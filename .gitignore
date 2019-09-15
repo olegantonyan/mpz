@@ -1,1 +1,2 @@
-build-qt5_clang-Debug/
+build*/
+*.user
