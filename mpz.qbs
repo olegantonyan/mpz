@@ -16,6 +16,8 @@ QtApplication {
     ]
 
     files: [
+        "src/directorytreeviewmodel.cpp",
+        "src/directorytreeviewmodel.h",
         "src/main.cpp",
         "src/mainwindow.cpp",
         "src/mainwindow.h",
