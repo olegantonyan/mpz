@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QTreeView>
-#include <QMenu>
 #include <QPoint>
 #include <QFileSystemModel>
 #include <QString>
@@ -14,13 +13,16 @@ class DirectoryTreeViewModel : public QObject {
 public:
   DirectoryTreeViewModel(QTreeView *view, const QString &library_path, QObject *parent = nullptr);
 
+signals:
+  void createNewPlaylist(const QString &filepath);
+  void appendToCurrentPlaylist(const QString &filepath);
+
 private slots:
   void on_customContextMenuRequested(const QPoint &pos);
 
 private:
   QTreeView *view;
   QFileSystemModel *model;
-  QMenu *context_menu;
 };
 
 #endif // DIRECTORYTREEVIEWMODEL_H
