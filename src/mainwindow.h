@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "directorytreeviewmodel.h"
-#include "playlistsviewmodel.h"
+#include "directory/directoryviewmodel.h"
+#include "playlists/playlistsviewmodel.h"
 
 #include <QMainWindow>
 
@@ -19,7 +19,7 @@ public:
 
 private:
   Ui::MainWindow *ui;
-  DirectoryTreeViewModel *library;
-  PlaylistsViewModel *playlists;
+  Directory::DirectoryViewModel *library;
+  Playlists::PlaylistsViewModel *playlists;
 };
 #endif // MAINWINDOW_H

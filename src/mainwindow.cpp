@@ -6,9 +6,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   setWindowTitle("mpz");
-  library = new DirectoryTreeViewModel(ui->treeView, "/mnt/storage/music", this);
-  playlists = new PlaylistsViewModel(ui->listView, this);
-  connect(library, &DirectoryTreeViewModel::createNewPlaylist, playlists, &PlaylistsViewModel::on_createPlaylist);
+  library = new Directory::DirectoryViewModel(ui->treeView, "/mnt/storage/music", this);
+  playlists = new Playlists::PlaylistsViewModel(ui->listView, this);
+  connect(library, &Directory::DirectoryViewModel::createNewPlaylist, playlists, &Playlists::PlaylistsViewModel::on_createPlaylist);
 }
 
 MainWindow::~MainWindow() {
