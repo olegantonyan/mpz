@@ -22,8 +22,10 @@ QtApplication {
         "src/mainwindow.cpp",
         "src/mainwindow.h",
         "src/mainwindow.ui",
+        "src/playlists/playlistitem.cpp",
+        "src/playlists/playlistitem.h",
+        "src/playlists/playlistsviewmodel.cpp",
         "src/playlists/playlistsviewmodel.h",
-        "src/playlists/playlistviewmodel.cpp",
     ]
 
     install: true
