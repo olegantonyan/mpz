@@ -2,16 +2,21 @@
 #define PLAYLISTITEM_H
 
 #include <QString>
+#include <QDir>
 
 namespace Playlists {
   class PlaylistItem {
   public:
-    explicit PlaylistItem(const QString &path);
+    explicit PlaylistItem(const QDir &path);
 
-    QString getPath() const;
+    QDir getPath() const;
+
+    QString getName() const;
+    void setName(const QString &value);
 
   private:
-    QString path;
+    QDir path;
+    QString name;
   };
 }
 #endif // PLAYLISTITEM_H

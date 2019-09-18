@@ -12,18 +12,28 @@ namespace Playlists {
     emit dataChanged(idx, idx, {Qt::DisplayRole});
   }
 
-  /*QVariant PlaylistsDataModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    return QVariant();
+  void PlaylistsDataModel::remove(const QModelIndex &index) {
+    if (index.row() > list.size() - 1) {
+      return;
+    }
+    list.removeAt(index.row());
+    emit dataChanged(index, index, {Qt::DisplayRole});
   }
 
-  bool PlaylistsDataModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) {
-    if (value != headerData(section, orientation, role)) {
-      // FIXME: Implement me!
-      emit headerDataChanged(orientation, section, section);
-      return true;
+  PlaylistItem PlaylistsDataModel::itemAt(const QModelIndex &index) const {
+    if (index.row() > list.size() - 1) {
+      throw "index out of bounds";
     }
-    return false;
-  }*/
+    return list.at(index.row());
+  }
+
+  PlaylistItem PlaylistsDataModel::repalceAt(const QModelIndex &index, const PlaylistItem &newItem) {
+    if (index.row() > list.size() - 1) {
+      throw "index out of bounds";
+    }
+    list.replace(index.row(), newItem);
+    return itemAt(index);
+  }
 
   int PlaylistsDataModel::rowCount(const QModelIndex &parent) const {
     // For list models only the root node (an invalid parent) should return the list's size. For all
@@ -31,8 +41,6 @@ namespace Playlists {
     if (parent.isValid()) {
       return 0;
     }
-
-    qDebug() << list.size();
 
     return list.size();
   }
@@ -44,7 +52,7 @@ namespace Playlists {
 
     if (role == Qt::DisplayRole) {
       if (list.size() > index.row()) {
-        return list.at(index.row()).getPath();
+        return list.at(index.row()).getName();
       } else {
         return QVariant();
       }
@@ -52,34 +60,4 @@ namespace Playlists {
 
     return QVariant();
   }
-/*
-  bool PlaylistsDataModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-    if (data(index, role) != value) {
-      // FIXME: Implement me!
-      emit dataChanged(index, index, QVector<int>() << role);
-      return true;
-    }
-    return false;
-  }*/
-
- /* Qt::ItemFlags PlaylistsDataModel::flags(const QModelIndex &index) const
-  {
-    if (!index.isValid()) {
-    //  return Qt::NoItemFlags;
-    }
-
-    return Qt::ItemIsEditable; // FIXME: Implement me!
-  }*/
-/*
-  bool PlaylistsDataModel::insertRows(int row, int count, const QModelIndex &parent) {
-    beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endInsertRows();
-  }
-
-  bool PlaylistsDataModel::removeRows(int row, int count, const QModelIndex &parent) {
-    beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endRemoveRows();
-  }*/
 }

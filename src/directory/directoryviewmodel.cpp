@@ -23,7 +23,7 @@ namespace Directory {
 
   void DirectoryViewModel::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
-    auto filepath = model->filePath(index);
+    auto filepath = QDir(model->filePath(index));
 
     QMenu menu;
     QAction create_playlist("Create new playlist");
