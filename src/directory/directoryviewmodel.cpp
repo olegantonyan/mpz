@@ -8,9 +8,7 @@ namespace Directory {
   DirectoryViewModel::DirectoryViewModel(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
     view = v;
 
-    model = new QFileSystemModel(this);
-    model->setReadOnly(true);
-    model->setRootPath(library_path);
+    model = new Directory::DirectoryDataModel(library_path, this);
 
     view->setModel(model);
     view->setRootIndex(model->index(library_path));

@@ -1,24 +1,26 @@
 #ifndef PLAYLISTSVIEWMODEL_H
 #define PLAYLISTSVIEWMODEL_H
 
+#include "playlistsdatamodel.h"
+
 #include <QObject>
 #include <QListView>
 #include <QString>
-#include <QStringListModel>
+#include <QAbstractItemModel>
 
 namespace Playlists {
   class PlaylistsViewModel : public QObject {
     Q_OBJECT
 
   public:
-    PlaylistsViewModel(QListView *view, QObject *parent = nullptr);
+    explicit PlaylistsViewModel(QListView *view, QObject *parent = nullptr);
 
   public slots:
     void on_createPlaylist(const QString &filepath);
 
   private:
     QListView *view;
-    QStringListModel *model;
+    Playlists::PlaylistsDataModel *model;
   };
 }
 

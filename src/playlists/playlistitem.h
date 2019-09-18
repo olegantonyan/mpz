@@ -6,7 +6,7 @@
 namespace Playlists {
   class PlaylistItem {
   public:
-    PlaylistItem(const QString &path);
+    explicit PlaylistItem(const QString &path);
 
     QString getPath() const;
 

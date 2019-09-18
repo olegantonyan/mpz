@@ -16,6 +16,8 @@ QtApplication {
     ]
 
     files: [
+        "src/directory/directorydatamodel.cpp",
+        "src/directory/directorydatamodel.h",
         "src/directory/directoryviewmodel.cpp",
         "src/directory/directoryviewmodel.h",
         "src/main.cpp",
@@ -24,6 +26,8 @@ QtApplication {
         "src/mainwindow.ui",
         "src/playlists/playlistitem.cpp",
         "src/playlists/playlistitem.h",
+        "src/playlists/playlistsdatamodel.cpp",
+        "src/playlists/playlistsdatamodel.h",
         "src/playlists/playlistsviewmodel.cpp",
         "src/playlists/playlistsviewmodel.h",
     ]
