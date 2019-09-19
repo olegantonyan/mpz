@@ -9,7 +9,7 @@
 #include <QString>
 #include <QDir>
 
-namespace Directory {
+namespace DirectoryUi {
   class View : public QObject {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ namespace Directory {
 
   private:
     QTreeView *view;
-    Directory::Model *model;
+    Model *model;
   };
 }
 

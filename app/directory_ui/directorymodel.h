@@ -4,7 +4,7 @@
 #include <QFileSystemModel>
 #include <QString>
 
-namespace Directory {
+namespace DirectoryUi {
   class Model : public QFileSystemModel {
     Q_OBJECT
 

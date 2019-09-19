@@ -1,6 +1,6 @@
 #include "playlistmodel.h"
 
-namespace Playlist {
+namespace PlaylistUi {
   Model::Model(QObject *parent) : QAbstractTableModel(parent) {
   }
 

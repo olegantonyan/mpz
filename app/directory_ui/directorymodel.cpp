@@ -1,6 +1,6 @@
 #include "directorymodel.h"
 
-namespace Directory {
+namespace DirectoryUi {
   Model::Model(const QString &library_path, QObject *parent) : QFileSystemModel(parent) {
     setReadOnly(true);
     setRootPath(library_path);

@@ -2,7 +2,7 @@
 #define PLAYLISTSVIEWMODEL_H
 
 #include "playlistsmodel.h"
-#include "playlistitem.h"
+#include "playlist.h"
 
 #include <QObject>
 #include <QListView>
@@ -11,7 +11,7 @@
 #include <QDir>
 #include <QModelIndex>
 
-namespace Playlists {
+namespace PlaylistsUi {
   class View : public QObject {
     Q_OBJECT
 
@@ -22,7 +22,7 @@ namespace Playlists {
     void on_createPlaylist(const QDir &filepath);
 
   signals:
-    void selected(const Playlists::PlaylistItem &item);
+    void selected(const Playlist &item);
 
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);
@@ -30,7 +30,7 @@ namespace Playlists {
 
   private:
     QListView *view;
-    Playlists::Model *model;
+    Model *model;
   };
 }
 

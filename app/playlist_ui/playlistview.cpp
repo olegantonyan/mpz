@@ -3,16 +3,16 @@
 #include <QDebug>
 #include <QHeaderView>
 
-namespace Playlist {
+namespace PlaylistUi {
   View::View(QTableView *v, QObject *parent) : QObject(parent) {
     view = v;
-    model = new Playlist::Model(this);
+    model = new Model(this);
     view->setModel(model);
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
   }
 
-  void View::on_load(const Playlists::PlaylistItem &pi) {
-    qDebug() << "loading playlist" << pi.getName();
+  void View::on_load(const Playlist &pi) {
+    qDebug() << "loading playlist" << pi.name();
   }
 }

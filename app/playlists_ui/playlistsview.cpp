@@ -1,15 +1,15 @@
 #include "playlistsview.h"
-#include "playlistitem.h"
+#include "playlist.h"
 
 #include <QDebug>
 #include <QMenu>
 #include <QAction>
 #include <QInputDialog>
 
-namespace Playlists {
+namespace PlaylistsUi {
   View::View(QListView *v, QObject *parent) : QObject(parent) {
     view = v;
-    model = new Playlists::Model(this);
+    model = new Model(this);
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -20,7 +20,7 @@ namespace Playlists {
 
   void View::on_createPlaylist(const QDir &filepath) {
     qDebug() << "add directory to playlist" << filepath;
-    Playlists::PlaylistItem item(filepath);
+    Playlist item(filepath);
     view->setCurrentIndex(model->append(item));
     emit selected(item);
   }
@@ -34,11 +34,11 @@ namespace Playlists {
 
     connect(&remove, &QAction::triggered, [=]() { model->remove(index); });
     connect(&rename, &QAction::triggered, [=]() {
-      PlaylistItem i = model->itemAt(index);
+      Playlist i = model->itemAt(index);
       bool ok;
-      QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i.getName()), "", QLineEdit::Normal, i.getName(), &ok, Qt::Widget);
+      QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i.name()), "", QLineEdit::Normal, i.name(), &ok, Qt::Widget);
       if (ok && !new_name.isEmpty()) {
-        i.setName(new_name);
+        i.rename(new_name);
         model->repalceAt(index, i);
       }
     });

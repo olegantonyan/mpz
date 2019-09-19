@@ -7,12 +7,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   setWindowTitle("mpz");
 
-  library = new Directory::View(ui->treeView, "/mnt/storage/music", this);
-  playlists = new Playlists::View(ui->listView, this);
-  playlist = new Playlist::View(ui->tableView, this);
+  library = new DirectoryUi::View(ui->treeView, "/mnt/storage/music", this);
+  playlists = new PlaylistsUi::View(ui->listView, this);
+  playlist = new PlaylistUi::View(ui->tableView, this);
 
-  connect(library, &Directory::View::createNewPlaylist, playlists, &Playlists::View::on_createPlaylist);
-  connect(playlists, &Playlists::View::selected, playlist, &Playlist::View::on_load);
+  connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
+  connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
 }
 
 MainWindow::~MainWindow() {

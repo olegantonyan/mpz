@@ -18,23 +18,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    directory/directorymodel.cpp \
-    directory/directoryview.cpp \
-    playlist/playlistmodel.cpp \
-    playlist/playlistview.cpp \
-    playlists/playlistitem.cpp \
-    playlists/playlistsmodel.cpp \
-    playlists/playlistsview.cpp
+    directory_ui/directorymodel.cpp \
+    directory_ui/directoryview.cpp \
+    playlist_ui/playlistmodel.cpp \
+    playlist_ui/playlistview.cpp \
+    playlist.cpp \
+    playlists_ui/playlistsmodel.cpp \
+    playlists_ui/playlistsview.cpp
 
 HEADERS += \
     mainwindow.h \
-    directory/directorymodel.h \
-    directory/directoryview.h \
-    playlist/playlistmodel.h \
-    playlist/playlistview.h \
-    playlists/playlistitem.h \
-    playlists/playlistsmodel.h \
-    playlists/playlistsview.h
+    directory_ui/directorymodel.h \
+    directory_ui/directoryview.h \
+    playlist_ui/playlistmodel.h \
+    playlist_ui/playlistview.h \
+    playlist.h \
+    playlists_ui/playlistsmodel.h \
+    playlists_ui/playlistsview.h
 
 FORMS += \
     mainwindow.ui

@@ -4,11 +4,11 @@
 #include <QDebug>
 #include <QMenu>
 
-namespace Directory {
+namespace DirectoryUi {
   View::View(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
     view = v;
 
-    model = new Directory::Model(library_path, this);
+    model = new Model(library_path, this);
 
     view->setModel(model);
     view->setRootIndex(model->index(library_path));

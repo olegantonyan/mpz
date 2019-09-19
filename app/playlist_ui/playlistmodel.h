@@ -3,7 +3,7 @@
 
 #include <QAbstractTableModel>
 
-namespace Playlist {
+namespace PlaylistUi {
   class Model : public QAbstractTableModel {
     Q_OBJECT
 

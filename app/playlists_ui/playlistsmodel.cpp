@@ -2,11 +2,11 @@
 
 #include <QDebug>
 
-namespace Playlists {
+namespace PlaylistsUi {
   Model::Model(QObject *parent) : QAbstractListModel(parent) {
   }
 
-  QModelIndex Model::append(const PlaylistItem &item) {
+  QModelIndex Model::append(const Playlist &item) {
     list.append(item);
     QModelIndex idx = createIndex(list.size() - 1, 0);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
@@ -21,14 +21,14 @@ namespace Playlists {
     emit dataChanged(index, index, {Qt::DisplayRole});
   }
 
-  PlaylistItem Model::itemAt(const QModelIndex &index) const {
+  Playlist Model::itemAt(const QModelIndex &index) const {
     if (index.row() > list.size() - 1) {
       throw "index out of bounds";
     }
     return list.at(index.row());
   }
 
-  PlaylistItem Model::repalceAt(const QModelIndex &index, const PlaylistItem &newItem) {
+  Playlist Model::repalceAt(const QModelIndex &index, const Playlist &newItem) {
     if (index.row() > list.size() - 1) {
       throw "index out of bounds";
     }
@@ -53,7 +53,7 @@ namespace Playlists {
 
     if (role == Qt::DisplayRole) {
       if (list.size() > index.row()) {
-        return list.at(index.row()).getName();
+        return list.at(index.row()).name();
       } else {
         return QVariant();
       }
