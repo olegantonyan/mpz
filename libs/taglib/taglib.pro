@@ -2,6 +2,7 @@ TEMPLATE = lib
 TARGET = taglib
 
 CONFIG += warn_off
+CONFIG += staticlib
 
 SOURCES += \
   taglib-1.11.1/taglib/toolkit/tbytevectorlist.cpp \

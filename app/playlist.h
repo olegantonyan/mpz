@@ -11,7 +11,7 @@ public:
   QDir path() const;
 
   QString name() const;
-  void rename(const QString &value);
+  QString rename(const QString &value);
 
 private:
   QDir directory_path;

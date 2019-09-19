@@ -15,7 +15,8 @@ QString Playlist::name() const {
   return playlist_name;
 }
 
-void Playlist::rename(const QString &value) {
+QString Playlist::rename(const QString &value) {
   playlist_name = value;
+  return name();
 }
 
