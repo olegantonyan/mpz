@@ -5,6 +5,7 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include <QModelIndex>
 
 namespace Playlists {
   class Model : public QAbstractListModel {
@@ -13,7 +14,7 @@ namespace Playlists {
   public:
     explicit Model(QObject *parent = nullptr);
 
-    void append(const Playlists::PlaylistItem &item);
+    QModelIndex append(const Playlists::PlaylistItem &item);
     void remove(const QModelIndex &index);
     PlaylistItem itemAt(const QModelIndex &index) const;
     PlaylistItem repalceAt(const QModelIndex &index, const Playlists::PlaylistItem &newItem);

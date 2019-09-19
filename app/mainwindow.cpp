@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   playlist = new Playlist::View(ui->tableView, this);
 
   connect(library, &Directory::View::createNewPlaylist, playlists, &Playlists::View::on_createPlaylist);
+  connect(playlists, &Playlists::View::selected, playlist, &Playlist::View::on_load);
 }
 
 MainWindow::~MainWindow() {

@@ -2,6 +2,7 @@
 #define PLAYLISTVIEW_H
 
 #include "playlistmodel.h"
+#include "playlists/playlistitem.h"
 
 #include <QObject>
 #include <QTableView>
@@ -15,6 +16,7 @@ namespace Playlist {
   signals:
 
   public slots:
+    void on_load(const Playlists::PlaylistItem &pi);
 
   private:
     QTableView *view;

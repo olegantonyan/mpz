@@ -6,10 +6,11 @@ namespace Playlists {
   Model::Model(QObject *parent) : QAbstractListModel(parent) {
   }
 
-  void Model::append(const PlaylistItem &item) {
+  QModelIndex Model::append(const PlaylistItem &item) {
     list.append(item);
     QModelIndex idx = createIndex(list.size() - 1, 0);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
+    return idx;
   }
 
   void Model::remove(const QModelIndex &index) {

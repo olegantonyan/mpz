@@ -7,8 +7,6 @@ namespace Playlists {
   PlaylistItem::PlaylistItem(const QDir &path) {
     this->path = path;
     setName(path.dirName());
-
-    qDebug() << QDir(path);
   }
 
   QDir PlaylistItem::getPath() const {

@@ -15,11 +15,14 @@ namespace Playlists {
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
+    connect(view, &QListView::clicked, this, &View::on_itemActivated);
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
     qDebug() << "add directory to playlist" << filepath;
-    model->append(Playlists::PlaylistItem(filepath));
+    Playlists::PlaylistItem item(filepath);
+    view->setCurrentIndex(model->append(item));
+    emit selected(item);
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -43,5 +46,10 @@ namespace Playlists {
     menu.addAction(&rename);
     menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
+  }
+
+  void View::on_itemActivated(const QModelIndex &index) {
+    auto item = model->itemAt(index);
+    emit selected(item);
   }
 }
