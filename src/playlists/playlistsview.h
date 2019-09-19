@@ -1,7 +1,7 @@
 #ifndef PLAYLISTSVIEWMODEL_H
 #define PLAYLISTSVIEWMODEL_H
 
-#include "playlistsdatamodel.h"
+#include "playlistsmodel.h"
 
 #include <QObject>
 #include <QListView>
@@ -11,11 +11,11 @@
 #include <QDir>
 
 namespace Playlists {
-  class PlaylistsViewModel : public QObject {
+  class View : public QObject {
     Q_OBJECT
 
   public:
-    explicit PlaylistsViewModel(QListView *view, QObject *parent = nullptr);
+    explicit View(QListView *view, QObject *parent = nullptr);
 
   public slots:
     void on_createPlaylist(const QDir &filepath);
@@ -25,7 +25,7 @@ namespace Playlists {
 
   private:
     QListView *view;
-    Playlists::PlaylistsDataModel *model;
+    Playlists::Model *model;
   };
 }
 

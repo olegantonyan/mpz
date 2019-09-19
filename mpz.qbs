@@ -16,20 +16,20 @@ QtApplication {
     ]
 
     files: [
-        "src/directory/directorydatamodel.cpp",
-        "src/directory/directorydatamodel.h",
-        "src/directory/directoryviewmodel.cpp",
-        "src/directory/directoryviewmodel.h",
+        "src/directory/directorymodel.cpp",
+        "src/directory/directorymodel.h",
+        "src/directory/directoryview.cpp",
+        "src/directory/directoryview.h",
         "src/main.cpp",
         "src/mainwindow.cpp",
         "src/mainwindow.h",
         "src/mainwindow.ui",
         "src/playlists/playlistitem.cpp",
         "src/playlists/playlistitem.h",
-        "src/playlists/playlistsdatamodel.cpp",
-        "src/playlists/playlistsdatamodel.h",
-        "src/playlists/playlistsviewmodel.cpp",
-        "src/playlists/playlistsviewmodel.h",
+        "src/playlists/playlistsmodel.cpp",
+        "src/playlists/playlistsmodel.h",
+        "src/playlists/playlistsview.cpp",
+        "src/playlists/playlistsview.h",
     ]
 
     install: true

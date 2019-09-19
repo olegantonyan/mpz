@@ -1,4 +1,4 @@
-#include "playlistsviewmodel.h"
+#include "playlistsview.h"
 #include "playlistitem.h"
 
 #include <QDebug>
@@ -7,22 +7,22 @@
 #include <QInputDialog>
 
 namespace Playlists {
-  PlaylistsViewModel::PlaylistsViewModel(QListView *v, QObject *parent) : QObject(parent) {
+  View::View(QListView *v, QObject *parent) : QObject(parent) {
     view = v;
-    model = new Playlists::PlaylistsDataModel(this);
+    model = new Playlists::Model(this);
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(view, &QListView::customContextMenuRequested, this, &PlaylistsViewModel::on_customContextMenuRequested);
+    connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
   }
 
-  void PlaylistsViewModel::on_createPlaylist(const QDir &filepath) {
+  void View::on_createPlaylist(const QDir &filepath) {
     qDebug() << "add directory to playlist" << filepath;
     model->append(Playlists::PlaylistItem(filepath));
   }
 
-  void PlaylistsViewModel::on_customContextMenuRequested(const QPoint &pos) {
+  void View::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
 
     QMenu menu;

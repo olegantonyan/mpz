@@ -1,7 +1,7 @@
 #ifndef DIRECTORYTREEVIEWMODEL_H
 #define DIRECTORYTREEVIEWMODEL_H
 
-#include "directorydatamodel.h"
+#include "directorymodel.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -11,11 +11,11 @@
 #include <QDir>
 
 namespace Directory {
-  class DirectoryViewModel : public QObject {
+  class View : public QObject {
     Q_OBJECT
 
   public:
-    explicit DirectoryViewModel(QTreeView *view, const QString &library_path, QObject *parent = nullptr);
+    explicit View(QTreeView *view, const QString &library_path, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QDir &filepath);
@@ -26,7 +26,7 @@ namespace Directory {
 
   private:
     QTreeView *view;
-    Directory::DirectoryDataModel *model;
+    Directory::Model *model;
   };
 }
 

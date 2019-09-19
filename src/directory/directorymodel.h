@@ -5,11 +5,11 @@
 #include <QString>
 
 namespace Directory {
-  class DirectoryDataModel : public QFileSystemModel {
+  class Model : public QFileSystemModel {
     Q_OBJECT
 
   public:
-    explicit DirectoryDataModel(const QString &library_path, QObject *parent = nullptr);
+    explicit Model(const QString &library_path, QObject *parent = nullptr);
   };
 }
 

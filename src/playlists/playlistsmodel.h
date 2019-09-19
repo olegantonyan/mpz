@@ -7,11 +7,11 @@
 #include <QList>
 
 namespace Playlists {
-  class PlaylistsDataModel : public QAbstractListModel {
+  class Model : public QAbstractListModel {
     Q_OBJECT
 
   public:
-    explicit PlaylistsDataModel(QObject *parent = nullptr);
+    explicit Model(QObject *parent = nullptr);
 
     void append(const Playlists::PlaylistItem &item);
     void remove(const QModelIndex &index);

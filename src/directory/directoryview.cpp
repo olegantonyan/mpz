@@ -1,14 +1,14 @@
-#include "directoryviewmodel.h"
+#include "directoryview.h"
 
 #include <QAction>
 #include <QDebug>
 #include <QMenu>
 
 namespace Directory {
-  DirectoryViewModel::DirectoryViewModel(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
+  View::View(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
     view = v;
 
-    model = new Directory::DirectoryDataModel(library_path, this);
+    model = new Directory::Model(library_path, this);
 
     view->setModel(model);
     view->setRootIndex(model->index(library_path));
@@ -18,10 +18,10 @@ namespace Directory {
     view->setColumnHidden(3, true);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(view, &QTreeView::customContextMenuRequested, this, &DirectoryViewModel::on_customContextMenuRequested);
+    connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
   }
 
-  void DirectoryViewModel::on_customContextMenuRequested(const QPoint &pos) {
+  void View::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
     auto filepath = QDir(model->filePath(index));
 
