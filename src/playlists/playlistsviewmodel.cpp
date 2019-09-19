@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QMenu>
 #include <QAction>
+#include <QInputDialog>
 
 namespace Playlists {
   PlaylistsViewModel::PlaylistsViewModel(QListView *v, QObject *parent) : QObject(parent) {
@@ -31,12 +32,16 @@ namespace Playlists {
     connect(&remove, &QAction::triggered, [=]() { model->remove(index); });
     connect(&rename, &QAction::triggered, [=]() {
       PlaylistItem i = model->itemAt(index);
-      i.setName("ololo");
-      model->repalceAt(index, i);
+      bool ok;
+      QString new_name = QInputDialog::getText(view, QString("Rename playlist %1").arg(i.getName()), "", QLineEdit::Normal, i.getName(), &ok, Qt::Widget);
+      if (ok && !new_name.isEmpty()) {
+        i.setName(new_name);
+        model->repalceAt(index, i);
+      }
     });
 
-    menu.addAction(&remove);
     menu.addAction(&rename);
+    menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 }
