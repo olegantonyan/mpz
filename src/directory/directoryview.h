@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QTreeView>
 #include <QPoint>
-#include <QFileSystemModel>
 #include <QString>
 #include <QDir>
 

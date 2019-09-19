@@ -33,7 +33,7 @@ namespace Playlists {
     connect(&rename, &QAction::triggered, [=]() {
       PlaylistItem i = model->itemAt(index);
       bool ok;
-      QString new_name = QInputDialog::getText(view, QString("Rename playlist %1").arg(i.getName()), "", QLineEdit::Normal, i.getName(), &ok, Qt::Widget);
+      QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i.getName()), "", QLineEdit::Normal, i.getName(), &ok, Qt::Widget);
       if (ok && !new_name.isEmpty()) {
         i.setName(new_name);
         model->repalceAt(index, i);

@@ -3,6 +3,7 @@
 
 #include "directory/directoryview.h"
 #include "playlists/playlistsview.h"
+#include "playlist/playlistview.h"
 
 #include <QMainWindow>
 
@@ -21,5 +22,6 @@ private:
   Ui::MainWindow *ui;
   Directory::View *library;
   Playlists::View *playlists;
+  Playlist::View *playlist;
 };
 #endif // MAINWINDOW_H

@@ -6,8 +6,11 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   setWindowTitle("mpz");
+
   library = new Directory::View(ui->treeView, "/mnt/storage/music", this);
   playlists = new Playlists::View(ui->listView, this);
+  playlist = new Playlist::View(ui->tableView, this);
+
   connect(library, &Directory::View::createNewPlaylist, playlists, &Playlists::View::on_createPlaylist);
 }
 
