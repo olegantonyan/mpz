@@ -40,7 +40,8 @@ FORMS += \
     mainwindow.ui
 
 INCLUDEPATH += \
-  ../libs/taglib
+  ../libs/taglib/taglib-1.11.1/taglib \
+  ../libs/taglib/taglib-1.11.1/taglib/toolkit \
 
 LIBS += \
   -L../libs/taglib -ltaglib
