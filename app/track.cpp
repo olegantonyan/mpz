@@ -10,9 +10,9 @@ Track::Track(const QString &fp) {
   TagLib::FileRef f(path().toStdString().c_str());
   if(!f.isNull() && f.tag()) {
     TagLib::Tag *tag = f.tag();
-    _artist = QString(tag->artist().toCString());
-    _album = QString(tag->album().toCString());
-    _title = QString(tag->title().toCString());
+    _artist = QString(tag->artist().toCString(true));
+    _album = QString(tag->album().toCString(true));
+    _title = QString(tag->title().toCString(true));
     _year = static_cast<quint16>(tag->year());
   }
 }

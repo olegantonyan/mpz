@@ -47,11 +47,16 @@ namespace PlaylistUi {
   }
 
   void Model::setTracks(const QVector<Track> &t) {
-    beginInsertRows(QModelIndex(), 0, columnCount());
+    beginRemoveRows(QModelIndex(), 0, tracks.size());
+    tracks.clear();
+    endRemoveRows();
+
+    beginInsertRows(QModelIndex(), 0, t.size());
     tracks = t;
     endInsertRows();
-    QModelIndex top = createIndex(0, 0);
+
+    /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
-    emit dataChanged(top, bottom, {Qt::DisplayRole});
+    emit dataChanged(top, bottom, {Qt::DisplayRole});*/
   }
 }

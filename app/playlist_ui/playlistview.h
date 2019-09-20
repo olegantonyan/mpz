@@ -17,6 +17,7 @@ namespace PlaylistUi {
 
   public slots:
     void on_load(const Playlist &pi);
+    void on_unload();
 
   private:
     QTableView *view;

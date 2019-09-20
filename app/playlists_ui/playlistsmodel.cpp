@@ -8,8 +8,8 @@ namespace PlaylistsUi {
   }
 
   QModelIndex Model::append(const Playlist &item) {
-    list.append(item);
     QModelIndex idx = createIndex(list.size() - 1, 0);
+    list.append(item);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
     return idx;
   }
@@ -35,6 +35,10 @@ namespace PlaylistsUi {
     }
     list.replace(index.row(), newItem);
     return itemAt(index);
+  }
+
+  int Model::listSize() const {
+    return list.size();
   }
 
   int Model::rowCount(const QModelIndex &parent) const {

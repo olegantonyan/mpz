@@ -18,6 +18,7 @@ namespace PlaylistsUi {
     void remove(const QModelIndex &index);
     Playlist itemAt(const QModelIndex &index) const;
     Playlist repalceAt(const QModelIndex &index, const Playlist &newItem);
+    int listSize() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

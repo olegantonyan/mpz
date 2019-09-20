@@ -5,6 +5,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QInputDialog>
+#include <QItemSelectionModel>
 
 namespace PlaylistsUi {
   View::View(QListView *v, QObject *parent) : QObject(parent) {
@@ -32,7 +33,20 @@ namespace PlaylistsUi {
     QAction remove("Remove");
     QAction rename("Rename");
 
-    connect(&remove, &QAction::triggered, [=]() { model->remove(index); });
+    connect(&remove, &QAction::triggered, [=]() {
+      model->remove(index);
+      foreach (auto i, view->selectionModel()->selectedIndexes()) {
+        if (i == index) {
+          auto new_idx = model->index(qMax(index.row() - 1, 0));
+          view->selectionModel()->select(new_idx, {QItemSelectionModel::Select});
+          if (model->listSize() > 0) {
+            on_itemActivated(new_idx);
+          } else {
+            emit emptied();
+          }
+        }
+      }
+    });
     connect(&rename, &QAction::triggered, [=]() {
       Playlist i = model->itemAt(index);
       bool ok;
@@ -49,7 +63,9 @@ namespace PlaylistsUi {
   }
 
   void View::on_itemActivated(const QModelIndex &index) {
-    auto item = model->itemAt(index);
-    emit selected(item);
+    if (model->listSize() > 0) {
+      auto item = model->itemAt(index);
+      emit selected(item);
+    }
   }
 }
