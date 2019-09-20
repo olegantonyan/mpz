@@ -20,6 +20,7 @@ public:
 private:
   QDir directory_path;
   QString playlist_name;
+  QVector<Track> tracks_list;
 };
 
 #endif // PLAYLISTITEM_H
