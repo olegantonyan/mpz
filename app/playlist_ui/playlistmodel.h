@@ -1,7 +1,11 @@
 #ifndef PLAYLISTMODEL_H
 #define PLAYLISTMODEL_H
 
+#include "track.h"
+
+#include <QVector>
 #include <QAbstractTableModel>
+
 
 namespace PlaylistUi {
   class Model : public QAbstractTableModel {
@@ -14,8 +18,10 @@ namespace PlaylistUi {
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    void setTracks(const QVector<Track> &tracks);
 
   private:
+    QVector<Track> tracks;
   };
 }
 

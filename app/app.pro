@@ -24,7 +24,8 @@ SOURCES += \
     playlist_ui/playlistview.cpp \
     playlist.cpp \
     playlists_ui/playlistsmodel.cpp \
-    playlists_ui/playlistsview.cpp
+    playlists_ui/playlistsview.cpp \
+    track.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -34,7 +35,8 @@ HEADERS += \
     playlist_ui/playlistview.h \
     playlist.h \
     playlists_ui/playlistsmodel.h \
-    playlists_ui/playlistsview.h
+    playlists_ui/playlistsview.h \
+    track.h
 
 FORMS += \
     mainwindow.ui

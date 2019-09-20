@@ -10,9 +10,14 @@ namespace PlaylistUi {
     view->setModel(model);
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
+    view->setSelectionBehavior(QAbstractItemView::SelectRows);
   }
 
   void View::on_load(const Playlist &pi) {
-    qDebug() << "loading playlist" << pi.name();
+    //qDebug() << "loading playlist" << pi.name();
+    /*foreach (auto i, pi.tracks()) {
+      qDebug() << i.path() << i.artist() << i.album() << i.title() << i.year();
+    }*/
+    model->setTracks(pi.tracks());
   }
 }

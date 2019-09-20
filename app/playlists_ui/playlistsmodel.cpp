@@ -4,6 +4,7 @@
 
 namespace PlaylistsUi {
   Model::Model(QObject *parent) : QAbstractListModel(parent) {
+    list.clear();
   }
 
   QModelIndex Model::append(const Playlist &item) {

@@ -19,7 +19,7 @@ namespace PlaylistsUi {
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
-    qDebug() << "add directory to playlist" << filepath;
+    //qDebug() << "add directory to playlist" << filepath;
     Playlist item(filepath);
     view->setCurrentIndex(model->append(item));
     emit selected(item);
