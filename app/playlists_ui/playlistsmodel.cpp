@@ -7,7 +7,7 @@ namespace PlaylistsUi {
     list.clear();
   }
 
-  QModelIndex Model::append(const Playlist &item) {
+  QModelIndex Model::append(std::shared_ptr<Playlist> item) {
     QModelIndex idx = createIndex(list.size(), 0);
     list.append(item);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
@@ -22,19 +22,11 @@ namespace PlaylistsUi {
     emit dataChanged(index, index, {Qt::DisplayRole});
   }
 
-  Playlist Model::itemAt(const QModelIndex &index) const {
+  std::shared_ptr<Playlist> Model::itemAt(const QModelIndex &index) const {
     if (index.row() > list.size() - 1) {
       throw "index out of bounds";
     }
     return list.at(index.row());
-  }
-
-  Playlist Model::repalceAt(const QModelIndex &index, const Playlist &newItem) {
-    if (index.row() > list.size() - 1) {
-      throw "index out of bounds";
-    }
-    list.replace(index.row(), newItem);
-    return itemAt(index);
   }
 
   int Model::listSize() const {
@@ -58,7 +50,7 @@ namespace PlaylistsUi {
 
     if (role == Qt::DisplayRole) {
       if (list.size() > index.row()) {
-        return list.at(index.row()).name();
+        return list.at(index.row())->name();
       } else {
         return QVariant();
       }

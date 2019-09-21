@@ -16,8 +16,8 @@ namespace PlaylistUi {
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
   }
 
-  void View::on_load(const Playlist &pi) {
-    model->setTracks(pi.tracks());
+  void View::on_load(const std::shared_ptr<Playlist> pi) {
+    model->setTracks(pi->tracks());
   }
 
   void View::on_unload() {

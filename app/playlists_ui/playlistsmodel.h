@@ -6,6 +6,7 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QModelIndex>
+#include <memory>
 
 namespace PlaylistsUi {
   class Model : public QAbstractListModel {
@@ -14,17 +15,16 @@ namespace PlaylistsUi {
   public:
     explicit Model(QObject *parent = nullptr);
 
-    QModelIndex append(const Playlist &item);
+    QModelIndex append(std::shared_ptr<Playlist> item);
     void remove(const QModelIndex &index);
-    Playlist itemAt(const QModelIndex &index) const;
-    Playlist repalceAt(const QModelIndex &index, const Playlist &newItem);
+    std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
     int listSize() const;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
   private:
-    QList<Playlist> list;
+    QList<std::shared_ptr<Playlist>> list;
   };
 }
 

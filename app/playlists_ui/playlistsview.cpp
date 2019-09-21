@@ -20,7 +20,7 @@ namespace PlaylistsUi {
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
-    Playlist item(filepath);
+    auto item = std::shared_ptr<Playlist>(new Playlist(filepath));
     auto index = model->append(item);
     view->setCurrentIndex(index);
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
@@ -53,12 +53,17 @@ namespace PlaylistsUi {
       }
     });
     connect(&rename, &QAction::triggered, [=]() {
-      Playlist i = model->itemAt(index);
+      auto i = model->itemAt(index);
       bool ok;
-      QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i.name()), "", QLineEdit::Normal, i.name(), &ok, Qt::Widget);
+      QString new_name = QInputDialog::getText(view,
+                                               QString("Rename playlist '%1'").arg(i->name()),
+                                               "",
+                                               QLineEdit::Normal,
+                                               i->name(),
+                                               &ok,
+                                               Qt::Widget);
       if (ok && !new_name.isEmpty()) {
-        i.rename(new_name);
-        model->repalceAt(index, i);
+        i->rename(new_name);
       }
     });
 

@@ -10,6 +10,7 @@
 #include <QPoint>
 #include <QDir>
 #include <QModelIndex>
+#include <memory>
 
 namespace PlaylistsUi {
   class View : public QObject {
@@ -22,7 +23,7 @@ namespace PlaylistsUi {
     void on_createPlaylist(const QDir &filepath);
 
   signals:
-    void selected(const Playlist &item);
+    void selected(const std::shared_ptr<Playlist> item);
     void emptied();
 
   private slots:

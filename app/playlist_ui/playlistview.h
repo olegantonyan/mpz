@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QTableView>
+#include <memory>
 
 namespace PlaylistUi {
   class View : public QObject {
@@ -16,7 +17,7 @@ namespace PlaylistUi {
   signals:
 
   public slots:
-    void on_load(const Playlist &pi);
+    void on_load(const std::shared_ptr<Playlist> pi);
     void on_unload();
 
   private:
