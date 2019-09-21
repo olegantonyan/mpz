@@ -20,14 +20,19 @@ namespace PlaylistsUi {
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
-    //qDebug() << "add directory to playlist" << filepath;
     Playlist item(filepath);
-    view->setCurrentIndex(model->append(item));
+    auto index = model->append(item);
+    view->setCurrentIndex(index);
+    view->selectionModel()->select(index, {QItemSelectionModel::Select});
+
     emit selected(item);
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
+    if (!index.isValid()) {
+      return;
+    }
 
     QMenu menu;
     QAction remove("Remove");
@@ -63,9 +68,11 @@ namespace PlaylistsUi {
   }
 
   void View::on_itemActivated(const QModelIndex &index) {
-    if (model->listSize() > 0) {
-      auto item = model->itemAt(index);
-      emit selected(item);
+    if (model->listSize() <= 0) {
+      return;
     }
+
+    auto item = model->itemAt(index);
+    emit selected(item);
   }
 }

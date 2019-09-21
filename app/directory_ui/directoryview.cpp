@@ -23,6 +23,10 @@ namespace DirectoryUi {
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
+    if (!index.isValid()) {
+      return;
+    }
+
     auto filepath = QDir(model->filePath(index));
 
     QMenu menu;

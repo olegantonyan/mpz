@@ -8,7 +8,7 @@ namespace PlaylistsUi {
   }
 
   QModelIndex Model::append(const Playlist &item) {
-    QModelIndex idx = createIndex(list.size() - 1, 0);
+    QModelIndex idx = createIndex(list.size(), 0);
     list.append(item);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
     return idx;

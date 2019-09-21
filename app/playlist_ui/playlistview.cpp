@@ -12,6 +12,8 @@ namespace PlaylistUi {
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
     view->setShowGrid(false);
+    //view->setFocusPolicy(Qt::NoFocus);
+    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
   }
 
   void View::on_load(const Playlist &pi) {
