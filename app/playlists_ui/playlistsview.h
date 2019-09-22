@@ -33,6 +33,7 @@ namespace PlaylistsUi {
   private:
     QListView *view;
     Model *model;
+    std::shared_ptr<Playlist> current;
   };
 }
 

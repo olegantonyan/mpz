@@ -24,6 +24,7 @@ namespace PlaylistsUi {
     auto index = model->append(item);
     view->setCurrentIndex(index);
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    current = item;
 
     emit selected(item);
   }
@@ -78,6 +79,9 @@ namespace PlaylistsUi {
     }
 
     auto item = model->itemAt(index);
-    emit selected(item);
+    if (current != item) {
+      emit selected(item);
+    }
+    current = item;
   }
 }
