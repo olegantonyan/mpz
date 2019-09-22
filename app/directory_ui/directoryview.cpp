@@ -3,6 +3,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QMenu>
+#include <QHeaderView>
 
 namespace DirectoryUi {
   View::View(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {

@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 
-  QCoreApplication::setOrganizationName("Oleg Antonyan");
+  QCoreApplication::setOrganizationName("mpz");
   QCoreApplication::setOrganizationDomain("github.com/olegantonyan/mpz");
   QCoreApplication::setApplicationName("mpz");
 
