@@ -43,24 +43,19 @@ void MainWindow::ui_settings() {
 
   auto i = QList<int>();
   bool all_ok = true;
-  do {
-    bool ok = false;
-    i << settings->value("splitter_size_1").toInt(&ok);
-    if (!ok) {
-      all_ok = false;
-      break;
-    }
-    i << settings->value("splitter_size_2").toInt(&ok);
-    if (!ok) {
-      all_ok = false;
-      break;
-    }
-    i << settings->value("splitter_size_3").toInt(&ok);
-    if (!ok) {
-      all_ok = false;
-      break;
-    }
-  } while(false);
+  bool ok = false;
+  i << settings->value("splitter_size_1").toInt(&ok);
+  if (!ok) {
+    all_ok = false;
+  }
+  i << settings->value("splitter_size_2").toInt(&ok);
+  if (!ok) {
+    all_ok = false;
+  }
+  i << settings->value("splitter_size_3").toInt(&ok);
+  if (!ok) {
+    all_ok = false;
+  }
 
   if (all_ok) {
     ui->splitter->setSizes(i);
