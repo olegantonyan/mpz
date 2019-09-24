@@ -44,9 +44,11 @@ FORMS += \
 INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
+  ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
 
 LIBS += \
-  -L../libs/taglib -ltaglib
+  -L../libs/taglib -ltaglib \
+  -L../libs/yaml-cpp -lyaml-cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
