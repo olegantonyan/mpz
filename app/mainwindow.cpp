@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "config/storage.h"
 
 #include <QDebug>
 #include <QSettings>
@@ -21,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
   ui_settings();
+  Config::Storage("/home/oleg/Desktop/config.yaml");
 }
 
 MainWindow::~MainWindow() {
