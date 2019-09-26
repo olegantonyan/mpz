@@ -6,21 +6,19 @@
 #include <QFile>
 
 namespace Config {
-  Storage::Storage(const QString &filepath) {
-    if (QFile::exists(filepath)) {
+  Storage::Storage(const QString &filepath_) {
+    filepath = filepath_;
+  }
 
-      YAML::Node config = YAML::LoadFile(filepath.toStdString());
-      if (config["hello"]) {
-        qDebug() << "hello " << QString(config["hello"].as<std::string>().c_str()) << "\n";
-      } else {
-        qDebug() << "nope";
-      }
-
-    } else {
-      qDebug() << "file does not exists" << filepath;
+  QString Storage::getString(const QString &key) {
+    if (!QFile::exists(filepath)) {
+      return QString();
     }
-
-
-
+    YAML::Node config = YAML::LoadFile(filepath.toStdString());
+    YAML::Node result = config[key.toLatin1().data()];
+    if (!result) {
+      return QString();
+    }
+    return QString(result.as<std::string>().c_str());
   }
 }

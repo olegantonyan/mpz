@@ -22,7 +22,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
   ui_settings();
-  Config::Storage("/home/oleg/Desktop/config.yaml");
+  auto c = Config::Storage("/home/oleg/Desktop/config.yaml");
+  qDebug() << c.getString("hello");
+  qDebug() << c.getString("ololo");
 }
 
 MainWindow::~MainWindow() {
