@@ -2,14 +2,14 @@
 #define STORAGE_H
 
 #include <QString>
-#include <QVariant>
 
 namespace Config {
   class Storage {
   public:
     Storage(const QString &filepath_);
 
-    QString getString(const QString &key);
+    QString getString(const QString &key, bool *ok = nullptr);
+    int getInt(const QString &key, bool *ok = nullptr);
 
   private:
     QString filepath;
