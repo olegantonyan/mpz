@@ -16,6 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    config/global.cpp \
+    config/local.cpp \
     config/storage.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +31,8 @@ SOURCES += \
     track.cpp
 
 HEADERS += \
+    config/global.h \
+    config/local.h \
     config/storage.h \
     mainwindow.h \
     directory_ui/directorymodel.h \

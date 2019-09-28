@@ -3,7 +3,6 @@
 #include "config/storage.h"
 
 #include <QDebug>
-#include <QSettings>
 #include <QApplication>
 #include <memory>
 
@@ -22,9 +21,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
   ui_settings();
-  auto c = Config::Storage("/home/oleg/Desktop/config.yaml");
-  qDebug() << c.getString("hello");
-  qDebug() << c.getString("ololo");
+  /*auto c = Config::Storage("/home/oleg/Desktop/config.yaml");
+  //qDebug() << c.getString("hello");
+  //qDebug() << c.getString("ololo");
+  c.setString("ololo", "asdasfsdf");
+  c.setInt("inioooo", 123123);
+
+  qDebug() << c.getInt("inioooo");*/
 }
 
 MainWindow::~MainWindow() {
@@ -32,12 +35,10 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::ui_settings() {
-  settings = std::shared_ptr<QSettings>(new QSettings("mpz.user.conf", QSettings::NativeFormat));
+  //restoreGeometry(settings->value("window_geometry").toByteArray());
+  //restoreState(settings->value("window_state").toByteArray());
 
-  restoreGeometry(settings->value("window_geometry").toByteArray());
-  restoreState(settings->value("window_state").toByteArray());
-
-  connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
+  /*connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
     (void)pos;
     (void)index;
     settings->setValue("splitter_size_1", ui->splitter->sizes().at(0));
@@ -63,12 +64,12 @@ void MainWindow::ui_settings() {
 
   if (all_ok) {
     ui->splitter->setSizes(i);
-  }
+  }*/
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  settings->setValue("window_geometry", saveGeometry());
-  settings->setValue("window_state", saveState());
+  local_conf.saveWindowGeometry(saveGeometry());
+  local_conf.saveWindowState(saveState());
   QMainWindow::closeEvent(event);
 
 }
