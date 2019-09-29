@@ -21,6 +21,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
   ui_settings();
+
+  local_conf.storage.set("ololo", 78534958);
+  local_conf.storage.save();
+  local_conf.storage.reload();
+
+  qDebug() << Config::Local().storage.get("ololo");
+
+
   /*auto c = Config::Storage("/home/oleg/Desktop/config.yaml");
   //qDebug() << c.getString("hello");
   //qDebug() << c.getString("ololo");
@@ -68,8 +76,8 @@ void MainWindow::ui_settings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  local_conf.saveWindowGeometry(saveGeometry());
-  local_conf.saveWindowState(saveState());
+  //local_conf.saveWindowGeometry(saveGeometry());
+  //local_conf.saveWindowState(saveState());
   QMainWindow::closeEvent(event);
 
 }

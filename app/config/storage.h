@@ -16,6 +16,7 @@ namespace Config {
     bool set(const QString &key, const QVariant &value);
 
     bool save();
+    bool reload();
 
   private:
     QString filepath;

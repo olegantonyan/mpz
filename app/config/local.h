@@ -13,7 +13,7 @@ namespace Config {
     bool saveWindowGeometry(const QByteArray &v);
     bool saveWindowState(const QByteArray &v);
 
-  private:
+  //private:
     Config::Storage storage;
   };
 }
