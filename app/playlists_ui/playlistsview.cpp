@@ -41,7 +41,7 @@ namespace PlaylistsUi {
 
     connect(&remove, &QAction::triggered, [=]() {
       model->remove(index);
-      foreach (auto i, view->selectionModel()->selectedIndexes()) {
+      for (auto i : view->selectionModel()->selectedIndexes()) {
         if (i == index) {
           auto new_idx = model->index(qMax(index.row() - 1, 0));
           view->selectionModel()->select(new_idx, {QItemSelectionModel::Select});
