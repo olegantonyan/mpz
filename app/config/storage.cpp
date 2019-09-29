@@ -86,4 +86,12 @@ namespace Config {
 
     return true;
   }
+
+  QStringList Storage::getStringList(const QString &key, bool *ok) {
+
+  }
+
+  bool Storage::setStringList(const QString &key, const QStringList &value) {
+
+  }
 }
