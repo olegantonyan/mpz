@@ -4,23 +4,22 @@
 #include <QString>
 #include <QList>
 #include <QStringList>
+#include <QMap>
+#include <QVariant>
 
 namespace Config {
   class Storage {
   public:
-    Storage(const QString &filepath_);
+    Storage(const QString &path);
 
-    QString getString(const QString &key, bool *ok = nullptr);
-    bool setString(const QString &key, const QString &value);
+    QVariant get(const QString &key, bool *ok = nullptr);
+    bool set(const QString &key, const QVariant &value);
 
-    int getInt(const QString &key, bool *ok = nullptr);
-    bool setInt(const QString &key, int value);
-
-    QStringList getStringList(const QString &key, bool *ok = nullptr);
-    bool setStringList(const QString &key, const QStringList &value);
+    bool save();
 
   private:
     QString filepath;
+    QMap<QString, QVariant> data;
   };
 }
 #endif // STORAGE_H

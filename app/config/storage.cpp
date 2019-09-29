@@ -7,54 +7,66 @@
 #include <iostream>
 
 namespace Config {
-  Storage::Storage(const QString &filepath_) {
-    filepath = filepath_;
+  Storage::Storage(const QString &path) : filepath(path) {
+    QFile file(filepath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      YAML::Node config = YAML::Load(file.readAll().toStdString());
+
+      for (YAML::const_iterator it = config.begin(); it != config.end(); ++it) {
+        const QString key = QString::fromStdString(it->first.as<std::string>());
+
+        YAML::Node node = it->second;
+        QVariant value;
+
+        if (node.IsScalar()) {
+          value = QVariant(QString::fromStdString(node.as<std::string>()));
+        } else if(node.IsSequence()) {
+
+        } else if(node.IsNull()) {
+
+        } else if(node.IsMap()) {
+
+        } else {
+
+        }
+        data.insert(key, value);
+
+
+       // std::cout << it->first.as<std::string>() << " is " << it->second.as<std::string>() << "\n";
+      }
+    } else {
+      qWarning() << "error opening file" << filepath << ":" << file.errorString();
+    }
+
+    qDebug() << data;
   }
 
-  QString Storage::getString(const QString &key, bool *ok) {
-    if (!QFile::exists(filepath)) {
+  QVariant Storage::get(const QString &key, bool *ok) {
+    if (!data.contains(key)) {
       if (ok) {
         *ok = false;
       }
-      return QString();
+      return QVariant();
     }
-    YAML::Node config = YAML::LoadFile(filepath.toStdString());
-    YAML::Node result = config[key.toLatin1().data()];
-    if (!result) {
-      if (ok) {
-        *ok = false;
-      }
-      return QString();
-    }
-    if (ok) {
-      *ok = true;
-    }
-    return QString(result.as<std::string>().c_str());
+    *ok = true;
+    return data[key];
   }
 
-  int Storage::getInt(const QString &key, bool *ok) {
-    if (!QFile::exists(filepath)) {
-      if (ok) {
-        *ok = false;
-      }
-      return -1;
-    }
-    YAML::Node config = YAML::LoadFile(filepath.toStdString());
-    YAML::Node result = config[key.toLatin1().data()];
-    if (!result) {
-      if (ok) {
-        *ok = false;
-      }
-      return -1;
-    }
-    if (ok) {
-      *ok = true;
-    }
-    return result.as<int>();
+  bool Storage::set(const QString &key, const QVariant &value) {
+    data[key] = value;
+
+
+
+    return true;
   }
 
-  bool Storage::setString(const QString &key, const QString &value) {
-    if (!QFile::exists(filepath)) {
+  bool Storage::save() {
+    QFile file(filepath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      return false;
+    }
+
+    /*if (!QFile::exists(filepath)) {
       return false;
     }
     YAML::Node config, root = YAML::LoadFile(filepath.toStdString());
@@ -66,32 +78,7 @@ namespace Config {
     YAML::Emitter emitter;
     emitter << root;
     f.write(emitter.c_str());
-
+*/
     return true;
-  }
-
-  bool Storage::setInt(const QString &key, int value) {
-    if (!QFile::exists(filepath)) {
-      return false;
-    }
-    YAML::Node config, root = YAML::LoadFile(filepath.toStdString());
-    root[key.toLatin1().data()] = value;
-    QFile f(filepath);
-    if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
-      return false;
-    }
-    YAML::Emitter emitter;
-    emitter << root;
-    f.write(emitter.c_str());
-
-    return true;
-  }
-
-  QStringList Storage::getStringList(const QString &key, bool *ok) {
-
-  }
-
-  bool Storage::setStringList(const QString &key, const QStringList &value) {
-
   }
 }
