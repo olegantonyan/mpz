@@ -22,20 +22,36 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   ui_settings();
 
-  local_conf.storage.set("ololo", 78534958);
-  local_conf.storage.save();
-  local_conf.storage.reload();
+  //  qRegisterMetaTypeStreamOperators<QList<int>>("Stuff");
+ /* QList<int> list{1,2,3};
+  QVariant v = QVariant::fromValue<QList<int>>(list);
+  for (auto i : v.value<QList<int>>()) {
+    qDebug() << i;
+  }*/
 
-  qDebug() << Config::Local().storage.get("ololo");
+
+  //local_conf.storage.set("ololo", 78534958);
 
 
-  /*auto c = Config::Storage("/home/oleg/Desktop/config.yaml");
-  //qDebug() << c.getString("hello");
-  //qDebug() << c.getString("ololo");
-  c.setString("ololo", "asdasfsdf");
-  c.setInt("inioooo", 123123);
+  /*qDebug() << "****";
+  QList<int> list{1,2,3};
+  QVariant v = QVariant::fromValue<QList<int>>(list);
+  qDebug() << v.type() << "|" << v.typeName() << "|" << v.userType() << "|" << QVariant::typeToName(v.type());
+  qDebug() << "****";
+  local_conf.storage.set("trolro", v);*/
 
-  qDebug() << c.getInt("inioooo");*/
+  /*QStringList list1{"olsdf", "dsfafsda"};
+  QVariant vv = QVariant::fromValue(list1);
+  local_conf.storage.set("хер", vv);
+
+
+  local_conf.storage.save();*/
+
+  qDebug() << Config::Local().storage.get("trolro").value<QList<int>>().size();
+  for (auto i : Config::Local().storage.get("trolro").value<QList<int>>()) {
+         qDebug() << i;
+  }
+
 }
 
 MainWindow::~MainWindow() {

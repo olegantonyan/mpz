@@ -12,7 +12,7 @@ namespace Config {
   public:
     Storage(const QString &path);
 
-    QVariant get(const QString &key, bool *ok = nullptr);
+    QVariant get(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QVariant &value);
 
     bool save();
@@ -21,6 +21,10 @@ namespace Config {
   private:
     QString filepath;
     QMap<QString, QVariant> data;
+
+    QVariant castScalar(const QString& str) const;
+    QVariant castSequence(const QStringList& strl) const;
+
   };
 }
 #endif // STORAGE_H
