@@ -10,10 +10,15 @@ namespace Config {
   public:
     Local();
 
-    bool saveWindowGeometry(const QByteArray &v);
-    bool saveWindowState(const QByteArray &v);
+    bool sync();
 
-  //private:
+    bool saveWindowGeometry(const QByteArray &v);
+    QByteArray windowGeomentry() const;
+
+    bool saveWindowState(const QByteArray &v);
+    QByteArray windowState() const;
+
+  private:
     Config::Storage storage;
   };
 }

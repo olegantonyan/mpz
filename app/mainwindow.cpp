@@ -47,10 +47,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   local_conf.storage.save();*/
 
-  qDebug() << Config::Local().storage.get("trolro").value<QList<int>>().size();
+  /*qDebug() << Config::Local().storage.get("trolro").value<QList<int>>().size();
   for (auto i : Config::Local().storage.get("trolro").value<QList<int>>()) {
          qDebug() << i;
-  }
+  }*/
 
 }
 
@@ -59,8 +59,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::ui_settings() {
-  //restoreGeometry(settings->value("window_geometry").toByteArray());
-  //restoreState(settings->value("window_state").toByteArray());
+  restoreGeometry(local_conf.windowGeomentry());
+  restoreState(local_conf.windowState());
 
   /*connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
     (void)pos;
@@ -92,8 +92,9 @@ void MainWindow::ui_settings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  //local_conf.saveWindowGeometry(saveGeometry());
-  //local_conf.saveWindowState(saveState());
+  local_conf.saveWindowGeometry(saveGeometry());
+  local_conf.saveWindowState(saveState());
+  local_conf.sync();
   QMainWindow::closeEvent(event);
 
 }

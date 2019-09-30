@@ -33,6 +33,42 @@ namespace Config {
     return true;
   }
 
+  QByteArray Storage::getByteArray(const QString &key, bool *ok) const {
+    QByteArray result;
+    for (auto i : getIntList(key, ok)) {
+      result.append((char)i);
+    }
+    return result;
+  }
+
+  bool Storage::set(const QString &key, const QByteArray &value) {
+    QList<int> intlist;
+    for (auto i : value) {
+      intlist << i;
+    }
+    return set(key, intlist);
+  }
+
+  QList<int> Storage::getIntList(const QString &key, bool *ok) const {
+    QVariant value = get(key, ok);
+    if (!value.isValid() || value.isNull() || (ok && !*ok)) {
+      return QList<int>();
+    }
+    return value.value<QList<int>>();
+  }
+
+  bool Storage::set(const QString &key, const QList<int> &value) {
+    return set(key, QVariant::fromValue(value));
+  }
+
+  QStringList Storage::getStringList(const QString &key, bool *ok) const {
+    return get(key, ok).value<QStringList>();
+  }
+
+  bool Storage::set(const QString &key, const QStringList &value) {
+    return set(key, QVariant::fromValue(value));
+  }
+
   bool Storage::save() {
     QFile file(filepath);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
@@ -68,7 +104,7 @@ namespace Config {
               root[key].push_back(i.toStdString());
             }
           } else {
-            qWarning() << "unsupported QVariant type" << value.type() << "|" << tname << "|" << value.userType();
+            qWarning() << "unsupported QVariant type at key" << QString::fromStdString(key) << ":" << value.type() << "|" << tname << "|" << value.userType();
             return false;
           }
       }

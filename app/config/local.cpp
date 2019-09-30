@@ -6,15 +6,23 @@ namespace Config {
   Local::Local() : storage("local.yml") {
   }
 
-  bool Local::saveWindowGeometry(const QByteArray &v) {
-    qDebug() << v.data();
+  bool Local::sync() {
+    return storage.save();
+  }
 
-    return true;
+  bool Local::saveWindowGeometry(const QByteArray &v) {
+    return storage.set("window_geometry", v);
+  }
+
+  QByteArray Local::windowGeomentry() const {
+    return storage.getByteArray("window_geometry");
   }
 
   bool Local::saveWindowState(const QByteArray &v) {
-    qDebug() << v.data();
+    return storage.set("window_state", v);
+  }
 
-    return true;
+  QByteArray Local::windowState() const {
+    return storage.getByteArray("window_state");
   }
 }
