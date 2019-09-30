@@ -4,7 +4,6 @@
 
 #include <QDebug>
 #include <QFile>
-#include <iostream>
 
 namespace Config {
   Storage::Storage(const QString &path) : filepath(path) {
