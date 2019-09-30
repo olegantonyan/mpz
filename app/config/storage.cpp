@@ -105,16 +105,13 @@ namespace Config {
           auto val = node[i];
           list << QString::fromStdString(val.as<std::string>());
         }
-        //qDebug() << "list" << list;
         value = castSequence(list);
-        //qDebug() << "value" << value;
-
       } else if(node.IsNull()) {
-
+        value.setValue(nullptr);
       } else if(node.IsMap()) {
-
+        qWarning() << "TODO: map not supported yet" << key;
       } else {
-
+        qWarning() << "unknown yaml type";
       }
       data.insert(key, value);
     }
@@ -136,10 +133,9 @@ namespace Config {
     QList<int> intlist;
 
     for (auto i : strl) {
-      bool ok = false;
-      auto integer = i.toInt(&ok);
-      if (ok) {
-        intlist.append(integer);
+      QVariant v = castScalar(i);
+      if (v.type() == QVariant::Int) {
+        intlist.append(v.value<int>());
       } else {
         all_ok = false;
         break;
