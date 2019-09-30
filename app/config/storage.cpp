@@ -35,7 +35,7 @@ namespace Config {
   QByteArray Storage::getByteArray(const QString &key, bool *ok) const {
     QByteArray result;
     for (auto i : getIntList(key, ok)) {
-      result.append((char)i);
+      result.append(static_cast<char>(i));
     }
     return result;
   }
