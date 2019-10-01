@@ -19,6 +19,7 @@ SOURCES += \
     config/global.cpp \
     config/local.cpp \
     config/storage.cpp \
+    config/value.cpp \
     main.cpp \
     mainwindow.cpp \
     directory_ui/directorymodel.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     config/global.h \
     config/local.h \
     config/storage.h \
+    config/value.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
     directory_ui/directoryview.h \

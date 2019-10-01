@@ -18,40 +18,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
 
-
+  auto v1 = Config::Value();
+  qDebug() << v1.get<int>();
+  auto v2 = Config::Value(100);
+  qDebug() << v2.get<int>();
+  auto v3 = Config::Value("1007");
+  qDebug() << v3.get<int>();
 
   ui_settings();
 
-  //  qRegisterMetaTypeStreamOperators<QList<int>>("Stuff");
- /* QList<int> list{1,2,3};
-  QVariant v = QVariant::fromValue<QList<int>>(list);
-  for (auto i : v.value<QList<int>>()) {
-    qDebug() << i;
-  }*/
-
-
-  //local_conf.storage.set("ololo", 78534958);
-
-
-  /*qDebug() << "****";
+ /* qDebug() << qRegisterMetaType<QList<int>>("QList<int>");
   QList<int> list{1,2,3};
   QVariant v = QVariant::fromValue<QList<int>>(list);
-  qDebug() << v.type() << "|" << v.typeName() << "|" << v.userType() << "|" << QVariant::typeToName(v.type());
-  qDebug() << "****";
-  local_conf.storage.set("trolro", v);*/
-
-  /*QStringList list1{"olsdf", "dsfafsda"};
-  QVariant vv = QVariant::fromValue(list1);
-  local_conf.storage.set("хер", vv);
-
-
-  local_conf.storage.save();*/
-
-  /*qDebug() << Config::Local().storage.get("trolro").value<QList<int>>().size();
-  for (auto i : Config::Local().storage.get("trolro").value<QList<int>>()) {
-         qDebug() << i;
-  }*/
-
+  qDebug() << v.userType();*/
 }
 
 MainWindow::~MainWindow() {

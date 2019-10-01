@@ -1,6 +1,8 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
+#include "config/value.h"
+
 #include <QString>
 #include <QList>
 #include <QStringList>
@@ -12,9 +14,10 @@ namespace Config {
   class Storage {
   public:
     Storage(const QString &path);
+    ~Storage();
 
-    QVariant get(const QString &key, bool *ok = nullptr) const;
-    bool set(const QString &key, const QVariant &value);
+    Config::Value get(const QString &key, bool *ok = nullptr) const;
+    bool set(const QString &key, const Config::Value &value);
 
     QByteArray getByteArray(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QByteArray &value);
@@ -30,10 +33,10 @@ namespace Config {
 
   private:
     QString filepath;
-    QMap<QString, QVariant> data;
+    QMap<QString, Config::Value> data;
 
-    QVariant castScalar(const QString& str) const;
-    QVariant castSequence(const QStringList& strl) const;
+    Config::Value castScalar(const QString& str) const;
+    Config::Value castSequence(const QStringList& strl) const;
 
   };
 }

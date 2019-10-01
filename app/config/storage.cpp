@@ -11,12 +11,16 @@ namespace Config {
     //qDebug() << "flle" << filepath << "data" << data;
   }
 
-  QVariant Storage::get(const QString &key, bool *ok) const {
+  Storage::~Storage() {
+    save();
+  }
+
+  Value Storage::get(const QString &key, bool *ok) const {
     if (!data.contains(key)) {
       if (ok) {
         *ok = false;
       }
-      return QVariant();
+      return Config::Value();
     }
     if (ok) {
       *ok = true;
@@ -24,10 +28,7 @@ namespace Config {
     return data[key];
   }
 
-  bool Storage::set(const QString &key, const QVariant &value) {
-    if (!value.isValid()) {
-      return false;
-    }
+  bool Storage::set(const QString &key, const Config::Value &value) {
     data[key] = value;
     return true;
   }
@@ -49,23 +50,23 @@ namespace Config {
   }
 
   QList<int> Storage::getIntList(const QString &key, bool *ok) const {
-    QVariant value = get(key, ok);
-    if (!value.isValid() || value.isNull() || (ok && !*ok)) {
+    Config::Value value = get(key, ok);
+    if (value.isNull() || value.type() != Config::Value::Type::IntegerList || (ok && !*ok)) {
       return QList<int>();
     }
-    return value.value<QList<int>>();
+    return value.get<QList<int>>();
   }
 
   bool Storage::set(const QString &key, const QList<int> &value) {
-    return set(key, QVariant::fromValue(value));
+    return set(key, Config::Value(value));
   }
 
   QStringList Storage::getStringList(const QString &key, bool *ok) const {
-    return get(key, ok).value<QStringList>();
+    return get(key, ok).get<QStringList>();
   }
 
   bool Storage::set(const QString &key, const QStringList &value) {
-    return set(key, QVariant::fromValue(value));
+    return set(key, Config::Value(value));
   }
 
   bool Storage::save() {
@@ -78,34 +79,29 @@ namespace Config {
     YAML::Node root;
     for(auto i : data.toStdMap()) {
       std::string key = i.first.toStdString();
-      QVariant value = i.second;
+      Config::Value value = i.second;
+
       switch (value.type()) {
-        case QVariant::Int:
-          root[key] = value.value<int>();
+        case Config::Value::Type::Integer:
+          root[key] = value.get<int>();
           break;
-        case QVariant::String:
-          root[key] = value.value<QString>().toStdString();
+        case Config::Value::Type::String:
+          root[key] = value.get<QString>().toStdString();
           break;
-        /*case QVariant::List:
-          qWarning() << "TODO: List not supported yet";
-          break;*/
-        default:
-          auto tname = QString(value.typeName());
-          if (tname == "QList<int>") {
-            root[key] = std::vector<int>();
-            auto list = value.value<QList<int>>();
-            for (auto i : list) {
-              root[key].push_back(i);
-            }
-          } else if (tname == "QStringList") {
-            auto list = value.value<QStringList>();
-            for (auto i : list) {
-              root[key].push_back(i.toStdString());
-            }
-          } else {
-            qWarning() << "unsupported QVariant type at key" << QString::fromStdString(key) << ":" << value.type() << "|" << tname << "|" << value.userType();
-            return false;
+        case Config::Value::Type::StringList:
+          root[key] = std::vector<std::string>();
+          for (auto i : value.get<QStringList>()) {
+            root[key].push_back(i.toStdString());
           }
+          break;
+        case Config::Value::Type::IntegerList:
+          root[key] = std::vector<int>();
+          for (auto i : value.get<QList<int>>()) {
+            root[key].push_back(i);
+          }
+          break;
+        default:
+          break;
       }
     }
 
@@ -129,7 +125,7 @@ namespace Config {
       auto key = QString::fromStdString(it->first.as<std::string>());
 
       auto node = it->second;
-      QVariant value;
+      Config::Value value;
 
       if (node.IsScalar()) {
         auto string = QString::fromStdString(node.as<std::string>());
@@ -142,7 +138,7 @@ namespace Config {
         }
         value = castSequence(list);
       } else if(node.IsNull()) {
-        value.setValue(nullptr);
+        // it's null by default, nothing to do
       } else if(node.IsMap()) {
         qWarning() << "TODO: map not supported yet" << key;
       } else {
@@ -153,32 +149,32 @@ namespace Config {
     return true;
   }
 
-  QVariant Storage::castScalar(const QString &str) const {
+  Config::Value Storage::castScalar(const QString &str) const {
     bool ok = false;
     auto integer = str.toInt(&ok);
     if (ok) {
-      return QVariant(integer);
+      return Config::Value(integer);
     } else {
-      return QVariant(str);
+      return Config::Value(str);
     }
   }
 
-  QVariant Storage::castSequence(const QStringList &strl) const {
+  Config::Value Storage::castSequence(const QStringList &strl) const {
     bool all_ok = !strl.isEmpty();
     QList<int> intlist;
 
     for (auto i : strl) {
-      QVariant v = castScalar(i);
-      if (v.type() == QVariant::Int) {
-        intlist.append(v.value<int>());
+      Config::Value v = castScalar(i);
+      if (v.type() == Config::Value::Type::Integer) {
+        intlist.append(v.get<int>());
       } else {
         all_ok = false;
         break;
       }
     }
     if (all_ok) {
-      return QVariant::fromValue<QList<int>>(intlist);
+      return Config::Value(QList<int>(intlist));
     }
-    return QVariant::fromValue(strl);
+    return Config::Value(strl);
   }
 }
