@@ -29,7 +29,7 @@ private:
   Config::Local local_conf;
   //Config::Global global_conf;
 
-  void ui_settings();
+  void loadUiSettings();
 
   // QWidget interface
 protected:

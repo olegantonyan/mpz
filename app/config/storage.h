@@ -38,6 +38,8 @@ namespace Config {
     Config::Value castScalar(const QString& str) const;
     Config::Value castSequence(const QStringList& strl) const;
 
+    bool changed;
+
   };
 }
 #endif // STORAGE_H

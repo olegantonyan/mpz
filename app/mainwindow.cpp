@@ -18,14 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
 
-  auto v1 = Config::Value();
-  qDebug() << v1.get<int>();
-  auto v2 = Config::Value(100);
-  qDebug() << v2.get<int>();
-  auto v3 = Config::Value("1007");
-  qDebug() << v3.get<int>();
-
-  ui_settings();
+  loadUiSettings();
 
  /* qDebug() << qRegisterMetaType<QList<int>>("QList<int>");
   QList<int> list{1,2,3};
@@ -37,7 +30,7 @@ MainWindow::~MainWindow() {
   delete ui;
 }
 
-void MainWindow::ui_settings() {
+void MainWindow::loadUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   restoreState(local_conf.windowState());
 

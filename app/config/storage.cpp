@@ -6,7 +6,7 @@
 #include <QFile>
 
 namespace Config {
-  Storage::Storage(const QString &path) : filepath(path) {
+  Storage::Storage(const QString &path) : filepath(path), changed(false) {
     reload();
     //qDebug() << "flle" << filepath << "data" << data;
   }
@@ -30,6 +30,7 @@ namespace Config {
 
   bool Storage::set(const QString &key, const Config::Value &value) {
     data[key] = value;
+    changed = true;
     return true;
   }
 
@@ -70,6 +71,9 @@ namespace Config {
   }
 
   bool Storage::save() {
+    if (!changed) {
+      return true;
+    }
     QFile file(filepath);
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
       qWarning() << "error opening file for writing" << filepath << ":" << file.errorString();
@@ -108,9 +112,10 @@ namespace Config {
     YAML::Emitter emitter;
     emitter << root;
     //qDebug() << emitter.c_str();
-    file.write(emitter.c_str());
-
-    return true;
+    bool ok = file.write(emitter.c_str()) == static_cast<qint64>(emitter.size());
+    //qDebug() << ok;
+    changed = !ok;
+    return ok;
   }
 
   bool Storage::reload() {
