@@ -19,11 +19,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
 
   loadUiSettings();
-
- /* qDebug() << qRegisterMetaType<QList<int>>("QList<int>");
-  QList<int> list{1,2,3};
-  QVariant v = QVariant::fromValue<QList<int>>(list);
-  qDebug() << v.userType();*/
 }
 
 MainWindow::~MainWindow() {
@@ -34,39 +29,26 @@ void MainWindow::loadUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   restoreState(local_conf.windowState());
 
-  /*connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
+  connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
     (void)pos;
     (void)index;
-    settings->setValue("splitter_size_1", ui->splitter->sizes().at(0));
-    settings->setValue("splitter_size_2", ui->splitter->sizes().at(1));
-    settings->setValue("splitter_size_3", ui->splitter->sizes().at(2));
+    QList<int> list;
+    list.append(ui->splitter->sizes().at(0));
+    list.append(ui->splitter->sizes().at(1));
+    list.append(ui->splitter->sizes().at(2));
+    local_conf.saveSplitterSizes(list);
   });
 
-  auto i = QList<int>();
-  bool all_ok = true;
-  bool ok = false;
-  i << settings->value("splitter_size_1").toInt(&ok);
-  if (!ok) {
-    all_ok = false;
+  auto splitter_sizes = local_conf.splitterSizes();
+  if (splitter_sizes.size() >= 3) {
+    ui->splitter->setSizes(splitter_sizes);
   }
-  i << settings->value("splitter_size_2").toInt(&ok);
-  if (!ok) {
-    all_ok = false;
-  }
-  i << settings->value("splitter_size_3").toInt(&ok);
-  if (!ok) {
-    all_ok = false;
-  }
-
-  if (all_ok) {
-    ui->splitter->setSizes(i);
-  }*/
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
+  global_conf.sync();
   QMainWindow::closeEvent(event);
-
 }

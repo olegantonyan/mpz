@@ -25,4 +25,12 @@ namespace Config {
   QByteArray Local::windowState() const {
     return storage.getByteArray("window_state");
   }
+
+  bool Local::saveSplitterSizes(const QList<int> &list) {
+    return storage.set("splitter_sizes", list);
+  }
+
+  QList<int> Local::splitterSizes() const {
+    return storage.getIntList("splitter_sizes");
+  }
 }

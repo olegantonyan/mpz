@@ -18,6 +18,9 @@ namespace Config {
     bool saveWindowState(const QByteArray &v);
     QByteArray windowState() const;
 
+    bool saveSplitterSizes(const QList<int> &list);
+    QList<int> splitterSizes() const;
+
   private:
     Config::Storage storage;
   };

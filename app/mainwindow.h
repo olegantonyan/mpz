@@ -27,7 +27,7 @@ private:
   PlaylistsUi::View *playlists;
   PlaylistUi::View *playlist;
   Config::Local local_conf;
-  //Config::Global global_conf;
+  Config::Global global_conf;
 
   void loadUiSettings();
 

@@ -8,6 +8,8 @@ namespace Config {
   public:
     Global();
 
+    bool sync();
+
   private:
     Config::Storage storage;
   };
