@@ -5,6 +5,7 @@
 #include <QList>
 #include <QString>
 #include <QStringList>
+#include <QMap>
 
 namespace Config {
   class Value {
@@ -14,7 +15,8 @@ namespace Config {
       Integer,
       String,
       StringList,
-      IntegerList
+      IntegerList,
+      Map
     };
 
     Value();
@@ -22,6 +24,7 @@ namespace Config {
     Value(const QString &v);
     Value(const QStringList &v);
     Value(const QList<int> &v);
+    Value(const QMap<QString, Value> &v);
 
     template<class T> T get() const {
       return value.value<T>();
@@ -30,10 +33,15 @@ namespace Config {
     enum Type type() const;
     bool isNull() const;
 
+    operator QString() const;
+    QString toString() const;
+
   private:
     QVariant value;
     enum Type value_type;
   };
 }
+
+Q_DECLARE_METATYPE(Config::Value)
 
 #endif // VALUE_H

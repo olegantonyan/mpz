@@ -3,6 +3,8 @@
 
 #include "config/value.h"
 
+#include <yaml-cpp/yaml.h>
+
 #include <QString>
 #include <QList>
 #include <QStringList>
@@ -40,6 +42,8 @@ namespace Config {
 
     bool changed;
 
+    QMap<QString, Config::Value> parse(const YAML::Node &begin_node) const;
+    YAML::Node serialize(const QMap<QString, Config::Value> &dt) const;
   };
 }
 #endif // STORAGE_H
