@@ -27,7 +27,7 @@ namespace Config {
     QList<int> getIntList(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QList<int> &value);
 
-    QStringList getStringList(const QString &key, bool *ok = nullptr) const;
+    //QStringList getStringList(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QStringList &value);
 
     bool save();

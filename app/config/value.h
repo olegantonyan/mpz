@@ -14,24 +14,25 @@ namespace Config {
       Null,
       Integer,
       String,
-      StringList,
-      IntegerList,
-      Map
+      Map,
+      List
     };
 
     Value();
     Value(int v);
     Value(const QString &v);
-    Value(const QStringList &v);
-    Value(const QList<int> &v);
     Value(const QMap<QString, Value> &v);
+    Value(const QList<Value> &v);
 
     template<class T> T get() const {
       return value.value<T>();
     }
 
     enum Type type() const;
+    enum Type listType() const;
     bool isNull() const;
+
+    void setListType(enum Type t);
 
     operator QString() const;
     QString toString() const;
@@ -39,6 +40,7 @@ namespace Config {
   private:
     QVariant value;
     enum Type value_type;
+    enum Type list_elements_type;
   };
 }
 
