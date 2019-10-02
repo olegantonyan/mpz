@@ -160,7 +160,7 @@ namespace Config {
     return result;
   }
 
-  YAML::Node Storage::serialize(const QMap<QString, Value> &dt) const {
+  YAML::Node Storage::serialize(const QMap<QString, Config::Value> &dt) const {
 
     YAML::Node result;
 
@@ -188,7 +188,7 @@ namespace Config {
           }
           break;
         case Config::Value::Type::Map:
-          result[key] = serialize(value.get<QMap<QString, Value>>());
+          result[key] = serialize(value.get<QMap<QString, Config::Value>>());
           break;
         default:
           break;
