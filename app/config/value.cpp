@@ -26,6 +26,9 @@ namespace Config {
   Value::Value(const QList<Value> &v) {
     value.setValue(v);
     value_type = Config::Value::Type::List;
+    if (v.size() > 0) { // assuming all values in the list are the same type
+      setListType(v.first().type());
+    }
   }
 
   Value::Type Value::type() const {

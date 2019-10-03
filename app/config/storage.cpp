@@ -75,7 +75,7 @@ namespace Config {
     return get(key, ok).get<QStringList>();
   }*/
 
-  bool Storage::set(const QString &key, const QStringList &value) {
+  /*bool Storage::set(const QString &key, const QStringList &value) {
     QList<Config::Value> vl;
     for (auto i : value) {
       vl.append(Config::Value(i));
@@ -83,7 +83,7 @@ namespace Config {
     auto i = Config::Value(vl);
     i.setListType(Config::Value::Type::String);
     return set(key, i);
-  }
+  }*/
 
   bool Storage::save() {
     if (!changed) {

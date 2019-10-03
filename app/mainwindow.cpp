@@ -19,6 +19,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
 
   loadUiSettings();
+
+/*
+  QMap<QString, Config::Value> m;
+  m.insert("hello", Config::Value(123));
+  m.insert("fuch", Config::Value(10));
+  local_conf.storage.set("sdafas", Config::Value(m));
+
+  QList<Config::Value> l;
+  l.append(Config::Value(m));
+  l.append(Config::Value(m));
+  auto i = Config::Value(l);
+  //i.setListType(Config::Value::Type::Map);
+local_conf.storage.set("list", i);*/
 }
 
 MainWindow::~MainWindow() {
