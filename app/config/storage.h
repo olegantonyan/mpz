@@ -27,9 +27,6 @@ namespace Config {
     QList<int> getIntList(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QList<int> &value);
 
-    //QStringList getStringList(const QString &key, bool *ok = nullptr) const;
-    //bool set(const QString &key, const QStringList &value);
-
     bool save();
     bool reload();
 
@@ -38,7 +35,6 @@ namespace Config {
     QMap<QString, Config::Value> data;
 
     Config::Value castScalar(const QString& str) const;
-    //Config::Value castSequence(const QStringList& strl) const;
 
     bool changed;
 

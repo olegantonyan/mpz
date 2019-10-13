@@ -71,20 +71,6 @@ namespace Config {
     return set(key, i);
   }
 
- /* QStringList Storage::getStringList(const QString &key, bool *ok) const {
-    return get(key, ok).get<QStringList>();
-  }*/
-
-  /*bool Storage::set(const QString &key, const QStringList &value) {
-    QList<Config::Value> vl;
-    for (auto i : value) {
-      vl.append(Config::Value(i));
-    }
-    auto i = Config::Value(vl);
-    i.setListType(Config::Value::Type::String);
-    return set(key, i);
-  }*/
-
   bool Storage::save() {
     if (!changed) {
       return true;
@@ -127,25 +113,6 @@ namespace Config {
       return Config::Value(str);
     }
   }
-
-  /*Config::Value Storage::castSequence(const QStringList &strl) const {
-    bool all_ok = !strl.isEmpty();
-    QList<int> intlist;
-
-    for (auto i : strl) {
-      Config::Value v = castScalar(i);
-      if (v.type() == Config::Value::Type::Integer) {
-        intlist.append(v.get<int>());
-      } else {
-        all_ok = false;
-        break;
-      }
-    }
-    if (all_ok) {
-      return Config::Value(QList<int>(intlist));
-    }
-    return Config::Value(strl);
-  }*/
 
   QMap<QString, Value> Storage::parse(const YAML::Node &begin_node) const {
     QMap<QString, Value> result;
