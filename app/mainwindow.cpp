@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   loadUiSettings();
 
+  playlists->load();
+
 /*
   QMap<QString, Config::Value> m;
   m.insert("hello", Config::Value(123));

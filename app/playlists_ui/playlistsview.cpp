@@ -8,7 +8,7 @@
 #include <QItemSelectionModel>
 
 namespace PlaylistsUi {
-  View::View(QListView *v, Config::Local &conf, QObject *parent) : QObject(parent) {
+  View::View(QListView *v, Config::Local &conf, QObject *parent) : QObject(parent), local_conf(conf){
     view = v;
     model = new PlaylistsUi::Model(conf, this);
 
@@ -19,13 +19,27 @@ namespace PlaylistsUi {
     connect(view, &QListView::clicked, this, &View::on_itemActivated);
   }
 
+  void View::load() {
+    if (model->listSize() > 0) {
+      auto idx = model->buildIndex(local_conf.currentPlaylist());
+      auto item = model->itemAt(idx);
+      view->setCurrentIndex(idx);
+      view->selectionModel()->select(idx, {QItemSelectionModel::Select});
+      current = item;
+      emit selected(item);
+    }
+  }
+
   void View::on_createPlaylist(const QDir &filepath) {
-    auto item = std::shared_ptr<Playlist>(new Playlist(filepath));
+    auto pl = new Playlist();
+    pl->load(filepath);
+    auto item = std::shared_ptr<Playlist>(pl);
     auto index = model->append(item);
     view->setCurrentIndex(index);
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     current = item;
 
+    local_conf.saveCurrentPlaylist(index.row());
     emit selected(item);
   }
 
@@ -80,6 +94,7 @@ namespace PlaylistsUi {
 
     auto item = model->itemAt(index);
     if (current != item) {
+      local_conf.saveCurrentPlaylist(index.row());
       emit selected(item);
     }
     current = item;

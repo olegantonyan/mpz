@@ -3,22 +3,8 @@
 #include <QDebug>
 #include <QDirIterator>
 
-Playlist::Playlist(const QDir &p) {
-  directory_path = p;
-  rename(path().dirName());
+Playlist::Playlist() {
   tracks_list.clear();
-
-  //qDebug() << "initializing playlist" << path();
-
-  // TODO do this in background
-  QDirIterator it(path().absolutePath(), QStringList() << "*.mp3" << "*.flac" << "*.ogg", QDir::Files, QDirIterator::Subdirectories);
-  while (it.hasNext()) {
-    tracks_list << Track(it.next());
-  }
-}
-
-QDir Playlist::path() const {
-  return directory_path;
 }
 
 QString Playlist::name() const {
@@ -32,5 +18,19 @@ QString Playlist::rename(const QString &value) {
 
 QVector<Track> Playlist::tracks() const {
   return tracks_list;
+}
+
+bool Playlist::load(const QDir &path) {
+  rename(path.dirName());
+  QDirIterator it(path.absolutePath(), QStringList() << "*.mp3" << "*.flac" << "*.ogg", QDir::Files, QDirIterator::Subdirectories);
+  while (it.hasNext()) {
+    tracks_list << Track(it.next());
+  }
+  return true;
+}
+
+bool Playlist::load(const QVector<Track> &tracks) {
+  tracks_list = tracks;
+  return true;
 }
 

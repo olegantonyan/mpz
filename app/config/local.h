@@ -25,6 +25,9 @@ namespace Config {
     QList<std::shared_ptr<Playlist>> playlists() const;
     bool savePlaylists(QList<std::shared_ptr<Playlist>> &list);
 
+    int currentPlaylist() const;
+    bool saveCurrentPlaylist(int idx);
+
   private:
     Config::Storage storage;
   };

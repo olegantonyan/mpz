@@ -4,12 +4,15 @@
 
 namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
-    list.clear();
-    // TODO: load playlists
+    list = conf.playlists();
+  }
+
+  QModelIndex Model::buildIndex(int row) {
+    return createIndex(row, 0);
   }
 
   QModelIndex Model::append(std::shared_ptr<Playlist> item) {
-    QModelIndex idx = createIndex(list.size(), 0);
+    QModelIndex idx = buildIndex(list.size());
     list.append(item);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
     persist();

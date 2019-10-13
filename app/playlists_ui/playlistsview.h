@@ -19,6 +19,7 @@ namespace PlaylistsUi {
 
   public:
     explicit View(QListView *view, Config::Local &conf, QObject *parent = nullptr);
+    void load();
 
   public slots:
     void on_createPlaylist(const QDir &filepath);
@@ -35,6 +36,7 @@ namespace PlaylistsUi {
     QListView *view;
     Model *model;
     std::shared_ptr<Playlist> current;
+    Config::Local &local_conf;
   };
 }
 

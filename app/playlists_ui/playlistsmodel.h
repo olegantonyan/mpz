@@ -16,6 +16,7 @@ namespace PlaylistsUi {
   public:
     explicit Model(Config::Local &conf, QObject *parent = nullptr);
 
+    QModelIndex buildIndex(int row);
     QModelIndex append(std::shared_ptr<Playlist> item);
     void remove(const QModelIndex &index);
     std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
@@ -27,6 +28,8 @@ namespace PlaylistsUi {
   private:
     QList<std::shared_ptr<Playlist>> list;
     Config::Local &local_conf;
+
+    bool persist();
   };
 }
 

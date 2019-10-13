@@ -9,16 +9,16 @@
 
 class Playlist {
 public:
-  explicit Playlist(const QDir &path);
-
-  QDir path() const;
+  explicit Playlist();
 
   QString name() const;
   QString rename(const QString &value);
   QVector<Track> tracks() const;
 
+  bool load(const QDir &path);
+  bool load(const QVector<Track> &tracks);
+
 private:
-  QDir directory_path;
   QString playlist_name;
   QVector<Track> tracks_list;
 };

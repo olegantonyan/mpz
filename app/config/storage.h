@@ -38,7 +38,7 @@ namespace Config {
     QMap<QString, Config::Value> data;
 
     Config::Value castScalar(const QString& str) const;
-    Config::Value castSequence(const QStringList& strl) const;
+    //Config::Value castSequence(const QStringList& strl) const;
 
     bool changed;
 
