@@ -3,7 +3,6 @@
 
 #include "playlistmodel.h"
 #include "playlist.h"
-#include "config/local.h"
 
 #include <QObject>
 #include <QTableView>
@@ -13,7 +12,7 @@ namespace PlaylistUi {
   class View : public QObject {
     Q_OBJECT
   public:
-    explicit View(QTableView *v, Config::Local &conf, QObject *parent = nullptr);
+    explicit View(QTableView *v, QObject *parent = nullptr);
 
   signals:
 
@@ -24,7 +23,6 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     Model *model;
-    Config::Local &local_conf;
   };
 }
 

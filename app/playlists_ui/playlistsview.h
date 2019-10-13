@@ -3,6 +3,7 @@
 
 #include "playlistsmodel.h"
 #include "playlist.h"
+#include "config/local.h"
 
 #include <QObject>
 #include <QListView>
@@ -17,7 +18,7 @@ namespace PlaylistsUi {
     Q_OBJECT
 
   public:
-    explicit View(QListView *view, QObject *parent = nullptr);
+    explicit View(QListView *view, Config::Local &conf, QObject *parent = nullptr);
 
   public slots:
     void on_createPlaylist(const QDir &filepath);

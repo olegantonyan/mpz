@@ -3,14 +3,16 @@
 #include <QDebug>
 
 namespace PlaylistsUi {
-  Model::Model(QObject *parent) : QAbstractListModel(parent) {
+  Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
     list.clear();
+    // TODO: load playlists
   }
 
   QModelIndex Model::append(std::shared_ptr<Playlist> item) {
     QModelIndex idx = createIndex(list.size(), 0);
     list.append(item);
     emit dataChanged(idx, idx, {Qt::DisplayRole});
+    persist();
     return idx;
   }
 
@@ -19,6 +21,7 @@ namespace PlaylistsUi {
       return;
     }
     list.removeAt(index.row());
+    persist();
     emit dataChanged(index, index, {Qt::DisplayRole});
   }
 
@@ -57,5 +60,9 @@ namespace PlaylistsUi {
     }
 
     return QVariant();
+  }
+
+  bool Model::persist() {
+    return local_conf.savePlaylists(list);
   }
 }

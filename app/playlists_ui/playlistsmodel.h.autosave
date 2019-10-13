@@ -27,6 +27,8 @@ namespace PlaylistsUi {
   private:
     QList<std::shared_ptr<Playlist>> list;
     Config::Local &local_conf;
+    
+    bool persist();
   };
 }
 

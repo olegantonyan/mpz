@@ -8,9 +8,9 @@
 #include <QItemSelectionModel>
 
 namespace PlaylistsUi {
-  View::View(QListView *v, QObject *parent) : QObject(parent) {
+  View::View(QListView *v, Config::Local &conf, QObject *parent) : QObject(parent) {
     view = v;
-    model = new Model(this);
+    model = new PlaylistsUi::Model(conf, this);
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);

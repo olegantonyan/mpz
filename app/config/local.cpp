@@ -33,4 +33,19 @@ namespace Config {
   QList<int> Local::splitterSizes() const {
     return storage.getIntList("splitter_sizes");
   }
+
+  QList<std::shared_ptr<Playlist> > Local::playlists() const {
+    return QList<std::shared_ptr<Playlist> >();
+  }
+
+  bool Local::savePlaylists(QList<std::shared_ptr<Playlist> > &list) {
+    QList<Config::Value> plist;
+    for (auto i : list) {
+      QMap<QString, Config::Value> mp;
+      mp.insert("name", Config::Value(i->name()));
+      mp.insert("path", Config::Value(i->path().absolutePath()));
+      plist << Config::Value(mp);
+    }
+    return storage.set("playlists", Config::Value(plist));
+  }
 }

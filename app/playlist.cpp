@@ -8,7 +8,7 @@ Playlist::Playlist(const QDir &p) {
   rename(path().dirName());
   tracks_list.clear();
 
-  qDebug() << "initializing playlist" << path();
+  //qDebug() << "initializing playlist" << path();
 
   // TODO do this in background
   QDirIterator it(path().absolutePath(), QStringList() << "*.mp3" << "*.flac" << "*.ogg", QDir::Files, QDirIterator::Subdirectories);
