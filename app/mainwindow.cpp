@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   library = new DirectoryUi::View(ui->treeView, "/mnt/storage/music", this);
   playlists = new PlaylistsUi::View(ui->listView, this);
-  playlist = new PlaylistUi::View(ui->tableView, this);
+  playlist = new PlaylistUi::View(ui->tableView, local_conf, this);
 
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);

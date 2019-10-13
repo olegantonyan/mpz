@@ -4,7 +4,7 @@
 #include <QHeaderView>
 
 namespace PlaylistUi {
-  View::View(QTableView *v, QObject *parent) : QObject(parent) {
+  View::View(QTableView *v, Config::Local &conf, QObject *parent) : QObject(parent), local_conf(conf) {
     view = v;
     model = new Model(this);
     view->setModel(model);
