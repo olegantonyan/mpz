@@ -13,8 +13,12 @@ public:
   QString title() const;
   quint16 year() const;
   quint32 duration() const;
+  quint16 sample_rate() const;
+  quint8 channels() const;
+  quint16 bitrate() const;
 
   QString formattedDuration() const;
+  QString formattedAudioInfo() const;
 
 private:
   QString filepath;
@@ -23,6 +27,9 @@ private:
   QString _title;
   quint16 _year;
   quint32 _duration;
+  quint16 _sample_rate;
+  quint8 _channels;
+  quint16 _bitrate;
 };
 
 #endif // TRACK_H
