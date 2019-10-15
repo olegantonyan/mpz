@@ -7,11 +7,14 @@ class Track {
 public:
   Track(const QString &filepath);
 
-  QString path();
-  QString artist();
-  QString album();
-  QString title();
-  quint16 year();
+  QString path() const;
+  QString artist() const;
+  QString album() const;
+  QString title() const;
+  quint16 year() const;
+  quint32 duration() const;
+
+  QString formattedDuration() const;
 
 private:
   QString filepath;
@@ -19,6 +22,7 @@ private:
   QString _album;
   QString _title;
   quint16 _year;
+  quint32 _duration;
 };
 
 #endif // TRACK_H

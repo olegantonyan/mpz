@@ -38,7 +38,7 @@ namespace PlaylistUi {
         case 3:
           return t.year();
         case 4:
-          return "";
+          return t.formattedDuration();
         default:
           throw "unhandled column number";
       }
