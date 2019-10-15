@@ -16,6 +16,7 @@ public:
   quint16 sample_rate() const;
   quint8 channels() const;
   quint16 bitrate() const;
+  QString format() const;
 
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
@@ -30,6 +31,7 @@ private:
   quint16 _sample_rate;
   quint8 _channels;
   quint16 _bitrate;
+  QString _format;
 };
 
 #endif // TRACK_H

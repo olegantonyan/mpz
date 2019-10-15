@@ -6,16 +6,19 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QFileInfo>
 
 Track::Track(const QString &fp) {
   filepath = fp;
 
   TagLib::FileRef f(path().toStdString().c_str());
   if(!f.isNull()) {
-    _duration = static_cast<quint32>(f.audioProperties()->length());
-    _channels = static_cast<quint32>(f.audioProperties()->channels());
-    _bitrate = static_cast<quint32>(f.audioProperties()->bitrate());
-    _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
+    if (f.audioProperties()) {
+      _duration = static_cast<quint32>(f.audioProperties()->length());
+      _channels = static_cast<quint32>(f.audioProperties()->channels());
+      _bitrate = static_cast<quint32>(f.audioProperties()->bitrate());
+      _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
+    }
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
       _artist = QString(tag->artist().toCString(true));
@@ -25,7 +28,11 @@ Track::Track(const QString &fp) {
     }
   }
 
-  //qDebug() << formattedAudioInfo();
+  _format = QFileInfo(path()).suffix().toUpper();
+
+  //qDebug() << typeid(f.file()).name();
+
+  qDebug() << formattedAudioInfo();
 }
 
 QString Track::path() const {
@@ -72,7 +79,7 @@ QString Track::formattedAudioInfo() const {
   } else {
     c = QString("%1 channels").arg(channels());
   }
-  return QString("%1kbps | %2Hz | %3").arg(bitrate()).arg(sample_rate()).arg(c);
+  return QString("%1 | %2kbps | %3Hz | %4").arg(format()).arg(bitrate()).arg(sample_rate()).arg(c);
 }
 
 quint16 Track::sample_rate() const {
@@ -85,4 +92,8 @@ quint8 Track::channels() const {
 
 quint16 Track::bitrate() const {
   return _bitrate;
+}
+
+QString Track::format() const {
+  return _format;
 }
