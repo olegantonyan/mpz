@@ -32,7 +32,7 @@ Track::Track(const QString &fp) {
 
   //qDebug() << typeid(f.file()).name();
 
-  qDebug() << formattedAudioInfo();
+  //qDebug() << formattedAudioInfo();
 }
 
 QString Track::path() const {

@@ -14,6 +14,10 @@ namespace PlaylistUi {
     view->setShowGrid(false);
     //view->setFocusPolicy(Qt::NoFocus);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //view->setColumnWidth(0, 400);
+
+   // qDebug() << view->columnWidth(0);
   }
 
   void View::on_load(const std::shared_ptr<Playlist> pi) {
