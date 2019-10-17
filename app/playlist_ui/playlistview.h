@@ -7,8 +7,16 @@
 #include <QObject>
 #include <QTableView>
 #include <memory>
+#include <QEvent>
 
 namespace PlaylistUi {
+  class ResizeEventInterceptor : public QObject {
+    Q_OBJECT
+
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+  };
+
   class View : public QObject {
     Q_OBJECT
   public:
@@ -23,6 +31,7 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     Model *model;
+    ResizeEventInterceptor interceptor;
   };
 }
 

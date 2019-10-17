@@ -67,3 +67,4 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   //global_conf.sync();
   QMainWindow::closeEvent(event);
 }
+
