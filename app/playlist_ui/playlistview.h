@@ -10,19 +10,10 @@
 #include <QEvent>
 
 namespace PlaylistUi {
-  class ResizeEventInterceptor : public QObject {
-    Q_OBJECT
-
-  protected:
-    bool eventFilter(QObject *obj, QEvent *event);
-  };
-
   class View : public QObject {
     Q_OBJECT
   public:
     explicit View(QTableView *v, QObject *parent = nullptr);
-
-  signals:
 
   public slots:
     void on_load(const std::shared_ptr<Playlist> pi);
@@ -31,7 +22,30 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     Model *model;
-    ResizeEventInterceptor interceptor;
+
+    void on_resize();
+  };
+
+
+  //
+  class ResizeEventInterceptor : public QObject {
+    Q_OBJECT
+  public:
+    explicit ResizeEventInterceptor(void (PlaylistUi::View::*cb)(), PlaylistUi::View *cbobj) :
+      QObject(cbobj), callback_object(cbobj), callback(cb) {
+    }
+
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event) {
+      if (event->type() == QEvent::Resize) {
+        (callback_object->*callback)();
+      }
+      return QObject::eventFilter(obj, event);
+    }
+
+  private:
+    PlaylistUi::View *callback_object;
+    void (PlaylistUi::View::*callback)();
   };
 }
 
