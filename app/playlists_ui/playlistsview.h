@@ -25,7 +25,7 @@ namespace PlaylistsUi {
     void on_createPlaylist(const QDir &filepath);
 
   signals:
-    void selected(const std::shared_ptr<Playlist> item);
+    void selected(const std::shared_ptr<Playlist> item, int index);
     void emptied();
 
   private slots:

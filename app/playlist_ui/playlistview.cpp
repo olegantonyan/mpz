@@ -24,12 +24,12 @@ namespace PlaylistUi {
     view->installEventFilter(interceptor);
   }
 
-  void View::on_load(const std::shared_ptr<Playlist> pi) {
-    model->setTracks(pi->tracks());
+  void View::on_load(const std::shared_ptr<Playlist> pi, int playlist_index) {
+    model->setTracks(pi->tracks(), playlist_index);
   }
 
   void View::on_unload() {
-    model->setTracks(QVector<Track>());
+    model->setTracks(QVector<Track>(), 0);
   }
 
   void View::on_resize() {

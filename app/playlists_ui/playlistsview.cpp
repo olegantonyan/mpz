@@ -26,7 +26,7 @@ namespace PlaylistsUi {
       view->setCurrentIndex(idx);
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
       current = item;
-      emit selected(item);
+      emit selected(item, idx.row());
     }
   }
 
@@ -40,7 +40,7 @@ namespace PlaylistsUi {
     current = item;
 
     local_conf.saveCurrentPlaylist(index.row());
-    emit selected(item);
+    emit selected(item, index.row());
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -95,7 +95,7 @@ namespace PlaylistsUi {
     auto item = model->itemAt(index);
     if (current != item) {
       local_conf.saveCurrentPlaylist(index.row());
-      emit selected(item);
+      emit selected(item, index.row());
     }
     current = item;
   }

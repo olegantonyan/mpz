@@ -18,10 +18,13 @@ namespace PlaylistUi {
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    void setTracks(const QVector<Track> &tracks);
+    void setTracks(const QVector<Track> &tracks, int index);
+
+    int current_playlist_index() const;
 
   private:
     QVector<Track> tracks;
+    int playlist_index;
   };
 }
 

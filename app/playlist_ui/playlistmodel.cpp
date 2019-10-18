@@ -50,7 +50,7 @@ namespace PlaylistUi {
     return QVariant();
   }
 
-  void Model::setTracks(const QVector<Track> &t) {
+  void Model::setTracks(const QVector<Track> &t, int index) {
     beginRemoveRows(QModelIndex(), 0, tracks.size());
     tracks.clear();
     endRemoveRows();
@@ -59,8 +59,13 @@ namespace PlaylistUi {
     tracks = t;
     endInsertRows();
 
+    playlist_index = index;
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
+  }
+
+  int Model::current_playlist_index() const {
+    return playlist_index;
   }
 }
