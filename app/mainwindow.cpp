@@ -17,15 +17,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   playlists = new PlaylistsUi::View(ui->listView, local_conf, this);
   playlist = new PlaylistUi::View(ui->tableView, this);
 
+  auto pc = Playback::Controls();
+  pc.next = ui->nextButton;
+  pc.prev = ui->prevButton;
+  pc.stop = ui->stopButton;
+  pc.play = ui->playButton;
+  pc.pause = ui->pauseButton;
+  pc.seekbar = ui->progressSeeker;
+  player = new Playback::PlaybackView(pc, this);
+
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
+  connect(playlist, &PlaylistUi::View::activated, player, &Playback::PlaybackView::play);
 
   loadUiSettings();
 
   playlists->load();
 
-  ui->statusbar->showMessage("TODO: Playing track name, info");
+  connect(player, &Playback::PlaybackView::started, [=](const Track &track) {
+    ui->statusbar->showMessage(QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo());
+  });
+  connect(player, &Playback::PlaybackView::stopped, [=]() {
+    ui->statusbar->showMessage("Stopped");
+  });
+  connect(player, &Playback::PlaybackView::paused, [=](const Track &track) {
+    ui->statusbar->showMessage(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
+  });
+
 
   ui->tableView->setFocus();
 

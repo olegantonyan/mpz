@@ -26,6 +26,8 @@ SOURCES += \
     mainwindow.cpp \
     directory_ui/directorymodel.cpp \
     directory_ui/directoryview.cpp \
+    playback/controls.cpp \
+    playback/playbackview.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist_ui/playlistview.cpp \
     playlist.cpp \
@@ -41,6 +43,8 @@ HEADERS += \
     mainwindow.h \
     directory_ui/directorymodel.h \
     directory_ui/directoryview.h \
+    playback/controls.h \
+    playback/playbackview.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistview.h \
     playlist.h \

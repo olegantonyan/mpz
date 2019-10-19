@@ -65,6 +65,13 @@ namespace PlaylistUi {
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
   }
 
+  Track Model::itemAt(const QModelIndex &index) const {
+    if (index.row() > tracks.size() - 1) {
+      throw "index out of bounds";
+    }
+    return tracks.at(index.row());
+  }
+
   int Model::current_playlist_index() const {
     return playlist_index;
   }

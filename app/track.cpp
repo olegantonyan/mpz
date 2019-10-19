@@ -97,3 +97,7 @@ quint16 Track::bitrate() const {
 QString Track::format() const {
   return _format;
 }
+
+QString Track::filename() const {
+  return QFileInfo(path()).fileName();
+}

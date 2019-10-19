@@ -17,6 +17,7 @@ public:
   quint8 channels() const;
   quint16 bitrate() const;
   QString format() const;
+  QString filename() const;
 
   QString formattedDuration() const;
   QString formattedAudioInfo() const;

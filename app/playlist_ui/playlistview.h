@@ -15,6 +15,9 @@ namespace PlaylistUi {
   public:
     explicit View(QTableView *v, QObject *parent = nullptr);
 
+  signals:
+    void activated(const Track &track);
+
   public slots:
     void on_load(const std::shared_ptr<Playlist> pi, int playlist_index);
     void on_unload();

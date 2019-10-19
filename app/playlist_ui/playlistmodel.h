@@ -20,6 +20,8 @@ namespace PlaylistUi {
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     void setTracks(const QVector<Track> &tracks, int index);
 
+    Track itemAt(const QModelIndex &index) const;
+
     int current_playlist_index() const;
 
   private:

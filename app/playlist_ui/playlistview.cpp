@@ -22,6 +22,10 @@ namespace PlaylistUi {
 
     auto interceptor = new ResizeEventInterceptor(&PlaylistUi::View::on_resize, this);
     view->installEventFilter(interceptor);
+
+    connect(view, &QTableView::doubleClicked, [=](const QModelIndex &index) {
+      emit activated(model->itemAt(index));
+    });
   }
 
   void View::on_load(const std::shared_ptr<Playlist> pi, int playlist_index) {
@@ -33,11 +37,12 @@ namespace PlaylistUi {
   }
 
   void View::on_resize() {
-    int total_width = view->width() - 50;
-    view->setColumnWidth(0, total_width * 0.3);
-    view->setColumnWidth(1, total_width * 0.3);
-    view->setColumnWidth(2, total_width * 0.3);
+    int total_width = view->width();
+    view->setColumnWidth(0, total_width * 0.28);
+    view->setColumnWidth(1, total_width * 0.28);
+    view->setColumnWidth(2, total_width * 0.28);
     view->setColumnWidth(3, total_width * 0.05);
-    view->setColumnWidth(4, total_width * 0.05);
+    //view->setColumnWidth(4, total_width * 0.05);
+    view->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
   }
 }
