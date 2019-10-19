@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(player, &Playback::PlaybackView::paused, [=](const Track &track) {
     ui->statusbar->showMessage(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
   });
+  player->stop();
 
 
   ui->tableView->setFocus();

@@ -16,8 +16,10 @@ namespace Playback {
     void started(const Track &track);
     void stopped();
     void paused(const Track &track);
+
   public slots:
     void play(const Track &track);
+    void stop();
 
   private:
     Playback::Controls controls;

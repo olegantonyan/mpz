@@ -7,4 +7,8 @@ namespace Playback {
   void PlaybackView::play(const Track &track) {
     emit started(track);
   }
+
+  void PlaybackView::stop() {
+    emit stopped();
+  }
 }
