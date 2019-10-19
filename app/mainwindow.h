@@ -27,7 +27,7 @@ private:
   DirectoryUi::View *library;
   PlaylistsUi::View *playlists;
   PlaylistUi::View *playlist;
-  Playback::PlaybackView *player;
+  Playback::View *player;
   Config::Local local_conf;
   //Config::Global global_conf;
 

@@ -7,10 +7,10 @@
 #include <QObject>
 
 namespace Playback {
-  class PlaybackView : public QObject {
+  class View : public QObject {
     Q_OBJECT
   public:
-    explicit PlaybackView(const Playback::Controls &c, QObject *parent = nullptr);
+    explicit View(const Playback::Controls &c, QObject *parent = nullptr);
 
   signals:
     void started(const Track &track);
