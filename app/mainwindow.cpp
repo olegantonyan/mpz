@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   playlists->load();
 
+  ui->statusbar->showMessage("TODO: Playing track name, info");
+
+  ui->tableView->setFocus();
+
 /*
   QMap<QString, Config::Value> m;
   m.insert("hello", Config::Value(123));
