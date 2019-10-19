@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QApplication>
 #include <memory>
+#include <QMenu>
+#include <QAction>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -72,3 +75,19 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QMainWindow::closeEvent(event);
 }
 
+void MainWindow::on_menuButton_clicked() {
+  QMenu menu;
+  QAction github("Github");
+  connect(&github, &QAction::triggered, [=]() {
+    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
+  });
+
+  menu.addAction(&github);
+
+  int menu_width = menu.sizeHint().width();
+  int x = ui->menuButton->width() - menu_width;
+  int y = ui->menuButton->height();
+  QPoint pos(ui->menuButton->mapToGlobal(QPoint(x, y)));
+
+  menu.exec(pos);
+}
