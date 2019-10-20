@@ -14,6 +14,7 @@ namespace PlaylistsUi {
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
+    //view->setSelectionMode(QAbstractItemView::MultiSelection);
 
     connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
     connect(view, &QListView::clicked, this, &View::on_itemActivated);
