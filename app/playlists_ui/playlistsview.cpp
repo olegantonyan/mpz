@@ -14,7 +14,7 @@ namespace PlaylistsUi {
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
-    //view->setSelectionMode(QAbstractItemView::MultiSelection);
+    view->setSelectionMode(QAbstractItemView::NoSelection);
 
     connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
     connect(view, &QListView::clicked, this, &View::on_itemActivated);
@@ -50,6 +50,8 @@ namespace PlaylistsUi {
       return;
     }
 
+    qDebug() << view->selectionModel()->currentIndex();
+
     QMenu menu;
     QAction remove("Remove");
     QAction rename("Rename");
@@ -59,6 +61,7 @@ namespace PlaylistsUi {
       for (auto i : view->selectionModel()->selectedIndexes()) {
         if (i == index) {
           auto new_idx = model->index(qMax(index.row() - 1, 0));
+          view->selectionModel()->clearSelection();
           view->selectionModel()->select(new_idx, {QItemSelectionModel::Select});
           if (model->listSize() > 0) {
             on_itemActivated(new_idx);
@@ -96,6 +99,8 @@ namespace PlaylistsUi {
     auto item = model->itemAt(index);
     if (current != item) {
       local_conf.saveCurrentPlaylist(index.row());
+      view->selectionModel()->clearSelection();
+      view->selectionModel()->select(index, {QItemSelectionModel::Select});
       emit selected(item, index.row());
     }
     current = item;
