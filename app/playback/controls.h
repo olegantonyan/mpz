@@ -3,6 +3,7 @@
 
 #include <QToolButton>
 #include <QProgressBar>
+#include <QLabel>
 
 namespace Playback {
   class Controls {
@@ -15,6 +16,7 @@ namespace Playback {
     QToolButton *prev;
     QToolButton *next;
     QProgressBar *seekbar;
+    QLabel *time;
   };
 }
 

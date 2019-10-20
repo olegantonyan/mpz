@@ -8,6 +8,8 @@ public:
   Track();
   Track(const QString &filepath);
 
+  static QString formattedTime(quint32 tm);
+
   bool isValid() const;
 
   QString path() const;

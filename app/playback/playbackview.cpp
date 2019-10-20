@@ -54,8 +54,14 @@ namespace Playback {
     player.setPosition(seek_value * 1000);
   }
 
+  QString View::time_text(int pos) const {
+    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(current_track().track.formattedDuration());
+  }
+
   void View::on_positionChanged(quint64 pos) {
-    controls.seekbar->setValue(static_cast<int>(pos / 1000));
+    int v = static_cast<int>(pos / 1000);
+    controls.time->setText(time_text(v));
+    controls.seekbar->setValue(v);
   }
 
   void View::on_stateChanged(QMediaPlayer::State state) {
@@ -64,6 +70,7 @@ namespace Playback {
         controls.seekbar->setValue(0);
         _current_track = TrackWrapper();
         player.setMedia(nullptr);
+        controls.time->clear();
         emit stopped();
         break;
       case QMediaPlayer::PlayingState:

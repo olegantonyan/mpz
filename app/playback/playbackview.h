@@ -36,6 +36,8 @@ namespace Playback {
 
     void on_seek(int position);
 
+    QString time_text(int pos) const;
+
   private slots:
     void on_positionChanged(quint64 pos);
     void on_stateChanged(QMediaPlayer::State state);

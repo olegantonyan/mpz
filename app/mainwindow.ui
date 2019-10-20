@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1155</width>
-    <height>648</height>
+    <width>878</width>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -79,6 +79,18 @@
         </property>
         <property name="textVisible">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="timeLabel">
+        <property name="font">
+         <font>
+          <family>Monospace</family>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>

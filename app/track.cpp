@@ -19,9 +19,9 @@ Track::Track(const QString &fp) {
   if(!f.isNull()) {
     if (f.audioProperties()) {
       _duration = static_cast<quint32>(f.audioProperties()->length());
-      _channels = static_cast<quint32>(f.audioProperties()->channels());
-      _bitrate = static_cast<quint32>(f.audioProperties()->bitrate());
-      _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
+      _channels = static_cast<quint8>(f.audioProperties()->channels());
+      _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
+      _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());
     }
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
@@ -37,6 +37,17 @@ Track::Track(const QString &fp) {
   //qDebug() << typeid(f.file()).name();
 
   //qDebug() << formattedAudioInfo();
+}
+
+QString Track::formattedTime(quint32 tm) {
+  quint32 seconds = tm % 60;
+  quint32 minutes = (tm / 60) % 60;
+  quint32 hours = (tm / 60 / 60);
+
+  if (hours == 0) {
+    return QString("%1:%2").arg(minutes, 2, 10).arg(seconds, 2, 10, QChar('0'));
+  }
+  return QString("%1:%2:%3").arg(hours, 2, 10).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
 }
 
 bool Track::isValid() const {
@@ -68,14 +79,7 @@ quint32 Track::duration() const {
 }
 
 QString Track::formattedDuration() const {
-  quint32 seconds = duration() % 60;
-  quint32 minutes = (duration() / 60) % 60;
-  quint32 hours = (duration() / 60 / 60);
-
-  if (hours == 0) {
-    return QString("%1:%2").arg(minutes, 2, 10).arg(seconds, 2, 10, QChar('0'));
-  }
-  return QString("%1:%2:%3").arg(hours, 2, 10).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
+  return Track::formattedTime(duration());
 }
 
 QString Track::formattedAudioInfo() const {

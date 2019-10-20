@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.play = ui->playButton;
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
+  pc.time = ui->timeLabel;
   player = new Playback::View(pc, this);
 
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
