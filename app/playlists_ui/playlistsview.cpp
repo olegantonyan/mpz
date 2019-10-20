@@ -22,7 +22,7 @@ namespace PlaylistsUi {
 
   void View::load() {
     if (model->listSize() > 0) {
-      auto idx = model->buildIndex(local_conf.currentPlaylist());
+      auto idx = model->buildIndex(qMax(local_conf.currentPlaylist(), model->listSize() - 1));
       auto item = model->itemAt(idx);
       view->setCurrentIndex(idx);
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
@@ -31,16 +31,21 @@ namespace PlaylistsUi {
     }
   }
 
+  void View::persist(int current_index) {
+    local_conf.saveCurrentPlaylist(qMax(current_index, qMax(model->listSize() - 1, 0)));
+  }
+
   void View::on_createPlaylist(const QDir &filepath) {
     auto pl = new Playlist();
     pl->load(filepath);
     auto item = std::shared_ptr<Playlist>(pl);
     auto index = model->append(item);
     view->setCurrentIndex(index);
+    view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     current = item;
 
-    local_conf.saveCurrentPlaylist(index.row());
+    persist(index.row());
     emit selected(item, index.row());
   }
 
@@ -56,17 +61,12 @@ namespace PlaylistsUi {
 
     connect(&remove, &QAction::triggered, [=]() {
       model->remove(index);
-      for (auto i : view->selectionModel()->selectedIndexes()) {
-        if (i == index) {
-          auto new_idx = model->index(qMax(index.row() - 1, 0));
-          view->selectionModel()->clearSelection();
-          view->selectionModel()->select(new_idx, {QItemSelectionModel::Select});
-          if (model->listSize() > 0) {
-            on_itemActivated(new_idx);
-          } else {
-            emit emptied();
-          }
-        }
+      auto selected_idx = view->selectionModel()->selectedIndexes().first();
+      if (selected_idx == index || model->listSize() == 1) {
+        on_itemActivated(model->buildIndex(0));
+      }
+      if (model->listSize() == 0) {
+        emit emptied();
       }
     });
     connect(&rename, &QAction::triggered, [=]() {
@@ -90,13 +90,14 @@ namespace PlaylistsUi {
   }
 
   void View::on_itemActivated(const QModelIndex &index) {
+    qDebug() << index;
     if (model->listSize() <= 0) {
       return;
     }
 
     auto item = model->itemAt(index);
     if (current != item) {
-      local_conf.saveCurrentPlaylist(index.row());
+      persist(index.row());
       view->selectionModel()->clearSelection();
       view->selectionModel()->select(index, {QItemSelectionModel::Select});
       emit selected(item, index.row());

@@ -37,6 +37,7 @@ namespace PlaylistsUi {
     Model *model;
     std::shared_ptr<Playlist> current;
     Config::Local &local_conf;
+    void persist(int current_index);
   };
 }
 
