@@ -50,8 +50,6 @@ namespace PlaylistsUi {
       return;
     }
 
-    qDebug() << view->selectionModel()->currentIndex();
-
     QMenu menu;
     QAction remove("Remove");
     QAction rename("Rename");
