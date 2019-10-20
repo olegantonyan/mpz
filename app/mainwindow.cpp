@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QDesktopServices>
+#include <statusbarlabel.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -23,28 +24,46 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.stop = ui->stopButton;
   pc.play = ui->playButton;
   pc.pause = ui->pauseButton;
-  pc.seekbar = ui->progressSeeker;
+  pc.seekbar = ui->progressBar;
   player = new Playback::View(pc, this);
 
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
   connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
+  connect(player, &Playback::View::prev_requested, playlist, &PlaylistUi::View::on_prev_requested);
+  connect(player, &Playback::View::next_requested, playlist, &PlaylistUi::View::on_next_requested);
+  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_started);
+  connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stopped);
+
 
   loadUiSettings();
 
   playlists->load();
 
-  connect(player, &Playback::View::started, [=](const Track &track) {
-    ui->statusbar->showMessage(QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo());
+  auto status_label = new StatusBarLabel(this);
+  ui->statusbar->addWidget(status_label);
+  status_label->setText("Stopped");
+  connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
+    auto t = player->current_track();
+    if (t.track.isValid()) {
+      qDebug() << "TODO: jump to playlist" << t.plalist_index << "track" << t.track_index;
+    }
+  });
+
+  connect(player, &Playback::View::started, [=](const TrackWrapper &track) {
+    status_label->setText(QString("Playing: ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+    //ui->statusbar->showMessage(QString("Playing ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
   });
   connect(player, &Playback::View::stopped, [=]() {
-    ui->statusbar->showMessage("Stopped");
+    status_label->setText("Stopped");
+    //ui->statusbar->showMessage("Stopped");
   });
-  connect(player, &Playback::View::paused, [=](const Track &track) {
-    ui->statusbar->showMessage(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
+  connect(player, &Playback::View::paused, [=](const TrackWrapper &track) {
+    status_label->setText(QString("Paused: ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+    //ui->statusbar->showMessage(QString("Paused ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
   });
-  player->stop();
+
 
 
   ui->tableView->setFocus();

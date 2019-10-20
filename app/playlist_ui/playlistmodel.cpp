@@ -7,6 +7,10 @@ namespace PlaylistUi {
     tracks.clear();
   }
 
+  QModelIndex Model::buildIndex(int row) {
+    return createIndex(row, 0);
+  }
+
   int Model::rowCount(const QModelIndex &parent) const {
     if (parent.isValid()) {
       return 0;
@@ -74,5 +78,9 @@ namespace PlaylistUi {
 
   int Model::current_playlist_index() const {
     return playlist_index;
+  }
+
+  int Model::tracksSize() const {
+    return tracks.size();
   }
 }

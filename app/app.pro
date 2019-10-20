@@ -33,7 +33,9 @@ SOURCES += \
     playlist.cpp \
     playlists_ui/playlistsmodel.cpp \
     playlists_ui/playlistsview.cpp \
-    track.cpp
+    statusbarlabel.cpp \
+    track.cpp \
+    trackwrapper.cpp
 
 HEADERS += \
     config/global.h \
@@ -50,7 +52,9 @@ HEADERS += \
     playlist.h \
     playlists_ui/playlistsmodel.h \
     playlists_ui/playlistsview.h \
-    track.h
+    statusbarlabel.h \
+    track.h \
+    trackwrapper.h
 
 FORMS += \
     mainwindow.ui

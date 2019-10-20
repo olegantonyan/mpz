@@ -73,9 +73,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="progressSeeker">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="textVisible">
+         <bool>false</bool>
         </property>
        </widget>
       </item>

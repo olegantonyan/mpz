@@ -8,6 +8,10 @@
 #include <QDebug>
 #include <QFileInfo>
 
+Track::Track() {
+  Track("");
+}
+
 Track::Track(const QString &fp) {
   filepath = fp;
 
@@ -33,6 +37,10 @@ Track::Track(const QString &fp) {
   //qDebug() << typeid(f.file()).name();
 
   //qDebug() << formattedAudioInfo();
+}
+
+bool Track::isValid() const {
+  return QFile::exists(path());
 }
 
 QString Track::path() const {

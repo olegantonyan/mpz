@@ -2,7 +2,7 @@
 #define CONTROLS_H
 
 #include <QToolButton>
-#include <QSlider>
+#include <QProgressBar>
 
 namespace Playback {
   class Controls {
@@ -14,7 +14,7 @@ namespace Playback {
     QToolButton *pause;
     QToolButton *prev;
     QToolButton *next;
-    QSlider *seekbar;
+    QProgressBar *seekbar;
   };
 }
 

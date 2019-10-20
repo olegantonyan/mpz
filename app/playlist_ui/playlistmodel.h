@@ -2,6 +2,7 @@
 #define PLAYLISTMODEL_H
 
 #include "track.h"
+#include "trackwrapper.h"
 
 #include <QVector>
 #include <QAbstractTableModel>
@@ -14,6 +15,8 @@ namespace PlaylistUi {
   public:
     explicit Model(QObject *parent = nullptr);
 
+    QModelIndex buildIndex(int row);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -23,6 +26,8 @@ namespace PlaylistUi {
     Track itemAt(const QModelIndex &index) const;
 
     int current_playlist_index() const;
+
+    int tracksSize() const;
 
   private:
     QVector<Track> tracks;

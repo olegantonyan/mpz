@@ -5,7 +5,10 @@
 
 class Track {
 public:
+  Track();
   Track(const QString &filepath);
+
+  bool isValid() const;
 
   QString path() const;
   QString artist() const;
