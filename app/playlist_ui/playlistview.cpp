@@ -16,6 +16,8 @@ namespace PlaylistUi {
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
     //view->horizontalHeader()->setStretchLastSection(true);
 
+    view->setAlternatingRowColors(true);
+
     for (int c = 0; c < view->horizontalHeader()->count(); ++c) {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
