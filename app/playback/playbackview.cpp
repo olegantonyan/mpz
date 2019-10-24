@@ -7,7 +7,13 @@ namespace Playback {
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
     connect(controls.stop, &QToolButton::clicked, &player, &QMediaPlayer::stop);
     connect(controls.pause, &QToolButton::clicked, &player, &QMediaPlayer::pause);
-    connect(controls.play, &QToolButton::clicked, &player, &QMediaPlayer::play);
+    connect(controls.play, &QToolButton::clicked, [=]() {
+      if (player.state() == QMediaPlayer::StoppedState) {
+        emit start_requested();
+      } else {
+        player.play();
+      }
+    });
     connect(controls.prev, &QToolButton::clicked, [=]() {
       if (current_track().track.isValid()) {
         emit prev_requested(current_track());

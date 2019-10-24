@@ -70,6 +70,15 @@ namespace PlaylistUi {
     }
   }
 
+  void View::on_start_requested() {
+    auto idx = view->selectionModel()->currentIndex();
+    if (!idx.isValid()) {
+      return;
+    }
+    auto i = TrackWrapper(model->itemAt(idx), idx.row(), model->current_playlist_index());
+    emit activated(i);
+  }
+
   void View::on_started(const TrackWrapper &track) {
     qDebug() << "started track" << track.track.filename();
     if (track.plalist_index == model->current_playlist_index()) {

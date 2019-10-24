@@ -24,6 +24,7 @@ namespace PlaylistUi {
     void on_unload();
     void on_prev_requested(const TrackWrapper &track);
     void on_next_requested(const TrackWrapper &track);
+    void on_start_requested();
     void on_started(const TrackWrapper &track);
     void on_stopped();
 

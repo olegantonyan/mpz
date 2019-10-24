@@ -24,6 +24,7 @@ namespace Playback {
     void paused(const TrackWrapper &track);
     void prev_requested(const TrackWrapper &current);
     void next_requested(const TrackWrapper &current);
+    void start_requested();
 
   public slots:
     void play(const TrackWrapper &track);

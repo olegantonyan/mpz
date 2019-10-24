@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
   connect(player, &Playback::View::prev_requested, playlist, &PlaylistUi::View::on_prev_requested);
   connect(player, &Playback::View::next_requested, playlist, &PlaylistUi::View::on_next_requested);
+  connect(player, &Playback::View::start_requested, playlist, &PlaylistUi::View::on_start_requested);
   connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_started);
   connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stopped);
 
