@@ -83,6 +83,7 @@ namespace PlaylistUi {
     qDebug() << "started track" << track.track.filename();
     if (track.plalist_index == model->current_playlist_index()) {
       qDebug() << "correct playlist";
+      model->highlight(track.track_index);
     } else {
       qDebug() << "wrong playlist";
     }
@@ -90,6 +91,7 @@ namespace PlaylistUi {
 
   void View::on_stopped() {
     qDebug() << "stopped";
+    model->highlight(-1);
   }
 
   void View::on_resize() {

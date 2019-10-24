@@ -1,9 +1,10 @@
 #include "playlistmodel.h"
 
 #include <QDebug>
+#include <QFont>
 
 namespace PlaylistUi {
-  Model::Model(QObject *parent) : QAbstractTableModel(parent) {
+  Model::Model(QObject *parent) : QAbstractTableModel(parent), highlight_row(-1) {
     tracks.clear();
   }
 
@@ -32,6 +33,12 @@ namespace PlaylistUi {
 
     if ((index.column() == 3 || index.column() == 4) && role == Qt::TextAlignmentRole) {
       return Qt::AlignRight;
+    }
+
+    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row) {
+      QFont font;
+      font.setBold(true);
+      return font;
     }
 
     if (role == Qt::DisplayRole) {
@@ -82,5 +89,10 @@ namespace PlaylistUi {
 
   int Model::tracksSize() const {
     return tracks.size();
+  }
+
+  void Model::highlight(int row) {
+    highlight_row = row;
+    emit dataChanged(buildIndex(row), buildIndex(row));
   }
 }

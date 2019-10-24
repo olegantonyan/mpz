@@ -29,9 +29,12 @@ namespace PlaylistUi {
 
     int tracksSize() const;
 
+    void highlight(int row);
+
   private:
     QVector<Track> tracks;
     int playlist_index;
+    int highlight_row;
   };
 }
 
