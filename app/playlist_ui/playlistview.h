@@ -4,6 +4,7 @@
 #include "playlistmodel.h"
 #include "playlist.h"
 #include "trackwrapper.h"
+#include "eventinteceptor.h"
 
 #include <QObject>
 #include <QTableView>
@@ -33,26 +34,6 @@ namespace PlaylistUi {
     Model *model;
 
     void on_event(QEvent *event);
-  };
-
-
-  //
-  class EventInterceptor : public QObject {
-    Q_OBJECT
-  public:
-    explicit EventInterceptor(void (PlaylistUi::View::*cb)(QEvent *event), PlaylistUi::View *cbobj) :
-      QObject(cbobj), callback_object(cbobj), callback(cb) {
-    }
-
-  protected:
-    bool eventFilter(QObject *obj, QEvent *event) {
-      (callback_object->*callback)(event);
-      return QObject::eventFilter(obj, event);
-    }
-
-  private:
-    PlaylistUi::View *callback_object;
-    void (PlaylistUi::View::*callback)(QEvent *event);
   };
 }
 
