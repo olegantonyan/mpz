@@ -22,7 +22,7 @@ namespace PlaylistUi {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
 
-    auto interceptor = new ResizeEventInterceptor(&PlaylistUi::View::on_resize, this);
+    auto interceptor = new EventInterceptor(&PlaylistUi::View::on_event, this);
     view->installEventFilter(interceptor);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
@@ -83,7 +83,7 @@ namespace PlaylistUi {
     qDebug() << "started track" << track.track.filename();
     if (track.plalist_index == model->current_playlist_index()) {
       qDebug() << "correct playlist";
-      model->highlight(track.track_index);
+      model->highlight(track.track_index, model->current_playlist_index());
     } else {
       qDebug() << "wrong playlist";
     }
@@ -91,16 +91,20 @@ namespace PlaylistUi {
 
   void View::on_stopped() {
     qDebug() << "stopped";
-    model->highlight(-1);
+    model->highlight(-1, -1);
   }
 
-  void View::on_resize() {
-    int total_width = view->width();
-    view->setColumnWidth(0, static_cast<int>(total_width * 0.28));
-    view->setColumnWidth(1, static_cast<int>(total_width * 0.28));
-    view->setColumnWidth(2, static_cast<int>(total_width * 0.28));
-    view->setColumnWidth(3, static_cast<int>(total_width * 0.05));
-    //view->setColumnWidth(4, total_width * 0.05);
-    view->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+  void View::on_event(QEvent *event) {
+    if (event->type() == QEvent::Resize) {
+      int total_width = view->width();
+      view->horizontalHeader()->setMinimumSectionSize(20);
+      view->setColumnWidth(0, 20);
+      view->setColumnWidth(1, static_cast<int>(total_width * 0.28));
+      view->setColumnWidth(2, static_cast<int>(total_width * 0.28));
+      view->setColumnWidth(3, static_cast<int>(total_width * 0.28));
+      view->setColumnWidth(4, static_cast<int>(total_width * 0.05));
+      //view->setColumnWidth(4, total_width * 0.05);
+      view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+    }
   }
 }

@@ -23,7 +23,7 @@ namespace PlaylistUi {
     if (parent.isValid()) {
       return 0;
     }
-    return 5;
+    return 6;
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
@@ -31,11 +31,11 @@ namespace PlaylistUi {
       return QVariant();
     }
 
-    if ((index.column() == 3 || index.column() == 4) && role == Qt::TextAlignmentRole) {
+    if ((index.column() == 4 || index.column() == 5) && role == Qt::TextAlignmentRole) {
       return Qt::AlignRight;
     }
 
-    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row) {
+    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row && highlight_playlist == current_playlist_index()) {
       QFont font;
       font.setBold(true);
       return font;
@@ -45,14 +45,21 @@ namespace PlaylistUi {
       Track t = tracks.at(index.row());
       switch (index.column()) {
         case 0:
-          return t.artist();
+          if (highlight_row >= 0 && highlight_row == index.row() && highlight_playlist == current_playlist_index()) {
+            //return "►";
+            return "▷";
+          } else {
+            return "";
+          }
         case 1:
-          return t.album();
+          return t.artist();
         case 2:
-          return t.title();
+          return t.album();
         case 3:
-          return t.year();
+          return t.title();
         case 4:
+          return t.year();
+        case 5:
           return t.formattedDuration();
         default:
           throw "unhandled column number";
@@ -91,8 +98,9 @@ namespace PlaylistUi {
     return tracks.size();
   }
 
-  void Model::highlight(int row) {
+  void Model::highlight(int row, int playlist) {
     highlight_row = row;
+    highlight_playlist = playlist;
     emit dataChanged(buildIndex(row), buildIndex(row));
   }
 }

@@ -114,7 +114,17 @@
       </property>
       <widget class="QTreeView" name="treeView"/>
       <widget class="QListView" name="listView"/>
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QTableView" name="tableView">
+       <property name="mouseTracking">
+        <bool>false</bool>
+       </property>
+       <property name="tabletTracking">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

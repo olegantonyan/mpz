@@ -32,29 +32,27 @@ namespace PlaylistUi {
     QTableView *view;
     Model *model;
 
-    void on_resize();
+    void on_event(QEvent *event);
   };
 
 
   //
-  class ResizeEventInterceptor : public QObject {
+  class EventInterceptor : public QObject {
     Q_OBJECT
   public:
-    explicit ResizeEventInterceptor(void (PlaylistUi::View::*cb)(), PlaylistUi::View *cbobj) :
+    explicit EventInterceptor(void (PlaylistUi::View::*cb)(QEvent *event), PlaylistUi::View *cbobj) :
       QObject(cbobj), callback_object(cbobj), callback(cb) {
     }
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) {
-      if (event->type() == QEvent::Resize) {
-        (callback_object->*callback)();
-      }
+      (callback_object->*callback)(event);
       return QObject::eventFilter(obj, event);
     }
 
   private:
     PlaylistUi::View *callback_object;
-    void (PlaylistUi::View::*callback)();
+    void (PlaylistUi::View::*callback)(QEvent *event);
   };
 }
 
