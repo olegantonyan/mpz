@@ -3,6 +3,7 @@
 
 #include "controls.h"
 #include "trackwrapper.h"
+#include "eventinteceptor.h"
 
 #include <QObject>
 #include <QMediaPlayer>
@@ -36,6 +37,7 @@ namespace Playback {
     TrackWrapper _current_track;
 
     void on_seek(int position);
+    void on_event(QEvent *event);
 
     QString time_text(int pos) const;
 
@@ -43,27 +45,6 @@ namespace Playback {
     void on_positionChanged(quint64 pos);
     void on_stateChanged(QMediaPlayer::State state);
     void on_error(QMediaPlayer::Error error);
-  };
-
-  //
-  class MouseEventInterceptor : public QObject {
-    Q_OBJECT
-  public:
-    explicit MouseEventInterceptor(void (Playback::View::*cb)(int), Playback::View *cbobj) :
-      QObject(cbobj), callback_object(cbobj), callback(cb) {
-    }
-
-  protected:
-    bool eventFilter(QObject *obj, QEvent *event) {
-      if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
-        (callback_object->*callback)(me->pos().x());
-      }
-      return QObject::eventFilter(obj, event);
-    }
-  private:
-    Playback::View *callback_object;
-    void (Playback::View::*callback)(int);
   };
 }
 #endif // PLAYBACKVIEW_H
