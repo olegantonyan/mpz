@@ -81,7 +81,7 @@ namespace Playback {
         controls.seekbar->setValue(0);
         player.setMedia(nullptr);
         controls.time->clear();
-        emit stopped(false);
+        emit stopped();
         _current_track = TrackWrapper();
         break;
       case QMediaPlayer::PlayingState:

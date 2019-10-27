@@ -33,7 +33,7 @@ namespace PlaylistsUi {
     void on_nextRequested();
     void on_startRequested();
     void on_started(TrackWrapper track);
-    void on_stopped(bool next);
+    void on_stopped();
 
   signals:
     void selected(const std::shared_ptr<Playlist> item);

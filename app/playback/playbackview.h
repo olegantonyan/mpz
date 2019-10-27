@@ -19,7 +19,7 @@ namespace Playback {
 
   signals:
     void started(TrackWrapper track);
-    void stopped(bool next);
+    void stopped();
     void paused(TrackWrapper track);
     void prev_requested();
     void next_requested();

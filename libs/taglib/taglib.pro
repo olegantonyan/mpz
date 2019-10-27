@@ -4,6 +4,8 @@ TARGET = taglib
 CONFIG += warn_off
 CONFIG += staticlib
 
+DEFINES += "NDEBUG=1"
+
 SOURCES += \
   taglib-1.11.1/taglib/toolkit/tbytevectorlist.cpp \
   taglib-1.11.1/taglib/toolkit/tdebug.cpp \

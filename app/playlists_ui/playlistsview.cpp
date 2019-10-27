@@ -111,7 +111,7 @@ namespace PlaylistsUi {
     }
   }
 
-  void View::on_stopped(bool next) {
+  void View::on_stopped() {
     state.resetPlaying();
     emit highlighted(-1);
   }
