@@ -26,72 +26,27 @@ namespace PlaylistUi {
     view->installEventFilter(interceptor);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
-      auto i = TrackWrapper(model->itemAt(index), index.row(), model->current_playlist_index());
-      emit activated(i);
+      emit activated(model->itemAt(index), index.row());
+    });
+
+    connect(view->selectionModel(), &QItemSelectionModel::currentChanged, [=](const QModelIndex &index, const QModelIndex &prev) {
+      (void)prev;
+      if (index.isValid()) {
+        emit selected(model->itemAt(index), index.row());
+      }
     });
   }
 
-  void View::on_load(const std::shared_ptr<Playlist> pi, int playlist_index) {
-    model->setTracks(pi->tracks(), playlist_index);
+  void View::on_load(const std::shared_ptr<Playlist> pi) {
+    model->setTracks(pi->tracks());
   }
 
   void View::on_unload() {
-    model->setTracks(QVector<Track>(), 0);
+    model->setTracks(QVector<Track>());
   }
 
-  void View::on_prev_requested(const TrackWrapper &track) {
-    int current = track.track_index;
-    if (model->tracksSize() <= 0) {
-      return;
-    }
-    auto prev = current - 1;
-    if (prev < 0) {
-      auto max = model->tracksSize() - 1;
-      auto i = TrackWrapper(model->itemAt(model->buildIndex(max)), max, model->current_playlist_index());
-      emit activated(i);
-    } else {
-      auto i = TrackWrapper(model->itemAt(model->buildIndex(prev)), prev, model->current_playlist_index());
-      emit activated(i);
-    }
-  }
-
-  void View::on_next_requested(const TrackWrapper &track) {
-    int current = track.track_index;
-    if (model->tracksSize() <= 0) {
-      return;
-    }
-    auto next = current + 1;
-    if (next > model->tracksSize() - 1) {
-      auto i = TrackWrapper(model->itemAt(model->buildIndex(0)), 0, model->current_playlist_index());
-      emit activated(i);
-    } else {
-      auto i = TrackWrapper(model->itemAt(model->buildIndex(next)), next, model->current_playlist_index());
-      emit activated(i);
-    }
-  }
-
-  void View::on_start_requested() {
-    auto idx = view->selectionModel()->currentIndex();
-    if (!idx.isValid()) {
-      return;
-    }
-    auto i = TrackWrapper(model->itemAt(idx), idx.row(), model->current_playlist_index());
-    emit activated(i);
-  }
-
-  void View::on_started(const TrackWrapper &track) {
-    qDebug() << "started track" << track.track.filename();
-    if (track.plalist_index == model->current_playlist_index()) {
-      qDebug() << "correct playlist";
-      model->highlight(track.track_index, model->current_playlist_index());
-    } else {
-      qDebug() << "wrong playlist";
-    }
-  }
-
-  void View::on_stopped() {
-    qDebug() << "stopped";
-    model->highlight(-1, -1);
+  void View::highlight(int row) {
+    model->highlight(row);
   }
 
   void View::on_event(QEvent *event) {

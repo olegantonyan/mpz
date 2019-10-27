@@ -3,7 +3,7 @@
 
 #include "playlistmodel.h"
 #include "playlist.h"
-#include "trackwrapper.h"
+#include "track.h"
 #include "eventinteceptor.h"
 
 #include <QObject>
@@ -18,16 +18,13 @@ namespace PlaylistUi {
     explicit View(QTableView *v, QObject *parent = nullptr);
 
   signals:
-    void activated(const TrackWrapper &track);
+    void activated(const Track &track, int index);
+    void selected(const Track &track, int index);
 
   public slots:
-    void on_load(const std::shared_ptr<Playlist> pi, int playlist_index);
+    void on_load(const std::shared_ptr<Playlist> pi);
     void on_unload();
-    void on_prev_requested(const TrackWrapper &track);
-    void on_next_requested(const TrackWrapper &track);
-    void on_start_requested();
-    void on_started(const TrackWrapper &track);
-    void on_stopped();
+    void highlight(int row);
 
   private:
     QTableView *view;

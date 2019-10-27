@@ -35,7 +35,7 @@ namespace PlaylistUi {
       return Qt::AlignRight;
     }
 
-    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row && highlight_playlist == current_playlist_index()) {
+    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row) {
       QFont font;
       font.setBold(true);
       return font;
@@ -45,7 +45,7 @@ namespace PlaylistUi {
       Track t = tracks.at(index.row());
       switch (index.column()) {
         case 0:
-          if (highlight_row >= 0 && highlight_row == index.row() && highlight_playlist == current_playlist_index()) {
+          if (highlight_row >= 0 && highlight_row == index.row()) {
             //return "►";
             return "▷";
           } else {
@@ -68,7 +68,7 @@ namespace PlaylistUi {
     return QVariant();
   }
 
-  void Model::setTracks(const QVector<Track> &t, int index) {
+  void Model::setTracks(const QVector<Track> &t) {
     beginRemoveRows(QModelIndex(), 0, tracks.size());
     tracks.clear();
     endRemoveRows();
@@ -77,7 +77,8 @@ namespace PlaylistUi {
     tracks = t;
     endInsertRows();
 
-    playlist_index = index;
+    highlight(-1);
+
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
@@ -89,18 +90,12 @@ namespace PlaylistUi {
     }
     return tracks.at(index.row());
   }
-
-  int Model::current_playlist_index() const {
-    return playlist_index;
-  }
-
   int Model::tracksSize() const {
     return tracks.size();
   }
 
-  void Model::highlight(int row, int playlist) {
+  void Model::highlight(int row) {
     highlight_row = row;
-    highlight_playlist = playlist;
     emit dataChanged(buildIndex(row), buildIndex(row));
   }
 }

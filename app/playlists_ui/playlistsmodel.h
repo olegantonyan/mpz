@@ -16,14 +16,14 @@ namespace PlaylistsUi {
   public:
     explicit Model(Config::Local &conf, QObject *parent = nullptr);
 
-    QModelIndex buildIndex(int row);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+    QModelIndex buildIndex(int row) const;
     QModelIndex append(std::shared_ptr<Playlist> item);
     void remove(const QModelIndex &index);
     std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
     int listSize() const;
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
   private:
     QList<std::shared_ptr<Playlist>> list;

@@ -31,13 +31,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
-  connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
-  connect(player, &Playback::View::prev_requested, playlist, &PlaylistUi::View::on_prev_requested);
-  connect(player, &Playback::View::next_requested, playlist, &PlaylistUi::View::on_next_requested);
-  connect(player, &Playback::View::start_requested, playlist, &PlaylistUi::View::on_start_requested);
-  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_started);
-  connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stopped);
-
+  connect(playlists, &PlaylistsUi::View::activated, player, &Playback::View::play);
+  connect(playlist, &PlaylistUi::View::activated, playlists, &PlaylistsUi::View::on_trackActivated);
+  connect(playlist, &PlaylistUi::View::selected, playlists, &PlaylistsUi::View::on_trackSelected);
+  connect(player, &Playback::View::prev_requested, playlists, &PlaylistsUi::View::on_prevRequested);
+  connect(player, &Playback::View::next_requested, playlists, &PlaylistsUi::View::on_nextRequested);
+  connect(player, &Playback::View::start_requested, playlists, &PlaylistsUi::View::on_startRequested);
+  connect(player, &Playback::View::started, playlists, &PlaylistsUi::View::on_started);
+  connect(player, &Playback::View::stopped, playlists, &PlaylistsUi::View::on_stopped);
+  connect(playlists, &PlaylistsUi::View::highlighted, playlist, &PlaylistUi::View::highlight);
 
   loadUiSettings();
 
@@ -47,41 +49,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    auto t = player->current_track();
-    if (t.track.isValid()) {
-      qDebug() << "TODO: jump to playlist" << t.plalist_index << "track" << t.track_index;
+    auto t = player->current_track().track;
+    if (t.isValid()) {
+      qDebug() << "TODO: jump to playlist";
     }
   });
 
   connect(player, &Playback::View::started, [=](const TrackWrapper &track) {
-    status_label->setText(QString("Playing: ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
-    //ui->statusbar->showMessage(QString("Playing ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+    status_label->setText(QString("Playing ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
   });
   connect(player, &Playback::View::stopped, [=]() {
     status_label->setText("Stopped");
-    //ui->statusbar->showMessage("Stopped");
   });
   connect(player, &Playback::View::paused, [=](const TrackWrapper &track) {
-    status_label->setText(QString("Paused: ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
-    //ui->statusbar->showMessage(QString("Paused ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+    status_label->setText(QString("Paused ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
   });
 
 
 
   ui->tableView->setFocus();
-
-/*
-  QMap<QString, Config::Value> m;
-  m.insert("hello", Config::Value(123));
-  m.insert("fuch", Config::Value(10));
-  local_conf.storage.set("sdafas", Config::Value(m));
-
-  QList<Config::Value> l;
-  l.append(Config::Value(m));
-  l.append(Config::Value(m));
-  auto i = Config::Value(l);
-  //i.setListType(Config::Value::Type::Map);
-local_conf.storage.set("list", i);*/
 }
 
 MainWindow::~MainWindow() {

@@ -7,7 +7,7 @@ namespace PlaylistsUi {
     list = conf.playlists();
   }
 
-  QModelIndex Model::buildIndex(int row) {
+  QModelIndex Model::buildIndex(int row) const {
     return createIndex(row, 0);
   }
 
@@ -29,8 +29,11 @@ namespace PlaylistsUi {
   }
 
   std::shared_ptr<Playlist> Model::itemAt(const QModelIndex &index) const {
+    if (!index.isValid()) {
+      return nullptr;
+    }
     if (index.row() > list.size() - 1) {
-      throw "index out of bounds";
+      return nullptr;
     }
     return list.at(index.row());
   }

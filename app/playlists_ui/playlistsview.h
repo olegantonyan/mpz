@@ -4,6 +4,8 @@
 #include "playlistsmodel.h"
 #include "playlist.h"
 #include "config/local.h"
+#include "playerstate.h"
+#include "trackwrapper.h"
 
 #include <QObject>
 #include <QListView>
@@ -24,9 +26,20 @@ namespace PlaylistsUi {
   public slots:
     void on_createPlaylist(const QDir &filepath);
 
+    void on_trackActivated(const Track &track, int index);
+    void on_trackSelected(const Track &track, int index);
+
+    void on_prevRequested(const TrackWrapper &track);
+    void on_nextRequested(const TrackWrapper &track);
+    void on_startRequested();
+    void on_started(const TrackWrapper &track);
+    void on_stopped();
+
   signals:
-    void selected(const std::shared_ptr<Playlist> item, int index);
+    void selected(const std::shared_ptr<Playlist> item);
     void emptied();
+    void activated(const TrackWrapper &track);
+    void highlighted(int row);
 
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);
@@ -35,7 +48,8 @@ namespace PlaylistsUi {
   private:
     QListView *view;
     Model *model;
-    std::shared_ptr<Playlist> current;
+    PlayerState state;
+
     Config::Local &local_conf;
     void persist(int current_index);
   };
