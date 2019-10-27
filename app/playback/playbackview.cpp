@@ -8,10 +8,10 @@ namespace Playback {
     connect(controls.stop, &QToolButton::clicked, &player, &QMediaPlayer::stop);
     connect(controls.pause, &QToolButton::clicked, &player, &QMediaPlayer::pause);
     connect(controls.play, &QToolButton::clicked, [=]() {
-      if (player.state() == QMediaPlayer::StoppedState) {
-        emit start_requested();
-      } else {
+      if (player.state() == QMediaPlayer::PausedState) {
         player.play();
+      } else  {
+        emit start_requested();
       }
     });
     connect(controls.prev, &QToolButton::clicked, [=]() {
@@ -81,12 +81,13 @@ namespace Playback {
     switch (state) {
       case QMediaPlayer::StoppedState:
         controls.seekbar->setValue(0);
-        _current_track = TrackWrapper();
         player.setMedia(nullptr);
         controls.time->clear();
         emit stopped();
+        _current_track = TrackWrapper();
         break;
       case QMediaPlayer::PlayingState:
+        qDebug() << "playing in player" << _current_track.track_index << _current_track.playlist_index;
         emit started(_current_track);
         break;
       case QMediaPlayer::PausedState:

@@ -26,13 +26,13 @@ namespace PlaylistsUi {
   public slots:
     void on_createPlaylist(const QDir &filepath);
 
-    void on_trackActivated(const Track &track, int index);
-    void on_trackSelected(const Track &track, int index);
+    void on_trackActivated(Track track, int index);
+    void on_trackSelected(Track track, int index);
 
-    void on_prevRequested(const TrackWrapper &track);
-    void on_nextRequested(const TrackWrapper &track);
+    void on_prevRequested(TrackWrapper track);
+    void on_nextRequested(TrackWrapper track);
     void on_startRequested();
-    void on_started(const TrackWrapper &track);
+    void on_started(TrackWrapper track);
     void on_stopped();
 
   signals:

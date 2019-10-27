@@ -9,7 +9,7 @@ public:
   TrackWrapper(const Track &t, int t_index, int p_index);
 
   Track track;
-  int plalist_index;
+  int playlist_index;
   int track_index;
 };
 

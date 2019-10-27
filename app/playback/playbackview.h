@@ -20,11 +20,11 @@ namespace Playback {
     TrackWrapper current_track() const;
 
   signals:
-    void started(const TrackWrapper &track);
+    void started(TrackWrapper track);
     void stopped();
-    void paused(const TrackWrapper &track);
-    void prev_requested(const TrackWrapper &current);
-    void next_requested(const TrackWrapper &current);
+    void paused(TrackWrapper track);
+    void prev_requested(TrackWrapper current);
+    void next_requested(TrackWrapper current);
     void start_requested();
 
   public slots:
