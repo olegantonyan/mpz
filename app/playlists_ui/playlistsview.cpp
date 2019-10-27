@@ -58,36 +58,36 @@ namespace PlaylistsUi {
     state.setSelectedTrack(index);
   }
 
-  void View::on_prevRequested(TrackWrapper track) {
-    int current = track.track_index;
-    auto pl = model->itemAt(model->buildIndex(track.playlist_index));
+  void View::on_prevRequested() {
+    int current = state.playing().track_index;
+    auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
     if (pl->tracks().size() <= 0) {
       return;
     }
     auto prev = current - 1;
     if (prev < 0) {
       auto max = pl->tracks().size() - 1;
-      auto i = TrackWrapper(pl->tracks().at(max), max, track.playlist_index);
+      auto i = TrackWrapper(pl->tracks().at(max), max, state.playing().playlist_index);
       emit activated(i);
     } else {
-      auto i = TrackWrapper(pl->tracks().at(prev), prev, track.playlist_index);
+      auto i = TrackWrapper(pl->tracks().at(prev), prev, state.playing().playlist_index);
       emit activated(i);
     }
   }
 
-  void View::on_nextRequested(TrackWrapper track) {
-    int current = track.track_index;
-    qDebug() << "next" << track.track_index << track.playlist_index;
-    auto pl = model->itemAt(model->buildIndex(track.playlist_index));
+  void View::on_nextRequested() {
+    int current = state.playing().track_index;
+    //qDebug() << "next" << state.playing().track_index << state.playing().playlist_index;
+    auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
     if (pl->tracks().size() <= 0) {
       return;
     }
     auto next = current + 1;
     if (next > pl->tracks().size() - 1) {
-      auto i = TrackWrapper(pl->tracks().first(), 0, track.playlist_index);
+      auto i = TrackWrapper(pl->tracks().first(), 0, state.playing().playlist_index);
       emit activated(i);
     } else {
-      auto i = TrackWrapper(pl->tracks().at(next), next, track.playlist_index);
+      auto i = TrackWrapper(pl->tracks().at(next), next, state.playing().playlist_index);
       emit activated(i);
     }
   }
@@ -111,12 +111,9 @@ namespace PlaylistsUi {
     }
   }
 
-  void View::on_stopped() {
+  void View::on_stopped(bool next) {
     state.resetPlaying();
     emit highlighted(-1);
-
-    qDebug() << "stopped in view";
-
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {

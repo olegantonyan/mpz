@@ -49,10 +49,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    auto t = player->current_track().track;
-    if (t.isValid()) {
+    //auto t = player->current_track().track;
+    //if (t.isValid()) {
       qDebug() << "TODO: jump to playlist";
-    }
+    //}
   });
 
   connect(player, &Playback::View::started, [=](const TrackWrapper &track) {

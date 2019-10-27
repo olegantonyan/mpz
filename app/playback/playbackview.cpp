@@ -5,7 +5,9 @@ namespace Playback {
     connect(&player, &QMediaPlayer::positionChanged, this, &View::on_positionChanged);
     connect(&player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
-    connect(controls.stop, &QToolButton::clicked, &player, &QMediaPlayer::stop);
+    connect(controls.stop, &QToolButton::clicked, [=]() {
+      player.stop();
+    });
     connect(controls.pause, &QToolButton::clicked, &player, &QMediaPlayer::pause);
     connect(controls.play, &QToolButton::clicked, [=]() {
       if (player.state() == QMediaPlayer::PausedState) {
@@ -15,22 +17,18 @@ namespace Playback {
       }
     });
     connect(controls.prev, &QToolButton::clicked, [=]() {
-      if (current_track().track.isValid()) {
-        emit prev_requested(current_track());
+      if (_current_track.track.isValid()) {
+        emit prev_requested();
       }
     });
     connect(controls.next, &QToolButton::clicked, [=]() {
-      if (current_track().track.isValid()) {
-        emit next_requested(current_track());
+      if (_current_track.track.isValid()) {
+        emit next_requested();
       }
     });
 
     auto interceptor = new EventInterceptor(&Playback::View::on_event, this);
     controls.seekbar->installEventFilter(interceptor);
-  }
-
-  TrackWrapper View::current_track() const {
-    return _current_track;
   }
 
   void View::play(const TrackWrapper &track) {
@@ -68,7 +66,7 @@ namespace Playback {
   }
 
   QString View::time_text(int pos) const {
-    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(current_track().track.formattedDuration());
+    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.track.formattedDuration());
   }
 
   void View::on_positionChanged(quint64 pos) {
@@ -83,11 +81,10 @@ namespace Playback {
         controls.seekbar->setValue(0);
         player.setMedia(nullptr);
         controls.time->clear();
-        emit stopped();
+        emit stopped(false);
         _current_track = TrackWrapper();
         break;
       case QMediaPlayer::PlayingState:
-        qDebug() << "playing in player" << _current_track.track_index << _current_track.playlist_index;
         emit started(_current_track);
         break;
       case QMediaPlayer::PausedState:

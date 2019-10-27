@@ -29,11 +29,11 @@ namespace PlaylistsUi {
     void on_trackActivated(Track track, int index);
     void on_trackSelected(Track track, int index);
 
-    void on_prevRequested(TrackWrapper track);
-    void on_nextRequested(TrackWrapper track);
+    void on_prevRequested();
+    void on_nextRequested();
     void on_startRequested();
     void on_started(TrackWrapper track);
-    void on_stopped();
+    void on_stopped(bool next);
 
   signals:
     void selected(const std::shared_ptr<Playlist> item);

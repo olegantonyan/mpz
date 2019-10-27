@@ -17,14 +17,12 @@ namespace Playback {
   public:
     explicit View(const Playback::Controls &c, QObject *parent = nullptr);
 
-    TrackWrapper current_track() const;
-
   signals:
     void started(TrackWrapper track);
-    void stopped();
+    void stopped(bool next);
     void paused(TrackWrapper track);
-    void prev_requested(TrackWrapper current);
-    void next_requested(TrackWrapper current);
+    void prev_requested();
+    void next_requested();
     void start_requested();
 
   public slots:
