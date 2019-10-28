@@ -60,6 +60,10 @@ namespace PlaylistsUi {
 
   void View::on_prevRequested() {
     int current = state.playing().track_index;
+    if (current < 0 || state.playing().playlist_index < 0) {
+      return;
+    }
+
     auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
     if (pl->tracks().size() <= 0) {
       return;
@@ -77,6 +81,10 @@ namespace PlaylistsUi {
 
   void View::on_nextRequested() {
     int current = state.playing().track_index;
+    if (current < 0 || state.playing().playlist_index < 0) {
+      return;
+    }
+
     //qDebug() << "next" << state.playing().track_index << state.playing().playlist_index;
     auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
     if (pl->tracks().size() <= 0) {
@@ -95,11 +103,13 @@ namespace PlaylistsUi {
   void View::on_startRequested() {
     int t_index = state.selected().track_index;
     int p_index = state.selected().playlist_index;
-    if (t_index >= 0 && p_index >= 0){
-      auto pl = model->itemAt(model->buildIndex(p_index));
-      if (pl->tracks().size() >= t_index) {
-        emit activated(TrackWrapper(pl->tracks().at(t_index), t_index, p_index));
-      }
+    if (t_index < 0 || p_index < 0) {
+      return;
+    }
+
+    auto pl = model->itemAt(model->buildIndex(p_index));
+    if (pl->tracks().size() >= t_index) {
+      emit activated(TrackWrapper(pl->tracks().at(t_index), t_index, p_index));
     }
   }
 
