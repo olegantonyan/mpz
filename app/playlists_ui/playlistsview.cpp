@@ -114,6 +114,7 @@ namespace PlaylistsUi {
   }
 
   void View::on_started(TrackWrapper track) {
+    on_stopped();
     state.setPlayingTrack(track.track_index);
     state.setPlayingPlaylist(track.playlist_index);
     if (track.playlist_index == state.selected().playlist_index) {

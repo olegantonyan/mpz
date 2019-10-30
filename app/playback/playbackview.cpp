@@ -5,9 +5,7 @@ namespace Playback {
     connect(&player, &QMediaPlayer::positionChanged, this, &View::on_positionChanged);
     connect(&player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
-    connect(controls.stop, &QToolButton::clicked, [=]() {
-      player.stop();
-    });
+    connect(controls.stop, &QToolButton::clicked, this, &View::stop);
     connect(controls.pause, &QToolButton::clicked, &player, &QMediaPlayer::pause);
     connect(controls.play, &QToolButton::clicked, [=]() {
       if (player.state() == QMediaPlayer::PausedState) {
@@ -17,11 +15,13 @@ namespace Playback {
       }
     });
     connect(controls.prev, &QToolButton::clicked, [=]() {
+      next_after_stop = false;
       if (_current_track.track.isValid()) {
         emit prev_requested();
       }
     });
     connect(controls.next, &QToolButton::clicked, [=]() {
+      next_after_stop = false;
       if (_current_track.track.isValid()) {
         emit next_requested();
       }
@@ -29,6 +29,7 @@ namespace Playback {
 
     auto interceptor = new EventInterceptor(&Playback::View::on_event, this);
     controls.seekbar->installEventFilter(interceptor);
+    next_after_stop = true;
   }
 
   void View::play(const TrackWrapper &track) {
@@ -41,6 +42,8 @@ namespace Playback {
   void View::stop() {
     controls.seekbar->setValue(0);
     player.stop();
+    next_after_stop = false;
+    emit stopped();
   }
 
   void View::on_seek(int position) {
@@ -82,10 +85,13 @@ namespace Playback {
         player.setMedia(nullptr);
         controls.time->clear();
         _current_track = TrackWrapper();
-        emit stopped();
+        if (next_after_stop) {
+          emit next_requested();
+        }
         break;
       case QMediaPlayer::PlayingState:
         emit started(_current_track);
+        next_after_stop = true;
         break;
       case QMediaPlayer::PausedState:
         emit paused(_current_track);
