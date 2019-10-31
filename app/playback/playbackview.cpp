@@ -42,7 +42,6 @@ namespace Playback {
 
   void View::stop() {
     next_after_stop = false;
-    controls.seekbar->setValue(0);
     player.stop();
     emit stopped();
   }
