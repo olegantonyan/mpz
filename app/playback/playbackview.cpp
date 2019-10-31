@@ -33,6 +33,7 @@ namespace Playback {
   }
 
   void View::play(const TrackWrapper &track) {
+    next_after_stop = false;
     controls.seekbar->setMaximum(static_cast<int>(track.track.duration()));
     player.setMedia(QUrl::fromLocalFile(track.track.path()));
     _current_track = track;
@@ -40,9 +41,9 @@ namespace Playback {
   }
 
   void View::stop() {
+    next_after_stop = false;
     controls.seekbar->setValue(0);
     player.stop();
-    next_after_stop = false;
     emit stopped();
   }
 
