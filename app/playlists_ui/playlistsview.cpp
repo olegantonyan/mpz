@@ -49,6 +49,10 @@ namespace PlaylistsUi {
     emit selected(item);
   }
 
+  void View::on_appendToCurrentPlaylist(const QDir &filepath) {
+    qDebug() << filepath;
+  }
+
   void View::on_trackActivated(Track track, int index) {
     emit activated(TrackWrapper(track, index, state.selected().playlist_index));
   }

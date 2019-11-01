@@ -25,6 +25,7 @@ namespace PlaylistsUi {
 
   public slots:
     void on_createPlaylist(const QDir &filepath);
+    void on_appendToCurrentPlaylist(const QDir &filepath);
 
     void on_trackActivated(Track track, int index);
     void on_trackSelected(Track track, int index);
