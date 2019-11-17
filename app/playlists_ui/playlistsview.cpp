@@ -95,6 +95,17 @@ namespace PlaylistsUi {
   }
 
   void View::on_startRequested() {
+    quint64 selected_track_uid = state.selected_track();
+    if (selected_track_uid == 0) {
+      return;
+    }
+    auto selected_playlist = model->itemByTrack(selected_track_uid);
+    if (selected_playlist == nullptr) {
+      return;
+    }
+    Track t = selected_playlist->trackBy(selected_track_uid);
+    emit activated(t);
+
     /*int t_index = state.selected().track_index;
     int p_index = state.selected().playlist_index;
     if (t_index < 0 || p_index < 0) {
