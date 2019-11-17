@@ -39,3 +39,12 @@ quint64 Playlist::uid() const {
   return _uid;
 }
 
+bool Playlist::hasTrack(const Track &track) const {
+  for (auto i : tracks()) {
+    if (i.uid() == track.uid()) {
+      return true;
+    }
+  }
+  return false;
+}
+

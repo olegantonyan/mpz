@@ -20,6 +20,8 @@ public:
 
   quint64 uid() const;
 
+  bool hasTrack(const Track &track) const;
+
 private:
   QString playlist_name;
   QVector<Track> tracks_list;

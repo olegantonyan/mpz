@@ -47,6 +47,15 @@ namespace PlaylistsUi {
     return nullptr;
   }
 
+  std::shared_ptr<Playlist> Model::itemByTrack(const Track &track) const {
+    for (auto i : list) {
+      if (i->hasTrack(track)) {
+        return i;
+      }
+    }
+    return nullptr;
+  }
+
   int Model::listSize() const {
     return list.size();
   }

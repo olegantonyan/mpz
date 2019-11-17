@@ -115,10 +115,10 @@ namespace PlaylistsUi {
   void View::on_started(const Track &track) {
     on_stopped();
     state.setPlayingTrack(track.uid());
-    /*state.setPlayingPlaylist(track.playlist_uid);
-    if (track.playlist_index == state.selected().playlist_index) {
-      emit highlighted(track.track_index);
-    }*/
+    auto pl = model->itemByTrack(track);
+    if (pl != nullptr) {
+      state.setPlayingPlaylist(pl->uid());
+    }
   }
 
   void View::on_stopped() {

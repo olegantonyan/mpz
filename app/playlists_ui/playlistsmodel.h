@@ -24,6 +24,7 @@ namespace PlaylistsUi {
     void remove(const QModelIndex &index);
     std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
     std::shared_ptr<Playlist> itemBy(quint64 uid) const;
+    std::shared_ptr<Playlist> itemByTrack(const Track &track) const;
     int listSize() const;
 
   private:
