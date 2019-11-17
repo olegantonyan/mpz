@@ -26,8 +26,6 @@ namespace PlaylistUi {
     view->installEventFilter(interceptor);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
-      auto t = model->itemAt(index);
-      highlight(t.uid());
       emit activated(model->itemAt(index));
     });
 

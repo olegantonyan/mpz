@@ -8,21 +8,17 @@ namespace PlaylistsUi {
   public:
     explicit PlayerState(QObject *parent = nullptr);
 
-    void setSelectedPlaylist(quint64 playlist_uid);
-    void setSelectedTrack(quint64 track_uid);
-
+    void setSelected(quint64 track_uid);
     void setPlaying(quint64 track_uid);
 
-    quint64 playing_track() const;
-    quint64 selected_track() const;
-    quint64 selected_playlist() const;
+    quint64 playingTrack() const;
+    quint64 selectedTrack() const;
 
     void resetPlaying();
 
   private:
     quint64 playing_track_uid;
     quint64 selected_track_uid;
-    quint64 selected_playlist_uid;
   };
 }
 #endif // PLAYERSTATE_H

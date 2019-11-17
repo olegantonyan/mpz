@@ -22,17 +22,18 @@ namespace PlaylistsUi {
 
   void View::load() {
     if (model->listSize() > 0) {
-      auto idx = model->buildIndex(qMax(local_conf.currentPlaylist(), model->listSize() - 1));
+      auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
       auto item = model->itemAt(idx);
       view->setCurrentIndex(idx);
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
-      state.setSelectedPlaylist(item->uid());
       emit selected(item);
     }
   }
 
   void View::persist(int current_index) {
-    local_conf.saveCurrentPlaylist(qMax(current_index, qMax(model->listSize() - 1, 0)));
+    auto max_index = qMax(model->listSize() - 1, 0);
+    auto save_index = qMin(current_index, max_index);
+    local_conf.saveCurrentPlaylist(save_index);
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
@@ -43,7 +44,6 @@ namespace PlaylistsUi {
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
-    state.setSelectedPlaylist(item->uid());
 
     persist(index.row());
     emit selected(item);
@@ -54,11 +54,11 @@ namespace PlaylistsUi {
   }
 
   void View::on_trackSelected(const Track &track) {
-    state.setSelectedTrack(track.uid());
+    state.setSelected(track.uid());
   }
 
   void View::on_prevRequested() {
-    quint64 current_track_uid = state.playing_track();
+    quint64 current_track_uid = state.playingTrack();
     auto current_playlist = model->itemByTrack(current_track_uid);
     if (current_playlist == nullptr) {
       return;
@@ -77,7 +77,7 @@ namespace PlaylistsUi {
   }
 
   void View::on_nextRequested() {
-    quint64 current_track_uid = state.playing_track();
+    quint64 current_track_uid = state.playingTrack();
     auto current_playlist = model->itemByTrack(current_track_uid);
     if (current_playlist == nullptr) {
       return;
@@ -95,7 +95,7 @@ namespace PlaylistsUi {
   }
 
   void View::on_startRequested() {
-    quint64 selected_track_uid = state.selected_track();
+    quint64 selected_track_uid = state.selectedTrack();
     if (selected_track_uid == 0) {
       return;
     }
@@ -105,17 +105,6 @@ namespace PlaylistsUi {
     }
     Track t = selected_playlist->trackBy(selected_track_uid);
     emit activated(t);
-
-    /*int t_index = state.selected().track_index;
-    int p_index = state.selected().playlist_index;
-    if (t_index < 0 || p_index < 0) {
-      return;
-    }
-
-    auto pl = model->itemAt(model->buildIndex(p_index));
-    if (pl->tracks().size() >= t_index) {
-      emit activated(TrackWrapper(pl->tracks().at(t_index), t_index, p_index));
-    }*/
   }
 
   void View::on_started(const Track &track) {
@@ -172,6 +161,5 @@ namespace PlaylistsUi {
       view->selectionModel()->select(index, {QItemSelectionModel::Select});
       emit selected(item);
     //}
-    state.setSelectedPlaylist(item->uid());
   }
 }
