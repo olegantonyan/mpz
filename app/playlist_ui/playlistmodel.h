@@ -2,7 +2,6 @@
 #define PLAYLISTMODEL_H
 
 #include "track.h"
-#include "trackwrapper.h"
 
 #include <QVector>
 #include <QAbstractTableModel>

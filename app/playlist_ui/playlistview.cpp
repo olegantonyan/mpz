@@ -26,13 +26,13 @@ namespace PlaylistUi {
     view->installEventFilter(interceptor);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
-      emit activated(model->itemAt(index), index.row());
+      emit activated(model->itemAt(index));
     });
 
     connect(view->selectionModel(), &QItemSelectionModel::currentChanged, [=](const QModelIndex &index, const QModelIndex &prev) {
       (void)prev;
       if (index.isValid()) {
-        emit selected(model->itemAt(index), index.row());
+        emit selected(model->itemAt(index));
       }
     });
   }

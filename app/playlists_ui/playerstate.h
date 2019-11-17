@@ -6,21 +6,21 @@
 namespace PlaylistsUi {
   class StateItem {
   public:
-    StateItem() : track_index(-1), playlist_index(-1) {}
+    StateItem() : track_uid(0), playlist_uid(0) {}
 
-    int track_index;
-    int playlist_index;
+    quint64 track_uid;
+    quint64 playlist_uid;
   };
 
   class PlayerState : public QObject {
   public:
     explicit PlayerState(QObject *parent = nullptr);
 
-    void setSelectedPlaylist(int idx);
-    void setSelectedTrack(int idx);
+    void setSelectedPlaylist(quint64 uid);
+    void setSelectedTrack(quint64 uid);
 
-    void setPlayingPlaylist(int idx);
-    void setPlayingTrack(int idx);
+    void setPlayingPlaylist(quint64 uid);
+    void setPlayingTrack(quint64 uid);
 
     StateItem selected() const;
     StateItem playing() const;

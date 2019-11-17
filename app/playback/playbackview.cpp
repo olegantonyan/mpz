@@ -16,13 +16,13 @@ namespace Playback {
     });
     connect(controls.prev, &QToolButton::clicked, [=]() {
       next_after_stop = false;
-      if (_current_track.track.isValid()) {
+      if (_current_track.isValid()) {
         emit prev_requested();
       }
     });
     connect(controls.next, &QToolButton::clicked, [=]() {
       next_after_stop = false;
-      if (_current_track.track.isValid()) {
+      if (_current_track.isValid()) {
         emit next_requested();
       }
     });
@@ -32,10 +32,10 @@ namespace Playback {
     next_after_stop = true;
   }
 
-  void View::play(const TrackWrapper &track) {
+  void View::play(const Track &track) {
     next_after_stop = false;
-    controls.seekbar->setMaximum(static_cast<int>(track.track.duration()));
-    player.setMedia(QUrl::fromLocalFile(track.track.path()));
+    controls.seekbar->setMaximum(static_cast<int>(track.duration()));
+    player.setMedia(QUrl::fromLocalFile(track.path()));
     _current_track = track;
     player.play();
   }
@@ -69,7 +69,7 @@ namespace Playback {
   }
 
   QString View::time_text(int pos) const {
-    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.track.formattedDuration());
+    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.formattedDuration());
   }
 
   void View::on_positionChanged(quint64 pos) {
@@ -84,7 +84,7 @@ namespace Playback {
         controls.seekbar->setValue(0);
         player.setMedia(nullptr);
         controls.time->clear();
-        _current_track = TrackWrapper();
+        _current_track = Track();
         if (next_after_stop) {
           emit next_requested();
         }

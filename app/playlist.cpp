@@ -2,9 +2,10 @@
 
 #include <QDebug>
 #include <QDirIterator>
+#include <QRandomGenerator>
 
 Playlist::Playlist() {
-  tracks_list.clear();
+  _uid = QRandomGenerator().generate64();
 }
 
 QString Playlist::name() const {
@@ -32,5 +33,9 @@ bool Playlist::load(const QDir &path) {
 bool Playlist::load(const QVector<Track> &tracks) {
   tracks_list = tracks;
   return true;
+}
+
+quint64 Playlist::uid() const {
+  return _uid;
 }
 

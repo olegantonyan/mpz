@@ -26,7 +26,7 @@ namespace PlaylistsUi {
       auto item = model->itemAt(idx);
       view->setCurrentIndex(idx);
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
-      state.setSelectedPlaylist(idx.row());
+      state.setSelectedPlaylist(item->uid());
       emit selected(item);
     }
   }
@@ -43,7 +43,7 @@ namespace PlaylistsUi {
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
-    state.setSelectedPlaylist(index.row());
+    state.setSelectedPlaylist(item->uid());
 
     persist(index.row());
     emit selected(item);
@@ -53,17 +53,16 @@ namespace PlaylistsUi {
     qDebug() << filepath;
   }
 
-  void View::on_trackActivated(Track track, int index) {
-    emit activated(TrackWrapper(track, index, state.selected().playlist_index));
+  void View::on_trackActivated(const Track &track) {
+    emit activated(track);
   }
 
-  void View::on_trackSelected(Track track, int index) {
-    Q_UNUSED(track)
-    state.setSelectedTrack(index);
+  void View::on_trackSelected(const Track &track) {
+    state.setSelectedTrack(track.uid());
   }
 
   void View::on_prevRequested() {
-    int current = state.playing().track_index;
+    /*int current = state.playing().track_index;
     if (current < 0 || state.playing().playlist_index < 0) {
       return;
     }
@@ -80,11 +79,11 @@ namespace PlaylistsUi {
     } else {
       auto i = TrackWrapper(pl->tracks().at(prev), prev, state.playing().playlist_index);
       emit activated(i);
-    }
+    }*/
   }
 
   void View::on_nextRequested() {
-    int current = state.playing().track_index;
+    /*int current = state.playing().track_index;
     if (current < 0 || state.playing().playlist_index < 0) {
       return;
     }
@@ -101,11 +100,11 @@ namespace PlaylistsUi {
     } else {
       auto i = TrackWrapper(pl->tracks().at(next), next, state.playing().playlist_index);
       emit activated(i);
-    }
+    }*/
   }
 
   void View::on_startRequested() {
-    int t_index = state.selected().track_index;
+    /*int t_index = state.selected().track_index;
     int p_index = state.selected().playlist_index;
     if (t_index < 0 || p_index < 0) {
       return;
@@ -114,16 +113,16 @@ namespace PlaylistsUi {
     auto pl = model->itemAt(model->buildIndex(p_index));
     if (pl->tracks().size() >= t_index) {
       emit activated(TrackWrapper(pl->tracks().at(t_index), t_index, p_index));
-    }
+    }*/
   }
 
-  void View::on_started(TrackWrapper track) {
+  void View::on_started(const Track &track) {
     on_stopped();
-    state.setPlayingTrack(track.track_index);
-    state.setPlayingPlaylist(track.playlist_index);
+    state.setPlayingTrack(track.uid());
+    /*state.setPlayingPlaylist(track.playlist_uid);
     if (track.playlist_index == state.selected().playlist_index) {
       emit highlighted(track.track_index);
-    }
+    }*/
   }
 
   void View::on_stopped() {
@@ -170,7 +169,7 @@ namespace PlaylistsUi {
       return;
     }
     auto item = model->itemAt(index);
-    if (model->itemAt(model->buildIndex(state.selected().playlist_index)) != item) {
+    /*if (model->itemAt(model->buildIndex(state.selected().playlist_index)) != item) {
       persist(index.row());
       view->selectionModel()->clearSelection();
       view->selectionModel()->select(index, {QItemSelectionModel::Select});
@@ -180,6 +179,6 @@ namespace PlaylistsUi {
 
     if (state.playing().playlist_index == index.row()) {
       emit highlighted(state.playing().track_index);
-    }
+    }*/
   }
 }

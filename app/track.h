@@ -27,6 +27,8 @@ public:
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
 
+  quint64 uid() const;
+
 private:
   QString filepath;
   QString _artist;
@@ -38,6 +40,8 @@ private:
   quint8 _channels;
   quint16 _bitrate;
   QString _format;
+
+  quint64 _uid;
 };
 
 #endif // TRACK_H

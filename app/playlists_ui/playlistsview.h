@@ -5,7 +5,7 @@
 #include "playlist.h"
 #include "config/local.h"
 #include "playerstate.h"
-#include "trackwrapper.h"
+#include "track.h"
 
 #include <QObject>
 #include <QListView>
@@ -27,19 +27,19 @@ namespace PlaylistsUi {
     void on_createPlaylist(const QDir &filepath);
     void on_appendToCurrentPlaylist(const QDir &filepath);
 
-    void on_trackActivated(Track track, int index);
-    void on_trackSelected(Track track, int index);
+    void on_trackActivated(const Track &track);
+    void on_trackSelected(const Track &track);
 
     void on_prevRequested();
     void on_nextRequested();
     void on_startRequested();
-    void on_started(TrackWrapper track);
+    void on_started(const Track &track);
     void on_stopped();
 
   signals:
     void selected(const std::shared_ptr<Playlist> item);
     void emptied();
-    void activated(const TrackWrapper &track);
+    void activated(const Track &track);
     void highlighted(int row);
 
   private slots:

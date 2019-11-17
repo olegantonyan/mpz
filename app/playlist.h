@@ -9,7 +9,7 @@
 
 class Playlist {
 public:
-  explicit Playlist();
+  Playlist();
 
   QString name() const;
   QString rename(const QString &value);
@@ -18,9 +18,12 @@ public:
   bool load(const QDir &path);
   bool load(const QVector<Track> &tracks);
 
+  quint64 uid() const;
+
 private:
   QString playlist_name;
   QVector<Track> tracks_list;
+  quint64 _uid;
 };
 
 #endif // PLAYLISTITEM_H

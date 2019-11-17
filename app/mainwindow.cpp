@@ -50,20 +50,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    //auto t = player->current_track().track;
-    //if (t.isValid()) {
-      qDebug() << "TODO: jump to playlist";
-    //}
+    qDebug() << "TODO: jump to playlist";
   });
 
-  connect(player, &Playback::View::started, [=](const TrackWrapper &track) {
-    status_label->setText(QString("Playing ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+  connect(player, &Playback::View::started, [=](const Track &track) {
+    status_label->setText(QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo());
   });
   connect(player, &Playback::View::stopped, [=]() {
     status_label->setText("Stopped");
   });
-  connect(player, &Playback::View::paused, [=](const TrackWrapper &track) {
-    status_label->setText(QString("Paused ") + track.track.filename() + " | " + track.track.formattedAudioInfo());
+  connect(player, &Playback::View::paused, [=](const Track &track) {
+    status_label->setText(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
   });
 
 

@@ -6,20 +6,20 @@ namespace PlaylistsUi {
   PlayerState::PlayerState(QObject *parent) : QObject(parent) {
   }
 
-  void PlayerState::setSelectedPlaylist(int idx) {
-    _selected.playlist_index = idx;
+  void PlayerState::setSelectedPlaylist(quint64 uid) {
+    _selected.playlist_uid = uid;
   }
 
-  void PlayerState::setSelectedTrack(int idx) {
-    _selected.track_index = idx;
+  void PlayerState::setSelectedTrack(quint64 uid) {
+    _selected.track_uid = uid;
   }
 
-  void PlayerState::setPlayingPlaylist(int idx) {
-    _playing.playlist_index = idx;
+  void PlayerState::setPlayingPlaylist(quint64 uid) {
+    _playing.playlist_uid = uid;
   }
 
-  void PlayerState::setPlayingTrack(int idx) {
-    _playing.track_index = idx;
+  void PlayerState::setPlayingTrack(quint64 uid) {
+    _playing.track_uid = uid;
   }
 
   StateItem PlayerState::selected() const {
@@ -31,7 +31,7 @@ namespace PlaylistsUi {
   }
 
   void PlayerState::resetPlaying() {
-    _playing.track_index = -1;
-    _playing.playlist_index = -1;
+    _playing.track_uid = 0;
+    _playing.playlist_uid = 0;
   }
 }

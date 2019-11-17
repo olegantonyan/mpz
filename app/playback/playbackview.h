@@ -2,7 +2,7 @@
 #define PLAYBACKVIEW_H
 
 #include "controls.h"
-#include "trackwrapper.h"
+#include "track.h"
 #include "eventinteceptor.h"
 
 #include <QObject>
@@ -18,21 +18,21 @@ namespace Playback {
     explicit View(const Playback::Controls &c, QObject *parent = nullptr);
 
   signals:
-    void started(TrackWrapper track);
+    void started(Track track);
     void stopped();
-    void paused(TrackWrapper track);
+    void paused(Track track);
     void prev_requested();
     void next_requested();
     void start_requested();
 
   public slots:
-    void play(const TrackWrapper &track);
+    void play(const Track &track);
     void stop();
 
   private:
     Playback::Controls controls;
     QMediaPlayer player;
-    TrackWrapper _current_track;
+    Track _current_track;
 
     void on_seek(int position);
     void on_event(QEvent *event);

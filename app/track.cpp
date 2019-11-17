@@ -7,12 +7,16 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QFileInfo>
+#include <QRandomGenerator>
 
 Track::Track() {
   Track("");
+  _uid = 0;
 }
 
 Track::Track(const QString &fp) {
+  _uid = QRandomGenerator().generate64();
+
   filepath = fp;
 
   TagLib::FileRef f(path().toStdString().c_str());
@@ -33,10 +37,6 @@ Track::Track(const QString &fp) {
   }
 
   _format = QFileInfo(path()).suffix().toUpper();
-
-  //qDebug() << typeid(f.file()).name();
-
-  //qDebug() << formattedAudioInfo();
 }
 
 QString Track::formattedTime(quint32 tm) {
@@ -51,7 +51,7 @@ QString Track::formattedTime(quint32 tm) {
 }
 
 bool Track::isValid() const {
-  return QFile::exists(path());
+  return uid() != 0 && QFile::exists(path());
 }
 
 QString Track::path() const {
@@ -92,6 +92,10 @@ QString Track::formattedAudioInfo() const {
     c = QString("%1 channels").arg(channels());
   }
   return QString("%1 | %2kbps | %3Hz | %4").arg(format()).arg(bitrate()).arg(sample_rate()).arg(c);
+}
+
+quint64 Track::uid() const {
+  return _uid;
 }
 
 quint16 Track::sample_rate() const {
