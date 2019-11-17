@@ -22,11 +22,11 @@ namespace PlaylistUi {
     Track itemAt(const QModelIndex &index) const;
     QModelIndex buildIndex(int row);
     int tracksSize() const;
-    void highlight(int row);
+    void highlight(quint64 uid);
 
   private:
     QVector<Track> tracks;
-    int highlight_row;
+    quint64 highlight_uid;
   };
 }
 

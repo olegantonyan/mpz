@@ -38,6 +38,15 @@ namespace PlaylistsUi {
     return list.at(index.row());
   }
 
+  std::shared_ptr<Playlist> Model::itemBy(quint64 uid) const {
+    for (auto i : list) {
+      if (i->uid() == uid) {
+        return i;
+      }
+    }
+    return nullptr;
+  }
+
   int Model::listSize() const {
     return list.size();
   }

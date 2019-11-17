@@ -26,6 +26,8 @@ namespace PlaylistUi {
     view->installEventFilter(interceptor);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
+      auto t = model->itemAt(index);
+      highlight(t.uid());
       emit activated(model->itemAt(index));
     });
 
@@ -45,8 +47,12 @@ namespace PlaylistUi {
     model->setTracks(QVector<Track>());
   }
 
-  void View::highlight(int row) {
-    model->highlight(row);
+  void View::highlight(quint64 track_uid) {
+    model->highlight(track_uid);
+  }
+
+  void View::on_stop() {
+    highlight(0);
   }
 
   void View::on_event(QEvent *event) {

@@ -18,13 +18,14 @@ namespace PlaylistUi {
     explicit View(QTableView *v, QObject *parent = nullptr);
 
   signals:
-    void activated(Track track);
-    void selected(Track track);
+    void activated(const Track &track);
+    void selected(const Track &track);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist> pi);
     void on_unload();
-    void highlight(int row);
+    void highlight(quint64 track_uid);
+    void on_stop();
 
   private:
     QTableView *view;

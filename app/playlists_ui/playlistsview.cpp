@@ -53,10 +53,6 @@ namespace PlaylistsUi {
     qDebug() << filepath;
   }
 
-  void View::on_trackActivated(const Track &track) {
-    emit activated(track);
-  }
-
   void View::on_trackSelected(const Track &track) {
     state.setSelectedTrack(track.uid());
   }
@@ -127,7 +123,6 @@ namespace PlaylistsUi {
 
   void View::on_stopped() {
     state.resetPlaying();
-    emit highlighted(-1);
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -169,16 +164,12 @@ namespace PlaylistsUi {
       return;
     }
     auto item = model->itemAt(index);
-    /*if (model->itemAt(model->buildIndex(state.selected().playlist_index)) != item) {
+    //if (model->itemBy(state.selected().playlist_uid) != item) {
       persist(index.row());
       view->selectionModel()->clearSelection();
       view->selectionModel()->select(index, {QItemSelectionModel::Select});
       emit selected(item);
-    }
-    state.setSelectedPlaylist(index.row());
-
-    if (state.playing().playlist_index == index.row()) {
-      emit highlighted(state.playing().track_index);
-    }*/
+    //}
+    state.setSelectedPlaylist(item->uid());
   }
 }

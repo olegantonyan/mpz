@@ -23,6 +23,7 @@ namespace PlaylistsUi {
     QModelIndex append(std::shared_ptr<Playlist> item);
     void remove(const QModelIndex &index);
     std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
+    std::shared_ptr<Playlist> itemBy(quint64 uid) const;
     int listSize() const;
 
   private:

@@ -4,7 +4,7 @@
 #include <QFont>
 
 namespace PlaylistUi {
-  Model::Model(QObject *parent) : QAbstractTableModel(parent), highlight_row(-1) {
+  Model::Model(QObject *parent) : QAbstractTableModel(parent), highlight_uid(0) {
     tracks.clear();
   }
 
@@ -35,17 +35,18 @@ namespace PlaylistUi {
       return Qt::AlignRight;
     }
 
-    if (role == Qt::FontRole && highlight_row >= 0 && index.row() == highlight_row) {
+    Track t = tracks.at(index.row());
+
+    if (role == Qt::FontRole && t.uid() == highlight_uid) {
       QFont font;
       font.setBold(true);
       return font;
     }
 
     if (role == Qt::DisplayRole) {
-      Track t = tracks.at(index.row());
       switch (index.column()) {
         case 0:
-          if (highlight_row >= 0 && highlight_row == index.row()) {
+          if (highlight_uid == t.uid()) {
             //return "►";
             return "▷";
           } else {
@@ -77,8 +78,6 @@ namespace PlaylistUi {
     tracks = t;
     endInsertRows();
 
-    highlight(-1);
-
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
@@ -90,12 +89,15 @@ namespace PlaylistUi {
     }
     return tracks.at(index.row());
   }
+
   int Model::tracksSize() const {
     return tracks.size();
   }
 
-  void Model::highlight(int row) {
-    highlight_row = row;
-    emit dataChanged(buildIndex(row), buildIndex(row));
+  void Model::highlight(quint64 uid) {
+    highlight_uid = uid;
+    if (tracks.size() > 0) {
+      emit dataChanged(buildIndex(0), buildIndex(tracks.size() - 1));
+    }
   }
 }

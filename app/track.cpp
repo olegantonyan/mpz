@@ -15,7 +15,7 @@ Track::Track() {
 }
 
 Track::Track(const QString &fp) {
-  _uid = QRandomGenerator().generate64();
+  _uid = QRandomGenerator::global()->generate64();
 
   filepath = fp;
 

@@ -27,7 +27,6 @@ namespace PlaylistsUi {
     void on_createPlaylist(const QDir &filepath);
     void on_appendToCurrentPlaylist(const QDir &filepath);
 
-    void on_trackActivated(const Track &track);
     void on_trackSelected(const Track &track);
 
     void on_prevRequested();
@@ -39,8 +38,6 @@ namespace PlaylistsUi {
   signals:
     void selected(const std::shared_ptr<Playlist> item);
     void emptied();
-    void activated(const Track &track);
-    void highlighted(int row);
 
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);

@@ -5,7 +5,7 @@
 #include <QRandomGenerator>
 
 Playlist::Playlist() {
-  _uid = QRandomGenerator().generate64();
+  _uid = QRandomGenerator::global()->generate64();
 }
 
 QString Playlist::name() const {
