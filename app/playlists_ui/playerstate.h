@@ -4,32 +4,25 @@
 #include <QObject>
 
 namespace PlaylistsUi {
-  class StateItem {
-  public:
-    StateItem() : track_uid(0), playlist_uid(0) {}
-
-    quint64 track_uid;
-    quint64 playlist_uid;
-  };
-
   class PlayerState : public QObject {
   public:
     explicit PlayerState(QObject *parent = nullptr);
 
-    void setSelectedPlaylist(quint64 uid);
-    void setSelectedTrack(quint64 uid);
+    void setSelectedPlaylist(quint64 playlist_uid);
+    void setSelectedTrack(quint64 track_uid);
 
-    void setPlayingPlaylist(quint64 uid);
-    void setPlayingTrack(quint64 uid);
+    void setPlaying(quint64 track_uid);
 
-    StateItem selected() const;
-    StateItem playing() const;
+    quint64 playing_track() const;
+    quint64 selected_track() const;
+    quint64 selected_playlist() const;
 
     void resetPlaying();
 
   private:
-    StateItem _selected;
-    StateItem _playing;
+    quint64 playing_track_uid;
+    quint64 selected_track_uid;
+    quint64 selected_playlist_uid;
   };
 }
 #endif // PLAYERSTATE_H

@@ -39,12 +39,25 @@ quint64 Playlist::uid() const {
   return _uid;
 }
 
-bool Playlist::hasTrack(const Track &track) const {
-  for (auto i : tracks()) {
-    if (i.uid() == track.uid()) {
-      return true;
+bool Playlist::hasTrack(quint64 track_uid) const {
+  return trackIndex(track_uid) >= 0;
+}
+
+int Playlist::trackIndex(quint64 track_uid) const {
+  for (int i = 0; i < tracks().size(); i++) {
+    if (tracks().at(i).uid() == track_uid) {
+      return i;
     }
   }
-  return false;
+  return -1;
+}
+
+Track Playlist::trackBy(quint64 uid) const {
+  for (auto i : tracks()) {
+    if (i.uid() == uid) {
+      return i;
+    }
+  }
+  return Track();
 }
 

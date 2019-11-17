@@ -26,6 +26,7 @@ namespace PlaylistUi {
     void on_unload();
     void highlight(quint64 track_uid);
     void on_stop();
+    void on_start(const Track &t);
 
   private:
     QTableView *view;

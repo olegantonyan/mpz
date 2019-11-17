@@ -47,9 +47,9 @@ namespace PlaylistsUi {
     return nullptr;
   }
 
-  std::shared_ptr<Playlist> Model::itemByTrack(const Track &track) const {
+  std::shared_ptr<Playlist> Model::itemByTrack(quint64 track_uid) const {
     for (auto i : list) {
-      if (i->hasTrack(track)) {
+      if (i->hasTrack(track_uid)) {
         return i;
       }
     }

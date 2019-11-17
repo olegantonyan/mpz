@@ -58,45 +58,40 @@ namespace PlaylistsUi {
   }
 
   void View::on_prevRequested() {
-    /*int current = state.playing().track_index;
-    if (current < 0 || state.playing().playlist_index < 0) {
+    quint64 current_track_uid = state.playing_track();
+    auto current_playlist = model->itemByTrack(current_track_uid);
+    if (current_playlist == nullptr) {
       return;
     }
 
-    auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
-    if (pl->tracks().size() <= 0) {
-      return;
-    }
+    int current = current_playlist->trackIndex(current_track_uid);
     auto prev = current - 1;
     if (prev < 0) {
-      auto max = pl->tracks().size() - 1;
-      auto i = TrackWrapper(pl->tracks().at(max), max, state.playing().playlist_index);
-      emit activated(i);
+      auto max = current_playlist->tracks().size() - 1;
+      Track t = current_playlist->tracks().at(max);
+      emit activated(t);
     } else {
-      auto i = TrackWrapper(pl->tracks().at(prev), prev, state.playing().playlist_index);
-      emit activated(i);
-    }*/
+      Track t = current_playlist->tracks().at(prev);
+      emit activated(t);
+    }
   }
 
   void View::on_nextRequested() {
-    /*int current = state.playing().track_index;
-    if (current < 0 || state.playing().playlist_index < 0) {
+    quint64 current_track_uid = state.playing_track();
+    auto current_playlist = model->itemByTrack(current_track_uid);
+    if (current_playlist == nullptr) {
       return;
     }
 
-    //qDebug() << "next" << state.playing().track_index << state.playing().playlist_index;
-    auto pl = model->itemAt(model->buildIndex(state.playing().playlist_index));
-    if (pl->tracks().size() <= 0) {
-      return;
-    }
+    int current = current_playlist->trackIndex(current_track_uid);
     auto next = current + 1;
-    if (next > pl->tracks().size() - 1) {
-      auto i = TrackWrapper(pl->tracks().first(), 0, state.playing().playlist_index);
-      emit activated(i);
+    if (next > current_playlist->tracks().size() - 1) {
+      Track t = current_playlist->tracks().at(0);
+      emit activated(t);
     } else {
-      auto i = TrackWrapper(pl->tracks().at(next), next, state.playing().playlist_index);
-      emit activated(i);
-    }*/
+      Track t = current_playlist->tracks().at(next);
+      emit activated(t);
+    }
   }
 
   void View::on_startRequested() {
@@ -114,11 +109,7 @@ namespace PlaylistsUi {
 
   void View::on_started(const Track &track) {
     on_stopped();
-    state.setPlayingTrack(track.uid());
-    auto pl = model->itemByTrack(track);
-    if (pl != nullptr) {
-      state.setPlayingPlaylist(pl->uid());
-    }
+    state.setPlaying(track.uid());
   }
 
   void View::on_stopped() {

@@ -20,7 +20,9 @@ public:
 
   quint64 uid() const;
 
-  bool hasTrack(const Track &track) const;
+  bool hasTrack(quint64 track_uid) const;
+  int trackIndex(quint64 track_uid) const;
+  Track trackBy(quint64 uid) const;
 
 private:
   QString playlist_name;

@@ -55,6 +55,10 @@ namespace PlaylistUi {
     highlight(0);
   }
 
+  void View::on_start(const Track &t) {
+    model->highlight(t.uid());
+  }
+
   void View::on_event(QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();

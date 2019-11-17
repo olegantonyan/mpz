@@ -33,11 +33,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
   connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
+  connect(playlists, &PlaylistsUi::View::activated, player, &Playback::View::play);
   connect(playlist, &PlaylistUi::View::selected, playlists, &PlaylistsUi::View::on_trackSelected);
   connect(player, &Playback::View::prev_requested, playlists, &PlaylistsUi::View::on_prevRequested);
   connect(player, &Playback::View::next_requested, playlists, &PlaylistsUi::View::on_nextRequested);
   connect(player, &Playback::View::start_requested, playlists, &PlaylistsUi::View::on_startRequested);
   connect(player, &Playback::View::started, playlists, &PlaylistsUi::View::on_started);
+  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_start);
   connect(player, &Playback::View::stopped, playlists, &PlaylistsUi::View::on_stopped);
   connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stop);
 

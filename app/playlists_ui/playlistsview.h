@@ -36,6 +36,7 @@ namespace PlaylistsUi {
     void on_stopped();
 
   signals:
+    void activated(const Track &track);
     void selected(const std::shared_ptr<Playlist> item);
     void emptied();
 
