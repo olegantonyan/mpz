@@ -30,6 +30,10 @@ namespace PlaylistsUi {
     }
   }
 
+  std::shared_ptr<Playlist> View::playlistByTrackUid(quint64 track_uid) const {
+    return model->itemByTrack(track_uid);
+  }
+
   void View::persist(int current_index) {
     auto max_index = qMax(model->listSize() - 1, 0);
     auto save_index = qMin(current_index, max_index);
@@ -52,77 +56,8 @@ namespace PlaylistsUi {
     qDebug() << filepath;
   }
 
-  void View::on_trackSelected(const Track &track) {
-    state.setSelected(track.uid());
-  }
-
-  void View::on_prevRequested() {
-    quint64 current_track_uid = state.playingTrack();
-    auto current_playlist = model->itemByTrack(current_track_uid);
-    if (current_playlist == nullptr) {
-      return;
-    }
-
-    int current = current_playlist->trackIndex(current_track_uid);
-    auto prev = current - 1;
-    if (prev < 0) {
-      auto max = current_playlist->tracks().size() - 1;
-      Track t = current_playlist->tracks().at(max);
-      emit activated(t);
-    } else {
-      Track t = current_playlist->tracks().at(prev);
-      emit activated(t);
-    }
-  }
-
-  void View::on_nextRequested() {
-    quint64 current_track_uid = state.playingTrack();
-    auto current_playlist = model->itemByTrack(current_track_uid);
-    if (current_playlist == nullptr) {
-      return;
-    }
-
-    int current = current_playlist->trackIndex(current_track_uid);
-    auto next = current + 1;
-    if (next > current_playlist->tracks().size() - 1) {
-      Track t = current_playlist->tracks().at(0);
-      emit activated(t);
-    } else {
-      Track t = current_playlist->tracks().at(next);
-      emit activated(t);
-    }
-  }
-
-  void View::on_startRequested() {
-    quint64 selected_track_uid = state.selectedTrack();
-    if (selected_track_uid == 0) {
-      return;
-    }
-    auto selected_playlist = model->itemByTrack(selected_track_uid);
-    if (selected_playlist == nullptr) {
-      return;
-    }
-    Track t = selected_playlist->trackBy(selected_track_uid);
-    emit activated(t);
-  }
-
-  void View::on_started(const Track &track) {
-    on_stopped();
-    state.setPlaying(track.uid());
-  }
-
-  void View::on_stopped() {
-    state.resetPlaying();
-  }
-
-  void View::on_jumpToCurrent() {
-    quint64 current_track_uid = state.playingTrack();
-    auto current_playlist = model->itemByTrack(current_track_uid);
-    if (current_playlist == nullptr) {
-      return;
-    }
-    on_itemActivated(model->itemIndex(current_playlist));
-    emit scrolling(current_playlist->trackBy(current_track_uid));
+  void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
+    on_itemActivated(model->itemIndex(playlist));
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {

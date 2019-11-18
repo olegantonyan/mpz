@@ -7,6 +7,7 @@
 #include "playback/playbackview.h"
 #include "config/local.h"
 #include "config/global.h"
+#include "playerstate.h"
 
 #include <QMainWindow>
 #include <memory>
@@ -31,7 +32,10 @@ private:
   Config::Local local_conf;
   //Config::Global global_conf;
 
+  PlayerState player_state;
+
   void loadUiSettings();
+  void setupControllerLogic();
 
   // QWidget interface
 protected:

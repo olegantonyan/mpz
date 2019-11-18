@@ -28,21 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.time = ui->timeLabel;
   player = new Playback::View(pc, this);
 
-  connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
-  connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlists, &PlaylistsUi::View::on_appendToCurrentPlaylist);
-  connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
-  connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
-  connect(playlists, &PlaylistsUi::View::scrolling, playlist, &PlaylistUi::View::on_scrollTo);
-  connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
-  connect(playlists, &PlaylistsUi::View::activated, player, &Playback::View::play);
-  connect(playlist, &PlaylistUi::View::selected, playlists, &PlaylistsUi::View::on_trackSelected);
-  connect(player, &Playback::View::prev_requested, playlists, &PlaylistsUi::View::on_prevRequested);
-  connect(player, &Playback::View::next_requested, playlists, &PlaylistsUi::View::on_nextRequested);
-  connect(player, &Playback::View::start_requested, playlists, &PlaylistsUi::View::on_startRequested);
-  connect(player, &Playback::View::started, playlists, &PlaylistsUi::View::on_started);
-  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_start);
-  connect(player, &Playback::View::stopped, playlists, &PlaylistsUi::View::on_stopped);
-  connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stop);
+  setupControllerLogic();
 
   loadUiSettings();
 
@@ -52,7 +38,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    playlists->on_jumpToCurrent();
+    auto current_track_uid = player_state.playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    playlists->on_jumpTo(current_playlist);
+    playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
   });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
@@ -92,6 +81,74 @@ void MainWindow::loadUiSettings() {
   if (splitter_sizes.size() >= 3) {
     ui->splitter->setSizes(splitter_sizes);
   }
+}
+
+void MainWindow::setupControllerLogic() {
+  connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
+  connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlists, &PlaylistsUi::View::on_appendToCurrentPlaylist);
+  connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
+  connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
+  connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
+  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_start);
+  connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stop);
+
+  connect(playlist, &PlaylistUi::View::selected, [=](const Track &track) {
+    player_state.setSelected(track.uid());
+  });
+
+  connect(player, &Playback::View::started, [=](const Track &track) {
+    player_state.setPlaying(track.uid());
+  });
+
+  connect(player, &Playback::View::stopped, [=]() {
+    player_state.resetPlaying();
+  });
+
+  connect(player, &Playback::View::prev_requested, [=]() {
+    quint64 current_track_uid = player_state.playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    if (current_playlist == nullptr) {
+      return;
+    }
+
+    int current = current_playlist->trackIndex(current_track_uid);
+    auto prev = current - 1;
+    if (prev < 0) {
+      auto max = current_playlist->tracks().size() - 1;
+      Track t = current_playlist->tracks().at(max);
+      player->play(t);
+    } else {
+      Track t = current_playlist->tracks().at(prev);
+      player->play(t);
+    }
+  });
+
+  connect(player, &Playback::View::next_requested, [=]() {
+    quint64 current_track_uid = player_state.playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    if (current_playlist == nullptr) {
+      return;
+    }
+
+    int current = current_playlist->trackIndex(current_track_uid);
+    auto next = current + 1;
+    if (next > current_playlist->tracks().size() - 1) {
+      Track t = current_playlist->tracks().at(0);
+      player->play(t);
+    } else {
+      Track t = current_playlist->tracks().at(next);
+      player->play(t);
+    }
+  });
+
+  connect(player, &Playback::View::start_requested, [=]() {
+    quint64 selected_track_uid = player_state.selectedTrack();
+    auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
+    if (selected_playlist != nullptr) {
+      Track t = selected_playlist->trackBy(selected_track_uid);
+      player->play(t);
+    }
+  });
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
