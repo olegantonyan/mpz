@@ -31,8 +31,12 @@ namespace PlaylistUi {
       return QVariant();
     }
 
-    if ((index.column() == 4 || index.column() == 5) && role == Qt::TextAlignmentRole) {
-      return Qt::AlignRight;
+    if (role == Qt::TextAlignmentRole) {
+      if (index.column() == 4 || index.column() == 5) {
+        return (Qt::AlignRight + Qt::AlignVCenter);
+      } else {
+        return Qt::AlignVCenter;
+      }
     }
 
     Track t = tracks.at(index.row());
