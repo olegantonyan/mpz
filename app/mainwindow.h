@@ -30,7 +30,7 @@ private:
   PlaylistUi::View *playlist;
   Playback::View *player;
   Config::Local local_conf;
-  //Config::Global global_conf;
+  Config::Global global_conf;
 
   PlayerState player_state;
 

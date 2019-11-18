@@ -7,4 +7,12 @@ namespace Config {
   bool Global::sync() {
     return storage.save();
   }
+
+  bool Global::playbackFollowCursor() const {
+    return true;
+  }
+
+  void Global::savePlaybackFollowCursor(bool arg) {
+
+  }
 }

@@ -10,6 +10,10 @@ namespace Config {
 
     bool sync();
 
+    bool playbackFollowCursor() const;
+
+    void savePlaybackFollowCursor(bool arg);
+
   private:
     Config::Storage storage;
   };

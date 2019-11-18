@@ -94,6 +94,7 @@ void MainWindow::setupControllerLogic() {
 
   connect(playlist, &PlaylistUi::View::selected, [=](const Track &track) {
     player_state.setSelected(track.uid());
+    player_state.resetFolowedCursor();
   });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
@@ -124,6 +125,20 @@ void MainWindow::setupControllerLogic() {
   });
 
   connect(player, &Playback::View::next_requested, [=]() {
+
+    if (global_conf.playbackFollowCursor()) {
+      auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
+      if (selected_playlist != nullptr) {
+        auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
+        if (!player_state.followedCursor()) {
+          player->play(selected_track);
+          player_state.setFollowedCursor();
+          return;
+        }
+      }
+    }
+
+
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist == nullptr) {
