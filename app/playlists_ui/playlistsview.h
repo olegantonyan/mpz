@@ -34,11 +34,13 @@ namespace PlaylistsUi {
     void on_startRequested();
     void on_started(const Track &track);
     void on_stopped();
+    void on_jumpToCurrent();
 
   signals:
     void activated(const Track &track);
     void selected(const std::shared_ptr<Playlist> item);
     void emptied();
+    void scrolling(const Track &track);
 
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);

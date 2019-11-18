@@ -60,6 +60,15 @@ namespace PlaylistsUi {
     return list.size();
   }
 
+  QModelIndex Model::itemIndex(std::shared_ptr<Playlist> playlist) const {
+    for (int i = 0; i < list.size(); i++) {
+      if (playlist->uid() == list.at(i)->uid()) {
+        return buildIndex(i);
+      }
+    }
+    return buildIndex(-1);
+  }
+
   int Model::rowCount(const QModelIndex &parent) const {
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.

@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QHeaderView>
+#include <QAbstractItemView>
 
 namespace PlaylistUi {
   View::View(QTableView *v, QObject *parent) : QObject(parent) {
@@ -55,6 +56,15 @@ namespace PlaylistUi {
 
   void View::on_start(const Track &t) {
     model->highlight(t.uid());
+  }
+
+  void View::on_scrollTo(const Track &track) {
+    QModelIndex index = model->indexOf(track.uid());
+    if (index.isValid()) {
+      view->setCurrentIndex(index);
+      view->scrollTo(index, QAbstractItemView::PositionAtCenter);
+      emit selected(track);
+    }
   }
 
   void View::on_event(QEvent *event) {

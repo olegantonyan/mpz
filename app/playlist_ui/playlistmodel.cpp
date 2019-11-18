@@ -8,7 +8,7 @@ namespace PlaylistUi {
     tracks.clear();
   }
 
-  QModelIndex Model::buildIndex(int row) {
+  QModelIndex Model::buildIndex(int row) const {
     return createIndex(row, 0);
   }
 
@@ -99,5 +99,14 @@ namespace PlaylistUi {
     if (tracks.size() > 0) {
       emit dataChanged(buildIndex(0), buildIndex(tracks.size() - 1));
     }
+  }
+
+  QModelIndex Model::indexOf(quint64 uid) const {
+    for (int i = 0; i < tracksSize(); i++) {
+      if (uid == tracks.at(i).uid()) {
+        return buildIndex(i);
+      }
+    }
+    return buildIndex(-1);
   }
 }

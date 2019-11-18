@@ -20,9 +20,10 @@ namespace PlaylistUi {
     void setTracks(const QVector<Track> &tracks);
 
     Track itemAt(const QModelIndex &index) const;
-    QModelIndex buildIndex(int row);
+    QModelIndex buildIndex(int row) const;
     int tracksSize() const;
     void highlight(quint64 uid);
+    QModelIndex indexOf(quint64 uid) const;
 
   private:
     QVector<Track> tracks;

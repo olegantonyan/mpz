@@ -44,7 +44,6 @@ namespace PlaylistsUi {
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
-
     persist(index.row());
     emit selected(item);
   }
@@ -116,6 +115,16 @@ namespace PlaylistsUi {
     state.resetPlaying();
   }
 
+  void View::on_jumpToCurrent() {
+    quint64 current_track_uid = state.playingTrack();
+    auto current_playlist = model->itemByTrack(current_track_uid);
+    if (current_playlist == nullptr) {
+      return;
+    }
+    on_itemActivated(model->itemIndex(current_playlist));
+    emit scrolling(current_playlist->trackBy(current_track_uid));
+  }
+
   void View::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
     if (!index.isValid()) {
@@ -155,11 +164,9 @@ namespace PlaylistsUi {
       return;
     }
     auto item = model->itemAt(index);
-    //if (model->itemBy(state.selected().playlist_uid) != item) {
-      persist(index.row());
-      view->selectionModel()->clearSelection();
-      view->selectionModel()->select(index, {QItemSelectionModel::Select});
-      emit selected(item);
-    //}
+    persist(index.row());
+    view->selectionModel()->clearSelection();
+    view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    emit selected(item);
   }
 }

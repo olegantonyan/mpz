@@ -27,6 +27,7 @@ namespace PlaylistUi {
     void highlight(quint64 track_uid);
     void on_stop();
     void on_start(const Track &t);
+    void on_scrollTo(const Track &track);
 
   private:
     QTableView *view;

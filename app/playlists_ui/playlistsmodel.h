@@ -26,6 +26,7 @@ namespace PlaylistsUi {
     std::shared_ptr<Playlist> itemBy(quint64 uid) const;
     std::shared_ptr<Playlist> itemByTrack(quint64 track_uid) const;
     int listSize() const;
+    QModelIndex itemIndex(std::shared_ptr<Playlist> playlist) const;
 
   private:
     QList<std::shared_ptr<Playlist>> list;

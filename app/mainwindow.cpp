@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlists, &PlaylistsUi::View::on_appendToCurrentPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
+  connect(playlists, &PlaylistsUi::View::scrolling, playlist, &PlaylistUi::View::on_scrollTo);
   connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
   connect(playlists, &PlaylistsUi::View::activated, player, &Playback::View::play);
   connect(playlist, &PlaylistUi::View::selected, playlists, &PlaylistsUi::View::on_trackSelected);
@@ -51,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    qDebug() << "TODO: jump to playlist";
+    playlists->on_jumpToCurrent();
   });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
