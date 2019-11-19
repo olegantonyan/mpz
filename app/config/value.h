@@ -15,7 +15,8 @@ namespace Config {
       Integer,
       String,
       Map,
-      List
+      List,
+      Boolean
     };
 
     Value();
@@ -23,6 +24,7 @@ namespace Config {
     Value(const QString &v);
     Value(const QMap<QString, Value> &v);
     Value(const QList<Value> &v);
+    Value(bool v);
 
     template<class T> T get() const {
       return value.value<T>();

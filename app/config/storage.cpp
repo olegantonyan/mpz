@@ -105,6 +105,14 @@ namespace Config {
   }
 
   Config::Value Storage::castScalar(const QString &str) const {
+    // try boolean first
+    if (str == "true") {
+      return Config::Value(true);
+    } else if (str == "false") {
+      return Config::Value(false);
+    }
+
+    // then integer
     bool ok = false;
     auto integer = str.toInt(&ok);
     if (ok) {
@@ -166,6 +174,9 @@ namespace Config {
       switch (value.type()) {
         case Config::Value::Type::Integer:
           result[key] = value.get<int>();
+          break;
+        case Config::Value::Type::Boolean:
+          result[key] = value.get<bool>();
           break;
         case Config::Value::Type::String:
           result[key] = value.get<QString>().toStdString();

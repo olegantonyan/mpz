@@ -31,6 +31,11 @@ namespace Config {
     }
   }
 
+  Value::Value(bool v) {
+    value.setValue(v);
+    value_type = Config::Value::Type::Boolean;
+  }
+
   Value::Type Value::type() const {
     return value_type;
   }
@@ -51,6 +56,8 @@ namespace Config {
     switch (type()) {
       case Config::Value::Type::Null:
         return QString("<Value null>");
+      case Config::Value::Type::Boolean:
+        return QString("<Value boolean %1>").arg(get<bool>());
       case Config::Value::Type::Integer:
         return QString("<Value integer %1>").arg(get<int>());
       case Config::Value::Type::String:

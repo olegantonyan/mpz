@@ -9,10 +9,10 @@ namespace Config {
   }
 
   bool Global::playbackFollowCursor() const {
-    return true;
+    return storage.get("playback_follows_cursor").get<bool>();
   }
 
   void Global::savePlaybackFollowCursor(bool arg) {
-
+    storage.set("playback_follows_cursor", Config::Value(arg));
   }
 }
