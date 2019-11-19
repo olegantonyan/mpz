@@ -170,7 +170,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
-  //global_conf.sync();
+  global_conf.sync();
   QMainWindow::closeEvent(event);
 }
 
