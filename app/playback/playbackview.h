@@ -21,9 +21,9 @@ namespace Playback {
     void started(Track track);
     void stopped();
     void paused(Track track);
-    void prev_requested();
-    void next_requested();
-    void start_requested();
+    void prevRequested();
+    void nextRequested();
+    void startRequested();
 
   public slots:
     void play(const Track &track);

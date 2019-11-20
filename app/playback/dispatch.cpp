@@ -1,0 +1,69 @@
+#include "dispatch.h"
+
+namespace Playback {
+  Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui, View *player_ui) :
+    QObject(nullptr), global_conf(conf), playlists(playlists_ui), player(player_ui) {
+  }
+
+  PlayerState &Dispatch::state() {
+    return player_state;
+  }
+
+  void Dispatch::on_nextRequested() {
+    if (global_conf.playbackFollowCursor()) {
+      auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
+      if (selected_playlist != nullptr) {
+        auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
+        if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
+          player->play(selected_track);
+          return;
+        }
+      }
+    }
+
+
+    quint64 current_track_uid = player_state.playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    if (current_playlist == nullptr) {
+      return;
+    }
+
+    int current = current_playlist->trackIndex(current_track_uid);
+    auto next = current + 1;
+    if (next > current_playlist->tracks().size() - 1) {
+      Track t = current_playlist->tracks().at(0);
+      player->play(t);
+    } else {
+      Track t = current_playlist->tracks().at(next);
+      player->play(t);
+    }
+  }
+
+  void Dispatch::on_prevRequested() {
+    quint64 current_track_uid = player_state.playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    if (current_playlist == nullptr) {
+      return;
+    }
+
+    int current = current_playlist->trackIndex(current_track_uid);
+    auto prev = current - 1;
+    if (prev < 0) {
+      auto max = current_playlist->tracks().size() - 1;
+      Track t = current_playlist->tracks().at(max);
+      player->play(t);
+    } else {
+      Track t = current_playlist->tracks().at(prev);
+      player->play(t);
+    }
+  }
+
+  void Dispatch::on_startRequested() {
+    quint64 selected_track_uid = player_state.selectedTrack();
+    auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
+    if (selected_playlist != nullptr) {
+      Track t = selected_playlist->trackBy(selected_track_uid);
+      player->play(t);
+    }
+  }
+}

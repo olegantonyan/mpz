@@ -11,19 +11,19 @@ namespace Playback {
       if (player.state() == QMediaPlayer::PausedState) {
         player.play();
       } else  {
-        emit start_requested();
+        emit startRequested();
       }
     });
     connect(controls.prev, &QToolButton::clicked, [=]() {
       next_after_stop = false;
       if (_current_track.isValid()) {
-        emit prev_requested();
+        emit prevRequested();
       }
     });
     connect(controls.next, &QToolButton::clicked, [=]() {
       next_after_stop = false;
       if (_current_track.isValid()) {
-        emit next_requested();
+        emit nextRequested();
       }
     });
 
@@ -86,7 +86,7 @@ namespace Playback {
         controls.time->clear();
         _current_track = Track();
         if (next_after_stop) {
-          emit next_requested();
+          emit nextRequested();
         }
         break;
       case QMediaPlayer::PlayingState:
