@@ -27,6 +27,7 @@ bool Playlist::load(const QDir &path) {
   while (it.hasNext()) {
     tracks_list << Track(it.next());
   }
+  sort();
   return true;
 }
 
@@ -59,5 +60,48 @@ Track Playlist::trackBy(quint64 uid) const {
     }
   }
   return Track();
+}
+
+void Playlist::sort() {
+   // %ARTIST% - %DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%
+  std::sort(tracks_list.begin(), tracks_list.end(), [](const Track &t1, const Track &t2) -> bool {
+    if (t1.artist() < t2.artist()) {
+      return true;
+    } else if (t1.artist() > t2.artist()) {
+      return false;
+    }
+
+    if (t1.year() < t2.year()) {
+      return true;
+    } else if (t1.year() > t2.year()) {
+      return false;
+    }
+
+    if (t1.album() < t2.album()) {
+      return true;
+    } else if (t1.album() > t2.album()) {
+      return false;
+    }
+
+    if (t1.track_number() < t2.track_number()) {
+      return true;
+    } else if (t1.track_number() > t2.track_number()) {
+      return false;
+    }
+
+    if (t1.filename() < t2.filename()) {
+      return true;
+    } else if (t1.filename() > t2.filename()) {
+      return false;
+    }
+
+    if (t1.title() < t2.title()) {
+      return true;
+    } else if (t1.title() > t2.title()) {
+      return false;
+    }
+
+    return false;
+  });
 }
 

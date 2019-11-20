@@ -23,6 +23,7 @@ public:
   quint16 bitrate() const;
   QString format() const;
   QString filename() const;
+  quint16 track_number() const;
 
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
@@ -40,6 +41,7 @@ private:
   quint8 _channels;
   quint16 _bitrate;
   QString _format;
+  quint16 _track_number;
 
   quint64 _uid;
 };

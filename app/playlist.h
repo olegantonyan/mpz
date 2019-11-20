@@ -24,6 +24,8 @@ public:
   int trackIndex(quint64 track_uid) const;
   Track trackBy(quint64 uid) const;
 
+  void sort();
+
 private:
   QString playlist_name;
   QVector<Track> tracks_list;

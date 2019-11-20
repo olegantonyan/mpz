@@ -33,6 +33,7 @@ Track::Track(const QString &fp) {
       _album = QString(tag->album().toCString(true));
       _title = QString(tag->title().toCString(true));
       _year = static_cast<quint16>(tag->year());
+      _track_number = static_cast<quint16>(tag->track());
     }
   }
 
@@ -116,4 +117,8 @@ QString Track::format() const {
 
 QString Track::filename() const {
   return QFileInfo(path()).fileName();
+}
+
+quint16 Track::track_number() const {
+  return _track_number;
 }
