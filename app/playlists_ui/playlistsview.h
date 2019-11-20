@@ -42,6 +42,11 @@ namespace PlaylistsUi {
 
     Config::Local &local_conf;
     void persist(int current_index);
+
+    void removeItem(const QModelIndex &idx);
+
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event);
   };
 }
 

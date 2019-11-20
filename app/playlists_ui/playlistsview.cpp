@@ -18,6 +18,8 @@ namespace PlaylistsUi {
 
     connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
     connect(view, &QListView::clicked, this, &View::on_itemActivated);
+
+    view->viewport()->installEventFilter(this);
   }
 
   void View::load() {
@@ -34,10 +36,33 @@ namespace PlaylistsUi {
     return model->itemByTrack(track_uid);
   }
 
+  bool View::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::MidButton) {
+        auto index = view->indexAt(me->pos());
+        removeItem(index);
+      }
+    }
+    return QObject::eventFilter(obj, event);
+  }
+
+
   void View::persist(int current_index) {
     auto max_index = qMax(model->listSize() - 1, 0);
     auto save_index = qMin(current_index, max_index);
     local_conf.saveCurrentPlaylist(save_index);
+  }
+
+  void View::removeItem(const QModelIndex &index) {
+    model->remove(index);
+    auto selected_idx = view->selectionModel()->selectedIndexes().first();
+    if (selected_idx == index || model->listSize() == 1) {
+      on_itemActivated(model->buildIndex(0));
+    }
+    if (model->listSize() == 0) {
+      emit emptied();
+    }
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
@@ -71,14 +96,7 @@ namespace PlaylistsUi {
     QAction rename("Rename");
 
     connect(&remove, &QAction::triggered, [=]() {
-      model->remove(index);
-      auto selected_idx = view->selectionModel()->selectedIndexes().first();
-      if (selected_idx == index || model->listSize() == 1) {
-        on_itemActivated(model->buildIndex(0));
-      }
-      if (model->listSize() == 0) {
-        emit emptied();
-      }
+      removeItem(index);
     });
     connect(&rename, &QAction::triggered, [=]() {
       auto i = model->itemAt(index);
