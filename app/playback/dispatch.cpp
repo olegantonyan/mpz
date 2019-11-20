@@ -1,8 +1,8 @@
 #include "dispatch.h"
 
 namespace Playback {
-  Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui, View *player_ui) :
-    QObject(nullptr), global_conf(conf), playlists(playlists_ui), player(player_ui) {
+  Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui) :
+    QObject(nullptr), global_conf(conf), playlists(playlists_ui) {
   }
 
   PlayerState &Dispatch::state() {
@@ -15,7 +15,7 @@ namespace Playback {
       if (selected_playlist != nullptr) {
         auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
         if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
-          player->play(selected_track);
+          emit play(selected_track);
           return;
         }
       }
@@ -32,10 +32,10 @@ namespace Playback {
     auto next = current + 1;
     if (next > current_playlist->tracks().size() - 1) {
       Track t = current_playlist->tracks().at(0);
-      player->play(t);
+      emit play(t);
     } else {
       Track t = current_playlist->tracks().at(next);
-      player->play(t);
+      emit play(t);
     }
   }
 
@@ -51,10 +51,10 @@ namespace Playback {
     if (prev < 0) {
       auto max = current_playlist->tracks().size() - 1;
       Track t = current_playlist->tracks().at(max);
-      player->play(t);
+      emit play(t);
     } else {
       Track t = current_playlist->tracks().at(prev);
-      player->play(t);
+      emit play(t);
     }
   }
 
@@ -63,7 +63,7 @@ namespace Playback {
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
     if (selected_playlist != nullptr) {
       Track t = selected_playlist->trackBy(selected_track_uid);
-      player->play(t);
+      emit play(t);
     }
   }
 }

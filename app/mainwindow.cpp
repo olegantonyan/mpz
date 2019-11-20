@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.time = ui->timeLabel;
   player = new Playback::View(pc, this);
 
-  dispatch = new Playback::Dispatch(global_conf, playlists, player);
+  dispatch = new Playback::Dispatch(global_conf, playlists);
 
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
   connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlists, &PlaylistsUi::View::on_appendToCurrentPlaylist);
@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(player, &Playback::View::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::View::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::View::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
+  connect(dispatch, &Playback::Dispatch::play, player, &Playback::View::play);
 
   loadUiSettings();
 

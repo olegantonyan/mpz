@@ -12,8 +12,11 @@ namespace Playback {
   class Dispatch : public QObject {
     Q_OBJECT
   public:
-    explicit Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui, Playback::View *player_ui);
+    explicit Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui);
     PlayerState &state();
+
+  signals:
+    void play(const Track &track);
 
   public slots:
     void on_nextRequested();
@@ -24,7 +27,6 @@ namespace Playback {
     Config::Global &global_conf;
     PlayerState player_state;
     PlaylistsUi::View *playlists;
-    Playback::View *player;
   };
 }
 
