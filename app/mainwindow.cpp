@@ -94,9 +94,7 @@ void MainWindow::setupControllerLogic() {
 
   connect(playlist, &PlaylistUi::View::selected, [=](const Track &track) {
     player_state.setSelected(track.uid());
-    if (player_state.playingTrack() != track.uid()) {
-      player_state.resetFolowedCursor();
-    }
+    player_state.resetFolowedCursor();
   });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
