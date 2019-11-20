@@ -43,7 +43,6 @@ HEADERS += \
     config/local.h \
     config/storage.h \
     config/value.h \
-    eventinteceptor.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
     directory_ui/directoryview.h \

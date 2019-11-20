@@ -27,8 +27,7 @@ namespace Playback {
       }
     });
 
-    auto interceptor = new EventInterceptor(&Playback::View::on_event, this);
-    controls.seekbar->installEventFilter(interceptor);
+    controls.seekbar->installEventFilter(this);
     next_after_stop = true;
   }
 
@@ -59,13 +58,6 @@ namespace Playback {
     controls.seekbar->setValue(seek_value);
 
     player.setPosition(seek_value * 1000);
-  }
-
-  void View::on_event(QEvent *event) {
-    if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
-      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
-      on_seek(me->pos().x());
-    }
   }
 
   QString View::time_text(int pos) const {
@@ -101,5 +93,13 @@ namespace Playback {
 
   void View::on_error(QMediaPlayer::Error error) {
     qDebug() << "error" << error;
+  }
+
+  bool View::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      on_seek(me->pos().x());
+    }
+    return QObject::eventFilter(obj, event);
   }
 }

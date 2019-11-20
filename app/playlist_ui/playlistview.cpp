@@ -23,8 +23,7 @@ namespace PlaylistUi {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
 
-    auto interceptor = new EventInterceptor(&PlaylistUi::View::on_event, this);
-    view->installEventFilter(interceptor);
+    view->installEventFilter(this);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
       emit activated(model->itemAt(index));
@@ -67,7 +66,7 @@ namespace PlaylistUi {
     }
   }
 
-  void View::on_event(QEvent *event) {
+  bool View::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();
       view->horizontalHeader()->setMinimumSectionSize(20);
@@ -79,5 +78,6 @@ namespace PlaylistUi {
       //view->setColumnWidth(4, total_width * 0.05);
       view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
     }
+    return QObject::eventFilter(obj, event);
   }
 }

@@ -4,7 +4,6 @@
 #include "playlistmodel.h"
 #include "playlist.h"
 #include "track.h"
-#include "eventinteceptor.h"
 
 #include <QObject>
 #include <QTableView>
@@ -33,7 +32,8 @@ namespace PlaylistUi {
     QTableView *view;
     Model *model;
 
-    void on_event(QEvent *event);
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event);
   };
 }
 

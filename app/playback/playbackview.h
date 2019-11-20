@@ -3,7 +3,6 @@
 
 #include "controls.h"
 #include "track.h"
-#include "eventinteceptor.h"
 
 #include <QObject>
 #include <QMediaPlayer>
@@ -35,7 +34,6 @@ namespace Playback {
     Track _current_track;
 
     void on_seek(int position);
-    void on_event(QEvent *event);
 
     QString time_text(int pos) const;
 
@@ -45,6 +43,9 @@ namespace Playback {
     void on_positionChanged(quint64 pos);
     void on_stateChanged(QMediaPlayer::State state);
     void on_error(QMediaPlayer::Error error);
+
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event);
   };
 }
 #endif // PLAYBACKVIEW_H
