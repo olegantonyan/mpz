@@ -2,10 +2,11 @@
 #define PLAYLISTMODEL_H
 
 #include "track.h"
+#include "playlist.h"
 
 #include <QVector>
 #include <QAbstractTableModel>
-
+#include <memory>
 
 namespace PlaylistUi {
   class Model : public QAbstractTableModel {
@@ -17,7 +18,7 @@ namespace PlaylistUi {
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    void setTracks(const QVector<Track> &tracks);
+    void setPlaylist(std::shared_ptr<Playlist> pl);
 
     Track itemAt(const QModelIndex &index) const;
     QModelIndex buildIndex(int row) const;
@@ -26,6 +27,9 @@ namespace PlaylistUi {
     QModelIndex indexOf(quint64 uid) const;
 
   private:
+    void setTracks(const QVector<Track> &tracks);
+
+    std::shared_ptr<Playlist> playlist;
     QVector<Track> tracks;
     quint64 highlight_uid;
   };

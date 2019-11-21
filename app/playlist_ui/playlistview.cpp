@@ -38,11 +38,11 @@ namespace PlaylistUi {
   }
 
   void View::on_load(const std::shared_ptr<Playlist> pi) {
-    model->setTracks(pi->tracks());
+    model->setPlaylist(pi);
   }
 
   void View::on_unload() {
-    model->setTracks(QVector<Track>());
+    model->setPlaylist(nullptr);
   }
 
   void View::highlight(quint64 track_uid) {

@@ -87,6 +87,15 @@ namespace PlaylistUi {
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
   }
 
+  void Model::setPlaylist(std::shared_ptr<Playlist> pl) {
+    playlist = pl;
+    if (playlist == nullptr) {
+      setTracks(QVector<Track>());
+    } else {
+      setTracks(playlist->tracks());
+    }
+  }
+
   Track Model::itemAt(const QModelIndex &index) const {
     if (index.row() > tracks.size() - 1) {
       throw "index out of bounds";
