@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QMenu>
 #include <QHeaderView>
+#include <QMouseEvent>
 
 namespace DirectoryUi {
   View::View(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
@@ -20,6 +21,8 @@ namespace DirectoryUi {
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
+
+    view->viewport()->installEventFilter(this);
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -34,11 +37,29 @@ namespace DirectoryUi {
     QAction create_playlist("Create new playlist");
     QAction append_to_playlist("Append to current playlist");
 
-    connect(&create_playlist, &QAction::triggered, [=]() { emit createNewPlaylist(filepath); });
-    connect(&append_to_playlist, &QAction::triggered, [=]() { emit appendToCurrentPlaylist(filepath); });
+    connect(&create_playlist, &QAction::triggered, [=]() {
+      emit createNewPlaylist(filepath);
+    });
+    connect(&append_to_playlist, &QAction::triggered, [=]() {
+      emit appendToCurrentPlaylist(filepath);
+    });
 
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
     menu.exec(view->viewport()->mapToGlobal(pos));
+  }
+
+  bool View::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::MidButton) {
+        auto index = view->indexAt(me->pos());
+        if (index.isValid()) {
+          auto filepath = QDir(model->filePath(index));
+          emit createNewPlaylist(filepath);
+        }
+      }
+    }
+    return QObject::eventFilter(obj, event);
   }
 }

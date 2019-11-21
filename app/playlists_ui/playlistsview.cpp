@@ -41,12 +41,13 @@ namespace PlaylistsUi {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {
         auto index = view->indexAt(me->pos());
-        removeItem(index);
+        if (index.isValid()) {
+          removeItem(index);
+        }
       }
     }
     return QObject::eventFilter(obj, event);
   }
-
 
   void View::persist(int current_index) {
     auto max_index = qMax(model->listSize() - 1, 0);

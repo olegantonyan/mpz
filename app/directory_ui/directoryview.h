@@ -8,6 +8,7 @@
 #include <QPoint>
 #include <QString>
 #include <QDir>
+#include <QEvent>
 
 namespace DirectoryUi {
   class View : public QObject {
@@ -26,6 +27,9 @@ namespace DirectoryUi {
   private:
     QTreeView *view;
     Model *model;
+
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event);
   };
 }
 
