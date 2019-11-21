@@ -88,12 +88,8 @@ namespace PlaylistUi {
   }
 
   void Model::setPlaylist(std::shared_ptr<Playlist> pl) {
-    playlist = pl;
-    if (playlist == nullptr) {
-      setTracks(QVector<Track>());
-    } else {
-      setTracks(playlist->tracks());
-    }
+    _playlist = pl;
+    reload();
   }
 
   Track Model::itemAt(const QModelIndex &index) const {
@@ -121,5 +117,17 @@ namespace PlaylistUi {
       }
     }
     return buildIndex(-1);
+  }
+
+  std::shared_ptr<Playlist> Model::playlist() {
+    return _playlist;
+  }
+
+  void Model::reload() {
+    if (_playlist == nullptr) {
+      setTracks(QVector<Track>());
+    } else {
+      setTracks(_playlist->tracks());
+    }
   }
 }

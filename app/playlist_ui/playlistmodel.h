@@ -26,10 +26,13 @@ namespace PlaylistUi {
     void highlight(quint64 uid);
     QModelIndex indexOf(quint64 uid) const;
 
+    std::shared_ptr<Playlist> playlist();
+    void reload();
+
   private:
     void setTracks(const QVector<Track> &tracks);
 
-    std::shared_ptr<Playlist> playlist;
+    std::shared_ptr<Playlist> _playlist;
     QVector<Track> tracks;
     quint64 highlight_uid;
   };

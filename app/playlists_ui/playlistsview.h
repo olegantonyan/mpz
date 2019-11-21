@@ -25,8 +25,8 @@ namespace PlaylistsUi {
 
   public slots:
     void on_createPlaylist(const QDir &filepath);
-    void on_appendToCurrentPlaylist(const QDir &filepath);
     void on_jumpTo(const std::shared_ptr<Playlist> playlist);
+    void on_playlistChanged(const std::shared_ptr<Playlist> pl);
 
   signals:
     void selected(const std::shared_ptr<Playlist> item);

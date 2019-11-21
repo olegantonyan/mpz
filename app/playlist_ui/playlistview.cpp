@@ -66,6 +66,12 @@ namespace PlaylistUi {
     }
   }
 
+  void View::on_appendToPlaylist(const QDir &filepath) {
+    model->playlist()->concat(filepath);
+    model->reload();
+    emit changed(model->playlist());
+  }
+
   bool View::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();

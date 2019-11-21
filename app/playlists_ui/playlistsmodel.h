@@ -28,11 +28,11 @@ namespace PlaylistsUi {
     int listSize() const;
     QModelIndex itemIndex(std::shared_ptr<Playlist> playlist) const;
 
+    bool persist();
+
   private:
     QList<std::shared_ptr<Playlist>> list;
     Config::Local &local_conf;
-
-    bool persist();
   };
 }
 

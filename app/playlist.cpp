@@ -36,6 +36,15 @@ bool Playlist::load(const QVector<Track> &tracks) {
   return true;
 }
 
+bool Playlist::concat(const QDir &path) {
+  auto new_playlist = Playlist();
+  new_playlist.load(path);
+  for (auto i : new_playlist.tracks()) {
+    tracks_list << i;
+  }
+  return true;
+}
+
 quint64 Playlist::uid() const {
   return _uid;
 }

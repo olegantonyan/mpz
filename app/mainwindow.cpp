@@ -31,12 +31,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   dispatch = new Playback::Dispatch(global_conf, playlists);
 
   connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
-  connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlists, &PlaylistsUi::View::on_appendToCurrentPlaylist);
+  connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlist, &PlaylistUi::View::on_appendToPlaylist);
   connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
   connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
   connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
   connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_start);
   connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stop);
+  connect(playlist, &PlaylistUi::View::changed, playlists, &PlaylistsUi::View::on_playlistChanged);
 
   connect(playlist, &PlaylistUi::View::selected, [=](const Track &track) {
     dispatch->state().setSelected(track.uid());

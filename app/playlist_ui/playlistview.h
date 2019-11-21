@@ -19,6 +19,7 @@ namespace PlaylistUi {
   signals:
     void activated(const Track &track);
     void selected(const Track &track);
+    void changed(const std::shared_ptr<Playlist> pl);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist> pi);
@@ -27,6 +28,7 @@ namespace PlaylistUi {
     void on_stop();
     void on_start(const Track &t);
     void on_scrollTo(const Track &track);
+    void on_appendToPlaylist(const QDir &filepath);
 
   private:
     QTableView *view;

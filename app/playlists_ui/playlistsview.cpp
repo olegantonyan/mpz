@@ -78,12 +78,13 @@ namespace PlaylistsUi {
     emit selected(item);
   }
 
-  void View::on_appendToCurrentPlaylist(const QDir &filepath) {
-    qDebug() << filepath;
-  }
-
   void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
     on_itemActivated(model->itemIndex(playlist));
+  }
+
+  void View::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
+    Q_UNUSED(pl)
+    model->persist();
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {

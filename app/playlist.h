@@ -17,6 +17,7 @@ public:
 
   bool load(const QDir &path);
   bool load(const QVector<Track> &tracks);
+  bool concat(const QDir &path);
 
   quint64 uid() const;
 
