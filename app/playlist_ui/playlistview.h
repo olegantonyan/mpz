@@ -30,6 +30,9 @@ namespace PlaylistUi {
     void on_scrollTo(const Track &track);
     void on_appendToPlaylist(const QDir &filepath);
 
+  private slots:
+    void on_appendAsyncFinished(Playlist *pl);
+
   private:
     QTableView *view;
     Model *model;

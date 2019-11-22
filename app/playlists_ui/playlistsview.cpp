@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QInputDialog>
 #include <QItemSelectionModel>
+#include <QtConcurrent>
 
 namespace PlaylistsUi {
   View::View(QListView *v, Config::Local &conf, QObject *parent) : QObject(parent), local_conf(conf){
@@ -67,15 +68,9 @@ namespace PlaylistsUi {
   }
 
   void View::on_createPlaylist(const QDir &filepath) {
-    auto pl = new Playlist();
-    pl->load(filepath);
-    auto item = std::shared_ptr<Playlist>(pl);
-    auto index = model->append(item);
-    view->setCurrentIndex(index);
-    view->selectionModel()->clearSelection();
-    view->selectionModel()->select(index, {QItemSelectionModel::Select});
-    persist(index.row());
-    emit selected(item);
+      auto pl = new Playlist();
+      connect(pl, &Playlist::loadAsyncFinished, this, &View::on_playlistLoadFinished);
+      pl->loadAsync(filepath);
   }
 
   void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
@@ -122,6 +117,17 @@ namespace PlaylistsUi {
     persist(index.row());
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    emit selected(item);
+  }
+
+  void View::on_playlistLoadFinished(Playlist *pl) {
+    disconnect(pl, &Playlist::loadAsyncFinished, this, &View::on_playlistLoadFinished);
+    auto item = std::shared_ptr<Playlist>(pl);
+    auto index = model->append(item);
+    view->setCurrentIndex(index);
+    view->selectionModel()->clearSelection();
+    view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    persist(index.row());
     emit selected(item);
   }
 }

@@ -3,8 +3,9 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QRandomGenerator>
+#include <QtConcurrent>
 
-Playlist::Playlist() {
+Playlist::Playlist() : QObject(nullptr) {
   _uid = QRandomGenerator::global()->generate64();
 }
 
@@ -31,6 +32,13 @@ bool Playlist::load(const QDir &path) {
   return true;
 }
 
+void Playlist::loadAsync(const QDir &path) {
+  QtConcurrent::run([=]() {
+    load(path);
+    emit loadAsyncFinished(this);
+  });
+}
+
 bool Playlist::load(const QVector<Track> &tracks) {
   tracks_list = tracks;
   return true;
@@ -43,6 +51,13 @@ bool Playlist::concat(const QDir &path) {
     tracks_list << i;
   }
   return true;
+}
+
+void Playlist::concatAsync(const QDir &path) {
+  QtConcurrent::run([=]() {
+    concat(path);
+    emit concatAsyncFinished(this);
+  });
 }
 
 quint64 Playlist::uid() const {

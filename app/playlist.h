@@ -6,8 +6,11 @@
 #include <QString>
 #include <QDir>
 #include <QVector>
+#include <QObject>
+#include <QFuture>
 
-class Playlist {
+class Playlist : public QObject {
+  Q_OBJECT
 public:
   Playlist();
 
@@ -16,8 +19,10 @@ public:
   QVector<Track> tracks() const;
 
   bool load(const QDir &path);
+  void loadAsync(const QDir &path);
   bool load(const QVector<Track> &tracks);
   bool concat(const QDir &path);
+  void concatAsync(const QDir &path);
 
   quint64 uid() const;
 
@@ -26,6 +31,10 @@ public:
   Track trackBy(quint64 uid) const;
 
   void sort();
+
+signals:
+  void loadAsyncFinished(Playlist *pl);
+  void concatAsyncFinished(Playlist *pl);
 
 private:
   QString playlist_name;

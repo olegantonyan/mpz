@@ -35,6 +35,7 @@ namespace PlaylistsUi {
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);
     void on_itemActivated(const QModelIndex &index);
+    void on_playlistLoadFinished(Playlist *pl);
 
   private:
     QListView *view;

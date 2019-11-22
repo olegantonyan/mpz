@@ -67,7 +67,12 @@ namespace PlaylistUi {
   }
 
   void View::on_appendToPlaylist(const QDir &filepath) {
-    model->playlist()->concat(filepath);
+    connect(&*model->playlist(), &Playlist::concatAsyncFinished, this, &View::on_appendAsyncFinished);
+    model->playlist()->concatAsync(filepath);
+  }
+
+  void View::on_appendAsyncFinished(Playlist *pl) {
+    disconnect(pl, &Playlist::concatAsyncFinished, this, &View::on_appendAsyncFinished);
     model->reload();
     emit changed(model->playlist());
   }
