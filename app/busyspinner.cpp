@@ -12,7 +12,7 @@ BusySpinner::BusySpinner(QWidget *_widget, QObject *parent) : QObject(parent), w
   spinner->setLineWidth(3);
   spinner->setInnerRadius(3);
   spinner->setRevolutionsPerSecond(1);
-  //spinner->setColor(QColor(81, 4, 71));
+  spinner->setColor(QColor(255, 255, 255));
 
   spinner->start(); // gets the show on the road!
   spinner->setToolTip("Background operation running");

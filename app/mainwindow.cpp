@@ -88,9 +88,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
   ui->tableView->setFocus();
+
+
+
+  auto appicon = QIcon(":/icons/icons/appicon.png");
+  setWindowIcon(appicon);
+  setupTray(appicon);
 }
 
 MainWindow::~MainWindow() {
+  trayicon->hide();
   delete ui;
 }
 
@@ -115,6 +122,7 @@ void MainWindow::loadUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  trayicon->hide();
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
@@ -137,4 +145,30 @@ void MainWindow::on_menuButton_clicked() {
   QPoint pos(ui->menuButton->mapToGlobal(QPoint(x, y)));
 
   menu.exec(pos);
+}
+
+void MainWindow::setupTray(const QIcon &appicon) {
+  trayicon = new QSystemTrayIcon(appicon, this);
+  QMenu *menu = new QMenu(this);
+  QAction *quit = new QAction("Quit", this);
+  QAction *play = new QAction("Play", this);
+  QAction *pause = new QAction("Pause", this);
+  QAction *stop = new QAction("Stop", this);
+  QAction *next = new QAction("Next", this);
+  QAction *prev = new QAction("Prev", this);
+  connect(play, &QAction::triggered, ui->playButton, &QToolButton::click);
+  connect(pause, &QAction::triggered, ui->pauseButton, &QToolButton::click);
+  connect(stop, &QAction::triggered, ui->stopButton, &QToolButton::click);
+  connect(next, &QAction::triggered, ui->nextButton, &QToolButton::click);
+  connect(prev, &QAction::triggered, ui->prevButton, &QToolButton::click);
+  connect(quit, &QAction::triggered, this, &QMainWindow::close);
+  menu->addAction(play);
+  menu->addAction(pause);
+  menu->addAction(stop);
+  menu->addAction(next);
+  menu->addAction(prev);
+  menu->addSeparator();
+  menu->addAction(quit);
+  trayicon->setContextMenu(menu);
+  trayicon->show();
 }

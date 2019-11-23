@@ -12,6 +12,7 @@
 
 #include <QMainWindow>
 #include <memory>
+#include <QSystemTrayIcon>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,10 +35,12 @@ private:
   Config::Local local_conf;
   Config::Global global_conf;
   BusySpinner *spinner;
+  QSystemTrayIcon *trayicon;
 
   void loadUiSettings();
 
-  // QWidget interface
+  void setupTray(const QIcon &appicon);
+
 protected:
   void closeEvent(QCloseEvent *event);
 private slots:

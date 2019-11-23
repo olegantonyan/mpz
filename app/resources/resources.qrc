@@ -6,5 +6,6 @@
         <file>icons/pause.svg</file>
         <file>icons/play.svg</file>
         <file>icons/prev.svg</file>
+        <file>icons/appicon.png</file>
     </qresource>
 </RCC>
