@@ -5,6 +5,7 @@
 #include "playlist.h"
 #include "config/local.h"
 #include "track.h"
+#include "busyspinner.h"
 
 #include <QObject>
 #include <QListView>
@@ -19,7 +20,7 @@ namespace PlaylistsUi {
     Q_OBJECT
 
   public:
-    explicit View(QListView *view, Config::Local &conf, QObject *parent = nullptr);
+    explicit View(QListView *view, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
     void load();
     std::shared_ptr<Playlist> playlistByTrackUid(quint64 track_uid) const;
 
@@ -40,8 +41,9 @@ namespace PlaylistsUi {
   private:
     QListView *view;
     Model *model;
-
     Config::Local &local_conf;
+    BusySpinner *spinner;
+
     void persist(int current_index);
 
     void removeItem(const QModelIndex &idx);

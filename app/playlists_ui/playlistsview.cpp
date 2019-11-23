@@ -9,8 +9,7 @@
 #include <QtConcurrent>
 
 namespace PlaylistsUi {
-  View::View(QListView *v, Config::Local &conf, QObject *parent) : QObject(parent), local_conf(conf){
-    view = v;
+  View::View(QListView *v, Config::Local &conf, BusySpinner *_spinner, QObject *parent) : QObject(parent), view(v), local_conf(conf), spinner(_spinner) {
     model = new PlaylistsUi::Model(conf, this);
 
     view->setModel(model);
@@ -71,6 +70,7 @@ namespace PlaylistsUi {
       auto pl = new Playlist();
       connect(pl, &Playlist::loadAsyncFinished, this, &View::on_playlistLoadFinished);
       pl->loadAsync(filepath);
+      spinner->show();
   }
 
   void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
@@ -129,5 +129,6 @@ namespace PlaylistsUi {
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     persist(index.row());
     emit selected(item);
+    spinner->hide();
   }
 }

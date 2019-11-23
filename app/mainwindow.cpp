@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "config/storage.h"
+#include "waitingspinnerwidget.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -14,8 +15,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   setWindowTitle("mpz");
 
+  spinner = new BusySpinner(ui->widgetSpinner, this);
+
   library = new DirectoryUi::View(ui->treeView, "/mnt/storage/music", this);
-  playlists = new PlaylistsUi::View(ui->listView, local_conf, this);
+  playlists = new PlaylistsUi::View(ui->listView, local_conf, spinner, this);
   playlist = new PlaylistUi::View(ui->tableView, this);
 
   auto pc = Playback::Controls();

@@ -8,6 +8,7 @@
 #include "config/local.h"
 #include "config/global.h"
 #include "playback/dispatch.h"
+#include "busyspinner.h"
 
 #include <QMainWindow>
 #include <memory>
@@ -32,6 +33,7 @@ private:
   Playback::Dispatch *dispatch;
   Config::Local local_conf;
   Config::Global global_conf;
+  BusySpinner *spinner;
 
   void loadUiSettings();
 

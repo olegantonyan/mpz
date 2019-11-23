@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
     config/storage.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
     track.cpp
 
 HEADERS += \
+    busyspinner.h \
     config/global.h \
     config/local.h \
     config/storage.h \
@@ -65,10 +67,12 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
+  ../libs/qtwaitingspinner \
 
 LIBS += \
   -L../libs/taglib -ltaglib \
-  -L../libs/yaml-cpp -lyaml-cpp
+  -L../libs/yaml-cpp -lyaml-cpp \
+  -L../libs/qtwaitingspinner -lqtwaitingspinner
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
