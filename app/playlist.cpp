@@ -4,9 +4,14 @@
 #include <QDirIterator>
 #include <QRandomGenerator>
 #include <QtConcurrent>
+#include <QFileInfo>
 
 Playlist::Playlist() : QObject(nullptr) {
   _uid = QRandomGenerator::global()->generate64();
+}
+
+QStringList Playlist::supportedFileFormats() {
+  return QStringList() << "mp3" << "flac" << "ogg";
 }
 
 QString Playlist::name() const {
@@ -24,11 +29,26 @@ QVector<Track> Playlist::tracks() const {
 
 bool Playlist::load(const QDir &path) {
   rename(path.dirName());
-  QDirIterator it(path.absolutePath(), QStringList() << "*.mp3" << "*.flac" << "*.ogg", QDir::Files, QDirIterator::Subdirectories);
-  while (it.hasNext()) {
-    tracks_list << Track(it.next());
+  bool is_file = false;
+  for (auto i : Playlist::supportedFileFormats()) {
+    if (i.endsWith(i, Qt::CaseInsensitive)) {
+      is_file = true;
+    }
   }
-  sort();
+
+  if (path.isEmpty() && is_file) {
+    tracks_list << path.absolutePath();
+  } else {
+    QStringList filter;
+    for (auto i : Playlist::supportedFileFormats()) {
+      filter << QString("*.") + i;
+    }
+    QDirIterator it(path.absolutePath(), filter, QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+      tracks_list << Track(it.next());
+    }
+    sort();
+  }
   return true;
 }
 

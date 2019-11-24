@@ -97,7 +97,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() {
-  trayicon->hide();
   delete ui;
 }
 
@@ -122,11 +121,11 @@ void MainWindow::loadUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  trayicon->hide();
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
   global_conf.sync();
+  trayicon->hide();
   QMainWindow::closeEvent(event);
 }
 
@@ -155,7 +154,7 @@ void MainWindow::setupTray(const QIcon &appicon) {
   QAction *pause = new QAction("Pause", this);
   QAction *stop = new QAction("Stop", this);
   QAction *next = new QAction("Next", this);
-  QAction *prev = new QAction("Prev", this);
+  QAction *prev = new QAction("Previous", this);
   connect(play, &QAction::triggered, ui->playButton, &QToolButton::click);
   connect(pause, &QAction::triggered, ui->pauseButton, &QToolButton::click);
   connect(stop, &QAction::triggered, ui->stopButton, &QToolButton::click);

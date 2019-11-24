@@ -14,6 +14,8 @@ class Playlist : public QObject {
 public:
   Playlist();
 
+  static QStringList supportedFileFormats();
+
   QString name() const;
   QString rename(const QString &value);
   QVector<Track> tracks() const;

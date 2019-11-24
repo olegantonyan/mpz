@@ -6,7 +6,13 @@ namespace Playback {
     connect(&player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
     connect(controls.stop, &QToolButton::clicked, this, &View::stop);
-    connect(controls.pause, &QToolButton::clicked, &player, &QMediaPlayer::pause);
+    connect(controls.pause, &QToolButton::clicked, [=]() {
+      if (player.state() == QMediaPlayer::PausedState) {
+        player.play();
+      } else  {
+        player.pause();
+      }
+    });
     connect(controls.play, &QToolButton::clicked, [=]() {
       if (player.state() == QMediaPlayer::PausedState) {
         player.play();
