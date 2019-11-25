@@ -81,4 +81,17 @@ namespace Config {
   bool Local::saveCurrentPlaylist(int idx) {
     return storage.set("current_playlist", Config::Value(idx));
   }
+
+  QStringList Local::libraryPaths() const {
+    auto raw = storage.get("library_paths");
+    QStringList result;
+    if (raw.listType() != Config::Value::String) {
+      return result;
+    }
+    auto list = raw.get<QList<Config::Value> >();
+    for (auto i : list) {
+      result << i.get<QString>();
+    }
+    return result;
+  }
 }

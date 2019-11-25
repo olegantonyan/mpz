@@ -28,6 +28,8 @@ namespace Config {
     int currentPlaylist() const;
     bool saveCurrentPlaylist(int idx);
 
+    QStringList libraryPaths() const;
+
   private:
     Config::Storage storage;
   };

@@ -5,15 +5,22 @@
 #include <QMenu>
 #include <QHeaderView>
 #include <QMouseEvent>
+#include <QScrollBar>
 
 namespace DirectoryUi {
-  View::View(QTreeView *v, const QString &library_path, QObject *parent) : QObject(parent) {
-    view = v;
+  View::View(QTreeView *v, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), local_conf(local_cfg) {
 
-    model = new Model(library_path, this);
+    QString path;
+    if (local_conf.libraryPaths().empty()) {
+      path = QDir::homePath();
+    } else {
+      path = local_conf.libraryPaths().first();
+    }
+
+    model = new Model(path, this);
 
     view->setModel(model);
-    view->setRootIndex(model->index(library_path));
+    view->setRootIndex(model->index(path));
     view->setHeaderHidden(true);
     view->setColumnHidden(1, true);
     view->setColumnHidden(2, true);
@@ -47,6 +54,8 @@ namespace DirectoryUi {
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
     menu.exec(view->viewport()->mapToGlobal(pos));
+
+    //qDebug() << view->verticalScrollBar()->value();
   }
 
   bool View::eventFilter(QObject *obj, QEvent *event) {

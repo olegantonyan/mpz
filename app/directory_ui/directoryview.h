@@ -2,6 +2,7 @@
 #define DIRECTORYTREEVIEWMODEL_H
 
 #include "directorymodel.h"
+#include "config/local.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -15,7 +16,7 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit View(QTreeView *view, const QString &library_path, QObject *parent = nullptr);
+    explicit View(QTreeView *view, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QDir &filepath);
@@ -27,6 +28,7 @@ namespace DirectoryUi {
   private:
     QTreeView *view;
     Model *model;
+    Config::Local &local_conf;
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event);

@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  library = new DirectoryUi::View(ui->treeView, "/mnt/storage/music", this);
+  library = new DirectoryUi::View(ui->treeView, local_conf, this);
   playlists = new PlaylistsUi::View(ui->listView, local_conf, spinner, this);
   playlist = new PlaylistUi::View(ui->tableView, this);
 
