@@ -170,4 +170,30 @@ void MainWindow::setupTray(const QIcon &appicon) {
   menu->addAction(quit);
   trayicon->setContextMenu(menu);
   trayicon->show();
+
+  connect(player, &Playback::View::started, [=](const Track &track) {
+    Q_UNUSED(track)
+    play->setEnabled(false);
+    stop->setEnabled(true);
+    pause->setEnabled(true);
+    next->setEnabled(true);
+    prev->setEnabled(true);
+  });
+
+  connect(player, &Playback::View::stopped, [=]() {
+    play->setEnabled(true);
+    stop->setEnabled(false);
+    pause->setEnabled(false);
+    next->setEnabled(false);
+    prev->setEnabled(false);
+  });
+
+  connect(player, &Playback::View::paused, [=](const Track &track) {
+    Q_UNUSED(track)
+    play->setEnabled(true);
+    stop->setEnabled(true);
+    pause->setEnabled(true);
+    next->setEnabled(true);
+    prev->setEnabled(true);
+  });
 }

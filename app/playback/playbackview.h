@@ -17,9 +17,9 @@ namespace Playback {
     explicit View(const Playback::Controls &c, QObject *parent = nullptr);
 
   signals:
-    void started(Track track);
+    void started(const Track &track);
     void stopped();
-    void paused(Track track);
+    void paused(const Track &track);
     void prevRequested();
     void nextRequested();
     void startRequested();
