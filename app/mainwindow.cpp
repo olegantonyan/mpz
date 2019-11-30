@@ -157,14 +157,6 @@ void MainWindow::setupTray(const QIcon &appicon) {
   QAction *prev = new QAction("Previous", this);
   QAction *now_plying = new QAction("", this);
   now_plying->setEnabled(false);
-  connect(player, &Playback::View::started, [=](const Track &track) {
-    if (track.title().length() == 0) {
-      now_plying->setText(track.filename());
-    } else {
-      now_plying->setText(track.title());
-    }
-  });
-
   connect(play, &QAction::triggered, ui->playButton, &QToolButton::click);
   connect(pause, &QAction::triggered, ui->pauseButton, &QToolButton::click);
   connect(stop, &QAction::triggered, ui->stopButton, &QToolButton::click);
@@ -182,6 +174,10 @@ void MainWindow::setupTray(const QIcon &appicon) {
   menu->addAction(quit);
   trayicon->setContextMenu(menu);
   trayicon->show();
+  connect(trayicon, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason) {
+    Q_UNUSED(reason)
+    menu->popup(QCursor::pos());
+  });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
     Q_UNUSED(track)
@@ -190,6 +186,11 @@ void MainWindow::setupTray(const QIcon &appicon) {
     pause->setEnabled(true);
     next->setEnabled(true);
     prev->setEnabled(true);
+    if (track.title().length() == 0) {
+      now_plying->setText(track.filename());
+    } else {
+      now_plying->setText(track.title());
+    }
   });
 
   connect(player, &Playback::View::stopped, [=]() {
