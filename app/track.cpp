@@ -68,7 +68,11 @@ QString Track::album() const {
 }
 
 QString Track::title() const {
-  return _title;
+  if (_title.length() == 0) {
+    return filename();
+  } else {
+    return _title;
+  }
 }
 
 quint16 Track::year() const {

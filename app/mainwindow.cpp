@@ -186,11 +186,7 @@ void MainWindow::setupTray(const QIcon &appicon) {
     pause->setEnabled(true);
     next->setEnabled(true);
     prev->setEnabled(true);
-    if (track.title().length() == 0) {
-      now_plying->setText(track.filename());
-    } else {
-      now_plying->setText(track.title());
-    }
+    now_plying->setText(track.title());
   });
 
   connect(player, &Playback::View::stopped, [=]() {

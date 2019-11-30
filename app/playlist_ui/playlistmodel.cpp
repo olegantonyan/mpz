@@ -61,11 +61,7 @@ namespace PlaylistUi {
         case 2:
           return t.album();
         case 3:
-          if (t.title().length() == 0) {
-            return t.filename();
-          } else {
-            return t.title();
-          }
+          return t.title();
         case 4:
           if (t.year() == 0) {
             return QVariant();
