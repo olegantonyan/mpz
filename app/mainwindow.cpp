@@ -155,12 +155,24 @@ void MainWindow::setupTray(const QIcon &appicon) {
   QAction *stop = new QAction("Stop", this);
   QAction *next = new QAction("Next", this);
   QAction *prev = new QAction("Previous", this);
+  QAction *now_plying = new QAction("", this);
+  now_plying->setEnabled(false);
+  connect(player, &Playback::View::started, [=](const Track &track) {
+    if (track.title().length() == 0) {
+      now_plying->setText(track.filename());
+    } else {
+      now_plying->setText(track.title());
+    }
+  });
+
   connect(play, &QAction::triggered, ui->playButton, &QToolButton::click);
   connect(pause, &QAction::triggered, ui->pauseButton, &QToolButton::click);
   connect(stop, &QAction::triggered, ui->stopButton, &QToolButton::click);
   connect(next, &QAction::triggered, ui->nextButton, &QToolButton::click);
   connect(prev, &QAction::triggered, ui->prevButton, &QToolButton::click);
   connect(quit, &QAction::triggered, this, &QMainWindow::close);
+  menu->addAction(now_plying);
+  menu->addSeparator();
   menu->addAction(play);
   menu->addAction(pause);
   menu->addAction(stop);
