@@ -16,6 +16,8 @@ namespace Playback {
   public:
     explicit View(const Playback::Controls &c, QObject *parent = nullptr);
 
+    Playback::Controls controls() const;
+
   signals:
     void started(const Track &track);
     void stopped();
@@ -29,8 +31,8 @@ namespace Playback {
     void stop();
 
   private:
-    Playback::Controls controls;
-    QMediaPlayer player;
+    Playback::Controls _controls;
+    QMediaPlayer _player;
     Track _current_track;
 
     void on_seek(int position);

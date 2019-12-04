@@ -1,69 +1,73 @@
 #include "playbackview.h"
 
 namespace Playback {
-  View::View(const Controls &c, QObject *parent) : QObject(parent), controls(c) {
-    connect(&player, &QMediaPlayer::positionChanged, this, &View::on_positionChanged);
-    connect(&player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
-    connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
-    connect(controls.stop, &QToolButton::clicked, this, &View::stop);
-    connect(controls.pause, &QToolButton::clicked, [=]() {
-      if (player.state() == QMediaPlayer::PausedState) {
-        player.play();
+  View::View(const Controls &c, QObject *parent) : QObject(parent), _controls(c) {
+    connect(&_player, &QMediaPlayer::positionChanged, this, &View::on_positionChanged);
+    connect(&_player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
+    connect(&_player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
+    connect(_controls.stop, &QToolButton::clicked, this, &View::stop);
+    connect(_controls.pause, &QToolButton::clicked, [=]() {
+      if (_player.state() == QMediaPlayer::PausedState) {
+        _player.play();
       } else  {
-        player.pause();
+        _player.pause();
       }
     });
-    connect(controls.play, &QToolButton::clicked, [=]() {
-      if (player.state() == QMediaPlayer::PausedState) {
-        player.play();
+    connect(_controls.play, &QToolButton::clicked, [=]() {
+      if (_player.state() == QMediaPlayer::PausedState) {
+        _player.play();
       } else  {
         emit startRequested();
       }
     });
-    connect(controls.prev, &QToolButton::clicked, [=]() {
+    connect(_controls.prev, &QToolButton::clicked, [=]() {
       next_after_stop = false;
       if (_current_track.isValid()) {
         emit prevRequested();
       }
     });
-    connect(controls.next, &QToolButton::clicked, [=]() {
+    connect(_controls.next, &QToolButton::clicked, [=]() {
       next_after_stop = false;
       if (_current_track.isValid()) {
         emit nextRequested();
       }
     });
 
-    controls.seekbar->installEventFilter(this);
+    _controls.seekbar->installEventFilter(this);
     next_after_stop = true;
+  }
+
+  Controls View::controls() const {
+    return _controls;
   }
 
   void View::play(const Track &track) {
     next_after_stop = false;
-    controls.seekbar->setMaximum(static_cast<int>(track.duration()));
-    player.setMedia(QUrl::fromLocalFile(track.path()));
+    _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
+    _player.setMedia(QUrl::fromLocalFile(track.path()));
     _current_track = track;
-    player.play();
+    _player.play();
   }
 
   void View::stop() {
     next_after_stop = false;
-    player.stop();
+    _player.stop();
     emit stopped();
   }
 
   void View::on_seek(int position) {
-    if (player.state() != QMediaPlayer::PlayingState)  {
+    if (_player.state() != QMediaPlayer::PlayingState)  {
       return;
     }
 
-    int total = controls.seekbar->width();
+    int total = _controls.seekbar->width();
     position = qMin(qMax(position, 0), total);
 
     double fraction = position / static_cast<double>(total);
-    int seek_value = static_cast<int>(controls.seekbar->maximum() * fraction);
-    controls.seekbar->setValue(seek_value);
+    int seek_value = static_cast<int>(_controls.seekbar->maximum() * fraction);
+    _controls.seekbar->setValue(seek_value);
 
-    player.setPosition(seek_value * 1000);
+    _player.setPosition(seek_value * 1000);
   }
 
   QString View::time_text(int pos) const {
@@ -72,16 +76,16 @@ namespace Playback {
 
   void View::on_positionChanged(quint64 pos) {
     int v = static_cast<int>(pos / 1000);
-    controls.time->setText(time_text(v));
-    controls.seekbar->setValue(v);
+    _controls.time->setText(time_text(v));
+    _controls.seekbar->setValue(v);
   }
 
   void View::on_stateChanged(QMediaPlayer::State state) {
     switch (state) {
       case QMediaPlayer::StoppedState:
-        controls.seekbar->setValue(0);
-        player.setMedia(nullptr);
-        controls.time->clear();
+        _controls.seekbar->setValue(0);
+        _player.setMedia(nullptr);
+        _controls.time->clear();
         _current_track = Track();
         if (next_after_stop) {
           emit nextRequested();

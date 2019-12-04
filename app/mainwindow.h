@@ -9,6 +9,7 @@
 #include "config/global.h"
 #include "playback/dispatch.h"
 #include "busyspinner.h"
+#include "trayicon.h"
 
 #include <QMainWindow>
 #include <memory>
@@ -35,11 +36,9 @@ private:
   Config::Local local_conf;
   Config::Global global_conf;
   BusySpinner *spinner;
-  QSystemTrayIcon *trayicon;
+  TrayIcon *trayicon;
 
   void loadUiSettings();
-
-  void setupTray(const QIcon &appicon);
 
 protected:
   void closeEvent(QCloseEvent *event);

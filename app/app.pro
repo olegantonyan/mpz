@@ -39,7 +39,8 @@ SOURCES += \
     playlists_ui/playlistsmodel.cpp \
     playlists_ui/playlistsview.cpp \
     statusbarlabel.cpp \
-    track.cpp
+    track.cpp \
+    trayicon.cpp
 
 HEADERS += \
     busyspinner.h \
@@ -60,7 +61,8 @@ HEADERS += \
     playlists_ui/playlistsmodel.h \
     playlists_ui/playlistsview.h \
     statusbarlabel.h \
-    track.h
+    track.h \
+    trayicon.h
 
 FORMS += \
     mainwindow.ui
