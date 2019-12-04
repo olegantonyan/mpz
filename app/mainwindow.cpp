@@ -136,9 +136,7 @@ void MainWindow::on_menuButton_clicked() {
   connect(&github, &QAction::triggered, [=]() {
     QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
   });
-  connect(&quit, &QAction::triggered, [=]() {
-    close();
-  });
+  connect(&quit, &QAction::triggered, this, &QMainWindow::close);
 
   menu.addAction(&github);
   menu.addSeparator();
