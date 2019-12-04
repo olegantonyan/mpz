@@ -94,4 +94,12 @@ namespace Config {
     }
     return result;
   }
+
+  int Local::libraryViewScrollPosition() const {
+    return storage.get("library_view_scroll").get<int>();
+  }
+
+  bool Local::saveLibraryViewScrollPosition(int val) {
+    return storage.set("library_view_scroll", Config::Value(val));
+  }
 }

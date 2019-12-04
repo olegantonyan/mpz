@@ -30,6 +30,9 @@ namespace Config {
 
     QStringList libraryPaths() const;
 
+    int libraryViewScrollPosition() const;
+    bool saveLibraryViewScrollPosition(int val);
+
   private:
     Config::Storage storage;
   };

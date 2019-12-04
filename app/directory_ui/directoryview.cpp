@@ -29,7 +29,7 @@ namespace DirectoryUi {
 
     connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
 
-    view->viewport()->installEventFilter(this);
+    view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -54,8 +54,6 @@ namespace DirectoryUi {
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
     menu.exec(view->viewport()->mapToGlobal(pos));
-
-    //qDebug() << view->verticalScrollBar()->value();
   }
 
   bool View::eventFilter(QObject *obj, QEvent *event) {
@@ -68,7 +66,13 @@ namespace DirectoryUi {
           emit createNewPlaylist(filepath);
         }
       }
+
+      local_conf.saveLibraryViewScrollPosition(view->verticalScrollBar()->value());
     }
+    if (event->type() == QEvent::Resize) {
+      view->verticalScrollBar()->setValue(local_conf.libraryViewScrollPosition());
+    }
+
     return QObject::eventFilter(obj, event);
   }
 }
