@@ -91,9 +91,11 @@ namespace PlaylistUi {
       //view->setColumnWidth(4, total_width * 0.05);
       view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
 
-    } else if (event->type() == QEvent::WindowActivate && restore_scroll_once) {
-      restore_scroll_once = false;
-      view->verticalScrollBar()->setValue(local_conf.playlistViewScrollPosition());
+    } else if (event->type() == QEvent::WindowActivate) {
+      if (restore_scroll_once) {
+        restore_scroll_once = false;
+        view->verticalScrollBar()->setValue(local_conf.playlistViewScrollPosition());
+      }
     } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
       local_conf.savePlaylistViewScrollPosition(view->verticalScrollBar()->value());
     }

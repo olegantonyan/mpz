@@ -67,9 +67,11 @@ namespace DirectoryUi {
         }
       }
       local_conf.saveLibraryViewScrollPosition(view->verticalScrollBar()->value());
-    } else if (event->type() == QEvent::WindowActivate && restore_scroll_once) {
-      restore_scroll_once = false;
-      view->verticalScrollBar()->setValue(local_conf.libraryViewScrollPosition());
+    } else if (event->type() == QEvent::WindowActivate) {
+      if (restore_scroll_once) {
+        restore_scroll_once = false;
+        view->verticalScrollBar()->setValue(local_conf.libraryViewScrollPosition());
+      }
     }
 
     return QObject::eventFilter(obj, event);
