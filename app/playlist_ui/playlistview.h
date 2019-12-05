@@ -4,6 +4,7 @@
 #include "playlistmodel.h"
 #include "playlist.h"
 #include "track.h"
+#include "config/local.h"
 
 #include <QObject>
 #include <QTableView>
@@ -14,7 +15,7 @@ namespace PlaylistUi {
   class View : public QObject {
     Q_OBJECT
   public:
-    explicit View(QTableView *v, QObject *parent = nullptr);
+    explicit View(QTableView *v, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);
@@ -36,6 +37,8 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     Model *model;
+    Config::Local &local_conf;
+    bool restore_scroll_once;
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event);

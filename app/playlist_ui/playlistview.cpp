@@ -3,9 +3,11 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QAbstractItemView>
+#include <QScrollBar>
 
 namespace PlaylistUi {
-  View::View(QTableView *v, QObject *parent) : QObject(parent) {
+  View::View(QTableView *v, Config::Local &local_cfg, QObject *parent) : QObject(parent), local_conf(local_cfg) {
+    restore_scroll_once = true;
     view = v;
     model = new Model(this);
     view->setModel(model);
@@ -23,7 +25,7 @@ namespace PlaylistUi {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
 
-    view->installEventFilter(this);
+    view->viewport()->installEventFilter(this);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
       emit activated(model->itemAt(index));
@@ -88,7 +90,14 @@ namespace PlaylistUi {
       view->setColumnWidth(4, static_cast<int>(total_width * 0.05));
       //view->setColumnWidth(4, total_width * 0.05);
       view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+
+    } else if (event->type() == QEvent::WindowActivate && restore_scroll_once) {
+      restore_scroll_once = false;
+      view->verticalScrollBar()->setValue(local_conf.playlistViewScrollPosition());
+    } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
+      local_conf.savePlaylistViewScrollPosition(view->verticalScrollBar()->value());
     }
+
     return QObject::eventFilter(obj, event);
   }
 }

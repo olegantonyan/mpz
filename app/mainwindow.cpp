@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   library = new DirectoryUi::View(ui->treeView, local_conf, this);
   playlists = new PlaylistsUi::View(ui->listView, local_conf, spinner, this);
-  playlist = new PlaylistUi::View(ui->tableView, this);
+  playlist = new PlaylistUi::View(ui->tableView, local_conf, this);
 
   auto pc = Playback::Controls();
   pc.next = ui->nextButton;

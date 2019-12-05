@@ -29,6 +29,7 @@ namespace DirectoryUi {
     QTreeView *view;
     Model *model;
     Config::Local &local_conf;
+    bool restore_scroll_once;
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event);

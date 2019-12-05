@@ -9,7 +9,7 @@
 
 namespace DirectoryUi {
   View::View(QTreeView *v, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), local_conf(local_cfg) {
-
+    restore_scroll_once = true;
     QString path;
     if (local_conf.libraryPaths().empty()) {
       path = QDir::homePath();
@@ -66,10 +66,9 @@ namespace DirectoryUi {
           emit createNewPlaylist(filepath);
         }
       }
-
       local_conf.saveLibraryViewScrollPosition(view->verticalScrollBar()->value());
-    }
-    if (event->type() == QEvent::Resize) {
+    } else if (event->type() == QEvent::WindowActivate && restore_scroll_once) {
+      restore_scroll_once = false;
       view->verticalScrollBar()->setValue(local_conf.libraryViewScrollPosition());
     }
 
