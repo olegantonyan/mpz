@@ -14,13 +14,14 @@
 #include <QDir>
 #include <QModelIndex>
 #include <memory>
+#include <QLineEdit>
 
 namespace PlaylistsUi {
   class View : public QObject {
     Q_OBJECT
 
   public:
-    explicit View(QListView *view, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
+    explicit View(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
     void load();
     std::shared_ptr<Playlist> playlistByTrackUid(quint64 track_uid) const;
 
@@ -40,6 +41,7 @@ namespace PlaylistsUi {
 
   private:
     QListView *view;
+    QLineEdit *search;
     Model *model;
     Config::Local &local_conf;
     BusySpinner *spinner;

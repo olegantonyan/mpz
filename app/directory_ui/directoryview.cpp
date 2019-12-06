@@ -8,7 +8,7 @@
 #include <QScrollBar>
 
 namespace DirectoryUi {
-  View::View(QTreeView *v, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), local_conf(local_cfg) {
+  View::View(QTreeView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     QString path;
     if (local_conf.libraryPaths().empty()) {

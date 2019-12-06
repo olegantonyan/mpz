@@ -10,12 +10,13 @@
 #include <QTableView>
 #include <memory>
 #include <QEvent>
+#include <QLineEdit>
 
 namespace PlaylistUi {
   class View : public QObject {
     Q_OBJECT
   public:
-    explicit View(QTableView *v, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit View(QTableView *v, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);
@@ -36,6 +37,7 @@ namespace PlaylistUi {
 
   private:
     QTableView *view;
+    QLineEdit *search;
     Model *model;
     Config::Local &local_conf;
     bool restore_scroll_once;

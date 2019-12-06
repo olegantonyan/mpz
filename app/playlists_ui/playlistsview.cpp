@@ -9,7 +9,13 @@
 #include <QtConcurrent>
 
 namespace PlaylistsUi {
-  View::View(QListView *v, Config::Local &conf, BusySpinner *_spinner, QObject *parent) : QObject(parent), view(v), local_conf(conf), spinner(_spinner) {
+  View::View(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
+    QObject(parent),
+    view(v),
+    search(s),
+    local_conf(conf),
+    spinner(_spinner) {
+
     model = new PlaylistsUi::Model(conf, this);
 
     view->setModel(model);

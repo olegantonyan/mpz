@@ -10,13 +10,14 @@
 #include <QString>
 #include <QDir>
 #include <QEvent>
+#include <QLineEdit>
 
 namespace DirectoryUi {
   class View : public QObject {
     Q_OBJECT
 
   public:
-    explicit View(QTreeView *view, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit View(QTreeView *view, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QDir &filepath);
@@ -27,6 +28,7 @@ namespace DirectoryUi {
 
   private:
     QTreeView *view;
+    QLineEdit *search;
     Model *model;
     Config::Local &local_conf;
     bool restore_scroll_once;

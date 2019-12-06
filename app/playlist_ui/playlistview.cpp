@@ -6,7 +6,7 @@
 #include <QScrollBar>
 
 namespace PlaylistUi {
-  View::View(QTableView *v, Config::Local &local_cfg, QObject *parent) : QObject(parent), local_conf(local_cfg) {
+  View::View(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
     model = new Model(this);
