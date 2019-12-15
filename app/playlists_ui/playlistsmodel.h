@@ -30,6 +30,8 @@ namespace PlaylistsUi {
 
     bool persist();
 
+    QList<std::shared_ptr<Playlist>> itemList() const;
+
   private:
     QList<std::shared_ptr<Playlist>> list;
     Config::Local &local_conf;

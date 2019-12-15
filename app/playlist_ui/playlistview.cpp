@@ -4,8 +4,9 @@
 #include <QHeaderView>
 #include <QAbstractItemView>
 #include <QScrollBar>
+#include <QThread>
 
-namespace PlaylistUi {
+namespace PlaylistUi {  
   View::View(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
@@ -35,6 +36,27 @@ namespace PlaylistUi {
       (void)prev;
       if (index.isValid()) {
         emit selected(model->itemAt(index));
+      }
+    });
+
+    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
+      if (model->tracksSize() == 0 || model->playlist()->tracks().size() == 0) {
+        return;
+      }
+      view->selectionModel()->clear();
+      if (term.isEmpty()) {
+        return;
+      }
+
+      for (int i = 0; i < model->tracksSize(); i++) {
+        auto t = model->playlist()->tracks().at(i);
+        if (t.artist().contains(term, Qt::CaseInsensitive) ||
+            t.album().contains(term, Qt::CaseInsensitive) ||
+            t.filename().contains(term, Qt::CaseInsensitive) ||
+            t.title().contains(term, Qt::CaseInsensitive)) {
+          selectRow(i); // TODO: rewrite to select all required rows at once
+          QThread::currentThread()->yieldCurrentThread();
+        }
       }
     });
   }
@@ -101,5 +123,11 @@ namespace PlaylistUi {
     }
 
     return QObject::eventFilter(obj, event);
+  }
+
+  void View::selectRow(int row) {
+    for (int i = 0; i < view->horizontalHeader()->count(); i++) { // TODO: rewrite to select all columns at once
+      view->selectionModel()->select(model->index(row, i), QItemSelectionModel::Select);
+    }
   }
 }

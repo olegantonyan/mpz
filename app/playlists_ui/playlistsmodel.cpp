@@ -98,4 +98,8 @@ namespace PlaylistsUi {
   bool Model::persist() {
     return local_conf.savePlaylists(list);
   }
+
+  QList<std::shared_ptr<Playlist> > Model::itemList() const {
+    return list;
+  }
 }

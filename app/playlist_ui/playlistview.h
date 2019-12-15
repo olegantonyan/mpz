@@ -41,7 +41,8 @@ namespace PlaylistUi {
     Model *model;
     Config::Local &local_conf;
     bool restore_scroll_once;
-
+    void selectRow(int row);
+    
   protected:
     bool eventFilter(QObject *obj, QEvent *event);
   };

@@ -26,6 +26,24 @@ namespace PlaylistsUi {
     connect(view, &QListView::clicked, this, &View::on_itemActivated);
 
     view->viewport()->installEventFilter(this);
+
+    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
+      if (model->listSize() == 0 || model->itemList().size() == 0) {
+        return;
+      }
+      view->selectionModel()->clear();
+      if (term.isEmpty()) {
+        return;
+      }
+
+      for (int i = 0; i < model->itemList().size(); i++) {
+        auto t = model->itemList().at(i);
+        if (t->name().contains(term, Qt::CaseInsensitive)) {
+          view->selectionModel()->select(model->index(i), QItemSelectionModel::Select); // TODO: rewrite to select all required rows at once
+          QThread::currentThread()->yieldCurrentThread();
+        }
+      }
+    });
   }
 
   void View::load() {
