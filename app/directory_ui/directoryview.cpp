@@ -20,6 +20,7 @@ namespace DirectoryUi {
     model = new Model(path, this);
 
     view->setModel(model);
+
     view->setRootIndex(model->index(path));
     view->setHeaderHidden(true);
     view->setColumnHidden(1, true);
@@ -30,6 +31,18 @@ namespace DirectoryUi {
     connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
+
+
+    model->setNameFilterDisables(false);
+    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
+      if (term.isEmpty()) {
+        model->setNameFilters(QStringList());
+        return;
+      }
+      QString wc = QString("*%1*").arg(term);
+      model->setNameFilters(QStringList() << wc);
+    });
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
