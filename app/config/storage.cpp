@@ -76,7 +76,7 @@ namespace Config {
       return true;
     }
     QFile file(filepath);
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
       qWarning() << "error opening file for writing" << filepath << ":" << file.errorString();
       return false;
     }
