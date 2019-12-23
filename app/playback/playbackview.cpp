@@ -103,6 +103,7 @@ namespace Playback {
 
   void View::on_error(QMediaPlayer::Error error) {
     qDebug() << "error" << error;
+    emit nextRequested();
   }
 
   bool View::eventFilter(QObject *obj, QEvent *event) {
