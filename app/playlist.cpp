@@ -60,7 +60,11 @@ void Playlist::loadAsync(const QDir &path) {
 }
 
 bool Playlist::load(const QVector<Track> &tracks) {
-  tracks_list = tracks;
+  for (auto i : tracks) {
+    if (i.isValid()) {
+      tracks_list << i;
+    }
+  }
   return true;
 }
 
