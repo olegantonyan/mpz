@@ -98,6 +98,9 @@ namespace PlaylistsUi {
   }
 
   void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
+    if (playlist == nullptr) {
+      return;
+    }
     on_itemActivated(model->itemIndex(playlist));
   }
 

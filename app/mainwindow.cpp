@@ -71,8 +71,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
     auto current_track_uid = dispatch->state().playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
-    playlists->on_jumpTo(current_playlist);
-    playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
+    if (current_playlist != nullptr) {
+      playlists->on_jumpTo(current_playlist);
+      playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
+    }
   });
 
   connect(player, &Playback::View::started, [=](const Track &track) {
