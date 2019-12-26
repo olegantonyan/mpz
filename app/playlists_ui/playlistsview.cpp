@@ -15,7 +15,6 @@ namespace PlaylistsUi {
     search(s),
     local_conf(conf),
     spinner(_spinner) {
-
     model = new PlaylistsUi::Model(conf, this);
 
     view->setModel(model);
@@ -27,23 +26,11 @@ namespace PlaylistsUi {
 
     view->viewport()->installEventFilter(this);
 
-    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
-      if (model->listSize() == 0 || model->itemList().size() == 0) {
-        return;
-      }
-      view->selectionModel()->clear();
-      if (term.isEmpty()) {
-        return;
-      }
+    connect(search, &QLineEdit::textChanged, this, &View::on_search);
 
-      for (int i = 0; i < model->itemList().size(); i++) {
-        auto t = model->itemList().at(i);
-        if (t->name().contains(term, Qt::CaseInsensitive)) {
-          view->selectionModel()->select(model->index(i), QItemSelectionModel::Select); // TODO: rewrite to select all required rows at once
-          QThread::currentThread()->yieldCurrentThread();
-        }
-      }
-    });
+    spinner->show();
+    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
+    connect(model, &Model::asynLoadFinished, this, &View::load);
   }
 
   void View::load() {
@@ -157,5 +144,23 @@ namespace PlaylistsUi {
     persist(index.row());
     emit selected(item);
     spinner->hide();
+  }
+
+  void View::on_search(const QString &term) {
+    if (model->listSize() == 0 || model->itemList().size() == 0) {
+      return;
+    }
+    view->selectionModel()->clear();
+    if (term.isEmpty()) {
+      return;
+    }
+
+    for (int i = 0; i < model->itemList().size(); i++) {
+      auto t = model->itemList().at(i);
+      if (t->name().contains(term, Qt::CaseInsensitive)) {
+        view->selectionModel()->select(model->index(i), QItemSelectionModel::Select); // TODO: rewrite to select all required rows at once
+        QThread::currentThread()->yieldCurrentThread();
+      }
+    }
   }
 }

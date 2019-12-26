@@ -63,8 +63,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   loadUiSettings();
 
-  playlists->load();
-
   auto status_label = new StatusBarLabel(this);
   ui->statusbar->addWidget(status_label);
   status_label->setText("Stopped");

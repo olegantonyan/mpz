@@ -22,7 +22,6 @@ namespace PlaylistsUi {
 
   public:
     explicit View(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
-    void load();
     std::shared_ptr<Playlist> playlistByTrackUid(quint64 track_uid) const;
 
   public slots:
@@ -38,6 +37,8 @@ namespace PlaylistsUi {
     void on_customContextMenuRequested(const QPoint &pos);
     void on_itemActivated(const QModelIndex &index);
     void on_playlistLoadFinished(Playlist *pl);
+    void on_search(const QString& term);
+    void load();
 
   private:
     QListView *view;

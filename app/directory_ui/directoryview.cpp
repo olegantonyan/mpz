@@ -6,6 +6,7 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <iostream>
 
 namespace DirectoryUi {
   View::View(QTreeView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), search(s), local_conf(local_cfg) {

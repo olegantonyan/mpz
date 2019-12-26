@@ -32,6 +32,9 @@ namespace PlaylistsUi {
 
     QList<std::shared_ptr<Playlist>> itemList() const;
 
+  signals:
+    void asynLoadFinished();
+
   private:
     QList<std::shared_ptr<Playlist>> list;
     Config::Local &local_conf;

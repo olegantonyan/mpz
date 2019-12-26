@@ -1,10 +1,17 @@
 #include "playlistsmodel.h"
 
 #include <QDebug>
+#include <QtConcurrent>
 
 namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
-    list = conf.playlists();
+    list.clear();
+    QtConcurrent::run([=]() {
+      list = conf.playlists();
+      emit dataChanged(buildIndex(0), buildIndex(list.size()), {Qt::DisplayRole});
+      emit asynLoadFinished();
+      persist();
+    });
   }
 
   QModelIndex Model::buildIndex(int row) const {
