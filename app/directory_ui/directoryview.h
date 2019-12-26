@@ -25,6 +25,7 @@ namespace DirectoryUi {
 
   private slots:
     void on_customContextMenuRequested(const QPoint &pos);
+    void on_search(const QString& term);
 
   private:
     QTreeView *view;

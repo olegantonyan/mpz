@@ -19,30 +19,23 @@ namespace DirectoryUi {
 
     model = new Model(path, this);
 
-    view->setModel(model);
+    connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
+      view->setModel(model);
+      view->setRootIndex(model->index(path));
+      view->setHeaderHidden(true);
+      view->setColumnHidden(1, true);
+      view->setColumnHidden(2, true);
+      view->setColumnHidden(3, true);
+      view->setContextMenuPolicy(Qt::CustomContextMenu);
+    });
 
-    view->setRootIndex(model->index(path));
-    view->setHeaderHidden(true);
-    view->setColumnHidden(1, true);
-    view->setColumnHidden(2, true);
-    view->setColumnHidden(3, true);
-    view->setContextMenuPolicy(Qt::CustomContextMenu);
+    model->setNameFilterDisables(false);
+    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    connect(search, &QLineEdit::textChanged, this, &DirectoryUi::View::on_search);
 
     connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
-
-
-    model->setNameFilterDisables(false);
-    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
-      if (term.isEmpty()) {
-        model->setNameFilters(QStringList());
-        return;
-      }
-      QString wc = QString("*%1*").arg(term);
-      model->setNameFilters(QStringList() << wc);
-    });
   }
 
   void View::on_customContextMenuRequested(const QPoint &pos) {
@@ -67,6 +60,15 @@ namespace DirectoryUi {
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
     menu.exec(view->viewport()->mapToGlobal(pos));
+  }
+
+  void View::on_search(const QString &term) {
+    if (term.isEmpty()) {
+      model->setNameFilters(QStringList());
+      return;
+    }
+    QString wc = QString("*%1*").arg(term);
+    model->setNameFilters(QStringList() << wc);
   }
 
   bool View::eventFilter(QObject *obj, QEvent *event) {
