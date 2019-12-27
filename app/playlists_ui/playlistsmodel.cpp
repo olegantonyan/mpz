@@ -7,6 +7,7 @@ namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
     list.clear();
     QtConcurrent::run([=]() {
+      emit asynLoadStarted();
       list = conf.playlists();
       emit dataChanged(buildIndex(0), buildIndex(list.size()), {Qt::DisplayRole});
       emit asynLoadFinished();
