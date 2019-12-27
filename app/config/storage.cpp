@@ -163,7 +163,7 @@ namespace Config {
       } else if(node.IsMap()) {
         value = parse(node);
       } else {
-        qWarning() << "unknown yaml type";
+        qWarning() << "unknown yaml type at key " << key;
       }
       result.insert(key, value);
     }

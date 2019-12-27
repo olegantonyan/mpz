@@ -39,26 +39,7 @@ namespace PlaylistUi {
       }
     });
 
-    connect(search, &QLineEdit::textChanged, [=](const QString &term) {
-      if (model->tracksSize() == 0 || model->playlist()->tracks().size() == 0) {
-        return;
-      }
-      view->selectionModel()->clear();
-      if (term.isEmpty()) {
-        return;
-      }
-
-      for (int i = 0; i < model->tracksSize(); i++) {
-        auto t = model->playlist()->tracks().at(i);
-        if (t.artist().contains(term, Qt::CaseInsensitive) ||
-            t.album().contains(term, Qt::CaseInsensitive) ||
-            t.filename().contains(term, Qt::CaseInsensitive) ||
-            t.title().contains(term, Qt::CaseInsensitive)) {
-          selectRow(i); // TODO: rewrite to select all required rows at once
-          QThread::currentThread()->yieldCurrentThread();
-        }
-      }
-    });
+    connect(search, &QLineEdit::textChanged, this, &View::on_search);
   }
 
   void View::on_load(const std::shared_ptr<Playlist> pi) {
@@ -101,6 +82,33 @@ namespace PlaylistUi {
     emit changed(model->playlist());
   }
 
+  void View::on_search(const QString &term) {
+    if (model->tracksSize() == 0 || model->playlist()->tracks().size() == 0) {
+      return;
+    }
+    view->selectionModel()->clear();
+    if (term.isEmpty()) {
+      return;
+    }
+
+    for (int i = 0; i < model->tracksSize(); i++) {
+      auto t = model->playlist()->tracks().at(i);
+      if (t.artist().contains(term, Qt::CaseInsensitive) ||
+          t.album().contains(term, Qt::CaseInsensitive) ||
+          t.filename().contains(term, Qt::CaseInsensitive) ||
+          t.title().contains(term, Qt::CaseInsensitive)) {
+        selectRow(i); // TODO: rewrite to select all required rows at once
+        QThread::currentThread()->yieldCurrentThread();
+      }
+    }
+  }
+
+  void View::selectRow(int row) {
+    for (int i = 0; i < view->horizontalHeader()->count(); i++) { // TODO: rewrite to select all columns at once
+      view->selectionModel()->select(model->index(row, i), QItemSelectionModel::Select);
+    }
+  }
+
   bool View::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();
@@ -123,11 +131,5 @@ namespace PlaylistUi {
     }
 
     return QObject::eventFilter(obj, event);
-  }
-
-  void View::selectRow(int row) {
-    for (int i = 0; i < view->horizontalHeader()->count(); i++) { // TODO: rewrite to select all columns at once
-      view->selectionModel()->select(model->index(row, i), QItemSelectionModel::Select);
-    }
   }
 }
