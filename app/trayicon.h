@@ -1,7 +1,7 @@
 #ifndef TRAYICON_H
 #define TRAYICON_H
 
-#include "playback/playbackcontroller.h"
+#include "track.h"
 
 #include <QObject>
 #include <QIcon>
@@ -12,17 +12,32 @@
 class TrayIcon : public QObject {
   Q_OBJECT
 public:
-  explicit TrayIcon(Playback::Controller *player, const QIcon &appicon, QMainWindow *parent = nullptr);
+  explicit TrayIcon(const QIcon &appicon, QMainWindow *parent = nullptr);
 
 signals:
+  void startTriggered();
+  void stopTriggered();
+  void nextTriggered();
+  void prevTriggered();
+  void pauseTriggered();
 
 public slots:
   void hide();
+  void on_playerStarted(const Track &track);
+  void on_playerStopped();
+  void on_playerPaused(const Track &track);
 
 private:
-  Playback::Controller *player;
   QSystemTrayIcon *trayicon;
   QMenu *menu;
+
+  QAction *quit;
+  QAction *play;
+  QAction *pause;
+  QAction *stop;
+  QAction *next;
+  QAction *prev;
+  QAction *now_playing;
 };
 
 #endif // TRAYICON_H

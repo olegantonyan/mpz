@@ -93,7 +93,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   auto appicon = QIcon(":/icons/icons/appicon.png");
   setWindowIcon(appicon);
-  trayicon = new TrayIcon(player, appicon, this);
+  trayicon = new TrayIcon(appicon, this);
+  connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
+  connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
+  connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
+
+  connect(trayicon, &TrayIcon::startTriggered, player->controls().play, &QToolButton::click);
+  connect(trayicon, &TrayIcon::pauseTriggered, player->controls().pause, &QToolButton::click);
+  connect(trayicon, &TrayIcon::stopTriggered, player->controls().stop, &QToolButton::click);
+  connect(trayicon, &TrayIcon::nextTriggered, player->controls().next, &QToolButton::click);
+  connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 }
 
 MainWindow::~MainWindow() {
