@@ -13,11 +13,11 @@
 #include <QLineEdit>
 
 namespace DirectoryUi {
-  class View : public QObject {
+  class Controller : public QObject {
     Q_OBJECT
 
   public:
-    explicit View(QTreeView *view, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QDir &filepath);

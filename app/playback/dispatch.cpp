@@ -1,7 +1,7 @@
 #include "dispatch.h"
 
 namespace Playback {
-  Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui) :
+  Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::Controller *playlists_ui) :
     QObject(nullptr), global_conf(conf), playlists(playlists_ui) {
   }
 

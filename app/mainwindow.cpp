@@ -17,9 +17,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  library = new DirectoryUi::View(ui->treeView, ui->treeViewSearch, local_conf, this);
-  playlists = new PlaylistsUi::View(ui->listView, ui->listViewSearch, local_conf, spinner, this);
-  playlist = new PlaylistUi::View(ui->tableView, ui->tableViewSearch, local_conf, this);
+  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, local_conf, this);
+  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
+  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, local_conf, this);
 
   auto pc = Playback::Controls();
   pc.next = ui->nextButton;
@@ -29,37 +29,37 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::View(pc, this);
+  player = new Playback::Controller(pc, this);
 
   dispatch = new Playback::Dispatch(global_conf, playlists);
 
-  connect(library, &DirectoryUi::View::createNewPlaylist, playlists, &PlaylistsUi::View::on_createPlaylist);
-  connect(library, &DirectoryUi::View::appendToCurrentPlaylist, playlist, &PlaylistUi::View::on_appendToPlaylist);
-  connect(playlists, &PlaylistsUi::View::selected, playlist, &PlaylistUi::View::on_load);
-  connect(playlists, &PlaylistsUi::View::emptied, playlist, &PlaylistUi::View::on_unload);
-  connect(playlist, &PlaylistUi::View::activated, player, &Playback::View::play);
-  connect(player, &Playback::View::started, playlist, &PlaylistUi::View::on_start);
-  connect(player, &Playback::View::stopped, playlist, &PlaylistUi::View::on_stop);
-  connect(playlist, &PlaylistUi::View::changed, playlists, &PlaylistsUi::View::on_playlistChanged);
+  connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
+  connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
+  connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
+  connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
+  connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);
+  connect(player, &Playback::Controller::started, playlist, &PlaylistUi::Controller::on_start);
+  connect(player, &Playback::Controller::stopped, playlist, &PlaylistUi::Controller::on_stop);
+  connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
 
-  connect(playlist, &PlaylistUi::View::selected, [=](const Track &track) {
+  connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
   });
 
-  connect(player, &Playback::View::started, [=](const Track &track) {
+  connect(player, &Playback::Controller::started, [=](const Track &track) {
     dispatch->state().setPlaying(track.uid());
     dispatch->state().setFollowedCursor();
   });
 
-  connect(player, &Playback::View::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, [=]() {
     dispatch->state().resetPlaying();
   });
 
-  connect(player, &Playback::View::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
-  connect(player, &Playback::View::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
-  connect(player, &Playback::View::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
-  connect(dispatch, &Playback::Dispatch::play, player, &Playback::View::play);
+  connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
+  connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
+  connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
+  connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
 
   loadUiSettings();
 
@@ -75,13 +75,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
   });
 
-  connect(player, &Playback::View::started, [=](const Track &track) {
+  connect(player, &Playback::Controller::started, [=](const Track &track) {
     status_label->setText(QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo());
   });
-  connect(player, &Playback::View::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, [=]() {
     status_label->setText("Stopped");
   });
-  connect(player, &Playback::View::paused, [=](const Track &track) {
+  connect(player, &Playback::Controller::paused, [=](const Track &track) {
     status_label->setText(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
   });
 

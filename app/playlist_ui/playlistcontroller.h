@@ -13,10 +13,10 @@
 #include <QLineEdit>
 
 namespace PlaylistUi {
-  class View : public QObject {
+  class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit View(QTableView *v, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTableView *v, QLineEdit *search, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);

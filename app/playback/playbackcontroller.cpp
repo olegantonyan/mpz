@@ -1,11 +1,11 @@
-#include "playbackview.h"
+#include "playbackcontroller.h"
 
 namespace Playback {
-  View::View(const Controls &c, QObject *parent) : QObject(parent), _controls(c) {
-    connect(&_player, &QMediaPlayer::positionChanged, this, &View::on_positionChanged);
-    connect(&_player, &QMediaPlayer::stateChanged, this, &View::on_stateChanged);
-    connect(&_player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &View::on_error);
-    connect(_controls.stop, &QToolButton::clicked, this, &View::stop);
+  Controller::Controller(const Controls &c, QObject *parent) : QObject(parent), _controls(c) {
+    connect(&_player, &QMediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(&_player, &QMediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &Controller::on_error);
+    connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
     connect(_controls.pause, &QToolButton::clicked, [=]() {
       if (_player.state() == QMediaPlayer::PausedState) {
         _player.play();
@@ -37,11 +37,11 @@ namespace Playback {
     next_after_stop = true;
   }
 
-  Controls View::controls() const {
+  Controls Controller::controls() const {
     return _controls;
   }
 
-  void View::play(const Track &track) {
+  void Controller::play(const Track &track) {
     next_after_stop = false;
     _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
     _player.setMedia(QUrl::fromLocalFile(track.path()));
@@ -49,13 +49,13 @@ namespace Playback {
     _player.play();
   }
 
-  void View::stop() {
+  void Controller::stop() {
     next_after_stop = false;
     _player.stop();
     emit stopped();
   }
 
-  void View::on_seek(int position) {
+  void Controller::on_seek(int position) {
     if (_player.state() != QMediaPlayer::PlayingState)  {
       return;
     }
@@ -70,17 +70,17 @@ namespace Playback {
     _player.setPosition(seek_value * 1000);
   }
 
-  QString View::time_text(int pos) const {
+  QString Controller::time_text(int pos) const {
     return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.formattedDuration());
   }
 
-  void View::on_positionChanged(quint64 pos) {
+  void Controller::on_positionChanged(quint64 pos) {
     int v = static_cast<int>(pos / 1000);
     _controls.time->setText(time_text(v));
     _controls.seekbar->setValue(v);
   }
 
-  void View::on_stateChanged(QMediaPlayer::State state) {
+  void Controller::on_stateChanged(QMediaPlayer::State state) {
     switch (state) {
       case QMediaPlayer::StoppedState:
         _controls.seekbar->setValue(0);
@@ -101,12 +101,12 @@ namespace Playback {
     }
   }
 
-  void View::on_error(QMediaPlayer::Error error) {
+  void Controller::on_error(QMediaPlayer::Error error) {
     qDebug() << "error" << error;
     emit nextRequested();
   }
 
-  bool View::eventFilter(QObject *obj, QEvent *event) {
+  bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       on_seek(me->pos().x());

@@ -1,10 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "directory_ui/directoryview.h"
-#include "playlists_ui/playlistsview.h"
-#include "playlist_ui/playlistview.h"
-#include "playback/playbackview.h"
+#include "directory_ui/directorycontroller.h"
+#include "playlists_ui/playlistscontroller.h"
+#include "playlist_ui/playlistcontroller.h"
+#include "playback/playbackcontroller.h"
 #include "config/local.h"
 #include "config/global.h"
 #include "playback/dispatch.h"
@@ -28,10 +28,10 @@ public:
 
 private:
   Ui::MainWindow *ui;
-  DirectoryUi::View *library;
-  PlaylistsUi::View *playlists;
-  PlaylistUi::View *playlist;
-  Playback::View *player;
+  DirectoryUi::Controller *library;
+  PlaylistsUi::Controller *playlists;
+  PlaylistUi::Controller *playlist;
+  Playback::Controller *player;
   Playback::Dispatch *dispatch;
   Config::Local local_conf;
   Config::Global global_conf;

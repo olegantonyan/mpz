@@ -2,9 +2,9 @@
 #define DISPATCH_H
 
 #include "config/global.h"
-#include "playlists_ui/playlistsview.h"
+#include "playlists_ui/playlistscontroller.h"
 #include "playerstate.h"
-#include "playback/playbackview.h"
+#include "playback/playbackcontroller.h"
 
 #include <QObject>
 
@@ -12,7 +12,7 @@ namespace Playback {
   class Dispatch : public QObject {
     Q_OBJECT
   public:
-    explicit Dispatch(Config::Global &conf, PlaylistsUi::View *playlists_ui);
+    explicit Dispatch(Config::Global &conf, PlaylistsUi::Controller *playlists_ui);
     PlayerState &state();
 
   signals:
@@ -26,7 +26,7 @@ namespace Playback {
   private:
     Config::Global &global_conf;
     PlayerState player_state;
-    PlaylistsUi::View *playlists;
+    PlaylistsUi::Controller *playlists;
   };
 }
 

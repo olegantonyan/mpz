@@ -1,4 +1,4 @@
-#include "directoryview.h"
+#include "directorycontroller.h"
 
 #include <QAction>
 #include <QDebug>
@@ -9,7 +9,7 @@
 #include <iostream>
 
 namespace DirectoryUi {
-  View::View(QTreeView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), search(s), local_conf(local_cfg) {
+  Controller::Controller(QTreeView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     QString path;
     if (local_conf.libraryPaths().empty()) {
@@ -32,14 +32,14 @@ namespace DirectoryUi {
 
     model->setNameFilterDisables(false);
     model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-    connect(search, &QLineEdit::textChanged, this, &DirectoryUi::View::on_search);
+    connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
 
-    connect(view, &QTreeView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
+    connect(view, &QTreeView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
   }
 
-  void View::on_customContextMenuRequested(const QPoint &pos) {
+  void Controller::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
     if (!index.isValid()) {
       return;
@@ -63,7 +63,7 @@ namespace DirectoryUi {
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
-  void View::on_search(const QString &term) {
+  void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
       model->setNameFilters(QStringList());
       return;
@@ -72,7 +72,7 @@ namespace DirectoryUi {
     model->setNameFilters(QStringList() << wc);
   }
 
-  bool View::eventFilter(QObject *obj, QEvent *event) {
+  bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {

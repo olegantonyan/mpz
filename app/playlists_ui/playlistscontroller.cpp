@@ -1,4 +1,4 @@
-#include "playlistsview.h"
+#include "playlistscontroller.h"
 #include "playlist.h"
 
 #include <QDebug>
@@ -9,7 +9,7 @@
 #include <QtConcurrent>
 
 namespace PlaylistsUi {
-  View::View(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
+  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
@@ -21,19 +21,19 @@ namespace PlaylistsUi {
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
 
-    connect(view, &QListView::customContextMenuRequested, this, &View::on_customContextMenuRequested);
-    connect(view, &QListView::clicked, this, &View::on_itemActivated);
+    connect(view, &QListView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
+    connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
 
     view->viewport()->installEventFilter(this);
 
-    connect(search, &QLineEdit::textChanged, this, &View::on_search);
+    connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
 
     connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show, Qt::QueuedConnection);
     connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide, Qt::QueuedConnection);
-    connect(model, &Model::asynLoadFinished, this, &View::load, Qt::QueuedConnection);
+    connect(model, &Model::asynLoadFinished, this, &Controller::load, Qt::QueuedConnection);
   }
 
-  void View::load() {
+  void Controller::load() {
     if (model->listSize() > 0) {
       auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
       auto item = model->itemAt(idx);
@@ -43,11 +43,11 @@ namespace PlaylistsUi {
     }
   }
 
-  std::shared_ptr<Playlist> View::playlistByTrackUid(quint64 track_uid) const {
+  std::shared_ptr<Playlist> Controller::playlistByTrackUid(quint64 track_uid) const {
     return model->itemByTrack(track_uid);
   }
 
-  bool View::eventFilter(QObject *obj, QEvent *event) {
+  bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {
@@ -60,13 +60,13 @@ namespace PlaylistsUi {
     return QObject::eventFilter(obj, event);
   }
 
-  void View::persist(int current_index) {
+  void Controller::persist(int current_index) {
     auto max_index = qMax(model->listSize() - 1, 0);
     auto save_index = qMin(current_index, max_index);
     local_conf.saveCurrentPlaylist(save_index);
   }
 
-  void View::removeItem(const QModelIndex &index) {
+  void Controller::removeItem(const QModelIndex &index) {
     model->remove(index);
     auto selected_idx = view->selectionModel()->selectedIndexes().first();
     if (selected_idx == index || model->listSize() == 1) {
@@ -77,26 +77,26 @@ namespace PlaylistsUi {
     }
   }
 
-  void View::on_createPlaylist(const QDir &filepath) {
+  void Controller::on_createPlaylist(const QDir &filepath) {
       auto pl = new Playlist();
-      connect(pl, &Playlist::loadAsyncFinished, this, &View::on_playlistLoadFinished);
+      connect(pl, &Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
       pl->loadAsync(filepath);
       spinner->show();
   }
 
-  void View::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
+  void Controller::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
     if (playlist == nullptr) {
       return;
     }
     on_itemActivated(model->itemIndex(playlist));
   }
 
-  void View::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
+  void Controller::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
     Q_UNUSED(pl)
     model->persist();
   }
 
-  void View::on_customContextMenuRequested(const QPoint &pos) {
+  void Controller::on_customContextMenuRequested(const QPoint &pos) {
     auto index = view->indexAt(pos);
     if (!index.isValid()) {
       return;
@@ -123,7 +123,7 @@ namespace PlaylistsUi {
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
-  void View::on_itemActivated(const QModelIndex &index) {
+  void Controller::on_itemActivated(const QModelIndex &index) {
     if (model->listSize() <= 0) {
       return;
     }
@@ -134,8 +134,8 @@ namespace PlaylistsUi {
     emit selected(item);
   }
 
-  void View::on_playlistLoadFinished(Playlist *pl) {
-    disconnect(pl, &Playlist::loadAsyncFinished, this, &View::on_playlistLoadFinished);
+  void Controller::on_playlistLoadFinished(Playlist *pl) {
+    disconnect(pl, &Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
     auto item = std::shared_ptr<Playlist>(pl);
     auto index = model->append(item);
     view->setCurrentIndex(index);
@@ -146,7 +146,7 @@ namespace PlaylistsUi {
     spinner->hide();
   }
 
-  void View::on_search(const QString &term) {
+  void Controller::on_search(const QString &term) {
     if (model->listSize() == 0 || model->itemList().size() == 0) {
       return;
     }

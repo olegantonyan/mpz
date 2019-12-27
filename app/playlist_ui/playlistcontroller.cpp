@@ -1,4 +1,4 @@
-#include "playlistview.h"
+#include "playlistcontroller.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -7,7 +7,7 @@
 #include <QThread>
 
 namespace PlaylistUi {  
-  View::View(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
     model = new Model(this);
@@ -39,30 +39,30 @@ namespace PlaylistUi {
       }
     });
 
-    connect(search, &QLineEdit::textChanged, this, &View::on_search);
+    connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
   }
 
-  void View::on_load(const std::shared_ptr<Playlist> pi) {
+  void Controller::on_load(const std::shared_ptr<Playlist> pi) {
     model->setPlaylist(pi);
   }
 
-  void View::on_unload() {
+  void Controller::on_unload() {
     model->setPlaylist(nullptr);
   }
 
-  void View::highlight(quint64 track_uid) {
+  void Controller::highlight(quint64 track_uid) {
     model->highlight(track_uid);
   }
 
-  void View::on_stop() {
+  void Controller::on_stop() {
     highlight(0);
   }
 
-  void View::on_start(const Track &t) {
+  void Controller::on_start(const Track &t) {
     model->highlight(t.uid());
   }
 
-  void View::on_scrollTo(const Track &track) {
+  void Controller::on_scrollTo(const Track &track) {
     QModelIndex index = model->indexOf(track.uid());
     if (index.isValid()) {
       view->setCurrentIndex(index);
@@ -71,18 +71,18 @@ namespace PlaylistUi {
     }
   }
 
-  void View::on_appendToPlaylist(const QDir &filepath) {
-    connect(&*model->playlist(), &Playlist::concatAsyncFinished, this, &View::on_appendAsyncFinished);
+  void Controller::on_appendToPlaylist(const QDir &filepath) {
+    connect(&*model->playlist(), &Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->playlist()->concatAsync(filepath);
   }
 
-  void View::on_appendAsyncFinished(Playlist *pl) {
-    disconnect(pl, &Playlist::concatAsyncFinished, this, &View::on_appendAsyncFinished);
+  void Controller::on_appendAsyncFinished(Playlist *pl) {
+    disconnect(pl, &Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->reload();
     emit changed(model->playlist());
   }
 
-  void View::on_search(const QString &term) {
+  void Controller::on_search(const QString &term) {
     if (model->tracksSize() == 0 || model->playlist()->tracks().size() == 0) {
       return;
     }
@@ -103,13 +103,13 @@ namespace PlaylistUi {
     }
   }
 
-  void View::selectRow(int row) {
+  void Controller::selectRow(int row) {
     for (int i = 0; i < view->horizontalHeader()->count(); i++) { // TODO: rewrite to select all columns at once
       view->selectionModel()->select(model->index(row, i), QItemSelectionModel::Select);
     }
   }
 
-  bool View::eventFilter(QObject *obj, QEvent *event) {
+  bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();
       view->horizontalHeader()->setMinimumSectionSize(20);

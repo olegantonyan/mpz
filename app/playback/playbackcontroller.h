@@ -11,10 +11,10 @@
 #include <QMouseEvent>
 
 namespace Playback {
-  class View : public QObject {
+  class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit View(const Playback::Controls &c, QObject *parent = nullptr);
+    explicit Controller(const Playback::Controls &c, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
 

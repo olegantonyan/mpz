@@ -17,11 +17,11 @@
 #include <QLineEdit>
 
 namespace PlaylistsUi {
-  class View : public QObject {
+  class Controller : public QObject {
     Q_OBJECT
 
   public:
-    explicit View(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
+    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
     std::shared_ptr<Playlist> playlistByTrackUid(quint64 track_uid) const;
 
   public slots:

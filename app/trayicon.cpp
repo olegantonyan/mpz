@@ -2,7 +2,7 @@
 
 #include <QAction>
 
-TrayIcon::TrayIcon(Playback::View *p, const QIcon &appicon, QMainWindow *parent) : QObject(parent), player(p) {
+TrayIcon::TrayIcon(Playback::Controller *p, const QIcon &appicon, QMainWindow *parent) : QObject(parent), player(p) {
   trayicon = new QSystemTrayIcon(appicon, parent);
   menu = new QMenu(parent);
 
@@ -36,7 +36,7 @@ TrayIcon::TrayIcon(Playback::View *p, const QIcon &appicon, QMainWindow *parent)
     menu->popup(QCursor::pos());
   });
 
-  connect(player, &Playback::View::started, [=](const Track &track) {
+  connect(player, &Playback::Controller::started, [=](const Track &track) {
     Q_UNUSED(track)
     play->setEnabled(false);
     stop->setEnabled(true);
@@ -46,7 +46,7 @@ TrayIcon::TrayIcon(Playback::View *p, const QIcon &appicon, QMainWindow *parent)
     now_plying->setText(track.title());
   });
 
-  connect(player, &Playback::View::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, [=]() {
     play->setEnabled(true);
     stop->setEnabled(false);
     pause->setEnabled(false);
@@ -54,7 +54,7 @@ TrayIcon::TrayIcon(Playback::View *p, const QIcon &appicon, QMainWindow *parent)
     prev->setEnabled(false);
   });
 
-  connect(player, &Playback::View::paused, [=](const Track &track) {
+  connect(player, &Playback::Controller::paused, [=](const Track &track) {
     Q_UNUSED(track)
     play->setEnabled(true);
     stop->setEnabled(true);
