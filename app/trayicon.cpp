@@ -4,6 +4,7 @@
 
 TrayIcon::TrayIcon(const QIcon &appicon, QMainWindow *parent) : QObject(parent) {
   trayicon = new QSystemTrayIcon(appicon, parent);
+  trayicon->setToolTip("Stopped");
   menu = new QMenu(parent);
 
   quit = new QAction("Quit", this);
@@ -50,6 +51,7 @@ void TrayIcon::on_playerStarted(const Track &track) {
   next->setEnabled(true);
   prev->setEnabled(true);
   now_playing->setText(track.title());
+  trayicon->setToolTip(QString("Playing: %1 - %2").arg(track.artist()).arg(track.title()));
 }
 
 void TrayIcon::on_playerStopped() {
@@ -58,6 +60,7 @@ void TrayIcon::on_playerStopped() {
   pause->setEnabled(false);
   next->setEnabled(false);
   prev->setEnabled(false);
+  trayicon->setToolTip("Stopped");
 }
 
 void TrayIcon::on_playerPaused(const Track &track) {
@@ -67,4 +70,5 @@ void TrayIcon::on_playerPaused(const Track &track) {
   pause->setEnabled(true);
   next->setEnabled(true);
   prev->setEnabled(true);
+  trayicon->setToolTip(QString("Paused: %1 - %2").arg(track.artist()).arg(track.title()));
 }
