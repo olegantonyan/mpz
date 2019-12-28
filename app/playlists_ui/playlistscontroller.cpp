@@ -28,9 +28,9 @@ namespace PlaylistsUi {
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
 
-    connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show, Qt::QueuedConnection);
-    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide, Qt::QueuedConnection);
-    connect(model, &Model::asynLoadFinished, this, &Controller::load, Qt::QueuedConnection);
+    connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show);
+    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
+    connect(model, &Model::asynLoadFinished, this, &Controller::load);
   }
 
   void Controller::load() {
