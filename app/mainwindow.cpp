@@ -97,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
+  connect(player, &Playback::Controller::progress, trayicon, &TrayIcon::on_playerProgress);
 
   connect(trayicon, &TrayIcon::startTriggered, player->controls().play, &QToolButton::click);
   connect(trayicon, &TrayIcon::pauseTriggered, player->controls().pause, &QToolButton::click);

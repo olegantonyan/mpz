@@ -22,6 +22,7 @@ namespace Playback {
     void started(const Track &track);
     void stopped();
     void paused(const Track &track);
+    void progress(const Track &track, int current_seconds);
     void prevRequested();
     void nextRequested();
     void startRequested();

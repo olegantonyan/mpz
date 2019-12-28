@@ -78,6 +78,7 @@ namespace Playback {
     int v = static_cast<int>(pos / 1000);
     _controls.time->setText(time_text(v));
     _controls.seekbar->setValue(v);
+    emit progress(_current_track, v);
   }
 
   void Controller::on_stateChanged(QMediaPlayer::State state) {

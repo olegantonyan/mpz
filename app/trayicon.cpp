@@ -50,7 +50,7 @@ void TrayIcon::on_playerStarted(const Track &track) {
   pause->setEnabled(true);
   next->setEnabled(true);
   prev->setEnabled(true);
-  now_playing->setText(track.title());
+  update_menu_now_playing(track, 0);
   trayicon->setToolTip(QString("Playing: %1 - %2").arg(track.artist()).arg(track.title()));
 }
 
@@ -60,6 +60,7 @@ void TrayIcon::on_playerStopped() {
   pause->setEnabled(false);
   next->setEnabled(false);
   prev->setEnabled(false);
+  update_menu_now_playing(Track(), -1);
   trayicon->setToolTip("Stopped");
 }
 
@@ -71,4 +72,23 @@ void TrayIcon::on_playerPaused(const Track &track) {
   next->setEnabled(true);
   prev->setEnabled(true);
   trayicon->setToolTip(QString("Paused: %1 - %2").arg(track.artist()).arg(track.title()));
+}
+
+void TrayIcon::on_playerProgress(const Track &track, int current_seconds) {
+  update_menu_now_playing(track, current_seconds);
+}
+
+QString TrayIcon::time_text(const Track &track, int pos) const {
+  return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(track.formattedDuration());
+}
+
+void TrayIcon::update_menu_now_playing(const Track &track, int pos) {
+  if (pos < 0) {
+    now_playing->setText("");
+    return;
+  }
+  auto time_t = time_text(track, pos);
+  auto track_t = track.title();
+  auto t = QString("%1 (%2)").arg(track_t).arg(time_t);
+  now_playing->setText(t);
 }

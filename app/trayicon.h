@@ -26,6 +26,7 @@ public slots:
   void on_playerStarted(const Track &track);
   void on_playerStopped();
   void on_playerPaused(const Track &track);
+  void on_playerProgress(const Track &track, int current_seconds);
 
 private:
   QSystemTrayIcon *trayicon;
@@ -38,6 +39,8 @@ private:
   QAction *next;
   QAction *prev;
   QAction *now_playing;
+  QString time_text(const Track &track, int pos) const;
+  void update_menu_now_playing(const Track &track, int pos);
 };
 
 #endif // TRAYICON_H
