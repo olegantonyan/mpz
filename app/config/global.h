@@ -11,8 +11,10 @@ namespace Config {
     bool sync();
 
     bool playbackFollowCursor() const;
-
     void savePlaybackFollowCursor(bool arg);
+
+    QString playbackOrder() const;
+    void savePlaybackOrder(const QString &arg);
 
   private:
     Config::Storage storage;

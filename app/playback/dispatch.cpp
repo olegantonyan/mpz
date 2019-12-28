@@ -1,5 +1,7 @@
 #include "dispatch.h"
 
+#include <QRandomGenerator>
+
 namespace Playback {
   Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::Controller *playlists_ui) :
     QObject(nullptr), global_conf(conf), playlists(playlists_ui) {
@@ -28,6 +30,17 @@ namespace Playback {
       return;
     }
 
+    if (global_conf.playbackOrder() == "random") {
+      int rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+      if (rngjesus == current_playlist->trackIndex(current_track_uid)) {
+        // once again, but only once, you lucky bastard
+        // TODO check random trail
+        rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+      }
+      emit play(current_playlist->tracks().at(rngjesus));
+      return;
+    }
+
     int current = current_playlist->trackIndex(current_track_uid);
     auto next = current + 1;
     if (next > current_playlist->tracks().size() - 1) {
@@ -40,6 +53,10 @@ namespace Playback {
   }
 
   void Dispatch::on_prevRequested() {
+    if (global_conf.playbackOrder() == "random") {
+      // TODO prev from random trail
+    }
+
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist == nullptr) {

@@ -101,6 +101,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(trayicon, &TrayIcon::stopTriggered, player->controls().stop, &QToolButton::click);
   connect(trayicon, &TrayIcon::nextTriggered, player->controls().next, &QToolButton::click);
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
+
+  ui->orderComboBox->addItem("Sequential");
+  ui->orderComboBox->addItem("Random");
+  ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
+  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+    global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequencial");
+    global_conf.sync();
+  });
+
+  ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
+  connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
+    global_conf.savePlaybackFollowCursor(state == Qt::Checked);
+    global_conf.sync();
+  });
 }
 
 MainWindow::~MainWindow() {

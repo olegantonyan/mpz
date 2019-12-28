@@ -128,7 +128,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTreeView" name="treeView"/>
@@ -142,7 +142,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QListView" name="listView"/>
@@ -172,11 +172,25 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="tableViewSearch">
-          <property name="placeholderText">
-           <string>Search tracks</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="tableViewSearch">
+            <property name="placeholderText">
+             <string>Search tracks</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="followCursorCheckBox">
+            <property name="text">
+             <string>Playback follows cursor</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="orderComboBox"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
