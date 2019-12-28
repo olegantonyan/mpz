@@ -12,7 +12,7 @@
 class TrayIcon : public QObject {
   Q_OBJECT
 public:
-  explicit TrayIcon(const QIcon &appicon, QMainWindow *parent = nullptr);
+  explicit TrayIcon(QMainWindow *parent);
 
 signals:
   void startTriggered();

@@ -14,6 +14,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   setWindowTitle("mpz");
+  setWindowIcon(QIcon(":/icons/icons/appicon.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
@@ -89,11 +90,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   ui->tableView->setFocus();
 
-
-
-  auto appicon = QIcon(":/icons/icons/appicon.png");
-  setWindowIcon(appicon);
-  trayicon = new TrayIcon(appicon, this);
+  trayicon = new TrayIcon(this);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);

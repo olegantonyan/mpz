@@ -2,8 +2,8 @@
 
 #include <QAction>
 
-TrayIcon::TrayIcon(const QIcon &appicon, QMainWindow *parent) : QObject(parent) {
-  trayicon = new QSystemTrayIcon(appicon, parent);
+TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
+  trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
   trayicon->setToolTip("Stopped");
   menu = new QMenu(parent);
 
