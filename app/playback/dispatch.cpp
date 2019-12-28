@@ -34,10 +34,16 @@ namespace Playback {
       int rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
       if (rngjesus == current_playlist->trackIndex(current_track_uid)) {
         // once again, but only once, you lucky bastard
-        // TODO check random trail
         rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
       }
-      emit play(current_playlist->tracks().at(rngjesus));
+      Track t = current_playlist->tracks().at(rngjesus);
+      if (random_trail.exists(t.uid())) {
+        rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+        t = current_playlist->tracks().at(rngjesus);
+      }
+
+      emit play(t);
+      random_trail.add(t.uid());
       return;
     }
 
@@ -53,14 +59,19 @@ namespace Playback {
   }
 
   void Dispatch::on_prevRequested() {
-    if (global_conf.playbackOrder() == "random") {
-      // TODO prev from random trail
-    }
-
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist == nullptr) {
       return;
+    }
+
+    if (global_conf.playbackOrder() == "random") {
+      auto prev_uid = random_trail.prev(current_track_uid);
+      if (prev_uid != 0) {
+        Track t = current_playlist->tracks().at(current_playlist->trackIndex(prev_uid));
+        emit play(t);
+        return;
+      }
     }
 
     int current = current_playlist->trackIndex(current_track_uid);

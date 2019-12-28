@@ -32,6 +32,7 @@ SOURCES += \
     playback/controls.cpp \
     playback/dispatch.cpp \
     playback/playbackcontroller.cpp \
+    playback/randomtrail.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     playback/controls.h \
     playback/dispatch.h \
     playback/playbackcontroller.h \
+    playback/randomtrail.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist.h \

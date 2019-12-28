@@ -5,6 +5,7 @@
 #include "playlists_ui/playlistscontroller.h"
 #include "playerstate.h"
 #include "playback/playbackcontroller.h"
+#include "playback/randomtrail.h"
 
 #include <QObject>
 
@@ -27,6 +28,7 @@ namespace Playback {
     Config::Global &global_conf;
     PlayerState player_state;
     PlaylistsUi::Controller *playlists;
+    RandomTrail random_trail;
   };
 }
 
