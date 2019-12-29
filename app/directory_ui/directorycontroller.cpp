@@ -27,9 +27,13 @@ namespace DirectoryUi {
       model->loadAsync(local_conf.libraryPaths().first());
     }
 
-    connect(libswitch, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
-      model->loadAsync(local_conf.libraryPaths()[idx]);
-    });
+    if (libswitch->count() > 1) {
+      connect(libswitch, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+        model->loadAsync(local_conf.libraryPaths()[idx]);
+      });
+    } else {
+      libswitch->setVisible(false);
+    }
 
     connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
       view->setModel(model);
