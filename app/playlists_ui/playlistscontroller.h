@@ -52,7 +52,7 @@ namespace PlaylistsUi {
     void removeItem(const QModelIndex &idx);
 
   protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
   };
 }
 

@@ -45,7 +45,7 @@ namespace PlaylistUi {
     void selectRow(int row);
     
   protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
   };
 }
 

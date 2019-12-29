@@ -1,6 +1,7 @@
 #include "trayicon.h"
 
 #include <QAction>
+#include <QDebug>
 
 TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);

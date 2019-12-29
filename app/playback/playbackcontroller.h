@@ -48,7 +48,7 @@ namespace Playback {
     void on_error(QMediaPlayer::Error error);
 
   protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
   };
 }
 #endif // PLAYBACKVIEW_H
