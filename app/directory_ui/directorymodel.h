@@ -9,7 +9,9 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit Model(const QString &library_path, QObject *parent = nullptr);
+    explicit Model(QObject *parent = nullptr);
+
+    void loadAsync(const QString &path);
   };
 }
 

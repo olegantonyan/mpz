@@ -9,20 +9,33 @@
 #include <iostream>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), view(v), search(s), local_conf(local_cfg) {
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *lib_switch, Config::Local &local_cfg, QObject *parent) :
+    QObject(parent),
+    view(v),
+    search(s),
+    libswitch(lib_switch),
+    local_conf(local_cfg) {
+
     restore_scroll_once = true;
-    QString path;
+
+    model = new Model(this);
     if (local_conf.libraryPaths().empty()) {
-      path = QDir::homePath();
+      model->loadAsync(QDir::homePath());
+      libswitch->addItem(QDir::homePath());
     } else {
-      path = local_conf.libraryPaths().first();
+      for (auto i : local_conf.libraryPaths()) {
+        libswitch->addItem(i);
+      }
+      model->loadAsync(local_conf.libraryPaths().first());
     }
 
-    model = new Model(path, this);
+    connect(libswitch, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+      model->loadAsync(local_conf.libraryPaths()[idx]);
+    });
 
     connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
       view->setModel(model);
-      view->setRootIndex(model->index(path));
+      view->setRootIndex(model->index(model->rootPath()));
       view->setHeaderHidden(true);
       view->setColumnHidden(1, true);
       view->setColumnHidden(2, true);

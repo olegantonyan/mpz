@@ -134,6 +134,9 @@
          <widget class="QTreeView" name="treeView"/>
         </item>
         <item>
+         <widget class="QComboBox" name="comboBoxLibraries"/>
+        </item>
+        <item>
          <widget class="QLineEdit" name="treeViewSearch">
           <property name="placeholderText">
            <string>Search library</string>
@@ -142,7 +145,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_1">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QListView" name="listView"/>
@@ -156,7 +159,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget_2">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QTableView" name="tableView">
