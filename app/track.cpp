@@ -46,7 +46,7 @@ QString Track::formattedTime(quint32 tm) {
   quint32 hours = (tm / 60 / 60);
 
   if (hours == 0) {
-    return QString("%1:%2").arg(minutes, 2, 10).arg(seconds, 2, 10, QChar('0'));
+    return QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
   }
   return QString("%1:%2:%3").arg(hours, 2, 10).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
 }

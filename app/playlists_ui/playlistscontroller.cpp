@@ -27,6 +27,7 @@ namespace PlaylistsUi {
     view->viewport()->installEventFilter(this);
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
+    search->setClearButtonEnabled(true);
 
     connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show);
     connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);

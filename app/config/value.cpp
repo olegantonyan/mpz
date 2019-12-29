@@ -80,6 +80,7 @@ namespace Config {
         return QString("<Value map list [%1]>").arg(sl.join(", "));
       }
     }
+    return QString();
   }
 
   Config::Value::operator QString() const {

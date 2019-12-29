@@ -33,6 +33,7 @@ namespace DirectoryUi {
     model->setNameFilterDisables(false);
     model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
+    search->setClearButtonEnabled(true);
 
     connect(view, &QTreeView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
 

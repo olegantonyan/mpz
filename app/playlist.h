@@ -12,7 +12,7 @@
 class Playlist : public QObject {
   Q_OBJECT
 public:
-  Playlist();
+  explicit Playlist();
 
   static QStringList supportedFileFormats();
 

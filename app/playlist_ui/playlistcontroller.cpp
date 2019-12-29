@@ -40,6 +40,7 @@ namespace PlaylistUi {
     });
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
+    search->setClearButtonEnabled(true);
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist> pi) {
