@@ -10,7 +10,6 @@ namespace PlaylistsUi {
 
   void Model::loadAsync() {
     QtConcurrent::run([=]() {
-      emit asynLoadStarted();
       list = local_conf.playlists();
       emit dataChanged(buildIndex(0), buildIndex(list.size()), {Qt::DisplayRole});
       emit asynLoadFinished();

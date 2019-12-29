@@ -35,7 +35,6 @@ namespace PlaylistsUi {
     void loadAsync();
 
   signals:
-    void asynLoadStarted();
     void asynLoadFinished();
 
   private:

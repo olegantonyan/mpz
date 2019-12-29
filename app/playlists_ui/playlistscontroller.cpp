@@ -16,7 +16,7 @@ namespace PlaylistsUi {
     local_conf(conf),
     spinner(_spinner) {
     model = new PlaylistsUi::Model(conf, this);
-    connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show);
+    spinner->show();
     connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
     connect(model, &Model::asynLoadFinished, this, &Controller::load);
     model->loadAsync();
