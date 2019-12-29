@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->orderComboBox->addItem("Sequential");
   ui->orderComboBox->addItem("Random");
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
-  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequencial");
     global_conf.sync();
   });

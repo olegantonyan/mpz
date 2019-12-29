@@ -28,7 +28,7 @@ namespace DirectoryUi {
     }
 
     if (libswitch->count() > 1) {
-      connect(libswitch, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+      connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         model->loadAsync(local_conf.libraryPaths()[idx]);
       });
     } else {
