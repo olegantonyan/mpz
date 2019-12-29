@@ -16,6 +16,10 @@ namespace PlaylistsUi {
     local_conf(conf),
     spinner(_spinner) {
     model = new PlaylistsUi::Model(conf, this);
+    connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show);
+    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
+    connect(model, &Model::asynLoadFinished, this, &Controller::load);
+    model->loadAsync();
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -28,10 +32,6 @@ namespace PlaylistsUi {
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
-
-    connect(model, &Model::asynLoadStarted, spinner, &BusySpinner::show);
-    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
-    connect(model, &Model::asynLoadFinished, this, &Controller::load);
   }
 
   void Controller::load() {

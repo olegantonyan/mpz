@@ -32,6 +32,8 @@ namespace PlaylistsUi {
 
     QList<std::shared_ptr<Playlist>> itemList() const;
 
+    void loadAsync();
+
   signals:
     void asynLoadStarted();
     void asynLoadFinished();

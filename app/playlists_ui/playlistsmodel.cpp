@@ -3,12 +3,15 @@
 #include <QDebug>
 #include <QtConcurrent>
 
-namespace PlaylistsUi {
+namespace PlaylistsUi {  
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
     list.clear();
+  }
+
+  void Model::loadAsync() {
     QtConcurrent::run([=]() {
       emit asynLoadStarted();
-      list = conf.playlists();
+      list = local_conf.playlists();
       emit dataChanged(buildIndex(0), buildIndex(list.size()), {Qt::DisplayRole});
       emit asynLoadFinished();
       persist();
