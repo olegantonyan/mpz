@@ -9,11 +9,9 @@
 #include <iostream>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *lib_switch, Config::Local &local_cfg, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, Config::Local &local_cfg, QObject *parent) :
     QObject(parent),
     view(v),
-    search(s),
-    libswitch(lib_switch),
     local_conf(local_cfg) {
 
     restore_scroll_once = true;
