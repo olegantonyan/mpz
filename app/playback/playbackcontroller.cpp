@@ -103,7 +103,7 @@ namespace Playback {
   }
 
   void Controller::on_error(QMediaPlayer::Error error) {
-    qDebug() << "error" << error;
+    qWarning() << "playback error" << error;
     emit nextRequested();
   }
 
