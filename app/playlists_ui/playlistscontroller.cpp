@@ -7,6 +7,7 @@
 #include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QtConcurrent>
+#include <QMouseEvent>
 
 namespace PlaylistsUi {
   Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
