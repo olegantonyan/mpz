@@ -11,6 +11,7 @@
 #include <memory>
 #include <QEvent>
 #include <QLineEdit>
+#include <QMap>
 
 namespace PlaylistUi {
   class Controller : public QObject {
@@ -43,6 +44,7 @@ namespace PlaylistUi {
     Config::Local &local_conf;
     bool restore_scroll_once;
     void selectRow(int row);
+    QMap<quint64,int> scroll_positions;
     
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

@@ -5,11 +5,13 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 #include <QThread>
+#include <QTimer>
 
 namespace PlaylistUi {  
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
+    scroll_positions.clear();
     model = new Model(this);
     view->setModel(model);
     view->horizontalHeader()->hide();
@@ -41,10 +43,22 @@ namespace PlaylistUi {
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
+
+    connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
+      if (model->playlist() != nullptr) {
+        scroll_positions[model->playlist()->uid()] = val;
+      }
+    });
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist> pi) {
     model->setPlaylist(pi);
+
+    if (scroll_positions.contains(pi->uid())) {
+      QTimer::singleShot(20, [=]() { // hack: https://stackoverflow.com/questions/50989433/qtableviewscrollto-immediately-after-model-reset-and-after-some-delay
+        view->verticalScrollBar()->setValue(scroll_positions[pi->uid()]);
+      });
+    }
   }
 
   void Controller::on_unload() {
