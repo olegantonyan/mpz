@@ -60,16 +60,19 @@ namespace DirectoryUi {
 
     connect(libcfg, &QToolButton::clicked, [=]() {
       DirectorySettings dlg(local_conf.libraryPaths());
+      auto old_paths = local_conf.libraryPaths();
       if(dlg.exec() == QDialog::Accepted) {
-        local_conf.saveLibraryPaths(dlg.libraryPaths());
-        local_conf.sync();
-        libswitch->clear();
-        for (auto i : local_conf.libraryPaths()) {
-          libswitch->addItem(i);
-        }
-        if (libswitch->count() > 0) {
-          model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
-          libswitch->setCurrentIndex(libswitch->count() - 1);
+        if (old_paths != dlg.libraryPaths()) {
+          local_conf.saveLibraryPaths(dlg.libraryPaths());
+          local_conf.sync();
+          libswitch->clear();
+          for (auto i : local_conf.libraryPaths()) {
+            libswitch->addItem(i);
+          }
+          if (libswitch->count() > 0) {
+            model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
+            libswitch->setCurrentIndex(libswitch->count() - 1);
+          }
         }
       }
     });

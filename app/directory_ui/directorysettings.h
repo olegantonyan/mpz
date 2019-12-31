@@ -27,6 +27,4 @@ private:
   QStringListModel model;
 };
 
-
-
 #endif // DIRECTORYSETTINGS_H
