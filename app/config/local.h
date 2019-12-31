@@ -37,6 +37,9 @@ namespace Config {
     int playlistViewScrollPosition() const;
     bool savePlaylistViewScrollPosition(int val);
 
+    int volume() const;
+    bool saveVolume(int arg);
+
   private:
     Config::Storage storage;
   };

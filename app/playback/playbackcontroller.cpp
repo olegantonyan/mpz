@@ -41,6 +41,10 @@ namespace Playback {
     return _controls;
   }
 
+  int Controller::volume() const {
+    return _player.volume();
+  }
+
   void Controller::play(const Track &track) {
     next_after_stop = false;
     _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
@@ -53,6 +57,10 @@ namespace Playback {
     next_after_stop = false;
     _player.stop();
     emit stopped();
+  }
+
+  void Controller::setVolume(int value) {
+    _player.setVolume(qMax(qMin(value, 100), 0));
   }
 
   void Controller::on_seek(int position) {

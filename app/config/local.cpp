@@ -118,4 +118,12 @@ namespace Config {
   bool Local::savePlaylistViewScrollPosition(int val) {
     return storage.set("playlist_view_scroll", Config::Value(val));
   }
+
+  int Local::volume() const {
+    return storage.get("playback_volume").get<int>();
+  }
+
+  bool Local::saveVolume(int arg) {
+    return storage.set("playback_volume", Config::Value(arg));
+  }
 }

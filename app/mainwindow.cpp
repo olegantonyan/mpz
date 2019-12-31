@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
+#include "volumemenu.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -31,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
   player = new Playback::Controller(pc, this);
+  if (local_conf.volume() > 0) {
+    player->setVolume(local_conf.volume());
+  }
 
   dispatch = new Playback::Dispatch(global_conf, playlists);
 
@@ -171,3 +175,19 @@ void MainWindow::on_menuButton_clicked() {
   menu.exec(pos);
 }
 
+
+void MainWindow::on_toolButtonVolume_clicked() {
+  VolumeMenu menu;
+  menu.setValue(player->volume());
+  int menu_width = menu.sizeHint().width();
+  int x = ui->toolButtonVolume->width() - menu_width;
+  int y = ui->toolButtonVolume->height();
+  QPoint pos(ui->toolButtonVolume->mapToGlobal(QPoint(x, y)));
+  connect(&menu, &VolumeMenu::changed, [=](int val) {
+    player->setVolume(val);
+    if (val > 0) {
+      local_conf.saveVolume(val);
+    }
+  });
+  menu.show(pos);
+}

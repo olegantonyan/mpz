@@ -17,6 +17,7 @@ namespace Playback {
     explicit Controller(const Playback::Controls &c, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
+    int volume() const;
 
   signals:
     void started(const Track &track);
@@ -30,6 +31,7 @@ namespace Playback {
   public slots:
     void play(const Track &track);
     void stop();
+    void setVolume(int value);
 
   private:
     Playback::Controls _controls;

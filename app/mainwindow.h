@@ -44,5 +44,6 @@ protected:
   void closeEvent(QCloseEvent *event);
 private slots:
   void on_menuButton_clicked();
+  void on_toolButtonVolume_clicked();
 };
 #endif // MAINWINDOW_H

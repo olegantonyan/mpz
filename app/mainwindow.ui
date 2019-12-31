@@ -111,6 +111,17 @@
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="toolButtonVolume">
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources/resources.qrc">
+          <normaloff>:/icons/icons/speaker.svg</normaloff>:/icons/icons/speaker.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="menuButton">
         <property name="text">
          <string>...</string>
@@ -128,7 +139,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTreeView" name="treeView"/>
