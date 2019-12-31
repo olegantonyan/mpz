@@ -120,9 +120,15 @@ namespace Config {
 
   Config::Value Storage::castScalar(const QString &str) const {
     // try boolean first
-    if (str == "true") {
+    if (str.compare("true", Qt::CaseInsensitive) == 0 ||
+        str.compare("yes", Qt::CaseInsensitive) == 0 ||
+        str.compare("y", Qt::CaseInsensitive) == 0 ||
+        str.compare("on", Qt::CaseInsensitive) == 0) {
       return Config::Value(true);
-    } else if (str == "false") {
+    } else if (str.compare("false", Qt::CaseInsensitive) == 0 ||
+               str.compare("no", Qt::CaseInsensitive) == 0 ||
+               str.compare("n", Qt::CaseInsensitive) == 0 ||
+               str.compare("off", Qt::CaseInsensitive) == 0) {
       return Config::Value(false);
     }
 
