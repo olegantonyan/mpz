@@ -15,13 +15,12 @@ namespace Config {
       filepath = filename;
     } else {
       filepath = default_filepath;
+      if (!QFile::exists(default_filepath)) {
+        QDir().mkpath(default_filedir);
+      }
     }
 
     reload();
-
-    if (filepath == default_filepath && !QFile::exists(default_filepath)) {
-      QDir().mkpath(default_filedir);
-    }
   }
 
   Storage::~Storage() {
