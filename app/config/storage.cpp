@@ -3,17 +3,25 @@
 #include <QDebug>
 #include <QFile>
 #include <QStandardPaths>
+#include <QDir>
 
 namespace Config {
   Storage::Storage(const QString &filename) : changed(false) {
+    auto cfg_path = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
+    auto default_filedir = QString("%1/mpz").arg(cfg_path);
+    auto default_filepath = QString("%1/%2").arg(default_filedir).arg(filename);
+
     if (QFile::exists(filename)) {
       filepath = filename;
     } else {
-      auto cfg_path = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
-      filepath = QString("%1/mpz/%2").arg(cfg_path).arg(filename);
+      filepath = default_filepath;
     }
 
     reload();
+
+    if (filepath == default_filepath && !QFile::exists(default_filepath)) {
+      QDir().mkpath(default_filedir);
+    }
   }
 
   Storage::~Storage() {
