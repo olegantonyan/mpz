@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QAbstractTableModel>
 #include <memory>
+#include <QList>
 
 namespace PlaylistUi {
   class Model : public QAbstractTableModel {
@@ -28,6 +29,8 @@ namespace PlaylistUi {
 
     std::shared_ptr<Playlist> playlist();
     void reload();
+
+    void remove(const QList<QModelIndex> &items);
 
   private:
     void setTracks(const QVector<Track> &tracks);

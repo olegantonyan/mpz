@@ -153,3 +153,7 @@ void Playlist::sort() {
   });
 }
 
+void Playlist::removeTrack(int position) {
+  tracks_list.remove(position);
+}
+

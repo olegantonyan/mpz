@@ -34,6 +34,8 @@ public:
 
   void sort();
 
+  void removeTrack(int position);
+
 signals:
   void loadAsyncFinished(Playlist *pl);
   void concatAsyncFinished(Playlist *pl);

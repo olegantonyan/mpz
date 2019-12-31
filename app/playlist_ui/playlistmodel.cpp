@@ -134,4 +134,11 @@ namespace PlaylistUi {
       setTracks(_playlist->tracks());
     }
   }
+
+  void Model::remove(const QList<QModelIndex> &items) {
+    for (auto i : items) {
+      playlist()->removeTrack(i.row());
+    }
+    reload();
+  }
 }
