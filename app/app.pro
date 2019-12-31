@@ -26,6 +26,7 @@ SOURCES += \
     config/storage.cpp \
     config/value.cpp \
     directory_ui/directorycontroller.cpp \
+    directory_ui/directorysettings.cpp \
     main.cpp \
     mainwindow.cpp \
     directory_ui/directorymodel.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     config/storage.h \
     config/value.h \
     directory_ui/directorycontroller.h \
+    directory_ui/directorysettings.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
     playback/controls.h \
@@ -67,6 +69,7 @@ HEADERS += \
     trayicon.h
 
 FORMS += \
+    directory_ui/directorysettings.ui \
     mainwindow.ui
 
 INCLUDEPATH += \

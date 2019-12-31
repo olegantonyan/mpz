@@ -1,4 +1,4 @@
-#ifndef DIRECTORYTREEVIEWMODEL_H
+﻿#ifndef DIRECTORYTREEVIEWMODEL_H
 #define DIRECTORYTREEVIEWMODEL_H
 
 #include "directorymodel.h"
@@ -12,13 +12,14 @@
 #include <QEvent>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QToolButton>
 
 namespace DirectoryUi {
   class Controller : public QObject {
     Q_OBJECT
 
   public:
-    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QDir &filepath);

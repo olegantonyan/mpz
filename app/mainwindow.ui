@@ -128,13 +128,24 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTreeView" name="treeView"/>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBoxLibraries"/>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QToolButton" name="toolButtonLibraries">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxLibraries"/>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLineEdit" name="treeViewSearch">

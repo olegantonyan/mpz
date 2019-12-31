@@ -1,4 +1,5 @@
 #include "directorycontroller.h"
+#include "directorysettings.h"
 
 #include <QAction>
 #include <QDebug>
@@ -6,10 +7,9 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include <iostream>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, Config::Local &local_cfg, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
     QObject(parent),
     view(v),
     local_conf(local_cfg) {
@@ -29,10 +29,10 @@ namespace DirectoryUi {
 
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-        model->loadAsync(local_conf.libraryPaths()[idx]);
+        if (idx >= 0) {
+          model->loadAsync(local_conf.libraryPaths()[idx]);
+        }
       });
-    } else {
-      libswitch->setVisible(false);
     }
 
     connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
@@ -56,6 +56,22 @@ namespace DirectoryUi {
 
     connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
       local_conf.saveLibraryViewScrollPosition(val);
+    });
+
+    connect(libcfg, &QToolButton::clicked, [=]() {
+      DirectorySettings dlg(local_conf.libraryPaths());
+      if(dlg.exec() == QDialog::Accepted) {
+        local_conf.saveLibraryPaths(dlg.libraryPaths());
+        local_conf.sync();
+        libswitch->clear();
+        for (auto i : local_conf.libraryPaths()) {
+          libswitch->addItem(i);
+        }
+        if (libswitch->count() > 0) {
+          model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
+          libswitch->setCurrentIndex(libswitch->count() - 1);
+        }
+      }
     });
   }
 

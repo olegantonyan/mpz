@@ -95,6 +95,14 @@ namespace Config {
     return result;
   }
 
+  bool Local::saveLibraryPaths(const QStringList &arg) {
+    QList<Config::Value> list;
+    for (auto i : arg) {
+      list << Config::Value(i);
+    }
+    return storage.set("library_paths", Config::Value(list));
+  }
+
   int Local::libraryViewScrollPosition() const {
     return storage.get("library_view_scroll").get<int>();
   }
