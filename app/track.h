@@ -30,6 +30,8 @@ public:
 
   quint64 uid() const;
 
+  QString dir() const;
+
 private:
   QString filepath;
   QString _artist;

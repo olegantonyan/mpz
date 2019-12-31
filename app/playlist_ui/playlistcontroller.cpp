@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QAction>
+#include <QDesktopServices>
 
 namespace PlaylistUi {  
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
@@ -53,17 +54,7 @@ namespace PlaylistUi {
     });
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(view, &QTableView::customContextMenuRequested, [=](const QPoint &pos) {
-      auto selected = view->selectionModel()->selectedRows();
-      QMenu menu;
-      QAction remove("Remove");
-      connect(&remove, &QAction::triggered, [=]() {
-        model->remove(selected);
-        emit changed(model->playlist());
-      });
-      menu.addAction(&remove);
-      menu.exec(view->viewport()->mapToGlobal(pos));
-    });
+    connect(view, &QTableView::customContextMenuRequested, this, &Controller::on_contextMenu);
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist> pi) {
@@ -131,6 +122,24 @@ namespace PlaylistUi {
         QThread::currentThread()->yieldCurrentThread();
       }
     }
+  }
+
+  void Controller::on_contextMenu(const QPoint &pos) {
+    QMenu menu;
+    QAction remove("Remove");
+    QAction open_in_filemanager("Show in file manager");
+    connect(&remove, &QAction::triggered, [=]() {
+      model->remove(view->selectionModel()->selectedRows());
+      emit changed(model->playlist());
+    });
+    connect(&open_in_filemanager, &QAction::triggered, [=]() {
+      auto t = model->itemAt(view->selectionModel()->selectedRows().first());
+      QDesktopServices::openUrl(QUrl::fromLocalFile(t.dir()));
+    });
+    menu.addAction(&open_in_filemanager);
+    menu.addSeparator();
+    menu.addAction(&remove);
+    menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
   void Controller::selectRow(int row) {

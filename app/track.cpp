@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QRandomGenerator>
+#include <QDir>
 
 Track::Track() {
   Track("");
@@ -101,6 +102,10 @@ QString Track::formattedAudioInfo() const {
 
 quint64 Track::uid() const {
   return _uid;
+}
+
+QString Track::dir() const {
+  return QFileInfo(path()).absoluteDir().canonicalPath();
 }
 
 quint16 Track::sample_rate() const {
