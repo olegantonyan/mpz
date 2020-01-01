@@ -28,6 +28,7 @@ SOURCES += \
     directory_ui/directorycontroller.cpp \
     directory_ui/directorysettings.cpp \
     main.cpp \
+    mainmenu.cpp \
     mainwindow.cpp \
     directory_ui/directorymodel.cpp \
     playback/controls.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     config/value.h \
     directory_ui/directorycontroller.h \
     directory_ui/directorysettings.h \
+    mainmenu.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
     playback/controls.h \

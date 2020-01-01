@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, local_conf, this);
 
-  auto pc = Playback::Controls();
+  Playback::Controls pc;
   pc.next = ui->nextButton;
   pc.prev = ui->prevButton;
   pc.stop = ui->stopButton;
@@ -125,6 +125,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(volume, &VolumeControl::decreased, [=](int by) {
     updateVolume(player->volume() - by);
   });
+
+  main_menu = new MainMenu(ui->menuButton, this);
+  connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
 }
 
 MainWindow::~MainWindow() {
@@ -158,27 +161,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   global_conf.sync();
   trayicon->hide();
   QMainWindow::closeEvent(event);
-}
-
-void MainWindow::on_menuButton_clicked() {
-  QMenu menu;
-  QAction github("Github");
-  QAction quit("Quit");
-  connect(&github, &QAction::triggered, [=]() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
-  });
-  connect(&quit, &QAction::triggered, this, &QMainWindow::close);
-
-  menu.addAction(&github);
-  menu.addSeparator();
-  menu.addAction(&quit);
-
-  int menu_width = menu.sizeHint().width();
-  int x = ui->menuButton->width() - menu_width;
-  int y = ui->menuButton->height();
-  QPoint pos(ui->menuButton->mapToGlobal(QPoint(x, y)));
-
-  menu.exec(pos);
 }
 
 void MainWindow::updateVolume(int value) {

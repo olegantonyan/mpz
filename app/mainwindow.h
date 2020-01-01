@@ -11,6 +11,7 @@
 #include "busyspinner.h"
 #include "trayicon.h"
 #include "volumecontrol.h"
+#include "mainmenu.h"
 
 #include <QMainWindow>
 
@@ -37,6 +38,7 @@ private:
   BusySpinner *spinner;
   TrayIcon *trayicon;
   VolumeControl *volume;
+  MainMenu *main_menu;
 
   void loadUiSettings();
 
@@ -44,7 +46,6 @@ protected:
   void closeEvent(QCloseEvent *event) override;
 
 private slots:
-  void on_menuButton_clicked();
   void updateVolume(int value);
 };
 #endif // MAINWINDOW_H
