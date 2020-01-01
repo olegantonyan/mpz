@@ -3,30 +3,8 @@
 #include <QtGlobal>
 #include <QWheelEvent>
 
-VolumeMenu::VolumeMenu(QObject *parent) : QObject(parent), action(QWidgetAction(nullptr)) {
-  slider.setMaximum(100);
-  slider.setMinimum(0);
-  layout.addWidget(&slider);
-  widget.setLayout(&layout);
-  action.setDefaultWidget(&widget);
-  menu.addAction(&action);
-  connect(&slider, &QSlider::valueChanged, this, &VolumeMenu::changed);
-}
-
-void VolumeMenu::show(const QPoint &pos) {
-  menu.exec(pos);
-}
-
-void VolumeMenu::setValue(int value) {
-  slider.setValue(value);
-}
-
-QSize VolumeMenu::sizeHint() const {
-  return menu.sizeHint();
-}
-
-VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn), menu(VolumeMenu(parent)) {
-  connect(&menu, &VolumeMenu::changed, this, &VolumeControl::changed);
+VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn), menu(PrivateVolumeControl::Menu(parent)) {
+  connect(&menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
   connect(button, &QToolButton::clicked, this, &VolumeControl::on_buttonClicked);
   button->installEventFilter(this);
   button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -59,4 +37,29 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
     }
   }
   return QObject::eventFilter(obj, event);
+}
+
+
+namespace PrivateVolumeControl {
+  Menu::Menu(QObject *parent) : QObject(parent), action(QWidgetAction(nullptr)) {
+    slider.setMaximum(100);
+    slider.setMinimum(0);
+    layout.addWidget(&slider);
+    widget.setLayout(&layout);
+    action.setDefaultWidget(&widget);
+    menu.addAction(&action);
+    connect(&slider, &QSlider::valueChanged, this, &Menu::changed);
+  }
+
+  void Menu::show(const QPoint &pos) {
+    menu.exec(pos);
+  }
+
+  void Menu::setValue(int value) {
+    slider.setValue(value);
+  }
+
+  QSize Menu::sizeHint() const {
+    return menu.sizeHint();
+  }
 }
