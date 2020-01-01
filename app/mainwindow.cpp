@@ -90,8 +90,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     status_label->setText(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
   });
 
-
-
   ui->tableView->setFocus();
 
   trayicon = new TrayIcon(this);
@@ -119,6 +117,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     global_conf.savePlaybackFollowCursor(state == Qt::Checked);
     global_conf.sync();
   });
+
+  ui->toolButtonVolume->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+  ui->toolButtonVolume->setText(QString("%1%").arg(player->volume()));
 }
 
 MainWindow::~MainWindow() {
@@ -175,7 +176,6 @@ void MainWindow::on_menuButton_clicked() {
   menu.exec(pos);
 }
 
-
 void MainWindow::on_toolButtonVolume_clicked() {
   VolumeMenu menu;
   menu.setValue(player->volume());
@@ -188,6 +188,7 @@ void MainWindow::on_toolButtonVolume_clicked() {
     if (val > 0) {
       local_conf.saveVolume(val);
     }
+    ui->toolButtonVolume->setText(QString("%1%").arg(val));
   });
   menu.show(pos);
 }

@@ -4,6 +4,7 @@
 
 VolumeMenu::VolumeMenu(QObject *parent) : QObject(parent), action(QWidgetAction(nullptr)) {
   slider.setMaximum(100);
+  slider.setMinimum(0);
   layout.addWidget(&slider);
   widget.setLayout(&layout);
   action.setDefaultWidget(&widget);
