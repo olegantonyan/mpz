@@ -12,7 +12,7 @@ VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *paren
 }
 
 void VolumeControl::setValue(int value) {
-  value = qMax(qMin(value, 100), 0);
+  value = qBound(0, value, 100);
   menu.setValue(value);
   button->setText(QString("%1%").arg(value));
 }
