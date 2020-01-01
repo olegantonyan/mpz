@@ -41,9 +41,12 @@ private:
   void loadUiSettings();
 
 protected:
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
+  bool eventFilter(QObject *obj, QEvent *event) override;
+
 private slots:
   void on_menuButton_clicked();
   void on_toolButtonVolume_clicked();
+  void updateVolume(int value);
 };
 #endif // MAINWINDOW_H

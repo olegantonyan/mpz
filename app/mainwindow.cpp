@@ -120,6 +120,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   ui->toolButtonVolume->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
   ui->toolButtonVolume->setText(QString("%1%").arg(player->volume()));
+  ui->toolButtonVolume->installEventFilter(this);
 }
 
 MainWindow::~MainWindow() {
@@ -155,6 +156,20 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QMainWindow::closeEvent(event);
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+  if (obj == ui->toolButtonVolume) {
+    if (event->type() == QEvent::Wheel) {
+      QWheelEvent *we = dynamic_cast<QWheelEvent *>(event);
+      if (we->angleDelta().y() > 0) {
+        updateVolume(player->volume() + 3);
+      } else if (we->angleDelta().y() < 0) {
+        updateVolume(player->volume() - 3);
+      }
+    }
+  }
+  return QObject::eventFilter(obj, event);
+}
+
 void MainWindow::on_menuButton_clicked() {
   QMenu menu;
   QAction github("Github");
@@ -183,12 +198,14 @@ void MainWindow::on_toolButtonVolume_clicked() {
   int x = ui->toolButtonVolume->width() - menu_width;
   int y = ui->toolButtonVolume->height();
   QPoint pos(ui->toolButtonVolume->mapToGlobal(QPoint(x, y)));
-  connect(&menu, &VolumeMenu::changed, [=](int val) {
-    player->setVolume(val);
-    if (val > 0) {
-      local_conf.saveVolume(val);
-    }
-    ui->toolButtonVolume->setText(QString("%1%").arg(val));
-  });
+  connect(&menu, &VolumeMenu::changed, this, &MainWindow::updateVolume);
   menu.show(pos);
+}
+
+void MainWindow::updateVolume(int value) {
+  player->setVolume(value);
+  if (value > 0) {
+    local_conf.saveVolume(value);
+  }
+  ui->toolButtonVolume->setText(QString("%1%").arg(player->volume()));
 }
