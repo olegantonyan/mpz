@@ -161,9 +161,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Wheel) {
       QWheelEvent *we = dynamic_cast<QWheelEvent *>(event);
       if (we->angleDelta().y() > 0) {
-        updateVolume(player->volume() + 3);
+        updateVolume(player->volume() + 5);
       } else if (we->angleDelta().y() < 0) {
-        updateVolume(player->volume() - 3);
+        updateVolume(player->volume() - 5);
       }
     }
   }
