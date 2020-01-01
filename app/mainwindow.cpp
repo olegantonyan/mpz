@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
-#include "volumemenu.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -118,9 +117,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     global_conf.sync();
   });
 
-  ui->toolButtonVolume->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-  ui->toolButtonVolume->setText(QString("%1%").arg(player->volume()));
-  ui->toolButtonVolume->installEventFilter(this);
+  volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
+  connect(volume, &VolumeControl::changed, this, &MainWindow::updateVolume);
+  connect(volume, &VolumeControl::increased, [=](int by) {
+    updateVolume(player->volume() + by);
+  });
+  connect(volume, &VolumeControl::decreased, [=](int by) {
+    updateVolume(player->volume() - by);
+  });
 }
 
 MainWindow::~MainWindow() {
@@ -156,20 +160,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QMainWindow::closeEvent(event);
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
-  if (obj == ui->toolButtonVolume) {
-    if (event->type() == QEvent::Wheel) {
-      QWheelEvent *we = dynamic_cast<QWheelEvent *>(event);
-      if (we->angleDelta().y() > 0) {
-        updateVolume(player->volume() + 5);
-      } else if (we->angleDelta().y() < 0) {
-        updateVolume(player->volume() - 5);
-      }
-    }
-  }
-  return QObject::eventFilter(obj, event);
-}
-
 void MainWindow::on_menuButton_clicked() {
   QMenu menu;
   QAction github("Github");
@@ -191,21 +181,10 @@ void MainWindow::on_menuButton_clicked() {
   menu.exec(pos);
 }
 
-void MainWindow::on_toolButtonVolume_clicked() {
-  VolumeMenu menu;
-  menu.setValue(player->volume());
-  int menu_width = menu.sizeHint().width();
-  int x = ui->toolButtonVolume->width() - menu_width;
-  int y = ui->toolButtonVolume->height();
-  QPoint pos(ui->toolButtonVolume->mapToGlobal(QPoint(x, y)));
-  connect(&menu, &VolumeMenu::changed, this, &MainWindow::updateVolume);
-  menu.show(pos);
-}
-
 void MainWindow::updateVolume(int value) {
   player->setVolume(value);
   if (value > 0) {
     local_conf.saveVolume(value);
   }
-  ui->toolButtonVolume->setText(QString("%1%").arg(player->volume()));
+  volume->setValue(value);
 }

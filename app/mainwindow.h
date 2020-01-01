@@ -10,10 +10,9 @@
 #include "playback/dispatch.h"
 #include "busyspinner.h"
 #include "trayicon.h"
+#include "volumecontrol.h"
 
 #include <QMainWindow>
-#include <memory>
-#include <QSystemTrayIcon>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +23,7 @@ class MainWindow : public QMainWindow {
 
 public:
   MainWindow(QWidget *parent = nullptr);
-  ~MainWindow();
+  ~MainWindow() override;
 
 private:
   Ui::MainWindow *ui;
@@ -37,16 +36,15 @@ private:
   Config::Global global_conf;
   BusySpinner *spinner;
   TrayIcon *trayicon;
+  VolumeControl *volume;
 
   void loadUiSettings();
 
 protected:
   void closeEvent(QCloseEvent *event) override;
-  bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
   void on_menuButton_clicked();
-  void on_toolButtonVolume_clicked();
   void updateVolume(int value);
 };
 #endif // MAINWINDOW_H

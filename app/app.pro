@@ -43,7 +43,7 @@ SOURCES += \
     statusbarlabel.cpp \
     track.cpp \
     trayicon.cpp \
-    volumemenu.cpp
+    volumecontrol.cpp
 
 HEADERS += \
     busyspinner.h \
@@ -68,7 +68,7 @@ HEADERS += \
     statusbarlabel.h \
     track.h \
     trayicon.h \
-    volumemenu.h
+    volumecontrol.h
 
 FORMS += \
     directory_ui/directorysettings.ui \
