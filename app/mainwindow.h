@@ -53,8 +53,5 @@ private:
 
 protected:
   void closeEvent(QCloseEvent *event) override;
-
-private slots:
-  void updateVolume(int value);
 };
 #endif // MAINWINDOW_H

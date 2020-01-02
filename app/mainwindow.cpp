@@ -87,14 +87,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QMainWindow::closeEvent(event);
 }
 
-void MainWindow::updateVolume(int value) {
-  player->setVolume(value);
-  if (value > 0) {
-    local_conf.saveVolume(value);
-  }
-  volume->setValue(value);
-}
-
 void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem("Sequential");
   ui->orderComboBox->addItem("Random");
@@ -115,12 +107,20 @@ void MainWindow::setupFollowCursorCheckbox() {
 
 void MainWindow::setupVolumeControl() {
   volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
-  connect(volume, &VolumeControl::changed, this, &MainWindow::updateVolume);
+  auto update = [=](int value) {
+    player->setVolume(value);
+    if (value > 0) {
+      local_conf.saveVolume(value);
+    }
+    volume->setValue(value);
+  };
+
+  connect(volume, &VolumeControl::changed, update);
   connect(volume, &VolumeControl::increased, [=](int by) {
-    updateVolume(player->volume() + by);
+    update(player->volume() + by);
   });
   connect(volume, &VolumeControl::decreased, [=](int by) {
-    updateVolume(player->volume() - by);
+    update(player->volume() - by);
   });
 }
 
