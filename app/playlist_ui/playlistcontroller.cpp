@@ -136,8 +136,14 @@ namespace PlaylistUi {
     });
     QAction open_in_filemanager("Show in file manager");
     connect(&open_in_filemanager, &QAction::triggered, [=]() {
-      auto t = model->itemAt(view->selectionModel()->selectedRows().first());
-      QDesktopServices::openUrl(QUrl::fromLocalFile(t.dir()));
+      QStringList str;
+      for (auto i : view->selectionModel()->selectedRows()) {
+        auto dir = model->itemAt(i).dir();
+        if (!str.contains(dir)) {
+          str << dir;
+          QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+        }
+      }
     });
     QAction copy_name("Copy name");
     connect(&copy_name, &QAction::triggered, [=]() {
