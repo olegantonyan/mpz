@@ -109,10 +109,10 @@ void MainWindow::setupVolumeControl() {
   volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
   auto update = [=](int value) {
     player->setVolume(value);
+    volume->setValue(value);
     if (value > 0) {
       local_conf.saveVolume(value);
     }
-    volume->setValue(value);
   };
 
   connect(volume, &VolumeControl::changed, update);

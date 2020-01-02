@@ -18,6 +18,7 @@ void StatusBarLabel::on_playerPaused(const Track &track) {
 }
 
 void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
-  (void)event;
+  Q_UNUSED(event)
   emit doubleclicked();
+  QLabel::mouseDoubleClickEvent(event);
 }
