@@ -108,6 +108,10 @@ QString Track::dir() const {
   return QFileInfo(path()).absoluteDir().canonicalPath();
 }
 
+QString Track::formattedTitle() const {
+  return QString("%1 - %2 (%3) - %4").arg(artist()).arg(album()).arg(year()).arg(title());
+}
+
 quint16 Track::sample_rate() const {
   return _sample_rate;
 }

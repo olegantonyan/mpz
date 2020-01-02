@@ -9,6 +9,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QDesktopServices>
+#include <QClipboard>
+#include <QApplication>
 
 namespace PlaylistUi {  
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
@@ -128,15 +130,24 @@ namespace PlaylistUi {
   void Controller::on_contextMenu(const QPoint &pos) {
     QMenu menu;
     QAction remove("Remove");
-    QAction open_in_filemanager("Show in file manager");
     connect(&remove, &QAction::triggered, [=]() {
       model->remove(view->selectionModel()->selectedRows());
       emit changed(model->playlist());
     });
+    QAction open_in_filemanager("Show in file manager");
     connect(&open_in_filemanager, &QAction::triggered, [=]() {
       auto t = model->itemAt(view->selectionModel()->selectedRows().first());
       QDesktopServices::openUrl(QUrl::fromLocalFile(t.dir()));
     });
+    QAction copy_name("Copy name");
+    connect(&copy_name, &QAction::triggered, [=]() {
+      QStringList str;
+      for (auto i : view->selectionModel()->selectedRows()) {
+        str << model->itemAt(i).formattedTitle();
+      }
+      qApp->clipboard()->setText(str.join('\n'));
+    });
+    menu.addAction(&copy_name);
     menu.addAction(&open_in_filemanager);
     menu.addSeparator();
     menu.addAction(&remove);

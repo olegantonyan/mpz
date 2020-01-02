@@ -32,6 +32,8 @@ public:
 
   QString dir() const;
 
+  QString formattedTitle() const;
+
 private:
   QString filepath;
   QString _artist;
