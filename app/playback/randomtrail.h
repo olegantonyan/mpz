@@ -6,7 +6,7 @@
 namespace Playback {
   class RandomTrail {
   public:
-    RandomTrail(int max_size = 64);
+    explicit RandomTrail(int max_size = 64);
 
     void add(quint64 track_uid);
     bool exists(quint64 track_uid) const;

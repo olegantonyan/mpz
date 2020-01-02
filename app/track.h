@@ -5,8 +5,8 @@
 
 class Track {
 public:
-  Track();
-  Track(const QString &filepath);
+  explicit Track();
+  explicit Track(const QString &filepath);
 
   static QString formattedTime(quint32 tm);
 

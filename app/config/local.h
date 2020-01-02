@@ -9,7 +9,7 @@
 namespace Config {
   class Local {
   public:
-    Local();
+    explicit Local();
 
     bool sync();
 

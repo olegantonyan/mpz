@@ -8,7 +8,7 @@
 namespace Playback {
   class Controls {
   public:
-    Controls();
+    explicit Controls();
 
     QToolButton *stop;
     QToolButton *play;

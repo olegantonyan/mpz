@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
@@ -9,7 +9,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QDesktopServices>
-#include <statusbarlabel.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -35,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     player->setVolume(local_conf.volume());
   }
 
-  dispatch = new Playback::Dispatch(global_conf, playlists);
-
   connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
@@ -46,88 +43,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(player, &Playback::Controller::stopped, playlist, &PlaylistUi::Controller::on_stop);
   connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
 
-  connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
-    dispatch->state().setSelected(track.uid());
-    dispatch->state().resetFolowedCursor();
-  });
-
-  connect(player, &Playback::Controller::started, [=](const Track &track) {
-    dispatch->state().setPlaying(track.uid());
-    dispatch->state().setFollowedCursor();
-  });
-
-  connect(player, &Playback::Controller::stopped, [=]() {
-    dispatch->state().resetPlaying();
-  });
-
-  connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
-  connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
-  connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
-  connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
-
   loadUiSettings();
 
-  auto status_label = new StatusBarLabel(this);
-  ui->statusbar->addWidget(status_label);
-  status_label->setText("Stopped");
-  connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
-    auto current_track_uid = dispatch->state().playingTrack();
-    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
-    if (current_playlist != nullptr) {
-      playlists->on_jumpTo(current_playlist);
-      playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
-    }
-  });
-
-  connect(player, &Playback::Controller::started, [=](const Track &track) {
-    status_label->setText(QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo());
-  });
-  connect(player, &Playback::Controller::stopped, [=]() {
-    status_label->setText("Stopped");
-  });
-  connect(player, &Playback::Controller::paused, [=](const Track &track) {
-    status_label->setText(QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo());
-  });
-
-  ui->tableView->setFocus();
-
-  trayicon = new TrayIcon(this);
-  connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
-  connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
-  connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
-  connect(player, &Playback::Controller::progress, trayicon, &TrayIcon::on_playerProgress);
-
-  connect(trayicon, &TrayIcon::startTriggered, player->controls().play, &QToolButton::click);
-  connect(trayicon, &TrayIcon::pauseTriggered, player->controls().pause, &QToolButton::click);
-  connect(trayicon, &TrayIcon::stopTriggered, player->controls().stop, &QToolButton::click);
-  connect(trayicon, &TrayIcon::nextTriggered, player->controls().next, &QToolButton::click);
-  connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
-
-  ui->orderComboBox->addItem("Sequential");
-  ui->orderComboBox->addItem("Random");
-  ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
-  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-    global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequencial");
-    global_conf.sync();
-  });
-
-  ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
-  connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
-    global_conf.savePlaybackFollowCursor(state == Qt::Checked);
-    global_conf.sync();
-  });
-
-  volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
-  connect(volume, &VolumeControl::changed, this, &MainWindow::updateVolume);
-  connect(volume, &VolumeControl::increased, [=](int by) {
-    updateVolume(player->volume() + by);
-  });
-  connect(volume, &VolumeControl::decreased, [=](int by) {
-    updateVolume(player->volume() - by);
-  });
-
-  main_menu = new MainMenu(ui->menuButton, this);
-  connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
+  setupPlaybackDispatch();
+  setupStatusBar();
+  setupTrayIcon();
+  setupOrderCombobox();
+  setupFollowCursorCheckbox();
+  setupVolumeControl();
+  setupMainMenu();
 }
 
 MainWindow::~MainWindow() {
@@ -139,8 +63,8 @@ void MainWindow::loadUiSettings() {
   restoreState(local_conf.windowState());
 
   connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
-    (void)pos;
-    (void)index;
+    Q_UNUSED(pos)
+    Q_UNUSED(index)
     QList<int> list;
     list.append(ui->splitter->sizes().at(0));
     list.append(ui->splitter->sizes().at(1));
@@ -169,4 +93,91 @@ void MainWindow::updateVolume(int value) {
     local_conf.saveVolume(value);
   }
   volume->setValue(value);
+}
+
+void MainWindow::setupOrderCombobox() {
+  ui->orderComboBox->addItem("Sequential");
+  ui->orderComboBox->addItem("Random");
+  ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
+  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
+    global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
+    global_conf.sync();
+  });
+}
+
+void MainWindow::setupFollowCursorCheckbox() {
+  ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
+  connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
+    global_conf.savePlaybackFollowCursor(state == Qt::Checked);
+    global_conf.sync();
+  });
+}
+
+void MainWindow::setupVolumeControl() {
+  volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
+  connect(volume, &VolumeControl::changed, this, &MainWindow::updateVolume);
+  connect(volume, &VolumeControl::increased, [=](int by) {
+    updateVolume(player->volume() + by);
+  });
+  connect(volume, &VolumeControl::decreased, [=](int by) {
+    updateVolume(player->volume() - by);
+  });
+}
+
+void MainWindow::setupMainMenu() {
+  main_menu = new MainMenu(ui->menuButton, this);
+  connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
+}
+
+void MainWindow::setupTrayIcon() {
+  trayicon = new TrayIcon(this);
+  connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
+  connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
+  connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
+  connect(player, &Playback::Controller::progress, trayicon, &TrayIcon::on_playerProgress);
+
+  connect(trayicon, &TrayIcon::startTriggered, player->controls().play, &QToolButton::click);
+  connect(trayicon, &TrayIcon::pauseTriggered, player->controls().pause, &QToolButton::click);
+  connect(trayicon, &TrayIcon::stopTriggered, player->controls().stop, &QToolButton::click);
+  connect(trayicon, &TrayIcon::nextTriggered, player->controls().next, &QToolButton::click);
+  connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
+}
+
+void MainWindow::setupPlaybackDispatch() {
+  dispatch = new Playback::Dispatch(global_conf, playlists);
+
+  connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
+    dispatch->state().setSelected(track.uid());
+    dispatch->state().resetFolowedCursor();
+  });
+
+  connect(player, &Playback::Controller::started, [=](const Track &track) {
+    dispatch->state().setPlaying(track.uid());
+    dispatch->state().setFollowedCursor();
+  });
+
+  connect(player, &Playback::Controller::stopped, [=]() {
+    dispatch->state().resetPlaying();
+  });
+
+  connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
+  connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
+  connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
+  connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
+}
+
+void MainWindow::setupStatusBar() {
+  status_label = new StatusBarLabel(ui->statusbar, this);
+  connect(player, &Playback::Controller::started, status_label, &StatusBarLabel::on_playerStarted);
+  connect(player, &Playback::Controller::stopped, status_label, &StatusBarLabel::on_playerStopped);
+  connect(player, &Playback::Controller::paused, status_label, &StatusBarLabel::on_playerPaused);
+
+  connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
+    auto current_track_uid = dispatch->state().playingTrack();
+    auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
+    if (current_playlist != nullptr) {
+      playlists->on_jumpTo(current_playlist);
+      playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
+    }
+  });
 }

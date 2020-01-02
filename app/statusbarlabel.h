@@ -1,14 +1,22 @@
 #ifndef STATUSBARLABEL_H
 #define STATUSBARLABEL_H
 
+#include "track.h"
+
 #include <QObject>
 #include <QLabel>
+#include <QStatusBar>
 
 class StatusBarLabel : public QLabel {
   Q_OBJECT
 
 public:
-  explicit StatusBarLabel(QWidget *parent = nullptr);
+  explicit StatusBarLabel(QStatusBar *sb, QWidget *parent = nullptr);
+
+public slots:
+  void on_playerStopped();
+  void on_playerStarted(const Track &track);
+  void on_playerPaused(const Track &track);
 
 signals:
   void doubleclicked();

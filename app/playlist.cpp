@@ -37,7 +37,7 @@ bool Playlist::load(const QDir &path) {
   }
 
   if (path.isEmpty() && is_file) {
-    tracks_list << path.absolutePath();
+    tracks_list << Track(path.absolutePath());
   } else {
     QStringList filter;
     for (auto i : Playlist::supportedFileFormats()) {

@@ -15,7 +15,7 @@
 namespace Config {
   class Storage {
   public:
-    Storage(const QString &filename);
+    explicit Storage(const QString &filename);
     ~Storage();
 
     Config::Value get(const QString &key, bool *ok = nullptr) const;

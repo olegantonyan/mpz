@@ -6,7 +6,7 @@
 namespace Config {
   class Global {
   public:
-    Global();
+    explicit Global();
 
     bool sync();
 

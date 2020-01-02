@@ -38,7 +38,7 @@ SOURCES += \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist.cpp \
-    playerstate.cpp \
+    playback/playerstate.cpp \
     playlists_ui/playlistscontroller.cpp \
     playlists_ui/playlistsmodel.cpp \
     statusbarlabel.cpp \
@@ -64,7 +64,7 @@ HEADERS += \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist.h \
-    playerstate.h \
+    playback/playerstate.h \
     playlists_ui/playlistscontroller.h \
     playlists_ui/playlistsmodel.h \
     statusbarlabel.h \

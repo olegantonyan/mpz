@@ -12,6 +12,7 @@
 #include "trayicon.h"
 #include "volumecontrol.h"
 #include "mainmenu.h"
+#include "statusbarlabel.h"
 
 #include <QMainWindow>
 
@@ -39,8 +40,16 @@ private:
   TrayIcon *trayicon;
   VolumeControl *volume;
   MainMenu *main_menu;
+  StatusBarLabel *status_label;
 
   void loadUiSettings();
+  void setupOrderCombobox();
+  void setupFollowCursorCheckbox();
+  void setupVolumeControl();
+  void setupMainMenu();
+  void setupTrayIcon();
+  void setupPlaybackDispatch();
+  void setupStatusBar();
 
 protected:
   void closeEvent(QCloseEvent *event) override;

@@ -26,6 +26,7 @@ namespace PlaylistUi {
     //view->horizontalHeader()->setStretchLastSection(true);
 
     view->setAlternatingRowColors(true);
+    view->setFocus();
 
     for (int c = 0; c < view->horizontalHeader()->count(); ++c) {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
