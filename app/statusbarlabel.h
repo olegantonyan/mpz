@@ -9,7 +9,6 @@
 
 class StatusBarLabel : public QLabel {
   Q_OBJECT
-
 public:
   explicit StatusBarLabel(QStatusBar *sb, QWidget *parent = nullptr);
 
@@ -21,9 +20,8 @@ public slots:
 signals:
   void doubleclicked();
 
-  // QWidget interface
 protected:
-  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
 };
 
 #endif // STATUSBARLABEL_H
