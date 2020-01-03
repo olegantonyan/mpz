@@ -42,6 +42,9 @@ namespace Config {
 
   private:
     Config::Storage storage;
+
+    Config::Value serializeTrack(const Track &t) const;
+    Track deserializeTrack(const Config::Value &v) const;
   };
 }
 

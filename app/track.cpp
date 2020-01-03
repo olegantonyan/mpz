@@ -16,7 +16,7 @@ Track::Track() {
 }
 
 Track::Track(const QString &fp) {
-  _uid = QRandomGenerator::global()->generate64();
+  _uid = generateUid();
 
   filepath = fp;
 
@@ -38,7 +38,31 @@ Track::Track(const QString &fp) {
     }
   }
 
-  _format = QFileInfo(path()).suffix().toUpper();
+  _format = detectFormat();
+}
+
+Track::Track(const QString &fp,
+             const QString &artst,
+             const QString &albm,
+             const QString &ttle,
+             quint16 yr,
+             quint32 dur,
+             quint8 chans,
+             quint16 bitrt,
+             quint16 samplert) {
+  _uid = generateUid();
+
+  filepath = fp;
+  _duration = dur;
+  _year = yr;
+  _title = ttle;
+  _artist = artst;
+  _album = albm;
+  _sample_rate = samplert;
+  _bitrate = bitrt;
+  _channels = chans;
+
+  _format = detectFormat();
 }
 
 QString Track::formattedTime(quint32 tm) {
@@ -134,4 +158,12 @@ QString Track::filename() const {
 
 quint16 Track::track_number() const {
   return _track_number;
+}
+
+quint64 Track::generateUid() const {
+  return QRandomGenerator::global()->generate64();
+}
+
+QString Track::detectFormat() const {
+  return QFileInfo(path()).suffix().toUpper();
 }

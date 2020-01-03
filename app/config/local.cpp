@@ -49,7 +49,7 @@ namespace Config {
       playlist->rename(name);
       QVector<Track> tracks;
       for (auto t : map.value("tracks").get<QList<Config::Value> >()) {
-        tracks << Track(t.get<QString>());
+        tracks << deserializeTrack(t.get<QMap<QString, Config::Value>>());
       }
       playlist->load(tracks);
       result << playlist;
@@ -65,7 +65,7 @@ namespace Config {
 
       QList<Config::Value> tl;
       for (auto j : i->tracks()) {
-        tl << Config::Value(j.path());
+        tl << serializeTrack(j);
       }
       mp.insert("tracks", tl);
 
@@ -125,5 +125,34 @@ namespace Config {
 
   bool Local::saveVolume(int arg) {
     return storage.set("playback_volume", Config::Value(arg));
+  }
+
+  Value Local::serializeTrack(const Track &t) const {
+    QMap<QString, Config::Value> r;
+    r["path"] = t.path();
+    r["artist"] = t.artist();
+    r["album"] = t.album();
+    r["title"] = t.title();
+    r["year"] = static_cast<int>(t.year());
+    r["duration"] = static_cast<int>(t.duration());
+    r["channels"] = static_cast<int>(t.channels());
+    r["bitrate"] = static_cast<int>(t.bitrate());
+    r["samplerate"] = static_cast<int>(t.sample_rate());
+    return r;
+  }
+
+  Track Local::deserializeTrack(const Value &v) const {
+    auto r = v.get<QMap<QString, Value>>();
+    return Track(
+          r["path"].get<QString>(),
+          r["artist"].get<QString>(),
+          r["album"].get<QString>(),
+          r["title"].get<QString>(),
+          static_cast<quint16>(r["year"].get<int>()),
+          static_cast<quint32>(r["duration"].get<int>()),
+          static_cast<quint8>(r["channels"].get<int>()),
+          static_cast<quint16>(r["bitrate"].get<int>()),
+          static_cast<quint16>(r["samplerate"].get<int>())
+        );
   }
 }

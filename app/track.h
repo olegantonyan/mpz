@@ -7,6 +7,15 @@ class Track {
 public:
   explicit Track();
   explicit Track(const QString &filepath);
+  explicit Track(const QString &filepath,
+                 const QString &artist,
+                 const QString &album,
+                 const QString &title,
+                 quint16 year,
+                 quint32 duration,
+                 quint8 channels,
+                 quint16 bitrate,
+                 quint16 samplerate);
 
   static QString formattedTime(quint32 tm);
 
@@ -48,6 +57,9 @@ private:
   quint16 _track_number;
 
   quint64 _uid;
+
+  quint64 generateUid() const;
+  QString detectFormat() const;
 };
 
 #endif // TRACK_H
