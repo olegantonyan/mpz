@@ -184,27 +184,27 @@ void MainWindow::setupMediaKeys() {
   auto play = new QHotkey(Qt::Key_MediaPlay, Qt::NoModifier, true, this);
   connect(play, &QHotkey::activated, [&]() {
     if (player->isStopped()) {
-      ui->playButton->click();
+      player->controls().play->click();
     }
   });
 
   auto stop = new QHotkey(Qt::Key_MediaStop, Qt::NoModifier, true, this);
   connect(stop, &QHotkey::activated, [&]() {
-    ui->stopButton->click();
+    player->controls().stop->click();
   });
 
   auto pause = new QHotkey(Qt::Key_MediaPause, Qt::NoModifier, true, this);
   connect(pause, &QHotkey::activated, [&]() {
-    ui->pauseButton->click();
+    player->controls().pause->click();
   });
 
   auto prev = new QHotkey(Qt::Key_MediaPrevious, Qt::NoModifier, true, this);
   connect(prev, &QHotkey::activated, [&]() {
-    ui->prevButton->click();
+    player->controls().prev->click();
   });
 
   auto next = new QHotkey(Qt::Key_MediaNext, Qt::NoModifier, true, this);
   connect(next, &QHotkey::activated, [&]() {
-    ui->nextButton->click();
+    player->controls().next->click();
   });
 }
