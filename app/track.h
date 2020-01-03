@@ -11,6 +11,7 @@ public:
                  const QString &artist,
                  const QString &album,
                  const QString &title,
+                 quint16 tracknum,
                  quint16 year,
                  quint32 duration,
                  quint8 channels,

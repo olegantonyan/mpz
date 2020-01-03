@@ -133,6 +133,7 @@ namespace Config {
     r["artist"] = t.artist();
     r["album"] = t.album();
     r["title"] = t.title();
+    r["track_number"] = static_cast<int>(t.track_number());
     r["year"] = static_cast<int>(t.year());
     r["duration"] = static_cast<int>(t.duration());
     r["channels"] = static_cast<int>(t.channels());
@@ -148,6 +149,7 @@ namespace Config {
           r["artist"].get<QString>(),
           r["album"].get<QString>(),
           r["title"].get<QString>(),
+          static_cast<quint16>(r["track_number"].get<int>()),
           static_cast<quint16>(r["year"].get<int>()),
           static_cast<quint32>(r["duration"].get<int>()),
           static_cast<quint8>(r["channels"].get<int>()),

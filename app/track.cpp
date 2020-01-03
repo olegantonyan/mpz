@@ -45,6 +45,7 @@ Track::Track(const QString &fp,
              const QString &artst,
              const QString &albm,
              const QString &ttle,
+             quint16 tracknum,
              quint16 yr,
              quint32 dur,
              quint8 chans,
@@ -61,6 +62,7 @@ Track::Track(const QString &fp,
   _sample_rate = samplert;
   _bitrate = bitrt;
   _channels = chans;
+  _track_number = tracknum;
 
   _format = detectFormat();
 }
