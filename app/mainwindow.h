@@ -50,7 +50,8 @@ private:
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
-
+  void setupMediaKeys();
+  
 protected:
   void closeEvent(QCloseEvent *event) override;
 };

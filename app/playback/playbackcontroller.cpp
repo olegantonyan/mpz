@@ -45,6 +45,10 @@ namespace Playback {
     return _player.volume();
   }
 
+  bool Controller::isStopped() const {
+    return _player.state() == QMediaPlayer::StoppedState;
+  }
+
   void Controller::play(const Track &track) {
     next_after_stop = false;
     _controls.seekbar->setMaximum(static_cast<int>(track.duration()));

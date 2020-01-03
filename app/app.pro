@@ -81,11 +81,15 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
+  ../libs/qhotkey/QHotkey-1.2.2
 
 LIBS += \
   -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
-  -L../libs/qtwaitingspinner -lqtwaitingspinner
+  -L../libs/qtwaitingspinner -lqtwaitingspinner \
+  -L../libs/qhotkey -lqhotkey
+
+include(../libs/qhotkey/qhotkey.pri)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

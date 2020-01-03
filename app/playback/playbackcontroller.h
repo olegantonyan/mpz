@@ -18,6 +18,7 @@ namespace Playback {
 
     Playback::Controls controls() const;
     int volume() const;
+    bool isStopped() const;
 
   signals:
     void started(const Track &track);
