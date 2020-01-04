@@ -66,7 +66,10 @@ namespace Playback {
     }
 
     if (global_conf.playbackOrder() == "random") {
-      auto prev_uid = random_trail.prev(current_track_uid);
+      auto prev_uid = random_trail.prev();
+      if (prev_uid == current_track_uid) {
+        prev_uid = random_trail.prev();
+      }
       if (prev_uid != 0) {
         Track t = current_playlist->tracks().at(current_playlist->trackIndex(prev_uid));
         emit play(t);

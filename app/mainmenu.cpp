@@ -11,14 +11,14 @@ MainMenu::MainMenu(QToolButton *btn, QObject *parent) : QObject(parent), button(
 
 void MainMenu::on_buttonClicked() {
   QMenu menu;
-  QAction github("Github");
+  QAction about("About");
   QAction quit("Quit");
-  connect(&github, &QAction::triggered, [=]() {
+  connect(&about, &QAction::triggered, [=]() {
     QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
 
-  menu.addAction(&github);
+  menu.addAction(&about);
   menu.addSeparator();
   menu.addAction(&quit);
 

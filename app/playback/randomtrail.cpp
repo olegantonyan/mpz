@@ -4,34 +4,30 @@
 
 namespace Playback {
   RandomTrail::RandomTrail(int max_size) : max_length(max_size) {
+  }
+
+  void RandomTrail::clear(){
     trail.clear();
   }
 
   void RandomTrail::add(quint64 track_uid) {
     if (trail.size() >= max_length) {
-      trail.remove(0);
+      clear();
     }
-    trail.append(track_uid);
+    //qDebug() << "push" << track_uid;
+    trail.push(track_uid);
   }
 
   bool RandomTrail::exists(quint64 track_uid) const {
-    for (auto i : trail) {
-      if (i == track_uid) {
-        return true;
-      }
-    }
-    return false;
+    return trail.contains(track_uid);
   }
 
-  quint64 RandomTrail::prev(quint64 track_uid) const {
+  quint64 RandomTrail::prev() {
     if (trail.size() == 0) {
       return 0;
     }
-    for (int i = 0; i < trail.size(); i++) {
-      if (trail.at(i) == track_uid && i - 1 >= 0) {
-        return trail.at(i - 1);
-      }
-    }
-    return trail.first();
+    auto track_uid = trail.pop();
+    //qDebug() << "pop" << track_uid;
+    return track_uid;
   }
 }
