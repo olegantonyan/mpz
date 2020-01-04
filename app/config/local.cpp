@@ -103,6 +103,14 @@ namespace Config {
     return storage.set("library_paths", Config::Value(list));
   }
 
+  int Local::currentLibraryPath() const {
+    return storage.get("current_library").get<int>();
+  }
+
+  bool Local::saveCurrentLibraryPath(int arg) {
+    return storage.set("current_library", Config::Value(arg));
+  }
+
   int Local::libraryViewScrollPosition() const {
     return storage.get("library_view_scroll").get<int>();
   }

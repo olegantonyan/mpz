@@ -31,6 +31,9 @@ namespace Config {
     QStringList libraryPaths() const;
     bool saveLibraryPaths(const QStringList &arg);
 
+    int currentLibraryPath() const;
+    bool saveCurrentLibraryPath(int arg);
+
     int libraryViewScrollPosition() const;
     bool saveLibraryViewScrollPosition(int val);
 

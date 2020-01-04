@@ -24,13 +24,16 @@ namespace DirectoryUi {
       for (auto i : local_conf.libraryPaths()) {
         libswitch->addItem(i);
       }
-      model->loadAsync(local_conf.libraryPaths().first());
+      int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
+      libswitch->setCurrentIndex(current_index);
+      model->loadAsync(local_conf.libraryPaths().at(current_index));
     }
 
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
           model->loadAsync(local_conf.libraryPaths()[idx]);
+          local_conf.saveCurrentLibraryPath(idx);
         }
       });
     }
