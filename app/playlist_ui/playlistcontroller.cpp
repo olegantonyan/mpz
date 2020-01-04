@@ -11,6 +11,7 @@
 #include <QDesktopServices>
 #include <QClipboard>
 #include <QApplication>
+#include <QUrl>
 
 namespace PlaylistUi {  
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
