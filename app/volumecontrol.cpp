@@ -29,9 +29,9 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Wheel) {
       QWheelEvent *we = dynamic_cast<QWheelEvent *>(event);
       if (we->angleDelta().y() > 0) {
-        emit increased(5);
+        emit changed(menu.value() + 5);
       } else if (we->angleDelta().y() < 0) {
-        emit decreased(5);
+        emit changed(menu.value() - 5);
       }
     }
   }
@@ -60,5 +60,9 @@ namespace PrivateVolumeControl {
 
   QSize Menu::sizeHint() const {
     return menu.sizeHint();
+  }
+
+  int Menu::value() const {
+    return slider.value();
   }
 }

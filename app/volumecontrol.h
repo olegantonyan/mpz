@@ -16,6 +16,7 @@ namespace PrivateVolumeControl {
   public:
     explicit Menu(QObject *parent = nullptr);
     QSize sizeHint() const;
+    int value() const;
 
   public slots:
     void show(const QPoint& pos);
@@ -40,8 +41,6 @@ public:
 
 signals:
   void changed(int value);
-  void increased(int by);
-  void decreased(int by);
 
 public slots:
   void setValue(int value);

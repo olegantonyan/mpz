@@ -105,20 +105,13 @@ void MainWindow::setupFollowCursorCheckbox() {
 
 void MainWindow::setupVolumeControl() {
   volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
-  auto update = [=](int value) {
+
+  connect(volume, &VolumeControl::changed, [=](int value) {
     player->setVolume(value);
     volume->setValue(value);
     if (value > 0) {
       local_conf.saveVolume(value);
     }
-  };
-
-  connect(volume, &VolumeControl::changed, update);
-  connect(volume, &VolumeControl::increased, [=](int by) {
-    update(player->volume() + by);
-  });
-  connect(volume, &VolumeControl::decreased, [=](int by) {
-    update(player->volume() - by);
   });
 }
 
