@@ -7,7 +7,6 @@ VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *paren
   connect(&menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
   connect(button, &QToolButton::clicked, this, &VolumeControl::on_buttonClicked);
   button->installEventFilter(this);
-  button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
   setValue(initial_value);
 }
 
