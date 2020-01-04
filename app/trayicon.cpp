@@ -9,11 +9,11 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   menu = new QMenu(parent);
 
   quit = new QAction("Quit", this);
-  play = new QAction("Play", this);
-  pause = new QAction("Pause", this);
-  stop = new QAction("Stop", this);
-  next = new QAction("Next", this);
-  prev = new QAction("Previous", this);
+  play = new QAction("▶ Play", this);
+  pause = new QAction("⏸Pause", this);
+  stop = new QAction("⏹ Stop", this);
+  next = new QAction("⏩ Next", this);
+  prev = new QAction("⏪ Previous", this);
   now_playing = new QAction("", this);
   now_playing->setEnabled(false);
   connect(play, &QAction::triggered, this, &TrayIcon::startTriggered);

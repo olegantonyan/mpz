@@ -14,7 +14,7 @@ VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *paren
 void VolumeControl::setValue(int value) {
   value = qBound(0, value, 100);
   menu.setValue(value);
-  button->setText(QString("%1%").arg(value));
+  button->setText(QString("%1 %2%").arg(value == 0 ? "🔇" : "🔊").arg(value));
 }
 
 void VolumeControl::on_buttonClicked() {
