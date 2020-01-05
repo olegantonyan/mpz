@@ -9,7 +9,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  setWindowTitle("mpz");
+  setWindowTitle(qApp->applicationName());
   setWindowIcon(QIcon(":/icons/icons/appicon.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
@@ -50,6 +50,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupVolumeControl();
   setupMainMenu();
   setupMediaKeys();
+#if defined(Q_OS_UNIX)
+  setupMpris();
+#endif
+
 }
 
 MainWindow::~MainWindow() {
@@ -92,6 +96,21 @@ void MainWindow::setupOrderCombobox() {
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
     global_conf.sync();
+    #if defined(Q_OS_UNIX)
+      if (mpris) {
+        mpris->on_shuffleChanged(idx == 1);
+      }
+    #endif
+  });
+}
+
+void MainWindow::setupMpris() {
+  mpris = new Mpris(player, this);
+  connect(mpris, &Mpris::quit, this, &QMainWindow::close);
+  connect(mpris, &Mpris::shuffleChanged, [=](bool val) {
+    ui->orderComboBox->setCurrentIndex(val ? 1 : 0);
+    global_conf.savePlaybackOrder(val ? "random" : "sequential");
+    global_conf.sync();
   });
 }
 
@@ -113,6 +132,7 @@ void MainWindow::setupVolumeControl() {
       local_conf.saveVolume(value);
     }
   });
+  connect(player, &Playback::Controller::volumeChanged, volume, &VolumeControl::setValue);
 }
 
 void MainWindow::setupMainMenu() {
@@ -201,3 +221,4 @@ void MainWindow::setupMediaKeys() {
     player->controls().next->click();
   });
 }
+

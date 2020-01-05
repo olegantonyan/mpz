@@ -13,12 +13,22 @@
 namespace Playback {
   class Controller : public QObject {
     Q_OBJECT
+
   public:
+    enum State {
+      Stopped,
+      Playing,
+      Paused
+    };
+
     explicit Controller(const Playback::Controls &c, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
     int volume() const;
     bool isStopped() const;
+    enum State state() const;
+    int position() const;
+    const Track& currentTrack() const;
 
   signals:
     void started(const Track &track);
@@ -28,11 +38,14 @@ namespace Playback {
     void prevRequested();
     void nextRequested();
     void startRequested();
+    void volumeChanged(int value);
+    void seeked(int value);
 
   public slots:
     void play(const Track &track);
     void stop();
     void setVolume(int value);
+    void seek(int seconds);
 
   private:
     Playback::Controls _controls;

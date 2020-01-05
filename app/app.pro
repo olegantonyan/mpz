@@ -1,4 +1,5 @@
 QT       += core gui multimedia concurrent
+unix: QT += dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -76,6 +77,7 @@ FORMS += \
     directory_ui/directorysettings.ui \
     mainwindow.ui
 
+# Libraries
 INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
@@ -90,6 +92,19 @@ LIBS += \
   -L../libs/qhotkey -lqhotkey
 
 include(../libs/qhotkey/qhotkey.pri)
+# End of libraries
+
+unix: {
+  DBUS_ADAPTORS += \
+    dbus/org.mpris.MediaPlayer2.xml \
+    dbus/org.mpris.MediaPlayer2.Player.xml
+
+  HEADERS += \
+    dbus/mpris.h
+
+  SOURCES += \
+    dbus/mpris.cpp
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

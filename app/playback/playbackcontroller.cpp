@@ -46,7 +46,26 @@ namespace Playback {
   }
 
   bool Controller::isStopped() const {
-    return _player.state() == QMediaPlayer::StoppedState;
+    return state() == Stopped;
+  }
+
+  Controller::State Controller::state() const {
+    switch (_player.state()) {
+      case QMediaPlayer::StoppedState:
+        return Stopped;
+      case QMediaPlayer::PlayingState:
+        return Playing;
+      case QMediaPlayer::PausedState:
+        return Paused;
+    }
+  }
+
+  int Controller::position() const {
+    return static_cast<int>(_player.position() / 1000);
+  }
+
+  const Track &Controller::currentTrack() const {
+    return _current_track;
   }
 
   void Controller::play(const Track &track) {
@@ -64,7 +83,13 @@ namespace Playback {
   }
 
   void Controller::setVolume(int value) {
-    _player.setVolume(qMax(qMin(value, 100), 0));
+    value = qMax(qMin(value, 100), 0);
+    _player.setVolume(value);
+    emit volumeChanged(value);
+  }
+
+  void Controller::seek(int seconds) {
+    _player.setPosition(seconds * 1000);
   }
 
   void Controller::on_seek(int position) {
@@ -80,6 +105,7 @@ namespace Playback {
     _controls.seekbar->setValue(seek_value);
 
     _player.setPosition(seek_value * 1000);
+    emit seeked(seek_value);
   }
 
   QString Controller::time_text(int pos) const {

@@ -15,6 +15,11 @@
 #include "statusbarlabel.h"
 
 #include <QMainWindow>
+#include <QtGlobal>
+
+#if defined(Q_OS_UNIX)
+  #include "dbus/mpris.h"
+#endif
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,6 +46,9 @@ private:
   VolumeControl *volume;
   MainMenu *main_menu;
   StatusBarLabel *status_label;
+  #if defined(Q_OS_UNIX)
+    Mpris *mpris;
+  #endif
 
   void loadUiSettings();
   void setupOrderCombobox();
@@ -52,6 +60,8 @@ private:
   void setupStatusBar();
   void setupMediaKeys();
   
+  void setupMpris();
+
 protected:
   void closeEvent(QCloseEvent *event) override;
 };
