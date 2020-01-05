@@ -53,7 +53,7 @@ bool Mpris::CanRaise() const{
 }
 
 bool Mpris::HasTrackList() const{
-  return true;
+  return false;
 }
 
 QString Mpris::Identity() const {
