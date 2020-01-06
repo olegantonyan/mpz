@@ -102,6 +102,11 @@ void MainWindow::setupOrderCombobox() {
       }
     #endif
   });
+#if defined(Q_OS_UNIX)
+  if (mpris) {
+    mpris->on_shuffleChanged(global_conf.playbackOrder() == "random");
+  }
+#endif
 }
 
 void MainWindow::setupMpris() {
