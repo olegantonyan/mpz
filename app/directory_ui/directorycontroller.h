@@ -35,6 +35,8 @@ namespace DirectoryUi {
     Config::Local &local_conf;
     bool restore_scroll_once;
 
+    void settingsDialog(QComboBox *libswitch);
+    
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
   };

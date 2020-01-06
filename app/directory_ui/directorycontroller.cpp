@@ -7,6 +7,9 @@
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QUrl>
 
 namespace DirectoryUi {
   Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
@@ -62,22 +65,7 @@ namespace DirectoryUi {
     });
 
     connect(libcfg, &QToolButton::clicked, [=]() {
-      DirectorySettings dlg(local_conf.libraryPaths());
-      auto old_paths = local_conf.libraryPaths();
-      if(dlg.exec() == QDialog::Accepted) {
-        if (old_paths != dlg.libraryPaths()) {
-          local_conf.saveLibraryPaths(dlg.libraryPaths());
-          local_conf.sync();
-          libswitch->clear();
-          for (auto i : local_conf.libraryPaths()) {
-            libswitch->addItem(i);
-          }
-          if (libswitch->count() > 0) {
-            model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
-            libswitch->setCurrentIndex(libswitch->count() - 1);
-          }
-        }
-      }
+      settingsDialog(libswitch);
     });
   }
 
@@ -92,6 +80,7 @@ namespace DirectoryUi {
     QMenu menu;
     QAction create_playlist("Create new playlist");
     QAction append_to_playlist("Append to current playlist");
+    QAction open_in_filemanager("Open in file manager");
 
     connect(&create_playlist, &QAction::triggered, [=]() {
       emit createNewPlaylist(filepath);
@@ -99,9 +88,13 @@ namespace DirectoryUi {
     connect(&append_to_playlist, &QAction::triggered, [=]() {
       emit appendToCurrentPlaylist(filepath);
     });
+    connect(&open_in_filemanager, &QAction::triggered, [=]() {
+      QDesktopServices::openUrl(QUrl::fromLocalFile(filepath.absolutePath()));
+    });
 
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
+    menu.addAction(&open_in_filemanager);
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
@@ -132,5 +125,24 @@ namespace DirectoryUi {
     }
 
     return QObject::eventFilter(obj, event);
+  }
+
+  void Controller::settingsDialog(QComboBox *libswitch) {
+    DirectorySettings dlg(local_conf.libraryPaths());
+    auto old_paths = local_conf.libraryPaths();
+    if(dlg.exec() == QDialog::Accepted) {
+      if (old_paths != dlg.libraryPaths()) {
+        local_conf.saveLibraryPaths(dlg.libraryPaths());
+        local_conf.sync();
+        libswitch->clear();
+        for (auto i : local_conf.libraryPaths()) {
+          libswitch->addItem(i);
+        }
+        if (libswitch->count() > 0) {
+          model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
+          libswitch->setCurrentIndex(libswitch->count() - 1);
+        }
+      }
+    }
   }
 }
