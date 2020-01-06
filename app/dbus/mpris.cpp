@@ -4,6 +4,7 @@
 #include "mediaplayer2_adaptor.h" // generated
 
 #include <QDebug>
+#include <QHostInfo>
 
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
 static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
@@ -57,7 +58,7 @@ bool Mpris::HasTrackList() const{
 }
 
 QString Mpris::Identity() const {
-  return qApp->applicationName();
+  return qApp->applicationName() + "@" + QHostInfo::localHostName();
 }
 
 QStringList Mpris::SupportedUriSchemes() const {
