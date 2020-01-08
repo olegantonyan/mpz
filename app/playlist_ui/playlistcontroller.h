@@ -27,9 +27,9 @@ namespace PlaylistUi {
   public slots:
     void on_load(const std::shared_ptr<Playlist> pi);
     void on_unload();
-    void highlight(quint64 track_uid);
     void on_stop();
     void on_start(const Track &t);
+    void on_pause(const Track &t);
     void on_scrollTo(const Track &track);
     void on_appendToPlaylist(const QDir &filepath);
 

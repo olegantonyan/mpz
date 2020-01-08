@@ -14,6 +14,11 @@ namespace PlaylistUi {
     Q_OBJECT
 
   public:
+    enum HighlightState {
+      None,
+      Playing,
+      Paused
+    };
     explicit Model(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -24,7 +29,7 @@ namespace PlaylistUi {
     Track itemAt(const QModelIndex &index) const;
     QModelIndex buildIndex(int row) const;
     int tracksSize() const;
-    void highlight(quint64 uid);
+    void highlight(quint64 uid, enum HighlightState st);
     QModelIndex indexOf(quint64 uid) const;
 
     std::shared_ptr<Playlist> playlist();
@@ -38,6 +43,7 @@ namespace PlaylistUi {
     std::shared_ptr<Playlist> _playlist;
     QVector<Track> tracks;
     quint64 highlight_uid;
+    enum HighlightState highlight_state;
   };
 }
 

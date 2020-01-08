@@ -75,16 +75,16 @@ namespace PlaylistUi {
     model->setPlaylist(nullptr);
   }
 
-  void Controller::highlight(quint64 track_uid) {
-    model->highlight(track_uid);
-  }
-
   void Controller::on_stop() {
-    highlight(0);
+    model->highlight(0, Model::HighlightState::None);
   }
 
   void Controller::on_start(const Track &t) {
-    model->highlight(t.uid());
+    model->highlight(t.uid(), Model::HighlightState::Playing);
+  }
+
+  void Controller::on_pause(const Track &t) {
+    model->highlight(t.uid(), Model::HighlightState::Paused);
   }
 
   void Controller::on_scrollTo(const Track &track) {

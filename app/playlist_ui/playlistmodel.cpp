@@ -51,8 +51,13 @@ namespace PlaylistUi {
       switch (index.column()) {
         case 0:
           if (highlight_uid == t.uid()) {
-            //return "►";
-            return "▷";
+            if (highlight_state == Playing) {
+              return "▶";
+            } else if (highlight_state == Paused) {
+              return "⏸";
+            } else {
+              return "";
+            }
           } else {
             return "";
           }
@@ -107,8 +112,9 @@ namespace PlaylistUi {
     return tracks.size();
   }
 
-  void Model::highlight(quint64 uid) {
+  void Model::highlight(quint64 uid, HighlightState st) {
     highlight_uid = uid;
+    highlight_state = st;
     if (tracks.size() > 0) {
       emit dataChanged(buildIndex(0), buildIndex(tracks.size() - 1));
     }
