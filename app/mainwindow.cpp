@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
   ui->setupUi(this);
   setWindowTitle(qApp->applicationName());
   setWindowIcon(QIcon(":/icons/icons/appicon.png"));
@@ -86,7 +86,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   local_conf.saveWindowState(saveState());
   local_conf.sync();
   global_conf.sync();
-  trayicon->hide();
+  if (trayicon != nullptr) {
+    trayicon->hide();
+  }
   QMainWindow::closeEvent(event);
 }
 
@@ -110,6 +112,7 @@ void MainWindow::setupOrderCombobox() {
 #endif
 }
 
+#if defined(Q_OS_UNIX)
 void MainWindow::setupMpris() {
   mpris = new Mpris(player, this);
   connect(mpris, &Mpris::quit, this, &QMainWindow::close);
@@ -119,6 +122,7 @@ void MainWindow::setupMpris() {
     global_conf.sync();
   });
 }
+#endif
 
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
@@ -142,11 +146,20 @@ void MainWindow::setupVolumeControl() {
 }
 
 void MainWindow::setupMainMenu() {
-  main_menu = new MainMenu(ui->menuButton, this);
+  main_menu = new MainMenu(ui->menuButton, global_conf, this);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
+  connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
 
 void MainWindow::setupTrayIcon() {
+  if (!global_conf.trayIconEnabled()) {
+    if (trayicon != nullptr) {
+      trayicon->hide();
+      trayicon->deleteLater();
+    }
+    trayicon = nullptr;
+    return;
+  }
   trayicon = new TrayIcon(this);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);

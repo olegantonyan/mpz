@@ -1,15 +1,19 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+#include "config/global.h"
+
 #include <QObject>
 #include <QToolButton>
+
 class MainMenu : public QObject {
   Q_OBJECT
 public:
-  explicit MainMenu(QToolButton *btn, QObject *parent = nullptr);
+  explicit MainMenu(QToolButton *btn, Config::Global &global_c, QObject *parent = nullptr);
 
 signals:
   void exit();
+  void toggleTrayIcon();
 
 public slots:
 
@@ -18,6 +22,8 @@ private slots:
 
 private:
   QToolButton *button;
+
+  Config::Global &global_conf;
 };
 
 #endif // MAINMENU_H

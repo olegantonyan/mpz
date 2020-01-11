@@ -54,13 +54,16 @@ private:
   void setupOrderCombobox();
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
-  void setupMainMenu();
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
   void setupMediaKeys();
-  
-  void setupMpris();
+  #if defined(Q_OS_UNIX)
+    void setupMpris();
+  #endif
+
+private slots:
+  void setupMainMenu();
 
 protected:
   void closeEvent(QCloseEvent *event) override;

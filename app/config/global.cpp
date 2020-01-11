@@ -23,4 +23,12 @@ namespace Config {
   void Global::savePlaybackOrder(const QString &arg) {
     storage.set("playback_order", Config::Value(arg));
   }
+
+  bool Global::trayIconEnabled() const {
+    return storage.get("tray_icon_enabled").get<bool>();
+  }
+
+  void Global::saveTrayIconEnabled(bool arg) {
+    storage.set("tray_icon_enabled", Config::Value(arg));
+  }
 }

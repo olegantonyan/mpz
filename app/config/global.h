@@ -16,6 +16,9 @@ namespace Config {
     QString playbackOrder() const;
     void savePlaybackOrder(const QString &arg);
 
+    bool trayIconEnabled() const;
+    void saveTrayIconEnabled(bool arg);
+
   private:
     Config::Storage storage;
   };
