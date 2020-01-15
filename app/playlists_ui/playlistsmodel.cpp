@@ -11,7 +11,7 @@ namespace PlaylistsUi {
   void Model::loadAsync() {
     QtConcurrent::run([=]() {
       list = local_conf.playlists();
-      emit dataChanged(buildIndex(0), buildIndex(list.size()), {Qt::DisplayRole});
+      emit dataChanged(buildIndex(0), buildIndex(list.size()));
       emit asynLoadFinished();
       persist();
     });
@@ -22,9 +22,9 @@ namespace PlaylistsUi {
   }
 
   QModelIndex Model::append(std::shared_ptr<Playlist> item) {
-    QModelIndex idx = buildIndex(list.size());
     list.append(item);
-    emit dataChanged(idx, idx, {Qt::DisplayRole});
+    QModelIndex idx = buildIndex(list.size());
+    emit dataChanged(buildIndex(0), idx);
     persist();
     return idx;
   }

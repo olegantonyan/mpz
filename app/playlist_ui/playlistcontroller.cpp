@@ -62,6 +62,9 @@ namespace PlaylistUi {
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist> pi) {
+    if (pi == nullptr) {
+      return;
+    }
     model->setPlaylist(pi);
 
     if (scroll_positions.contains(pi->uid())) {

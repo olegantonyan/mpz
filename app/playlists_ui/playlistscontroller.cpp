@@ -16,13 +16,17 @@ namespace PlaylistsUi {
     search(s),
     local_conf(conf),
     spinner(_spinner) {
+
     model = new PlaylistsUi::Model(conf, this);
     spinner->show();
     connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
     connect(model, &Model::asynLoadFinished, this, &Controller::load);
     model->loadAsync();
 
-    view->setModel(model);
+    proxy = new ProxyFilterModel(this);
+    proxy->setSourceModel(model);
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
 
@@ -36,6 +40,7 @@ namespace PlaylistsUi {
   }
 
   void Controller::load() {
+    view->setModel(proxy);
     if (model->listSize() > 0) {
       auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
       auto item = model->itemAt(idx);
@@ -54,8 +59,9 @@ namespace PlaylistsUi {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {
         auto index = view->indexAt(me->pos());
-        if (index.isValid()) {
-          removeItem(index);
+        auto s_index = proxy->mapToSource(index);
+        if (s_index.isValid()) {
+          removeItem(s_index);
         }
       }
     }
@@ -70,9 +76,11 @@ namespace PlaylistsUi {
 
   void Controller::removeItem(const QModelIndex &index) {
     model->remove(index);
-    auto selected_idx = view->selectionModel()->selectedIndexes().first();
-    if (selected_idx == index || model->listSize() == 1) {
-      on_itemActivated(model->buildIndex(0));
+    if (view->selectionModel()->selectedIndexes().size() > 0) {
+      auto selected_idx = view->selectionModel()->selectedIndexes().first();
+      if (selected_idx == index || model->listSize() == 1) {
+        on_itemActivated(model->buildIndex(0));
+      }
     }
     if (model->listSize() == 0) {
       emit emptied();
@@ -90,7 +98,8 @@ namespace PlaylistsUi {
     if (playlist == nullptr) {
       return;
     }
-    on_itemActivated(model->itemIndex(playlist));
+
+    on_itemActivated(proxy->mapFromSource(model->itemIndex(playlist)));
   }
 
   void Controller::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
@@ -109,10 +118,10 @@ namespace PlaylistsUi {
     QAction rename("Rename");
 
     connect(&remove, &QAction::triggered, [=]() {
-      removeItem(index);
+      removeItem(proxy->mapToSource(index));
     });
     connect(&rename, &QAction::triggered, [=]() {
-      auto i = model->itemAt(index);
+      auto i = model->itemAt(proxy->mapToSource(index));
       bool ok;
       QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
       if (ok && !new_name.isEmpty()) {
@@ -129,8 +138,9 @@ namespace PlaylistsUi {
     if (model->listSize() <= 0) {
       return;
     }
-    auto item = model->itemAt(index);
-    persist(index.row());
+    auto s_index = proxy->mapToSource(index);
+    auto item = model->itemAt(s_index);
+    persist(s_index.row());
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     emit selected(item);
@@ -149,20 +159,6 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_search(const QString &term) {
-    if (model->listSize() == 0 || model->itemList().size() == 0) {
-      return;
-    }
-    view->selectionModel()->clear();
-    if (term.isEmpty()) {
-      return;
-    }
-
-    for (int i = 0; i < model->itemList().size(); i++) {
-      auto t = model->itemList().at(i);
-      if (t->name().contains(term, Qt::CaseInsensitive)) {
-        view->selectionModel()->select(model->index(i), QItemSelectionModel::Select); // TODO: rewrite to select all required rows at once
-        QThread::currentThread()->yieldCurrentThread();
-      }
-    }
+    proxy->setFilterWildcard("*" + term + "*");
   }
 }

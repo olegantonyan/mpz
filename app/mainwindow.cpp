@@ -8,6 +8,9 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
+  #if defined(Q_OS_UNIX)
+    mpris = nullptr;
+  #endif
   ui->setupUi(this);
   setWindowTitle(qApp->applicationName());
   setWindowIcon(QIcon(":/icons/icons/appicon.png"));

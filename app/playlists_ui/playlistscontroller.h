@@ -6,6 +6,7 @@
 #include "config/local.h"
 #include "track.h"
 #include "busyspinner.h"
+#include "playlistsproxyfiltermodel.h"
 
 #include <QObject>
 #include <QListView>
@@ -46,6 +47,7 @@ namespace PlaylistsUi {
     Model *model;
     Config::Local &local_conf;
     BusySpinner *spinner;
+    ProxyFilterModel *proxy;
 
     void persist(int current_index);
 

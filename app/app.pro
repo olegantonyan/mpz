@@ -42,6 +42,7 @@ SOURCES += \
     playback/playerstate.cpp \
     playlists_ui/playlistscontroller.cpp \
     playlists_ui/playlistsmodel.cpp \
+    playlists_ui/playlistsproxyfiltermodel.cpp \
     statusbarlabel.cpp \
     track.cpp \
     trayicon.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     playback/playerstate.h \
     playlists_ui/playlistscontroller.h \
     playlists_ui/playlistsmodel.h \
+    playlists_ui/playlistsproxyfiltermodel.h \
     statusbarlabel.h \
     track.h \
     trayicon.h \
