@@ -1,5 +1,5 @@
-#ifndef PROXYFILTERMODEL_H
-#define PROXYFILTERMODEL_H
+#ifndef PLAYLISTSPROXYFILTERMODEL_H
+#define PLAYLISTSPROXYFILTERMODEL_H
 
 #include "playlistsmodel.h"
 
@@ -8,6 +8,7 @@
 
 namespace PlaylistsUi {
   class ProxyFilterModel : public QSortFilterProxyModel {
+    Q_OBJECT
   public:
     explicit ProxyFilterModel(Model *source_model, QObject *parent = nullptr);
 
@@ -15,4 +16,4 @@ namespace PlaylistsUi {
   };
 }
 
-#endif // PROXYFILTERMODEL_H
+#endif // PLAYLISTSPROXYFILTERMODEL_H

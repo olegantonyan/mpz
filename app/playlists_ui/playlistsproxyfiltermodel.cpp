@@ -2,6 +2,7 @@
 
 namespace PlaylistsUi {
   ProxyFilterModel::ProxyFilterModel(Model *source_model, QObject *parent) : QSortFilterProxyModel(parent) {
+    Q_ASSERT(source_model);
     setSourceModel(source_model);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
   }

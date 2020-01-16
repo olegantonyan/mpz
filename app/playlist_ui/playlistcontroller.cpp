@@ -19,7 +19,8 @@ namespace PlaylistUi {
     view = v;
     scroll_positions.clear();
     model = new Model(this);
-    view->setModel(model);
+    proxy = new ProxyFilterModel(model, this);
+    view->setModel(proxy);
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -38,17 +39,18 @@ namespace PlaylistUi {
     view->viewport()->installEventFilter(this);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
-      emit activated(model->itemAt(index));
+      emit activated(model->itemAt(proxy->mapToSource(index)));
     });
 
     connect(view->selectionModel(), &QItemSelectionModel::currentChanged, [=](const QModelIndex &index, const QModelIndex &prev) {
       (void)prev;
-      if (index.isValid()) {
-        emit selected(model->itemAt(index));
+      auto source_index = proxy->mapToSource(index);
+      if (index.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
+        emit selected(model->itemAt(source_index));
       }
     });
 
-    connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
+    connect(search, &QLineEdit::textChanged, proxy, &ProxyFilterModel::filter);
     search->setClearButtonEnabled(true);
 
     connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
@@ -91,7 +93,7 @@ namespace PlaylistUi {
   }
 
   void Controller::on_scrollTo(const Track &track) {
-    QModelIndex index = model->indexOf(track.uid());
+    QModelIndex index = proxy->mapFromSource(model->indexOf(track.uid()));
     if (index.isValid()) {
       view->setCurrentIndex(index);
       view->scrollTo(index, QAbstractItemView::PositionAtCenter);
@@ -110,39 +112,22 @@ namespace PlaylistUi {
     emit changed(model->playlist());
   }
 
-  void Controller::on_search(const QString &term) {
-    if (model->tracksSize() == 0 || model->playlist()->tracks().size() == 0) {
-      return;
-    }
-    view->selectionModel()->clear();
-    if (term.isEmpty()) {
-      return;
-    }
-
-    for (int i = 0; i < model->tracksSize(); i++) {
-      auto t = model->playlist()->tracks().at(i);
-      if (t.artist().contains(term, Qt::CaseInsensitive) ||
-          t.album().contains(term, Qt::CaseInsensitive) ||
-          t.filename().contains(term, Qt::CaseInsensitive) ||
-          t.title().contains(term, Qt::CaseInsensitive)) {
-        selectRow(i); // TODO: rewrite to select all required rows at once
-        QThread::currentThread()->yieldCurrentThread();
-      }
-    }
-  }
-
   void Controller::on_contextMenu(const QPoint &pos) {
     QMenu menu;
     QAction remove("Remove");
     connect(&remove, &QAction::triggered, [=]() {
-      model->remove(view->selectionModel()->selectedRows());
+      QList <QModelIndex> lst;
+      for (auto i : view->selectionModel()->selectedRows()) {
+        lst << proxy->mapToSource(i);
+      }
+      model->remove(lst);
       emit changed(model->playlist());
     });
     QAction open_in_filemanager("Show in file manager");
     connect(&open_in_filemanager, &QAction::triggered, [=]() {
       QStringList str;
       for (auto i : view->selectionModel()->selectedRows()) {
-        auto dir = model->itemAt(i).dir();
+        auto dir = model->itemAt(proxy->mapToSource(i)).dir();
         if (!str.contains(dir)) {
           str << dir;
           QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
@@ -153,7 +138,7 @@ namespace PlaylistUi {
     connect(&copy_name, &QAction::triggered, [=]() {
       QStringList str;
       for (auto i : view->selectionModel()->selectedRows()) {
-        str << model->itemAt(i).formattedTitle();
+        str << model->itemAt(proxy->mapToSource(i)).formattedTitle();
       }
       qApp->clipboard()->setText(str.join('\n'));
     });
@@ -162,12 +147,6 @@ namespace PlaylistUi {
     menu.addSeparator();
     menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
-  }
-
-  void Controller::selectRow(int row) {
-    for (int i = 0; i < view->horizontalHeader()->count(); i++) { // TODO: rewrite to select all columns at once
-      view->selectionModel()->select(model->index(row, i), QItemSelectionModel::Select);
-    }
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
