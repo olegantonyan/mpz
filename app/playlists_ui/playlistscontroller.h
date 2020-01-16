@@ -51,7 +51,7 @@ namespace PlaylistsUi {
 
     void persist(int current_index);
 
-    void removeItem(const QModelIndex &idx);
+    void removeItem(const QModelIndex &index);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

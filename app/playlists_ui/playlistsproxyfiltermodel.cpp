@@ -1,8 +1,9 @@
 #include "playlistsproxyfiltermodel.h"
 
 namespace PlaylistsUi {
-  ProxyFilterModel::ProxyFilterModel(QObject *parent) : QSortFilterProxyModel(parent) {
-    setSourceModel(nullptr);
+  ProxyFilterModel::ProxyFilterModel(Model *source_model, QObject *parent) : QSortFilterProxyModel(parent) {
+    setSourceModel(source_model);
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
   }
 
   int ProxyFilterModel::rowCount(const QModelIndex &parent) const {

@@ -23,9 +23,7 @@ namespace PlaylistsUi {
     connect(model, &Model::asynLoadFinished, this, &Controller::load);
     model->loadAsync();
 
-    proxy = new ProxyFilterModel(this);
-    proxy->setSourceModel(model);
-    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    proxy = new ProxyFilterModel(model, this);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
@@ -59,9 +57,8 @@ namespace PlaylistsUi {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {
         auto index = view->indexAt(me->pos());
-        auto s_index = proxy->mapToSource(index);
-        if (s_index.isValid()) {
-          removeItem(s_index);
+        if (index.isValid()) {
+          removeItem(index);
         }
       }
     }
@@ -75,7 +72,7 @@ namespace PlaylistsUi {
   }
 
   void Controller::removeItem(const QModelIndex &index) {
-    model->remove(index);
+    model->remove(proxy->mapToSource(index));
     if (view->selectionModel()->selectedIndexes().size() > 0) {
       auto selected_idx = view->selectionModel()->selectedIndexes().first();
       if (selected_idx == index || model->listSize() == 1) {
@@ -118,7 +115,7 @@ namespace PlaylistsUi {
     QAction rename("Rename");
 
     connect(&remove, &QAction::triggered, [=]() {
-      removeItem(proxy->mapToSource(index));
+      removeItem(index);
     });
     connect(&rename, &QAction::triggered, [=]() {
       auto i = model->itemAt(proxy->mapToSource(index));
@@ -138,9 +135,9 @@ namespace PlaylistsUi {
     if (model->listSize() <= 0) {
       return;
     }
-    auto s_index = proxy->mapToSource(index);
-    auto item = model->itemAt(s_index);
-    persist(s_index.row());
+    auto source_index = proxy->mapToSource(index);
+    auto item = model->itemAt(source_index);
+    persist(source_index.row());
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     emit selected(item);
