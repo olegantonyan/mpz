@@ -113,11 +113,11 @@ Track Playlist::trackBy(quint64 uid) const {
 void Playlist::sort() {
    // %ARTIST% - %DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%
   std::sort(tracks_list.begin(), tracks_list.end(), [](const Track &t1, const Track &t2) -> bool {
-    if (t1.artist() < t2.artist()) {
+    /*if (t1.artist() < t2.artist()) {
       return true;
     } else if (t1.artist() > t2.artist()) {
       return false;
-    }
+    }*/
 
     if (t1.year() < t2.year()) {
       return true;
