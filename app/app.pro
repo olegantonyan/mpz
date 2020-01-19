@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aboutdialog.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
     volumecontrol.cpp
 
 HEADERS += \
+    aboutdialog.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
@@ -78,6 +80,7 @@ HEADERS += \
     volumecontrol.h
 
 FORMS += \
+    aboutdialog.ui \
     directory_ui/directorysettings.ui \
     mainwindow.ui
 

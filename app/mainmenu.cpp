@@ -1,4 +1,5 @@
 #include "mainmenu.h"
+#include "aboutdialog.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -18,7 +19,7 @@ void MainMenu::on_buttonClicked() {
   QAction about("About");
   QAction quit("Quit");
   connect(&about, &QAction::triggered, [=]() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
+    AboutDialog().exec();
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&trayicon, &QAction::triggered, [&]() {
