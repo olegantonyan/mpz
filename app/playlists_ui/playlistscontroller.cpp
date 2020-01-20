@@ -157,5 +157,11 @@ namespace PlaylistsUi {
 
   void Controller::on_search(const QString &term) {
     proxy->setFilterWildcard("*" + term + "*");
+
+    QTimer::singleShot(20, [=]() {
+      if (!view->selectionModel()->selectedRows().isEmpty()) {
+        view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
+      }
+    });
   }
 }

@@ -10,6 +10,7 @@
 #include <QDesktopServices>
 #include <QApplication>
 #include <QUrl>
+#include <QTimer>
 
 namespace DirectoryUi {
   Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
@@ -54,6 +55,7 @@ namespace DirectoryUi {
     model->setNameFilterDisables(false);
     model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
+
     search->setClearButtonEnabled(true);
 
     connect(view, &QTreeView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
@@ -101,6 +103,11 @@ namespace DirectoryUi {
   void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
       model->setNameFilters(QStringList());
+      QTimer::singleShot(20, [=]() {
+        if (!view->selectionModel()->selectedRows().isEmpty()) {
+          view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
+        }
+      });
       return;
     }
     QString wc = QString("*%1*").arg(term);

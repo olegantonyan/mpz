@@ -37,7 +37,8 @@ namespace PlaylistUi {
   private slots:
     void on_appendAsyncFinished(Playlist *pl);
     void on_contextMenu(const QPoint &pos);
-
+    void on_search(const QString &term);
+    
   private:
     QTableView *view;
     QLineEdit *search;

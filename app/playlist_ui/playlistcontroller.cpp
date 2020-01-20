@@ -13,7 +13,7 @@
 #include <QApplication>
 #include <QUrl>
 
-namespace PlaylistUi {  
+namespace PlaylistUi {    
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
@@ -50,7 +50,7 @@ namespace PlaylistUi {
       }
     });
 
-    connect(search, &QLineEdit::textChanged, proxy, &ProxyFilterModel::filter);
+    connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
 
     connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
@@ -171,5 +171,16 @@ namespace PlaylistUi {
     }
 
     return QObject::eventFilter(obj, event);
+  }
+
+  void Controller::on_search(const QString &term) {
+    proxy->filter(term);
+    if (term.isEmpty()) {
+      QTimer::singleShot(20, [=]() {
+        if (!view->selectionModel()->selectedRows().isEmpty()) {
+          view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
+        }
+      });
+    }
   }
 }
