@@ -32,6 +32,7 @@ namespace DirectoryUi {
   private:
     QTreeView *view;
     Model *model;
+    QLineEdit *search;
     Config::Local &local_conf;
     bool restore_scroll_once;
 

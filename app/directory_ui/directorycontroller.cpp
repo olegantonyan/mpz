@@ -13,10 +13,13 @@
 #include <QTimer>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
     QObject(parent),
     view(v),
+    search(s),
     local_conf(local_cfg) {
+    Q_ASSERT(search);
+    Q_ASSERT(view);
 
     restore_scroll_once = true;
 
@@ -80,6 +83,7 @@ namespace DirectoryUi {
     auto filepath = QDir(model->filePath(index));
 
     QMenu menu;
+    QAction clear_filter("Clear filter");
     QAction create_playlist("Create new playlist");
     QAction append_to_playlist("Append to current playlist");
     QAction open_in_filemanager("Open in file manager");
@@ -93,6 +97,13 @@ namespace DirectoryUi {
     connect(&open_in_filemanager, &QAction::triggered, [=]() {
       QDesktopServices::openUrl(QUrl::fromLocalFile(filepath.absolutePath()));
     });
+    if (!search->text().isEmpty()) {
+      connect(&clear_filter, &QAction::triggered, [=]() {
+        search->clear();
+      });
+      menu.addAction(&clear_filter);
+      menu.addSeparator();
+    }
 
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
@@ -123,6 +134,9 @@ namespace DirectoryUi {
           auto filepath = QDir(model->filePath(index));
           emit createNewPlaylist(filepath);
         }
+      }
+      if (me->button() == Qt::BackButton) {
+        search->clear();
       }
     } else if (event->type() == QEvent::WindowActivate) {
       if (restore_scroll_once) {

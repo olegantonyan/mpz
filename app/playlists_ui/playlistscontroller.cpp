@@ -61,6 +61,9 @@ namespace PlaylistsUi {
           removeItem(index);
         }
       }
+      if (me->button() == Qt::BackButton) {
+        search->clear();
+      }
     }
     return QObject::eventFilter(obj, event);
   }
@@ -125,6 +128,14 @@ namespace PlaylistsUi {
         i->rename(new_name);
       }
     });
+    QAction clear_filter("Clear filter");
+    if (!search->text().isEmpty()) {
+       connect(&clear_filter, &QAction::triggered, [=]() {
+         search->clear();
+       });
+       menu.addAction(&clear_filter);
+       menu.addSeparator();
+    }
 
     menu.addAction(&rename);
     menu.addAction(&remove);

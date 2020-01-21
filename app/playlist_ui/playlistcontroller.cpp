@@ -142,6 +142,15 @@ namespace PlaylistUi {
       }
       qApp->clipboard()->setText(str.join('\n'));
     });
+    QAction clear_filter("Clear filter");
+    if (!search->text().isEmpty()) {
+       connect(&clear_filter, &QAction::triggered, [=]() {
+         search->clear();
+       });
+       menu.addAction(&clear_filter);
+       menu.addSeparator();
+    }
+
     menu.addAction(&copy_name);
     menu.addAction(&open_in_filemanager);
     menu.addSeparator();
@@ -168,6 +177,13 @@ namespace PlaylistUi {
       }
     } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
       local_conf.savePlaylistViewScrollPosition(view->verticalScrollBar()->value());
+    }
+
+    if (event->type() == QEvent::MouseButtonPress) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::BackButton) {
+        search->clear();
+      }
     }
 
     return QObject::eventFilter(obj, event);
