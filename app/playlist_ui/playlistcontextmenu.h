@@ -10,6 +10,7 @@
 #include <QTableView>
 #include <QLineEdit>
 #include <memory>
+#include <QAction>
 
 namespace PlaylistUi {
   class PlaylistContextMenu : public QObject {
@@ -28,6 +29,17 @@ namespace PlaylistUi {
     ProxyFilterModel *proxy;
     QTableView *view;
     QLineEdit *search;
+
+    QAction remove;
+    QAction clear_filter;
+    QAction show_in_filemanager;
+    QAction copy_name;
+
+  private slots:
+    void on_remove();
+    void on_clearFilter();
+    void on_copyName();
+    void on_showInFilemanager();
   };
 }
 
