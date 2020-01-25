@@ -12,6 +12,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QUrl>
+#include <QMouseEvent>
 
 namespace PlaylistUi {    
   Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
@@ -113,6 +114,10 @@ namespace PlaylistUi {
   }
 
   void Controller::on_contextMenu(const QPoint &pos) {
+    if(!view->indexAt(pos).isValid()) {
+      return;
+    }
+
     QMenu menu;
     QAction remove("Remove");
     connect(&remove, &QAction::triggered, [=]() {
@@ -151,6 +156,15 @@ namespace PlaylistUi {
        menu.addSeparator();
     }
 
+    /*QMenu move_to;
+    move_to.setTitle("Move to playlist");
+    move_to.addAction(&clear_filter);
+    QMenu copy_to;
+    copy_to.setTitle("Copy to playlist");
+    copy_to.addAction(&clear_filter);
+
+    menu.addMenu(&move_to);
+    menu.addMenu(&copy_to);*/
     menu.addAction(&copy_name);
     menu.addAction(&open_in_filemanager);
     menu.addSeparator();
