@@ -94,6 +94,9 @@ namespace PlaylistUi {
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
+
+
+    qDebug() << tracks.at(0).title();
   }
 
   void Model::setPlaylist(std::shared_ptr<Playlist> pl) {
@@ -142,7 +145,12 @@ namespace PlaylistUi {
   }
 
   void Model::remove(const QList<QModelIndex> &items) {
-    for (auto i : items) {
+    QList<QModelIndex> sorted = items;
+
+    std::sort(sorted.begin(), sorted.end(), [](const QModelIndex &t1, const QModelIndex &t2) -> bool {
+      return t1.row() > t2.row();
+    });
+    for (auto i : sorted) {
       playlist()->removeTrack(i.row());
     }
     reload();

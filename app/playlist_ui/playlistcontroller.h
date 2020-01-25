@@ -6,6 +6,7 @@
 #include "track.h"
 #include "config/local.h"
 #include "playlistproxyfiltermodel.h"
+#include "playlist_ui/playlistcontextmenu.h"
 
 #include <QObject>
 #include <QTableView>
@@ -36,7 +37,6 @@ namespace PlaylistUi {
 
   private slots:
     void on_appendAsyncFinished(Playlist *pl);
-    void on_contextMenu(const QPoint &pos);
     void on_search(const QString &term);
     
   private:
@@ -47,6 +47,7 @@ namespace PlaylistUi {
     bool restore_scroll_once;
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
+    PlaylistContextMenu *context_menu;
     
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

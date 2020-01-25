@@ -6,12 +6,6 @@
 #include <QScrollBar>
 #include <QThread>
 #include <QTimer>
-#include <QMenu>
-#include <QAction>
-#include <QDesktopServices>
-#include <QClipboard>
-#include <QApplication>
-#include <QUrl>
 #include <QMouseEvent>
 
 namespace PlaylistUi {    
@@ -60,8 +54,11 @@ namespace PlaylistUi {
       }
     });
 
+    context_menu = new PlaylistContextMenu(model, proxy, view, search, this);
+    connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
+
     view->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(view, &QTableView::customContextMenuRequested, this, &Controller::on_contextMenu);
+    connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist> pi) {
@@ -111,65 +108,6 @@ namespace PlaylistUi {
     disconnect(pl, &Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->reload();
     emit changed(model->playlist());
-  }
-
-  void Controller::on_contextMenu(const QPoint &pos) {
-    if(!view->indexAt(pos).isValid()) {
-      return;
-    }
-
-    QMenu menu;
-    QAction remove("Remove");
-    connect(&remove, &QAction::triggered, [=]() {
-      QList <QModelIndex> lst;
-      for (auto i : view->selectionModel()->selectedRows()) {
-        lst << proxy->mapToSource(i);
-      }
-      model->remove(lst);
-      emit changed(model->playlist());
-    });
-    QAction open_in_filemanager("Show in file manager");
-    connect(&open_in_filemanager, &QAction::triggered, [=]() {
-      QStringList str;
-      for (auto i : view->selectionModel()->selectedRows()) {
-        auto dir = model->itemAt(proxy->mapToSource(i)).dir();
-        if (!str.contains(dir)) {
-          str << dir;
-          QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
-        }
-      }
-    });
-    QAction copy_name("Copy name");
-    connect(&copy_name, &QAction::triggered, [=]() {
-      QStringList str;
-      for (auto i : view->selectionModel()->selectedRows()) {
-        str << model->itemAt(proxy->mapToSource(i)).formattedTitle();
-      }
-      qApp->clipboard()->setText(str.join('\n'));
-    });
-    QAction clear_filter("Clear filter");
-    if (!search->text().isEmpty()) {
-       connect(&clear_filter, &QAction::triggered, [=]() {
-         search->clear();
-       });
-       menu.addAction(&clear_filter);
-       menu.addSeparator();
-    }
-
-    /*QMenu move_to;
-    move_to.setTitle("Move to playlist");
-    move_to.addAction(&clear_filter);
-    QMenu copy_to;
-    copy_to.setTitle("Copy to playlist");
-    copy_to.addAction(&clear_filter);
-
-    menu.addMenu(&move_to);
-    menu.addMenu(&copy_to);*/
-    menu.addAction(&copy_name);
-    menu.addAction(&open_in_filemanager);
-    menu.addSeparator();
-    menu.addAction(&remove);
-    menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
