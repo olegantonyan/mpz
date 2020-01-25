@@ -16,7 +16,7 @@ namespace PlaylistUi {
   class PlaylistContextMenu : public QObject {
     Q_OBJECT
   public:
-    explicit PlaylistContextMenu(Model *model, ProxyFilterModel *proxy, QTableView *view, QLineEdit *s, QObject *parent = nullptr);
+    explicit PlaylistContextMenu(Model *model, ProxyFilterModel *proxy, QTableView *view, QLineEdit *seacrh, QObject *parent = nullptr);
 
   public slots:
     void show(const QPoint &pos);
