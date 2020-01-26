@@ -133,7 +133,7 @@
         <item>
          <widget class="QLineEdit" name="treeViewSearch">
           <property name="placeholderText">
-           <string>Search library</string>
+           <string>Filter library</string>
           </property>
          </widget>
         </item>
@@ -147,7 +147,7 @@
         <item>
          <widget class="QLineEdit" name="listViewSearch">
           <property name="placeholderText">
-           <string>Search playlist</string>
+           <string>Filter playlists</string>
           </property>
          </widget>
         </item>
@@ -173,7 +173,7 @@
           <item>
            <widget class="QLineEdit" name="tableViewSearch">
             <property name="placeholderText">
-             <string>Search tracks</string>
+             <string>Filter tracks</string>
             </property>
            </widget>
           </item>
