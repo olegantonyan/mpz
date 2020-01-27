@@ -3,6 +3,7 @@
 
 #include "directorymodel.h"
 #include "config/local.h"
+#include "directorycontextmenu.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -26,7 +27,6 @@ namespace DirectoryUi {
     void appendToCurrentPlaylist(const QDir &filepath);
 
   private slots:
-    void on_customContextMenuRequested(const QPoint &pos);
     void on_search(const QString& term);
 
   private:
@@ -35,6 +35,7 @@ namespace DirectoryUi {
     QLineEdit *search;
     Config::Local &local_conf;
     bool restore_scroll_once;
+    DirectoryContextMenu *context_menu;
 
     void settingsDialog(QComboBox *libswitch);
     

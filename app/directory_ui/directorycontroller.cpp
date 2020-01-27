@@ -61,7 +61,10 @@ namespace DirectoryUi {
 
     search->setClearButtonEnabled(true);
 
-    connect(view, &QTreeView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
+    context_menu = new DirectoryContextMenu(model, view, search, this);
+    connect(context_menu, &DirectoryContextMenu::createNewPlaylist, this, &Controller::createNewPlaylist);
+    connect(context_menu, &DirectoryContextMenu::appendToCurrentPlaylist, this, &Controller::appendToCurrentPlaylist);
+    connect(view, &QTreeView::customContextMenuRequested, context_menu, &DirectoryContextMenu::show);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
 
@@ -72,43 +75,6 @@ namespace DirectoryUi {
     connect(libcfg, &QToolButton::clicked, [=]() {
       settingsDialog(libswitch);
     });
-  }
-
-  void Controller::on_customContextMenuRequested(const QPoint &pos) {
-    auto index = view->indexAt(pos);
-    if (!index.isValid()) {
-      return;
-    }
-
-    auto filepath = QDir(model->filePath(index));
-
-    QMenu menu;
-    QAction clear_filter("Clear filter");
-    QAction create_playlist("Create new playlist");
-    QAction append_to_playlist("Append to current playlist");
-    QAction open_in_filemanager("Open in file manager");
-
-    connect(&create_playlist, &QAction::triggered, [=]() {
-      emit createNewPlaylist(filepath);
-    });
-    connect(&append_to_playlist, &QAction::triggered, [=]() {
-      emit appendToCurrentPlaylist(filepath);
-    });
-    connect(&open_in_filemanager, &QAction::triggered, [=]() {
-      QDesktopServices::openUrl(QUrl::fromLocalFile(filepath.absolutePath()));
-    });
-    if (!search->text().isEmpty()) {
-      connect(&clear_filter, &QAction::triggered, [=]() {
-        search->clear();
-      });
-      menu.addAction(&clear_filter);
-      menu.addSeparator();
-    }
-
-    menu.addAction(&create_playlist);
-    menu.addAction(&append_to_playlist);
-    menu.addAction(&open_in_filemanager);
-    menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
   void Controller::on_search(const QString &term) {
