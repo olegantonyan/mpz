@@ -43,6 +43,7 @@ SOURCES += \
     playback/playerstate.cpp \
     playlist_ui/playlistproxyfiltermodel.cpp \
     playlist_ui/playlistcontextmenu.cpp \
+    playlists_ui/playlistscontextmenu.cpp \
     playlists_ui/playlistscontroller.cpp \
     playlists_ui/playlistsmodel.cpp \
     playlists_ui/playlistsproxyfiltermodel.cpp \
@@ -70,6 +71,7 @@ HEADERS += \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \
+    playlists_ui/playlistscontextmenu.h \
     playlist.h \
     playback/playerstate.h \
     playlist_ui/playlistproxyfiltermodel.h \

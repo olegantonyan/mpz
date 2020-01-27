@@ -7,6 +7,7 @@
 #include "track.h"
 #include "busyspinner.h"
 #include "playlistsproxyfiltermodel.h"
+#include "playlistscontextmenu.h"
 
 #include <QObject>
 #include <QListView>
@@ -35,11 +36,11 @@ namespace PlaylistsUi {
     void emptied();
 
   private slots:
-    void on_customContextMenuRequested(const QPoint &pos);
     void on_itemActivated(const QModelIndex &index);
     void on_playlistLoadFinished(Playlist *pl);
     void on_search(const QString& term);
     void load();
+    void on_removeItem(const QModelIndex &index);
 
   private:
     QListView *view;
@@ -48,10 +49,9 @@ namespace PlaylistsUi {
     Config::Local &local_conf;
     BusySpinner *spinner;
     ProxyFilterModel *proxy;
+    PlaylistsContextMenu *context_menu;
 
     void persist(int current_index);
-
-    void removeItem(const QModelIndex &index);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

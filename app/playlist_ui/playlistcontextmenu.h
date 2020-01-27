@@ -1,5 +1,5 @@
-#ifndef CONTEXTMENU_H
-#define CONTEXTMENU_H
+#ifndef PLAYLISTCONTEXTMENU_H
+#define PLAYLISTCONTEXTMENU_H
 
 #include "playlistmodel.h"
 #include "playlistproxyfiltermodel.h"
@@ -43,4 +43,4 @@ namespace PlaylistUi {
   };
 }
 
-#endif // CONTEXTMENU_H
+#endif // PLAYLISTCONTEXTMENU_H

@@ -28,13 +28,18 @@ namespace PlaylistsUi {
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
 
-    connect(view, &QListView::customContextMenuRequested, this, &Controller::on_customContextMenuRequested);
     connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
 
     view->viewport()->installEventFilter(this);
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
+
+    context_menu = new PlaylistsContextMenu(model, proxy, view, search, this);
+    connect(context_menu, &PlaylistsContextMenu::removed, this, &Controller::on_removeItem);
+
+    view->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(view, &QListView::customContextMenuRequested, context_menu, &PlaylistsContextMenu::show);
   }
 
   void Controller::load() {
@@ -58,7 +63,7 @@ namespace PlaylistsUi {
       if (me->button() == Qt::MidButton) {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
-          removeItem(index);
+          on_removeItem(index);
         }
       }
       if (me->button() == Qt::BackButton) {
@@ -74,7 +79,7 @@ namespace PlaylistsUi {
     local_conf.saveCurrentPlaylist(save_index);
   }
 
-  void Controller::removeItem(const QModelIndex &index) {
+  void Controller::on_removeItem(const QModelIndex &index) {
     model->remove(proxy->mapToSource(index));
     if (view->selectionModel()->selectedIndexes().size() > 0) {
       auto selected_idx = view->selectionModel()->selectedIndexes().first();
@@ -105,41 +110,6 @@ namespace PlaylistsUi {
   void Controller::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
     Q_UNUSED(pl)
     model->persist();
-  }
-
-  void Controller::on_customContextMenuRequested(const QPoint &pos) {
-    auto index = view->indexAt(pos);
-    if (!index.isValid()) {
-      return;
-    }
-
-    QMenu menu;
-    QAction remove("Remove");
-    QAction rename("Rename");
-
-    connect(&remove, &QAction::triggered, [=]() {
-      removeItem(index);
-    });
-    connect(&rename, &QAction::triggered, [=]() {
-      auto i = model->itemAt(proxy->mapToSource(index));
-      bool ok;
-      QString new_name = QInputDialog::getText(view, QString("Rename playlist '%1'").arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
-      if (ok && !new_name.isEmpty()) {
-        i->rename(new_name);
-      }
-    });
-    QAction clear_filter("Clear filter");
-    if (!search->text().isEmpty()) {
-       connect(&clear_filter, &QAction::triggered, [=]() {
-         search->clear();
-       });
-       menu.addAction(&clear_filter);
-       menu.addSeparator();
-    }
-
-    menu.addAction(&rename);
-    menu.addAction(&remove);
-    menu.exec(view->viewport()->mapToGlobal(pos));
   }
 
   void Controller::on_itemActivated(const QModelIndex &index) {
