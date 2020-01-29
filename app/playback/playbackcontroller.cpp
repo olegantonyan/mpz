@@ -71,7 +71,7 @@ namespace Playback {
   void Controller::play(const Track &track) {
     next_after_stop = false;
     _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
-    _player.setMedia(QUrl::fromLocalFile(track.path()));
+    _player.setMedia(track.url());
     _current_track = track;
     _player.play();
   }

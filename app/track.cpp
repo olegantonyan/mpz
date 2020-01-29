@@ -86,6 +86,10 @@ QString Track::path() const {
   return filepath;
 }
 
+QUrl Track::url() const {
+  return QUrl::fromLocalFile(path());
+}
+
 QString Track::artist() const {
   return _artist;
 }

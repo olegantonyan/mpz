@@ -2,6 +2,7 @@
 #define TRACK_H
 
 #include <QString>
+#include <QUrl>
 
 class Track {
 public:
@@ -23,6 +24,7 @@ public:
   bool isValid() const;
 
   QString path() const;
+  QUrl url() const;
   QString artist() const;
   QString album() const;
   QString title() const;
