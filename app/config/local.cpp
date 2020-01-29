@@ -34,18 +34,18 @@ namespace Config {
     return storage.getIntList("splitter_sizes");
   }
 
-  QList<std::shared_ptr<Playlist> > Local::playlists() const {
+  QList<std::shared_ptr<Playlist::Playlist> > Local::playlists() const {
     auto raw = storage.get("playlists");
     if (raw.listType() != Config::Value::Map) {
-      return QList<std::shared_ptr<Playlist> >();
+      return QList<std::shared_ptr<Playlist::Playlist> >();
     }
 
-    QList<std::shared_ptr<Playlist> > result;
+    QList<std::shared_ptr<Playlist::Playlist> > result;
     auto list = raw.get<QList<Config::Value> >();
     for (auto i : list) {
       auto map = i.get<QMap<QString, Config::Value>>();
       QString name = map.value("name").get<QString>();
-      std::shared_ptr<Playlist> playlist(new Playlist());
+      std::shared_ptr<Playlist::Playlist> playlist(new Playlist::Playlist());
       playlist->rename(name);
       QVector<Track> tracks;
       for (auto t : map.value("tracks").get<QList<Config::Value> >()) {
@@ -57,7 +57,7 @@ namespace Config {
     return result;
   }
 
-  bool Local::savePlaylists(QList<std::shared_ptr<Playlist> > &list) {
+  bool Local::savePlaylists(QList<std::shared_ptr<Playlist::Playlist> > &list) {
     QList<Config::Value> plist;
     for (auto i : list) {
       QMap<QString, Config::Value> mp;

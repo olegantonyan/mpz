@@ -2,7 +2,7 @@
 #define LOCAL_H
 
 #include "storage.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QByteArray>
 
@@ -22,8 +22,8 @@ namespace Config {
     bool saveSplitterSizes(const QList<int> &list);
     QList<int> splitterSizes() const;
 
-    QList<std::shared_ptr<Playlist>> playlists() const;
-    bool savePlaylists(QList<std::shared_ptr<Playlist>> &list);
+    QList<std::shared_ptr<Playlist::Playlist>> playlists() const;
+    bool savePlaylists(QList<std::shared_ptr<Playlist::Playlist>> &list);
 
     int currentPlaylist() const;
     bool saveCurrentPlaylist(int idx);

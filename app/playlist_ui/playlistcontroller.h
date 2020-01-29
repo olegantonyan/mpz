@@ -2,7 +2,7 @@
 #define PLAYLISTVIEW_H
 
 #include "playlistmodel.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 #include "track.h"
 #include "config/local.h"
 #include "playlistproxyfiltermodel.h"
@@ -24,10 +24,10 @@ namespace PlaylistUi {
   signals:
     void activated(const Track &track);
     void selected(const Track &track);
-    void changed(const std::shared_ptr<Playlist> pl);
+    void changed(const std::shared_ptr<Playlist::Playlist> pl);
 
   public slots:
-    void on_load(const std::shared_ptr<Playlist> pi);
+    void on_load(const std::shared_ptr<Playlist::Playlist> pi);
     void on_unload();
     void on_stop();
     void on_start(const Track &t);
@@ -36,7 +36,7 @@ namespace PlaylistUi {
     void on_appendToPlaylist(const QDir &filepath);
 
   private slots:
-    void on_appendAsyncFinished(Playlist *pl);
+    void on_appendAsyncFinished(Playlist::Playlist *pl);
     void on_search(const QString &term);
     
   private:

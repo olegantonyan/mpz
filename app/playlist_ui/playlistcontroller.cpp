@@ -61,7 +61,7 @@ namespace PlaylistUi {
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
   }
 
-  void Controller::on_load(const std::shared_ptr<Playlist> pi) {
+  void Controller::on_load(const std::shared_ptr<Playlist::Playlist> pi) {
     if (pi == nullptr) {
       return;
     }
@@ -100,12 +100,12 @@ namespace PlaylistUi {
   }
 
   void Controller::on_appendToPlaylist(const QDir &filepath) {
-    connect(&*model->playlist(), &Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
+    connect(&*model->playlist(), &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->playlist()->concatAsync(filepath);
   }
 
-  void Controller::on_appendAsyncFinished(Playlist *pl) {
-    disconnect(pl, &Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
+  void Controller::on_appendAsyncFinished(Playlist::Playlist *pl) {
+    disconnect(pl, &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->reload();
     emit changed(model->playlist());
   }

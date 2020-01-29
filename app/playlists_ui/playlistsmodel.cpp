@@ -23,7 +23,7 @@ namespace PlaylistsUi {
     return createIndex(row, 0);
   }
 
-  QModelIndex Model::append(std::shared_ptr<Playlist> item) {
+  QModelIndex Model::append(std::shared_ptr<Playlist::Playlist> item) {
     beginInsertRows(QModelIndex(), list.size(), list.size());
     list.append(item);
     endInsertRows();
@@ -44,7 +44,7 @@ namespace PlaylistsUi {
     emit dataChanged(index, index, {Qt::DisplayRole});
   }
 
-  std::shared_ptr<Playlist> Model::itemAt(const QModelIndex &index) const {
+  std::shared_ptr<Playlist::Playlist> Model::itemAt(const QModelIndex &index) const {
     if (!index.isValid()) {
       return nullptr;
     }
@@ -54,7 +54,7 @@ namespace PlaylistsUi {
     return list.at(index.row());
   }
 
-  std::shared_ptr<Playlist> Model::itemBy(quint64 uid) const {
+  std::shared_ptr<Playlist::Playlist> Model::itemBy(quint64 uid) const {
     for (auto i : list) {
       if (i->uid() == uid) {
         return i;
@@ -63,7 +63,7 @@ namespace PlaylistsUi {
     return nullptr;
   }
 
-  std::shared_ptr<Playlist> Model::itemByTrack(quint64 track_uid) const {
+  std::shared_ptr<Playlist::Playlist> Model::itemByTrack(quint64 track_uid) const {
     for (auto i : list) {
       if (i->hasTrack(track_uid)) {
         return i;
@@ -76,7 +76,7 @@ namespace PlaylistsUi {
     return list.size();
   }
 
-  QModelIndex Model::itemIndex(std::shared_ptr<Playlist> playlist) const {
+  QModelIndex Model::itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const {
     for (int i = 0; i < list.size(); i++) {
       if (playlist->uid() == list.at(i)->uid()) {
         return buildIndex(i);
@@ -115,7 +115,7 @@ namespace PlaylistsUi {
     return local_conf.savePlaylists(list);
   }
 
-  QList<std::shared_ptr<Playlist> > Model::itemList() const {
+  QList<std::shared_ptr<Playlist::Playlist> > Model::itemList() const {
     return list;
   }
 }

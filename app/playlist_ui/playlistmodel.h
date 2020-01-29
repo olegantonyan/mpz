@@ -2,7 +2,7 @@
 #define PLAYLISTMODEL_H
 
 #include "track.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QVector>
 #include <QAbstractTableModel>
@@ -24,7 +24,7 @@ namespace PlaylistUi {
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    void setPlaylist(std::shared_ptr<Playlist> pl);
+    void setPlaylist(std::shared_ptr<Playlist::Playlist> pl);
 
     Track itemAt(const QModelIndex &index) const;
     QModelIndex buildIndex(int row) const;
@@ -32,7 +32,7 @@ namespace PlaylistUi {
     void highlight(quint64 uid, enum HighlightState st);
     QModelIndex indexOf(quint64 uid) const;
 
-    std::shared_ptr<Playlist> playlist();
+    std::shared_ptr<Playlist::Playlist> playlist();
     void reload();
 
     void remove(const QList<QModelIndex> &items);
@@ -40,7 +40,7 @@ namespace PlaylistUi {
   private:
     void setTracks(const QVector<Track> &tracks);
 
-    std::shared_ptr<Playlist> _playlist;
+    std::shared_ptr<Playlist::Playlist> _playlist;
     QVector<Track> tracks;
     quint64 highlight_uid;
     enum HighlightState highlight_state;

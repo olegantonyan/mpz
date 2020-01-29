@@ -1,7 +1,7 @@
 #ifndef PLAYLISTSDATAMODEL_H
 #define PLAYLISTSDATAMODEL_H
 
-#include "playlist.h"
+#include "playlist/playlist.h"
 #include "config/local.h"
 
 #include <QAbstractListModel>
@@ -20,17 +20,17 @@ namespace PlaylistsUi {
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QModelIndex buildIndex(int row) const;
-    QModelIndex append(std::shared_ptr<Playlist> item);
+    QModelIndex append(std::shared_ptr<Playlist::Playlist> item);
     void remove(const QModelIndex &index);
-    std::shared_ptr<Playlist> itemAt(const QModelIndex &index) const;
-    std::shared_ptr<Playlist> itemBy(quint64 uid) const;
-    std::shared_ptr<Playlist> itemByTrack(quint64 track_uid) const;
+    std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
+    std::shared_ptr<Playlist::Playlist> itemBy(quint64 uid) const;
+    std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
     int listSize() const;
-    QModelIndex itemIndex(std::shared_ptr<Playlist> playlist) const;
+    QModelIndex itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const;
 
     bool persist();
 
-    QList<std::shared_ptr<Playlist>> itemList() const;
+    QList<std::shared_ptr<Playlist::Playlist>> itemList() const;
 
     void loadAsync();
 
@@ -38,7 +38,7 @@ namespace PlaylistsUi {
     void asynLoadFinished();
 
   private:
-    QList<std::shared_ptr<Playlist>> list;
+    QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
   };
 }

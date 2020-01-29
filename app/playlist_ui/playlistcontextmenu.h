@@ -3,7 +3,7 @@
 
 #include "playlistmodel.h"
 #include "playlistproxyfiltermodel.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QObject>
 #include <QPoint>
@@ -22,7 +22,7 @@ namespace PlaylistUi {
     void show(const QPoint &pos);
 
   signals:
-    void playlistChanged(const std::shared_ptr<Playlist> pl);
+    void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
 
   private:
     Model *model;

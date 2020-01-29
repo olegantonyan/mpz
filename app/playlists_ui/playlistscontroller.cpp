@@ -1,5 +1,5 @@
 #include "playlistscontroller.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -53,7 +53,7 @@ namespace PlaylistsUi {
     }
   }
 
-  std::shared_ptr<Playlist> Controller::playlistByTrackUid(quint64 track_uid) const {
+  std::shared_ptr<Playlist::Playlist> Controller::playlistByTrackUid(quint64 track_uid) const {
     return model->itemByTrack(track_uid);
   }
 
@@ -93,13 +93,13 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_createPlaylist(const QDir &filepath) {
-      auto pl = new Playlist();
-      connect(pl, &Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-      pl->loadAsync(filepath);
-      spinner->show();
+    auto pl = new Playlist::Playlist();
+    connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
+    pl->loadAsync(filepath);
+    spinner->show();
   }
 
-  void Controller::on_jumpTo(const std::shared_ptr<Playlist> playlist) {
+  void Controller::on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist == nullptr) {
       return;
     }
@@ -107,7 +107,7 @@ namespace PlaylistsUi {
     on_itemActivated(proxy->mapFromSource(model->itemIndex(playlist)));
   }
 
-  void Controller::on_playlistChanged(const std::shared_ptr<Playlist> pl) {
+  void Controller::on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl) {
     Q_UNUSED(pl)
     model->persist();
   }
@@ -124,9 +124,9 @@ namespace PlaylistsUi {
     emit selected(item);
   }
 
-  void Controller::on_playlistLoadFinished(Playlist *pl) {
-    disconnect(pl, &Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    auto item = std::shared_ptr<Playlist>(pl);
+  void Controller::on_playlistLoadFinished(Playlist::Playlist *pl) {
+    disconnect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
+    auto item = std::shared_ptr<Playlist::Playlist>(pl);
     auto index = model->append(item);
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();

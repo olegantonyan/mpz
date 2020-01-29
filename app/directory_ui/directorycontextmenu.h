@@ -2,7 +2,7 @@
 #define DIRECTORYCONTEXTMENU_H
 
 #include "directorymodel.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QObject>
 #include <QPoint>

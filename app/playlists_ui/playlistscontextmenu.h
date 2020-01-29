@@ -3,7 +3,7 @@
 
 #include "playlistsmodel.h"
 #include "playlistsproxyfiltermodel.h"
-#include "playlist.h"
+#include "playlist/playlist.h"
 
 #include <QObject>
 #include <QPoint>

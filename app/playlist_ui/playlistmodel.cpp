@@ -94,12 +94,9 @@ namespace PlaylistUi {
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
-
-
-    qDebug() << tracks.at(0).title();
   }
 
-  void Model::setPlaylist(std::shared_ptr<Playlist> pl) {
+  void Model::setPlaylist(std::shared_ptr<Playlist::Playlist> pl) {
     _playlist = pl;
     reload();
   }
@@ -132,7 +129,7 @@ namespace PlaylistUi {
     return buildIndex(-1);
   }
 
-  std::shared_ptr<Playlist> Model::playlist() {
+  std::shared_ptr<Playlist::Playlist> Model::playlist() {
     return _playlist;
   }
 
