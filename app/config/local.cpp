@@ -147,22 +147,29 @@ namespace Config {
     r["channels"] = static_cast<int>(t.channels());
     r["bitrate"] = static_cast<int>(t.bitrate());
     r["samplerate"] = static_cast<int>(t.sample_rate());
+    if (t.isStream()) {
+      r["url"] = t.url().toString();
+    }
     return r;
   }
 
   Track Local::deserializeTrack(const Value &v) const {
     auto r = v.get<QMap<QString, Value>>();
-    return Track(
-          r["path"].get<QString>(),
-          r["artist"].get<QString>(),
-          r["album"].get<QString>(),
-          r["title"].get<QString>(),
-          static_cast<quint16>(r["track_number"].get<int>()),
-          static_cast<quint16>(r["year"].get<int>()),
-          static_cast<quint32>(r["duration"].get<int>()),
-          static_cast<quint8>(r["channels"].get<int>()),
-          static_cast<quint16>(r["bitrate"].get<int>()),
-          static_cast<quint16>(r["samplerate"].get<int>())
-        );
+    if (r["url"].get<QString>().isEmpty()) {
+      return Track(
+            r["path"].get<QString>(),
+            r["artist"].get<QString>(),
+            r["album"].get<QString>(),
+            r["title"].get<QString>(),
+            static_cast<quint16>(r["track_number"].get<int>()),
+            static_cast<quint16>(r["year"].get<int>()),
+            static_cast<quint32>(r["duration"].get<int>()),
+            static_cast<quint8>(r["channels"].get<int>()),
+            static_cast<quint16>(r["bitrate"].get<int>()),
+            static_cast<quint16>(r["samplerate"].get<int>())
+          );
+    } else {
+     return Track(QUrl(r["url"].get<QString>()));
+    }
   }
 }

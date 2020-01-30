@@ -18,6 +18,7 @@ public:
                  quint8 channels,
                  quint16 bitrate,
                  quint16 samplerate);
+  explicit Track(const QUrl &stream_url);
 
   static QString formattedTime(quint32 tm);
 
@@ -46,6 +47,8 @@ public:
 
   QString formattedTitle() const;
 
+  bool isStream() const;
+
 private:
   QString filepath;
   QString _artist;
@@ -58,6 +61,7 @@ private:
   quint16 _bitrate;
   QString _format;
   quint16 _track_number;
+  QUrl _stream_url;
 
   quint64 _uid;
 

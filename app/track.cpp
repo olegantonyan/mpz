@@ -13,6 +13,12 @@
 Track::Track() {
   Track("");
   _uid = 0;
+  _duration = 0;
+  _channels = 0;
+  _bitrate = 0;
+  _sample_rate = 0;
+  _year = 0;
+  _track_number = 0;
 }
 
 Track::Track(const QString &fp) {
@@ -67,6 +73,18 @@ Track::Track(const QString &fp,
   _format = detectFormat();
 }
 
+Track::Track(const QUrl &stream_url) {
+  _duration = 0;
+  _channels = 0;
+  _bitrate = 0;
+  _sample_rate = 0;
+  _year = 0;
+  _track_number = 0;
+
+  _uid = generateUid();
+  _stream_url = stream_url;
+}
+
 QString Track::formattedTime(quint32 tm) {
   quint32 seconds = tm % 60;
   quint32 minutes = (tm / 60) % 60;
@@ -79,7 +97,7 @@ QString Track::formattedTime(quint32 tm) {
 }
 
 bool Track::isValid() const {
-  return uid() != 0 && QFile::exists(path());
+  return uid() != 0 && (QFile::exists(path()) || isStream());
 }
 
 QString Track::path() const {
@@ -87,7 +105,10 @@ QString Track::path() const {
 }
 
 QUrl Track::url() const {
-  return QUrl::fromLocalFile(path());
+  if (!isStream()) {
+    return QUrl::fromLocalFile(path());
+  }
+  return _stream_url;
 }
 
 QString Track::artist() const {
@@ -100,7 +121,11 @@ QString Track::album() const {
 
 QString Track::title() const {
   if (_title.length() == 0) {
-    return filename();
+    if (isStream()) {
+      return _stream_url.toString();
+    } else {
+      return filename();
+    }
   } else {
     return _title;
   }
@@ -140,6 +165,10 @@ QString Track::dir() const {
 
 QString Track::formattedTitle() const {
   return QString("%1 - %2 (%3) - %4").arg(artist()).arg(album()).arg(year()).arg(title());
+}
+
+bool Track::isStream() const {
+  return !_stream_url.isEmpty();
 }
 
 quint16 Track::sample_rate() const {

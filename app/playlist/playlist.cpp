@@ -1,4 +1,5 @@
 #include "playlist/playlist.h"
+#include "playlist/fileparser.h"
 
 #include <QDebug>
 #include <QDirIterator>
@@ -38,6 +39,7 @@ namespace Playlist {
     for (auto i : Playlist::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
         // TODO parse playlist file
+        tracks_list = FileParser(path).tracks_list();
         return true;
       }
     }
