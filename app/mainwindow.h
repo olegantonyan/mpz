@@ -17,7 +17,7 @@
 #include <QMainWindow>
 #include <QtGlobal>
 
-#if defined(Q_OS_UNIX)
+#if defined(MPRIS_ENABLE)
   #include "dbus/mpris.h"
 #endif
 
@@ -46,7 +46,7 @@ private:
   VolumeControl *volume;
   MainMenu *main_menu;
   StatusBarLabel *status_label;
-  #if defined(Q_OS_UNIX)
+  #if defined(MPRIS_ENABLE)
     Mpris *mpris;
   #endif
 
@@ -58,7 +58,7 @@ private:
   void setupPlaybackDispatch();
   void setupStatusBar();
   void setupMediaKeys();
-  #if defined(Q_OS_UNIX)
+  #if defined(MPRIS_ENABLE)
     void setupMpris();
   #endif
 

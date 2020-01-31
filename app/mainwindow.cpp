@@ -8,7 +8,7 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
-  #if defined(Q_OS_UNIX)
+  #if defined(MPRIS_ENABLE)
     mpris = nullptr;
   #endif
   ui->setupUi(this);
@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupVolumeControl();
   setupMainMenu();
   setupMediaKeys();
-#if defined(Q_OS_UNIX)
+#if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
 
@@ -102,20 +102,20 @@ void MainWindow::setupOrderCombobox() {
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
     global_conf.sync();
-    #if defined(Q_OS_UNIX)
+    #if defined(MPRIS_ENABLE)
       if (mpris) {
         mpris->on_shuffleChanged(idx == 1);
       }
     #endif
   });
-#if defined(Q_OS_UNIX)
+#if defined(MPRIS_ENABLE)
   if (mpris) {
     mpris->on_shuffleChanged(global_conf.playbackOrder() == "random");
   }
 #endif
 }
 
-#if defined(Q_OS_UNIX)
+#if defined(MPRIS_ENABLE)
 void MainWindow::setupMpris() {
   mpris = new Mpris(player, this);
   connect(mpris, &Mpris::quit, this, &QMainWindow::close);
