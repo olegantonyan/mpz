@@ -24,6 +24,7 @@ unix: DEFINES += MPRIS_ENABLE
 
 SOURCES += \
     aboutdialog.cpp \
+    audio/output.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
     config/value.cpp \
     directory_ui/directorycontroller.cpp \
     directory_ui/directorysettings.cpp \
+    audio/decoder.cpp \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
@@ -59,6 +61,7 @@ SOURCES += \
 
 HEADERS += \
     aboutdialog.h \
+    audio/output.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
@@ -66,6 +69,7 @@ HEADERS += \
     config/value.h \
     directory_ui/directorycontroller.h \
     directory_ui/directorysettings.h \
+    audio/decoder.h \
     mainmenu.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
@@ -102,13 +106,20 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.2.2
+  ../libs/qhotkey/QHotkey-1.2.2 \
+  $$OUT_PWD/../libs/libav/include \
+  $$OUT_PWD/../libs/libsoundio/include
 
 LIBS += \
   -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
-  -L../libs/qhotkey -lqhotkey
+  -L../libs/qhotkey -lqhotkey \
+  -L../libs/libav/lib -lavcodec \
+  -L../libs/libsoundio/lib -lsoundio \
+  -lpulse \
+  -ljack \
+  -lasound
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries

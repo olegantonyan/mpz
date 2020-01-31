@@ -7,7 +7,11 @@
 #include <QDebug>
 #include <QApplication>
 
+#include "audio/output.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
+  Audio::Output a;
+  a.test();
   #if defined(MPRIS_ENABLE)
     mpris = nullptr;
   #endif
