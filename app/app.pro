@@ -35,6 +35,7 @@ SOURCES += \
     directory_ui/directorymodel.cpp \
     playback/controls.cpp \
     playback/dispatch.cpp \
+    playback/mediaplayer.cpp \
     playback/playbackcontroller.cpp \
     playback/randomtrail.cpp \
     playlist/fileparser.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     directory_ui/directorymodel.h \
     playback/controls.h \
     playback/dispatch.h \
+    playback/mediaplayer.h \
     playback/playbackcontroller.h \
     playback/randomtrail.h \
     playlist/fileparser.h \

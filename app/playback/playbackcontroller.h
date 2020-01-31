@@ -3,9 +3,9 @@
 
 #include "controls.h"
 #include "track.h"
+#include "playback/mediaplayer.h"
 
 #include <QObject>
-#include <QMediaPlayer>
 #include <memory>
 #include <QEvent>
 #include <QMouseEvent>
@@ -49,7 +49,7 @@ namespace Playback {
 
   private:
     Playback::Controls _controls;
-    QMediaPlayer _player;
+    MediaPlayer _player;
     Track _current_track;
 
     void on_seek(int position);
@@ -60,8 +60,8 @@ namespace Playback {
 
   private slots:
     void on_positionChanged(quint64 pos);
-    void on_stateChanged(QMediaPlayer::State state);
-    void on_error(QMediaPlayer::Error error);
+    void on_stateChanged(MediaPlayer::State state);
+    void on_error(const QString &message);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

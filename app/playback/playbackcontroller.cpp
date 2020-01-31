@@ -2,19 +2,19 @@
 
 namespace Playback {
   Controller::Controller(const Controls &c, QObject *parent) : QObject(parent), _controls(c) {
-    connect(&_player, &QMediaPlayer::positionChanged, this, &Controller::on_positionChanged);
-    connect(&_player, &QMediaPlayer::stateChanged, this, &Controller::on_stateChanged);
-    connect(&_player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &Controller::on_error);
+    connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    //connect(&_player, &MediaPlayer::error, this, &Controller::on_error);
     connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
     connect(_controls.pause, &QToolButton::clicked, [=]() {
-      if (_player.state() == QMediaPlayer::PausedState) {
+      if (_player.state() == MediaPlayer::PausedState) {
         _player.play();
       } else  {
         _player.pause();
       }
     });
     connect(_controls.play, &QToolButton::clicked, [=]() {
-      if (_player.state() == QMediaPlayer::PausedState) {
+      if (_player.state() == MediaPlayer::PausedState) {
         _player.play();
       } else  {
         emit startRequested();
@@ -51,11 +51,11 @@ namespace Playback {
 
   Controller::State Controller::state() const {
     switch (_player.state()) {
-      case QMediaPlayer::StoppedState:
+      case MediaPlayer::StoppedState:
         return Stopped;
-      case QMediaPlayer::PlayingState:
+      case MediaPlayer::PlayingState:
         return Playing;
-      case QMediaPlayer::PausedState:
+      case MediaPlayer::PausedState:
         return Paused;
     }
   }
@@ -93,7 +93,7 @@ namespace Playback {
   }
 
   void Controller::on_seek(int position) {
-    if (_player.state() != QMediaPlayer::PlayingState)  {
+    if (_player.state() != MediaPlayer::PlayingState)  {
       return;
     }
 
@@ -119,29 +119,29 @@ namespace Playback {
     emit progress(_current_track, v);
   }
 
-  void Controller::on_stateChanged(QMediaPlayer::State state) {
+  void Controller::on_stateChanged(MediaPlayer::State state) {
     switch (state) {
-      case QMediaPlayer::StoppedState:
+      case MediaPlayer::StoppedState:
         _controls.seekbar->setValue(0);
-        _player.setMedia(nullptr);
+        _player.removeMedia();
         _controls.time->clear();
         _current_track = Track();
         if (next_after_stop) {
           emit nextRequested();
         }
         break;
-      case QMediaPlayer::PlayingState:
+      case MediaPlayer::PlayingState:
         emit started(_current_track);
         next_after_stop = true;
         break;
-      case QMediaPlayer::PausedState:
+      case MediaPlayer::PausedState:
         emit paused(_current_track);
         break;
     }
   }
 
-  void Controller::on_error(QMediaPlayer::Error error) {
-    qWarning() << "playback error" << error;
+  void Controller::on_error(const QString &message) {
+    qWarning() << "playback error" << message;
     emit nextRequested();
   }
 
