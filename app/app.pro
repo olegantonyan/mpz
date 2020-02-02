@@ -61,6 +61,7 @@ SOURCES += \
 
 HEADERS += \
     aboutdialog.h \
+    audio/audiofile.h \
     audio/output.h \
     busyspinner.h \
     config/global.h \
