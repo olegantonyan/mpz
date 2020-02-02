@@ -40,7 +40,7 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
 
 
 namespace PrivateVolumeControl {
-  Menu::Menu(QObject *parent) : QObject(parent), action(QWidgetAction(nullptr)) {
+  Menu::Menu(QObject *parent) : QObject(parent), action(QWidgetAction(parent)) {
     slider.setMaximum(100);
     slider.setMinimum(0);
     layout.addWidget(&slider);

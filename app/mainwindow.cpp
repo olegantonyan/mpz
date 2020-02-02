@@ -7,11 +7,8 @@
 #include <QDebug>
 #include <QApplication>
 
-#include "audio/output.h"
-
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
-  Audio::Output a;
-  a.test();
+  ao = new Audio::Output(new Audio::Decoder);
   #if defined(MPRIS_ENABLE)
     mpris = nullptr;
   #endif
@@ -65,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() {
+  delete ao;
   delete ui;
 }
 

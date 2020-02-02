@@ -11,6 +11,7 @@ echo "source directory: $SOURCE_DIRECTORY"
 echo "build directory: $BUILD_DIRECTORY"
 INSTALL_DIRECTORY="$CURRENT_DIRECTORY/libs/libav/"
 echo "install prefix: $INSTALL_DIRECTORY"
+rm -rf $INSTALL_DIRECTORY
 
 cd $BUILD_DIRECTORY
 

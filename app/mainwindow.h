@@ -21,6 +21,8 @@
   #include "dbus/mpris.h"
 #endif
 
+#include "audio/output.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -49,6 +51,7 @@ private:
   #if defined(MPRIS_ENABLE)
     Mpris *mpris;
   #endif
+  Audio::Output *ao;
 
   void loadUiSettings();
   void setupOrderCombobox();

@@ -84,7 +84,7 @@ namespace Playlist {
   }
 
   bool Playlist::concat(const QDir &path) {
-    auto new_playlist = Playlist();
+    Playlist new_playlist;
     new_playlist.load(path);
     for (auto i : new_playlist.tracks()) {
       tracks_list << i;
