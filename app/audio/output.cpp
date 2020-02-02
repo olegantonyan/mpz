@@ -33,7 +33,7 @@ static void write_sample_float64ne(char *ptr, double sample) {
 
 static void write_callback(struct SoundIoOutStream *outstream, int frame_count_min, int frame_count_max) {
   Q_UNUSED(frame_count_min)
-  Audio::OutputPrivate::Context *ctx = static_cast<Audio::OutputPrivate::Context *>(outstream->userdata);
+  Audio::Output *ctx = static_cast<Audio::Output *>(outstream->userdata);
   struct SoundIoChannelArea *areas = nullptr;
   int frames_left = frame_count_max;
 
@@ -72,7 +72,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
     frames_left -= frame_count;
   }
 
-  soundio_outstream_pause(outstream, ctx->pause());
+  soundio_outstream_pause(outstream, ctx->paused());
 }
 
 static void underflow_callback(struct SoundIoOutStream *outstream) {
@@ -83,7 +83,8 @@ static void underflow_callback(struct SoundIoOutStream *outstream) {
 }
 
 namespace Audio {
-  Output::Output(Decoder *d) : context(OutputPrivate::Context(d)) {
+  Output::Output(Decoder *d) : write_sample(nullptr), decoder(d) {
+    Q_ASSERT(decoder);
     soundio = soundio_create();
     if (soundio == nullptr) {
       qWarning() << "cannot create soundio";
@@ -98,14 +99,36 @@ namespace Audio {
     deinit();
   }
 
+  bool Output::paused() const {
+    return _pause;
+  }
+
+  void Output::pause(bool v) {
+    _pause = v;
+  }
+
+  double Output::readSample(int channel, int channels_count) {
+    if (paused()) {
+      return 0.0;
+    }
+    bool eof = false;
+    auto sample = decoder->readSample(&eof, channel, channels_count);
+    if (eof) {
+      pause(true);
+    }
+    return sample;
+  }
+
   bool Output::init() {
+    _stop = false;
+    _pause = false;
     qDebug() << "init soundio";
+    soundio->app_name = "mpz";
     int err = soundio_connect(soundio);
     if (err) {
       qWarning() << "cannot connect soundio:" << soundio_strerror(err);
       return false;
     }
-    soundio->app_name = "mpz";
 
     if (!connect_backend(SoundIoBackendPulseAudio)) {
       if (!connect_backend(SoundIoBackendAlsa)) {
@@ -135,28 +158,28 @@ namespace Audio {
       qWarning() << "cannot get output stream";
       return false;
     }
-    outstream->userdata = static_cast<void *>(&context);
+    outstream->userdata = static_cast<void *>(this);
     Q_ASSERT(outstream->userdata);
 
     outstream->sample_rate = 44100;
 
     outstream->write_callback = write_callback;
     outstream->underflow_callback = underflow_callback;
-    outstream->name = "mpz audio playback";
+    outstream->name = "audio playback";
     outstream->format = SoundIoFormatFloat32NE;
 
     if (soundio_device_supports_format(device, SoundIoFormatFloat32NE)) {
         outstream->format = SoundIoFormatFloat32NE;
-        context.write_sample = write_sample_float32ne;
+        write_sample = write_sample_float32ne;
     } else if (soundio_device_supports_format(device, SoundIoFormatFloat64NE)) {
         outstream->format = SoundIoFormatFloat64NE;
-        context.write_sample = write_sample_float64ne;
+        write_sample = write_sample_float64ne;
     } else if (soundio_device_supports_format(device, SoundIoFormatS32NE)) {
         outstream->format = SoundIoFormatS32NE;
-        context.write_sample = write_sample_s32ne;
+        write_sample = write_sample_s32ne;
     } else if (soundio_device_supports_format(device, SoundIoFormatS16NE)) {
         outstream->format = SoundIoFormatS16NE;
-        context.write_sample = write_sample_s16ne;
+        write_sample = write_sample_s16ne;
     } else {
       qDebug() << "no suitable device format available";
       return false;
@@ -183,19 +206,19 @@ namespace Audio {
     }
 
     soundio_flush_events(soundio);
-    QtConcurrent::run([=]() {
-      while(!context.stop()) {
+    /*QtConcurrent::run([=]() {
+      while(!stop()) {
         soundio_wait_events(soundio);
       }
-      deinit();
-    });
+      //deinit();
+    });*/
 
     return true;
   }
 
   void Output::deinit() {
     qDebug() << "deinit soundio";
-    context.setStop();
+    pause(true);
     if (outstream != nullptr) {
       soundio_outstream_destroy(outstream);
       outstream = nullptr;
@@ -219,49 +242,6 @@ namespace Audio {
       }
     }
     return false;
-  }
-
-  namespace OutputPrivate {
-    Context::Context(Decoder *d) : decoder(d), _pause(false), _stop(false) {
-      Q_ASSERT(decoder);
-      write_sample = nullptr;
-
-
-      audioFile.load("/home/oleg/Desktop/file.wav");
-      audioFile.printSummary();
-      sample_pointer = 0;
-    }
-
-    bool Context::pause() const {
-      return _pause;
-    }
-
-    bool Context::stop() const {
-      return _stop;
-    }
-
-    void Context::setPause(bool v) {
-      _pause = v;
-    }
-
-    void Context::setStop() {
-      _stop = true;
-    }
-
-    double Context::readSample(int channel, int channels_count) {
-      //return  QRandomGenerator::global()->generateDouble();
-
-      if (stop() || (sample_pointer >= audioFile.getNumSamplesPerChannel())) {
-        setStop();
-        return 0.0;
-      }
-
-      double sample = audioFile.samples[channel][sample_pointer];
-      if (channel + 1 >= channels_count) {
-        sample_pointer++;
-      }
-      return sample;
-    }
   }
 }
 

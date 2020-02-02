@@ -102,6 +102,7 @@ void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem("Random");
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
+    delete ao;
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
     global_conf.sync();
     #if defined(MPRIS_ENABLE)

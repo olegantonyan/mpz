@@ -9,10 +9,18 @@ extern "C" {
 #include "libavutil/mathematics.h"
 }
 
+#include "audio/audiofile.h"
+
 namespace Audio {
   class Decoder {
   public:
-    Decoder();
+    explicit Decoder();
+
+    double readSample(bool *eof, int channel, int channels_count);
+
+  private:
+    AudioFile<double> audioFile;
+    int sample_pointer;
   };
 }
 
