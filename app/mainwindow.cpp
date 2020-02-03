@@ -8,7 +8,10 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
-  ao = new Audio::Output(new Audio::Decoder);
+  while (true) {
+    pla.play();
+  }
+
   #if defined(MPRIS_ENABLE)
     mpris = nullptr;
   #endif
@@ -62,7 +65,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow() {
-  delete ao;
   delete ui;
 }
 
@@ -102,7 +104,6 @@ void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem("Random");
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-    delete ao;
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
     global_conf.sync();
     #if defined(MPRIS_ENABLE)

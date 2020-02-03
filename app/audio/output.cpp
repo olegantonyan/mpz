@@ -1,8 +1,7 @@
 #include "output.h"
 
 #include <QDebug>
-#include <QtConcurrent>
-#include <QRandomGenerator>
+#include <QDateTime>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
@@ -88,9 +87,11 @@ namespace Audio {
     soundio = soundio_create();
     if (soundio == nullptr) {
       qWarning() << "cannot create soundio";
+      eof = true;
     } else {
       if (!init()) {
         qWarning() << "cannot initialize soundio";
+        eof = true;
       }
     }
   }
@@ -108,10 +109,9 @@ namespace Audio {
   }
 
   double Output::readSample(int channel, int channels_count) {
-    if (paused()) {
+    if (paused() || eof) {
       return 0.0;
     }
-    bool eof = false;
     auto sample = decoder->readSample(&eof, channel, channels_count);
     if (eof) {
       pause(true);
@@ -119,10 +119,17 @@ namespace Audio {
     return sample;
   }
 
+  void Output::wait() {
+    while(!eof) {
+      soundio_wait_events(soundio);
+    }
+    deinit();
+  }
+
   bool Output::init() {
-    _stop = false;
+    eof = false;
     _pause = false;
-    qDebug() << "init soundio";
+    qDebug() << QDateTime::currentDateTime().toString() << "init soundio";
     soundio->app_name = "mpz";
     int err = soundio_connect(soundio);
     if (err) {
@@ -151,7 +158,7 @@ namespace Audio {
       return false;
     }
 
-    qDebug() << "output device:" << device->name;
+    qDebug() << QDateTime::currentDateTime().toString() << "output device:" << device->name;
 
     outstream = soundio_outstream_create(device);
     if (outstream == nullptr) {
@@ -161,12 +168,12 @@ namespace Audio {
     outstream->userdata = static_cast<void *>(this);
     Q_ASSERT(outstream->userdata);
 
-    outstream->sample_rate = 44100;
+    outstream->sample_rate = decoder->format().sampleRate();
 
     outstream->write_callback = write_callback;
     outstream->underflow_callback = underflow_callback;
-    outstream->name = "audio playback";
-    outstream->format = SoundIoFormatFloat32NE;
+    outstream->name = decoder->streamName();
+    outstream->format = SoundIoFormatFloat32NE; // TODO get format from decoder
 
     if (soundio_device_supports_format(device, SoundIoFormatFloat32NE)) {
         outstream->format = SoundIoFormatFloat32NE;
@@ -198,6 +205,7 @@ namespace Audio {
     if (outstream->layout_error) {
       qWarning() << "unable to set channel layout" << soundio_strerror(outstream->layout_error);
     }
+    outstream->layout.channel_count = decoder->format().channelCount();
 
     err = soundio_outstream_start(outstream);
     if (err) {
@@ -206,18 +214,12 @@ namespace Audio {
     }
 
     soundio_flush_events(soundio);
-    /*QtConcurrent::run([=]() {
-      while(!stop()) {
-        soundio_wait_events(soundio);
-      }
-      //deinit();
-    });*/
 
     return true;
   }
 
   void Output::deinit() {
-    qDebug() << "deinit soundio";
+    qDebug() << QDateTime::currentDateTime().toString() << "deinit soundio";
     pause(true);
     if (outstream != nullptr) {
       soundio_outstream_destroy(outstream);

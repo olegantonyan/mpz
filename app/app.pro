@@ -25,6 +25,7 @@ unix: DEFINES += MPRIS_ENABLE
 SOURCES += \
     aboutdialog.cpp \
     audio/output.cpp \
+    audio/player.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     aboutdialog.h \
     audio/audiofile.h \
     audio/output.h \
+    audio/player.h \
     busyspinner.h \
     config/global.h \
     config/local.h \

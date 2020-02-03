@@ -11,6 +11,8 @@ extern "C" {
 
 #include "audio/audiofile.h"
 
+#include <QAudioFormat>
+
 namespace Audio {
   class Decoder {
   public:
@@ -18,7 +20,13 @@ namespace Audio {
 
     double readSample(bool *eof, int channel, int channels_count);
 
+    const char *streamName() const;
+
+    const QAudioFormat& format() const;
+
   private:
+    QAudioFormat _format;
+
     AudioFile<double> audioFile;
     int sample_pointer;
   };

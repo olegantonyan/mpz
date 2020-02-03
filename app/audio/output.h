@@ -20,6 +20,8 @@ namespace Audio {
 
     double readSample(int channel, int channels_count);
 
+    void wait();
+
   private:
     bool init();
     void deinit();
@@ -31,7 +33,7 @@ namespace Audio {
 
     Decoder *decoder;
     bool _pause;
-    bool _stop;
+    bool eof;
   };
 }
 
