@@ -2,14 +2,7 @@
 #define DECODER_H
 
 extern "C" {
-#include "libavcodec/avcodec.h"
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libavutil/opt.h"
-#include "libavutil/mathematics.h"
-#include "libavutil/channel_layout.h"
-#include "libavutil/frame.h"
-#include "libavutil/mem.h"
+
 }
 
 #include <QAudioFormat>

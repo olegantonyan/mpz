@@ -3,112 +3,88 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
+#include <QThread>
 
+#define DR_FLAC_IMPLEMENTATION
+#include "extras/dr_flac.h"
+#define DR_MP3_IMPLEMENTATION
+#include "extras/dr_mp3.h"
+#define DR_WAV_IMPLEMENTATION
+#include "extras/dr_wav.h"
 
-static void decode(AVCodecContext *dec_ctx, AVPacket *pkt, AVFrame *frame) {
-    int i, ch;
-    int ret, data_size;
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
 
-    /* send the packet with the compressed data to the decoder */
-    ret = avcodec_send_packet(dec_ctx, pkt);
-    if (ret < 0) {
-      qWarning() << "avcodec_send_packet error";
+void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
+    ma_decoder* pDecoder = (ma_decoder*)pDevice->pUserData;
+    if (pDecoder == nullptr) {
+      return;
     }
 
-    /* read all the output frames (in general there may be any number of them */
-    while (ret >= 0) {
-        ret = avcodec_receive_frame(dec_ctx, frame);
-        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
-            return;
-        else if (ret < 0) {
-          qWarning() << "decoding error";
-        }
-        data_size = av_get_bytes_per_sample(dec_ctx->sample_fmt);
-        if (data_size < 0) {
-          qWarning() << "diata size error";
-        }
+    ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
 
-        qDebug() << "samples" << frame->nb_samples;
-        qDebug() << "channels" << dec_ctx->channels;
+    (void)pInput;
+}
 
-        /*for (i = 0; i < frame->nb_samples; i++) {
-          for (ch = 0; ch < dec_ctx->channels; ch++) {
+static size_t read_func(ma_decoder *decoder, void *buffer_out, size_t bytes_to_read) {
+  QFile *f = (QFile *)decoder->pUserData;
+  auto data = f->read(bytes_to_read);
+  memcpy(buffer_out, data.data(), data.size());
+  return data.size();
+}
 
-            fwrite(frame->data[ch] + data_size*i, 1, data_size, outfile);
-          }
-        }*/
-    }
+static ma_bool32 seek_func(ma_decoder *decoder, int byte_offset, ma_seek_origin origin) {
+  return 0;
+}
+
+void log_callback(ma_context* pContext, ma_device* pDevice, ma_uint32 logLevel, const char* message)
+{
+    (void)pContext;
+    (void)pDevice;
+    printf("miniaudio: [%s] %s\n", ma_log_level_to_string(logLevel), message);
 }
 
 namespace Audio {
   Decoder::Decoder() : sample_pointer(0) {
 
+    ma_result result;
+    ma_decoder decoder;
+    ma_device_config deviceConfig;
+    ma_device device;
 
-
-    AVCodec *codec = nullptr;
-    AVCodecContext *c= nullptr;
-    AVCodecParserContext *parser = nullptr;
-    AVPacket *pkt = av_packet_alloc();
-    AVFrame *decoded_frame = nullptr;
-
-    codec = avcodec_find_decoder(AV_CODEC_ID_MP2);
-    if (!codec) {
-      qWarning() << "cannot find codec";
-    }
-    parser = av_parser_init(codec->id);
-    if (!parser) {
-      qWarning() << "cannot find parser";
-    }
-    c = avcodec_alloc_context3(codec);
-    if (!c) {
-      qWarning() << "cannot allocate audio codec context";
-    }
-
-    if (avcodec_open2(c, codec, nullptr) < 0) {
-      qWarning() << "cannot open codec";
-    }
-
-    auto filename = "/home/oleg/Desktop/file.mp3";
-    QFile f(filename);
+    QFile f("/home/oleg/Desktop/file.flac");
     if (!f.open(QIODevice::ReadOnly)) {
-      qWarning() << "cannot open file" << f.errorString();
-    }
-    auto a = f.readAll();
-    f.close();
-    unsigned char *data = (unsigned char *)a.data();
-    int data_size = a.size();
-    qDebug() << "data size" << data_size;
-
-    decoded_frame = av_frame_alloc();
-
-    int ret = av_parser_parse2(parser, c, &pkt->data, &pkt->size, data, data_size, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
-    if (ret < 0) {
-      qWarning() << "parse error";
-    }
-    //data += ret;
-    qDebug() << "pkt size" << pkt->size;
-    if (pkt->size) {
-      decode(c, pkt, decoded_frame);
+      qWarning() << "open file error" << f.errorString();
     }
 
-    //av_register_all();
-
-    /*AVCodec *codec = av_codec_next(nullptr);
-    qDebug() << "enumerating codecs";
-    while(codec != nullptr) {
-      qDebug() << codec->long_name;
-      codec = av_codec_next(codec);
+    result = ma_decoder_init(read_func, seek_func, &f, nullptr, &decoder);
+    if (result != MA_SUCCESS) {
+      qWarning() << "init error";
     }
 
-    AVOutputFormat *oformat = av_oformat_next(nullptr);
-    qDebug() << "enumerating formats";
-    while(oformat != nullptr) {
-      qDebug() << oformat->long_name;
-      oformat = av_oformat_next(oformat);
-    }*/
+    deviceConfig = ma_device_config_init(ma_device_type_playback);
+    qDebug() << "output format:" << decoder.outputFormat;
+    qDebug() << "chanels:" << decoder.outputChannels;
+    qDebug() << "sample rate:" << decoder.outputSampleRate;
 
+    deviceConfig.playback.format   = decoder.outputFormat;
+    deviceConfig.playback.channels = decoder.outputChannels;
+    deviceConfig.sampleRate        = decoder.outputSampleRate;
+    deviceConfig.dataCallback      = data_callback;
+    deviceConfig.pUserData         = &decoder;
 
+    if (ma_device_init(nullptr, &deviceConfig, &device) != MA_SUCCESS) {
+        qWarning() << "device open error";
+        ma_decoder_uninit(&decoder);
+    }
 
+    if (ma_device_start(&device) != MA_SUCCESS) {
+        qWarning() << "playback start error";
+        ma_device_uninit(&device);
+        ma_decoder_uninit(&decoder);
+    }
+
+    QThread::currentThread()->sleep(100000000);
 
 
     _format.setSampleRate(44100);
