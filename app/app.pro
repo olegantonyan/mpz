@@ -110,19 +110,28 @@ INCLUDEPATH += \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
   ../libs/qhotkey/QHotkey-1.2.2 \
-  $$OUT_PWD/../libs/libav/include \
-  $$OUT_PWD/../libs/libsoundio/include
+  $$OUT_PWD/../libs/ffmpeg/include
 
 LIBS += \
+  -Wl,--start-group \
   -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
   -L../libs/qhotkey -lqhotkey \
-  -L../libs/libav/lib -lavcodec \
-  -L../libs/libsoundio/lib -lsoundio \
+  -L../libs/ffmpeg/lib -lavformat \
+  -L../libs/ffmpeg/lib -lavcodec \
+  -L../libs/ffmpeg/lib -lswscale \
+  -L../libs/ffmpeg/lib -lavdevice \
+  -L../libs/ffmpeg/lib -lavfilter \
+  -L../libs/ffmpeg/lib -lavutil \
+  -L../libs/ffmpeg/lib -lswresample \
   -lpulse \
-  -ljack \
-  -lasound
+  -lasound \
+  -lm \
+  -lz \
+  -llzma \
+  -lbz2 \
+  -Wl,--end-group
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries

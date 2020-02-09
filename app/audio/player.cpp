@@ -10,7 +10,7 @@ namespace Audio {
     qDebug() << "start play";
     Audio::Decoder dec;
     Audio::Output ao(&dec);
-    ao.wait();
+    //ao.wait();
     qDebug() << "finish play";
   }
 }

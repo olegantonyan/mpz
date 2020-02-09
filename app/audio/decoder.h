@@ -2,14 +2,15 @@
 #define DECODER_H
 
 extern "C" {
-#include "libavresample/avresample.h"
+#include "libavcodec/avcodec.h"
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 #include "libavutil/opt.h"
 #include "libavutil/mathematics.h"
+#include "libavutil/channel_layout.h"
+#include "libavutil/frame.h"
+#include "libavutil/mem.h"
 }
-
-#include "audio/audiofile.h"
 
 #include <QAudioFormat>
 
@@ -27,8 +28,7 @@ namespace Audio {
   private:
     QAudioFormat _format;
 
-    AudioFile<double> audioFile;
-    int sample_pointer;
+    unsigned long sample_pointer;
   };
 }
 
