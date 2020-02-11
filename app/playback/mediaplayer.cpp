@@ -1,7 +1,12 @@
 #include "mediaplayer.h"
 
+#include <QBuffer>
+#include <QFile>
+#include <QThread>
+#include <QtConcurrent>
+
 namespace Playback {
-  MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent) {
+  MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent), player(QMediaPlayer(parent, QMediaPlayer::StreamPlayback)) {
     connect(&player, &QMediaPlayer::positionChanged, this, &MediaPlayer::positionChanged);
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
       switch (state) {
@@ -19,6 +24,7 @@ namespace Playback {
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), [=](QMediaPlayer::Error err) {
       emit error(QString("QMediaPlayer error %1").arg(err));
     });
+    connect(&stream, &Stream::fillChanged, this, &MediaPlayer::streamBufferfillChanged);
   }
 
   MediaPlayer::State MediaPlayer::state() const {
@@ -41,15 +47,22 @@ namespace Playback {
   }
 
   void MediaPlayer::pause() {
+    // TODO: stream pause? prevent buffer overflow
     player.pause();
   }
 
   void MediaPlayer::play() {
+    if (!stream.isRunning() && stream.isValidUrl()) {
+      if (!stream.start()) {
+        qWarning() << "error starting stream form" << stream.url();
+      }
+    }
     player.play();
   }
 
   void MediaPlayer::stop() {
     player.stop();
+    stream.stop();
   }
 
   void MediaPlayer::setPosition(qint64 pos) {
@@ -61,7 +74,13 @@ namespace Playback {
   }
 
   void MediaPlayer::setMedia(const QUrl &url) {
-    player.setMedia(url);
+    stream.stop();
+    if (url.scheme() == "file") {
+      player.setMedia(url);
+    } else {
+      stream.setUrl(url);
+      player.setMedia(url, &stream);
+    }
   }
 
   void MediaPlayer::removeMedia() {

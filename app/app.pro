@@ -1,4 +1,4 @@
-QT       += core gui multimedia concurrent
+QT       += core gui multimedia concurrent network
 unix: QT += dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -55,7 +55,8 @@ SOURCES += \
     statusbarlabel.cpp \
     track.cpp \
     trayicon.cpp \
-    volumecontrol.cpp
+    volumecontrol.cpp \
+    playback/stream.cpp
 
 HEADERS += \
     aboutdialog.h \
@@ -89,7 +90,8 @@ HEADERS += \
     statusbarlabel.h \
     track.h \
     trayicon.h \
-    volumecontrol.h
+    volumecontrol.h \
+    playback/stream.h
 
 FORMS += \
     aboutdialog.ui \

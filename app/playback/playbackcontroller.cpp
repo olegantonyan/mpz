@@ -32,6 +32,12 @@ namespace Playback {
         emit nextRequested();
       }
     });
+    connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
+      if (_current_track.isStream()) {
+        _controls.seekbar->setMaximum(static_cast<int>(thresh));
+        _controls.seekbar->setValue(static_cast<int>(bytes));
+      }
+    });
 
     _controls.seekbar->installEventFilter(this);
     next_after_stop = true;
@@ -70,10 +76,10 @@ namespace Playback {
 
   void Controller::play(const Track &track) {
     next_after_stop = false;
-    _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
     _player.setMedia(track.url());
     _current_track = track;
     _player.play();
+    _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
   }
 
   void Controller::stop() {
@@ -96,6 +102,9 @@ namespace Playback {
     if (_player.state() != MediaPlayer::PlayingState)  {
       return;
     }
+    if (_current_track.isStream()) {
+      return;
+    }
 
     int total = _controls.seekbar->width();
     position = qMin(qMax(position, 0), total);
@@ -115,7 +124,9 @@ namespace Playback {
   void Controller::on_positionChanged(quint64 pos) {
     int v = static_cast<int>(pos / 1000);
     _controls.time->setText(time_text(v));
-    _controls.seekbar->setValue(v);
+    if (!_current_track.isStream()) {
+      _controls.seekbar->setValue(v);
+    }
     emit progress(_current_track, v);
   }
 
