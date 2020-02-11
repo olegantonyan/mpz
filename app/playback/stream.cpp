@@ -7,7 +7,7 @@
 #include <QNetworkReply>
 
 namespace Playback {
-  Stream::Stream(quint32 threshold_bytes, QObject *parent) : QIODevice(parent), _threshold_bytes(threshold_bytes) {
+  Stream::Stream(quint32 threshold_bytes, QObject *parent) : QIODevice(parent), _running(false), _threshold_bytes(threshold_bytes) {
     open(QIODevice::ReadWrite | QIODevice::Unbuffered | QIODevice::Append);
     connect(this, &Stream::started, [=]() {
       _running = true;

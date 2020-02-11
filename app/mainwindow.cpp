@@ -85,6 +85,7 @@ void MainWindow::loadUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  player->stop();
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
