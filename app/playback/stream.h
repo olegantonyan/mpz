@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QIODevice>
 #include <QUrl>
+#include <QMutex>
 
 namespace Playback {
   class Stream : public QIODevice {
@@ -42,8 +43,12 @@ namespace Playback {
     bool _running;
     QUrl _url;
     const quint32 _threshold_bytes;
+    QMutex _mutex;
 
     void append(const QByteArray& a);
+    void clear();
+
+    void thread();
 
   protected:
     qint64 readData(char *data, qint64 maxlen) override;
