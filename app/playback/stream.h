@@ -1,11 +1,14 @@
 #ifndef PLAYBACK_STREAM_H
 #define PLAYBACK_STREAM_H
 
+#include "playback/streammetadata.h"
+
 #include <QObject>
 #include <QIODevice>
 #include <QUrl>
 #include <QMutex>
 #include <QFuture>
+#include <QNetworkReply>
 
 namespace Playback {
   class Stream : public QIODevice {
@@ -38,6 +41,7 @@ namespace Playback {
     void started();
     void fillChanged(quint32 current, quint32 total);
     void error(const QString& message);
+    void metadataChanged(const StreamMetaData& meta);
 
   private:
     QByteArray _buffer;
@@ -47,11 +51,15 @@ namespace Playback {
     const quint32 _max_bytes;
     QMutex _mutex;
     QFuture<void> _future;
+    int _icy_metaint;
+    qint64 _next_meta_pos;
+    StreamMetaData _meta;
 
     void append(const QByteArray& a);
     void clear();
-
     void thread();
+    bool extract_icy_metaint(const QNetworkReply *const reply);
+    void append_extract_meta(const QByteArray &a);
 
   protected:
     // QIODevice interface

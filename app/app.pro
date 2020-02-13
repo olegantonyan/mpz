@@ -56,7 +56,8 @@ SOURCES += \
     track.cpp \
     trayicon.cpp \
     volumecontrol.cpp \
-    playback/stream.cpp
+    playback/stream.cpp \
+    playback/streammetadata.cpp
 
 HEADERS += \
     aboutdialog.h \
@@ -91,7 +92,8 @@ HEADERS += \
     track.h \
     trayicon.h \
     volumecontrol.h \
-    playback/stream.h
+    playback/stream.h \
+    playback/streammetadata.h
 
 FORMS += \
     aboutdialog.ui \

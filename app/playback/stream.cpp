@@ -4,7 +4,6 @@
 #include <QtConcurrent>
 #include <QTimer>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 
 namespace Playback {
   Stream::Stream(quint32 threshold_bytes, QObject *parent) :
@@ -21,15 +20,15 @@ namespace Playback {
 
   bool Stream::start(quint32 timeout_ms) {
     if (!isValidUrl()) {
+      emit error(QString("invalid url: %1").arg(url().toString()));
       return false;
     }
     qDebug() << "starting stream from" << url();
 
-    _total_bytes_received = 0;
-    clear();
     if (isRunning()) {
       stop();
     }
+    clear();
 
     _future = QtConcurrent::run(this, &Stream::thread);
 
@@ -53,7 +52,10 @@ namespace Playback {
     QTimer timer;
     timer.setSingleShot(true);
     timer.setInterval(static_cast<int>(timeout_ms));
-    auto timer_conn = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    auto timer_conn = connect(&timer, &QTimer::timeout, [&]() {
+      emit error(QString("cannot start stream in %1 seconds").arg(timeout_ms));
+      loop.quit();
+    });
     timer.start();
 
     loop.exec();
@@ -86,15 +88,45 @@ namespace Playback {
     }
   }
 
-  void Stream::append(const QByteArray &a) {
+  void Stream::append_extract_meta(const QByteArray &a) {
+    if (_icy_metaint <= 0) {
+      return;
+    }
+
+    int meta_bytes = 0;
+    QByteArray meta;
+    for (int i = 0; i < a.size(); i++) {
+      if (i + _total_bytes_received == _next_meta_pos) {
+        meta_bytes = a.at(i) * 16;
+        _next_meta_pos += (_icy_metaint + meta_bytes + 1);
+      } else if (meta_bytes > 0) {
+        meta.append(a.at(i));
+        meta_bytes--;
+        if (meta_bytes == 0) {
+          _meta.insert("stream", meta);
+          emit metadataChanged(_meta);
+        }
+      } else {
+        _buffer.append(a.at(i));
+      }
+    }
+  }
+
+  void Stream::append(const QByteArray& a) {
     if (a.isEmpty()) {
       return;
     }
     _mutex.lock();
+
     if (static_cast<quint32>(_buffer.size()) < _max_bytes) {
-      _buffer.append(a);
+      if (_icy_metaint > 0) {
+        append_extract_meta(a);
+      } else {
+        _buffer.append(a);
+      }
     }
     _total_bytes_received += a.size();
+
     quint32 new_size = static_cast<quint32>(_buffer.size());
     _mutex.unlock();
     if (_total_bytes_received >= _threshold_bytes) {
@@ -106,7 +138,12 @@ namespace Playback {
   void Stream::clear() {
     _mutex.lock();
     _buffer.clear();
+    _total_bytes_received = 0;
+    _icy_metaint = 0;
+    _next_meta_pos = 0;
+    _meta.clear();
     _mutex.unlock();
+    emit metadataChanged(_meta);
   }
 
   void Stream::thread() {
@@ -117,13 +154,12 @@ namespace Playback {
     QEventLoop loop;
     QNetworkAccessManager nam;
     QNetworkRequest request(url());
-    //request.setRawHeader("Icy-MetaData", "1");
+    request.setRawHeader("Icy-MetaData", "1");
     QNetworkReply *reply = nam.get(request);
 
     auto conn_read = connect(reply, &QNetworkReply::downloadProgress, [=](qint64 bytesReceived, qint64 bytesTotal) {
       Q_UNUSED(bytesReceived)
       Q_UNUSED(bytesTotal)
-      //qDebug() << "icy-metaint" << reply->rawHeader("icy-metaint");
       append(reply->readAll());
     });
     auto conn_error = connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
@@ -132,6 +168,21 @@ namespace Playback {
         emit error(reply->errorString());
       }
     });
+    auto conn_meta = connect(reply, &QNetworkReply::metaDataChanged, [=]() {
+      extract_icy_metaint(reply);
+      auto headers = reply->rawHeaderPairs();
+      for (auto i : headers) {
+        QString h = QString(i.first);
+        if (h.startsWith("icy-", Qt::CaseInsensitive)) {
+          _meta.insert(h, i.second);
+          emit metadataChanged(_meta);
+        }
+      }
+    });
+    /*connect(reply, &QNetworkReply::finished, [=]() {
+      qDebug() << reply->rawHeaderPairs();
+      qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    });*/
 
     auto conn_fin = connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     auto conn_abort = connect(this, &Stream::stopping, reply, &QNetworkReply::abort);
@@ -142,14 +193,38 @@ namespace Playback {
     disconnect(conn_quit);
     disconnect(conn_fin);
     disconnect(conn_error);
+    disconnect(conn_meta);
     reply->deleteLater();
     clear();
-
     setUrl(QUrl());
 
     emit stopped();
 
     qDebug() << "stream stopped";
+  }
+
+  bool Stream::extract_icy_metaint(const QNetworkReply * const reply) {
+    const auto HEADER = "icy-metaint";
+
+    if (_icy_metaint > 0) {
+      return false;
+    }
+    if (!reply->hasRawHeader(HEADER)) {
+      return false;
+    }
+    auto raw_metaint = reply->rawHeader(HEADER);
+    if (raw_metaint.isEmpty()) {
+      return false;
+    }
+    bool ok = false;
+    int raw_int = raw_metaint.toInt(&ok);
+    if (!ok) {
+      return false;
+    }
+    _icy_metaint = raw_int;
+    _next_meta_pos = _icy_metaint;
+    qDebug() << "stream got icy-metaint" << _icy_metaint;
+    return true;
   }
 
   bool Stream::isSequential() const {

@@ -25,6 +25,12 @@ namespace Playback {
       emit error(QString("QMediaPlayer error %1").arg(err));
     });
     connect(&stream, &Stream::fillChanged, this, &MediaPlayer::streamBufferfillChanged);
+    connect(&stream, &Stream::metadataChanged, [=](const StreamMetaData& meta) {
+      qDebug() << "metadata changed" << meta.rawData();
+    });
+    connect(&stream, &Stream::error, [=](const QString& message) {
+      qDebug() << "stream error" << message;
+    });
   }
 
   MediaPlayer::State MediaPlayer::state() const {
