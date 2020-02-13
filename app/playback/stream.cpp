@@ -7,17 +7,12 @@
 #include <QNetworkReply>
 
 namespace Playback {
-  Stream::Stream(quint32 threshold_bytes, QObject *parent) : QIODevice(parent), _running(false), _threshold_bytes(threshold_bytes) {
+  Stream::Stream(quint32 threshold_bytes, QObject *parent) :
+    QIODevice(parent),
+    _total_bytes_received(0),
+    _threshold_bytes(threshold_bytes),
+    _max_bytes(threshold_bytes * 128) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
-    connect(this, &Stream::started, [=]() {
-      _running = true;
-      qDebug() << "stream started";
-    });
-    connect(this, &Stream::stopped, [=]() {
-      _running = false;
-      setUrl(QUrl());
-      qDebug() << "stream stopped";
-    });
   }
 
   Stream::~Stream() {
@@ -36,7 +31,7 @@ namespace Playback {
       stop();
     }
 
-    QtConcurrent::run(this, &Stream::thread);
+    _future = QtConcurrent::run(this, &Stream::thread);
 
     return waitForFill(timeout_ms);
   }
@@ -69,7 +64,7 @@ namespace Playback {
   }
 
   bool Stream::isRunning() const {
-    return _running;
+    return _future.isRunning();
   }
 
   bool Stream::isValidUrl() const {
@@ -87,11 +82,7 @@ namespace Playback {
   void Stream::stop() {
     if (isRunning()) {
       emit stopping();
-
-      QEventLoop loop;
-      auto conn = connect(this, &Stream::stopped, &loop, &QEventLoop::quit);
-      loop.exec();
-      disconnect(conn);
+      _future.waitForFinished();
     }
   }
 
@@ -100,7 +91,9 @@ namespace Playback {
       return;
     }
     _mutex.lock();
-    _buffer.append(a);
+    if (static_cast<quint32>(_buffer.size()) < _max_bytes) {
+      _buffer.append(a);
+    }
     _total_bytes_received += a.size();
     quint32 new_size = static_cast<quint32>(_buffer.size());
     _mutex.unlock();
@@ -119,27 +112,44 @@ namespace Playback {
   void Stream::thread() {
     emit started();
 
+    qDebug() << "stream started";
+
     QEventLoop loop;
     QNetworkAccessManager nam;
     QNetworkRequest request(url());
+    //request.setRawHeader("Icy-MetaData", "1");
     QNetworkReply *reply = nam.get(request);
 
     auto conn_read = connect(reply, &QNetworkReply::downloadProgress, [=](qint64 bytesReceived, qint64 bytesTotal) {
       Q_UNUSED(bytesReceived)
       Q_UNUSED(bytesTotal)
+      //qDebug() << "icy-metaint" << reply->rawHeader("icy-metaint");
       append(reply->readAll());
     });
+    auto conn_error = connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
+      if (code != QNetworkReply::OperationCanceledError) {
+        qWarning() << "stream network error" << code << reply->errorString();
+        emit error(reply->errorString());
+      }
+    });
 
+    auto conn_fin = connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     auto conn_abort = connect(this, &Stream::stopping, reply, &QNetworkReply::abort);
     auto conn_quit = connect(this, &Stream::stopping, &loop, &QEventLoop::quit);
     loop.exec();
     disconnect(conn_read);
     disconnect(conn_abort);
     disconnect(conn_quit);
+    disconnect(conn_fin);
+    disconnect(conn_error);
     reply->deleteLater();
     clear();
 
+    setUrl(QUrl());
+
     emit stopped();
+
+    qDebug() << "stream stopped";
   }
 
   bool Stream::isSequential() const {
