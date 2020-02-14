@@ -120,7 +120,7 @@ namespace Playback {
     QStringList headers;
     headers.append(QString("GET %1 HTTP/1.1").arg(url().path()));
     headers.append(QString("Host: %1:%2").arg(url().host()).arg(url().port()));
-    headers.append(QString("User-Agent: %1").arg(qAppName()));
+    headers.append(QString("User-Agent: %1 %2").arg(qAppName()).arg(qApp->applicationVersion()));
     if (!url().userName().isEmpty() && !url().password().isEmpty()) {
       QString concatenated = url().userName() + ":" + url().password();
       QByteArray data = concatenated.toLocal8Bit().toBase64();
