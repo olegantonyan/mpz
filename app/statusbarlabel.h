@@ -16,6 +16,7 @@ public slots:
   void on_playerStopped();
   void on_playerStarted(const Track &track);
   void on_playerPaused(const Track &track);
+  void on_streamBufferFill(const Track &track, int percents);
 
 signals:
   void doubleclicked();

@@ -33,11 +33,8 @@ namespace Playback {
       }
     });
     connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
-      if (_current_track.isStream() && !isStopped()) {
-        //qDebug() << "fill" << bytes << "of" << thresh;
-        _controls.seekbar->setMaximum(static_cast<int>(thresh));
-        _controls.seekbar->setValue(static_cast<int>(bytes));
-      }
+      double percents = static_cast<double>(bytes) / static_cast<double>(thresh) * 100.0;
+      emit streamFill(_current_track, static_cast<int>(percents));
     });
 
     _controls.seekbar->installEventFilter(this);
@@ -80,7 +77,11 @@ namespace Playback {
     _player.setMedia(track.url());
     _current_track = track;
     _player.play();
-    _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
+    if (track.isStream()) {
+      _controls.seekbar->setMaximum(1);
+    } else {
+      _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
+    }
   }
 
   void Controller::stop() {
