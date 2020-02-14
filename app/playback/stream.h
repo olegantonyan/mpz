@@ -19,8 +19,6 @@ namespace Playback {
 
     bool start();
 
-    bool waitForFill(quint32 timeout_ms);
-
     bool isRunning() const;
     bool isValidUrl() const;
 

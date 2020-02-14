@@ -36,36 +36,6 @@ namespace Playback {
     return _future.isStarted();
   }
 
-  bool Stream::waitForFill(quint32 timeout_ms) {
-    if (bytesAvailable() >= _threshold_bytes) {
-      return true;
-    }
-
-    bool ok = false;
-
-    QEventLoop loop;
-    auto ready_conn = connect(this, &Stream::readyRead, [&]() {
-      if (bytesAvailable() >= _threshold_bytes) {
-        loop.quit();
-        ok = true;
-      }
-    });
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.setInterval(static_cast<int>(timeout_ms));
-    auto timer_conn = connect(&timer, &QTimer::timeout, [&]() {
-      emit error(QString("cannot start stream in %1 seconds").arg(timeout_ms));
-      loop.quit();
-    });
-    timer.start();
-
-    loop.exec();
-
-    disconnect(ready_conn);
-    disconnect(timer_conn);
-    return ok;
-  }
-
   bool Stream::isRunning() const {
     return _future.isRunning();
   }
@@ -240,7 +210,7 @@ namespace Playback {
     disconnect(conn_fin);
     disconnect(conn_error);
     clear();
-    setUrl(QUrl());
+    _url.clear();
 
     emit stopped();
 
