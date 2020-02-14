@@ -170,7 +170,7 @@ namespace Playback {
 
     quint32 new_size = static_cast<quint32>(_buffer.size());
     _mutex.unlock();
-    if (_total_bytes_received >= _threshold_bytes) {
+    if (new_size >= _threshold_bytes) {
       emit readyRead();
     }
     emit fillChanged(new_size, _threshold_bytes);

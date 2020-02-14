@@ -14,7 +14,7 @@ namespace Playback {
   class Stream : public QIODevice {
     Q_OBJECT
   public:
-    explicit Stream(quint32 threshold_bytes = 262144, QObject *parent = nullptr);
+    explicit Stream(quint32 threshold_bytes = 131072, QObject *parent = nullptr);
     ~Stream() override;
 
     bool start();
