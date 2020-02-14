@@ -76,6 +76,14 @@ namespace Playback {
 
   void Stream::setUrl(const QUrl &url) {
     _url = url;
+    if (!_url.isEmpty() && _url.port() < 0) {
+      if (_url.scheme() == "https") {
+        _url.setPort(443);
+      } else {
+        _url.setPort(80);
+      }
+
+    }
   }
 
   QUrl Stream::url() const {
@@ -221,11 +229,7 @@ namespace Playback {
     auto conn_abort = connect(this, &Stream::stopping, &sock, &QTcpSocket::abort);
     auto conn_quit = connect(this, &Stream::stopping, &loop, &QEventLoop::quit);
 
-    int port =  url().port();
-    if (port < 0) {
-      port = 80;
-    }
-    sock.connectToHost(url().host(), static_cast<quint16>(port));
+    sock.connectToHost(url().host(), static_cast<quint16>(url().port()));
     sock.waitForConnected();
     sock.write(buildRequest().toLatin1());
 
