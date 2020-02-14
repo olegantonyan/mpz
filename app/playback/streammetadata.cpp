@@ -26,4 +26,13 @@ namespace Playback {
     }
     return static_cast<quint16>(i);
   }
+
+  quint16 StreamMetaData::samplerate() const {
+    bool ok = false;
+    auto i = _data.value("icy-sr", "0").toUInt(&ok);
+    if (!ok) {
+      return 0;
+    }
+    return static_cast<quint16>(i);
+  }
 }

@@ -13,6 +13,7 @@ namespace Playback {
     QMap<QString, QString> rawData() const;
 
     quint16 bitrate() const;
+    quint16 samplerate() const;
 
   private:
     QMap<QString, QString> _data;

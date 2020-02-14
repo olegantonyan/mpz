@@ -8,16 +8,16 @@
 #include <QUrl>
 #include <QMutex>
 #include <QFuture>
-#include <QNetworkReply>
+#include <QStringList>
 
 namespace Playback {
   class Stream : public QIODevice {
     Q_OBJECT
   public:
-    explicit Stream(quint32 threshold_bytes = 131072, QObject *parent = nullptr);
+    explicit Stream(quint32 threshold_bytes = 262144, QObject *parent = nullptr);
     ~Stream() override;
 
-    bool start(quint32 timeout_ms = 60000);
+    bool start();
 
     bool waitForFill(quint32 timeout_ms);
 
@@ -58,8 +58,10 @@ namespace Playback {
     void append(const QByteArray& a);
     void clear();
     void thread();
-    bool extract_icy_metaint(const QNetworkReply *const reply);
-    void append_extract_meta(const QByteArray &a);
+    bool extract_icy_metaint(const QMap<QString, QString> &headers);
+    int append_extract_meta(const QByteArray &a);
+    QString buildRequest() const;
+    QMap<QString, QString> parseHeaders(QStringList rawheaders);
 
   protected:
     // QIODevice interface

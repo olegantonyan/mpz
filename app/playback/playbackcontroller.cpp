@@ -34,6 +34,7 @@ namespace Playback {
     });
     connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
       if (_current_track.isStream() && !isStopped()) {
+        //qDebug() << "fill" << bytes << "of" << thresh;
         _controls.seekbar->setMaximum(static_cast<int>(thresh));
         _controls.seekbar->setValue(static_cast<int>(bytes));
       }

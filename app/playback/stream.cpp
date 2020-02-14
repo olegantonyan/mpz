@@ -3,14 +3,15 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QTimer>
-#include <QNetworkAccessManager>
+#include <QTcpSocket>
+#include <QMap>
 
 namespace Playback {
   Stream::Stream(quint32 threshold_bytes, QObject *parent) :
     QIODevice(parent),
     _total_bytes_received(0),
     _threshold_bytes(threshold_bytes),
-    _max_bytes(threshold_bytes * 128) {
+    _max_bytes(threshold_bytes * 32) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
   }
 
@@ -18,7 +19,7 @@ namespace Playback {
     stop();
   }
 
-  bool Stream::start(quint32 timeout_ms) {
+  bool Stream::start() {
     if (!isValidUrl()) {
       emit error(QString("invalid url: %1").arg(url().toString()));
       return false;
@@ -32,7 +33,7 @@ namespace Playback {
 
     _future = QtConcurrent::run(this, &Stream::thread);
 
-    return waitForFill(timeout_ms);
+    return _future.isStarted();
   }
 
   bool Stream::waitForFill(quint32 timeout_ms) {
@@ -88,10 +89,11 @@ namespace Playback {
     }
   }
 
-  void Stream::append_extract_meta(const QByteArray &a) {
+  int Stream::append_extract_meta(const QByteArray &a) {
     if (_icy_metaint <= 0) {
-      return;
+      return -1;
     }
+    int bytes_appended = 0;
 
     int meta_bytes = 0;
     QByteArray meta;
@@ -107,9 +109,44 @@ namespace Playback {
           emit metadataChanged(_meta);
         }
       } else {
+        bytes_appended++;
         _buffer.append(a.at(i));
       }
     }
+    return bytes_appended;
+  }
+
+  QString Stream::buildRequest() const {
+    QStringList headers;
+    headers.append(QString("GET %1 HTTP/1.1").arg(url().path()));
+    headers.append(QString("Host: %1:%2").arg(url().host()).arg(url().port()));
+    headers.append(QString("User-Agent: %1").arg(qAppName()));
+    if (!url().userName().isEmpty() && !url().password().isEmpty()) {
+      QString concatenated = url().userName() + ":" + url().password();
+      QByteArray data = concatenated.toLocal8Bit().toBase64();
+      QString header_data = "Basic " + data;
+      headers.append(QString("Authorization: %1").arg(header_data));
+    }
+    headers.append("Icy-Metadata: 1");
+    headers.append("Accept: */*");
+
+    return headers.join("\r\n") + "\r\n\r\n";
+  }
+
+  QMap<QString, QString> Stream::parseHeaders(QStringList rawheaders) {
+    QMap<QString, QString> result;
+    rawheaders.removeAt(0); // status line. don't care
+    rawheaders.removeAll({}); // empty and null
+    for (auto i : rawheaders) {
+      auto key = i.section(':', 0, 0);
+      auto value = i.section(':', 1);
+      result.insert(key, value);
+      if (key.startsWith("icy-", Qt::CaseInsensitive)) {
+        _meta.insert(key, value);
+        emit metadataChanged(_meta);
+      }
+    }
+    return result;
   }
 
   void Stream::append(const QByteArray& a) {
@@ -118,12 +155,16 @@ namespace Playback {
     }
     _mutex.lock();
 
-    if (static_cast<quint32>(_buffer.size()) < _max_bytes) {
-      if (_icy_metaint > 0) {
-        append_extract_meta(a);
-      } else {
-        _buffer.append(a);
-      }
+    int bytes_appended = 0;
+    if (_icy_metaint > 0) {
+      bytes_appended = append_extract_meta(a);
+    } else {
+      _buffer.append(a);
+      bytes_appended = a.size();
+    }
+    if (static_cast<quint32>(_buffer.size()) >= _max_bytes) {
+      qDebug() << "stream buffer overflow";
+      _buffer.remove(0, bytes_appended);
     }
     _total_bytes_received += a.size();
 
@@ -152,49 +193,48 @@ namespace Playback {
     qDebug() << "stream started";
 
     QEventLoop loop;
-    QNetworkAccessManager nam;
-    QNetworkRequest request(url());
-    request.setRawHeader("Icy-MetaData", "1");
-    QNetworkReply *reply = nam.get(request);
+    QTcpSocket sock;
+    QMap<QString, QString> headers;
 
-    auto conn_read = connect(reply, &QNetworkReply::downloadProgress, [=](qint64 bytesReceived, qint64 bytesTotal) {
-      Q_UNUSED(bytesReceived)
-      Q_UNUSED(bytesTotal)
-      append(reply->readAll());
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
+      qWarning() << "stream network error" << code << sock.errorString();
+      emit error(sock.errorString());
     });
-    auto conn_error = connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
-      if (code != QNetworkReply::OperationCanceledError) {
-        qWarning() << "stream network error" << code << reply->errorString();
-        emit error(reply->errorString());
-      }
-    });
-    auto conn_meta = connect(reply, &QNetworkReply::metaDataChanged, [=]() {
-      extract_icy_metaint(reply);
-      auto headers = reply->rawHeaderPairs();
-      for (auto i : headers) {
-        QString h = QString(i.first);
-        if (h.startsWith("icy-", Qt::CaseInsensitive)) {
-          _meta.insert(h, i.second);
-          emit metadataChanged(_meta);
+
+    auto conn_read = connect(&sock, &QTcpSocket::readyRead, [&]() {
+      auto data = sock.readAll();
+      if (!headers.isEmpty()) {
+        append(data);
+      } else {
+        const QString HEADERS_TERMINATOR("\r\n\r\n");
+        auto string = QString(data.data());
+        if (string.contains(HEADERS_TERMINATOR)) {
+          int idx = string.indexOf(HEADERS_TERMINATOR) + HEADERS_TERMINATOR.length();
+          headers = parseHeaders(string.left(idx).split("\r\n"));
+          extract_icy_metaint(headers);
+          append(data.mid(idx));
         }
       }
     });
-    /*connect(reply, &QNetworkReply::finished, [=]() {
-      qDebug() << reply->rawHeaderPairs();
-      qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    });*/
 
-    auto conn_fin = connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    auto conn_abort = connect(this, &Stream::stopping, reply, &QNetworkReply::abort);
+    auto conn_fin = connect(&sock, &QTcpSocket::disconnected, &loop, &QEventLoop::quit);
+    auto conn_abort = connect(this, &Stream::stopping, &sock, &QTcpSocket::abort);
     auto conn_quit = connect(this, &Stream::stopping, &loop, &QEventLoop::quit);
+
+    int port =  url().port();
+    if (port < 0) {
+      port = 80;
+    }
+    sock.connectToHost(url().host(), static_cast<quint16>(port));
+    sock.waitForConnected();
+    sock.write(buildRequest().toLatin1());
+
     loop.exec();
     disconnect(conn_read);
     disconnect(conn_abort);
     disconnect(conn_quit);
     disconnect(conn_fin);
     disconnect(conn_error);
-    disconnect(conn_meta);
-    reply->deleteLater();
     clear();
     setUrl(QUrl());
 
@@ -203,16 +243,16 @@ namespace Playback {
     qDebug() << "stream stopped";
   }
 
-  bool Stream::extract_icy_metaint(const QNetworkReply * const reply) {
+  bool Stream::extract_icy_metaint(const QMap<QString, QString> &headers) {
     const auto HEADER = "icy-metaint";
 
     if (_icy_metaint > 0) {
       return false;
     }
-    if (!reply->hasRawHeader(HEADER)) {
+    if (!headers.contains(HEADER)) {
       return false;
     }
-    auto raw_metaint = reply->rawHeader(HEADER);
+    auto raw_metaint = headers.value(HEADER);
     if (raw_metaint.isEmpty()) {
       return false;
     }
@@ -223,7 +263,6 @@ namespace Playback {
     }
     _icy_metaint = raw_int;
     _next_meta_pos = _icy_metaint;
-    qDebug() << "stream got icy-metaint" << _icy_metaint;
     return true;
   }
 
