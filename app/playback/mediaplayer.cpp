@@ -6,7 +6,7 @@
 #include <QtConcurrent>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent), player(QMediaPlayer(parent, QMediaPlayer::StreamPlayback)) {
+  MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent) {
     connect(&player, &QMediaPlayer::positionChanged, this, &MediaPlayer::positionChanged);
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
       switch (state) {
