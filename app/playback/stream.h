@@ -1,7 +1,7 @@
 #ifndef PLAYBACK_STREAM_H
 #define PLAYBACK_STREAM_H
 
-#include "playback/streammetadata.h"
+#include "streammetadata.h"
 
 #include <QObject>
 #include <QIODevice>

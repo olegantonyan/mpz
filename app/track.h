@@ -1,6 +1,8 @@
 #ifndef TRACK_H
 #define TRACK_H
 
+#include "streammetadata.h"
+
 #include <QString>
 #include <QUrl>
 
@@ -49,6 +51,11 @@ public:
 
   bool isStream() const;
 
+  void setStreamMeta(const StreamMetaData& meta);
+  void clearStreamMeta();
+
+  const StreamMetaData &streamMeta() const;
+
 private:
   QString filepath;
   QString _artist;
@@ -64,6 +71,8 @@ private:
   QUrl _stream_url;
 
   quint64 _uid;
+
+  StreamMetaData _stream_meta;
 
   quint64 generateUid() const;
   QString detectFormat() const;

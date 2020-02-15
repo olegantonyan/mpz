@@ -89,7 +89,12 @@ void TrayIcon::update_menu_now_playing(const Track &track, int pos) {
     return;
   }
   auto time_t = time_text(track, pos);
-  auto track_t = track.title();
+  QString track_t;
+  if (track.isStream()) {
+    track_t = track.streamMeta().stream();
+  } else {
+    track_t = track.title();
+  }
   auto t = QString("%1 (%2)").arg(track_t).arg(time_t);
   now_playing->setText(t);
 }

@@ -112,6 +112,9 @@ QUrl Track::url() const {
 }
 
 QString Track::artist() const {
+  if (isStream()) {
+    return _stream_meta.stream();
+  }
   return _artist;
 }
 
@@ -169,6 +172,18 @@ QString Track::formattedTitle() const {
 
 bool Track::isStream() const {
   return !_stream_url.isEmpty();
+}
+
+void Track::setStreamMeta(const StreamMetaData &meta) {
+  _stream_meta = meta;
+}
+
+void Track::clearStreamMeta() {
+  _stream_meta.clear();
+}
+
+const StreamMetaData &Track::streamMeta() const {
+  return _stream_meta;
 }
 
 quint16 Track::sample_rate() const {

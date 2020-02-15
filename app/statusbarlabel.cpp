@@ -9,32 +9,34 @@ StatusBarLabel::StatusBarLabel(QStatusBar *sb, QWidget *parent) : QLabel(parent)
 }
 
 void StatusBarLabel::on_playerStopped() {
-  setText("Stopped");
+  _state = "Stopped";
+  _stream_buffer = 0;
+  setText(_state);
 }
 
 void StatusBarLabel::on_playerStarted(const Track &track) {
-  auto t = QString("Playing ") + track.filename() + " | " + track.formattedAudioInfo();
+  _state = "Playing";
+  auto t = _state + trackInfo(track);
   setText(t);
 }
 
 void StatusBarLabel::on_playerPaused(const Track &track) {
-  auto t = QString("Paused ") + track.filename() + " | " + track.formattedAudioInfo();
+  _state = "Paused";
+  auto t = _state + trackInfo(track);
   setText(t);
 }
 
 void StatusBarLabel::on_streamBufferFill(const Track &track, int percents) {
-  Q_UNUSED(track)
+  _stream_buffer = percents;
+  if (_state != "Stopped") {
+    setText(_state + trackInfo(track));
+  }
+}
 
-  if (!text().contains("Stopped") && percents >=0) {
-    if (text().contains(" | stream buffer")) {
-      QRegularExpression regex(".+\\| stream buffer (\\d+%)");
-      auto m = regex.match(text());
-      if (m.hasMatch()) {
-        setText(text().replace(m.captured(1), QString("%1%").arg(percents)));
-      }
-    } else {
-      setText(text() + QString(" | stream buffer %1%").arg(percents));
-    }
+void StatusBarLabel::on_progress(const Track &track, int current_seconds) {
+  Q_UNUSED(current_seconds)
+  if (track.isStream()) {
+    setText(_state + trackInfo(track));
   }
 }
 
@@ -42,4 +44,12 @@ void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
   Q_UNUSED(event)
   emit doubleclicked();
   QLabel::mouseDoubleClickEvent(event);
+}
+
+QString StatusBarLabel::trackInfo(const Track &t) const {
+  if (t.isStream()) {
+    return " " + t.streamMeta().stream() + QString(" | stream buffer %1%").arg(_stream_buffer);
+  } else {
+    return " " + t.filename() + " | " + t.formattedAudioInfo();
+  }
 }

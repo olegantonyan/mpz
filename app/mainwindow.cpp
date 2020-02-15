@@ -206,6 +206,7 @@ void MainWindow::setupStatusBar() {
   connect(player, &Playback::Controller::stopped, status_label, &StatusBarLabel::on_playerStopped);
   connect(player, &Playback::Controller::paused, status_label, &StatusBarLabel::on_playerPaused);
   connect(player, &Playback::Controller::streamFill, status_label, &StatusBarLabel::on_streamBufferFill);
+  connect(player, &Playback::Controller::progress, status_label, &StatusBarLabel::on_progress);
 
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
     auto current_track_uid = dispatch->state().playingTrack();

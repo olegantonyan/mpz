@@ -83,7 +83,7 @@ namespace Playback {
         meta.append(a.at(i));
         meta_bytes--;
         if (meta_bytes == 0) {
-          _meta.insert("stream", meta);
+          _meta.setStream(meta);
           emit metadataChanged(_meta);
         }
       } else {
@@ -162,7 +162,6 @@ namespace Playback {
     _next_meta_pos = 0;
     _meta.clear();
     _mutex.unlock();
-    emit metadataChanged(_meta);
   }
 
   void Stream::thread() {
