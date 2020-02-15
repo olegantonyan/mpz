@@ -179,12 +179,14 @@ namespace Playback {
     });
 
     auto conn_read = connect(&sock, &QTcpSocket::readyRead, [&]() {
+      // assuming headers will be received all in first chunk upon readyRead
+      // this may not be true. probably need a proper fix here
       auto data = sock.readAll();
       if (!headers.isEmpty()) {
         append(data);
       } else {
         const QString HEADERS_TERMINATOR("\r\n\r\n");
-        auto string = QString(data.data());
+        const QString string(data);
         if (string.contains(HEADERS_TERMINATOR)) {
           int idx = string.indexOf(HEADERS_TERMINATOR) + HEADERS_TERMINATOR.length();
           headers = parseHeaders(string.left(idx).split("\r\n"));
