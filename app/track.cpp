@@ -125,7 +125,12 @@ QString Track::album() const {
 QString Track::title() const {
   if (_title.length() == 0) {
     if (isStream()) {
-      return _stream_url.toString();
+      QUrl displayable_url;
+      displayable_url.setScheme(_stream_url.scheme());
+      displayable_url.setHost(_stream_url.host());
+      displayable_url.setPort(_stream_url.port());
+      displayable_url.setPath(_stream_url.path());
+      return displayable_url.toString();
     } else {
       return filename();
     }
