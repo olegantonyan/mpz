@@ -17,6 +17,9 @@ public:
   quint16 samplerate() const;
   QString stream() const;
 
+  QString artist() const;
+  QString title() const;
+
 private:
   QMap<QString, QString> _data;
 };

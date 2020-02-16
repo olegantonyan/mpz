@@ -113,7 +113,7 @@ QUrl Track::url() const {
 
 QString Track::artist() const {
   if (isStream()) {
-    return _stream_meta.stream();
+    return _stream_meta.artist();
   }
   return _artist;
 }
@@ -123,14 +123,18 @@ QString Track::album() const {
 }
 
 QString Track::title() const {
-  if (_title.length() == 0) {
+  if (_title.isEmpty()) {
     if (isStream()) {
-      QUrl displayable_url;
-      displayable_url.setScheme(_stream_url.scheme());
-      displayable_url.setHost(_stream_url.host());
-      displayable_url.setPort(_stream_url.port());
-      displayable_url.setPath(_stream_url.path());
-      return displayable_url.toString();
+      if (streamMeta().title().isEmpty()) {
+        QUrl displayable_url;
+        displayable_url.setScheme(_stream_url.scheme());
+        displayable_url.setHost(_stream_url.host());
+        displayable_url.setPort(_stream_url.port());
+        displayable_url.setPath(_stream_url.path());
+        return displayable_url.toString();
+      } else {
+        return streamMeta().title();
+      }
     } else {
       return filename();
     }
@@ -168,9 +172,7 @@ QString Track::formattedAudioInfo() const {
 }
 
 QString Track::shortText() const {
-  if (isStream()) {
-    return streamMeta().stream();
-  } else if (!title().isEmpty() && !artist().isEmpty()) {
+  if (!title().isEmpty() && !artist().isEmpty()) {
     return artist() + " - " + title();
   }  else if (!title().isEmpty()) {
     return title();

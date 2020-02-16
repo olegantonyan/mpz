@@ -1,6 +1,7 @@
 #include "streammetadata.h"
 
 #include <QDebug>
+#include <QRegularExpression>
 
 StreamMetaData::StreamMetaData() {
 }
@@ -11,6 +12,7 @@ bool StreamMetaData::isEmpty() const {
 
 void StreamMetaData::insert(const QString &key, const QString &value) {
   _data.insert(key, value);
+        qDebug() << _data;
 }
 
 void StreamMetaData::clear() {
@@ -41,4 +43,22 @@ quint16 StreamMetaData::samplerate() const {
 
 QString StreamMetaData::stream() const {
   return _data.value("stream", "");
+}
+
+QString StreamMetaData::artist() const {
+  QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
+  auto match = r.match(stream());
+  if (match.hasMatch()) {
+    return match.captured(2).split(" - ").first();
+  }
+  return "";
+}
+
+QString StreamMetaData::title() const {
+  QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
+  auto match = r.match(stream());
+  if (match.hasMatch()) {
+    return match.captured(2).split(" - ").last();
+  }
+  return "";
 }
