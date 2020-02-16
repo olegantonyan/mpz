@@ -42,6 +42,7 @@ public:
 
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
+  QString shortText() const;
 
   quint64 uid() const;
 

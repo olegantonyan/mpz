@@ -17,6 +17,7 @@ void StatusBarLabel::on_playerStopped() {
 void StatusBarLabel::on_playerStarted(const Track &track) {
   _state = "Playing";
   auto t = _state + trackInfo(track);
+  _stream_buffer = 0;
   setText(t);
 }
 
@@ -35,9 +36,7 @@ void StatusBarLabel::on_streamBufferFill(const Track &track, int percents) {
 
 void StatusBarLabel::on_progress(const Track &track, int current_seconds) {
   Q_UNUSED(current_seconds)
-  if (track.isStream()) {
-    setText(_state + trackInfo(track));
-  }
+  setText(_state + trackInfo(track));
 }
 
 void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
@@ -47,9 +46,9 @@ void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 QString StatusBarLabel::trackInfo(const Track &t) const {
-  if (t.isStream()) {
-    return " " + t.streamMeta().stream() + QString(" | stream buffer %1%").arg(_stream_buffer);
-  } else {
-    return " " + t.filename() + " | " + t.formattedAudioInfo();
+  auto c = ": " + t.shortText() + " | " + t.formattedAudioInfo();
+  if (_stream_buffer > 0) {
+    c += QString(" | stream buffer %1%").arg(_stream_buffer);
   }
+  return c;
 }
