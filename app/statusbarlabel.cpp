@@ -2,10 +2,16 @@
 
 #include <QDebug>
 #include <QRegularExpression>
+#include <QMenu>
+#include <QAction>
+#include <QClipboard>
+#include <QApplication>
 
 StatusBarLabel::StatusBarLabel(QStatusBar *sb, QWidget *parent) : QLabel(parent) {
   sb->addWidget(this);
   on_playerStopped();
+  setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this, &QLabel::customContextMenuRequested, this, &StatusBarLabel::on_contextMenu);
 }
 
 void StatusBarLabel::on_playerStopped() {
@@ -43,6 +49,16 @@ void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
   Q_UNUSED(event)
   emit doubleclicked();
   QLabel::mouseDoubleClickEvent(event);
+}
+
+void StatusBarLabel::on_contextMenu(const QPoint &pos) {
+  QMenu menu;
+  QAction copy_name("Copy");
+  connect(&copy_name, &QAction::triggered, [=]() {
+     qApp->clipboard()->setText(text());
+  });
+  menu.addAction(&copy_name);
+  menu.exec(mapToGlobal(pos));
 }
 
 QString StatusBarLabel::trackInfo(const Track &t) const {

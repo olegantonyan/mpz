@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QLabel>
 #include <QStatusBar>
+#include <QPoint>
 
 class StatusBarLabel : public QLabel {
   Q_OBJECT
@@ -24,6 +25,9 @@ signals:
 
 protected:
   void mouseDoubleClickEvent(QMouseEvent *event) override;
+
+private slots:
+  void on_contextMenu(const QPoint &pos);
 
 private:
   QString trackInfo(const Track &t) const;
