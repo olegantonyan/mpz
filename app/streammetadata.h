@@ -11,11 +11,9 @@ public:
 
   void insert(const QString& key, const QString &value);
   void clear();
-  void setStream(const QString& str);
 
   quint16 bitrate() const;
   quint16 samplerate() const;
-  QString stream() const;
 
   QString artist() const;
   QString title() const;

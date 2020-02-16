@@ -83,7 +83,7 @@ namespace Playback {
         meta.append(a.at(i));
         meta_bytes--;
         if (meta_bytes == 0) {
-          _meta.setStream(meta);
+          _meta.insert("stream", meta);
           emit metadataChanged(_meta);
         }
       } else {
