@@ -38,7 +38,6 @@ namespace Playlist {
 
     for (auto i : Playlist::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        // TODO parse playlist file
         tracks_list = FileParser(path).tracks_list();
         return true;
       }
@@ -76,9 +75,9 @@ namespace Playlist {
 
   bool Playlist::load(const QVector<Track> &tracks) {
     for (auto i : tracks) {
-      if (i.isValid()) {
+      //if (i.isValid()) { // load all regardless to prevent saving empty playlists (#65)
         tracks_list << i;
-      }
+      //}
     }
     return true;
   }
