@@ -12,7 +12,6 @@ bool StreamMetaData::isEmpty() const {
 
 void StreamMetaData::insert(const QString &key, const QString &value) {
   _data.insert(key, value);
-        qDebug() << _data;
 }
 
 void StreamMetaData::clear() {
