@@ -158,15 +158,15 @@ QString Track::formattedDuration() const {
 QString Track::formattedAudioInfo() const {
   QString c = format();
   if (channels() == 1) {
-    c =+ " Mono";
+    c.append(" Mono");
   } else if (channels() == 2) {
-    c =+ " Stereo";
+    c.append(" Stereo");
   }
   if (bitrate() > 0) {
-    c += QString(" %1kbps").arg(bitrate());
+    c.append(QString(" %1kbps").arg(bitrate()));
   }
   if (sample_rate() > 0) {
-    c += QString(" %1Hz").arg(sample_rate());
+    c.append(QString(" %1Hz").arg(sample_rate()));
   }
   return c;
 }
