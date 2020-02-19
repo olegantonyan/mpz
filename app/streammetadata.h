@@ -18,6 +18,8 @@ public:
   QString artist() const;
   QString title() const;
 
+  QString format() const;
+
 private:
   QMap<QString, QString> _data;
 };

@@ -229,6 +229,9 @@ quint16 Track::bitrate() const {
 }
 
 QString Track::format() const {
+  if (isStream()) {
+    return streamMeta().format();
+  }
   return _format;
 }
 

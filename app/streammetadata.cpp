@@ -55,3 +55,7 @@ QString StreamMetaData::title() const {
   }
   return "";
 }
+
+QString StreamMetaData::format() const {
+  return _data.value("content-type", "");
+}

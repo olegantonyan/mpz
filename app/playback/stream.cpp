@@ -119,7 +119,7 @@ namespace Playback {
       auto key = i.section(':', 0, 0);
       auto value = i.section(':', 1);
       result.insert(key, value);
-      if (key.startsWith("icy-", Qt::CaseInsensitive)) {
+      if (key.startsWith("icy-", Qt::CaseInsensitive) || key.toLower() == "content-type") {
         _meta.insert(key, value);
         emit metadataChanged(_meta);
       }
