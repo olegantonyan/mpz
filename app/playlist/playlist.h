@@ -13,6 +13,12 @@ namespace Playlist {
   class Playlist : public QObject {
     Q_OBJECT
   public:
+    enum PlaylistRandom {
+      None = 0,
+      Random,
+      Sequential
+    };
+
     explicit Playlist();
 
     static QStringList supportedFileFormats();
@@ -38,6 +44,9 @@ namespace Playlist {
 
     void removeTrack(int position);
 
+    enum PlaylistRandom random() const;
+    void setRandom(enum PlaylistRandom arg);
+
   signals:
     void loadAsyncFinished(Playlist *pl);
     void concatAsyncFinished(Playlist *pl);
@@ -46,6 +55,7 @@ namespace Playlist {
     QString playlist_name;
     QVector<Track> tracks_list;
     quint64 _uid;
+    enum PlaylistRandom _random;
   };
 }
 

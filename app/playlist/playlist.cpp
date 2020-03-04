@@ -170,5 +170,13 @@ namespace Playlist {
   void Playlist::removeTrack(int position) {
     tracks_list.remove(position);
   }
+
+  Playlist::PlaylistRandom Playlist::random() const {
+    return _random;
+  }
+
+  void Playlist::setRandom(Playlist::PlaylistRandom arg) {
+    _random = arg;
+  }
 }
 
