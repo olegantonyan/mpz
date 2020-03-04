@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupStatusBar();
   setupTrayIcon();
   setupOrderCombobox();
+  setupPerPlaylistOrderCombobox();
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
@@ -114,6 +115,28 @@ void MainWindow::setupOrderCombobox() {
     mpris->on_shuffleChanged(global_conf.playbackOrder() == "random");
   }
 #endif
+}
+
+void MainWindow::setupPerPlaylistOrderCombobox() {
+  ui->perPlaylistOrdercomboBox->addItem("Current playlist: no override");
+  ui->perPlaylistOrdercomboBox->addItem("Current playlist: random");
+  ui->perPlaylistOrdercomboBox->addItem("Current playlist: sequential");
+  connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
+    if (playlist->random() == Playlist::Playlist::Random) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
+    } else if (playlist->random() == Playlist::Playlist::Sequential) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
+    } else if (playlist->random() == Playlist::Playlist::None) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
+    }
+  });
+  connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+    auto current_playlist = playlists->playlistByTrackUid(dispatch->state().playingTrack());
+    if (current_playlist != nullptr) {
+      current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
+      playlists->on_playlistChanged(current_playlist);
+    }
+  });
 }
 
 #if defined(MPRIS_ENABLE)

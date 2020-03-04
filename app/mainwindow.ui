@@ -187,6 +187,9 @@
           <item>
            <widget class="QComboBox" name="orderComboBox"/>
           </item>
+          <item>
+           <widget class="QComboBox" name="perPlaylistOrdercomboBox"/>
+          </item>
          </layout>
         </item>
        </layout>

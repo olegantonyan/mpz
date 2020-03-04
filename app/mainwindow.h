@@ -52,6 +52,7 @@ private:
 
   void loadUiSettings();
   void setupOrderCombobox();
+  void setupPerPlaylistOrderCombobox();
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
   void setupTrayIcon();
