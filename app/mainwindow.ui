@@ -185,7 +185,28 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Order:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>global</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QComboBox" name="orderComboBox"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>playlist</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QComboBox" name="perPlaylistOrdercomboBox"/>
