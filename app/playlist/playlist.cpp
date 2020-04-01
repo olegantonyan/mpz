@@ -10,6 +10,7 @@
 namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
     _uid = QRandomGenerator::global()->generate64();
+    _random = PlaylistRandom::None;
   }
 
   QStringList Playlist::supportedFileFormats() {

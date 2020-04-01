@@ -7,11 +7,11 @@
 #include <QMap>
 
 namespace Playback {
-  Stream::Stream(quint32 threshold_bytes, QObject *parent) :
+  Stream::Stream(quint32 threshold_bytes, quint16 threshold_multiplier, QObject *parent) :
     QIODevice(parent),
     _total_bytes_received(0),
     _threshold_bytes(threshold_bytes),
-    _max_bytes(threshold_bytes * 32) {
+    _max_bytes(threshold_bytes * threshold_multiplier) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
   }
 
