@@ -62,7 +62,19 @@ namespace Playback {
         qWarning() << "error starting stream form" << stream.url();
       }
     }
-    player.play();
+    //player.play();
+    ffplay.start("/home/oleg/projects/mpz/build-qt5_clang-Debug/libs/ffmpeg/bin/ffplay -autoexit -nodisp -infbuf -");
+    QFile *file = new QFile("/home/oleg/Desktop/1.mp3");
+    file->open(QIODevice::ReadOnly);
+    while(!file->atEnd()) {
+      QByteArray blob = file->read(520000);
+      ffplay.write(blob);
+      ffplay.waitForBytesWritten();
+    }
+
+
+
+
   }
 
   void MediaPlayer::stop() {

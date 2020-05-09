@@ -15,6 +15,6 @@ rm -rf $INSTALL_DIRECTORY
 
 cd $BUILD_DIRECTORY
 
-$SOURCE_DIRECTORY/configure --disable-asm --disable-shared --disable-programs --disable-doc --disable-debug --cc=$COMPILER --prefix=$INSTALL_DIRECTORY --enable-libpulse && \
+$SOURCE_DIRECTORY/configure --disable-asm --disable-shared --disable-doc --disable-debug --cc=$COMPILER --prefix=$INSTALL_DIRECTORY --enable-libpulse && \
 make -j8 && \
 make install

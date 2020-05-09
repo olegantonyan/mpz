@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#include <QProcess>
 
 namespace Playback {
   class MediaPlayer : public QObject {
@@ -41,6 +42,7 @@ namespace Playback {
   private:
     QMediaPlayer player;
     Stream stream;
+    QProcess ffplay;
   };
 }
 

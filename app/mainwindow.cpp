@@ -8,12 +8,6 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
-  while (true) {
-    pla.play();
-    exit(0);
-    QThread::currentThread()->sleep(100000000);
-  }
-
   #if defined(MPRIS_ENABLE)
     mpris = nullptr;
   #endif
