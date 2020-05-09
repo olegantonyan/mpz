@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#include <QProcess>
 
 namespace Playback {
   class MediaPlayer : public QObject {
@@ -17,6 +18,7 @@ namespace Playback {
     };
 
     explicit MediaPlayer(QObject *parent = nullptr);
+    ~MediaPlayer();
 
     MediaPlayer::State state() const;
     int volume() const;
@@ -41,6 +43,9 @@ namespace Playback {
   private:
     QMediaPlayer player;
     Stream stream;
+    QProcess mplayer;
+    QString media;
+    State mplayer_state;
   };
 }
 
