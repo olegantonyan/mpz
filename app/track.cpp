@@ -112,6 +112,9 @@ QUrl Track::url() const {
 }
 
 QString Track::artist() const {
+  if (isStream()) {
+    return _stream_meta.artist();
+  }
   return _artist;
 }
 
@@ -120,9 +123,18 @@ QString Track::album() const {
 }
 
 QString Track::title() const {
-  if (_title.length() == 0) {
+  if (_title.isEmpty()) {
     if (isStream()) {
-      return _stream_url.toString();
+      if (streamMeta().title().isEmpty()) {
+        QUrl displayable_url;
+        displayable_url.setScheme(_stream_url.scheme());
+        displayable_url.setHost(_stream_url.host());
+        displayable_url.setPort(_stream_url.port());
+        displayable_url.setPath(_stream_url.path());
+        return displayable_url.toString();
+      } else {
+        return streamMeta().title();
+      }
     } else {
       return filename();
     }
@@ -144,15 +156,30 @@ QString Track::formattedDuration() const {
 }
 
 QString Track::formattedAudioInfo() const {
-  QString c;
+  QString c = format();
   if (channels() == 1) {
-    c = "Mono";
+    c.append(" Mono");
   } else if (channels() == 2) {
-    c = "Stereo";
-  } else {
-    c = QString("%1 channels").arg(channels());
+    c.append(" Stereo");
   }
-  return QString("%1 | %2kbps | %3Hz | %4").arg(format()).arg(bitrate()).arg(sample_rate()).arg(c);
+  if (bitrate() > 0) {
+    c.append(QString(" %1kbps").arg(bitrate()));
+  }
+  if (sample_rate() > 0) {
+    c.append(QString(" %1Hz").arg(sample_rate()));
+  }
+  return c;
+}
+
+QString Track::shortText() const {
+  if (!title().isEmpty() && !artist().isEmpty()) {
+    return artist() + " - " + title();
+  }  else if (!title().isEmpty()) {
+    return title();
+  } else if (!filename().isEmpty()) {
+    return filename();
+  }
+  return url().toString();
 }
 
 quint64 Track::uid() const {
@@ -171,7 +198,22 @@ bool Track::isStream() const {
   return !_stream_url.isEmpty();
 }
 
+void Track::setStreamMeta(const StreamMetaData &meta) {
+  _stream_meta = meta;
+}
+
+void Track::clearStreamMeta() {
+  _stream_meta.clear();
+}
+
+const StreamMetaData &Track::streamMeta() const {
+  return _stream_meta;
+}
+
 quint16 Track::sample_rate() const {
+  if (isStream()) {
+    return streamMeta().samplerate();
+  }
   return _sample_rate;
 }
 
@@ -180,10 +222,16 @@ quint8 Track::channels() const {
 }
 
 quint16 Track::bitrate() const {
+  if (isStream()) {
+    return streamMeta().bitrate();
+  }
   return _bitrate;
 }
 
 QString Track::format() const {
+  if (isStream()) {
+    return streamMeta().format();
+  }
   return _format;
 }
 

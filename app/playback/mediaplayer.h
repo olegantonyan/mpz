@@ -1,6 +1,8 @@
 #ifndef MEDIAPLAYER_H
 #define MEDIAPLAYER_H
 
+#include "playback/stream.h"
+
 #include <QObject>
 #include <QMediaPlayer>
 
@@ -24,6 +26,8 @@ namespace Playback {
     void positionChanged(qint64 position);
     void stateChanged(MediaPlayer::State newState);
     void error(const QString &message);
+    void streamBufferfillChanged(quint32 current, quint32 total);
+    void streamMetaChanged(const StreamMetaData& meta);
 
   public slots:
     void pause();
@@ -36,6 +40,7 @@ namespace Playback {
 
   private:
     QMediaPlayer player;
+    Stream stream;
   };
 }
 

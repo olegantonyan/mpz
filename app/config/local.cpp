@@ -47,6 +47,10 @@ namespace Config {
       QString name = map.value("name").get<QString>();
       std::shared_ptr<Playlist::Playlist> playlist(new Playlist::Playlist());
       playlist->rename(name);
+
+      auto order = map.value("playback_order_override").get<int>();
+      playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(order));
+
       QVector<Track> tracks;
       for (auto t : map.value("tracks").get<QList<Config::Value> >()) {
         tracks << deserializeTrack(t.get<QMap<QString, Config::Value>>());
@@ -68,6 +72,7 @@ namespace Config {
         tl << serializeTrack(j);
       }
       mp.insert("tracks", tl);
+      mp.insert("playback_order_override", static_cast<int>(i->random()));
 
       plist << Config::Value(mp);
     }

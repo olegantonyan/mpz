@@ -10,6 +10,7 @@
 namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
     _uid = QRandomGenerator::global()->generate64();
+    _random = PlaylistRandom::None;
   }
 
   QStringList Playlist::supportedFileFormats() {
@@ -38,7 +39,6 @@ namespace Playlist {
 
     for (auto i : Playlist::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        // TODO parse playlist file
         tracks_list = FileParser(path).tracks_list();
         return true;
       }
@@ -76,9 +76,9 @@ namespace Playlist {
 
   bool Playlist::load(const QVector<Track> &tracks) {
     for (auto i : tracks) {
-      if (i.isValid()) {
+      //if (i.isValid()) { // load all regardless to prevent saving empty playlists (#65)
         tracks_list << i;
-      }
+      //}
     }
     return true;
   }
@@ -170,6 +170,14 @@ namespace Playlist {
 
   void Playlist::removeTrack(int position) {
     tracks_list.remove(position);
+  }
+
+  Playlist::PlaylistRandom Playlist::random() const {
+    return _random;
+  }
+
+  void Playlist::setRandom(Playlist::PlaylistRandom arg) {
+    _random = arg;
   }
 }
 

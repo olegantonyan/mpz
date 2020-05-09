@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupStatusBar();
   setupTrayIcon();
   setupOrderCombobox();
+  setupPerPlaylistOrderCombobox();
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
@@ -91,6 +92,7 @@ void MainWindow::loadUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  player->stop();
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
@@ -102,8 +104,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::setupOrderCombobox() {
-  ui->orderComboBox->addItem("Sequential");
-  ui->orderComboBox->addItem("Random");
+  ui->orderComboBox->addItem("sequential");
+  ui->orderComboBox->addItem("random");
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
@@ -119,6 +121,28 @@ void MainWindow::setupOrderCombobox() {
     mpris->on_shuffleChanged(global_conf.playbackOrder() == "random");
   }
 #endif
+}
+
+void MainWindow::setupPerPlaylistOrderCombobox() {
+  ui->perPlaylistOrdercomboBox->addItem("(use global)");
+  ui->perPlaylistOrdercomboBox->addItem("random");
+  ui->perPlaylistOrdercomboBox->addItem("sequential");
+  connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
+    if (playlist->random() == Playlist::Playlist::Random) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
+    } else if (playlist->random() == Playlist::Playlist::Sequential) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
+    } else if (playlist->random() == Playlist::Playlist::None) {
+      ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
+    }
+  });
+  connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+    auto current_playlist = playlists->playlistByTrackUid(dispatch->state().playingTrack());
+    if (current_playlist != nullptr) {
+      current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
+      playlists->on_playlistChanged(current_playlist);
+    }
+  });
 }
 
 #if defined(MPRIS_ENABLE)
@@ -210,6 +234,8 @@ void MainWindow::setupStatusBar() {
   connect(player, &Playback::Controller::started, status_label, &StatusBarLabel::on_playerStarted);
   connect(player, &Playback::Controller::stopped, status_label, &StatusBarLabel::on_playerStopped);
   connect(player, &Playback::Controller::paused, status_label, &StatusBarLabel::on_playerPaused);
+  connect(player, &Playback::Controller::streamFill, status_label, &StatusBarLabel::on_streamBufferFill);
+  connect(player, &Playback::Controller::progress, status_label, &StatusBarLabel::on_progress);
 
   connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
     auto current_track_uid = dispatch->state().playingTrack();

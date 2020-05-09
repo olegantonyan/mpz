@@ -12,8 +12,8 @@ namespace Playback {
   }
 
   void Dispatch::on_nextRequested() {
+    auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
     if (global_conf.playbackFollowCursor()) {
-      auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
       if (selected_playlist != nullptr) {
         auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
         if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
@@ -30,7 +30,7 @@ namespace Playback {
       return;
     }
 
-    if (global_conf.playbackOrder() == "random") {
+    if (selected_playlist->random() == Playlist::Playlist::Random || global_conf.playbackOrder() == "random") {
       int rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
       if (rngjesus == current_playlist->trackIndex(current_track_uid)) {
         // once again, but only once, you lucky bastard
