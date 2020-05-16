@@ -5,6 +5,7 @@ CONFIG += warn_off
 CONFIG += staticlib
 
 DEFINES += "NDEBUG=1"
+DEFINES += "MAKE_TAGLIB_LIB"
 
 SOURCES += \
   taglib-1.11.1/taglib/toolkit/tbytevectorlist.cpp \
