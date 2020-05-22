@@ -13,6 +13,7 @@ namespace Playback {
     _threshold_bytes(threshold_bytes),
     _max_bytes(threshold_bytes * threshold_multiplier) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+    _timeout_ms = 30000;
   }
 
   Stream::~Stream() {
@@ -172,6 +173,7 @@ namespace Playback {
     QEventLoop loop;
     QTcpSocket sock;
     QMap<QString, QString> headers;
+    QTimer timer;
 
     auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
       qWarning() << "stream network error" << code << sock.errorString();
@@ -194,11 +196,23 @@ namespace Playback {
           append(data.mid(idx));
         }
       }
+      timer.stop();
+      timer.setInterval(_timeout_ms);
+      timer.start();
     });
 
     auto conn_fin = connect(&sock, &QTcpSocket::disconnected, &loop, &QEventLoop::quit);
     auto conn_abort = connect(this, &Stream::stopping, &sock, &QTcpSocket::abort);
     auto conn_quit = connect(this, &Stream::stopping, &loop, &QEventLoop::quit);
+
+    timer.setSingleShot(true);
+    timer.setInterval(_timeout_ms);
+    timer.start();
+    connect(&timer, &QTimer::timeout, [&]() {
+      emit stopping();
+      qWarning() << "stream timeout";
+      emit error("timeout");
+    });
 
     sock.connectToHost(url().host(), static_cast<quint16>(url().port()));
     sock.waitForConnected();

@@ -17,7 +17,7 @@ public slots:
   void on_playerStopped();
   void on_playerStarted(const Track &track);
   void on_playerPaused(const Track &track);
-  void on_streamBufferFill(const Track &track, int percents);
+  void on_streamBufferFill(const Track &track, quint32 bytes);
   void on_progress(const Track &track, int current_seconds);
 
 signals:
@@ -33,7 +33,8 @@ private:
   QString trackInfo(const Track &t) const;
 
   QString _state;
-  int _stream_buffer;
+  quint32 _stream_buffer;
+  QString humanized_bytes(quint32 bytes) const;
 };
 
 #endif // STATUSBARLABEL_H

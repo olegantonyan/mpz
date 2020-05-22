@@ -33,8 +33,8 @@ void StatusBarLabel::on_playerPaused(const Track &track) {
   setText(t);
 }
 
-void StatusBarLabel::on_streamBufferFill(const Track &track, int percents) {
-  _stream_buffer = percents;
+void StatusBarLabel::on_streamBufferFill(const Track &track, quint32 bytes) {
+  _stream_buffer = bytes;
   if (_state != "Stopped") {
     setText(_state + trackInfo(track));
   }
@@ -64,7 +64,21 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
 QString StatusBarLabel::trackInfo(const Track &t) const {
   auto c = ": " + t.shortText() + " | " + t.formattedAudioInfo();
   if (_stream_buffer > 0) {
-    c += QString(" | stream buffer %1%").arg(_stream_buffer);
+    c += QString(" | stream buffer %1").arg(humanized_bytes(_stream_buffer));
   }
   return c;
+}
+
+QString StatusBarLabel::humanized_bytes(quint32 bytes) const {
+    QStringList list;
+    list << "KB" << "MB" << "GB" << "TB";
+
+    QStringListIterator i(list);
+    QString unit("bytes");
+
+    while(bytes >= 1024 && i.hasNext()) {
+      unit = i.next();
+      bytes /= 1024;
+    }
+    return QString().setNum(bytes, 10) + " " + unit;
 }

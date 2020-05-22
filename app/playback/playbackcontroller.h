@@ -40,7 +40,7 @@ namespace Playback {
     void startRequested();
     void volumeChanged(int value);
     void seeked(int value);
-    void streamFill(const Track &track, int percents);
+    void streamFill(const Track &track, quint32 bytes);
 
   public slots:
     void play(const Track &track);

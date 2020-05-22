@@ -36,8 +36,9 @@ namespace Playback {
       }
     });
     connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
-      double percents = static_cast<double>(bytes) / static_cast<double>(thresh) * 100.0;
-      emit streamFill(_current_track, static_cast<int>(percents));
+      //double percents = static_cast<double>(bytes) / static_cast<double>(thresh) * 100.0;
+      Q_UNUSED(thresh)
+      emit streamFill(_current_track, bytes);
     });
     connect(&_player, &MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);

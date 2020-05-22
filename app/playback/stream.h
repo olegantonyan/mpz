@@ -52,6 +52,7 @@ namespace Playback {
     int _icy_metaint;
     qint64 _next_meta_pos;
     StreamMetaData _meta;
+    int _timeout_ms;
 
     void append(const QByteArray& a);
     void clear();
