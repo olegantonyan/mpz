@@ -18,39 +18,19 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QToolButton" name="stopButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="stopButton"/>
       </item>
       <item>
-       <widget class="QToolButton" name="pauseButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="pauseButton"/>
       </item>
       <item>
-       <widget class="QToolButton" name="playButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="playButton"/>
       </item>
       <item>
-       <widget class="QToolButton" name="prevButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="prevButton"/>
       </item>
       <item>
-       <widget class="QToolButton" name="nextButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="nextButton"/>
       </item>
       <item>
        <widget class="QProgressBar" name="progressBar">
