@@ -179,6 +179,7 @@ void MainWindow::setupVolumeControl() {
 }
 
 void MainWindow::setupMainMenu() {
+  ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
   main_menu = new MainMenu(ui->menuButton, global_conf, this);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);

@@ -2,8 +2,9 @@
 
 #include <QtGlobal>
 #include <QWheelEvent>
+#include <QStyle>
 
-VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn), menu(PrivateVolumeControl::Menu(parent)) {
+VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QWidget *parent) : QWidget(parent), button(btn), menu(PrivateVolumeControl::Menu(parent)) {
   connect(&menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
   connect(button, &QToolButton::clicked, this, &VolumeControl::on_buttonClicked);
   button->installEventFilter(this);
@@ -13,7 +14,12 @@ VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *paren
 void VolumeControl::setValue(int value) {
   value = qBound(0, value, 100);
   menu.setValue(value);
-  button->setText(QString("%1 %2%").arg(value == 0 ? "🔇" : "🔊").arg(value));
+  button->setText(QString("%1%").arg(value));
+  if (value == 0) {
+    button->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+  } else {
+    button->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+  }
 }
 
 void VolumeControl::on_buttonClicked() {

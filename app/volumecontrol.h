@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QPoint>
 #include <QEvent>
+#include <QWidget>
 
 namespace PrivateVolumeControl {
   class Menu : public QObject {
@@ -34,10 +35,10 @@ namespace PrivateVolumeControl {
   };
 }
 
-class VolumeControl : public QObject {
+class VolumeControl : public QWidget {
   Q_OBJECT
 public:
-  explicit VolumeControl(QToolButton *btn, int initial_value, QObject *parent = nullptr);
+  explicit VolumeControl(QToolButton *btn, int initial_value, QWidget *parent = nullptr);
 
 signals:
   void changed(int value);

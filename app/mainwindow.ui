@@ -73,16 +73,15 @@
       <item>
        <widget class="QToolButton" name="toolButtonVolume">
         <property name="text">
-         <string>...</string>
+         <string/>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="menuButton">
-        <property name="text">
-         <string>☰</string>
-        </property>
-       </widget>
+       <widget class="QToolButton" name="menuButton"/>
       </item>
      </layout>
     </item>
