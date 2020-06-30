@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QApplication>
+#include <QStyle>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
   #if defined(MPRIS_ENABLE)
@@ -21,6 +22,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, local_conf, this);
 
+  ui->stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+  ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+  ui->pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+  ui->nextButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+  ui->prevButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
   Playback::Controls pc;
   pc.next = ui->nextButton;
   pc.prev = ui->prevButton;

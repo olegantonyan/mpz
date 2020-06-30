@@ -20,35 +20,35 @@
       <item>
        <widget class="QToolButton" name="stopButton">
         <property name="text">
-         <string>⏹</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="pauseButton">
         <property name="text">
-         <string>⏸</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="playButton">
         <property name="text">
-         <string> ▶</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="prevButton">
         <property name="text">
-         <string>⏪</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="nextButton">
         <property name="text">
-         <string>⏩</string>
+         <string/>
         </property>
        </widget>
       </item>
