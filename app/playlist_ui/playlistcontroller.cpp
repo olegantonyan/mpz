@@ -13,7 +13,7 @@ namespace PlaylistUi {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
-    model = new Model(this);
+    model = new Model(view->style(), this);
     proxy = new ProxyFilterModel(model, this);
     view->setModel(proxy);
     view->horizontalHeader()->hide();

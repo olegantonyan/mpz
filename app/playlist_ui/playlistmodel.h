@@ -8,6 +8,7 @@
 #include <QAbstractTableModel>
 #include <memory>
 #include <QList>
+#include <QStyle>
 
 namespace PlaylistUi {
   class Model : public QAbstractTableModel {
@@ -19,7 +20,7 @@ namespace PlaylistUi {
       Playing,
       Paused
     };
-    explicit Model(QObject *parent = nullptr);
+    explicit Model(QStyle *stl, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -43,6 +44,7 @@ namespace PlaylistUi {
     std::shared_ptr<Playlist::Playlist> _playlist;
     QVector<Track> tracks;
     quint64 highlight_uid;
+    QStyle *style;
     enum HighlightState highlight_state;
   };
 }

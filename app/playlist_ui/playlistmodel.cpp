@@ -4,7 +4,7 @@
 #include <QFont>
 
 namespace PlaylistUi {
-  Model::Model(QObject *parent) : QAbstractTableModel(parent), highlight_uid(0) {
+  Model::Model(QStyle *stl, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl) {
     tracks.clear();
   }
 
@@ -47,20 +47,20 @@ namespace PlaylistUi {
       return font;
     }
 
+    if (role == Qt::DecorationRole) {
+       if (index.column() == 0) {
+         if (highlight_uid == t.uid()) {
+           if (highlight_state == Playing) {
+             return style->standardIcon(QStyle::SP_MediaPlay);
+           } else if (highlight_state == Paused) {
+             return style->standardIcon(QStyle::SP_MediaPause);
+           }
+         }
+       }
+    }
+
     if (role == Qt::DisplayRole) {
       switch (index.column()) {
-        case 0:
-          if (highlight_uid == t.uid()) {
-            if (highlight_state == Playing) {
-              return "▶";
-            } else if (highlight_state == Paused) {
-              return "⏸";
-            } else {
-              return "";
-            }
-          } else {
-            return "";
-          }
         case 1:
           return t.artist();
         case 2:
@@ -75,8 +75,6 @@ namespace PlaylistUi {
           }
         case 5:
           return t.formattedDuration();
-        default:
-          throw "unhandled column number";
       }
     }
     return QVariant();
