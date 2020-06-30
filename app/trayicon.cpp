@@ -4,23 +4,24 @@
 #include <QDebug>
 #include <QStyle>
 
-TrayIcon::TrayIcon(QMainWindow *parent) : QWidget(parent) {
+TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
   trayicon->setToolTip("Stopped");
   menu = new QMenu(parent);
 
   quit = new QAction("Quit", this);
+  hide();
 
   play = new QAction("Play", this);
-  play->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+  play->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPlay));
   pause = new QAction("Pause", this);
-  pause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+  pause->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPause));
   stop = new QAction("Stop", this);
-  stop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+  stop->setIcon(parent->style()->standardIcon(QStyle::SP_MediaStop));
   next = new QAction("Next", this);
-  next->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+  next->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekForward));
   prev = new QAction("Previous", this);
-  prev->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+  prev->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekBackward));
   now_playing = new QAction("", this);
   now_playing->setEnabled(false);
   connect(play, &QAction::triggered, this, &TrayIcon::startTriggered);

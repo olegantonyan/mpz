@@ -9,7 +9,7 @@
 #include <QMainWindow>
 #include <QMenu>
 
-class TrayIcon : public QWidget {
+class TrayIcon : public QObject {
   Q_OBJECT
 public:
   explicit TrayIcon(QMainWindow *parent);
