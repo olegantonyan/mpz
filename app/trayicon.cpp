@@ -10,7 +10,6 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   menu = new QMenu(parent);
 
   quit = new QAction("Quit", this);
-  hide();
 
   play = new QAction("Play", this);
   play->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPlay));
