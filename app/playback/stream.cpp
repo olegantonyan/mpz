@@ -175,7 +175,7 @@ namespace Playback {
     QMap<QString, QString> headers;
     QTimer timer;
 
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
       qWarning() << "stream network error" << code << sock.errorString();
       emit error(sock.errorString());
     });
