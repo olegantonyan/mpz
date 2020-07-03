@@ -106,13 +106,15 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.2.2
+  ../libs/qhotkey/QHotkey-1.2.2 \
+  ../libs/libcuefile/libcuefile_r475/include
 
 LIBS += \
   -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
-  -L../libs/qhotkey -lqhotkey
+  -L../libs/qhotkey -lqhotkey \
+  -L../libs/libcuefile -lcuefile
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries
