@@ -1,5 +1,5 @@
 Name:       mpz
-Version:    999.git
+Version:    0.0.1
 Release:    1%{?dist}
 Summary:    mpz music player
 License:    GPLv3+
