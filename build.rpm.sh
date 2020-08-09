@@ -17,6 +17,7 @@ cp -ar app/*          $TMP_SRC_FULL_DIR/app
 mkdir -p $TMP_SRC_FULL_DIR/libs
 cp -ar libs/*         $TMP_SRC_FULL_DIR/libs
 cp -ar mpz.pro       $TMP_SRC_FULL_DIR
+cp -ar mpz.desktop       $TMP_SRC_FULL_DIR
 cp -ar license.txt   $TMP_SRC_FULL_DIR
 ls -latrh $TMP_SRC_FULL_DIR
 

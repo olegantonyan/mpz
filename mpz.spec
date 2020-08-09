@@ -6,16 +6,18 @@ License:    GPLv3+
 URL:        https://github.com/olegantonyan/%{name}
 Source0:    https://github.com/olegantonyan/%{name}/releases/%{name}-%{version}.tar.gz
 
-BuildRequires:  clang
-BuildRequires:  make
+BuildRequires:  clang make libqt5-qtbase-devel libqt5-qtmultimedia-devel
+
+Requires: libQt5Core5 libQt5Concurrent5 libQt5Multimedia5 libQt5Gui5 libQt5DBus5 libQt5Network5
+
 
 %description
 Music player for big local collections
 
+
 %prep
-echo %{buildroot}
-echo %{_bindir}
 %setup -q
+
 
 %build
 mkdir build-fucking-qmake-ignore-fucking-debug-release
@@ -23,15 +25,27 @@ cd build-fucking-qmake-ignore-fucking-debug-release
 qmake-qt5 -spec linux-clang CONFIG+=release ..
 make %{?_smp_mflags}
 
+
 %install
 cd build-fucking-qmake-ignore-fucking-debug-release
 # %make_install
-mkdir -p %{buildroot}/usr/bin/
-install -m 0755 app/mpz %{buildroot}/usr/bin/%{name}
+
+mkdir -p %{buildroot}%{_bindir}/
+install -m 0755 app/mpz %{buildroot}/%{_bindir}/%{name}
+
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/
+install -m 0755 ../app/resources/icons/appicon.png %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
+
+mkdir -p %{buildroot}%{_datadir}/applications/
+install -m 0755 ../mpz.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
+
 
 %files
 %license license.txt
 %{_bindir}/%{name}
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
+
 
 %changelog
 * Sun Aug 9 2020 Oleg Antonyan <oleg.b.antonyan@gmail.com>

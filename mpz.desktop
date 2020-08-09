@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=0.0.1
+Terminal=false
+Icon=mpz
+Type=Application
+Categories=AudioVideo;Audio;Player;
+Exec=mpz %f
+Name=mpz audio player
+GenericName=mpz audio player
+GenericName[ru]=mpz музыкальный проигрыватель
+Comment=mpz audio player for large local music collections
+Comment[ru]=mpz музыкальный проигрыватель для больших локальных коллекций
