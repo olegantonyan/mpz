@@ -1,10 +1,10 @@
 Name:       mpz
-Version:    0.0.1
+Version:    999.git
 Release:    1%{?dist}
 Summary:    mpz music player
 License:    GPLv3+
 URL:        https://github.com/olegantonyan/%{name}
-Source0:    https://github.com/olegantonyan/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:    %{name}-%{version}.tar.gz
 
 BuildRequires:  clang make libqt5-qtbase-devel libqt5-qtmultimedia-devel
 
