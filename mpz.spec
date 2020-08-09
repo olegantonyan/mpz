@@ -28,16 +28,7 @@ make %{?_smp_mflags}
 
 %install
 cd build-fucking-qmake-ignore-fucking-debug-release
-# %make_install
-
-mkdir -p %{buildroot}%{_bindir}/
-install -m 0755 app/mpz %{buildroot}/%{_bindir}/%{name}
-
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/
-install -m 0755 ../app/resources/icons/appicon.png %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
-
-mkdir -p %{buildroot}%{_datadir}/applications/
-install -m 0755 ../mpz.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
+make install INSTALL_ROOT=%{buildroot}
 
 
 %files

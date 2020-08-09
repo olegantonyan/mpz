@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   #endif
   ui->setupUi(this);
   setWindowTitle(qApp->applicationName());
-  setWindowIcon(QIcon(":/icons/icons/appicon.png"));
+  setWindowIcon(QIcon(":/icons/icons/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
