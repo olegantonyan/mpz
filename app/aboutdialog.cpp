@@ -6,7 +6,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   setWindowTitle("About mpz");
 
   auto url = "https://github.com/olegantonyan/mpz";
-  auto version = "0.0.0";
+  auto version = qApp->applicationVersion();
 
   ui->infoLabel->setTextFormat(Qt::RichText);
   ui->infoLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
