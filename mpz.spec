@@ -10,6 +10,18 @@ BuildRequires:  clang make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-
 
 Requires: libQt5Core5 libQt5Concurrent5 libQt5Multimedia5 libQt5Gui5 libQt5DBus5 libQt5Network5 libQt5X11Extras5
 
+%if 0%{?fedora_version}
+  Substitute: libqt5-qtbase-devel qt5-qtbase-devel
+  Substitute: libqt5-qtmultimedia-devel qt5-qtmultimedia-devel
+  Substitute: libqt5-qtx11extras-devel qt5-qtx11extras-devel
+  Substitute: libQt5Core5 qt5-qtbase
+  Substitute: libQt5Concurrent5 qt5-qtbase-common
+  Substitute: libQt5Multimedia5 qt5-qtmultimedia
+  Substitute: libQt5Gui5 qt5-qtbase-gui
+  Substitute: libQt5DBus5 qt5-qtbase-common
+  Substitute: libQt5Network5 qt5-qtnetworkauth
+  Substitute: libQt5X11Extras5 qt5-qtx11extras
+%endif
 
 %description
 Music player for big local collections
