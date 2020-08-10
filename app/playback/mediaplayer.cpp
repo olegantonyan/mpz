@@ -40,6 +40,7 @@ namespace Playback {
       case QMediaPlayer::PausedState:
         return MediaPlayer::PausedState;
     }
+    return MediaPlayer::StoppedState;
   }
 
   int MediaPlayer::volume() const {
