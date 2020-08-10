@@ -18,7 +18,8 @@ quint64 RNJesus::generate(int max) {
 #ifdef USE_QRANDOMGENERATOR
   return QRandomGenerator::global()->bounded(max);
 #else
-  return qrand() % ((max + 1) - 1) + 1;
+  int min = 0;
+  return qrand() % ((max + 1) - min) + min;
 #endif
 }
 
