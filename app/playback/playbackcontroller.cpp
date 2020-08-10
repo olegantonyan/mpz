@@ -69,6 +69,7 @@ namespace Playback {
       case MediaPlayer::PausedState:
         return Paused;
     }
+    return Stopped;
   }
 
   int Controller::position() const {
