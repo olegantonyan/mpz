@@ -6,7 +6,7 @@ License:    GPL-3.0-or-later
 URL:        https://github.com/olegantonyan/%{name}
 Source0:    %{name}-%{version}.tar.gz
 
-BuildRequires:  gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires:  clang make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
 
 #Requires: libQt5Core5 libQt5Concurrent5 libQt5Multimedia5 libQt5Gui5 libQt5DBus5 libQt5Network5 libQt5X11Extras5
 
@@ -21,7 +21,7 @@ Music player for big local collections
 %build
 mkdir build
 cd build
-qmake-qt5 CONFIG+=release ..
+qmake-qt5 -spec linux-clang CONFIG+=release ..
 make %{?_smp_mflags}
 
 
