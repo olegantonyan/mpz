@@ -78,6 +78,7 @@ QString Mpris::PlaybackStatus() const {
     case Playback::Controller::Playing:
       return "Playing";
   }
+  return "Stopped";
 }
 
 void Mpris::OpenUri(const QString& uri) {

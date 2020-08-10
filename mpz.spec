@@ -8,7 +8,6 @@ Source0:    %{name}-%{version}.tar.gz
 
 BuildRequires:  clang make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
 
-#Requires: libQt5Core5 libQt5Concurrent5 libQt5Multimedia5 libQt5Gui5 libQt5DBus5 libQt5Network5 libQt5X11Extras5
 
 %description
 Music player for big local collections
