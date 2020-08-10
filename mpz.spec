@@ -20,14 +20,14 @@ Music player for big local collections
 
 
 %build
-mkdir build-fucking-qmake-ignore-fucking-debug-release
-cd build-fucking-qmake-ignore-fucking-debug-release
+mkdir build
+cd build
 qmake-qt5 -spec linux-clang CONFIG+=release ..
 make %{?_smp_mflags}
 
 
 %install
-cd build-fucking-qmake-ignore-fucking-debug-release
+cd build
 make install INSTALL_ROOT=%{buildroot}
 
 
