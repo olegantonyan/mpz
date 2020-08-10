@@ -1,15 +1,15 @@
 #include "playlist/playlist.h"
 #include "playlist/fileparser.h"
+#include "rnjesus.h"
 
 #include <QDebug>
 #include <QDirIterator>
-#include <QRandomGenerator>
 #include <QtConcurrent>
 #include <QFileInfo>
 
 namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
-    _uid = QRandomGenerator::global()->generate64();
+    _uid = RNJesus::generate();
     _random = PlaylistRandom::None;
   }
 

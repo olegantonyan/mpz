@@ -1,6 +1,5 @@
 #include "dispatch.h"
-
-#include <QRandomGenerator>
+#include "rnjesus.h"
 
 namespace Playback {
   Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::Controller *playlists_ui) :
@@ -31,14 +30,14 @@ namespace Playback {
     }
 
     if (selected_playlist->random() == Playlist::Playlist::Random || global_conf.playbackOrder() == "random") {
-      int rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+      int rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
       if (rngjesus == current_playlist->trackIndex(current_track_uid)) {
         // once again, but only once, you lucky bastard
-        rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+        rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
       }
       Track t = current_playlist->tracks().at(rngjesus);
       if (random_trail.exists(t.uid())) {
-        rngjesus = QRandomGenerator::global()->bounded(current_playlist->tracks().size() - 1);
+        rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
         t = current_playlist->tracks().at(rngjesus);
       }
 

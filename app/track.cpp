@@ -1,4 +1,5 @@
 #include "track.h"
+#include "rnjesus.h"
 
 #include "fileref.h"
 #include "tag.h"
@@ -7,7 +8,6 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QFileInfo>
-#include <QRandomGenerator>
 #include <QDir>
 
 Track::Track() {
@@ -244,7 +244,7 @@ quint16 Track::track_number() const {
 }
 
 quint64 Track::generateUid() const {
-  return QRandomGenerator::global()->generate64();
+  return RNJesus::generate();
 }
 
 QString Track::detectFormat() const {

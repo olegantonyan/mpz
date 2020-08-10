@@ -1,0 +1,31 @@
+#include "rnjesus.h"
+
+#include <QDebug>
+
+#ifdef USE_QRANDOMGENERATOR
+  #include <QRandomGenerator>
+#else
+  #include <QDateTime>
+#endif
+
+void RNJesus::seed() {
+#ifndef USE_QRANDOMGENERATOR
+  qsrand(QDateTime::currentSecsSinceEpoch());
+#endif
+}
+
+quint64 RNJesus::generate(int max) {
+#ifdef USE_QRANDOMGENERATOR
+  return QRandomGenerator::global()->bounded(max);
+#else
+  return qrand() % ((max + 1) - 1) + 1;
+#endif
+}
+
+quint64 RNJesus::generate() {
+#ifdef USE_QRANDOMGENERATOR
+  return QRandomGenerator::global()->generate64();
+#else
+  return QDateTime::currentMSecsSinceEpoch() * (qrand() + 1) + (qrand() + 1);
+#endif
+}
