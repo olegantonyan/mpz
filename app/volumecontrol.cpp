@@ -4,8 +4,9 @@
 #include <QWheelEvent>
 #include <QStyle>
 
-VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn), menu(PrivateVolumeControl::Menu(parent)) {
-  connect(&menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
+VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn) {
+  menu = new PrivateVolumeControl::Menu(this);
+  connect(menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
   connect(button, &QToolButton::clicked, this, &VolumeControl::on_buttonClicked);
   button->installEventFilter(this);
   setValue(initial_value);
@@ -13,7 +14,7 @@ VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *paren
 
 void VolumeControl::setValue(int value) {
   value = qBound(0, value, 100);
-  menu.setValue(value);
+  menu->setValue(value);
   button->setText(QString("%1%").arg(value));
   if (value == 0) {
     button->setIcon(button->style()->standardIcon(QStyle::SP_MediaVolumeMuted));
@@ -23,11 +24,11 @@ void VolumeControl::setValue(int value) {
 }
 
 void VolumeControl::on_buttonClicked() {
-  int menu_width = menu.sizeHint().width();
+  int menu_width = menu->sizeHint().width();
   int x = button->width() - menu_width;
   int y = button->height();
   QPoint pos(button->mapToGlobal(QPoint(x, y)));
-  menu.show(pos);
+  menu->show(pos);
 }
 
 bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
@@ -35,9 +36,9 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::Wheel) {
       QWheelEvent *we = dynamic_cast<QWheelEvent *>(event);
       if (we->angleDelta().y() > 0) {
-        emit changed(menu.value() + 5);
+        emit changed(menu->value() + 5);
       } else if (we->angleDelta().y() < 0) {
-        emit changed(menu.value() - 5);
+        emit changed(menu->value() - 5);
       }
     }
   }
@@ -46,13 +47,14 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
 
 
 namespace PrivateVolumeControl {
-  Menu::Menu(QObject *parent) : QObject(parent), action(QWidgetAction(nullptr)) {
+  Menu::Menu(QObject *parent) : QObject(parent) {
+    action = new QWidgetAction(this);
     slider.setMaximum(100);
     slider.setMinimum(0);
     layout.addWidget(&slider);
     widget.setLayout(&layout);
-    action.setDefaultWidget(&widget);
-    menu.addAction(&action);
+    action->setDefaultWidget(&widget);
+    menu.addAction(action);
     connect(&slider, &QSlider::valueChanged, this, &Menu::changed);
   }
 

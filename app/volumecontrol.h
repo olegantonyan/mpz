@@ -27,7 +27,7 @@ namespace PrivateVolumeControl {
     void changed(int value);
 
   private:
-    QWidgetAction action;
+    QWidgetAction *action;
     QWidget widget;
     QMenu menu;
     QSlider slider;
@@ -54,7 +54,7 @@ protected:
 
 private:
   QToolButton *button;
-  PrivateVolumeControl::Menu menu;
+  PrivateVolumeControl::Menu *menu;
 };
 
 #endif // VOLUMECONTROL_H
