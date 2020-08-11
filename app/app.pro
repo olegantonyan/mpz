@@ -7,6 +7,8 @@ CONFIG += c++14
 
 TARGET = mpz
 
+include(../version.pri)
+
 # QMAKE_LFLAGS += -static
 
 # The following define makes your compiler emit warnings if you use
@@ -139,5 +141,3 @@ RESOURCES += \
 # make install
 target.path = /usr/bin/
 INSTALLS += target
-
-include(../version.pri)
