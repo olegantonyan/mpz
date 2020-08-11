@@ -1,7 +1,7 @@
 Name:       mpz
 Version:    0.0.1
 Release:    1%{?dist}
-Summary:    Music player for the larger local collections
+Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
 URL:        https://github.com/olegantonyan/%{name}
 Source0:    %{name}-%{version}.tar.gz
