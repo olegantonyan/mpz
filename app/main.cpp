@@ -13,7 +13,7 @@ void registerMetaTypes() {
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   a.setApplicationName("mpz");
-  a.setApplicationVersion(GIT_VERSION);
+  a.setApplicationVersion(VERSION);
 
   registerMetaTypes();
 
