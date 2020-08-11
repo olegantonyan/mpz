@@ -39,7 +39,6 @@ make install INSTALL_ROOT=%{buildroot}
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %dir %{_datadir}/applications/
-#%dir %{_datadir}/icons/
 %dir %{_datadir}/icons/hicolor/
 %dir %{_datadir}/icons/hicolor/512x512
 %dir %{_datadir}/icons/hicolor/512x512/apps/
