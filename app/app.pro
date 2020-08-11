@@ -139,3 +139,6 @@ RESOURCES += \
 # make install
 target.path = /usr/bin/
 INSTALLS += target
+
+include(../gitrevision.pri)
+message($$GIT_VERSION)

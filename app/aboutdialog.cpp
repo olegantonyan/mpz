@@ -11,7 +11,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->infoLabel->setTextFormat(Qt::RichText);
   ui->infoLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->infoLabel->setOpenExternalLinks(true);
-  ui->infoLabel->setText(QString("mpz version %1 <a href=\"%2\">%3</a>").arg(version).arg(url).arg(url));
+  ui->infoLabel->setText(QString("version %1 <a href=\"%2\">%3</a>").arg(version).arg(url).arg(url));
 
   ui->opensourceLabel->setTextFormat(Qt::RichText);
   ui->opensourceLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
