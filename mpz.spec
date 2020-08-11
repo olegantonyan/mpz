@@ -10,7 +10,9 @@ BuildRequires:  gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qt
 
 
 %description
-Music player for big local collections
+Music player for big local collections. Treats your folders with music as a library.
+Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist.
+Similar to "album list" in Foobar2000.
 
 
 %prep
