@@ -2,23 +2,27 @@
 
 ## Installation
 
-### openSUSE (Tumbleweed, 15.2, 15.1)
+#### openSUSE (Tumbleweed, 15.2, 15.1)
 
 https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
 
 Use OBS repository:
 ```
-zypper ar obs://home:oleg_antonyan home:oleg_antonyan
+zypper ar -f obs://home:oleg_antonyan home:oleg_antonyan
 zypper in mpz
 ```
 
 To update:
 ```
-zypper ref -r home:oleg_antonyan
 zypper up mpz
 ```
 
-### From sources
+Or regualar update on Tumbleweed should pick up a new version:
+```
+zypper dup
+```
+
+#### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
 Packages' names may differ in different distros.
