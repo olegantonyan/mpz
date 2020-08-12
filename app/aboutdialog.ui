@@ -17,14 +17,14 @@
    <item>
     <widget class="QLabel" name="infoLabel">
      <property name="text">
-      <string>mpz version github</string>
+      <string/>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="opensourceLabel">
      <property name="text">
-      <string>opensource libraries</string>
+      <string/>
      </property>
     </widget>
    </item>
