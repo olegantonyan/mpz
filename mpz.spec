@@ -22,7 +22,6 @@ Similar to "album list" in Foobar2000.
 %build
 mkdir build
 cd build
-#qmake-qt5 -spec linux-clang CONFIG+=release ..
 qmake-qt5 CONFIG+=release ..
 make %{?_smp_mflags}
 
