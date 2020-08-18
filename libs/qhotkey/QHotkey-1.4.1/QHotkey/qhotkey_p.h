@@ -16,6 +16,7 @@ public:
 	~QHotkeyPrivate();
 
 	static QHotkeyPrivate *instance();
+	static bool isPlatformSupported();
 
 	QHotkey::NativeShortcut nativeShortcut(Qt::Key keycode, Qt::KeyboardModifiers modifiers);
 
@@ -24,12 +25,15 @@ public:
 
 protected:
 	void activateShortcut(QHotkey::NativeShortcut shortcut);
+	void releaseShortcut(QHotkey::NativeShortcut shortcut);
 
 	virtual quint32 nativeKeycode(Qt::Key keycode, bool &ok) = 0;//platform implement
 	virtual quint32 nativeModifiers(Qt::KeyboardModifiers modifiers, bool &ok) = 0;//platform implement
 
 	virtual bool registerShortcut(QHotkey::NativeShortcut shortcut) = 0;//platform implement
 	virtual bool unregisterShortcut(QHotkey::NativeShortcut shortcut) = 0;//platform implement
+
+	QString error;
 
 private:
 	QHash<QPair<Qt::Key, Qt::KeyboardModifiers>, QHotkey::NativeShortcut> mapping;

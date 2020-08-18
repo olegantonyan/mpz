@@ -4,18 +4,18 @@ CONFIG += staticlib
 TARGET = qhotkey
 
 HEADERS += \
-  QHotkey-1.2.2/QHotkey/qhotkey.h \
-  QHotkey-1.2.2/QHotkey/QHotkey \
-  QHotkey-1.2.2/QHotkey/qhotkey_p.h
+  QHotkey-1.4.1/QHotkey/qhotkey.h \
+  QHotkey-1.4.1/QHotkey/QHotkey \
+  QHotkey-1.4.1/QHotkey/qhotkey_p.h
 
 SOURCES += \
-  QHotkey-1.2.2/QHotkey/qhotkey.cpp
+  QHotkey-1.4.1/QHotkey/qhotkey.cpp
 
-mac:        SOURCES += QHotkey-1.2.2/QHotkey/qhotkey_mac.cpp
-else:win32: SOURCES += QHotkey-1.2.2/QHotkey/qhotkey_win.cpp
-else:unix:  SOURCES += QHotkey-1.2.2/QHotkey/qhotkey_x11.cpp
+mac:        SOURCES += QHotkey-1.4.1/QHotkey/qhotkey_mac.cpp
+else:win32: SOURCES += QHotkey-1.4.1/QHotkey/qhotkey_win.cpp
+else:unix:  SOURCES += QHotkey-1.4.1/QHotkey/qhotkey_x11.cpp
 
-INCLUDEPATH += QHotkey-1.2.2/QHotkey
+INCLUDEPATH += QHotkey-1.4.1/QHotkey
 
 include(qhotkey.pri)
 

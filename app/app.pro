@@ -110,7 +110,7 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.2.2 \
+  ../libs/qhotkey/QHotkey-1.4.1 \
   ../libs/libcuefile/libcuefile_r475/include
 
 LIBS += \
