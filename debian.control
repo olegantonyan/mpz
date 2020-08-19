@@ -9,6 +9,4 @@ Homepage: https://github.com/olegantonyan/mpz
 Package: mpz
 Architecture: amd64
 Depends: ${shlibs:Depends}
-Description: Music player for big local collections. Treats your folders with music as a library.
-Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist.
-Similar to "album list" in Foobar2000.
+Description: Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to "album list" in Foobar2000.
