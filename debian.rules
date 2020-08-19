@@ -6,7 +6,7 @@
 export DESTROOT=$(CURDIR)/debian/mpz
 
 %:
-  dh $@
+	dh $@
 
 override_dh_auto_install:
-  make install INSTALL_ROOT=$(DESTROOT)
+	make install INSTALL_ROOT=$(DESTROOT)
