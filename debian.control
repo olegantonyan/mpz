@@ -2,7 +2,7 @@ Source: mpz
 Section: video
 Priority: optional
 Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), gcc, make
+Build-Depends: debhelper (>= 8.0.0), build-essential, qt5-default
 Standards-Version: 3.9.4
 Homepage: https://github.com/olegantonyan/mpz
 
