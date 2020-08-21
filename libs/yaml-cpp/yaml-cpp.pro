@@ -3,6 +3,7 @@ TARGET = yaml-cpp
 
 CONFIG += warn_off
 CONFIG += staticlib
+CONFIG += c++11
 
 SOURCES += \
   yaml-cpp-0.6.2/src/convert.cpp \
