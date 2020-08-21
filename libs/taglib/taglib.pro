@@ -3,6 +3,7 @@ TARGET = taglib
 
 CONFIG += warn_off
 CONFIG += staticlib
+CONFIG += c++11
 
 DEFINES += "NDEBUG=1"
 

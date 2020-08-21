@@ -3,6 +3,7 @@ TARGET = cuefile
 
 CONFIG += warn_off
 CONFIG += staticlib
+CONFIG += c++11
 
 SOURCES += \
   libcuefile_r475/src/cd.c \
