@@ -6,6 +6,7 @@ CONFIG += staticlib
 CONFIG += c++11
 
 DEFINES += "NDEBUG=1"
+DEFINES += TAGLIB_STATIC
 
 SOURCES += \
   taglib-1.11.1/taglib/toolkit/tbytevectorlist.cpp \
