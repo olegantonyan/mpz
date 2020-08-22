@@ -18,19 +18,39 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QToolButton" name="stopButton"/>
+       <widget class="QToolButton" name="stopButton">
+        <property name="toolTip">
+         <string>Stop</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="pauseButton"/>
+       <widget class="QToolButton" name="pauseButton">
+        <property name="toolTip">
+         <string>Pause</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="playButton"/>
+       <widget class="QToolButton" name="playButton">
+        <property name="toolTip">
+         <string>Play</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="prevButton"/>
+       <widget class="QToolButton" name="prevButton">
+        <property name="toolTip">
+         <string>Previous track</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="nextButton"/>
+       <widget class="QToolButton" name="nextButton">
+        <property name="toolTip">
+         <string>Next track</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QProgressBar" name="progressBar">
@@ -48,6 +68,9 @@
          <font>
           <family>Monospace</family>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>Track duration</string>
         </property>
         <property name="text">
          <string/>
@@ -68,10 +91,16 @@
           <height>32</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Background operation running</string>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="toolButtonVolume">
+        <property name="toolTip">
+         <string>Volume</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -81,7 +110,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="menuButton"/>
+       <widget class="QToolButton" name="menuButton">
+        <property name="toolTip">
+         <string>Main menu</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -99,13 +132,20 @@
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QToolButton" name="toolButtonLibraries">
+            <property name="toolTip">
+             <string>Configure library folders</string>
+            </property>
             <property name="text">
              <string>⚙</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBoxLibraries"/>
+           <widget class="QComboBox" name="comboBoxLibraries">
+            <property name="toolTip">
+             <string>Select library folder</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -158,6 +198,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="followCursorCheckBox">
+            <property name="toolTip">
+             <string>Playback follows selection</string>
+            </property>
             <property name="text">
              <string>Playback follows cursor</string>
             </property>
@@ -178,7 +221,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="orderComboBox"/>
+           <widget class="QComboBox" name="orderComboBox">
+            <property name="toolTip">
+             <string>Default playback order</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_3">
@@ -188,7 +235,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="perPlaylistOrdercomboBox"/>
+           <widget class="QComboBox" name="perPlaylistOrdercomboBox">
+            <property name="toolTip">
+             <string>Override playback for current playlist</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
