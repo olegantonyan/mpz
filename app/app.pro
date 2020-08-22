@@ -7,6 +7,8 @@ CONFIG += c++11
 
 TARGET = mpz
 
+win32: CONFIG -= debug_and_release
+
 include(../version.pri)
 
 # QMAKE_LFLAGS += -static
