@@ -9,6 +9,8 @@ TARGET = mpz
 
 win32: CONFIG -= debug_and_release
 
+DEFINES += TAGLIB_STATIC
+
 include(../version.pri)
 
 # QMAKE_LFLAGS += -static
