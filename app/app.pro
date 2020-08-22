@@ -13,6 +13,8 @@ DEFINES += TAGLIB_STATIC
 
 include(../version.pri)
 
+RC_ICONS = resources/icons/mpz.ico
+
 # QMAKE_LFLAGS += -static
 
 # The following define makes your compiler emit warnings if you use
