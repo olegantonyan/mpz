@@ -4,6 +4,8 @@ CONFIG += c++11
 
 TARGET = qhotkey
 
+win32: CONFIG -= debug_and_release
+
 HEADERS += \
   QHotkey-1.4.1/QHotkey/qhotkey.h \
   QHotkey-1.4.1/QHotkey/QHotkey \

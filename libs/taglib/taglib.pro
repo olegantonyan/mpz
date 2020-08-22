@@ -8,6 +8,8 @@ CONFIG += c++11
 DEFINES += "NDEBUG=1"
 DEFINES += TAGLIB_STATIC
 
+win32: CONFIG -= debug_and_release
+
 SOURCES += \
   taglib-1.11.1/taglib/toolkit/tbytevectorlist.cpp \
   taglib-1.11.1/taglib/toolkit/tdebug.cpp \

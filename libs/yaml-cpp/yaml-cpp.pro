@@ -5,6 +5,8 @@ CONFIG += warn_off
 CONFIG += staticlib
 CONFIG += c++11
 
+win32: CONFIG -= debug_and_release
+
 SOURCES += \
   yaml-cpp-0.6.2/src/convert.cpp \
   yaml-cpp-0.6.2/src/null.cpp \
