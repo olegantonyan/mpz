@@ -9,6 +9,13 @@ TARGET = mpz
 
 DEFINES += TAGLIB_STATIC
 
+win32: {
+  CONFIG -= debug_and_release
+  #CONFIG += static
+  #QMAKE_LFLAGS += -static
+}
+
+
 include(../version.pri)
 
 RC_ICONS = resources/icons/mpz.ico
@@ -135,11 +142,6 @@ unix: {
 
   SOURCES += \
     dbus/mpris.cpp
-}
-win32: {
-  CONFIG -= debug_and_release
-  #CONFIG += static
-  #QMAKE_LFLAGS += -static
 }
 
 RESOURCES += \
