@@ -7,15 +7,11 @@ CONFIG += c++11
 
 TARGET = mpz
 
-win32: CONFIG -= debug_and_release
-
 DEFINES += TAGLIB_STATIC
 
 include(../version.pri)
 
 RC_ICONS = resources/icons/mpz.ico
-
-# QMAKE_LFLAGS += -static
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -139,6 +135,11 @@ unix: {
 
   SOURCES += \
     dbus/mpris.cpp
+}
+win32: {
+  CONFIG -= debug_and_release
+  #CONFIG += static
+  #QMAKE_LFLAGS += -static
 }
 
 RESOURCES += \
