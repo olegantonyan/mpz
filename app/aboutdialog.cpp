@@ -18,6 +18,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->opensourceLabel->setOpenExternalLinks(true);
 
   QStringList os;
+  os << libraryInfo("Qt", "https://www.qt.io/");
   os << libraryInfo("TagLib", "https://taglib.org/");
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
