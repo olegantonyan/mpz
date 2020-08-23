@@ -13,9 +13,6 @@ TMP_SRC_DIR=mpz-$VERSION
 TMP_SRC_FULL_DIR=$TMP_DIR/$TMP_SRC_DIR
 
 
-
-
-
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
 echo -e "tmp dir:\t$TMP_DIR"
