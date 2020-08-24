@@ -4,25 +4,9 @@
 
 ## Installation
 
-#### openSUSE (Tumbleweed, 15.2, 15.1)
+#### Linux
 
-https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
-
-Use OBS repository:
-```
-zypper ar -f obs://home:oleg_antonyan home:oleg_antonyan
-zypper in mpz
-```
-
-To update:
-```
-zypper up mpz
-```
-
-Or regualar update on Tumbleweed should pick up a new version:
-```
-zypper dup
-```
+Use open build service repositories for openSUSE, Ubuntu, Fedora and other popular distros: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
 
 #### From sources
 
@@ -40,3 +24,7 @@ make -j8
 # optionally, install to /usr/bin with icon and desktop file, as root:
 make install
 ```
+
+#### Windows
+
+Grab static binaries from releases page: https://github.com/olegantonyan/mpz/releases
