@@ -104,8 +104,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::setupOrderCombobox() {
-  ui->orderComboBox->addItem("sequential");
-  ui->orderComboBox->addItem("random");
+  ui->orderComboBox->addItem(tr("sequential"));
+  ui->orderComboBox->addItem(tr("random"));
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
@@ -124,9 +124,9 @@ void MainWindow::setupOrderCombobox() {
 }
 
 void MainWindow::setupPerPlaylistOrderCombobox() {
-  ui->perPlaylistOrdercomboBox->addItem("(use global)");
-  ui->perPlaylistOrdercomboBox->addItem("random");
-  ui->perPlaylistOrdercomboBox->addItem("sequential");
+  ui->perPlaylistOrdercomboBox->addItem(tr("(use global)"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("random"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
   connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist->random() == Playlist::Playlist::Random) {
       ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
