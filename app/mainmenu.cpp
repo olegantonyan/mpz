@@ -13,11 +13,11 @@ MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, QObject *parent) 
 
 void MainMenu::on_buttonClicked() {
   QMenu menu;
-  QAction trayicon(tr("Tray icon"));
+  QAction trayicon("Tray icon");
   trayicon.setCheckable(true);
   trayicon.setChecked(global_conf.trayIconEnabled());
-  QAction about(tr("About"));
-  QAction quit(tr("Quit"));
+  QAction about("About");
+  QAction quit("Quit");
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
   });
