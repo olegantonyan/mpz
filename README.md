@@ -2,6 +2,8 @@
 
 # WIP misic player
 
+https://olegantonyan.github.io/mpz/
+
 ## Installation
 
 #### Linux
