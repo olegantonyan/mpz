@@ -6,7 +6,6 @@ SUBDIRS = \
   libs/yaml-cpp \
   libs/qtwaitingspinner \
   libs/qhotkey \
-  libs/libcuefile \
   app
 
 # make install

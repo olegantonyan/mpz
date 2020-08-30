@@ -51,6 +51,7 @@ SOURCES += \
     playback/mediaplayer.cpp \
     playback/playbackcontroller.cpp \
     playback/randomtrail.cpp \
+    playlist/cueparser.cpp \
     playlist/fileparser.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     playback/mediaplayer.h \
     playback/playbackcontroller.h \
     playback/randomtrail.h \
+    playlist/cueparser.h \
     playlist/fileparser.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
@@ -119,15 +121,13 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.4.1 \
-  ../libs/libcuefile/libcuefile_r475/include
+  ../libs/qhotkey/QHotkey-1.4.1
 
 LIBS += \
   -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
-  -L../libs/qhotkey -lqhotkey \
-  -L../libs/libcuefile -lcuefile
+  -L../libs/qhotkey -lqhotkey
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries
