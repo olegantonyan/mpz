@@ -24,8 +24,7 @@
 #include <QtDebug>
 
 namespace Playlist {
-  const char* CueParser::kFileLineRegExp =
-      "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
+  const char* CueParser::kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
   const char* CueParser::kIndexRegExp = "(\\d{2,3}):(\\d{2}):(\\d{2})";
 
   const char* CueParser::kPerformer = "performer";
@@ -41,25 +40,22 @@ namespace Playlist {
   const char* CueParser::kDisc = "discnumber";
 
   // Use these to convert between time units
-  const qint64 kMsecPerSec = 1000ll;
+  /*const qint64 kMsecPerSec = 1000ll;
   const qint64 kUsecPerMsec = 1000ll;
   const qint64 kUsecPerSec = 1000000ll;
   const qint64 kNsecPerUsec = 1000ll;
-  const qint64 kNsecPerMsec = 1000000ll;
+  const qint64 kNsecPerMsec = 1000000ll;*/
   const qint64 kNsecPerSec = 1000000000ll;
-
-  const qint64 kSecsPerDay = 24 * 60 * 60;
+  //const qint64 kSecsPerDay = 24 * 60 * 60;
 
 
   CueParser::CueParser() {
   }
 
-  SongList CueParser::Load(QIODevice* device, const QString& playlist_path, const QDir& dir) const {
-    SongList ret;
+  void CueParser::Load(QIODevice* device, const QDir& dir) const {
 
     QTextStream text_stream(device);
-    text_stream.setCodec(QTextCodec::codecForUtfText(
-        device->peek(1024), QTextCodec::codecForName("UTF-8")));
+    text_stream.setCodec(QTextCodec::codecForUtfText(device->peek(1024), QTextCodec::codecForName("UTF-8")));
 
     QString dir_path = dir.absolutePath();
     // read the first line already
@@ -143,7 +139,7 @@ namespace Playlist {
 
       if (line.isNull()) {
         qWarning() << "the .cue file from " << dir_path << " defines no tracks!";
-        return ret;
+        //return ret;
       }
 
       // if this is a data file, all of it's tracks will be ignored
@@ -218,20 +214,20 @@ namespace Playlist {
       } while (!(line = text_stream.readLine()).isNull());
 
       // we didn't add the last song yet...
-      if (valid_file && !index.isEmpty() &&
-          (track_type.isEmpty() || track_type == kAudioTrackType)) {
-        entries.append(CueEntry(file, index, title, artist, album_artist, album,
-                                composer, album_composer, genre, date, disc));
+      if (valid_file && !index.isEmpty() && (track_type.isEmpty() || track_type == kAudioTrackType)) {
+        entries.append(CueEntry(file, index, title, artist, album_artist, album, composer, album_composer, genre, date, disc));
       }
     }
 
-    QDateTime cue_mtime = QFileInfo(playlist_path).lastModified();
+    //QDateTime cue_mtime = QFileInfo(playlist_path).lastModified();
 
     // finalize parsing songs
     for (int i = 0; i < entries.length(); i++) {
       CueEntry entry = entries.at(i);
 
-      Song song = LoadSong(entry.file, IndexToMarker(entry.index), dir);
+      qDebug() << entry.index << IndexToMarker(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
+
+      /*Song song = LoadSong(entry.file, IndexToMarker(entry.index), dir);
 
       // cue song has mtime equal to qMax(media_file_mtime, cue_sheet_mtime)
       if (cue_mtime.isValid()) {
@@ -263,10 +259,10 @@ namespace Playlist {
         }
       }
 
-      ret << song;
+      ret << song;*/
     }
 
-    return ret;
+    //return ret;
   }
 
   // This and the kFileLineRegExp do most of the "dirty" work, namely: splitting
@@ -312,4 +308,61 @@ namespace Playlist {
 
     return false;
   }
+
+  /*void CueParser::LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir, Song* song) const {
+    if (filename_or_url.isEmpty()) {
+      return;
+    }
+
+    QString filename = filename_or_url;
+
+    if (filename_or_url.contains(QRegExp("^[a-z]{2,}:"))) {
+      QUrl url(filename_or_url);
+      if (url.scheme() == "file") {
+        filename = url.toLocalFile();
+      } else {
+        song->set_url(QUrl::fromUserInput(filename_or_url));
+        song->set_filetype(Song::Type_Stream);
+        song->set_valid(true);
+        return;
+      }
+    }
+
+    // Clementine always wants / separators internally.  Using
+    // QDir::fromNativeSeparators() only works on the same platform the playlist
+    // was created on/for, using replace() lets playlists work on any platform.
+    filename = filename.replace('\\', '/');
+
+    // Make the path absolute
+    if (!QDir::isAbsolutePath(filename)) {
+      filename = dir.absoluteFilePath(filename);
+    }
+
+    // Use the canonical path
+    if (QFile::exists(filename)) {
+      filename = QFileInfo(filename).canonicalFilePath();
+    }
+
+    const QUrl url = QUrl::fromLocalFile(filename);
+
+    // Search in the library
+    Song library_song;
+    if (library_) {
+      library_song = library_->GetSongByUrl(url, beginning);
+    }
+
+    // If it was found in the library then use it, otherwise load metadata from
+    // disk.
+    if (library_song.is_valid()) {
+      *song = library_song;
+    } else {
+      TagReaderClient::Instance()->ReadFileBlocking(filename, song);
+    }
+  }
+
+  Song CueParser::LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir) const {
+    Song song;
+    LoadSong(filename_or_url, beginning, dir, &song);
+    return song;
+  }*/
 }

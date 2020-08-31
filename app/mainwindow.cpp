@@ -8,6 +8,8 @@
 #include <QApplication>
 #include <QStyle>
 
+#include "playlist/cueparser.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
   #if defined(MPRIS_ENABLE)
     mpris = nullptr;
@@ -65,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupMpris();
 #endif
 
+
+  QFile f("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)/Roland Klinkenberg - Mexico Can Wait.cue");
+  f.open(QIODevice::ReadOnly);
+  Playlist::CueParser().Load(&f, QDir("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)"));
 }
 
 MainWindow::~MainWindow() {
