@@ -9,8 +9,9 @@
 class Track {
 public:
   explicit Track();
-  explicit Track(const QString &filepath);
+  explicit Track(const QString &filepath, quint32 begin = 0);
   explicit Track(const QString &filepath,
+                 quint32 begin,
                  const QString &artist,
                  const QString &album,
                  const QString &title,
@@ -39,6 +40,7 @@ public:
   QString format() const;
   QString filename() const;
   quint16 track_number() const;
+  quint32 begin() const;
 
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
@@ -70,6 +72,7 @@ private:
   QString _format;
   quint16 _track_number;
   QUrl _stream_url;
+  quint32 _begin;
 
   quint64 _uid;
 

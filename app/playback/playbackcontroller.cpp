@@ -82,7 +82,7 @@ namespace Playback {
 
   void Controller::play(const Track &track) {
     next_after_stop = false;
-    _player.setMedia(track.url());
+    _player.setTrack(track);
     _current_track = track;
     _player.play();
     if (track.isStream()) {
@@ -144,7 +144,7 @@ namespace Playback {
     switch (state) {
       case MediaPlayer::StoppedState:
         _controls.seekbar->setValue(0);
-        _player.removeMedia();
+        _player.clearTrack();
         _controls.time->clear();
         _current_track = Track();
         if (next_after_stop) {

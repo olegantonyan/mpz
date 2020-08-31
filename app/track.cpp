@@ -11,7 +11,7 @@
 #include <QDir>
 
 Track::Track() {
-  Track("");
+  Track("", 0);
   _uid = 0;
   _duration = 0;
   _channels = 0;
@@ -21,8 +21,9 @@ Track::Track() {
   _track_number = 0;
 }
 
-Track::Track(const QString &fp) {
+Track::Track(const QString &fp, quint32 bgn) {
   _uid = generateUid();
+  _begin = bgn;
 
   filepath = fp;
 
@@ -48,6 +49,7 @@ Track::Track(const QString &fp) {
 }
 
 Track::Track(const QString &fp,
+             quint32 bgn,
              const QString &artst,
              const QString &albm,
              const QString &ttle,
@@ -58,6 +60,7 @@ Track::Track(const QString &fp,
              quint16 bitrt,
              quint16 samplert) {
   _uid = generateUid();
+  _begin = bgn;
 
   filepath = fp;
   _duration = dur;
@@ -241,6 +244,10 @@ QString Track::filename() const {
 
 quint16 Track::track_number() const {
   return _track_number;
+}
+
+quint32 Track::begin() const {
+  return _begin;
 }
 
 quint64 Track::generateUid() const {

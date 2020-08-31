@@ -52,7 +52,6 @@ namespace Playback {
   }
 
   void MediaPlayer::pause() {
-    // TODO: stream pause? prevent buffer overflow
     player.pause();
   }
 
@@ -78,17 +77,17 @@ namespace Playback {
     player.setVolume(vol);
   }
 
-  void MediaPlayer::setMedia(const QUrl &url) {
+  void MediaPlayer::setTrack(const Track &track) {
     stream.stop();
-    if (url.scheme() == "file") {
-      player.setMedia(url);
+    if (track.isStream()) {
+      stream.setUrl(track.url());
+      player.setMedia(track.url(), &stream);
     } else {
-      stream.setUrl(url);
-      player.setMedia(url, &stream);
+      player.setMedia(track.url());
     }
   }
 
-  void MediaPlayer::removeMedia() {
+  void MediaPlayer::clearTrack() {
     player.setMedia(nullptr);
   }
 }

@@ -2,6 +2,7 @@
 #define MEDIAPLAYER_H
 
 #include "playback/stream.h"
+#include "track.h"
 
 #include <QObject>
 #include <QMediaPlayer>
@@ -35,8 +36,8 @@ namespace Playback {
     void stop();
     void setPosition(qint64 position);
     void setVolume(int volume);
-    void setMedia(const QUrl &url);
-    void removeMedia();
+    void setTrack(const Track &track);
+    void clearTrack();
 
   private:
     QMediaPlayer player;

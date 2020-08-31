@@ -143,6 +143,7 @@ namespace Config {
   Value Local::serializeTrack(const Track &t) const {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();
+    r["begin"] = static_cast<int>(t.begin());
     r["artist"] = t.artist();
     r["album"] = t.album();
     r["title"] = t.title();
@@ -163,6 +164,7 @@ namespace Config {
     if (r["url"].get<QString>().isEmpty()) {
       return Track(
             r["path"].get<QString>(),
+            static_cast<quint32>(r["begin"].get<int>()),
             r["artist"].get<QString>(),
             r["album"].get<QString>(),
             r["title"].get<QString>(),
