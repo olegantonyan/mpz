@@ -47,6 +47,6 @@ namespace Config {
 }
 
 Q_DECLARE_METATYPE(Config::Value)
-Q_DECLARE_METATYPE(Config::Value::Type)
+Q_DECLARE_METATYPE(enum Config::Value::Type)
 
 #endif // VALUE_H
