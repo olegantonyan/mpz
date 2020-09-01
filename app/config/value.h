@@ -30,8 +30,8 @@ namespace Config {
       return value.value<T>();
     }
 
-    enum Type type() const;
-    enum Type listType() const;
+    Type type() const;
+    Type listType() const;
     bool isNull() const;
 
     void setListType(enum Type t);
@@ -41,12 +41,12 @@ namespace Config {
 
   private:
     QVariant value;
-    enum Type value_type;
-    enum Type list_elements_type;
+    Type value_type;
+    Type list_elements_type;
   };
 }
 
 Q_DECLARE_METATYPE(Config::Value)
-Q_DECLARE_METATYPE(enum Config::Value::Type)
+Q_DECLARE_METATYPE(Config::Value::Type)
 
 #endif // VALUE_H
