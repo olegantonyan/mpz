@@ -4,7 +4,7 @@
 
 namespace Config {
   Value::Value() {
-    value.setValue(nullptr);
+    //value.setValue(nullptr);
     value_type = Config::Value::Type::Null;
   }
 
