@@ -179,9 +179,6 @@
           <property name="mouseTracking">
            <bool>false</bool>
           </property>
-          <property name="tabletTracking">
-           <bool>false</bool>
-          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
