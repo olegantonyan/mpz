@@ -51,7 +51,12 @@ namespace Playlist {
       }
     }
 
-    if (path.isEmpty() && is_file) {
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+      bool empty = path.isEmpty();
+    #else
+      bool empty = path.count() == 0;
+    #endif
+    if (empty && is_file) {
       tracks_list << Track(path.absolutePath());
     } else {
       QStringList filter;
