@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QUrl>
 #include <QTimer>
+#include <QtGlobal>
 
 namespace DirectoryUi {
   Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
