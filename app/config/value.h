@@ -34,7 +34,7 @@ namespace Config {
     Type listType() const;
     bool isNull() const;
 
-    void setListType(enum Type t);
+    void setListType(Type t);
 
     operator QString() const;
     QString toString() const;
