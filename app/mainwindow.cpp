@@ -67,10 +67,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupMpris();
 #endif
 
-
-  QFile f("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)/Roland Klinkenberg - Mexico Can Wait.cue");
-  f.open(QIODevice::ReadOnly);
-  Playlist::CueParser().Load(&f, QDir("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)"));
+  auto tr = Playlist::CueParser("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)/Roland Klinkenberg - Mexico Can Wait.cue").tracks_list();
+  for (auto i : tr) {
+    qDebug() << i.artist() << i.album() << i.title() << i.year() << i.begin();
+  }
 }
 
 MainWindow::~MainWindow() {

@@ -22,42 +22,39 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QtDebug>
+#include <QFileInfo>
 
 namespace Playlist {
-  const char* CueParser::kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
-  const char* CueParser::kIndexRegExp = "(\\d{2,3}):(\\d{2}):(\\d{2})";
+  static const char* kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
+  static const char* kIndexRegExp = "(\\d{2,3}):(\\d{2}):(\\d{2})";
 
-  const char* CueParser::kPerformer = "performer";
-  const char* CueParser::kTitle = "title";
-  const char* CueParser::kSongWriter = "songwriter";
-  const char* CueParser::kFile = "file";
-  const char* CueParser::kTrack = "track";
-  const char* CueParser::kIndex = "index";
-  const char* CueParser::kAudioTrackType = "audio";
-  const char* CueParser::kRem = "rem";
-  const char* CueParser::kGenre = "genre";
-  const char* CueParser::kDate = "date";
-  const char* CueParser::kDisc = "discnumber";
+  static const char* kPerformer = "performer";
+  static const char* kTitle = "title";
+  static const char* kSongWriter = "songwriter";
+  static const char* kFile = "file";
+  static const char* kTrack = "track";
+  static const char* kIndex = "index";
+  static const char* kAudioTrackType = "audio";
+  static const char* kRem = "rem";
+  static const char* kGenre = "genre";
+  static const char* kDate = "date";
+  static const char* kDisc = "discnumber";
 
-  // Use these to convert between time units
-  /*const qint64 kMsecPerSec = 1000ll;
-  const qint64 kUsecPerMsec = 1000ll;
-  const qint64 kUsecPerSec = 1000000ll;
-  const qint64 kNsecPerUsec = 1000ll;
-  const qint64 kNsecPerMsec = 1000000ll;*/
-  const qint64 kNsecPerSec = 1000000000ll;
-  //const qint64 kSecsPerDay = 24 * 60 * 60;
-
-
-  CueParser::CueParser() {
+  CueParser::CueParser(const QString &p) : path(p) {
   }
 
-  void CueParser::Load(QIODevice* device, const QDir& dir) const {
+  QVector<Track> CueParser::tracks_list() const {
 
-    QTextStream text_stream(device);
-    text_stream.setCodec(QTextCodec::codecForUtfText(device->peek(1024), QTextCodec::codecForName("UTF-8")));
+    QFile device(path);
+    if (!device.open(QIODevice::ReadOnly)) {
+      qWarning() << "error opening file for reading" << path << ":" << device.errorString();
+      return QVector<Track>();
+    }
 
-    QString dir_path = dir.absolutePath();
+    QTextStream text_stream(&device);
+    text_stream.setCodec(QTextCodec::codecForUtfText(device.peek(1024), QTextCodec::codecForName("UTF-8")));
+
+    QString dir_path = QFileInfo(path).absoluteDir().absolutePath();
     // read the first line already
     QString line = text_stream.readLine();
 
@@ -77,7 +74,7 @@ namespace Playlist {
 
       // -- FILE section
       do {
-        QStringList splitted = SplitCueLine(line);
+        QStringList splitted = split_cue_line(line);
 
         // uninteresting or incorrect line
         if (splitted.size() < 2) {
@@ -101,9 +98,7 @@ namespace Playlist {
 
           // FILE
         } else if (line_name == kFile) {
-          file = QDir::isAbsolutePath(line_value)
-                     ? line_value
-                     : dir.absoluteFilePath(line_value);
+          file = QDir::isAbsolutePath(line_value) ? line_value : QDir(dir_path).absoluteFilePath(line_value);
 
           if (splitted.size() > 2) {
             file_type = splitted[2];
@@ -143,8 +138,7 @@ namespace Playlist {
       }
 
       // if this is a data file, all of it's tracks will be ignored
-      bool valid_file = file_type.compare("BINARY", Qt::CaseInsensitive) &&
-                        file_type.compare("MOTOROLA", Qt::CaseInsensitive);
+      bool valid_file = file_type.compare("BINARY", Qt::CaseInsensitive) && file_type.compare("MOTOROLA", Qt::CaseInsensitive);
 
       QString track_type;
       QString index;
@@ -154,7 +148,7 @@ namespace Playlist {
 
       // TRACK section
       do {
-        QStringList splitted = SplitCueLine(line);
+        QStringList splitted = split_cue_line(line);
 
         // uninteresting or incorrect line
         if (splitted.size() < 2) {
@@ -163,8 +157,7 @@ namespace Playlist {
 
         QString line_name = splitted[0].toLower();
         QString line_value = splitted[1];
-        QString line_additional =
-            splitted.size() > 2 ? splitted[2].toLower() : "";
+        QString line_additional = splitted.size() > 2 ? splitted[2].toLower() : "";
 
         if (line_name == kTrack) {
           // the beginning of another track's definition - we're saving the
@@ -172,8 +165,7 @@ namespace Playlist {
           // for later (if it's valid of course)
           // please note that the same code is repeated just after this 'do-while'
           // loop
-          if (valid_file && !index.isEmpty() &&
-              (track_type.isEmpty() || track_type == kAudioTrackType)) {
+          if (valid_file && !index.isEmpty() && (track_type.isEmpty() || track_type == kAudioTrackType)) {
             entries.append(CueEntry(file, index, title, artist, album_artist,
                                     album, composer, album_composer, genre,
                                     date, disc));
@@ -219,57 +211,36 @@ namespace Playlist {
       }
     }
 
-    //QDateTime cue_mtime = QFileInfo(playlist_path).lastModified();
+    QVector<Track> tracks;
 
     // finalize parsing songs
     for (int i = 0; i < entries.length(); i++) {
       CueEntry entry = entries.at(i);
 
-      qDebug() << entry.index << IndexToMarker(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
+      //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
 
-      /*Song song = LoadSong(entry.file, IndexToMarker(entry.index), dir);
-
-      // cue song has mtime equal to qMax(media_file_mtime, cue_sheet_mtime)
-      if (cue_mtime.isValid()) {
-        song.set_mtime(qMax(cue_mtime.toTime_t(), song.mtime()));
-      }
-      song.set_cue_path(playlist_path);
-
-      // overwrite the stuff, we may have read from the file or library, using
-      // the current .cue metadata
-
-      // set track number only in single-file mode
-      if (files == 1) {
-        song.set_track(i + 1);
-      }
-
-      // the last TRACK for every FILE gets it's 'end' marker from the media
-      // file's
-      // length
-      if (i + 1 < entries.size() &&
-          entries.at(i).file == entries.at(i + 1).file) {
-        // incorrect indices?
-        if (!UpdateSong(entry, entries.at(i + 1).index, &song)) {
-          continue;
-        }
-      } else {
-        // incorrect index?
-        if (!UpdateLastSong(entry, &song)) {
-          continue;
-        }
-      }
-
-      ret << song;*/
+      bool fuck;
+      tracks << Track(entry.file,
+                      begin_by_index(entry.index),
+                      entry.artist,
+                      entry.album,
+                      entry.title,
+                      entry.index.toUInt(&fuck),
+                      entry.date.toUInt(&fuck),
+                      100500,
+                      2,
+                      1150,
+                      4314);
     }
 
-    //return ret;
+    return tracks;
   }
 
   // This and the kFileLineRegExp do most of the "dirty" work, namely: splitting
   // the raw .cue
   // line into logical parts and getting rid of all the unnecessary whitespaces
   // and quoting.
-  QStringList CueParser::SplitCueLine(const QString& line) const {
+  QStringList CueParser::split_cue_line(const QString& line) const {
     QRegExp line_regexp(kFileLineRegExp);
     if (!line_regexp.exactMatch(line.trimmed())) {
       return QStringList();
@@ -279,7 +250,7 @@ namespace Playlist {
     return line_regexp.capturedTexts().filter(QRegExp(".+")).mid(1, -1);
   }
 
-  qint64 CueParser::IndexToMarker(const QString& index) const {
+  qint32 CueParser::begin_by_index(const QString& index) const {
     QRegExp index_regexp(kIndexRegExp);
     if (!index_regexp.exactMatch(index)) {
       return -1;
@@ -289,80 +260,7 @@ namespace Playlist {
     qlonglong frames = splitted.at(0).toLongLong() * 60 * 75 +
                        splitted.at(1).toLongLong() * 75 +
                        splitted.at(2).toLongLong();
-    return (frames * kNsecPerSec) / 75;
+
+    return frames / 75; // seconds
   }
-
-  // Looks for a track starting with one of the .cue's keywords.
-  bool CueParser::TryMagic(const QByteArray& data) const {
-    QStringList splitted = QString::fromUtf8(data.constData()).split('\n');
-
-    for (int i = 0; i < splitted.length(); i++) {
-      QString line = splitted.at(i).trimmed();
-      if (line.startsWith(kPerformer, Qt::CaseInsensitive) ||
-          line.startsWith(kTitle, Qt::CaseInsensitive) ||
-          line.startsWith(kFile, Qt::CaseInsensitive) ||
-          line.startsWith(kTrack, Qt::CaseInsensitive)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /*void CueParser::LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir, Song* song) const {
-    if (filename_or_url.isEmpty()) {
-      return;
-    }
-
-    QString filename = filename_or_url;
-
-    if (filename_or_url.contains(QRegExp("^[a-z]{2,}:"))) {
-      QUrl url(filename_or_url);
-      if (url.scheme() == "file") {
-        filename = url.toLocalFile();
-      } else {
-        song->set_url(QUrl::fromUserInput(filename_or_url));
-        song->set_filetype(Song::Type_Stream);
-        song->set_valid(true);
-        return;
-      }
-    }
-
-    // Clementine always wants / separators internally.  Using
-    // QDir::fromNativeSeparators() only works on the same platform the playlist
-    // was created on/for, using replace() lets playlists work on any platform.
-    filename = filename.replace('\\', '/');
-
-    // Make the path absolute
-    if (!QDir::isAbsolutePath(filename)) {
-      filename = dir.absoluteFilePath(filename);
-    }
-
-    // Use the canonical path
-    if (QFile::exists(filename)) {
-      filename = QFileInfo(filename).canonicalFilePath();
-    }
-
-    const QUrl url = QUrl::fromLocalFile(filename);
-
-    // Search in the library
-    Song library_song;
-    if (library_) {
-      library_song = library_->GetSongByUrl(url, beginning);
-    }
-
-    // If it was found in the library then use it, otherwise load metadata from
-    // disk.
-    if (library_song.is_valid()) {
-      *song = library_song;
-    } else {
-      TagReaderClient::Instance()->ReadFileBlocking(filename, song);
-    }
-  }
-
-  Song CueParser::LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir) const {
-    Song song;
-    LoadSong(filename_or_url, beginning, dir, &song);
-    return song;
-  }*/
 }

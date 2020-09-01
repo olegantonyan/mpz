@@ -15,42 +15,34 @@
 #ifndef CUEPARSER_H
 #define CUEPARSER_H
 
+#include "track.h"
+
 #include <QRegExp>
 #include <QDebug>
 #include <QDir>
 #include <QStringList>
 #include <QUrl>
+#include <QVector>
 
 // This parser will try to detect the real encoding of a .cue file but there's
 // a great chance it will fail so it's probably best to assume that the parser
 // is UTF compatible only.
 namespace Playlist {
   class CueParser {
-   public:
-    static const char* kFileLineRegExp;
-    static const char* kIndexRegExp;
+  public:
+    explicit CueParser(const QString &path);
 
-    static const char* kPerformer;
-    static const char* kTitle;
-    static const char* kSongWriter;
-    static const char* kFile;
-    static const char* kTrack;
-    static const char* kIndex;
-    static const char* kAudioTrackType;
-    static const char* kRem;
-    static const char* kGenre;
-    static const char* kDate;
-    static const char* kDisc;
+    QVector<Track> tracks_list() const;
 
-    CueParser();
+  private:
+    QString path;
 
-    bool TryMagic(const QByteArray& data) const;
+    QStringList split_cue_line(const QString& line) const;
+    qint32 begin_by_index(const QString& index) const;
 
-    void Load(QIODevice* device, const QDir& dir) const;
-
-   private:
     // A single TRACK entry in .cue file.
-    struct CueEntry {
+    class CueEntry {
+    public:
       QString file;
 
       QString index;
@@ -66,13 +58,6 @@ namespace Playlist {
       QString genre;
       QString date;
       QString disc;
-
-      QString PrettyArtist() const {
-        return artist.isEmpty() ? album_artist : artist;
-      }
-      QString PrettyComposer() const {
-        return composer.isEmpty() ? album_composer : composer;
-      }
 
       CueEntry(QString& file, QString& index, QString& title, QString& artist,
                QString& album_artist, QString& album, QString& composer,
@@ -90,19 +75,6 @@ namespace Playlist {
         this->disc = disc;
       }
     };
-
-    QStringList SplitCueLine(const QString& line) const;
-    qint64 IndexToMarker(const QString& index) const;
-
-
-    // Loads a song.  If filename_or_url is a URL (with a scheme other than
-    // "file") then it is set on the song and the song marked as a stream.
-    // If it is a filename or a file:// URL then it is made absolute and canonical
-    // and set as a file:// url on the song.  Also sets the song's metadata by
-    // searching in the Library, or loading from the file as a fallback.
-    // This function should always be used when loading a playlist.
-   // Song LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir) const;
-    //void LoadSong(const QString& filename_or_url, qint64 beginning, const QDir& dir, Song* song) const;
   };
 }
 
