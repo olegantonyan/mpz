@@ -1,5 +1,5 @@
-#ifndef VALUE_H
-#define VALUE_H
+#ifndef CONFIG_VALUE_H
+#define CONFIG_VALUE_H
 
 #include <QVariant>
 #include <QList>
@@ -49,4 +49,4 @@ namespace Config {
 Q_DECLARE_METATYPE(Config::Value::Type)
 Q_DECLARE_METATYPE(Config::Value)
 
-#endif // VALUE_H
+#endif // CONFIG_VALUE_H
