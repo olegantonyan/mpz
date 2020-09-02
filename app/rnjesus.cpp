@@ -10,7 +10,7 @@
 
 void RNJesus::seed() {
 #ifndef USE_QRANDOMGENERATOR
-  qsrand(QDateTime::currentSecsSinceEpoch());
+  qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
 #endif
 }
 

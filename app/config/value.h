@@ -1,5 +1,5 @@
-#ifndef VALUE_H
-#define VALUE_H
+#ifndef CONFIG_VALUE_H
+#define CONFIG_VALUE_H
 
 #include <QVariant>
 #include <QList>
@@ -30,22 +30,23 @@ namespace Config {
       return value.value<T>();
     }
 
-    enum Type type() const;
-    enum Type listType() const;
+    Type type() const;
+    Type listType() const;
     bool isNull() const;
 
-    void setListType(enum Type t);
+    void setListType(Type t);
 
     operator QString() const;
     QString toString() const;
 
   private:
     QVariant value;
-    enum Type value_type;
-    enum Type list_elements_type;
+    Type value_type;
+    Type list_elements_type;
   };
 }
 
+Q_DECLARE_METATYPE(Config::Value::Type)
 Q_DECLARE_METATYPE(Config::Value)
 
-#endif // VALUE_H
+#endif // CONFIG_VALUE_H
