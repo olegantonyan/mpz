@@ -19,6 +19,7 @@ Track::Track() {
   _sample_rate = 0;
   _year = 0;
   _track_number = 0;
+  setCue(false);
 }
 
 Track::Track(const QString &fp, quint32 bgn) {
@@ -29,6 +30,7 @@ Track::Track(const QString &fp, quint32 bgn) {
 
   fillAudioProperties();
   fillTags();
+  setCue(false);
 
   _format = detectFormat();
 }
@@ -58,6 +60,8 @@ Track::Track(const QString &fp,
   _channels = chans;
   _track_number = tracknum;
 
+  setCue(false);
+
   _format = detectFormat();
 }
 
@@ -68,6 +72,8 @@ Track::Track(const QUrl &stream_url) {
   _sample_rate = 0;
   _year = 0;
   _track_number = 0;
+
+  setCue(false);
 
   _uid = generateUid();
   _stream_url = stream_url;
@@ -120,6 +126,10 @@ bool Track::fillTags() {
 
 void Track::setDuration(quint32 dur) {
   _duration = dur;
+}
+
+void Track::setCue(bool is_cue) {
+  _cue = is_cue;
 }
 
 QString Track::path() const {
@@ -267,6 +277,10 @@ quint16 Track::track_number() const {
 
 quint32 Track::begin() const {
   return _begin;
+}
+
+bool Track::isCue() const {
+  return _cue;
 }
 
 quint64 Track::generateUid() const {

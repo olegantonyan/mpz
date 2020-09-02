@@ -30,6 +30,7 @@ public:
   bool fillAudioProperties();
   bool fillTags();
   void setDuration(quint32 dur);
+  void setCue(bool is_cue = true);
 
   QString path() const;
   QUrl url() const;
@@ -46,6 +47,7 @@ public:
   quint16 track_number() const;
   quint32 begin() const;
 
+  bool isCue() const;
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
   QString shortText() const;
@@ -79,6 +81,8 @@ private:
   quint32 _begin;
 
   quint64 _uid;
+
+  bool _cue;
 
   StreamMetaData _stream_meta;
 
