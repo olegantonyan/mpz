@@ -23,6 +23,7 @@
 #include <QTextStream>
 #include <QtDebug>
 #include <QFileInfo>
+#include <QtGlobal>
 
 namespace Playlist {
   static const char* kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
@@ -220,17 +221,28 @@ namespace Playlist {
       //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
 
       bool fuck;
-      tracks << Track(entry.file,
-                      begin_by_index(entry.index),
-                      entry.artist,
-                      entry.album,
-                      entry.title,
-                      entry.index.toUInt(&fuck),
-                      entry.date.toUInt(&fuck),
-                      100500,
-                      2,
-                      1150,
-                      4314);
+      Track track(entry.file,
+                  begin_by_index(entry.index),
+                  entry.artist,
+                  entry.album,
+                  entry.title,
+                  entry.index.toUInt(&fuck),
+                  entry.date.toUInt(&fuck),
+                  0,
+                  0,
+                  0,
+                  0);
+      track.fillAudioProperties();
+      if (i < entries.length() - 1) {
+        CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
+        quint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
+        track.setDuration(duration);
+      } else {
+        quint32 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
+        track.setDuration(duration);
+      }
+
+      tracks << track;
     }
 
     return tracks;

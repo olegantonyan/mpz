@@ -27,6 +27,10 @@ public:
 
   bool isValid() const;
 
+  bool fillAudioProperties();
+  bool fillTags();
+  void setDuration(quint32 dur);
+
   QString path() const;
   QUrl url() const;
   QString artist() const;

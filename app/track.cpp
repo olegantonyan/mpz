@@ -27,23 +27,8 @@ Track::Track(const QString &fp, quint32 bgn) {
 
   filepath = fp;
 
-  TagLib::FileRef f(path().toStdString().c_str());
-  if(!f.isNull()) {
-    if (f.audioProperties()) {
-      _duration = static_cast<quint32>(f.audioProperties()->length());
-      _channels = static_cast<quint8>(f.audioProperties()->channels());
-      _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
-      _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());
-    }
-    if (f.tag()) {
-      TagLib::Tag *tag = f.tag();
-      _artist = QString(tag->artist().toCString(true));
-      _album = QString(tag->album().toCString(true));
-      _title = QString(tag->title().toCString(true));
-      _year = static_cast<quint16>(tag->year());
-      _track_number = static_cast<quint16>(tag->track());
-    }
-  }
+  fillAudioProperties();
+  fillTags();
 
   _format = detectFormat();
 }
@@ -101,6 +86,40 @@ QString Track::formattedTime(quint32 tm) {
 
 bool Track::isValid() const {
   return uid() != 0 && (QFile::exists(path()) || isStream());
+}
+
+bool Track::fillAudioProperties() {
+  TagLib::FileRef f(path().toStdString().c_str());
+  if(!f.isNull()) {
+    if (f.audioProperties()) {
+      _duration = static_cast<quint32>(f.audioProperties()->length());
+      _channels = static_cast<quint8>(f.audioProperties()->channels());
+      _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
+      _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Track::fillTags() {
+  TagLib::FileRef f(path().toStdString().c_str());
+  if(!f.isNull()) {
+    if (f.tag()) {
+      TagLib::Tag *tag = f.tag();
+      _artist = QString(tag->artist().toCString(true));
+      _album = QString(tag->album().toCString(true));
+      _title = QString(tag->title().toCString(true));
+      _year = static_cast<quint16>(tag->year());
+      _track_number = static_cast<quint16>(tag->track());
+      return true;
+    }
+  }
+  return false;
+}
+
+void Track::setDuration(quint32 dur) {
+  _duration = dur;
 }
 
 QString Track::path() const {
