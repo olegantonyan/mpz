@@ -8,7 +8,7 @@
 #include <QApplication>
 #include <QStyle>
 
-#include "playlist/cueparser.h"
+//#include "playlist/cueparser.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
   #if defined(MPRIS_ENABLE)
@@ -67,10 +67,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupMpris();
 #endif
 
-  auto tr = Playlist::CueParser("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)/Roland Klinkenberg - Mexico Can Wait.cue").tracks_list();
+/*  auto tr = Playlist::CueParser("/mnt/storage/unsorted/Roland.Klinkenberg.-.Mexico.Can.Wait.(EAC.flac.cue)/Roland Klinkenberg - Mexico Can Wait.cue").tracks_list();
   for (auto i : tr) {
     qDebug() << i.artist() << i.album() << i.title() << i.year() << i.begin() << i.format() << i.formattedAudioInfo() << i.formattedDuration();
-  }
+  }*/
 }
 
 MainWindow::~MainWindow() {

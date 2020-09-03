@@ -218,7 +218,7 @@ namespace Playlist {
     for (int i = 0; i < entries.length(); i++) {
       CueEntry entry = entries.at(i);
 
-      //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
+      qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
 
       bool fuck;
       Track track(entry.file,

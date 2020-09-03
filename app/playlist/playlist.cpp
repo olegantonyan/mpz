@@ -1,5 +1,6 @@
 #include "playlist/playlist.h"
 #include "playlist/fileparser.h"
+#include "playlist/cueparser.h"
 #include "rnjesus.h"
 
 #include <QDebug>
@@ -14,7 +15,7 @@ namespace Playlist {
   }
 
   QStringList Playlist::supportedFileFormats() {
-    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape";
+    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape" << "cue";
   }
 
   QStringList Playlist::supportedPlaylistFileFormats() {
@@ -56,7 +57,7 @@ namespace Playlist {
     #else
       bool empty = path.count() == 0;
     #endif
-    if (empty && is_file) {
+    if (empty && is_file) { // playlist file
       tracks_list << Track(path.absolutePath());
     } else {
       QStringList filter;
@@ -65,7 +66,12 @@ namespace Playlist {
       }
       QDirIterator it(path.absolutePath(), filter, QDir::Files, QDirIterator::Subdirectories);
       while (it.hasNext()) {
-        tracks_list << Track(it.next());
+        auto path = it.next();
+        if (path.endsWith(".cue", Qt::CaseInsensitive)) {
+          tracks_list.append(CueParser(path).tracks_list());
+        } else {
+          tracks_list.append(Track(path));
+        }
       }
       sort();
     }
