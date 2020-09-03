@@ -218,7 +218,7 @@ namespace Playlist {
     for (int i = 0; i < entries.length(); i++) {
       CueEntry entry = entries.at(i);
 
-      qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
+      //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
 
       bool fuck;
       Track track(entry.file,
@@ -237,7 +237,7 @@ namespace Playlist {
       if (i < entries.length() - 1) {
         CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
         quint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
-        track.setDuration(duration);
+        track.setDuration(duration - 1);
       } else {
         quint32 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
         track.setDuration(duration);

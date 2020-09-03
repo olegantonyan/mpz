@@ -144,6 +144,7 @@ namespace Config {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();
     r["begin"] = static_cast<int>(t.begin());
+    r["cue"] = t.isCue();
     r["artist"] = t.artist();
     r["album"] = t.album();
     r["title"] = t.title();
@@ -162,7 +163,8 @@ namespace Config {
   Track Local::deserializeTrack(const Value &v) const {
     auto r = v.get<QMap<QString, Value>>();
     if (r["url"].get<QString>().isEmpty()) {
-      return Track(
+      bool cue = r["cue"].get<bool>();
+      Track t(
             r["path"].get<QString>(),
             static_cast<quint32>(r["begin"].get<int>()),
             r["artist"].get<QString>(),
@@ -175,6 +177,8 @@ namespace Config {
             static_cast<quint16>(r["bitrate"].get<int>()),
             static_cast<quint16>(r["samplerate"].get<int>())
           );
+      t.setCue(cue);
+      return t;
     } else {
      return Track(QUrl(r["url"].get<QString>()));
     }

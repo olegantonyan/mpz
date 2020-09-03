@@ -42,6 +42,9 @@ namespace Playback {
   private:
     QMediaPlayer player;
     Stream stream;
+
+    quint64 offset_begin;
+    quint64 offset_end;
   };
 }
 

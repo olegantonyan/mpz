@@ -7,7 +7,12 @@
 
 namespace Playback {
   MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent) {
-    connect(&player, &QMediaPlayer::positionChanged, this, &MediaPlayer::positionChanged);
+    connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
+      emit positionChanged(pos - offset_begin);
+      if (offset_end > 0 && pos >= offset_end) {
+        stop();
+      }
+    });
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
       switch (state) {
         case QMediaPlayer::StoppedState:
@@ -29,6 +34,8 @@ namespace Playback {
     connect(&stream, &Stream::error, [&](const QString& message) {
       qWarning() << "stream error" << message;
     });
+    offset_begin = 0;
+    offset_end = 0;
   }
 
   MediaPlayer::State MediaPlayer::state() const {
@@ -62,6 +69,9 @@ namespace Playback {
       }
     }
     player.play();
+    if (offset_begin > 0) {
+      player.setPosition(offset_begin);
+    }
   }
 
   void MediaPlayer::stop() {
@@ -70,7 +80,7 @@ namespace Playback {
   }
 
   void MediaPlayer::setPosition(qint64 pos) {
-    player.setPosition(pos);
+    player.setPosition(pos + offset_begin);
   }
 
   void MediaPlayer::setVolume(int vol) {
@@ -84,6 +94,13 @@ namespace Playback {
       player.setMedia(track.url(), &stream);
     } else {
       player.setMedia(track.url());
+      if (track.isCue()) {
+        offset_begin = track.begin() * 1000;
+        offset_end = offset_begin + track.duration() * 1000;
+      } else {
+        offset_begin = 0;
+        offset_end = 0;
+      }
     }
   }
 
