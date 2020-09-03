@@ -226,7 +226,7 @@ namespace Playlist {
                   entry.artist,
                   entry.album,
                   entry.title,
-                  entry.index.toUInt(&fuck),
+                  i + 1,
                   entry.date.toUInt(&fuck),
                   0,
                   0,

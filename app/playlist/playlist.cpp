@@ -7,6 +7,7 @@
 #include <QDirIterator>
 #include <QtConcurrent>
 #include <QFileInfo>
+#include <QMutableVectorIterator>
 
 namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
@@ -64,15 +65,29 @@ namespace Playlist {
       for (auto i : Playlist::supportedFileFormats()) {
         filter << QString("*.") + i;
       }
+      QStringList cues;
       QDirIterator it(path.absolutePath(), filter, QDir::Files, QDirIterator::Subdirectories);
       while (it.hasNext()) {
         auto path = it.next();
         if (path.endsWith(".cue", Qt::CaseInsensitive)) {
-          tracks_list.append(CueParser(path).tracks_list());
+          auto current_cues = CueParser(path).tracks_list();
+          if (!current_cues.isEmpty()) {
+            cues.append(current_cues.first().path());
+            tracks_list.append(current_cues);
+          }
         } else {
           tracks_list.append(Track(path));
         }
       }
+
+      QMutableVectorIterator<Track> mit(tracks_list);
+      while (mit.hasNext()) {
+        auto track = mit.next();
+        if (!track.isCue() && cues.contains(track.path())) {
+          mit.remove();
+        }
+      }
+
       sort();
     }
     return true;
