@@ -55,7 +55,7 @@ namespace Playback {
   }
 
   qint64 MediaPlayer::position() const {
-    return player.position();
+    return player.position() - offset_begin;
   }
 
   void MediaPlayer::pause() {
@@ -88,6 +88,8 @@ namespace Playback {
   }
 
   void MediaPlayer::setTrack(const Track &track) {
+    offset_begin = 0;
+    offset_end = 0;
     stream.stop();
     if (track.isStream()) {
       stream.setUrl(track.url());
@@ -97,14 +99,13 @@ namespace Playback {
       if (track.isCue()) {
         offset_begin = track.begin() * 1000;
         offset_end = offset_begin + track.duration() * 1000;
-      } else {
-        offset_begin = 0;
-        offset_end = 0;
       }
     }
   }
 
   void MediaPlayer::clearTrack() {
     player.setMedia(nullptr);
+    offset_begin = 0;
+    offset_end = 0;
   }
 }
