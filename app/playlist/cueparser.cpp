@@ -237,7 +237,7 @@ namespace Playlist {
       if (i < entries.length() - 1) {
         CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
         quint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
-        track.setDuration(duration - 1); // just in case... -1 second from the end
+        track.setDuration(duration);
       } else {
         quint32 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
         track.setDuration(duration);
