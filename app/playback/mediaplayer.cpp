@@ -68,8 +68,9 @@ namespace Playback {
         qWarning() << "error starting stream form" << stream.url();
       }
     }
+    bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
-    if (offset_begin > 0) {
+    if (ff && offset_begin > 0) {
       player.setPosition(offset_begin);
     }
   }
