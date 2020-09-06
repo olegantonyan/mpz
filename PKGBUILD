@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://github.com/olegantonyan/mpz/"
 license=('GPL3')
 depends=('')
-makedepends=('gcc' 'make' 'libqt5-qtbase-devel' 'libqt5-qtmultimedia-devel' 'libqt5-qtx11extras-devel')
+makedepends=('gcc' 'make' 'qt5-base' 'qt5-multimedia' 'qt5-x11extras')
 
 provides=('mpz')
 source=($pkgname-$pkgver.tar.gz)
