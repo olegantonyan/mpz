@@ -8,7 +8,7 @@ pkgdesc='Music player for the large local collections'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz/"
 license=('GPL3')
-depends=('')
+depends=('qt5-base' 'qt5-multimedia' 'qt5-x11extras')
 makedepends=('gcc' 'make' 'qt5-base' 'qt5-multimedia' 'qt5-x11extras')
 
 provides=('mpz')
