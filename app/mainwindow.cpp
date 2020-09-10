@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
+  setupShortcuts();
 }
 
 MainWindow::~MainWindow() {
@@ -155,6 +156,12 @@ void MainWindow::setupMpris() {
   });
 }
 #endif
+
+void MainWindow::setupShortcuts() {
+  shortcuts = new Shortcuts(this, global_conf);
+
+  connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
+}
 
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);

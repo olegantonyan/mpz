@@ -13,6 +13,7 @@
 #include "volumecontrol.h"
 #include "mainmenu.h"
 #include "statusbarlabel.h"
+#include "shortcuts.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -49,6 +50,7 @@ private:
   #if defined(MPRIS_ENABLE)
     Mpris *mpris;
   #endif
+  Shortcuts *shortcuts;
 
   void loadUiSettings();
   void setupOrderCombobox();
@@ -62,6 +64,7 @@ private:
   #if defined(MPRIS_ENABLE)
     void setupMpris();
   #endif
+  void setupShortcuts();
 
 private slots:
   void setupMainMenu();
