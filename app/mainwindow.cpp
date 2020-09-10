@@ -161,6 +161,24 @@ void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this, global_conf);
 
   connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
+  connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
+    ui->treeView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusPlaylists, [=]() {
+    ui->listView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusPlaylist, [=]() {
+    ui->tableView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterLibrary, [=]() {
+    ui->treeViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterPlaylists, [=]() {
+    ui->listViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterPlaylist, [=]() {
+    ui->tableViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
 }
 
 void MainWindow::setupFollowCursorCheckbox() {
