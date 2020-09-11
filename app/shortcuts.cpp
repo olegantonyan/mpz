@@ -22,7 +22,7 @@ Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent
   _focus_library.setKey(Qt::CTRL | Qt::Key_1);
   _focus_playlists.setKey(Qt::CTRL | Qt::Key_2);
   _focus_playlist.setKey(Qt::CTRL | Qt::Key_3);
-  _focus_filter_library.setKey(Qt::CTRL | Qt::Key_4);
-  _focus_filter_playlists.setKey(Qt::CTRL | Qt::Key_5);
-  _focus_filter_playlist.setKey(Qt::CTRL | Qt::Key_6);
+  _focus_filter_library.setKey(Qt::ALT | Qt::Key_1);
+  _focus_filter_playlists.setKey(Qt::ALT | Qt::Key_2);
+  _focus_filter_playlist.setKey(Qt::ALT | Qt::Key_3);
 }
