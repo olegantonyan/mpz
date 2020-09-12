@@ -34,12 +34,14 @@ namespace PlaylistUi {
     QAction clear_filter;
     QAction show_in_filemanager;
     QAction copy_name;
+    QAction info;
 
   private slots:
     void on_remove();
     void on_clearFilter();
     void on_copyName();
     void on_showInFilemanager();
+    void on_trackInfo();
   };
 }
 

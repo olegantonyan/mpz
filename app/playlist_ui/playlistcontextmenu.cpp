@@ -1,4 +1,5 @@
 #include "playlistcontextmenu.h"
+#include "trackinfodialog.h"
 
 #include <QMenu>
 #include <QAction>
@@ -25,6 +26,9 @@ namespace PlaylistUi {
 
     clear_filter.setText("Clear filter");
     connect(&clear_filter, &QAction::triggered, this, &PlaylistContextMenu::on_clearFilter);
+
+    info.setText("Track info");
+    connect(&info, &QAction::triggered, this, &PlaylistContextMenu::on_trackInfo);
   }
 
   void PlaylistContextMenu::show(const QPoint &pos) {
@@ -47,6 +51,7 @@ namespace PlaylistUi {
     menu.addMenu(&move_to);
     menu.addMenu(&copy_to);*/
 
+    menu.addAction(&info);
     menu.addAction(&copy_name);
     menu.addAction(&show_in_filemanager);
     menu.addSeparator();
@@ -83,6 +88,14 @@ namespace PlaylistUi {
         str << dir;
         QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
       }
+    }
+  }
+
+  void PlaylistContextMenu::on_trackInfo() {
+    auto selection = view->selectionModel()->selectedRows().first();
+    if (selection.isValid()) {
+      auto track = model->itemAt(proxy->mapToSource(selection));
+      TrackInfoDialog(track, view).exec();
     }
   }
 }

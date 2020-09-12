@@ -59,6 +59,7 @@ SOURCES += \
     playback/playerstate.cpp \
     playlist_ui/playlistproxyfiltermodel.cpp \
     playlist_ui/playlistcontextmenu.cpp \
+    playlist_ui/trackinfodialog.cpp \
     playlists_ui/playlistscontextmenu.cpp \
     directory_ui/directorycontextmenu.cpp \
     playlists_ui/playlistscontroller.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \
+    playlist_ui/trackinfodialog.h \
     playlists_ui/playlistscontextmenu.h \
     directory_ui/directorycontextmenu.h \
     playlist/playlist.h \
@@ -115,7 +117,8 @@ HEADERS += \
 FORMS += \
     aboutdialog.ui \
     directory_ui/directorysettings.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    playlist_ui/trackinfodialog.ui
 
 # Libraries
 INCLUDEPATH += \
