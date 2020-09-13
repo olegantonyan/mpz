@@ -1,6 +1,6 @@
 Format: 1.0
 Source: mpz
-Version: 0.0.7-0
+Version: 0.0.8-0
 Binary: mpz
 Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
 Architecture: amd64
