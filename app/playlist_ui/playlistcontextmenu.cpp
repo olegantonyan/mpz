@@ -95,7 +95,10 @@ namespace PlaylistUi {
     auto selection = view->selectionModel()->selectedRows().first();
     if (selection.isValid()) {
       auto track = model->itemAt(proxy->mapToSource(selection));
-      TrackInfoDialog(track, view).exec();
+      TrackInfoDialog *dlg = new TrackInfoDialog(track);
+      dlg->setModal(false);
+      connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
+      dlg->show();
     }
   }
 }
