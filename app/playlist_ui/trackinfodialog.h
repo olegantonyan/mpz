@@ -27,6 +27,8 @@ private:
 
   void setup_table(const Track &track);
   void setup_context_menu();
+
+  void add_table_row(const QString& title, const QString &content);
 };
 
 #endif // TRACKINFODIALOG_H

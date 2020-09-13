@@ -26,66 +26,44 @@ void TrackInfoDialog::on_copy(const QPoint &pos) {
 }
 
 void TrackInfoDialog::setup_table(const Track &track) {
-  int row = 0;
-
-  model.setItem(row, 0, new QStandardItem("Artist"));
-  model.setItem(row, 1, new QStandardItem(track.artist()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Album"));
-  model.setItem(row, 1, new QStandardItem(track.album()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Title"));
-  model.setItem(row, 1, new QStandardItem(track.title()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Year"));
-  model.setItem(row, 1, new QStandardItem(track.year()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Track number"));
-  model.setItem(row, 1, new QStandardItem(QString::number(track.track_number())));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Duration"));
-  model.setItem(row, 1, new QStandardItem(track.formattedDuration()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Format"));
-  model.setItem(row, 1, new QStandardItem(track.format()));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Bitrate"));
-  model.setItem(row, 1, new QStandardItem(QString::number(track.bitrate())));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Sample rate"));
-  model.setItem(row, 1, new QStandardItem(QString::number(track.sample_rate())));
-  row++;
-
-  model.setItem(row, 0, new QStandardItem("Channels"));
-  model.setItem(row, 1, new QStandardItem(QString::number(track.channels())));
-  row++;
-
-  if (track.isStream()) {
-    model.setItem(row, 0, new QStandardItem("Stream url"));
-    model.setItem(row, 1, new QStandardItem(track.url().toString()));
-    row++;
-  } else {
-    model.setItem(row, 0, new QStandardItem("File path"));
-    model.setItem(row, 1, new QStandardItem(track.path()));
-    row++;
+  if (!track.artist().isEmpty()) {
+    add_table_row("Artist", track.artist());
   }
-
+  if (!track.album().isEmpty()) {
+    add_table_row("Album", track.album());
+  }
+  if (!track.title().isEmpty()) {
+    add_table_row("Title", track.title());
+  }
+  if (track.year() > 0) {
+    add_table_row("Year", QString::number(track.year()));
+  }
+  if (!track.isStream()) {
+    add_table_row("Track number", QString::number(track.track_number()));
+    add_table_row("Duration", track.formattedDuration());
+  }
+  add_table_row("Format", track.format());
+  add_table_row("Bitrate", QString::number(track.bitrate()));
+  add_table_row("Sample rate", QString::number(track.sample_rate()));
+  add_table_row("Channels", QString::number(track.channels()));
+  if (track.isStream()) {
+    add_table_row("Stream url", track.url().toString());
+  } else {
+    add_table_row("File path", track.path());
+  }
   if (track.isCue()) {
-    model.setItem(row, 0, new QStandardItem("CUE start"));
-    model.setItem(row, 1, new QStandardItem(QString::number(track.begin())));
-    row++;
+    add_table_row("CUE start (seconds)", QString::number(track.begin()));
   }
 
   ui->tableView->resizeColumnsToContents();
   ui->tableView->resizeRowsToContents();
+}
+
+void TrackInfoDialog::add_table_row(const QString &title, const QString &content) {
+  QList<QStandardItem *> row;
+  row.append(new QStandardItem(title));
+  row.append(new QStandardItem(content));
+  model.appendRow(row);
 }
 
 void TrackInfoDialog::setup_context_menu() {
@@ -104,3 +82,5 @@ void TrackInfoDialog::setup_context_menu() {
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });
 }
+
+
