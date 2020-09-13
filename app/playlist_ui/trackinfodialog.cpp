@@ -3,36 +3,26 @@
 
 #include <QMenu>
 #include <QClipboard>
+#include <QDebug>
 
 TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
   ui->setupUi(this);
-  setWindowTitle("Track " + track.formattedTitle());
-
+  setWindowTitle(track.formattedTitle());
+  ui->tableView->horizontalHeader()->setVisible(false);
+  ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setModel(&model);
-
-  ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(ui->tableView, &QTableView::customContextMenuRequested, [=](const QPoint &pos) {
-    if(!ui->tableView->indexAt(pos).isValid()) {
-      return;
-    }
-    QMenu menu;
-    QAction copy("Copy");
-    connect(&copy, &QAction::triggered, [=]() {
-      auto index = ui->tableView->indexAt(pos);
-      auto text = model.data(index);
-      qApp->clipboard()->setText(text.toString());
-    });
-    menu.addAction(&copy);
-    menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
-  });
-
+  setup_context_menu();
   setup_table(track);
-
-  ui->tableView->resizeColumnsToContents();
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
   delete ui;
+}
+
+void TrackInfoDialog::on_copy(const QPoint &pos) {
+  auto index = ui->tableView->indexAt(pos);
+  auto text = model.data(index);
+  qApp->clipboard()->setText(text.toString());
 }
 
 void TrackInfoDialog::setup_table(const Track &track) {
@@ -93,4 +83,24 @@ void TrackInfoDialog::setup_table(const Track &track) {
     model.setItem(row, 1, new QStandardItem(QString::number(track.begin())));
     row++;
   }
+
+  ui->tableView->resizeColumnsToContents();
+  ui->tableView->resizeRowsToContents();
+}
+
+void TrackInfoDialog::setup_context_menu() {
+  ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  connect(ui->tableView, &QTableView::customContextMenuRequested, [=](const QPoint &pos) {
+    if(!ui->tableView->indexAt(pos).isValid()) {
+      return;
+    }
+    QMenu menu;
+    QAction copy("Copy");
+    connect(&copy, &QAction::triggered, [=]() {
+      on_copy(pos);
+    });
+    menu.addAction(&copy);
+    menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
+  });
 }
