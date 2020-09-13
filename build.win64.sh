@@ -7,6 +7,8 @@
 
 SRC_DIR=$(cd `dirname $0` && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
+TMP_DIR=$(mktemp -d -t mpz-build-win64-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
+cd $TMP_DIR
 
 ##
 QTMINGW_DIR=/mnt/storage/dev/qt/qt515-win64-mingw-static
@@ -18,9 +20,9 @@ ARTIFACT_NAME=mpz-$VERSION-win64-static.exe
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
+echo -e "build dir:\t$TMP_DIR"
 
-$MAKE clean
-rm Makefile
+
 $QTMINGW_DIR/bin/qmake CONFIG+=release CONFIG+=static QMAKE_LFLAGS+=-static $SRC_DIR && \
 $MAKE -j8 && \
 mv app/mpz.exe ~/Desktop/$ARTIFACT_NAME
