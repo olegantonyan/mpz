@@ -22,7 +22,7 @@ private:
 
   QStandardItemModel model;
 
-  const Track &track;
+  void setup_table(const Track &track);
 };
 
 #endif // TRACKINFODIALOG_H

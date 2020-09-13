@@ -4,7 +4,7 @@
 #include <QMenu>
 #include <QClipboard>
 
-TrackInfoDialog::TrackInfoDialog(const Track &t, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog), track(t) {
+TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
   ui->setupUi(this);
   setWindowTitle("Track " + track.formattedTitle());
 
@@ -26,6 +26,16 @@ TrackInfoDialog::TrackInfoDialog(const Track &t, QWidget *parent) : QDialog(pare
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });
 
+  setup_table(track);
+
+  ui->tableView->resizeColumnsToContents();
+}
+
+TrackInfoDialog::~TrackInfoDialog() {
+  delete ui;
+}
+
+void TrackInfoDialog::setup_table(const Track &track) {
   int row = 0;
 
   model.setItem(row, 0, new QStandardItem("Artist"));
@@ -45,28 +55,42 @@ TrackInfoDialog::TrackInfoDialog(const Track &t, QWidget *parent) : QDialog(pare
   row++;
 
   model.setItem(row, 0, new QStandardItem("Track number"));
-  model.setItem(row, 1, new QStandardItem(track.track_number()));
+  model.setItem(row, 1, new QStandardItem(QString::number(track.track_number())));
   row++;
 
   model.setItem(row, 0, new QStandardItem("Duration"));
   model.setItem(row, 1, new QStandardItem(track.formattedDuration()));
   row++;
 
-  model.setItem(row, 0, new QStandardItem("Audio info"));
-  model.setItem(row, 1, new QStandardItem(track.formattedAudioInfo()));
+  model.setItem(row, 0, new QStandardItem("Format"));
+  model.setItem(row, 1, new QStandardItem(track.format()));
   row++;
 
-  model.setItem(row, 0, new QStandardItem("File path"));
-  model.setItem(row, 1, new QStandardItem(track.path()));
+  model.setItem(row, 0, new QStandardItem("Bitrate"));
+  model.setItem(row, 1, new QStandardItem(QString::number(track.bitrate())));
   row++;
 
-  model.setItem(row, 0, new QStandardItem("Stream url"));
-  model.setItem(row, 1, new QStandardItem(track.url().toString()));
+  model.setItem(row, 0, new QStandardItem("Sample rate"));
+  model.setItem(row, 1, new QStandardItem(QString::number(track.sample_rate())));
   row++;
 
-  ui->tableView->resizeColumnsToContents();
-}
+  model.setItem(row, 0, new QStandardItem("Channels"));
+  model.setItem(row, 1, new QStandardItem(QString::number(track.channels())));
+  row++;
 
-TrackInfoDialog::~TrackInfoDialog() {
-  delete ui;
+  if (track.isStream()) {
+    model.setItem(row, 0, new QStandardItem("Stream url"));
+    model.setItem(row, 1, new QStandardItem(track.url().toString()));
+    row++;
+  } else {
+    model.setItem(row, 0, new QStandardItem("File path"));
+    model.setItem(row, 1, new QStandardItem(track.path()));
+    row++;
+  }
+
+  if (track.isCue()) {
+    model.setItem(row, 0, new QStandardItem("CUE start"));
+    model.setItem(row, 1, new QStandardItem(QString::number(track.begin())));
+    row++;
+  }
 }
