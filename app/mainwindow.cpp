@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     mpris = nullptr;
   #endif
   ui->setupUi(this);
-  setWindowTitle(qApp->applicationName());
   setWindowIcon(QIcon(":/icons/icons/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
@@ -65,13 +64,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupMpris();
 #endif
   setupShortcuts();
-
-  connect(player, &Playback::Controller::started, [=](const Track &track) {
-    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationName());
-  });
-  connect(player, &Playback::Controller::stopped, [=]() {
-    setWindowTitle(qApp->applicationName());
-  });
+  setupWindowTitle();
 }
 
 MainWindow::~MainWindow() {
@@ -305,6 +298,16 @@ void MainWindow::setupMediaKeys() {
   auto next = new QHotkey(Qt::Key_MediaNext, Qt::NoModifier, true, this);
   connect(next, &QHotkey::activated, [&]() {
     player->controls().next->click();
+  });
+}
+
+void MainWindow::setupWindowTitle() {
+  setWindowTitle(qApp->applicationName());
+  connect(player, &Playback::Controller::started, [=](const Track &track) {
+    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationName());
+  });
+  connect(player, &Playback::Controller::stopped, [=]() {
+    setWindowTitle(qApp->applicationName());
   });
 }
 

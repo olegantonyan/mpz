@@ -66,7 +66,8 @@ private:
   #endif
   void setupShortcuts();
   void setupMainMenu();
-
+  void setupWindowTitle();
+  
 protected:
   void closeEvent(QCloseEvent *event) override;
 };
