@@ -65,8 +65,6 @@ private:
     void setupMpris();
   #endif
   void setupShortcuts();
-
-private slots:
   void setupMainMenu();
 
 protected:
