@@ -281,24 +281,16 @@ void MainWindow::setupMediaKeys() {
   });
 
   auto stop = new QHotkey(Qt::Key_MediaStop, Qt::NoModifier, true, this);
-  connect(stop, &QHotkey::activated, [&]() {
-    player->controls().stop->click();
-  });
+  connect(stop, &QHotkey::activated, player->controls().stop, &QToolButton::click);
 
   auto pause = new QHotkey(Qt::Key_MediaPause, Qt::NoModifier, true, this);
-  connect(pause, &QHotkey::activated, [&]() {
-    player->controls().pause->click();
-  });
+  connect(pause, &QHotkey::activated, player->controls().pause, &QToolButton::click);
 
   auto prev = new QHotkey(Qt::Key_MediaPrevious, Qt::NoModifier, true, this);
-  connect(prev, &QHotkey::activated, [&]() {
-    player->controls().prev->click();
-  });
+  connect(prev, &QHotkey::activated, player->controls().prev, &QToolButton::click);
 
   auto next = new QHotkey(Qt::Key_MediaNext, Qt::NoModifier, true, this);
-  connect(next, &QHotkey::activated, [&]() {
-    player->controls().next->click();
-  });
+  connect(next, &QHotkey::activated, player->controls().next, &QToolButton::click);
 }
 
 void MainWindow::setupWindowTitle() {
