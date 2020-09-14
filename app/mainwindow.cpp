@@ -302,12 +302,12 @@ void MainWindow::setupMediaKeys() {
 }
 
 void MainWindow::setupWindowTitle() {
-  setWindowTitle(qApp->applicationName());
+  setWindowTitle(qApp->applicationDisplayName());
   connect(player, &Playback::Controller::started, [=](const Track &track) {
-    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationName());
+    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationDisplayName());
   });
   connect(player, &Playback::Controller::stopped, [=]() {
-    setWindowTitle(qApp->applicationName());
+    setWindowTitle(qApp->applicationDisplayName());
   });
 }
 

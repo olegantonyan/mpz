@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   a.setApplicationName("mpz");
   a.setApplicationVersion(VERSION);
+  a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
 
   registerMetaTypes();
 
