@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupShortcuts();
 
   connect(player, &Playback::Controller::started, [=](const Track &track) {
-    setWindowTitle(track.shortText());
+    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationName());
   });
   connect(player, &Playback::Controller::stopped, [=]() {
     setWindowTitle(qApp->applicationName());
