@@ -157,30 +157,6 @@ void MainWindow::setupMpris() {
 }
 #endif
 
-void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(this, global_conf);
-
-  connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
-  connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
-    ui->treeView->setFocus(Qt::ShortcutFocusReason);
-  });
-  connect(shortcuts, &Shortcuts::focusPlaylists, [=]() {
-    ui->listView->setFocus(Qt::ShortcutFocusReason);
-  });
-  connect(shortcuts, &Shortcuts::focusPlaylist, [=]() {
-    ui->tableView->setFocus(Qt::ShortcutFocusReason);
-  });
-  connect(shortcuts, &Shortcuts::focusFilterLibrary, [=]() {
-    ui->treeViewSearch->setFocus(Qt::ShortcutFocusReason);
-  });
-  connect(shortcuts, &Shortcuts::focusFilterPlaylists, [=]() {
-    ui->listViewSearch->setFocus(Qt::ShortcutFocusReason);
-  });
-  connect(shortcuts, &Shortcuts::focusFilterPlaylist, [=]() {
-    ui->tableViewSearch->setFocus(Qt::ShortcutFocusReason);
-  });
-}
-
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
   connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
@@ -291,6 +267,40 @@ void MainWindow::setupMediaKeys() {
 
   auto next = new QHotkey(Qt::Key_MediaNext, Qt::NoModifier, true, this);
   connect(next, &QHotkey::activated, player->controls().next, &QToolButton::click);
+}
+
+void MainWindow::setupShortcuts() {
+  shortcuts = new Shortcuts(this, global_conf);
+
+  connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
+  connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
+    ui->treeView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusPlaylists, [=]() {
+    ui->listView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusPlaylist, [=]() {
+    ui->tableView->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterLibrary, [=]() {
+    ui->treeViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterPlaylists, [=]() {
+    ui->listViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
+  connect(shortcuts, &Shortcuts::focusFilterPlaylist, [=]() {
+    ui->tableViewSearch->setFocus(Qt::ShortcutFocusReason);
+  });
+
+  connect(shortcuts, &Shortcuts::play, [&]() {
+    if (player->isStopped()) {
+      player->controls().play->click();
+    }
+  });
+  connect(shortcuts, &Shortcuts::stop, player->controls().stop, &QToolButton::click);
+  connect(shortcuts, &Shortcuts::pause, player->controls().pause, &QToolButton::click);
+  connect(shortcuts, &Shortcuts::prev, player->controls().prev, &QToolButton::click);
+  connect(shortcuts, &Shortcuts::next, player->controls().next, &QToolButton::click);
 }
 
 void MainWindow::setupWindowTitle() {

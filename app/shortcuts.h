@@ -22,6 +22,11 @@ signals:
   void focusFilterLibrary();
   void focusFilterPlaylists();
   void focusFilterPlaylist();
+  void play();
+  void pause();
+  void stop();
+  void prev();
+  void next();
 
 private:
   Config::Global &global_conf;
@@ -33,6 +38,11 @@ private:
   QShortcut _focus_filter_library;
   QShortcut _focus_filter_playlists;
   QShortcut _focus_filter_playlist;
+  QShortcut _play;
+  QShortcut _pause;
+  QShortcut _stop;
+  QShortcut _prev;
+  QShortcut _next;
 };
 
 #endif // SHORTCUTS_H
