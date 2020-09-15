@@ -60,7 +60,6 @@ private:
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
-  void setupMediaKeys();
   #if defined(MPRIS_ENABLE)
     void setupMpris();
   #endif

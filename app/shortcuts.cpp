@@ -12,8 +12,32 @@ Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent
   _pause(parent),
   _stop(parent),
   _prev(parent),
-  _next(parent)
+  _next(parent),
+  _play_global(parent),
+  _pause_global(parent),
+  _stop_global(parent),
+  _prev_global(parent),
+  _next_global(parent)
 {
+  setupLocal();
+  setupGlobal();
+}
+
+void Shortcuts::setupGlobal() {
+  connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
+  connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);
+  connect(&_stop_global, &QHotkey::activated, this, &Shortcuts::stop);
+  connect(&_prev_global, &QHotkey::activated, this, &Shortcuts::prev);
+  connect(&_next_global, &QHotkey::activated, this, &Shortcuts::next);
+
+  _stop_global.setShortcut(Qt::Key_MediaStop, Qt::NoModifier, true);
+  _play_global.setShortcut(Qt::Key_MediaPlay, Qt::NoModifier, true);
+  _pause_global.setShortcut(Qt::Key_MediaPause, Qt::NoModifier, true);
+  _next_global.setShortcut(Qt::Key_MediaNext, Qt::NoModifier, true);
+  _prev_global.setShortcut(Qt::Key_MediaPrevious, Qt::NoModifier, true);
+}
+
+void Shortcuts::setupLocal() {
   connect(&_quit, &QShortcut::activated, this, &Shortcuts::quit);
   connect(&_focus_library, &QShortcut::activated, this, &Shortcuts::focusLibrary);
   connect(&_focus_playlists, &QShortcut::activated, this, &Shortcuts::focusPlaylists);

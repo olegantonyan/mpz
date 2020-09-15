@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
-#include "QHotkey/qhotkey.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -59,7 +58,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
-  setupMediaKeys();
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -246,27 +244,6 @@ void MainWindow::setupStatusBar() {
       playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
     }
   });
-}
-
-void MainWindow::setupMediaKeys() {
-  auto play = new QHotkey(Qt::Key_MediaPlay, Qt::NoModifier, true, this);
-  connect(play, &QHotkey::activated, [&]() {
-    if (player->isStopped()) {
-      player->controls().play->click();
-    }
-  });
-
-  auto stop = new QHotkey(Qt::Key_MediaStop, Qt::NoModifier, true, this);
-  connect(stop, &QHotkey::activated, player->controls().stop, &QToolButton::click);
-
-  auto pause = new QHotkey(Qt::Key_MediaPause, Qt::NoModifier, true, this);
-  connect(pause, &QHotkey::activated, player->controls().pause, &QToolButton::click);
-
-  auto prev = new QHotkey(Qt::Key_MediaPrevious, Qt::NoModifier, true, this);
-  connect(prev, &QHotkey::activated, player->controls().prev, &QToolButton::click);
-
-  auto next = new QHotkey(Qt::Key_MediaNext, Qt::NoModifier, true, this);
-  connect(next, &QHotkey::activated, player->controls().next, &QToolButton::click);
 }
 
 void MainWindow::setupShortcuts() {

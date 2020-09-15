@@ -2,6 +2,7 @@
 #define SHORTCUTS_H
 
 #include "config/global.h"
+#include "QHotkey/qhotkey.h"
 
 #include <QObject>
 #include <QWidget>
@@ -29,6 +30,9 @@ signals:
   void next();
 
 private:
+  void setupGlobal();
+  void setupLocal();
+
   Config::Global &global_conf;
 
   QShortcut _quit;
@@ -43,6 +47,12 @@ private:
   QShortcut _stop;
   QShortcut _prev;
   QShortcut _next;
+
+  QHotkey _play_global;
+  QHotkey _pause_global;
+  QHotkey _stop_global;
+  QHotkey _prev_global;
+  QHotkey _next_global;
 };
 
 #endif // SHORTCUTS_H
