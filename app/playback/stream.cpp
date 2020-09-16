@@ -4,7 +4,6 @@
 #include <QtConcurrent>
 #include <QTimer>
 #include <QTcpSocket>
-#include <QMap>
 
 namespace Playback {
   Stream::Stream(quint32 threshold_bytes, quint16 threshold_multiplier, QObject *parent) :

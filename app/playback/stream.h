@@ -9,6 +9,7 @@
 #include <QMutex>
 #include <QFuture>
 #include <QStringList>
+#include <QMap>
 
 namespace Playback {
   class Stream : public QIODevice {
