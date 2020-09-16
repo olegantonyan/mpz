@@ -53,7 +53,7 @@ void TrackInfoDialog::setup_table(const Track &track) {
     add_table_row("File path", track.path());
   }
   if (track.isCue()) {
-    add_table_row("CUE start (seconds)", QString::number(track.begin()));
+    add_table_row("CUE start at", Track::formattedTime(track.begin()));
   }
 
   ui->tableView->resizeColumnsToContents();

@@ -47,9 +47,9 @@ private:
   VolumeControl *volume;
   MainMenu *main_menu;
   StatusBarLabel *status_label;
-  #if defined(MPRIS_ENABLE)
-    Mpris *mpris;
-  #endif
+#if defined(MPRIS_ENABLE)
+  Mpris *mpris;
+#endif
   Shortcuts *shortcuts;
 
   void loadUiSettings();
@@ -60,9 +60,9 @@ private:
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
-  #if defined(MPRIS_ENABLE)
-    void setupMpris();
-  #endif
+#if defined(MPRIS_ENABLE)
+  void setupMpris();
+#endif
   void setupShortcuts();
   void setupMainMenu();
   void setupWindowTitle();

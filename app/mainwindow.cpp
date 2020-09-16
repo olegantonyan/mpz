@@ -8,9 +8,9 @@
 #include <QStyle>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
-  #if defined(MPRIS_ENABLE)
-    mpris = nullptr;
-  #endif
+#if defined(MPRIS_ENABLE)
+  mpris = nullptr;
+#endif
   ui->setupUi(this);
   setWindowIcon(QIcon(":/icons/icons/mpz.png"));
 
@@ -108,11 +108,11 @@ void MainWindow::setupOrderCombobox() {
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
     global_conf.sync();
-    #if defined(MPRIS_ENABLE)
-      if (mpris) {
-        mpris->on_shuffleChanged(idx == 1);
-      }
-    #endif
+#if defined(MPRIS_ENABLE)
+    if (mpris) {
+      mpris->on_shuffleChanged(idx == 1);
+    }
+#endif
   });
 #if defined(MPRIS_ENABLE)
   if (mpris) {
