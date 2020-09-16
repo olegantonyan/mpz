@@ -10,6 +10,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   setWindowTitle("Track info: " + track.formattedTitle());
   ui->tableView->horizontalHeader()->setVisible(false);
   ui->tableView->verticalHeader()->setVisible(false);
+  ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableView->setModel(&model);
   setup_context_menu();
   setup_table(track);
