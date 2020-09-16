@@ -124,7 +124,7 @@ FORMS += \
 INCLUDEPATH += \
   ../libs/taglib/taglib-1.11.1/taglib \
   ../libs/taglib/taglib-1.11.1/taglib/toolkit \
-  ../libs/yaml-cpp/yaml-cpp-0.6.2/include \
+  ../libs/yaml-cpp/yaml-cpp-0.6.3/include \
   ../libs/qtwaitingspinner \
   ../libs/qhotkey/QHotkey-1.4.1
 
