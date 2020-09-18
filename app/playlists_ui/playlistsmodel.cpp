@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QtConcurrent>
+#include <QFont>
 
 namespace PlaylistsUi {  
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
@@ -17,6 +18,16 @@ namespace PlaylistsUi {
       emit asynLoadFinished();
       persist();
     });
+  }
+
+  void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
+    if (playlist == nullptr) {
+      highlight_uid = 0;
+      emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
+    } else {
+      highlight_uid = playlist->uid();
+      emit dataChanged(itemIndex(playlist), itemIndex(playlist));
+    }
   }
 
   QModelIndex Model::buildIndex(int row) const {
@@ -41,7 +52,7 @@ namespace PlaylistsUi {
     list.removeAt(index.row());
     endRemoveRows();
     persist();
-    emit dataChanged(index, index, {Qt::DisplayRole});
+    emit dataChanged(index, index);
   }
 
   std::shared_ptr<Playlist::Playlist> Model::itemAt(const QModelIndex &index) const {
@@ -98,6 +109,13 @@ namespace PlaylistsUi {
   QVariant Model::data(const QModelIndex &index, int role) const {
     if (!index.isValid()) {
       return QVariant();
+    }
+
+    auto pl = list.at(index.row());
+    if (role == Qt::FontRole && pl->uid() == highlight_uid) {
+      QFont font;
+      font.setBold(true);
+      return font;
     }
 
     if (role == Qt::DisplayRole) {

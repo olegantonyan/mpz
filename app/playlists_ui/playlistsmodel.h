@@ -34,12 +34,16 @@ namespace PlaylistsUi {
 
     void loadAsync();
 
+    void higlight(std::shared_ptr<Playlist::Playlist> playlist);
+
   signals:
     void asynLoadFinished();
 
   private:
     QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
+
+    quint64 highlight_uid;
   };
 }
 

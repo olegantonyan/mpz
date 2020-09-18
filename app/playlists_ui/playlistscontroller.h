@@ -30,6 +30,8 @@ namespace PlaylistsUi {
     void on_createPlaylist(const QDir &filepath);
     void on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist);
     void on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
+    void on_start(const Track &t);
+    void on_stop();
 
   signals:
     void selected(const std::shared_ptr<Playlist::Playlist> item);

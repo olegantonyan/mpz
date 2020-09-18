@@ -92,6 +92,14 @@ namespace PlaylistsUi {
     }
   }
 
+  void Controller::on_start(const Track &t) {
+    model->higlight(model->itemByTrack(t.uid()));
+  }
+
+  void Controller::on_stop() {
+    model->higlight(nullptr);
+  }
+
   void Controller::on_createPlaylist(const QDir &filepath) {
     auto pl = new Playlist::Playlist();
     connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
