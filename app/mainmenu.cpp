@@ -7,7 +7,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, QObject *parent) : QObject(parent), button(btn), global_conf(global_c) {
+MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c) : QObject(btn), button(btn), global_conf(global_c) {
   connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
 }
 

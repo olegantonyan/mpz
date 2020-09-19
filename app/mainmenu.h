@@ -9,7 +9,7 @@
 class MainMenu : public QObject {
   Q_OBJECT
 public:
-  explicit MainMenu(QToolButton *btn, Config::Global &global_c, QObject *parent = nullptr);
+  explicit MainMenu(QToolButton *btn, Config::Global &global_c);
 
 signals:
   void exit();
