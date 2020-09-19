@@ -13,6 +13,7 @@ Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent
   _stop(parent),
   _prev(parent),
   _next(parent),
+  _open_main_menu(parent),
   _play_global(parent),
   _pause_global(parent),
   _stop_global(parent),
@@ -50,6 +51,7 @@ void Shortcuts::setupLocal() {
   connect(&_stop, &QShortcut::activated, this, &Shortcuts::stop);
   connect(&_prev, &QShortcut::activated, this, &Shortcuts::prev);
   connect(&_next, &QShortcut::activated, this, &Shortcuts::next);
+  connect(&_open_main_menu, &QShortcut::activated, this, &Shortcuts::openMainMenu);
 
   _quit.setKey(Qt::CTRL | Qt::Key_Q);
   _focus_library.setKey(Qt::CTRL | Qt::Key_1);
@@ -63,4 +65,5 @@ void Shortcuts::setupLocal() {
   _pause.setKey(Qt::ALT | Qt::Key_W);
   _prev.setKey(Qt::ALT | Qt::Key_R);
   _next.setKey(Qt::ALT | Qt::Key_T);
+  _open_main_menu.setKey(Qt::ALT | Qt::Key_M);
 }

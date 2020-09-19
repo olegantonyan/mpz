@@ -280,6 +280,8 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::pause, player->controls().pause, &QToolButton::click);
   connect(shortcuts, &Shortcuts::prev, player->controls().prev, &QToolButton::click);
   connect(shortcuts, &Shortcuts::next, player->controls().next, &QToolButton::click);
+
+  connect(shortcuts, &Shortcuts::openMainMenu, ui->menuButton, &QToolButton::click);
 }
 
 void MainWindow::setupWindowTitle() {
