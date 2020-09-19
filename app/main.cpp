@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "rnjesus.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -17,6 +18,8 @@ int main(int argc, char *argv[]) {
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
 
   registerMetaTypes();
+
+  RNJesus::seed();
 
   MainWindow w;
   w.show();
