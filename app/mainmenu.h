@@ -16,9 +16,7 @@ signals:
   void toggleTrayIcon();
 
 public slots:
-
-private slots:
-  void on_buttonClicked();
+  void on_open();
 
 private:
   QToolButton *button;

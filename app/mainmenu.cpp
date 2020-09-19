@@ -8,10 +8,10 @@
 #include <QUrl>
 
 MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, QObject *parent) : QObject(parent), button(btn), global_conf(global_c) {
-  connect(button, &QToolButton::clicked, this, &MainMenu::on_buttonClicked);
+  connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
 }
 
-void MainMenu::on_buttonClicked() {
+void MainMenu::on_open() {
   QMenu menu;
   QAction trayicon("Tray icon");
   trayicon.setCheckable(true);
