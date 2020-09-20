@@ -14,6 +14,7 @@
 #include "mainmenu.h"
 #include "statusbarlabel.h"
 #include "shortcuts.h"
+#include "playback_log_ui/playbackloguicontroller.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -51,6 +52,7 @@ private:
   Mpris *mpris;
 #endif
   Shortcuts *shortcuts;
+  PlaybackLogUi::Controller *playback_log;
 
   void loadUiSettings();
   void setupOrderCombobox();
@@ -66,6 +68,7 @@ private:
   void setupShortcuts();
   void setupMainMenu();
   void setupWindowTitle();
+  void setupPlaybackLog();
   
 protected:
   void closeEvent(QCloseEvent *event) override;

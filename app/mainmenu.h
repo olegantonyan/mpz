@@ -14,6 +14,7 @@ public:
 signals:
   void exit();
   void toggleTrayIcon();
+  void openPlaybackLog();
 
 public slots:
   void on_open();

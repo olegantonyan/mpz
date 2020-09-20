@@ -16,18 +16,21 @@ void MainMenu::on_open() {
   QAction trayicon("Tray icon");
   trayicon.setCheckable(true);
   trayicon.setChecked(global_conf.trayIconEnabled());
+  QAction lpog("Playback log");
   QAction about("About");
   QAction quit("Quit");
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
+  connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
   connect(&trayicon, &QAction::triggered, [&]() {
     global_conf.saveTrayIconEnabled(trayicon.isChecked());
     emit toggleTrayIcon();
   });
 
   menu.addAction(&trayicon);
+  menu.addAction(&lpog);
   menu.addAction(&about);
   menu.addSeparator();
   menu.addAction(&quit);

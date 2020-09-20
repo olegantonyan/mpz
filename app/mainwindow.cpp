@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 #endif
   setupShortcuts();
   setupWindowTitle();
+  setupPlaybackLog();
 }
 
 MainWindow::~MainWindow() {
@@ -292,5 +293,21 @@ void MainWindow::setupWindowTitle() {
   connect(player, &Playback::Controller::stopped, [=]() {
     setWindowTitle(qApp->applicationDisplayName());
   });
+}
+
+void MainWindow::setupPlaybackLog() {
+  playback_log = new PlaybackLogUi::Controller(this);
+  connect(main_menu, &MainMenu::openPlaybackLog, playback_log, &PlaybackLogUi::Controller::show_window);
+  connect(player, &Playback::Controller::started, playback_log, &PlaybackLogUi::Controller::append);
+  connect(player, &Playback::Controller::trackChanged, playback_log, &PlaybackLogUi::Controller::append);
+
+  connect(playback_log, &PlaybackLogUi::Controller::jump_to_track, [=](quint64 track_uid) {
+    auto plst = playlists->playlistByTrackUid(track_uid);
+    if (plst != nullptr) {
+      playlists->on_jumpTo(plst);
+      playlist->on_scrollTo(plst->trackBy(track_uid));
+    }
+  });
+
 }
 

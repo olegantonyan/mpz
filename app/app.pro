@@ -51,6 +51,9 @@ SOURCES += \
     playback/mediaplayer.cpp \
     playback/playbackcontroller.cpp \
     playback/randomtrail.cpp \
+    playback_log_ui/playbacklogdialog.cpp \
+    playback_log_ui/playbackloguicontroller.cpp \
+    playback_log_ui/playbackloguimodel.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
     playlist_ui/playlistcontroller.cpp \
@@ -91,6 +94,9 @@ HEADERS += \
     playback/mediaplayer.h \
     playback/playbackcontroller.h \
     playback/randomtrail.h \
+    playback_log_ui/playbacklogdialog.h \
+    playback_log_ui/playbackloguicontroller.h \
+    playback_log_ui/playbackloguimodel.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
     playlist_ui/playlistcontroller.h \
@@ -118,6 +124,7 @@ FORMS += \
     aboutdialog.ui \
     directory_ui/directorysettings.ui \
     mainwindow.ui \
+    playback_log_ui/playbacklogdialog.ui \
     playlist_ui/trackinfodialog.ui
 
 # Libraries

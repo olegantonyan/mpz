@@ -42,6 +42,7 @@ namespace Playback {
     });
     connect(&_player, &MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
+      emit trackChanged(_current_track);
     });
 
     _controls.seekbar->installEventFilter(this);

@@ -41,6 +41,7 @@ namespace Playback {
     void volumeChanged(int value);
     void seeked(int value);
     void streamFill(const Track &track, quint32 bytes);
+    void trackChanged(const Track &track);
 
   public slots:
     void play(const Track &track);
