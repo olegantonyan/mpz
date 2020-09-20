@@ -29,9 +29,9 @@ void PlaybackLogDialog::on_copy(const QPoint &pos) {
   qApp->clipboard()->setText(text.toString());
 }
 
-void PlaybackLogDialog::on_jump_to(const QModelIndex &idx) {
+void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) {
   auto track_uid = model->itemAt(idx).track_uid;
-  emit jump_to_track(track_uid);
+  emit jumpToTrack(track_uid);
 }
 
 void PlaybackLogDialog::setup_context_menu() {
@@ -49,7 +49,7 @@ void PlaybackLogDialog::setup_context_menu() {
     QAction jump_to("Jump to");
     connect(&jump_to, &QAction::triggered, [=]() {
       auto index = ui->tableView->indexAt(pos);
-      on_jump_to(index);
+      on_jumpTo(index);
     });
 
     menu.addAction(&copy);
@@ -57,5 +57,5 @@ void PlaybackLogDialog::setup_context_menu() {
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });
 
-  connect(ui->tableView, &QTableView::doubleClicked, this, &PlaybackLogDialog::on_jump_to);
+  connect(ui->tableView, &QTableView::doubleClicked, this, &PlaybackLogDialog::on_jumpTo);
 }

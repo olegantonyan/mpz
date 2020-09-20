@@ -15,11 +15,11 @@ namespace PlaybackLogUi {
     explicit Controller(QObject *parent = nullptr);
 
   signals:
-    void jump_to_track(quint64 track_uid);
+    void jumpToTrack(quint64 track_uid);
 
   public slots:
     void append(const Track& t);
-    void show_window();
+    void showWindow();
 
   private:
     PlaybackLogUi::Model *model;

@@ -301,7 +301,7 @@ void MainWindow::setupPlaybackLog() {
   connect(player, &Playback::Controller::started, playback_log, &PlaybackLogUi::Controller::append);
   connect(player, &Playback::Controller::trackChanged, playback_log, &PlaybackLogUi::Controller::append);
 
-  connect(playback_log, &PlaybackLogUi::Controller::jump_to_track, [=](quint64 track_uid) {
+  connect(playback_log, &PlaybackLogUi::Controller::jumpToTrack, [=](quint64 track_uid) {
     auto plst = playlists->playlistByTrackUid(track_uid);
     if (plst != nullptr) {
       playlists->on_jumpTo(plst);

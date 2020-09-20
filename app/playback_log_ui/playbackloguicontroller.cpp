@@ -3,7 +3,7 @@
 
 namespace PlaybackLogUi {
   Controller::Controller(QObject *parent) : QObject(parent) {
-    this->model = new PlaybackLogUi::Model(100, this);
+    model = new PlaybackLogUi::Model(100, this);
   }
 
   void Controller::append(const Track &t) {
@@ -21,7 +21,7 @@ namespace PlaybackLogUi {
     PlaybackLogDialog *dlg = new PlaybackLogDialog(model);
     dlg->setModal(false);
     connect(dlg, &PlaybackLogDialog::finished, dlg, &PlaybackLogDialog::deleteLater);
-    connect(dlg, &PlaybackLogDialog::jump_to_track, this, &Controller::jump_to_track);
+    connect(dlg, &PlaybackLogDialog::jumpToTrack, this, &Controller::jumpToTrack);
     dlg->show();
   }
 }

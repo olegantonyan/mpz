@@ -17,11 +17,11 @@ public:
   ~PlaybackLogDialog();
 
 signals:
-  void jump_to_track(quint64 track_uid);
+  void jumpToTrack(quint64 track_uid);
 
 private slots:
   void on_copy(const QPoint &pos);
-  void on_jump_to(const QModelIndex &idx);
+  void on_jumpTo(const QModelIndex &idx);
 
 private:
   Ui::PlaybackLogDialog *ui;
