@@ -102,6 +102,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     trayicon->hide();
   }
   QMainWindow::closeEvent(event);
+  qApp->closeAllWindows();
 }
 
 void MainWindow::setupOrderCombobox() {
