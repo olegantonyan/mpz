@@ -17,7 +17,7 @@ namespace PlaybackLogUi {
     model->append(item);
   }
 
-  void Controller::show_window() {
+  void Controller::showWindow() {
     PlaybackLogDialog *dlg = new PlaybackLogDialog(model);
     dlg->setModal(false);
     connect(dlg, &PlaybackLogDialog::finished, dlg, &PlaybackLogDialog::deleteLater);
