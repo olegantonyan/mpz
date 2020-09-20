@@ -22,6 +22,7 @@ public slots:
 
 signals:
   void doubleclicked();
+  void showPlaybackLog();
 
 protected:
   void mouseDoubleClickEvent(QMouseEvent *event) override;

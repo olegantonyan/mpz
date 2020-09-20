@@ -57,7 +57,10 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   connect(&copy_name, &QAction::triggered, [=]() {
      qApp->clipboard()->setText(text());
   });
+  QAction show_log("Show playback log");
+  connect(&show_log, &QAction::triggered, this, &StatusBarLabel::showPlaybackLog);
   menu.addAction(&copy_name);
+  menu.addAction(&show_log);
   menu.exec(mapToGlobal(pos));
 }
 

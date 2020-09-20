@@ -311,5 +311,6 @@ void MainWindow::setupPlaybackLog() {
   });
 
   connect(shortcuts, &Shortcuts::openPlabackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
+  connect(status_label, &StatusBarLabel::showPlaybackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
 }
 
