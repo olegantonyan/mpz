@@ -9,6 +9,8 @@ TARGET = mpz
 
 DEFINES += TAGLIB_STATIC
 
+DEFINES += GIT_CURRENT_SHA1="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)\\\""
+
 win32: {
   CONFIG -= debug_and_release
   #CONFIG += static
