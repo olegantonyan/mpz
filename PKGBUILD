@@ -2,7 +2,7 @@
 # Contributor: Oleg Antonyan <oleg.b.antonyan@gmail.com>
 
 pkgname=mpz
-pkgver=0.0.9
+pkgver=0.0.10
 pkgrel=1
 pkgdesc='Music player for the large local collections'
 arch=('x86_64')
