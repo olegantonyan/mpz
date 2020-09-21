@@ -19,6 +19,9 @@ namespace Config {
     bool trayIconEnabled() const;
     void saveTrayIconEnabled(bool arg);
 
+    int streamBufferSize() const;
+    void saveStreamBufferSize(int arg);
+
   private:
     Config::Storage storage;
   };

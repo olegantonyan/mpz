@@ -17,7 +17,7 @@ namespace Playback {
       PausedState
     };
 
-    explicit MediaPlayer(QObject *parent = nullptr);
+    explicit MediaPlayer(quint32 stream_buffer_size, QObject *parent = nullptr);
 
     MediaPlayer::State state() const;
     int volume() const;

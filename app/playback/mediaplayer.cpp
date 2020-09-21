@@ -6,7 +6,7 @@
 #include <QtConcurrent>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(QObject *parent) : QObject(parent) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QObject *parent) : QObject(parent), stream(stream_buffer_size) {
     connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
       if (offset_end > 0 && pos >= offset_end) {

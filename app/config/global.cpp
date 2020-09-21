@@ -31,4 +31,12 @@ namespace Config {
   void Global::saveTrayIconEnabled(bool arg) {
     storage.set("tray_icon_enabled", Config::Value(arg));
   }
+
+  int Global::streamBufferSize() const {
+    return storage.get("stream_buffer_size").get<int>();
+  }
+
+  void Global::saveStreamBufferSize(int arg) {
+    storage.set("stream_buffer_size", Config::Value(arg));
+  }
 }

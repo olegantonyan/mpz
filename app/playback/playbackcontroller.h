@@ -22,7 +22,7 @@ namespace Playback {
       Paused
     };
 
-    explicit Controller(const Playback::Controls &c, QObject *parent = nullptr);
+    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
     int volume() const;
