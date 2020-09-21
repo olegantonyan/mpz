@@ -47,6 +47,20 @@ namespace Playback {
 
     _controls.seekbar->installEventFilter(this);
     next_after_stop = true;
+
+    setup_monotonic_timer();
+  }
+
+  void Playback::Controller::setup_monotonic_timer() {
+    monotonic_timer.setSingleShot(false);
+    monotonic_timer.setInterval(1000);
+    monotonic_timer.start();
+    monotonic_timer.setTimerType(Qt::PreciseTimer);
+    connect(&monotonic_timer, &QTimer::timeout, [=]() {
+      if (state() == Controller::Playing) {
+        emit monotonicPlaybackTimerIncrement(1);
+      }
+    });
   }
 
   Controls Controller::controls() const {

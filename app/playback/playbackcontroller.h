@@ -9,6 +9,7 @@
 #include <memory>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QTimer>
 
 namespace Playback {
   class Controller : public QObject {
@@ -42,6 +43,7 @@ namespace Playback {
     void seeked(int value);
     void streamFill(const Track &track, quint32 bytes);
     void trackChanged(const Track &track);
+    void monotonicPlaybackTimerIncrement(int by);
 
   public slots:
     void play(const Track &track);
@@ -50,15 +52,15 @@ namespace Playback {
     void seek(int seconds);
 
   private:
+    void on_seek(int position);
+    QString time_text(int pos) const;
+    void setup_monotonic_timer();
+
     Playback::Controls _controls;
     MediaPlayer _player;
     Track _current_track;
-
-    void on_seek(int position);
-
-    QString time_text(int pos) const;
-
     bool next_after_stop;
+    QTimer monotonic_timer;
 
   private slots:
     void on_positionChanged(quint64 pos);

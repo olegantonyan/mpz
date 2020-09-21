@@ -1,5 +1,7 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef PLAYBACKLOGMODEL_H
+#define PLAYBACKLOGMODEL_H
+
+#include "config/local.h"
 
 #include <QAbstractTableModel>
 #include <QDateTime>
@@ -24,7 +26,7 @@ namespace PlaybackLogUi {
   class Model : public QAbstractTableModel {
     Q_OBJECT
   public:
-    explicit Model(int max_size, QObject *parent = nullptr);
+    explicit Model(Config::Local &local_c, int max_size, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -36,14 +38,20 @@ namespace PlaybackLogUi {
 
   signals:
     void changed();
+    void totalPlayTimeChanged(int value);
+    void thisSessionPlayTimeChanged(int value);
 
   public slots:
     void append(const Item& item);
+    void incrementPlayTime(int by = 1);
 
   private:
+    Config::Local &local_config;
     int max_size;
     QList<Item> items;
+    int total_play_time;
+    int this_session_play_time;
   };
 }
 
-#endif // MODEL_H
+#endif // PLAYBACKLOGMODEL_H

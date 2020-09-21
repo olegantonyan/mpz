@@ -2,8 +2,8 @@
 #include "playback_log_ui/playbacklogdialog.h"
 
 namespace PlaybackLogUi {
-  Controller::Controller(QObject *parent) : QObject(parent) {
-    model = new PlaybackLogUi::Model(100, this);
+  Controller::Controller(Config::Local &local_c, QObject *parent) : QObject(parent) {
+    model = new PlaybackLogUi::Model(local_c, 100, this);
   }
 
   void Controller::append(const Track &t) {
@@ -15,6 +15,10 @@ namespace PlaybackLogUi {
       return;
     }
     model->append(item);
+  }
+
+  void Controller::on_monotonicPlaybackTimeIncrement(int by) {
+    model->incrementPlayTime(by);
   }
 
   void Controller::showWindow() {

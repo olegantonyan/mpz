@@ -1,7 +1,9 @@
 #include "playbackloguimodel.h"
 
 namespace PlaybackLogUi {
-  Model::Model(int max_sz, QObject *parent) : QAbstractTableModel(parent), max_size(max_sz) {
+  Model::Model(Config::Local &local_c, int max_sz, QObject *parent) : QAbstractTableModel(parent), local_config(local_c), max_size(max_sz) {
+    total_play_time = local_config.totalPlaybackTime();
+    this_session_play_time = 0;
   }
 
   int Model::rowCount(const QModelIndex &parent) const{
@@ -57,5 +59,13 @@ namespace PlaybackLogUi {
     endInsertRows();
 
     emit changed();
+  }
+
+  void Model::incrementPlayTime(int by) {
+    total_play_time += by;
+    this_session_play_time += by;
+    emit totalPlayTimeChanged(total_play_time);
+    emit thisSessionPlayTimeChanged(this_session_play_time);
+    local_config.saveTotalPlaybackTime(total_play_time);
   }
 }

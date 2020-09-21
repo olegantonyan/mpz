@@ -1,5 +1,6 @@
 #include "playback_log_ui/playbacklogdialog.h"
 #include "ui_playbacklogdialog.h"
+#include "track.h"
 
 #include <QMenu>
 #include <QAction>
@@ -15,6 +16,9 @@ PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) :
   ui->tableView->resizeColumnsToContents();
 
   connect(model, &PlaybackLogUi::Model::changed, ui->tableView, &QTableView::resizeColumnsToContents);
+  connect(model, &PlaybackLogUi::Model::totalPlayTimeChanged, this, &PlaybackLogDialog::on_totalPlayTimeChanged);
+  connect(model, &PlaybackLogUi::Model::thisSessionPlayTimeChanged, this, &PlaybackLogDialog::on_thisSessionPlayTimeChanged);
+  model->incrementPlayTime(0); // trigger signal
 
   setup_context_menu();
 }
@@ -32,6 +36,14 @@ void PlaybackLogDialog::on_copy(const QPoint &pos) {
 void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) {
   auto track_uid = model->itemAt(idx).track_uid;
   emit jumpToTrack(track_uid);
+}
+
+void PlaybackLogDialog::on_totalPlayTimeChanged(int value) {
+  ui->labelTotalPlayTime->setText("Total time played: " + Track::formattedTime(value));
+}
+
+void PlaybackLogDialog::on_thisSessionPlayTimeChanged(int value) {
+  ui->labelThisSessionPlayTime->setText("This session time played: " + Track::formattedTime(value));
 }
 
 void PlaybackLogDialog::setup_context_menu() {

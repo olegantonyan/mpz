@@ -43,6 +43,9 @@ namespace Config {
     int volume() const;
     bool saveVolume(int arg);
 
+    int totalPlaybackTime() const;
+    bool saveTotalPlaybackTime(int arg);
+
   private:
     Config::Storage storage;
 

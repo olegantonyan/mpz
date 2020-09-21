@@ -1,10 +1,10 @@
 #ifndef PLAYBACKLOGDIALOG_H
 #define PLAYBACKLOGDIALOG_H
 
+#include "playback_log_ui/playbackloguimodel.h"
+
 #include <QDialog>
 #include <QPoint>
-
-#include "playback_log_ui/playbackloguimodel.h"
 
 namespace Ui {
   class PlaybackLogDialog;
@@ -22,6 +22,8 @@ signals:
 private slots:
   void on_copy(const QPoint &pos);
   void on_jumpTo(const QModelIndex &idx);
+  void on_totalPlayTimeChanged(int value);
+  void on_thisSessionPlayTimeChanged(int value);
 
 private:
   Ui::PlaybackLogDialog *ui;

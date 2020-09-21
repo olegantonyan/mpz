@@ -140,6 +140,14 @@ namespace Config {
     return storage.set("playback_volume", Config::Value(arg));
   }
 
+  int Local::totalPlaybackTime() const {
+    return storage.get("total_playback_time").get<int>();
+  }
+
+  bool Local::saveTotalPlaybackTime(int arg) {
+    return storage.set("total_playback_time", Config::Value(arg));
+  }
+
   Value Local::serializeTrack(const Track &t) const {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();
