@@ -36,6 +36,8 @@ namespace PlaybackLogUi {
     Item last() const;
     Item itemAt(const QModelIndex& index) const;
 
+    QString itemsToCsv() const;
+
   signals:
     void changed();
     void totalPlayTimeChanged(int value);

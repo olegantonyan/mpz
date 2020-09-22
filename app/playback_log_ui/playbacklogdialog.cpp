@@ -5,6 +5,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QClipboard>
+#include <QFileDialog>
+#include <QFile>
 
 PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) : QDialog(parent), ui(new Ui::PlaybackLogDialog), model(m) {
   ui->setupUi(this);
@@ -14,6 +16,8 @@ PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) :
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableView->setModel(model);
   ui->tableView->resizeColumnsToContents();
+
+  ui->buttonSaveCsv->setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
 
   connect(model, &PlaybackLogUi::Model::changed, ui->tableView, &QTableView::resizeColumnsToContents);
   connect(model, &PlaybackLogUi::Model::totalPlayTimeChanged, this, &PlaybackLogDialog::on_totalPlayTimeChanged);
@@ -70,4 +74,15 @@ void PlaybackLogDialog::setup_context_menu() {
   });
 
   connect(ui->tableView, &QTableView::doubleClicked, this, &PlaybackLogDialog::on_jumpTo);
+}
+
+void PlaybackLogDialog::on_buttonSaveCsv_clicked() {
+  QString fname = QFileDialog::getSaveFileName(this, "Save as CSV", ".", "CSV (*.csv)");
+  QFile f(fname);
+  if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    f.write(model->itemsToCsv().toUtf8());
+    f.close();
+  } else {
+    qWarning() << "error opening file " << fname << "for writing";
+  }
 }

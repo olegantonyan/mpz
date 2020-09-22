@@ -1,5 +1,7 @@
 #include "playbackloguimodel.h"
 
+#include <QStringList>
+
 namespace PlaybackLogUi {
   Model::Model(Config::Local &local_c, int max_sz, QObject *parent) : QAbstractTableModel(parent), local_config(local_c), max_size(max_sz) {
     total_play_time = local_config.totalPlaybackTime();
@@ -46,6 +48,18 @@ namespace PlaybackLogUi {
 
   Item Model::itemAt(const QModelIndex &index) const {
     return items.at(index.row());
+  }
+
+  QString Model::itemsToCsv() const {
+    QStringList result;
+    for (int i = 0; i < rowCount(); i++) {
+      QStringList row;
+      for (int j = 0; j < columnCount(); j++) {
+        row += data(createIndex(i, j)).toString();
+      }
+      result += row.join(",");
+    }
+    return result.join("\n");
   }
 
   void Model::append(const Item &item) {

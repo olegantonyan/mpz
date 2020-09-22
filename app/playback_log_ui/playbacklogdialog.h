@@ -25,6 +25,8 @@ private slots:
   void on_totalPlayTimeChanged(int value);
   void on_thisSessionPlayTimeChanged(int value);
 
+  void on_buttonSaveCsv_clicked();
+
 private:
   Ui::PlaybackLogDialog *ui;
   PlaybackLogUi::Model *model;
