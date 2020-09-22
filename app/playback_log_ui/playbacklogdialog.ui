@@ -20,9 +20,12 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="buttonSaveCsv">
+      <widget class="QToolButton" name="buttonSaveCsv">
        <property name="text">
         <string>Save as CSV</string>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
       </widget>
      </item>
