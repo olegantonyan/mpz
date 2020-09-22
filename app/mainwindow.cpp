@@ -135,12 +135,14 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem("random");
   ui->perPlaylistOrdercomboBox->addItem("sequential");
   connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
-    if (playlist->random() == Playlist::Playlist::Random) {
-      ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
-    } else if (playlist->random() == Playlist::Playlist::Sequential) {
-      ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
-    } else if (playlist->random() == Playlist::Playlist::None) {
-      ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
+    if (playlist != nullptr) {
+      if (playlist->random() == Playlist::Playlist::Random) {
+        ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
+      } else if (playlist->random() == Playlist::Playlist::Sequential) {
+        ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
+      } else if (playlist->random() == Playlist::Playlist::None) {
+        ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
+      }
     }
   });
   connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
