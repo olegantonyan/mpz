@@ -34,6 +34,6 @@ QString AboutDialog::libraryInfo(const QString &name, const QString &url) const 
   return QString("%1 <a href=\"%2\">%3</a>").arg(name).arg(url).arg(url);
 }
 
-void AboutDialog::on_buttonAboutQt_clicked() {
+void AboutDialog::on_buttonAboutQt_clicked() const {
   qApp->aboutQt();
 }

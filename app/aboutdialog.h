@@ -15,7 +15,7 @@ public:
   ~AboutDialog();
 
 private slots:
-  void on_buttonAboutQt_clicked();
+  void on_buttonAboutQt_clicked() const;
 
 private:
   Ui::AboutDialog *ui;

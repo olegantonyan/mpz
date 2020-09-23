@@ -20,7 +20,7 @@ signals:
   void jumpToTrack(quint64 track_uid);
 
 private slots:
-  void on_copy(const QPoint &pos);
+  void on_copy(const QPoint &pos) const;
   void on_jumpTo(const QModelIndex &idx);
   void on_totalPlayTimeChanged(int value);
   void on_thisSessionPlayTimeChanged(int value);

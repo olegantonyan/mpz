@@ -37,7 +37,7 @@ void PlaybackLogDialog::on_copy(const QPoint &pos) const {
   qApp->clipboard()->setText(text.toString());
 }
 
-void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) const {
+void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) {
   auto track_uid = model->itemAt(idx).track_uid;
   emit jumpToTrack(track_uid);
 }
