@@ -156,8 +156,9 @@ namespace PlaylistUi {
   }
 
   void Controller::on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
-    Q_UNUSED(deselected);
-    Q_UNUSED(selected);
+    Q_UNUSED(deselected)
+    Q_UNUSED(selected)
+
     quint32 selection_time = 0;
     for (auto i: view->selectionModel()->selectedRows()) {
       auto source_index = proxy->mapToSource(i);
