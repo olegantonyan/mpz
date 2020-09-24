@@ -255,6 +255,16 @@ void MainWindow::setupStatusBar() {
       playlist->on_scrollTo(current_playlist->trackBy(current_track_uid));
     }
   });
+
+  auto *l = new QLabel("Nothing selected", this);
+  ui->statusbar->addPermanentWidget(l);
+  connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, [=](quint32 t) {
+    if (t == 0) {
+      l->setText("Nothing selected");
+    } else {
+      l->setText("Selection total duration: " + Track::formattedTime(t));
+    }
+  });
 }
 
 void MainWindow::setupShortcuts() {

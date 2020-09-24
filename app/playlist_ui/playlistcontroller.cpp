@@ -37,13 +37,8 @@ namespace PlaylistUi {
       emit activated(model->itemAt(proxy->mapToSource(index)));
     });
 
-    connect(view->selectionModel(), &QItemSelectionModel::currentChanged, [=](const QModelIndex &index, const QModelIndex &prev) {
-      (void)prev;
-      auto source_index = proxy->mapToSource(index);
-      if (index.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
-        emit selected(model->itemAt(source_index));
-      }
-    });
+    connect(view->selectionModel(), &QItemSelectionModel::currentChanged, this, &Controller::on_currentSelectionChanged);
+    connect(view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &Controller::on_selectionChanged);
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
@@ -150,5 +145,26 @@ namespace PlaylistUi {
         }
       });
     }
+  }
+
+  void Controller::on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev) {
+    Q_UNUSED(prev)
+    auto source_index = proxy->mapToSource(index);
+    if (index.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
+      emit selected(model->itemAt(source_index));
+    }
+  }
+
+  void Controller::on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
+    Q_UNUSED(deselected);
+    Q_UNUSED(selected);
+    quint32 selection_time = 0;
+    for (auto i: view->selectionModel()->selectedRows()) {
+      auto source_index = proxy->mapToSource(i);
+      if (i.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
+        selection_time += model->itemAt(source_index).duration();
+      }
+    }
+    emit durationOfSelectedChanged(selection_time);
   }
 }

@@ -25,6 +25,7 @@ namespace PlaylistUi {
     void activated(const Track &track);
     void selected(const Track &track);
     void changed(const std::shared_ptr<Playlist::Playlist> pl);
+    void durationOfSelectedChanged(quint32 total_duration);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist::Playlist> pi);
@@ -38,7 +39,9 @@ namespace PlaylistUi {
   private slots:
     void on_appendAsyncFinished(Playlist::Playlist *pl);
     void on_search(const QString &term);
-    
+    void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
+    void on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
   private:
     QTableView *view;
     QLineEdit *search;
