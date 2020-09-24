@@ -68,5 +68,5 @@ void Shortcuts::setupLocal() {
   _prev.setKey(Qt::ALT | Qt::Key_R);
   _next.setKey(Qt::ALT | Qt::Key_T);
   _open_main_menu.setKey(Qt::ALT | Qt::Key_M);
-  _open_playback_log.setKey(Qt::ALT | Qt::Key_L);
+  _open_playback_log.setKey(Qt::CTRL | Qt::Key_L);
 }
