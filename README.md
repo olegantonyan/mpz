@@ -6,9 +6,19 @@ https://olegantonyan.github.io/mpz/
 
 ## Installation
 
-#### Linux
+#### openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia
 
-Use open build service repositories for openSUSE, Ubuntu, Fedora and other popular distros: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
+Use open build service repositories: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
+
+#### Arch
+
+Use AUR package: https://aur.archlinux.org/packages/mpz/
+
+```
+git clone https://aur.archlinux.org/mpz.git
+cd mpz
+makepkg -si
+```
 
 #### From sources
 
@@ -29,4 +39,4 @@ make install
 
 #### Windows
 
-Grab static binaries from releases page: https://github.com/olegantonyan/mpz/releases
+Use static binaries from releases page: https://github.com/olegantonyan/mpz/releases
