@@ -5,3 +5,4 @@
 5. Build for windows: ./build.win32.sh && ./build.win64.sh and attach exe to the release
 6. Download tar.gz from the GitHub release and put its sha256sum into PKGBUILD
 7. Commit with the message "update PKGBUILD sha256sum"
+8. Run ./release-aur.sh to push these changes to Arch's AUR
