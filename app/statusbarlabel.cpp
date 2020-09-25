@@ -7,8 +7,7 @@
 #include <QClipboard>
 #include <QApplication>
 
-StatusBarLabel::StatusBarLabel(QStatusBar *sb, QWidget *parent) : QLabel(parent) {
-  sb->addWidget(this);
+StatusBarLabel::StatusBarLabel(QWidget *parent) : QLabel(parent) {
   on_playerStopped();
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, &QLabel::customContextMenuRequested, this, &StatusBarLabel::on_contextMenu);

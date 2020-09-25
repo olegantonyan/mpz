@@ -240,7 +240,8 @@ void MainWindow::setupPlaybackDispatch() {
 }
 
 void MainWindow::setupStatusBar() {
-  status_label = new StatusBarLabel(ui->statusbar, this);
+  status_label = new StatusBarLabel(this);
+  ui->statusbar->addWidget(status_label);
   connect(player, &Playback::Controller::started, status_label, &StatusBarLabel::on_playerStarted);
   connect(player, &Playback::Controller::stopped, status_label, &StatusBarLabel::on_playerStopped);
   connect(player, &Playback::Controller::paused, status_label, &StatusBarLabel::on_playerPaused);
@@ -256,13 +257,13 @@ void MainWindow::setupStatusBar() {
     }
   });
 
-  auto *l = new QLabel("Nothing selected", this);
-  ui->statusbar->addPermanentWidget(l);
+  status_label_right = new QLabel("Nothing selected", this);
+  ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, [=](quint32 t) {
     if (t == 0) {
-      l->setText("Nothing selected");
+      status_label_right->setText("Nothing selected");
     } else {
-      l->setText("Selection total duration: " + Track::formattedTime(t));
+      status_label_right->setText("Selection total duration: " + Track::formattedTime(t));
     }
   });
 }

@@ -11,7 +11,7 @@
 class StatusBarLabel : public QLabel {
   Q_OBJECT
 public:
-  explicit StatusBarLabel(QStatusBar *sb, QWidget *parent = nullptr);
+  explicit StatusBarLabel(QWidget *parent = nullptr);
 
 public slots:
   void on_playerStopped();

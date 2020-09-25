@@ -48,6 +48,7 @@ private:
   VolumeControl *volume;
   MainMenu *main_menu;
   StatusBarLabel *status_label;
+  QLabel *status_label_right;
 #if defined(MPRIS_ENABLE)
   Mpris *mpris;
 #endif
