@@ -12,7 +12,7 @@ depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme')
 makedepends=('gcc' 'make')
 provides=('mpz')
 source=(https://github.com/olegantonyan/$pkgname/archive/$pkgver.tar.gz)
-sha256sums=('cd0539409c5be0413684e9897e8ef71d851ad322ef60ca3764c40b49dc930409')
+sha256sums=('73d2210f06ea03a8b6cfcb08344900495a6c9a2fc693da97b825222526d65c39')
 
 build() {
     cd $pkgname-$pkgver
