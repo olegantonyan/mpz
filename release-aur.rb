@@ -96,7 +96,7 @@ puts "***** END OF PKGBUILD *****"
   puts srcinfo
   puts "***** END OF .SRCINFO *****"
 
-  `cd #{d}/mpz && git add . --all && git commit -m "update AUR package" && git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}" && git push`
 end
 
 
