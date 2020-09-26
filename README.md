@@ -1,8 +1,29 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 
-# WIP misic player
+# Qt-based music player
 
 https://olegantonyan.github.io/mpz/
+
+If you like to organize your music in folders, then this player might be for you. It doesn't try to index all the files into a library, but rather treats your files and folders as a library and provides a convenient way to create playlists directly from folders. Similar to Foobar2000's Album List, but it's not an attempt to clone.
+
+## Why?
+
+In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but it's not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
+
+## Features
+
+- 3-columns UI which allows you to quickly create playlists from folders and switch between playlists;
+- Built with Qt/C++ (yes, you can still do it in 2020) - fast and responsive native UI;
+- Supports internet radio in `m3u` and `pls` playlists formats;
+- Supports CUE sheets;
+- Supports MPRIS on Linux for remote control;
+- Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation).
+
+## Limitations
+
+- Uses external codecs installed on your OS (through QtMultimedia), like the most other multimedia players;
+- CUE must contain only 1 source audio file, multi-file CUEs are not supported;
+- Lacks some "expected" features like tracks rearranging within playlist.
 
 ## Installation
 
@@ -40,3 +61,17 @@ make install
 #### Windows
 
 Use static binaries from releases page: https://github.com/olegantonyan/mpz/releases
+
+#### MacOS
+
+It should be possible to build mpz for Mac, but I don't have a hardware to test it. If you're interested in Mac builds - drop an issue here https://github.com/olegantonyan/mpz/issues/
+
+## Configuration
+
+The default config location on Linux is `~/.config/mpz`. There're 2 files:
+- `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
+- `global.yml` - for portable settings that make sense to share between computers.
+
+Some config options can be changed only by editing config files:
+
+- `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
