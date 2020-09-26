@@ -28,32 +28,32 @@ void TrackInfoDialog::on_copy(const QPoint &pos) {
 
 void TrackInfoDialog::setup_table(const Track &track) {
   if (!track.artist().isEmpty()) {
-    add_table_row("Artist", track.artist());
+    add_table_row(tr("Artist"), track.artist());
   }
   if (!track.album().isEmpty()) {
-    add_table_row("Album", track.album());
+    add_table_row(tr("Album"), track.album());
   }
   if (!track.title().isEmpty()) {
-    add_table_row("Title", track.title());
+    add_table_row(tr("Title"), track.title());
   }
   if (track.year() > 0) {
-    add_table_row("Year", QString::number(track.year()));
+    add_table_row(tr("Year"), QString::number(track.year()));
   }
   if (!track.isStream()) {
-    add_table_row("Track number", QString::number(track.track_number()));
-    add_table_row("Duration", track.formattedDuration());
+    add_table_row(tr("Track number"), QString::number(track.track_number()));
+    add_table_row(tr("Duration"), track.formattedDuration());
   }
-  add_table_row("Format", track.format());
-  add_table_row("Bitrate", QString::number(track.bitrate()));
-  add_table_row("Sample rate", QString::number(track.sample_rate()));
-  add_table_row("Channels", QString::number(track.channels()));
+  add_table_row(tr("Format"), track.format());
+  add_table_row(tr("Bitrate"), QString::number(track.bitrate()));
+  add_table_row(tr("Sample rate"), QString::number(track.sample_rate()));
+  add_table_row(tr("Channels"), QString::number(track.channels()));
   if (track.isStream()) {
-    add_table_row("Stream url", track.url().toString());
+    add_table_row(tr("Stream url"), track.url().toString());
   } else {
-    add_table_row("File path", track.path());
+    add_table_row(tr("File path"), track.path());
   }
   if (track.isCue()) {
-    add_table_row("CUE start at", Track::formattedTime(track.begin()));
+    add_table_row(tr("CUE start at"), Track::formattedTime(track.begin()));
   }
 
   ui->tableView->resizeColumnsToContents();
@@ -75,7 +75,7 @@ void TrackInfoDialog::setup_context_menu() {
       return;
     }
     QMenu menu;
-    QAction copy("Copy");
+    QAction copy(tr("Copy"));
     connect(&copy, &QAction::triggered, [=]() {
       on_copy(pos);
     });

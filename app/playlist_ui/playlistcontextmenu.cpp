@@ -15,19 +15,19 @@ namespace PlaylistUi {
     Q_ASSERT(view);
     Q_ASSERT(search);
 
-    remove.setText("Remove");
+    remove.setText(tr("Remove"));
     connect(&remove, &QAction::triggered, this, &PlaylistContextMenu::on_remove);
 
-    show_in_filemanager.setText("Show in file manager");
+    show_in_filemanager.setText(tr("Show in file manager"));
     connect(&show_in_filemanager, &QAction::triggered, this, &PlaylistContextMenu::on_showInFilemanager);
 
-    copy_name.setText("Copy name");
+    copy_name.setText(tr("Copy name"));
     connect(&copy_name, &QAction::triggered, this, &PlaylistContextMenu::on_copyName);
 
-    clear_filter.setText("Clear filter");
+    clear_filter.setText(tr("Clear filter"));
     connect(&clear_filter, &QAction::triggered, this, &PlaylistContextMenu::on_clearFilter);
 
-    info.setText("Track info");
+    info.setText(tr("Track info"));
     connect(&info, &QAction::triggered, this, &PlaylistContextMenu::on_trackInfo);
   }
 

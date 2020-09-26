@@ -3,7 +3,7 @@
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
-  setWindowTitle("About mpz");
+  setWindowTitle(tr("About mpz"));
 
   auto url = "https://github.com/olegantonyan/mpz";
   auto version = qApp->applicationVersion();
@@ -23,7 +23,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
-  ui->opensourceLabel->setText(QString("Using opensource libraries:<br /> %1").arg(os.join("<br />")));
+  ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 }
 
 AboutDialog::~AboutDialog() {

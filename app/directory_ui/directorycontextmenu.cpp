@@ -23,10 +23,10 @@ namespace DirectoryUi {
     auto filepath = QDir(model->filePath(index));
 
     QMenu menu;
-    QAction clear_filter("Clear filter");
-    QAction create_playlist("Create new playlist");
-    QAction append_to_playlist("Append to current playlist");
-    QAction open_in_filemanager("Open in file manager");
+    QAction clear_filter(tr("Clear filter"));
+    QAction create_playlist(tr("Create new playlist"));
+    QAction append_to_playlist(tr("Append to current playlist"));
+    QAction open_in_filemanager(tr("Open in file manager"));
 
     connect(&create_playlist, &QAction::triggered, [&]() {
       emit createNewPlaylist(filepath);

@@ -14,27 +14,27 @@ StatusBarLabel::StatusBarLabel(QWidget *parent) : QLabel(parent) {
 }
 
 void StatusBarLabel::on_playerStopped() {
-  _state = "Stopped";
+  _state = tr("Stopped");
   _stream_buffer = 0;
   setText(_state);
 }
 
 void StatusBarLabel::on_playerStarted(const Track &track) {
-  _state = "Playing";
+  _state = tr("Playing");
   auto t = _state + trackInfo(track);
   _stream_buffer = 0;
   setText(t);
 }
 
 void StatusBarLabel::on_playerPaused(const Track &track) {
-  _state = "Paused";
+  _state = tr("Paused");
   auto t = _state + trackInfo(track);
   setText(t);
 }
 
 void StatusBarLabel::on_streamBufferFill(const Track &track, quint32 bytes) {
   _stream_buffer = bytes;
-  if (_state != "Stopped") {
+  if (_state != tr("Stopped")) {
     setText(_state + trackInfo(track));
   }
 }
@@ -52,11 +52,11 @@ void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   QMenu menu;
-  QAction copy_name("Copy");
+  QAction copy_name(tr("Copy"));
   connect(&copy_name, &QAction::triggered, [=]() {
      qApp->clipboard()->setText(text());
   });
-  QAction show_log("Show playback log");
+  QAction show_log(tr("Show playback log"));
   connect(&show_log, &QAction::triggered, this, &StatusBarLabel::showPlaybackLog);
   menu.addAction(&copy_name);
   menu.addAction(&show_log);
@@ -66,17 +66,17 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
 QString StatusBarLabel::trackInfo(const Track &t) const {
   auto c = ": " + t.shortText() + " | " + t.formattedAudioInfo();
   if (_stream_buffer > 0) {
-    c += QString(" | stream buffer %1").arg(humanized_bytes(_stream_buffer));
+    c += QString(" | %1 %2").arg(tr("stream buffer")).arg(humanized_bytes(_stream_buffer));
   }
   return c;
 }
 
 QString StatusBarLabel::humanized_bytes(quint32 bytes) const {
     QStringList list;
-    list << "KB" << "MB" << "GB" << "TB";
+    list << tr("KB") << tr("MB") << tr("GB") << tr("TB");
 
     QStringListIterator i(list);
-    QString unit("bytes");
+    QString unit(tr("bytes"));
 
     while(bytes >= 1024 && i.hasNext()) {
       unit = i.next();

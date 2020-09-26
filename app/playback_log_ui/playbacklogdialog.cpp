@@ -10,7 +10,7 @@
 
 PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) : QDialog(parent), ui(new Ui::PlaybackLogDialog), model(m) {
   ui->setupUi(this);
-  setWindowTitle("Playback log");
+  setWindowTitle(tr("Playback log"));
   ui->tableView->horizontalHeader()->setVisible(false);
   ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -43,11 +43,11 @@ void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) {
 }
 
 void PlaybackLogDialog::on_totalPlayTimeChanged(int value) {
-  ui->labelTotalPlayTime->setText("Total time played: " + Track::formattedTime(value));
+  ui->labelTotalPlayTime->setText(tr("Total time played") + ": " + Track::formattedTime(value));
 }
 
 void PlaybackLogDialog::on_thisSessionPlayTimeChanged(int value) {
-  ui->labelThisSessionPlayTime->setText("This session time played: " + Track::formattedTime(value));
+  ui->labelThisSessionPlayTime->setText(tr("This session time played") + ": " + Track::formattedTime(value));
 }
 
 void PlaybackLogDialog::setup_context_menu() {
@@ -58,11 +58,11 @@ void PlaybackLogDialog::setup_context_menu() {
       return;
     }
     QMenu menu;
-    QAction copy("Copy");
+    QAction copy(tr("Copy"));
     connect(&copy, &QAction::triggered, [=]() {
       on_copy(pos);
     });
-    QAction jump_to("Jump to");
+    QAction jump_to(tr("Jump to"));
     connect(&jump_to, &QAction::triggered, [=]() {
       auto index = ui->tableView->indexAt(pos);
       on_jumpTo(index);
@@ -77,7 +77,7 @@ void PlaybackLogDialog::setup_context_menu() {
 }
 
 void PlaybackLogDialog::on_buttonSaveCsv_clicked() {
-  QString fname = QFileDialog::getSaveFileName(this, "Save as CSV", ".", "CSV (*.csv)");
+  QString fname = QFileDialog::getSaveFileName(this, tr("Save as CSV"), ".", "CSV (*.csv)");
   QFile f(fname);
   if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
     f.write(model->itemsToCsv().toUtf8());

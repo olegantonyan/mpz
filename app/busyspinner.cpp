@@ -15,7 +15,7 @@ BusySpinner::BusySpinner(QWidget *_widget, QObject *parent) : QObject(parent), w
   spinner->setColor(QColor(120, 120, 120));
 
   spinner->start(); // gets the show on the road!
-  spinner->setToolTip("Background operation running");
+  spinner->setToolTip(tr("Background operation running"));
 
   hide();
 }

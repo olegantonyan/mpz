@@ -111,8 +111,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::setupOrderCombobox() {
-  ui->orderComboBox->addItem("sequential");
-  ui->orderComboBox->addItem("random");
+  ui->orderComboBox->addItem(tr("sequential"));
+  ui->orderComboBox->addItem(tr("random"));
   ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
     global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
@@ -131,9 +131,9 @@ void MainWindow::setupOrderCombobox() {
 }
 
 void MainWindow::setupPerPlaylistOrderCombobox() {
-  ui->perPlaylistOrdercomboBox->addItem("(use global)");
-  ui->perPlaylistOrdercomboBox->addItem("random");
-  ui->perPlaylistOrdercomboBox->addItem("sequential");
+  ui->perPlaylistOrdercomboBox->addItem(tr("(use global)"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("random"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
   connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {
@@ -257,13 +257,13 @@ void MainWindow::setupStatusBar() {
     }
   });
 
-  status_label_right = new QLabel("Nothing selected", this);
+  status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, [=](quint32 t) {
     if (t == 0) {
-      status_label_right->setText("Nothing selected");
+      status_label_right->setText(tr("Nothing selected"));
     } else {
-      status_label_right->setText("Selection total duration: " + Track::formattedTime(t));
+      status_label_right->setText(tr("Selection total duration") + ": " + Track::formattedTime(t));
     }
   });
 }

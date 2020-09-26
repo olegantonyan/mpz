@@ -6,20 +6,20 @@
 
 TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
-  trayicon->setToolTip("Stopped");
+  trayicon->setToolTip(tr("Stopped"));
   menu = new QMenu(parent);
 
-  quit = new QAction("Quit", this);
+  quit = new QAction(tr("Quit"), this);
 
-  play = new QAction("Play", this);
+  play = new QAction(tr("Play"), this);
   play->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPlay));
-  pause = new QAction("Pause", this);
+  pause = new QAction(tr("Pause"), this);
   pause->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPause));
-  stop = new QAction("Stop", this);
+  stop = new QAction(tr("Stop"), this);
   stop->setIcon(parent->style()->standardIcon(QStyle::SP_MediaStop));
-  next = new QAction("Next", this);
+  next = new QAction(tr("Next"), this);
   next->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekForward));
-  prev = new QAction("Previous", this);
+  prev = new QAction(tr("Previous"), this);
   prev->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekBackward));
   now_playing = new QAction("", this);
   now_playing->setEnabled(false);
@@ -59,7 +59,7 @@ void TrayIcon::on_playerStarted(const Track &track) {
   next->setEnabled(true);
   prev->setEnabled(true);
   update_menu_now_playing(track, 0);
-  trayicon->setToolTip(QString("Playing: %1 - %2").arg(track.artist()).arg(track.title()));
+  trayicon->setToolTip(QString("%1: %2 - %3").arg(tr("Playing")).arg(track.artist()).arg(track.title()));
 }
 
 void TrayIcon::on_playerStopped() {
@@ -69,7 +69,7 @@ void TrayIcon::on_playerStopped() {
   next->setEnabled(false);
   prev->setEnabled(false);
   update_menu_now_playing(Track(), -1);
-  trayicon->setToolTip("Stopped");
+  trayicon->setToolTip(tr("Stopped"));
 }
 
 void TrayIcon::on_playerPaused(const Track &track) {
@@ -79,7 +79,7 @@ void TrayIcon::on_playerPaused(const Track &track) {
   pause->setEnabled(true);
   next->setEnabled(true);
   prev->setEnabled(true);
-  trayicon->setToolTip(QString("Paused: %1 - %2").arg(track.artist()).arg(track.title()));
+  trayicon->setToolTip(QString("%1: %2 - %3").arg(tr("Paused")).arg(track.artist()).arg(track.title()));
 }
 
 void TrayIcon::on_playerProgress(const Track &track, int current_seconds) {

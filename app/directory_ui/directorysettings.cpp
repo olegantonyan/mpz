@@ -6,7 +6,7 @@
 
 DirectorySettings::DirectorySettings(const QStringList &paths, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings) {
   ui->setupUi(this);
-  setWindowTitle("Library folders");
+  setWindowTitle(tr("Library folders"));
   model.setStringList(paths);
   ui->listView->setModel(&model);
 }
