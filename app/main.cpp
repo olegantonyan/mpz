@@ -3,6 +3,9 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QTranslator>
+#include <QLocale>
+#include <QTextCodec>
 
 #include "track.h"
 #include "streammetadata.h"
@@ -20,6 +23,12 @@ int main(int argc, char *argv[]) {
   registerMetaTypes();
 
   RNJesus::seed();
+
+  QString lang = QLocale::system().name().split("_").first();
+  qDebug() << "system language" << lang;
+  QTranslator trans;
+  qDebug() << "transaltions load" << trans.load(lang, ":/translations/translations");
+  a.installTranslator(&trans);
 
   MainWindow w;
   w.show();
