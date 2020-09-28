@@ -79,6 +79,14 @@ def source
   'https://github.com/olegantonyan/mpz/archive/master.zip'
 end
 
+def author_name
+  "Oleg Antonyan"
+end
+
+def author_email
+  "oleg.b.antonyan@gmail.com"
+end
+
 pkgbuild = ::ERB.new(PKGBUILD, nil, '-').result_with_hash(
   pkgver: pkgver,
   pkgrel: pkgrel,
@@ -107,9 +115,12 @@ puts "***** END OF SRCINFO *****"
   raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   `chmod 400 #{keyfile}`
 
+  git_ssh = "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'"
+
   puts "cloning aur repo..."
-  puts "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git clone #{aur_repo}"
-  `cd #{d} && GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git clone #{aur_repo}`
+  puts "#{git_ssh} git clone #{aur_repo}"
+  `cd #{d} && #{git_ssh} git clone #{aur_repo}`
+  `cd #{d} && #{git_ssh} git pull --tags`
 
   ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
   ::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
@@ -117,9 +128,9 @@ puts "***** END OF SRCINFO *****"
   raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
   raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
 
-  `git config --global user.email "oleg.b.antonyan@gmail.com"`
-  `git config --global user.name "Oleg Antonyan"`
+  `git config --global user.email "#{author_email}"`
+  `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && #{git_ssh} git push`
 end
