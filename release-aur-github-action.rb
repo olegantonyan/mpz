@@ -22,7 +22,7 @@ source=(<%= source %>)
 sha256sums=('<%= sha256sums %>')
 
 build() {
-    cd $pkgname-$pkgver
+    cd $pkgname-master
 
     rm -rf build
     mkdir build
@@ -32,7 +32,7 @@ build() {
 }
 
 package() {
-    cd $pkgname-$pkgver
+    cd $pkgname-master
 
     cd build
     make install INSTALL_ROOT=$pkgdir
