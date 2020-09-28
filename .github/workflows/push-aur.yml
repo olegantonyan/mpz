@@ -16,5 +16,8 @@ jobs:
       with:
         ruby-version: 2.6
 
+    - name: Set up Git
+      run: apt install git
+
     - name: Run release script
       run: ./release-aur-ci.rb

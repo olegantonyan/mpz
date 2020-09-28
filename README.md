@@ -45,7 +45,7 @@ cd mpz
 makepkg -si
 ```
 
-#### From sources 
+#### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
 Packages' names may differ in different distros.
