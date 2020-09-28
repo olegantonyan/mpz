@@ -57,35 +57,14 @@ pkgbase = mpz
 pkgname = mpz
 HEREDOC
 
-def aur_repo
-  'ssh://aur@aur.archlinux.org/mpz.git'
- end
-
-def sha256sums
-  content = open(source).read
-  ::Digest::SHA256.hexdigest(content)
-end
-
-def pkgrel
-  `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
-end
-
-def pkgver
-  txt = ::File.read('version.pri')
-  /(?<=").+(?=\\\\\\\")/.match(txt).to_s.strip
-end
-
-def source
-  'https://github.com/olegantonyan/mpz/archive/master.zip'
-end
-
-def author_name
-  "Oleg Antonyan"
-end
-
-def author_email
-  "oleg.b.antonyan@gmail.com"
-end
+aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
+sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
+pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
+pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
+source = 'https://github.com/olegantonyan/mpz/archive/master.zip'
+author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
+author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
+last_commit_hash = `git rev-parse --short HEAD`.strip
 
 pkgbuild = ::ERB.new(PKGBUILD, nil, '-').result_with_hash(
   pkgver: pkgver,
@@ -132,5 +111,5 @@ puts "***** END OF SRCINFO *****"
   `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && #{git_ssh} git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel} (#{last_commit_hash})" && #{git_ssh} git push`
 end
