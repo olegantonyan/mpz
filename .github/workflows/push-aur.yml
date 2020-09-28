@@ -1,10 +1,6 @@
 name: AUR push package
 
-on:
-  push:
-    branches: [ $default-branch ]
-  pull_request:
-    branches: [ $default-branch ]
+on: push
 
 jobs:
   aur_push:
@@ -19,6 +15,6 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.6
-        
+
     - name: Run release script
       run: ./release-aur-ci.rb
