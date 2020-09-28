@@ -58,10 +58,10 @@ pkgname = mpz
 HEREDOC
 
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
-sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
 pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
 source = 'https://github.com/olegantonyan/mpz/archive/master.zip'
+sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
 author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
 last_commit_hash = `git rev-parse --short HEAD`.strip
