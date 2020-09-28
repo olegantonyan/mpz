@@ -116,5 +116,5 @@ puts "***** END OF SRCINFO *****"
   raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
   raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
 
-  #`cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git push`
 end
