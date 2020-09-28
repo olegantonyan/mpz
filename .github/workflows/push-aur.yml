@@ -17,4 +17,6 @@ jobs:
         ruby-version: 2.6
 
     - name: Run release script
+      env:
+        AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
       run: ./release-aur-ci.rb

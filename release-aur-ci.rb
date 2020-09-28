@@ -99,6 +99,8 @@ puts "***** SRCINFO *****"
 puts srcinfo
 puts "***** END OF SRCINFO *****"
 
+puts "ssh key: #{ENV['AUR_SSH_PRIVATE_KEY']}"
+
 ::Dir.mktmpdir do |d|
   puts "temp dir: #{d}"
 
