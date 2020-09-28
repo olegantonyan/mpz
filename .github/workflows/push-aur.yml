@@ -24,4 +24,4 @@ jobs:
     - name: Run release script
       env:
         AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-      run: ./github/release-aur-github-action.rb
+      run: ./release-aur-github-action.rb
