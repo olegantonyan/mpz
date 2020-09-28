@@ -99,12 +99,12 @@ puts "***** SRCINFO *****"
 puts srcinfo
 puts "***** END OF SRCINFO *****"
 
-puts "ssh key: #{ENV['AUR_SSH_PRIVATE_KEY']}"
-
 ::Dir.mktmpdir do |d|
   puts "temp dir: #{d}"
 
-  `cd #{d} && git clone #{aur_repo}`
+  ::File.open("#{d}/ssh_key", 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
+
+  `cd #{d} && GIT_SSH_COMMAND="ssh -i #{d}/ssh_key" git clone #{aur_repo}`
 
   ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
   ::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
