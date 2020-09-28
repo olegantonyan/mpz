@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Sleep for 30 seconds (wait for master.zip)
+      uses: whatnick/wait-action@master
+      with:
+        time: '30s'
+
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
