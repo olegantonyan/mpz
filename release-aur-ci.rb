@@ -104,6 +104,7 @@ puts "***** END OF SRCINFO *****"
 
   keyfile = "#{d}/ssh_key"
   ::File.open(keyfile, 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
+  raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   `chmod 400 #{keyfile}`
 
   puts "cloning aur repo..."
@@ -116,5 +117,6 @@ puts "***** END OF SRCINFO *****"
   raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
   raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
 
+  puts "pushin changes to aur..."
   `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git push`
 end
