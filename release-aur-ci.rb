@@ -104,6 +104,8 @@ puts "***** END OF SRCINFO *****"
 
   ::File.open("#{d}/ssh_key", 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
 
+  puts ::File.read("#{d}/ssh_key")
+
   `cd #{d} && GIT_SSH_COMMAND="ssh -i #{d}/ssh_key" git clone #{aur_repo}`
 
   ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
