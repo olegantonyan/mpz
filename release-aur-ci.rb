@@ -66,6 +66,8 @@ author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
 last_commit_hash = `git rev-parse --short HEAD`.strip
 
+puts "git describe --tags: #{`git describe --tags`}"
+
 pkgbuild = ::ERB.new(PKGBUILD, nil, '-').result_with_hash(
   pkgver: pkgver,
   pkgrel: pkgrel,
