@@ -106,6 +106,7 @@ puts "***** END OF SRCINFO *****"
   ::File.open(keyfile, 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
   `chmod 400 #{keyfile}`
 
+  puts "cloning aur repo..."
   puts "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git clone #{aur_repo}"
   `cd #{d} && GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git clone #{aur_repo}`
 
