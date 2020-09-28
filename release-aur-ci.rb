@@ -102,13 +102,13 @@ puts "***** END OF SRCINFO *****"
 ::Dir.mktmpdir do |d|
   puts "temp dir: #{d}"
 
-  `cd #{d} && git clone #{aur_repo}`
+  #`cd #{d} && git clone #{aur_repo}`
 
-  ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
-  ::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
+  #::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
+  #::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
 
-  raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
-  raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
+  #raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
+  #raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
 
   #`cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel}" && git push`
 end
