@@ -65,6 +65,7 @@ sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
 author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
 last_commit_hash = `git rev-parse --short HEAD`.strip
+last_commit_message = `git --no-pager log -1 --pretty=format:'%s'`.strip
 
 puts "git describe --tags: #{`git describe --tags`}"
 
@@ -112,5 +113,5 @@ puts "***** END OF SRCINFO *****"
   `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/mpz && git add . --all && git commit -m "release version #{pkgver}-#{pkgrel} (#{last_commit_hash})" && #{git_ssh} git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_hash})" && #{git_ssh} git push`
 end
