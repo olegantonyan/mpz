@@ -2,7 +2,7 @@
 
 # Work-in-progress...
 
-# Qt-based music player
+# Music player for big local collections
 
 https://olegantonyan.github.io/mpz/
 
@@ -11,6 +11,8 @@ If you like to organize your music in folders, then this player might be for you
 ## Why?
 
 In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but it's not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
+
+Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is to play music you own, not rent), "big" means it's big enough so managing it becomes hard.
 
 ## Features
 
@@ -77,3 +79,20 @@ The default config location on Linux is `~/.config/mpz`. There're 2 files:
 Some config options can be changed only by editing config files:
 
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
+
+## Hotkeys
+
+mpz supports global media keys (typically found on a keyboard play/pause/stop/...) as well as non-global shortcuts:
+- Ctrl+L - open playback log;
+- Alt+T - next track;
+- Alt+R - previous track;
+- Alt+W - pause;
+- Alt+Q - stop;
+- Alt+E - play;
+- Alt+3 - focus playlists filter;
+- Alt+2 - focus playlists filter;
+- Alt+1 - focus library (directory tree) filter;
+- Ctrl+3 - focus playlist;
+- Ctrl+2 - focus playlists;
+- Ctrl+1 - focus library (directory tree);
+- Ctrl+Q - exit;
