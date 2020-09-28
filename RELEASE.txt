@@ -3,4 +3,3 @@
 3. Commit these changes with message "bump version to ..."
 4. Create GitHub release, tag name == version
 5. Build for windows: ./build.win32.sh && ./build.win64.sh and attach exe to the release
-6. Run ./release-aur.rb to push these changes to Arch's AUR
