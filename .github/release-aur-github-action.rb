@@ -94,7 +94,7 @@ puts srcinfo
 puts "***** END OF SRCINFO *****"
 
 ::Dir.mktmpdir do |d|
-  puts "temp dir: #{d}"
+  puts "TMP DIR: #{d}"
 
   raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   keyfile = "#{d}/ssh_key"
