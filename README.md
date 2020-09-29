@@ -46,7 +46,7 @@ cd mpz
 makepkg -si
 ```
 
-If you want to update package in existing local repository (i.e. running git pull inside AUR local copy) then you have to clean this directory before running `makepkg -si` again: `rm -rf src/ pkg/ master.zip`. Otherwise you'll get checksums error. Alternatively just make a fresh clone of AUR repo every time you want to update mpz.
+If you want to update package in existing local repository (i.e. running git pull inside AUR local copy) then you have to clean this directory before running `makepkg -si` again: `rm -rf src/ pkg/ *.zip`. Otherwise you'll get checksums error. Alternatively just make a fresh clone of AUR repo every time you want to update mpz.
 
 #### From sources
 

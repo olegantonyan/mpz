@@ -18,11 +18,11 @@ url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
 depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme')
 provides=('mpz')
-source=(<%= source %>)
+source=('$pkgname-$pkgver.zip::<%= source %>')
 sha256sums=('<%= sha256sums %>')
 
 build() {
-    cd $pkgname-master
+    cd $pkgname-$pkgver
 
     rm -rf build
     mkdir build
@@ -32,7 +32,7 @@ build() {
 }
 
 package() {
-    cd $pkgname-master
+    cd $pkgname-$pkgver
 
     cd build
     make install INSTALL_ROOT=$pkgdir
@@ -51,7 +51,7 @@ pkgbase = mpz
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
 	provides = mpz
-	source = <%= source %>
+	source = $pkgname-$pkgver.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
 pkgname = mpz
