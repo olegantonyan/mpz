@@ -43,10 +43,8 @@ Use AUR package: https://aur.archlinux.org/packages/mpz/
 ```
 git clone https://aur.archlinux.org/mpz.git
 cd mpz
-makepkg -si
+makepkg -Ccsi
 ```
-
-If you want to update package in existing local repository (i.e. running git pull inside AUR local copy) then you have to clean this directory before running `makepkg -si` again: `rm -rf src/ pkg/ *.zip`. Otherwise you'll get checksums error. Alternatively just make a fresh clone of AUR repo every time you want to update mpz.
 
 #### From sources
 
@@ -58,11 +56,11 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake-qt5 ..
-make -j8
+qmake-qt5 CONFIG+=release ..
+make -j`nproc`
 # now you now use app/mpz binary directly
-# optionally, install to /usr/bin with icon and desktop file, as root:
-make install
+# optionally, install to default prefix:
+sudo make install
 ```
 
 #### Windows
