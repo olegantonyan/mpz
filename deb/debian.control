@@ -1,5 +1,5 @@
 Source: mpz
-Section: video
+Section: sound
 Priority: optional
 Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
 Build-Depends: debhelper (>= 8.0.0), build-essential, qt5-default, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev
