@@ -18,7 +18,7 @@ url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
 depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme')
 provides=('mpz')
-source=('$pkgname-$pkgver.zip::<%= source %>')
+source=("$pkgname-$pkgver.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
 
 build() {
@@ -51,7 +51,7 @@ pkgbase = mpz
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
 	provides = mpz
-	source = $pkgname-$pkgver.zip::<%= source %>
+	source = mpz-<%= pkgver =>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
 pkgname = mpz
