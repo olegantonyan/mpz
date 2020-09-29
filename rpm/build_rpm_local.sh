@@ -1,11 +1,11 @@
 #!/bin/bash
 
-SRC_DIR=$(cd `dirname $0` && pwd)
-VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' version.pri)
+SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
+VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' rpm/version.pri)
 TMP_DIR=$(mktemp -d -t mpz-build-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 TMP_SRC_DIR=mpz-$VERSION
 TMP_SRC_FULL_DIR=$TMP_DIR/mpz-$VERSION
-SPECFILE=mpz.spec
+SPECFILE=rpm/mpz.spec
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
