@@ -1,10 +1,9 @@
-name: AUR push package
+name: Release AUR package
 
 on: push
 
 jobs:
-  aur_push:
-
+  release_aur_package:
     runs-on: ubuntu-latest
 
     steps:
