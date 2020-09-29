@@ -51,7 +51,7 @@ pkgbase = mpz
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
 	provides = mpz
-	source = mpz-<%= pkgver =>.zip::<%= source %>
+	source = mpz-<%= pkgver %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
 pkgname = mpz
