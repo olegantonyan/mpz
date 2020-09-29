@@ -57,15 +57,17 @@ pkgbase = mpz
 pkgname = mpz
 HEREDOC
 
+source = 'https://github.com/olegantonyan/mpz/archive/master.zip'
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
+
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
 pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
-source = 'https://github.com/olegantonyan/mpz/archive/master.zip'
 sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
 author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
 last_commit_hash = `git rev-parse --short HEAD`.strip
 last_commit_message = `git --no-pager log -1 --pretty=format:'%s'`.strip
+last_commit_url = "https://github.com/olegantonyan/mpz/commit/#{last_commit_hash}"
 
 puts "git describe --tags: #{`git describe --tags`}"
 
@@ -92,9 +94,9 @@ puts "***** END OF SRCINFO *****"
 ::Dir.mktmpdir do |d|
   puts "temp dir: #{d}"
 
+  raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   keyfile = "#{d}/ssh_key"
   ::File.open(keyfile, 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
-  raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   `chmod 400 #{keyfile}`
 
   git_ssh = "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'"
@@ -113,5 +115,5 @@ puts "***** END OF SRCINFO *****"
   `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/mpz && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} https://github.com/olegantonyan/mpz/commit/#{last_commit_hash})" && #{git_ssh} git push`
+  `cd #{d}/mpz && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_url})" && #{git_ssh} git push`
 end
