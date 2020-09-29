@@ -1,5 +1,5 @@
 1. Commit all the changes
-2. Change version in: version.pri, mpz.dsc, mpz.spec
+2. Change version in: version.pri, deb/mpz.dsc, rpm/mpz.spec
 3. Commit these changes with message "bump version to ..."
 4. Create GitHub release, tag name == version
-5. Build for windows: ./build.win32.sh && ./build.win64.sh and attach exe to the release
+5. Build for windows: ./win/build_win32.sh && ./win/build_win64.sh and attach exe to the release
