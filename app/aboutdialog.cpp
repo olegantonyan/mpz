@@ -1,6 +1,8 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
+#include <QSysInfo>
+
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
   setWindowTitle(tr("About mpz"));
@@ -11,7 +13,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->infoLabel->setTextFormat(Qt::RichText);
   ui->infoLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->infoLabel->setOpenExternalLinks(true);
-  ui->infoLabel->setText(QString("version %1 <a href=\"%2\">%3</a>").arg(version).arg(url).arg(url));
+  ui->infoLabel->setText(QString("%1 <a href=\"%2\">%3</a>").arg(version).arg(url).arg(url));
 
   ui->opensourceLabel->setTextFormat(Qt::RichText);
   ui->opensourceLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -24,6 +26,15 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
+
+  QStringList si;
+  si << "Build ABI: " + QSysInfo::buildAbi();
+  si << "Build CPU architecture: " + QSysInfo::buildCpuArchitecture();
+  si << "Current CPU architecture: " + QSysInfo::currentCpuArchitecture();
+  si << "Kernel type: " + QSysInfo::kernelType();
+  si << "Kernel version: " + QSysInfo::kernelVersion();
+  si << "Product name: " + QSysInfo::prettyProductName();
+  ui->sysinfo->setText(si.join("<br />"));
 }
 
 AboutDialog::~AboutDialog() {
