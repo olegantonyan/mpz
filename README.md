@@ -34,7 +34,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 #### openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia
 
-Use open build service repositories: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
+Use Open Build Service repositories: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
 
 #### Arch
 
