@@ -43,7 +43,7 @@ Use AUR package: https://aur.archlinux.org/packages/mpz/
 ```
 git clone https://aur.archlinux.org/mpz.git
 cd mpz
-makepkg -Ccsi
+makepkg -si
 ```
 
 #### From sources

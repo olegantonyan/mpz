@@ -58,8 +58,7 @@ pkgname = mpz
 HEREDOC
 
 puts "PWD: #{::Dir.pwd}"
-commit_hash = ::ENV['GITHUB_SHA']
-raise 'no GITHUB_SHA' unless commit_hash
+commit_hash = ::ENV['GITHUB_SHA'] || raise 'no GITHUB_SHA'
 puts "Commit hash: #{commit_hash}"
 
 source = "https://github.com/olegantonyan/mpz/archive/#{commit_hash}.zip"
@@ -68,8 +67,9 @@ puts "Source tarball: #{source}"
 15.times do |attempt|
   status = open(source).status.first rescue nil
   break if status == '200'
+  raise "timeout waiting for #{source}" if attempt >= 14
+  puts "waiting for #{source}... attempt #{attempt}"
   sleep 10
-  raise "timeout waiting for #{source}"
 end
 
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
