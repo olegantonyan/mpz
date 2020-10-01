@@ -332,4 +332,3 @@ void MainWindow::setupPlaybackLog() {
   connect(status_label, &StatusBarLabel::showPlaybackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
   connect(player, &Playback::Controller::monotonicPlaybackTimerIncrement, playback_log, &PlaybackLogUi::Controller::on_monotonicPlaybackTimeIncrement);
 }
-

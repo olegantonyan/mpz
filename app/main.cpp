@@ -25,9 +25,8 @@ int main(int argc, char *argv[]) {
   RNJesus::seed();
 
   QString lang = QLocale::system().name().split("_").first();
-  qDebug() << "system language" << lang;
   QTranslator trans;
-  qDebug() << "transaltions load" << trans.load(lang, ":/translations/translations");
+  qDebug() << "system language:" << lang << "| transaltions load:" << trans.load(lang, ":/translations/translations");
   a.installTranslator(&trans);
 
   MainWindow w;
