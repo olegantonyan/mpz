@@ -85,6 +85,8 @@ last_commit_url = "https://github.com/olegantonyan/mpz/commit/#{last_commit_hash
 
 puts "git describe --tags: #{`git describe --tags`}"
 
+raise "Commits mismtach: #{commit_hash} != #{last_commit_hash}" unless commit_hash.start_with?(last_commit_hash)
+
 pkgbuild = ::ERB.new(PKGBUILD, nil, '-').result_with_hash(
   pkgver: pkgver,
   pkgrel: pkgrel,
