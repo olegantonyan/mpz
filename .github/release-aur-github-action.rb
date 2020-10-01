@@ -58,6 +58,7 @@ pkgname = mpz
 HEREDOC
 
 puts "PWD: #{::Dir.pwd}"
+puts "Commit: #{::ENV['GITHUB_SHA']}"
 
 source = 'https://github.com/olegantonyan/mpz/archive/master.zip'
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
