@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Sleep (wait for master.zip)
-      run: sleep 20
+    #- name: Sleep (wait for master.zip)
+    #  run: sleep 20
 
     - name: Checkout code
       uses: actions/checkout@v2
