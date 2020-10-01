@@ -58,7 +58,7 @@ pkgname = mpz
 HEREDOC
 
 puts "PWD: #{::Dir.pwd}"
-commit_hash = ::ENV['GITHUB_SHA'] || raise 'no GITHUB_SHA'
+commit_hash = ::ENV['GITHUB_SHA'] || (raise 'no GITHUB_SHA')
 puts "Commit hash: #{commit_hash}"
 
 source = "https://github.com/olegantonyan/mpz/archive/#{commit_hash}.zip"
