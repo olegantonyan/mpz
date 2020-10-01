@@ -1,6 +1,9 @@
 name: Release AUR package
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   release_aur_package:
