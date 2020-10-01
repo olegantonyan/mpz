@@ -26,8 +26,11 @@ int main(int argc, char *argv[]) {
 
   QString lang = QLocale::system().name().split("_").first();
   QTranslator trans;
-  qDebug() << "system language:" << lang << "| transaltions load:" << trans.load(lang, ":/translations/translations");
-  a.installTranslator(&trans);
+  bool load_ok = trans.load(lang, ":/translations/translations");
+  qDebug() << "system language:" << lang << "| transaltions load:" << load_ok;
+  if (load_ok) {
+    a.installTranslator(&trans);
+  }
 
   MainWindow w;
   w.show();
