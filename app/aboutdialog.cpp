@@ -1,6 +1,7 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "sysinfo.h"
+#include "feedback_ui/feedbackform.h"
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
@@ -39,4 +40,8 @@ QString AboutDialog::libraryInfo(const QString &name, const QString &url) const 
 
 void AboutDialog::on_buttonAboutQt_clicked() const {
   qApp->aboutQt();
+}
+
+void AboutDialog::on_buttonContact_clicked() {
+  FeedbackForm().exec();
 }

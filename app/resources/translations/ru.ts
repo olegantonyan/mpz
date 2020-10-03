@@ -14,12 +14,17 @@
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="7"/>
+        <location filename="../../aboutdialog.ui" line="43"/>
+        <source>Contact with developer</source>
+        <translation>Связь с автором</translation>
+    </message>
+    <message>
+        <location filename="../../aboutdialog.cpp" line="8"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="27"/>
+        <location filename="../../aboutdialog.cpp" line="28"/>
         <source>Using opensource libraries</source>
         <translation>Использует опенсорсные библиотеки</translation>
     </message>
@@ -115,12 +120,12 @@
         <translation>Отравить</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="34"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>Спасибо за вашу обратную связь (нажмите ещё раз чтобы закрыть)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="67"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="68"/>
         <source>Error occured, please try again</source>
         <translation>Произошла ошибка, пожалуйста повторите</translation>
     </message>

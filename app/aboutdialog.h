@@ -17,6 +17,8 @@ public:
 private slots:
   void on_buttonAboutQt_clicked() const;
 
+  void on_buttonContact_clicked();
+
 private:
   Ui::AboutDialog *ui;
 
