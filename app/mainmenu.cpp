@@ -1,5 +1,6 @@
 #include "mainmenu.h"
 #include "aboutdialog.h"
+#include "feedback_ui/feedbackform.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -19,6 +20,7 @@ void MainMenu::on_open() {
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
+  QAction feedback(tr("Got feedback?"));
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
   });
@@ -28,10 +30,15 @@ void MainMenu::on_open() {
     global_conf.saveTrayIconEnabled(trayicon.isChecked());
     emit toggleTrayIcon();
   });
+  connect(&feedback, &QAction::triggered, [=]() {
+    FeedbackForm().exec();
+  });
 
   menu.addAction(&trayicon);
   menu.addAction(&lpog);
   menu.addAction(&about);
+  menu.addSeparator();
+  menu.addAction(&feedback);
   menu.addSeparator();
   menu.addAction(&quit);
 

@@ -14,12 +14,12 @@
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="6"/>
+        <location filename="../../aboutdialog.cpp" line="7"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="26"/>
+        <location filename="../../aboutdialog.cpp" line="27"/>
         <source>Using opensource libraries</source>
         <translation>Использует опенсорсные библиотеки</translation>
     </message>
@@ -79,26 +79,78 @@
     </message>
 </context>
 <context>
+    <name>FeedbackForm</name>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="14"/>
+        <source>Feedback form</source>
+        <translation>Форма обратной связи</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="20"/>
+        <source>Found a bug? Need a feature? Tell developer what you think about mpz</source>
+        <translation>Нашли баг? Нужна фича? Расскажите это разработчику</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="30"/>
+        <source>(optional )Your name / contact if you&apos;d like to hear back</source>
+        <translation>(по желанию) Имя / контакт если хотите чтобы быть в курсе работы по вашему сообщению</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="46"/>
+        <source>Include anonymous system info</source>
+        <translation>Добавить анонимную информацию о системе</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="56"/>
+        <source>This will help, but you can opt-out</source>
+        <translation>Это полезно, но вы можете отказаться передавать эту информацию</translation>
+    </message>
+    <message>
+        <source>This will help, but you can opt-out </source>
+        <translation type="vanished">Это полезно, но вы можете отказаться сообщать эту информацию</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
+        <source>Send</source>
+        <translation>Отравить</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="34"/>
+        <source>Thanks for you feedback! (click again to close)</source>
+        <translation>Спасибо за вашу обратную связь (нажмите ещё раз чтобы закрыть)</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="67"/>
+        <source>Error occured, please try again</source>
+        <translation>Произошла ошибка, пожалуйста повторите</translation>
+    </message>
+</context>
+<context>
     <name>MainMenu</name>
     <message>
-        <location filename="../../mainmenu.cpp" line="16"/>
+        <location filename="../../mainmenu.cpp" line="17"/>
         <source>Tray icon</source>
         <translation>Иконка в трее</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="19"/>
+        <location filename="../../mainmenu.cpp" line="20"/>
         <source>Playback log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="20"/>
+        <location filename="../../mainmenu.cpp" line="21"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="21"/>
+        <location filename="../../mainmenu.cpp" line="22"/>
         <source>Quit</source>
         <translation>Выход</translation>
+    </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="23"/>
+        <source>Got feedback?</source>
+        <translation>Связаться с автором?</translation>
     </message>
 </context>
 <context>

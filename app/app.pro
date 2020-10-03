@@ -42,6 +42,7 @@ SOURCES += \
     config/value.cpp \
     directory_ui/directorycontroller.cpp \
     directory_ui/directorysettings.cpp \
+    feedback_ui/feedbackform.cpp \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
@@ -71,6 +72,7 @@ SOURCES += \
     rnjesus.cpp \
     shortcuts.cpp \
     statusbarlabel.cpp \
+    sysinfo.cpp \
     track.cpp \
     trayicon.cpp \
     volumecontrol.cpp \
@@ -86,6 +88,7 @@ HEADERS += \
     config/value.h \
     directory_ui/directorycontroller.h \
     directory_ui/directorysettings.h \
+    feedback_ui/feedbackform.h \
     mainmenu.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
@@ -114,6 +117,7 @@ HEADERS += \
     rnjesus.h \
     shortcuts.h \
     statusbarlabel.h \
+    sysinfo.h \
     track.h \
     trayicon.h \
     volumecontrol.h \
@@ -123,6 +127,7 @@ HEADERS += \
 FORMS += \
     aboutdialog.ui \
     directory_ui/directorysettings.ui \
+    feedback_ui/feedbackform.ui \
     mainwindow.ui \
     playback_log_ui/playbacklogdialog.ui \
     playlist_ui/trackinfodialog.ui

@@ -19,7 +19,7 @@ public slots:
 
 private:
   QWidget *widget;
-  WaitingSpinnerWidget* spinner;
+  WaitingSpinnerWidget *spinner;
   quint16 show_count;
 };
 
