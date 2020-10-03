@@ -1,1 +1,1 @@
-DEFINES += VERSION=\\\"0.0.15\\\"
+DEFINES += VERSION=\\\"0.0.16\\\"
