@@ -42,6 +42,6 @@ void AboutDialog::on_buttonAboutQt_clicked() const {
   qApp->aboutQt();
 }
 
-void AboutDialog::on_buttonContact_clicked() {
+void AboutDialog::on_buttonContact_clicked() const {
   FeedbackForm().exec();
 }
