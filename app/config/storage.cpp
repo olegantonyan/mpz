@@ -7,9 +7,10 @@
 
 namespace Config {
   Storage::Storage(const QString &filename) : changed(false) {
-    auto cfg_path = QStandardPaths::locate(QStandardPaths::ConfigLocation, "", QStandardPaths::LocateDirectory);
+    auto cfg_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
     auto default_filedir = QString("%1/mpz").arg(cfg_path);
     auto default_filepath = QString("%1/%2").arg(default_filedir).arg(filename);
+    qDebug() << "config file: " << default_filepath;
 
     if (QFile::exists(filename)) {
       filepath = filename;

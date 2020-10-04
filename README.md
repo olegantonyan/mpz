@@ -10,7 +10,7 @@ If you like to organize your music in folders, then this player might be for you
 
 ## Why?
 
-In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but it's not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
+In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but this solution is not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
 
 Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is to play music you own, not rent), "big" means it's big enough so managing it becomes hard.
 
@@ -59,7 +59,7 @@ cd build
 qmake-qt5 CONFIG+=release ..
 make -j`nproc`
 # now you now use app/mpz binary directly
-# optionally, install to default prefix:
+# optionally, install to /usr:
 sudo make install
 ```
 
@@ -69,11 +69,11 @@ Use static binaries from releases page: https://github.com/olegantonyan/mpz/rele
 
 #### MacOS
 
-It should be possible to build mpz for Mac, but I don't have a hardware to test it. If you're interested in Mac builds - drop an issue here https://github.com/olegantonyan/mpz/issues/
+It should be possible to build mpz for Mac, but I don't have a hardware to test it. If you're interested in Mac builds - drop an issue here https://github.com/olegantonyan/mpz/issues/new
 
 ## Configuration
 
-The default config location on Linux is `~/.config/mpz`. There're 2 files:
+The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/$USERNAME/AppData/Local/mpz/mpz`. There are 2 files:
 - `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
 - `global.yml` - for portable settings that make sense to share between computers.
 
