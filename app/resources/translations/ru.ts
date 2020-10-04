@@ -457,72 +457,72 @@
         <translation type="vanished">Диалог</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="32"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="34"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="35"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="37"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="38"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="40"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="41"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="43"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="44"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="46"/>
         <source>Track number</source>
         <translation>Номер трэка</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="45"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="49"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="48"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="50"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="49"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="51"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="50"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="52"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="52"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="54"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="54"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="56"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="57"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="59"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="79"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="81"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -530,6 +530,11 @@
         <location filename="../../playlist_ui/trackinfodialog.ui" line="14"/>
         <source>Track info</source>
         <translation>Информация о трэке</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="30"/>
+        <source>Show in file manager</source>
+        <translation>Показать в файловом менеджере</translation>
     </message>
 </context>
 <context>

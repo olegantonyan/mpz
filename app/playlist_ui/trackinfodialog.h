@@ -19,11 +19,13 @@ public:
 
 private slots:
   void on_copy(const QPoint &pos);
+  void on_toolButtonOpenFileManager_clicked();
 
 private:
   Ui::TrackInfoDialog *ui;
 
   QStandardItemModel model;
+  QString track_dir;
 
   void setup_table(const Track &track);
   void setup_context_menu();

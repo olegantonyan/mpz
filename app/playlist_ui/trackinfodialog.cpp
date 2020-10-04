@@ -4,6 +4,7 @@
 #include <QMenu>
 #include <QClipboard>
 #include <QDebug>
+#include <QDesktopServices>
 
 TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
   ui->setupUi(this);
@@ -15,6 +16,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   ui->tableView->setModel(&model);
   setup_context_menu();
   setup_table(track);
+  track_dir = track.dir();
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -85,4 +87,6 @@ void TrackInfoDialog::setup_context_menu() {
   });
 }
 
-
+void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(track_dir));
+}

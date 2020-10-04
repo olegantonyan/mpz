@@ -24,6 +24,13 @@
      </attribute>
     </widget>
    </item>
+   <item>
+    <widget class="QToolButton" name="toolButtonOpenFileManager">
+     <property name="text">
+      <string>Show in file manager</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
