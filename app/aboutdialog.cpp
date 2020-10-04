@@ -5,7 +5,6 @@
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
-  setWindowTitle(tr("About mpz"));
 
   auto url = "https://github.com/olegantonyan/mpz";
   auto version = qApp->applicationVersion();

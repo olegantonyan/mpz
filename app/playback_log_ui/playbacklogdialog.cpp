@@ -10,7 +10,7 @@
 
 PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) : QDialog(parent), ui(new Ui::PlaybackLogDialog), model(m) {
   ui->setupUi(this);
-  setWindowTitle(tr("Playback log"));
+
   ui->tableView->horizontalHeader()->setVisible(false);
   ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
