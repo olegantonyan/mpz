@@ -1,7 +1,5 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 
-# Work-in-progress...
-
 # Music player for big local collections
 
 ![image](https://raw.githubusercontent.com/olegantonyan/mpz/screenshots/screen1.png)
