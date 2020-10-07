@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# required ENV variables: GITHUB_SHA, AUR_SSH_PRIVATE_KEY
+
 require 'erb'
 require 'digest'
 require 'open-uri'
@@ -59,18 +61,20 @@ HEREDOC
 
 puts "PWD: #{::Dir.pwd}"
 commit_hash = ::ENV['GITHUB_SHA'] || (raise 'no GITHUB_SHA')
+aur_ssh_key = ENV['AUR_SSH_PRIVATE_KEY'] || (raise 'no AUR_SSH_PRIVATE_KEY')
 puts "Commit hash: #{commit_hash}"
 
 source = "https://github.com/olegantonyan/mpz/archive/#{commit_hash}.zip"
 puts "Source tarball: #{source}"
 
-15.times do |attempt|
-  status = open(source).status.first rescue nil
-  break if status == '200'
-  raise "timeout waiting for #{source}" if attempt >= 14
-  puts "waiting for #{source}... attempt #{attempt}"
-  sleep 10
-end
+# don't need this it looks like
+#15.times do |attempt|
+#  status = open(source).status.first rescue nil
+#  break if status == '200'
+#  raise "timeout waiting for #{source}" if attempt >= 14
+#  puts "waiting for #{source}... attempt #{attempt}"
+#  sleep 10
+#end
 
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
 
@@ -112,9 +116,8 @@ puts "***** END OF SRCINFO *****"
 ::Dir.mktmpdir do |d|
   puts "TMP DIR: #{d}"
 
-  raise 'no AUR_SSH_PRIVATE_KEY' unless ENV['AUR_SSH_PRIVATE_KEY']
   keyfile = "#{d}/ssh_key"
-  ::File.open(keyfile, 'w') { |f| f.write(ENV['AUR_SSH_PRIVATE_KEY']) }
+  ::File.open(keyfile, 'w') { |f| f.write(aur_ssh_key) }
   `chmod 400 #{keyfile}`
 
   git_ssh = "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'"
