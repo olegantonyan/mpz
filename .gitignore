@@ -2,3 +2,5 @@ build*/
 *.user
 libs/
 app/
+_site
+.sass-cache

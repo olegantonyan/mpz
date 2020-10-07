@@ -1,3 +1,7 @@
+---
+layout: home
+---
+
 ### Directory tree is your music library
 
 TODO
@@ -9,5 +13,3 @@ TODO
 ### Radio streams, hotkeys, playback log and more
 
 TODO
-
-[More screenshots]({{ site.baseurl }}{% link screenshots.html %})
