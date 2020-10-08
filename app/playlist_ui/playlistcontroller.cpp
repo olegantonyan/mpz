@@ -95,8 +95,10 @@ namespace PlaylistUi {
   }
 
   void Controller::on_appendToPlaylist(const QDir &filepath) {
-    connect(&*model->playlist(), &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
-    model->playlist()->concatAsync(filepath);
+    if (model->playlist() != nullptr) {
+      connect(&*model->playlist(), &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
+      model->playlist()->concatAsync(filepath);
+    }
   }
 
   void Controller::on_appendAsyncFinished(Playlist::Playlist *pl) {

@@ -6,6 +6,7 @@
 namespace PlaylistUi {
   Model::Model(QStyle *stl, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl) {
     tracks.clear();
+    _playlist = nullptr;
   }
 
   QModelIndex Model::buildIndex(int row) const {
