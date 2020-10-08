@@ -8,5 +8,5 @@ Homepage: https://github.com/olegantonyan/mpz
 
 Package: mpz
 Architecture: amd64
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5multimedia5-plugins
 Description: Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to "album list" in Foobar2000.
