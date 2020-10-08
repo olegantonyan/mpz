@@ -115,7 +115,7 @@
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
         <source>Send</source>
-        <translation>Отравить</translation>
+        <translation type="unfinished">Отправить</translation>
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
