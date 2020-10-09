@@ -32,6 +32,7 @@ namespace PlaylistUi {
     }
 
     view->viewport()->installEventFilter(this);
+    view->installEventFilter(this);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
       emit activated(model->itemAt(proxy->mapToSource(index)));
@@ -108,6 +109,24 @@ namespace PlaylistUi {
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == view->viewport()) {
+      eventFilterViewport(event);
+    } else if (obj == view) {
+      eventFilterTableView(event);
+    }
+    return QObject::eventFilter(obj, event);
+  }
+
+  void Controller::eventFilterTableView(QEvent *event) {
+    if (event->type() == QEvent::KeyPress) {
+      QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
+      if (keyevent->key() == Qt::Key_Delete) {
+        context_menu->on_remove();
+      }
+    }
+  }
+
+  void Controller::eventFilterViewport(QEvent *event) {
     if (event->type() == QEvent::Resize) {
       int total_width = view->width();
       view->horizontalHeader()->setMinimumSectionSize(20);
@@ -134,8 +153,6 @@ namespace PlaylistUi {
         search->clear();
       }
     }
-
-    return QObject::eventFilter(obj, event);
   }
 
   void Controller::on_search(const QString &term) {

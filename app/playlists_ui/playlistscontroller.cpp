@@ -31,6 +31,7 @@ namespace PlaylistsUi {
     connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
 
     view->viewport()->installEventFilter(this);
+    view->installEventFilter(this);
 
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
@@ -58,6 +59,26 @@ namespace PlaylistsUi {
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == view->viewport()) {
+      eventFilterViewport(event);
+    } else if (obj == view) {
+      eventFilterTableView(event);
+    }
+    return QObject::eventFilter(obj, event);
+  }
+
+  void Controller::eventFilterTableView(QEvent *event) {
+    if (event->type() == QEvent::KeyPress) {
+      QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
+      if (keyevent->key() == Qt::Key_Delete) {
+        for (auto i : view->selectionModel()->selectedIndexes()) {
+          on_removeItem(i);
+        }
+      }
+    }
+  }
+
+  void Controller::eventFilterViewport(QEvent *event) {
     if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MidButton) {
@@ -70,7 +91,6 @@ namespace PlaylistsUi {
         search->clear();
       }
     }
-    return QObject::eventFilter(obj, event);
   }
 
   void Controller::persist(int current_index) {

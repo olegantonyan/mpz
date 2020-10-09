@@ -51,6 +51,9 @@ namespace PlaylistUi {
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
+
+    void eventFilterTableView(QEvent *event);
+    void eventFilterViewport(QEvent *event);
     
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

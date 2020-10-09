@@ -55,6 +55,9 @@ namespace PlaylistsUi {
 
     void persist(int current_index);
 
+    void eventFilterTableView(QEvent *event);
+    void eventFilterViewport(QEvent *event);
+
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
   };

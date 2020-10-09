@@ -20,6 +20,7 @@ namespace PlaylistUi {
 
   public slots:
     void show(const QPoint &pos);
+    void on_remove();
 
   signals:
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
@@ -37,7 +38,6 @@ namespace PlaylistUi {
     QAction info;
 
   private slots:
-    void on_remove();
     void on_clearFilter();
     void on_copyName();
     void on_showInFilemanager();
