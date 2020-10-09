@@ -6,6 +6,9 @@ on:
   #    - master
   release:
     types: [published, created, edited, prereleased, deleted, unpublished]
+  workflow_dispatch:
+    tags:
+      description: 'Manual AUR package trigger'
 
 jobs:
   release_aur_package:
