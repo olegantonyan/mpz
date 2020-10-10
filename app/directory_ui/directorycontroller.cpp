@@ -12,6 +12,7 @@
 #include <QUrl>
 #include <QTimer>
 #include <QtGlobal>
+#include <QFileInfo>
 
 namespace DirectoryUi {
   Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
@@ -76,6 +77,8 @@ namespace DirectoryUi {
     connect(libcfg, &QToolButton::clicked, [=]() {
       settingsDialog(libswitch);
     });
+
+    connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
   }
 
   void Controller::on_search(const QString &term) {
@@ -90,6 +93,17 @@ namespace DirectoryUi {
     }
     QString wc = QString("*%1*").arg(term);
     model->setNameFilters(QStringList() << wc);
+  }
+
+  void Controller::on_doubleclick(const QModelIndex &index) {
+    if (!index.isValid()) {
+      return;
+    }
+    auto filepath = model->filePath(index);
+    QFileInfo fi(filepath);
+    if (fi.exists() && fi.isFile()) {
+      emit createNewPlaylist(QDir(filepath));
+    }
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

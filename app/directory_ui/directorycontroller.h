@@ -28,6 +28,7 @@ namespace DirectoryUi {
 
   private slots:
     void on_search(const QString& term);
+    void on_doubleclick(const QModelIndex &index);
 
   private:
     QTreeView *view;
