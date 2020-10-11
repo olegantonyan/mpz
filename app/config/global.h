@@ -22,6 +22,9 @@ namespace Config {
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
 
+    bool minimizeToTray() const;
+    void saveMinimizeToTray(bool arg);
+
   private:
     Config::Storage storage;
   };

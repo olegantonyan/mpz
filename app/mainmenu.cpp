@@ -17,6 +17,11 @@ void MainMenu::on_open() {
   QAction trayicon(tr("Tray icon"));
   trayicon.setCheckable(true);
   trayicon.setChecked(global_conf.trayIconEnabled());
+  QAction minimize_to_tray(tr("Minimize to tray"));
+  minimize_to_tray.setCheckable(true);
+  minimize_to_tray.setEnabled(trayicon.isChecked());
+  minimize_to_tray.setChecked(global_conf.minimizeToTray());
+
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
@@ -26,15 +31,20 @@ void MainMenu::on_open() {
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
-  connect(&trayicon, &QAction::triggered, [&]() {
-    global_conf.saveTrayIconEnabled(trayicon.isChecked());
+  connect(&trayicon, &QAction::triggered, [=](bool checked) {
+    global_conf.saveTrayIconEnabled(checked);
     emit toggleTrayIcon();
+  });
+  connect(&minimize_to_tray, &QAction::triggered, [=](bool checked) {
+    global_conf.saveMinimizeToTray(checked);
   });
   connect(&feedback, &QAction::triggered, [=]() {
     FeedbackForm().exec();
   });
 
   menu.addAction(&trayicon);
+  menu.addAction(&minimize_to_tray);
+  menu.addSeparator();
   menu.addAction(&lpog);
   menu.addAction(&about);
   menu.addSeparator();

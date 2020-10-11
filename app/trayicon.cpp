@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QStyle>
 
-TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
+TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(parent), global_conf(global_c) {
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
   trayicon->setToolTip(tr("Stopped"));
   menu = new QMenu(parent);
@@ -42,8 +42,11 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon->setContextMenu(menu);
   trayicon->show();
   connect(trayicon, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason) {
-    Q_UNUSED(reason)
-    menu->popup(QCursor::pos());
+    if (global_conf.minimizeToTray()) {
+      emit clicked();
+    } else if (reason == QSystemTrayIcon::Trigger) {
+      menu->popup(QCursor::pos());
+    }
   });
 }
 

@@ -34,6 +34,9 @@ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
 
+public slots:
+  void toggleHidden();
+
 private:
   Ui::MainWindow *ui;
   DirectoryUi::Controller *library;
@@ -73,5 +76,6 @@ private:
   
 protected:
   void closeEvent(QCloseEvent *event) override;
+  void changeEvent(QEvent *) override;
 };
 #endif // MAINWINDOW_H

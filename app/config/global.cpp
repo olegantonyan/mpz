@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include <QDebug>
+
 namespace Config {
   Global::Global() : storage("global.yml") {
   }
@@ -38,5 +40,13 @@ namespace Config {
 
   void Global::saveStreamBufferSize(int arg) {
     storage.set("stream_buffer_size", Config::Value(arg));
+  }
+
+  bool Global::minimizeToTray() const {
+    return storage.get("minimize_to_tray").get<bool>();
+  }
+
+  void Global::saveMinimizeToTray(bool arg) {
+    storage.set("minimize_to_tray", Config::Value(arg));
   }
 }

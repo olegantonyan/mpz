@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QStyle>
+#include <QEvent>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
 #if defined(MPRIS_ENABLE)
@@ -77,6 +78,16 @@ MainWindow::~MainWindow() {
   delete ui;
 }
 
+void MainWindow::toggleHidden() {
+  if (isHidden()) {
+    show();
+    raise();
+    setFocus();
+  } else {
+    hide();
+  }
+}
+
 void MainWindow::loadUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   restoreState(local_conf.windowState());
@@ -108,6 +119,13 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
   QMainWindow::closeEvent(event);
   qApp->closeAllWindows();
+}
+
+void MainWindow::changeEvent(QEvent *event) {
+  if(global_conf.minimizeToTray() && event->type() == QEvent::WindowStateChange && isMinimized()) {
+    hide();
+  }
+  QMainWindow::changeEvent(event);
 }
 
 void MainWindow::setupOrderCombobox() {
@@ -203,7 +221,7 @@ void MainWindow::setupTrayIcon() {
     trayicon = nullptr;
     return;
   }
-  trayicon = new TrayIcon(this);
+  trayicon = new TrayIcon(this, global_conf);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
@@ -214,6 +232,8 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::stopTriggered, player->controls().stop, &QToolButton::click);
   connect(trayicon, &TrayIcon::nextTriggered, player->controls().next, &QToolButton::click);
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
+
+  connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
 }
 
 void MainWindow::setupPlaybackDispatch() {
