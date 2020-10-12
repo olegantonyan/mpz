@@ -370,7 +370,7 @@
     <message>
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="30"/>
         <source>Track info</source>
-        <translation>Информация о трэке</translation>
+        <translation>Информация о треке</translation>
     </message>
 </context>
 <context>
