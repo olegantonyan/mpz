@@ -186,12 +186,12 @@
     <message>
         <location filename="../../mainwindow.ui" line="44"/>
         <source>Previous track</source>
-        <translation>Предыдущий трэк</translation>
+        <translation>Предыдущий трек</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="51"/>
         <source>Next track</source>
-        <translation>Следующий трэк</translation>
+        <translation>Следующий трек</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="73"/>
@@ -241,7 +241,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="192"/>
         <source>Filter tracks</source>
-        <translation>Фильтр трэков</translation>
+        <translation>Фильтр треков</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="199"/>
@@ -484,7 +484,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="46"/>
         <source>Track number</source>
-        <translation>Номер трэка</translation>
+        <translation>Номер трека</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
@@ -534,7 +534,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.ui" line="14"/>
         <source>Track info</source>
-        <translation>Информация о трэке</translation>
+        <translation>Информация о треке</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.ui" line="30"/>
