@@ -115,7 +115,7 @@
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
         <source>Send</source>
-        <translation type="unfinished">Отправить</translation>
+        <translation>Отправить</translation>
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
@@ -137,21 +137,26 @@
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="20"/>
+        <source>Minimize to tray</source>
+        <translation>Сворачивать в трей</translation>
+    </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="25"/>
         <source>Playback log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="21"/>
+        <location filename="../../mainmenu.cpp" line="26"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="22"/>
+        <location filename="../../mainmenu.cpp" line="27"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="23"/>
+        <location filename="../../mainmenu.cpp" line="28"/>
         <source>Got feedback?</source>
         <translation>Связаться с автором?</translation>
     </message>
@@ -274,30 +279,30 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="114"/>
-        <location filename="../../mainwindow.cpp" line="136"/>
+        <location filename="../../mainwindow.cpp" line="132"/>
+        <location filename="../../mainwindow.cpp" line="154"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="115"/>
-        <location filename="../../mainwindow.cpp" line="135"/>
+        <location filename="../../mainwindow.cpp" line="133"/>
+        <location filename="../../mainwindow.cpp" line="153"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="134"/>
+        <location filename="../../mainwindow.cpp" line="152"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="260"/>
-        <location filename="../../mainwindow.cpp" line="264"/>
+        <location filename="../../mainwindow.cpp" line="280"/>
+        <location filename="../../mainwindow.cpp" line="284"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="286"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -541,7 +546,7 @@
     <name>TrayIcon</name>
     <message>
         <location filename="../../trayicon.cpp" line="9"/>
-        <location filename="../../trayicon.cpp" line="72"/>
+        <location filename="../../trayicon.cpp" line="75"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
@@ -576,12 +581,12 @@
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="62"/>
+        <location filename="../../trayicon.cpp" line="65"/>
         <source>Playing</source>
         <translation>Воспроизводится</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="82"/>
+        <location filename="../../trayicon.cpp" line="85"/>
         <source>Paused</source>
         <translation>На паузе</translation>
     </message>
