@@ -16,7 +16,7 @@ namespace Playlist {
   }
 
   QStringList Playlist::supportedFileFormats() {
-    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape" << "cue" << "opus";
+    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape" << "cue" << "opus" << "dsf";
   }
 
   QStringList Playlist::supportedPlaylistFileFormats() {
