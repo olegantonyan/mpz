@@ -1,5 +1,6 @@
 1. Commit all the changes
 2. Change version in: version.pri, deb/mpz.dsc, rpm/mpz.spec
-3. Commit these changes with message "bump version to ..."
-4. Build for windows: ./win/build_win32.sh && ./win/build_win64.sh and attach exe to the release
-5. Publish github release (which will trigger CI build): gh release create 0.0.18 ~/Desktop/mpz-0.0.18-win32-static.exe ~/Desktop/mpz-0.0.18-win64-static.exe
+3. Write changelog
+4. Commit these changes with message "bump version to ..."
+5. Build for windows: ./win/build_win32.sh && ./win/build_win64.sh and attach exe to the release
+6. Publish github release (which will trigger CI build): gh release create 0.0.18 ~/Desktop/mpz-0.0.18-win32-static.exe ~/Desktop/mpz-0.0.18-win64-static.exe
