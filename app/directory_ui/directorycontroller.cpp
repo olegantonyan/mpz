@@ -23,6 +23,8 @@ namespace DirectoryUi {
     Q_ASSERT(search);
     Q_ASSERT(view);
 
+    view->setSelectionMode(QTreeView::ExtendedSelection);
+
     restore_scroll_once = true;
 
     model = new Model(this);
@@ -102,7 +104,7 @@ namespace DirectoryUi {
     auto filepath = model->filePath(index);
     QFileInfo fi(filepath);
     if (fi.exists() && fi.isFile()) {
-      emit createNewPlaylist(QDir(filepath));
+      emit createNewPlaylist({ QDir(filepath) });
     }
   }
 
@@ -113,7 +115,7 @@ namespace DirectoryUi {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
           auto filepath = QDir(model->filePath(index));
-          emit createNewPlaylist(filepath);
+          emit createNewPlaylist({filepath});
         }
       }
       if (me->button() == Qt::BackButton) {

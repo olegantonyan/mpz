@@ -28,8 +28,13 @@ namespace Playlist {
   }
 
   QString Playlist::rename(const QString &value) {
-    playlist_name = value;
-    return name();
+    const int MAX_NAME_LEN = 69;
+    if (value.length() > MAX_NAME_LEN) {
+      playlist_name = value.left(MAX_NAME_LEN - 3) + "...";
+    } else {
+      playlist_name = value;
+    }
+    return playlist_name;
   }
 
   QVector<Track> Playlist::tracks() const {
@@ -37,7 +42,7 @@ namespace Playlist {
   }
 
   bool Playlist::load(const QDir &path) {
-    rename(path.dirName());
+    rename(nameBy(path));
 
     for (auto i : Playlist::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
@@ -100,13 +105,31 @@ namespace Playlist {
     });
   }
 
+  void Playlist::loadAsync(const QList<QDir> &dirs) {
+    QtConcurrent::run([=]() {
+      load(dirs);
+      emit loadAsyncFinished(this);
+    });
+  }
+
   bool Playlist::load(const QVector<Track> &tracks) {
     for (auto i : tracks) {
-      //if (i.isValid()) { // load all regardless to prevent saving empty playlists (#65)
-        tracks_list << i;
-      //}
+      tracks_list << i;
     }
     return true;
+  }
+
+  bool Playlist::load(const QList<QDir> &dirs) {
+    bool ok = true;
+    for (auto i : dirs) {
+      if (!load(i)) {
+        ok = false;
+      }
+    }
+    QStringList lst;
+    for (auto i : dirs) { lst << nameBy(i); }
+    rename(lst.join(", "));
+    return ok;
   }
 
   bool Playlist::concat(const QDir &path) {
@@ -118,9 +141,26 @@ namespace Playlist {
     return true;
   }
 
+  bool Playlist::concat(const QList<QDir> &dirs) {
+    bool ok = true;
+    for (auto i : dirs) {
+      if (!concat(i)) {
+        ok = false;
+      }
+    }
+    return ok;
+  }
+
   void Playlist::concatAsync(const QDir &path) {
     QtConcurrent::run([=]() {
       concat(path);
+      emit concatAsyncFinished(this);
+    });
+  }
+
+  void Playlist::concatAsync(const QList<QDir> &dirs) {
+    QtConcurrent::run([=]() {
+      concat(dirs);
       emit concatAsyncFinished(this);
     });
   }
@@ -204,6 +244,10 @@ namespace Playlist {
 
   void Playlist::setRandom(Playlist::PlaylistRandom arg) {
     _random = arg;
+  }
+
+  QString Playlist::nameBy(const QDir &path) {
+    return path.dirName();
   }
 }
 

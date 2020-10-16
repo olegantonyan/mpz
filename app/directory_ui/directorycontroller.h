@@ -23,8 +23,8 @@ namespace DirectoryUi {
     explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
-    void createNewPlaylist(const QDir &filepath);
-    void appendToCurrentPlaylist(const QDir &filepath);
+    void createNewPlaylist(const QList<QDir> &filepaths);
+    void appendToCurrentPlaylist(const QList<QDir> &filepaths);
 
   private slots:
     void on_search(const QString& term);
