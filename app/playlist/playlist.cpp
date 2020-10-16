@@ -65,7 +65,7 @@ namespace Playlist {
       bool empty = path.count() == 0;
     #endif
     if (empty && is_file) { // playlist file
-      loading_track_list << Track(path.absolutePath());
+      tracks_list << Track(path.absolutePath());
     } else {
       QStringList filter;
       for (auto i : Playlist::supportedFileFormats()) {
