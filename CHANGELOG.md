@@ -1,3 +1,7 @@
+## [1.0.3] - 2020-10-16
+### Added
+- Ability to create playlist from multiple folders (multiselect)
+
 ## [1.0.2] - 2020-10-12
 ### Added
 - Minimize to tray option
