@@ -22,8 +22,8 @@ namespace DirectoryUi {
     void show(const QPoint &pos);
 
   signals:
-    void createNewPlaylist(const QDir &filepath);
-    void appendToCurrentPlaylist(const QDir &filepath);
+    void createNewPlaylist(const QList<QDir> &filepaths);
+    void appendToCurrentPlaylist(const QList<QDir> &filepaths);
 
   private:
     Model *model;

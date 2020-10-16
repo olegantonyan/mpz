@@ -19,6 +19,10 @@ namespace DirectoryUi {
     if (!index.isValid()) {
       return;
     }
+    QList<QDir> selected_dirs;
+    for (auto i : view->selectionModel()->selectedRows()) {
+      selected_dirs << QDir(model->filePath(i));
+    }
 
     auto filepath = QDir(model->filePath(index));
 
@@ -29,10 +33,10 @@ namespace DirectoryUi {
     QAction open_in_filemanager(tr("Open in file manager"));
 
     connect(&create_playlist, &QAction::triggered, [&]() {
-      emit createNewPlaylist(filepath);
+      emit createNewPlaylist(selected_dirs);
     });
     connect(&append_to_playlist, &QAction::triggered, [&]() {
-      emit appendToCurrentPlaylist(filepath);
+      emit appendToCurrentPlaylist(selected_dirs);
     });
     connect(&open_in_filemanager, &QAction::triggered, [&]() {
       QDesktopServices::openUrl(QUrl::fromLocalFile(filepath.absolutePath()));
