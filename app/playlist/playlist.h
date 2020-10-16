@@ -44,8 +44,6 @@ namespace Playlist {
     int trackIndex(quint64 track_uid) const;
     Track trackBy(quint64 uid) const;
 
-    void sort();
-
     void removeTrack(int position);
 
     enum PlaylistRandom random() const;
@@ -56,7 +54,10 @@ namespace Playlist {
     void concatAsyncFinished(Playlist *pl);
 
   private:
+    QVector<Track> sort(QVector<Track> list);
     QString nameBy(const QDir &path);
+    bool sortComparasion(const Track& t1, const Track& t2) const;
+
     QString playlist_name;
     QVector<Track> tracks_list;
     quint64 _uid;

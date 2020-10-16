@@ -43,10 +43,11 @@ namespace Playlist {
 
   bool Playlist::load(const QDir &path) {
     rename(nameBy(path));
+    QVector<Track> loading_track_list;
 
     for (auto i : Playlist::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        tracks_list = FileParser(path).tracks_list();
+        loading_track_list = FileParser(path).tracks_list();
         return true;
       }
     }
@@ -64,7 +65,7 @@ namespace Playlist {
       bool empty = path.count() == 0;
     #endif
     if (empty && is_file) { // playlist file
-      tracks_list << Track(path.absolutePath());
+      loading_track_list << Track(path.absolutePath());
     } else {
       QStringList filter;
       for (auto i : Playlist::supportedFileFormats()) {
@@ -78,14 +79,14 @@ namespace Playlist {
           auto current_cues = CueParser(path).tracks_list();
           if (!current_cues.isEmpty()) {
             cues.append(current_cues.first().path());
-            tracks_list.append(current_cues);
+            loading_track_list.append(current_cues);
           }
         } else {
-          tracks_list.append(Track(path));
+          loading_track_list.append(Track(path));
         }
       }
 
-      QMutableVectorIterator<Track> mit(tracks_list);
+      QMutableVectorIterator<Track> mit(loading_track_list);
       while (mit.hasNext()) {
         auto track = mit.next();
         if (!track.isCue() && cues.contains(track.path())) {
@@ -93,7 +94,7 @@ namespace Playlist {
         }
       }
 
-      sort();
+      tracks_list.append(sort(loading_track_list));
     }
     return true;
   }
@@ -191,47 +192,11 @@ namespace Playlist {
     return Track();
   }
 
-  void Playlist::sort() {
-     // %ARTIST% - %DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%
-    std::sort(tracks_list.begin(), tracks_list.end(), [](const Track &t1, const Track &t2) -> bool {
-      /*if (t1.artist() < t2.artist()) {
-        return true;
-      } else if (t1.artist() > t2.artist()) {
-        return false;
-      }*/
-
-      if (t1.year() < t2.year()) {
-        return true;
-      } else if (t1.year() > t2.year()) {
-        return false;
-      }
-
-      if (t1.album() < t2.album()) {
-        return true;
-      } else if (t1.album() > t2.album()) {
-        return false;
-      }
-
-      if (t1.track_number() < t2.track_number()) {
-        return true;
-      } else if (t1.track_number() > t2.track_number()) {
-        return false;
-      }
-
-      if (t1.filename() < t2.filename()) {
-        return true;
-      } else if (t1.filename() > t2.filename()) {
-        return false;
-      }
-
-      if (t1.title() < t2.title()) {
-        return true;
-      } else if (t1.title() > t2.title()) {
-        return false;
-      }
-
-      return false;
+  QVector<Track> Playlist::sort(QVector<Track> list) {
+    std::sort(list.begin(), list.end(), [&](const Track &t1, const Track &t2) -> bool {
+      return sortComparasion(t1, t2);
     });
+    return list;
   }
 
   void Playlist::removeTrack(int position) {
@@ -248,6 +213,48 @@ namespace Playlist {
 
   QString Playlist::nameBy(const QDir &path) {
     return path.dirName();
+  }
+
+  bool Playlist::sortComparasion(const Track &t1, const Track &t2) const {
+    // %ARTIST% - %DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%
+
+    /*if (t1.artist() < t2.artist()) {
+      return true;
+    } else if (t1.artist() > t2.artist()) {
+      return false;
+    }*/
+
+    if (t1.year() < t2.year()) {
+      return true;
+    } else if (t1.year() > t2.year()) {
+      return false;
+    }
+
+    if (t1.album() < t2.album()) {
+      return true;
+    } else if (t1.album() > t2.album()) {
+      return false;
+    }
+
+    if (t1.track_number() < t2.track_number()) {
+      return true;
+    } else if (t1.track_number() > t2.track_number()) {
+      return false;
+    }
+
+    if (t1.filename() < t2.filename()) {
+      return true;
+    } else if (t1.filename() > t2.filename()) {
+      return false;
+    }
+
+    if (t1.title() < t2.title()) {
+      return true;
+    } else if (t1.title() > t2.title()) {
+      return false;
+    }
+
+    return false;
   }
 }
 
