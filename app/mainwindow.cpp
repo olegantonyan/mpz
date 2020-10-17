@@ -34,12 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  int stream_buffer = global_conf.streamBufferSize();
-  if (stream_buffer == 0) {
-    stream_buffer = 131072;
-    global_conf.saveStreamBufferSize(stream_buffer);
-  }
-  player = new Playback::Controller(pc, stream_buffer, this);
+  player = new Playback::Controller(pc, streamBuffer(), this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -86,6 +81,15 @@ void MainWindow::toggleHidden() {
   } else {
     hide();
   }
+}
+
+int MainWindow::streamBuffer() {
+  int stream_buffer = global_conf.streamBufferSize();
+  if (stream_buffer == 0) {
+    stream_buffer = 131072;
+    global_conf.saveStreamBufferSize(stream_buffer);
+  }
+  return stream_buffer;
 }
 
 void MainWindow::loadUiSettings() {

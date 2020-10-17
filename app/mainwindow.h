@@ -58,6 +58,7 @@ private:
   Shortcuts *shortcuts;
   PlaybackLogUi::Controller *playback_log;
 
+  int streamBuffer();
   void loadUiSettings();
   void setupOrderCombobox();
   void setupPerPlaylistOrderCombobox();
