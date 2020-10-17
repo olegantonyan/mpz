@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
 
-  loadUiSettings();
+  setupUiSettings();
 
   setupPlaybackDispatch();
   setupStatusBar();
@@ -92,7 +92,7 @@ int MainWindow::streamBuffer() {
   return stream_buffer;
 }
 
-void MainWindow::loadUiSettings() {
+void MainWindow::setupUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   restoreState(local_conf.windowState());
 

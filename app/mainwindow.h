@@ -59,7 +59,7 @@ private:
   PlaybackLogUi::Controller *playback_log;
 
   int streamBuffer();
-  void loadUiSettings();
+  void setupUiSettings();
   void setupOrderCombobox();
   void setupPerPlaylistOrderCombobox();
   void setupFollowCursorCheckbox();
