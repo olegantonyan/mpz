@@ -8,6 +8,12 @@
         <translation type="vanished">Диалог</translation>
     </message>
     <message>
+        <location filename="../../aboutdialog.ui" line="29"/>
+        <location filename="../../aboutdialog.cpp" line="65"/>
+        <source>Changelog</source>
+        <translation>Список изменений</translation>
+    </message>
+    <message>
         <location filename="../../aboutdialog.ui" line="36"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
@@ -23,7 +29,7 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="27"/>
+        <location filename="../../aboutdialog.cpp" line="32"/>
         <source>Using opensource libraries</source>
         <translation>Использует опенсорсные библиотеки</translation>
     </message>
@@ -61,22 +67,22 @@
 <context>
     <name>DirectoryUi::DirectoryContextMenu</name>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="26"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="30"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="27"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
         <source>Create new playlist</source>
         <translation>Создать новый плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="28"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="32"/>
         <source>Append to current playlist</source>
         <translation>Добавить в текущий плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="29"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
         <source>Open in file manager</source>
         <translation>Открыть в файловом менеджере</translation>
     </message>

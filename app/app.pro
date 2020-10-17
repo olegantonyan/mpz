@@ -162,7 +162,7 @@ unix: {
 }
 
 RESOURCES += \
-  resources/resources.qrc
+  ../resources.qrc
 
 # make install
 target.path = /usr/bin/

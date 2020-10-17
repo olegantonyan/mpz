@@ -22,14 +22,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="opensourceLabel">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QToolButton" name="buttonChangelog">
+       <property name="text">
+        <string>Changelog</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QToolButton" name="buttonAboutQt">
        <property name="text">
@@ -58,6 +58,13 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="opensourceLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="sysinfo">

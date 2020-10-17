@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   mpris = nullptr;
 #endif
   ui->setupUi(this);
-  setWindowIcon(QIcon(":/icons/icons/mpz.png"));
+  setWindowIcon(QIcon(":/app/resources/icons/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 

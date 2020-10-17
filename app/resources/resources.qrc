@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>icons/mpz.png</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file>translations/ru.qm</file>
-    </qresource>
-</RCC>

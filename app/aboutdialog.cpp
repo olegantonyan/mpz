@@ -3,6 +3,11 @@
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
 
+#include <QFile>
+#include <QDebug>
+#include <QMessageBox>
+#include <QTextStream>
+
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
 
@@ -33,6 +38,35 @@ AboutDialog::~AboutDialog() {
   delete ui;
 }
 
+void AboutDialog::show_changelog() {
+  QFile file(":/CHANGELOG.md");
+  if (!file.open(QIODevice::ReadOnly)) {
+    qWarning() << "error opening changelog resource file";
+    return;
+  }
+  QStringList lines;
+  int sections = 0;
+  QTextStream in(&file);
+  while (!in.atEnd()) {
+    QString line = in.readLine();
+    if (line.startsWith("## ")) {
+      sections++;
+    }
+    if (sections > 3) {
+      break;
+    }
+    lines << line;
+  }
+  lines << "<a href='https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md'>Full changelog</a>";
+
+  QMessageBox msg;
+  msg.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  msg.setTextFormat(Qt::RichText);
+  msg.setWindowTitle(tr("Changelog"));
+  msg.setText(lines.join("<br />"));
+  msg.exec();
+}
+
 QString AboutDialog::libraryInfo(const QString &name, const QString &url) const {
   return QString("%1 <a href=\"%2\">%3</a>").arg(name).arg(url).arg(url);
 }
@@ -43,4 +77,8 @@ void AboutDialog::on_buttonAboutQt_clicked() const {
 
 void AboutDialog::on_buttonContact_clicked() const {
   FeedbackForm().exec();
+}
+
+void AboutDialog::on_buttonChangelog_clicked() const {
+  AboutDialog::show_changelog();
 }
