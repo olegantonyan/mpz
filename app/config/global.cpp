@@ -49,4 +49,21 @@ namespace Config {
   void Global::saveMinimizeToTray(bool arg) {
     storage.set("minimize_to_tray", Config::Value(arg));
   }
+
+  QList<QPair<QString, QString> > Global::sortPresets() const {
+    QList<QPair<QString, QString> > result;
+    result << QPair<QString, QString>("Sorting preset 1", "%artist% - %album%");
+    result << QPair<QString, QString>("Sorting preset 2", "%year% - %title%");
+
+    auto raw = storage.get("sort_presets");
+    if (raw.listType() != Config::Value::Map) {
+      return result;
+    }
+
+    return result;
+  }
+
+  /*bool Global::saveSortPresets(const QMap<QString, QString> &arg) {
+
+  }*/
 }

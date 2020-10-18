@@ -74,6 +74,7 @@ private:
   void setupMainMenu();
   void setupWindowTitle();
   void setupPlaybackLog();
+  void setupSortButton();
   
 protected:
   void closeEvent(QCloseEvent *event) override;

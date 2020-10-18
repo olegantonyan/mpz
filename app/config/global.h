@@ -25,6 +25,9 @@ namespace Config {
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
 
+    QList<QPair<QString, QString> > sortPresets() const;
+    //bool saveSortPresets(const QMap<QString, QString>& arg);
+
   private:
     Config::Storage storage;
   };

@@ -97,6 +97,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="sortButton">
+        <property name="text">
+         <string>Sort</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="toolButtonVolume">
         <property name="toolTip">
          <string>Volume</string>
