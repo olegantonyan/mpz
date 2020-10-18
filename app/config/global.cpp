@@ -52,19 +52,35 @@ namespace Config {
 
   QList<QPair<QString, QString> > Global::sortPresets() const {
     QList<QPair<QString, QString> > result;
-    result << QPair<QString, QString>("Artist / Album / -Title", "Artist / Album / -Title");
+    /*result << QPair<QString, QString>("Artist / Album / -Title", "Artist / Album / -Title");
     result << QPair<QString, QString>("year / title ", " year/    tiTle");
     result << QPair<QString, QString>("-title", "-title");
-
+*/
     auto raw = storage.get("sort_presets");
     if (raw.listType() != Config::Value::Map) {
       return result;
     }
 
+    auto list = raw.get<QList<Config::Value> >();
+    for (auto i : list) {
+      auto map = i.get<QMap<QString, Config::Value>>();
+      QString name = map.value("name").get<QString>();
+      QString value = map.value("value").get<QString>();
+
+      result << QPair<QString, QString>(name, value);
+    }
+
     return result;
   }
 
-  /*bool Global::saveSortPresets(const QMap<QString, QString> &arg) {
-
-  }*/
+  bool Global::saveSortPresets(const QList<QPair<QString, QString> > &arg) {
+    QList<Config::Value> result;
+    for (auto i : arg) {
+      QMap<QString, Config::Value> mp;
+      mp.insert("name", Config::Value(i.first));
+      mp.insert("value", Config::Value(i.second));
+      result << Config::Value(mp);
+    }
+    return storage.set("sort_presets", Config::Value(result));
+  }
 }
