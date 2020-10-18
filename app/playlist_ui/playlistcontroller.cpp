@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 
 namespace PlaylistUi {    
-  Controller::Controller(QTableView *v, QLineEdit *s, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), local_conf(local_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
@@ -99,6 +99,7 @@ namespace PlaylistUi {
     if (model->playlist() != nullptr) {
       connect(&*model->playlist(), &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
       model->playlist()->concatAsync(filepaths);
+      spinner->show();
     }
   }
 
@@ -106,6 +107,7 @@ namespace PlaylistUi {
     disconnect(pl, &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->reload();
     emit changed(model->playlist());
+    spinner->hide();
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

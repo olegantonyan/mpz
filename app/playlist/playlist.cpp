@@ -99,13 +99,6 @@ namespace Playlist {
     return true;
   }
 
-  void Playlist::loadAsync(const QDir &path) {
-    QtConcurrent::run([=]() {
-      load(path);
-      emit loadAsyncFinished(this);
-    });
-  }
-
   void Playlist::loadAsync(const QList<QDir> &dirs) {
     QtConcurrent::run([=]() {
       load(dirs);
@@ -150,13 +143,6 @@ namespace Playlist {
       }
     }
     return ok;
-  }
-
-  void Playlist::concatAsync(const QDir &path) {
-    QtConcurrent::run([=]() {
-      concat(path);
-      emit concatAsyncFinished(this);
-    });
   }
 
   void Playlist::concatAsync(const QList<QDir> &dirs) {

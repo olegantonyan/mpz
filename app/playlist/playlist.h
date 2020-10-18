@@ -31,11 +31,9 @@ namespace Playlist {
     bool load(const QDir &path);
     bool load(const QVector<Track> &tracks);
     bool load(const QList<QDir> &dirs);
-    void loadAsync(const QDir &path);
     void loadAsync(const QList<QDir> &dirs);
     bool concat(const QDir &path);
     bool concat(const QList<QDir> &dirs);
-    void concatAsync(const QDir &path);
     void concatAsync(const QList<QDir> &dirs);
 
     quint64 uid() const;

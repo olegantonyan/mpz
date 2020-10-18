@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
   library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, local_conf, this);
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
-  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, local_conf, this);
+  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, this);
 
   ui->stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
   ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
