@@ -57,6 +57,7 @@ SOURCES += \
     playback_log_ui/playbackloguimodel.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
+    playlist/sorter.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist/playlist.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     playback_log_ui/playbackloguimodel.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
+    playlist/sorter.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \
