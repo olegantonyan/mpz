@@ -3,6 +3,7 @@
 
 #include <QInputDialog>
 #include <QStyle>
+#include <QMessageBox>
 
 SortingPresets::SortingPresets(const QList<QPair<QString, QString> > &_pr, QWidget *parent) : QDialog(parent), ui(new Ui::SortingPresets), presets(_pr) {
   ui->setupUi(this);
@@ -80,5 +81,10 @@ QStringList SortingPresets::itemList(const QList<QPair<QString, QString> > &pres
 }
 
 void SortingPresets::on_buttonHelp_clicked() {
-
+  QMessageBox *msg = new QMessageBox;
+  msg->setWindowTitle(tr("Sorting presets description"));
+  msg->setModal(false);
+  connect(msg, &QMessageBox::finished, msg, &QMessageBox::deleteLater);
+  msg->setText("hello");
+  msg->show();
 }
