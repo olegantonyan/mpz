@@ -370,7 +370,7 @@ void MainWindow::setupSortButton() {
   }
 
   connect(menu, &QMenu::triggered, [=](QAction *a) {
-    qDebug() << "trigger sort" << a->data().toString();
+    playlist->sortBy(a->data().toString());
   });
   ui->sortButton->setMenu(menu);
 }

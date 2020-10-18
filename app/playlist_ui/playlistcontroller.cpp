@@ -103,6 +103,13 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::sortBy(const QString &criteria) {
+    if (model->playlist() != nullptr) {
+      model->playlist()->sortBy(criteria);
+      model->reload();
+    }
+  }
+
   void Controller::on_appendAsyncFinished(Playlist::Playlist *pl) {
     disconnect(pl, &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
     model->reload();

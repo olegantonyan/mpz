@@ -3,17 +3,26 @@
 
 #include "track.h"
 
-#include <QString>
+#include <QStringList>
+#include <QDebug>
 
 namespace Playlist {
   class Sorter {
   public:
-    explicit Sorter(const QString &criteria = "%DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%");
+    explicit Sorter(const QString &criteria = "%YEAR% %ALBUM% %TRACK_NUMBER% %FILENAME% %TITLE%");
 
   bool condition(const Track &t1, const Track &t2) const;
 
   private:
-    QString criteria;
+    QStringList criteria;
+
+    int compare(const Track &t1, const Track &t2, const QString& attr) const;
+    int compare_year(const Track &t1, const Track &t2) const;
+    int compare_album(const Track &t1, const Track &t2) const;
+    int compare_track_number(const Track &t1, const Track &t2) const;
+    int compare_filename(const Track &t1, const Track &t2) const;
+    int compare_title(const Track &t1, const Track &t2) const;
+    int compare_artist(const Track &t1, const Track &t2) const;
   };
 }
 
