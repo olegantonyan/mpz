@@ -52,10 +52,7 @@ namespace Config {
 
   QList<QPair<QString, QString> > Global::sortPresets() const {
     QList<QPair<QString, QString> > result;
-    /*result << QPair<QString, QString>("Artist / Album / -Title", "Artist / Album / -Title");
-    result << QPair<QString, QString>("year / title ", " year/    tiTle");
-    result << QPair<QString, QString>("-title", "-title");
-*/
+
     auto raw = storage.get("sort_presets");
     if (raw.listType() != Config::Value::Map) {
       return result;

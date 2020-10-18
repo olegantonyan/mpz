@@ -13,6 +13,18 @@ namespace SortUi {
     //button->setMenu(new QMenu(button)); // to show small arrow
   }
 
+  QList<QPair<QString, QString> > SortMenu::standardPresets(){
+    QList<QPair<QString, QString> > result;
+
+    result << QPair<QString, QString>("", "Title");
+    result << QPair<QString, QString>("", "-Title");
+    result << QPair<QString, QString>("", "Artist");
+    result << QPair<QString, QString>("", "-Artist");
+    result << QPair<QString, QString>("", "Arist / Album / Track_Number / Filename / Title");
+
+    return result;
+  }
+
   void SortMenu::on_open() {
     QMenu menu;
     connect(&menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
@@ -21,6 +33,10 @@ namespace SortUi {
     defau.setData(Playlist::Sorter::defaultCriteria());
     menu.addAction(&defau);
     menu.addSeparator();
+
+    if (global_conf.sortPresets().isEmpty()) {
+      global_conf.saveSortPresets(SortUi::SortMenu::standardPresets());
+    }
 
     QList<QAction *> actions;
     for (auto i : global_conf.sortPresets()) {

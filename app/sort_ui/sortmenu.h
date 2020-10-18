@@ -13,6 +13,8 @@ namespace SortUi {
   public:
     explicit SortMenu(QToolButton *button, Config::Global &global_c);
 
+    static QList<QPair<QString, QString> > standardPresets();
+
   signals:
     void triggered(const QString& criteria);
 
