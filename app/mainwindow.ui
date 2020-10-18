@@ -97,6 +97,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="sortButton">
+        <property name="text">
+         <string>Sort</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="toolButtonVolume">
         <property name="toolTip">
          <string>Volume</string>
@@ -106,13 +113,6 @@
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="sortButton">
-        <property name="text">
-         <string>Sort</string>
         </property>
        </widget>
       </item>
