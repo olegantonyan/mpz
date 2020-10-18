@@ -107,6 +107,7 @@ namespace PlaylistUi {
     if (model->playlist() != nullptr) {
       model->playlist()->sortBy(criteria);
       model->reload();
+      emit changed(model->playlist());
     }
   }
 

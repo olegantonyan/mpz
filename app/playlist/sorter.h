@@ -9,14 +9,16 @@
 namespace Playlist {
   class Sorter {
   public:
-    explicit Sorter(const QString &criteria = "%YEAR% %ALBUM% %TRACK_NUMBER% %FILENAME% %TITLE%");
+    static QString defaultCriteria();
+
+    explicit Sorter(const QString &criteria = Sorter::defaultCriteria());
 
   bool condition(const Track &t1, const Track &t2) const;
 
   private:
     QStringList criteria;
 
-    int compare(const Track &t1, const Track &t2, const QString& attr) const;
+    int compare(const Track &t1, const Track &t2, QString attr) const;
     int compare_year(const Track &t1, const Track &t2) const;
     int compare_album(const Track &t1, const Track &t2) const;
     int compare_track_number(const Track &t1, const Track &t2) const;

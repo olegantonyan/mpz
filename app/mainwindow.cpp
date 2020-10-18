@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupShortcuts();
   setupWindowTitle();
   setupPlaybackLog();
-  setupSortButton();
+  setupSortMenu();
 }
 
 MainWindow::~MainWindow() {
@@ -360,17 +360,8 @@ void MainWindow::setupPlaybackLog() {
   connect(player, &Playback::Controller::monotonicPlaybackTimerIncrement, playback_log, &PlaybackLogUi::Controller::on_monotonicPlaybackTimeIncrement);
 }
 
-void MainWindow::setupSortButton() {
-  QMenu *menu = new QMenu(ui->sortButton);
+void MainWindow::setupSortMenu() {
+  sort_menu = new SortUi::SortMenu(ui->sortButton, global_conf);
 
-  for (auto i : global_conf.sortPresets()) {
-    QAction *action = new QAction(i.first, ui->sortButton);
-    action->setData(i.second);
-    menu->addAction(action);
-  }
-
-  connect(menu, &QMenu::triggered, [=](QAction *a) {
-    playlist->sortBy(a->data().toString());
-  });
-  ui->sortButton->setMenu(menu);
+  connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
 }

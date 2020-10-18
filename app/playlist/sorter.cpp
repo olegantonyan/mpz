@@ -2,11 +2,16 @@
 
 namespace Playlist {
   Sorter::Sorter(const QString &c) {
-    for (auto i : c.split(" ")) {
+    for (auto i : c.split("/")) {
       if (!i.isEmpty()) {
         criteria << i.simplified().toUpper();
       }
     }
+    //qDebug() << criteria;
+  }
+
+  QString Sorter::defaultCriteria() {
+    return "YEAR / ALBUM / TRACK_NUMBER / FILENAME / TITLE";
   }
 
   bool Sorter::condition(const Track &t1, const Track &t2) const {
@@ -22,22 +27,26 @@ namespace Playlist {
     return false;
   }
 
-  int Sorter::compare(const Track &t1, const Track &t2, const QString &attr) const {
+  int Sorter::compare(const Track &t1, const Track &t2, QString attr) const {
     int result = 0;
+    int order = 1;
 
-    int order = attr.startsWith("-") ? -1 : 1;
+    if (attr.startsWith("-")) {
+      attr.remove(0, 1);
+      order = -1;
+    }
 
-    if (attr.contains("%ARTIST%")) {
+    if (attr == "ARTIST") {
       result = compare_artist(t1, t2);
-    } else if (attr.contains("%ALBUM%")) {
+    } else if (attr == "ALBUM") {
       result = compare_album(t1, t2);
-    } else if (attr.contains("%YEAR%")) {
+    } else if (attr == "YEAR") {
       result = compare_year(t1, t2);
-    } else if (attr.contains("%TRACK_NUMBER%")) {
+    } else if (attr == "TRACK_NUMBER") {
       result = compare_track_number(t1, t2);
-    } else if (attr.contains("%FILENAME%")) {
+    } else if (attr == "FILENAME") {
       result = compare_filename(t1, t2);
-    } else if (attr.contains("%TITLE%")) {
+    } else if (attr == "TITLE") {
       result = compare_title(t1, t2);
     }
 

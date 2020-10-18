@@ -15,6 +15,7 @@
 #include "statusbarlabel.h"
 #include "shortcuts.h"
 #include "playback_log_ui/playbackloguicontroller.h"
+#include "sort_ui/sortmenu.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -57,6 +58,7 @@ private:
 #endif
   Shortcuts *shortcuts;
   PlaybackLogUi::Controller *playback_log;
+  SortUi::SortMenu *sort_menu;
 
   int streamBuffer();
   void setupUiSettings();
@@ -74,7 +76,7 @@ private:
   void setupMainMenu();
   void setupWindowTitle();
   void setupPlaybackLog();
-  void setupSortButton();
+  void setupSortMenu();
   
 protected:
   void closeEvent(QCloseEvent *event) override;
