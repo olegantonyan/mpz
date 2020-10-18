@@ -4,10 +4,6 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Диалог</translation>
-    </message>
-    <message>
         <location filename="../../aboutdialog.ui" line="29"/>
         <location filename="../../aboutdialog.cpp" line="65"/>
         <source>Changelog</source>
@@ -44,10 +40,6 @@
 </context>
 <context>
     <name>DirectorySettings</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Диалог</translation>
-    </message>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="27"/>
         <source>Add</source>
@@ -113,10 +105,6 @@
         <location filename="../../feedback_ui/feedbackform.ui" line="56"/>
         <source>This will help, but you can opt-out</source>
         <translation>Это полезно, но вы можете отказаться передавать эту информацию</translation>
-    </message>
-    <message>
-        <source>This will help, but you can opt-out </source>
-        <translation type="vanished">Это полезно, но вы можете отказаться сообщать эту информацию</translation>
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
@@ -210,12 +198,12 @@
         <translation>Выполняется фоновая операция</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="102"/>
+        <location filename="../../mainwindow.ui" line="109"/>
         <source>Volume</source>
         <translation>Громкость</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="115"/>
+        <location filename="../../mainwindow.ui" line="102"/>
         <source>Sort</source>
         <translation>Сортировка</translation>
     </message>
@@ -321,10 +309,6 @@
 <context>
     <name>PlaybackLogDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Диалог</translation>
-    </message>
-    <message>
         <location filename="../../playback_log_ui/playbacklogdialog.ui" line="25"/>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="80"/>
         <source>Save as CSV</source>
@@ -408,24 +392,16 @@
     </message>
 </context>
 <context>
-    <name>SortMenu</name>
+    <name>SortUi::SortMenu</name>
     <message>
-        <location filename="../../sort_ui/sortmenu.cpp" line="32"/>
+        <location filename="../../sort_ui/sortmenu.cpp" line="33"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../../sort_ui/sortmenu.cpp" line="50"/>
+        <location filename="../../sort_ui/sortmenu.cpp" line="51"/>
         <source>Edit presets</source>
         <translation>Редактировать пресеты</translation>
-    </message>
-    <message>
-        <source>Default sort</source>
-        <translation type="vanished">По умолчанию</translation>
-    </message>
-    <message>
-        <source>Edit sort presets</source>
-        <translation type="vanished">Редактировать пресеты</translation>
     </message>
 </context>
 <context>
@@ -464,10 +440,6 @@
         <location filename="../../sort_ui/sortingpresets.ui" line="73"/>
         <source>Remove</source>
         <translation>Удалить</translation>
-    </message>
-    <message>
-        <source>Fields available to sort (case insensitive):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * Track_number&lt;br /&gt;&lt;br /&gt;By default sort in ascending order. Add - before the field name to change to descending order.&lt;br /&gt;Use / to build nested multilevel sorting criteria. Examples:&lt;br /&gt; * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title&lt;br /&gt; * -Title : sort only by title in descending order&lt;br /&gt;</source>
-        <translation type="vanished">Достпные для сортировки поля (регистр не важен):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * Track_number&lt;br /&gt;&lt;br /&gt;По умолчанию сортировка по возрастанию. Добавьте - перед названием поля чтобы полчуить сортировку по убыванию.&lt;br /&gt;Используйте / чтобы сделать многоуровневую сортировку по нескольким полям. Примеры:&lt;br /&gt; * Artist / -Year / Title : сортировать по артисту, затем по дате в обратном порядке, затем по названию&lt;br /&gt; * -Title : сортировать по названию в обратном порядке&lt;br /&gt;</translation>
     </message>
     <message>
         <location filename="../../sort_ui/sortingpresets.cpp" line="65"/>
@@ -541,10 +513,6 @@
 </context>
 <context>
     <name>TrackInfoDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Диалог</translation>
-    </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="34"/>
         <source>Artist</source>

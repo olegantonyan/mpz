@@ -29,6 +29,7 @@ namespace SortUi {
     QMenu menu;
     connect(&menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
 
+
     QAction defau(tr("Default"));
     defau.setData(Playlist::Sorter::defaultCriteria());
     menu.addAction(&defau);

@@ -33,6 +33,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 unix: DEFINES += MPRIS_ENABLE
 
+INCLUDEPATH += .
+
 SOURCES += \
     aboutdialog.cpp \
     busyspinner.cpp \
