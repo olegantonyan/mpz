@@ -17,6 +17,8 @@ namespace SortUi {
 
   private:
     Config::Global &global_conf;
+
+    void showEditPresetsDialog();
   };
 }
 
