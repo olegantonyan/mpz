@@ -33,7 +33,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 unix: DEFINES += MPRIS_ENABLE
 
-INCLUDEPATH += .
+INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown namespace/class
 
 SOURCES += \
     aboutdialog.cpp \
