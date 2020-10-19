@@ -36,7 +36,7 @@ namespace Playlist {
 
   bool Playlist::load(const QDir &path) {
     rename(nameBy(path));
-    tracks_list.append(sort(Loader(path).tracks()));
+    concat(path);
     return true;
   }
 
@@ -48,9 +48,7 @@ namespace Playlist {
   }
 
   bool Playlist::load(const QVector<Track> &tracks) {
-    for (auto i : tracks) {
-      tracks_list << i;
-    }
+    tracks_list.append(tracks);
     return true;
   }
 
@@ -68,11 +66,7 @@ namespace Playlist {
   }
 
   bool Playlist::concat(const QDir &path) {
-    Playlist new_playlist;
-    new_playlist.load(path);
-    for (auto i : new_playlist.tracks()) {
-      tracks_list << i;
-    }
+    tracks_list.append(sort(Loader(path).tracks()));
     return true;
   }
 
