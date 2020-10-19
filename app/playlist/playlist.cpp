@@ -65,7 +65,13 @@ namespace Playlist {
   }
 
   bool Playlist::concat(const QDir &path) {
-    tracks_list.append(sort(Loader(path).tracks()));
+    Loader loader(path);
+    auto tracks = loader.tracks();
+    if (loader.is_playlist_file()) {
+      tracks_list.append(tracks);
+    } else {
+      tracks_list.append(sort(tracks));
+    }
     return true;
   }
 
