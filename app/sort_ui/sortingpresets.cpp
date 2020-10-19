@@ -5,21 +5,6 @@
 #include <QStyle>
 #include <QMessageBox>
 
-static const QString HELP_TEXT =
-      "Fields available to sort (case insensitive):<br />"
-      " * Artist<br />"
-      " * Album<br />"
-      " * Title<br />"
-      " * Year<br />"
-      " * Filename<br />"
-      " * Track_number<br />"
-      "<br />"
-      "By default sort in ascending order. Add - before the field name to change to descending order.<br />"
-      "Use / to build nested multilevel sorting criteria. Examples:<br />"
-      " * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title<br />"
-      " * -Title : sort only by title in descending order<br />"
-      ;
-
 SortingPresets::SortingPresets(const QList<QPair<QString, QString> > &_pr, QWidget *parent) : QDialog(parent), ui(new Ui::SortingPresets), presets(_pr) {
   ui->setupUi(this);
   ui->listViewPresets->setModel(&model);
@@ -96,6 +81,21 @@ QStringList SortingPresets::itemList(const QList<QPair<QString, QString> > &pres
 }
 
 void SortingPresets::on_buttonHelp_clicked() {
+  static const QString HELP_TEXT = tr(
+        "Fields available to sort (case insensitive):<br />"
+        " * Artist<br />"
+        " * Album<br />"
+        " * Title<br />"
+        " * Year<br />"
+        " * Filename<br />"
+        " * TrackNumber<br />"
+        "<br />"
+        "By default sort in ascending order. Add - before the field name to change to descending order.<br />"
+        "Use / to build nested multilevel sorting criteria. Examples:<br />"
+        " * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title<br />"
+        " * -Title : sort only by title in descending order<br />"
+        );
+
   QMessageBox *msg = new QMessageBox;
   msg->setWindowTitle(tr("Sorting presets description"));
   msg->setModal(false);

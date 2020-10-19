@@ -11,7 +11,7 @@ namespace Playlist {
   }
 
   QString Sorter::defaultCriteria() {
-    return "YEAR / ALBUM / TRACK_NUMBER / FILENAME / TITLE";
+    return "YEAR / ALBUM / TRACKNUMBER / FILENAME / TITLE";
   }
 
   bool Sorter::condition(const Track &t1, const Track &t2) const {
@@ -42,7 +42,7 @@ namespace Playlist {
       result = compare_album(t1, t2);
     } else if (attr == "YEAR") {
       result = compare_year(t1, t2);
-    } else if (attr == "TRACK_NUMBER") {
+    } else if (attr == "TRACKNUMBER") {
       result = compare_track_number(t1, t2);
     } else if (attr == "FILENAME") {
       result = compare_filename(t1, t2);

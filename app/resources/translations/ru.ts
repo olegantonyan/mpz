@@ -394,12 +394,12 @@
 <context>
     <name>SortUi::SortMenu</name>
     <message>
-        <location filename="../../sort_ui/sortmenu.cpp" line="33"/>
+        <location filename="../../sort_ui/sortmenu.cpp" line="35"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../../sort_ui/sortmenu.cpp" line="51"/>
+        <location filename="../../sort_ui/sortmenu.cpp" line="53"/>
         <source>Edit presets</source>
         <translation>Редактировать пресеты</translation>
     </message>
@@ -442,7 +442,12 @@
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../sort_ui/sortingpresets.cpp" line="65"/>
+        <location filename="../../sort_ui/sortingpresets.cpp" line="84"/>
+        <source>Fields available to sort (case insensitive):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;By default sort in ascending order. Add - before the field name to change to descending order.&lt;br /&gt;Use / to build nested multilevel sorting criteria. Examples:&lt;br /&gt; * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title&lt;br /&gt; * -Title : sort only by title in descending order&lt;br /&gt;</source>
+        <translation>Поля доступные для сортировки (регистр не важен):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;По умолчанию порядок возрастающий. Добавьте - перед названием поля чтобы сортировать в убывающем порядке.&lt;br /&gt;Используйте / чтобы получить многоуровневую сортировку. Примеры:&lt;br /&gt; * Artist / -Year / Title : сортировка по артисту, дате в убывающем порядке и названию&lt;br /&gt; * -Title : сортировка только по названию в убывающем порядке&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../sort_ui/sortingpresets.cpp" line="50"/>
         <source>Rename sorting preset</source>
         <translation>Переименовать пресет сортировки</translation>
     </message>

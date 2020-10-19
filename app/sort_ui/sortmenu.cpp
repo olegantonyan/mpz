@@ -22,7 +22,7 @@ namespace SortUi {
     result << QPair<QString, QString>("", "-Artist");
     result << QPair<QString, QString>("", "Album / Title");
     result << QPair<QString, QString>("", "-Album / Title");
-    result << QPair<QString, QString>("", "Arist / Album / Track_Number / Filename / Title");
+    result << QPair<QString, QString>("", "Arist / Album / TrackNumber / Filename / Title");
 
     return result;
   }
