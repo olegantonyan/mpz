@@ -36,8 +36,7 @@ namespace Playlist {
 
   bool Playlist::load(const QDir &path) {
     rename(nameBy(path));
-    concat(path);
-    return true;
+    return concat(path);
   }
 
   void Playlist::loadAsync(const QList<QDir> &dirs) {
