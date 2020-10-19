@@ -2,6 +2,7 @@
 #define PLAYLISTITEM_H
 
 #include "track.h"
+#include "playlist/sorter.h"
 
 #include <QString>
 #include <QDir>
@@ -47,14 +48,15 @@ namespace Playlist {
     enum PlaylistRandom random() const;
     void setRandom(enum PlaylistRandom arg);
 
+    void sortBy(const QString &criteria);
+
   signals:
     void loadAsyncFinished(Playlist *pl);
     void concatAsyncFinished(Playlist *pl);
 
   private:
-    QVector<Track> sort(QVector<Track> list);
+    QVector<Track> sort(QVector<Track> list, const Sorter &sorter = Sorter());
     QString nameBy(const QDir &path);
-    bool sortComparasion(const Track& t1, const Track& t2) const;
 
     QString playlist_name;
     QVector<Track> tracks_list;

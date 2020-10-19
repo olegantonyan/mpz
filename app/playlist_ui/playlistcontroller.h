@@ -36,6 +36,7 @@ namespace PlaylistUi {
     void on_pause(const Track &t);
     void on_scrollTo(const Track &track);
     void on_appendToPlaylist(const QList<QDir> &filepaths);
+    void sortBy(const QString &criteria);
 
   private slots:
     void on_appendAsyncFinished(Playlist::Playlist *pl);

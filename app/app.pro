@@ -33,6 +33,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 unix: DEFINES += MPRIS_ENABLE
 
+INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown namespace/class
+
 SOURCES += \
     aboutdialog.cpp \
     busyspinner.cpp \
@@ -57,6 +59,7 @@ SOURCES += \
     playback_log_ui/playbackloguimodel.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
+    playlist/sorter.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist/playlist.cpp \
@@ -71,6 +74,8 @@ SOURCES += \
     playlists_ui/playlistsproxyfiltermodel.cpp \
     rnjesus.cpp \
     shortcuts.cpp \
+    sort_ui/sortingpresets.cpp \
+    sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
     sysinfo.cpp \
     track.cpp \
@@ -102,6 +107,7 @@ HEADERS += \
     playback_log_ui/playbackloguimodel.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
+    playlist/sorter.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \
@@ -116,6 +122,8 @@ HEADERS += \
     playlists_ui/playlistsproxyfiltermodel.h \
     rnjesus.h \
     shortcuts.h \
+    sort_ui/sortingpresets.h \
+    sort_ui/sortmenu.h \
     statusbarlabel.h \
     sysinfo.h \
     track.h \
@@ -130,7 +138,8 @@ FORMS += \
     feedback_ui/feedbackform.ui \
     mainwindow.ui \
     playback_log_ui/playbacklogdialog.ui \
-    playlist_ui/trackinfodialog.ui
+    playlist_ui/trackinfodialog.ui \
+    sort_ui/sortingpresets.ui
 
 # Libraries
 INCLUDEPATH += \

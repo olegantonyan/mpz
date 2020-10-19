@@ -178,9 +178,9 @@ namespace Playlist {
     return Track();
   }
 
-  QVector<Track> Playlist::sort(QVector<Track> list) {
+  QVector<Track> Playlist::sort(QVector<Track> list, const Sorter &sorter) {
     std::sort(list.begin(), list.end(), [&](const Track &t1, const Track &t2) -> bool {
-      return sortComparasion(t1, t2);
+      return sorter.condition(t1, t2);
     });
     return list;
   }
@@ -197,50 +197,12 @@ namespace Playlist {
     _random = arg;
   }
 
-  QString Playlist::nameBy(const QDir &path) {
-    return path.dirName();
+  void Playlist::sortBy(const QString &criteria) {
+    tracks_list = sort(tracks_list, Sorter(criteria));
   }
 
-  bool Playlist::sortComparasion(const Track &t1, const Track &t2) const {
-    // %ARTIST% - %DATE% - %ALBUM% - %DISCNUMBER% - %TRACKNUMBER% - %TITLE%
-
-    /*if (t1.artist() < t2.artist()) {
-      return true;
-    } else if (t1.artist() > t2.artist()) {
-      return false;
-    }*/
-
-    if (t1.year() < t2.year()) {
-      return true;
-    } else if (t1.year() > t2.year()) {
-      return false;
-    }
-
-    if (t1.album() < t2.album()) {
-      return true;
-    } else if (t1.album() > t2.album()) {
-      return false;
-    }
-
-    if (t1.track_number() < t2.track_number()) {
-      return true;
-    } else if (t1.track_number() > t2.track_number()) {
-      return false;
-    }
-
-    if (t1.filename() < t2.filename()) {
-      return true;
-    } else if (t1.filename() > t2.filename()) {
-      return false;
-    }
-
-    if (t1.title() < t2.title()) {
-      return true;
-    } else if (t1.title() > t2.title()) {
-      return false;
-    }
-
-    return false;
+  QString Playlist::nameBy(const QDir &path) {
+    return path.dirName();
   }
 }
 

@@ -3,6 +3,9 @@
 
 #include "storage.h"
 
+#include <QPair>
+#include <QList>
+
 namespace Config {
   class Global {
   public:
@@ -24,6 +27,9 @@ namespace Config {
 
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
+
+    QList<QPair<QString, QString> > sortPresets() const;
+    bool saveSortPresets(const QList<QPair<QString, QString> >& arg);
 
   private:
     Config::Storage storage;

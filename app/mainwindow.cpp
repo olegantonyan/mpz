@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupShortcuts();
   setupWindowTitle();
   setupPlaybackLog();
+  setupSortMenu();
 }
 
 MainWindow::~MainWindow() {
@@ -326,6 +327,8 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::next, player->controls().next, &QToolButton::click);
 
   connect(shortcuts, &Shortcuts::openMainMenu, main_menu, &MainMenu::on_open);
+
+  connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
 }
 
 void MainWindow::setupWindowTitle() {
@@ -355,4 +358,12 @@ void MainWindow::setupPlaybackLog() {
   connect(shortcuts, &Shortcuts::openPlabackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
   connect(status_label, &StatusBarLabel::showPlaybackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
   connect(player, &Playback::Controller::monotonicPlaybackTimerIncrement, playback_log, &PlaybackLogUi::Controller::on_monotonicPlaybackTimeIncrement);
+}
+
+void MainWindow::setupSortMenu() {
+  sort_menu = new SortUi::SortMenu(ui->sortButton, global_conf);
+
+  connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
+
+  //ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
 }
