@@ -1,6 +1,7 @@
 #include "playlist/playlist.h"
 #include "playlist/fileparser.h"
 #include "playlist/cueparser.h"
+#include "playlist/loader.h"
 #include "rnjesus.h"
 
 #include <QDebug>
@@ -13,14 +14,6 @@ namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
     _uid = RNJesus::generate();
     _random = PlaylistRandom::None;
-  }
-
-  QStringList Playlist::supportedFileFormats() {
-    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape" << "cue" << "opus" << "dsf";
-  }
-
-  QStringList Playlist::supportedPlaylistFileFormats() {
-    return QStringList() << "m3u" << "pls";
   }
 
   QString Playlist::name() const {
@@ -43,59 +36,7 @@ namespace Playlist {
 
   bool Playlist::load(const QDir &path) {
     rename(nameBy(path));
-    QVector<Track> loading_track_list;
-
-    for (auto i : Playlist::supportedPlaylistFileFormats()) {
-      if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        loading_track_list = FileParser(path).tracks_list();
-        return true;
-      }
-    }
-
-    bool is_file = false;
-    for (auto i : Playlist::supportedFileFormats()) {
-      if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        is_file = true;
-      }
-    }
-
-    #if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
-      bool empty = path.isEmpty();
-    #else
-      bool empty = path.count() == 0;
-    #endif
-    if (empty && is_file) { // playlist file
-      tracks_list << Track(path.absolutePath());
-    } else {
-      QStringList filter;
-      for (auto i : Playlist::supportedFileFormats()) {
-        filter << QString("*.") + i;
-      }
-      QStringList cues;
-      QDirIterator it(path.absolutePath(), filter, QDir::Files, QDirIterator::Subdirectories);
-      while (it.hasNext()) {
-        auto path = it.next();
-        if (path.endsWith(".cue", Qt::CaseInsensitive)) {
-          auto current_cues = CueParser(path).tracks_list();
-          if (!current_cues.isEmpty()) {
-            cues.append(current_cues.first().path());
-            loading_track_list.append(current_cues);
-          }
-        } else {
-          loading_track_list.append(Track(path));
-        }
-      }
-
-      QMutableVectorIterator<Track> mit(loading_track_list);
-      while (mit.hasNext()) {
-        auto track = mit.next();
-        if (!track.isCue() && cues.contains(track.path())) {
-          mit.remove();
-        }
-      }
-
-      tracks_list.append(sort(loading_track_list));
-    }
+    tracks_list.append(sort(Loader(path).tracks()));
     return true;
   }
 

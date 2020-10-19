@@ -22,9 +22,6 @@ namespace Playlist {
 
     explicit Playlist();
 
-    static QStringList supportedFileFormats();
-    static QStringList supportedPlaylistFileFormats();
-
     QString name() const;
     QString rename(const QString &value);
     QVector<Track> tracks() const;
