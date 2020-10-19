@@ -26,6 +26,7 @@ namespace Playlist {
     bool is_playlist_file() const;
     QStringList files_filter() const;
     bool is_cue(const QString &current_path) const;
+    void remove_tracks_added_from_cue(const QStringList &cues, QVector<Track> &tracks) const;
   };
 }
 

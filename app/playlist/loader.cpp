@@ -41,17 +41,22 @@ namespace Playlist {
       }
     }
 
-    if (!cues.isEmpty()) { // remove files that are already added from CUE
-      QMutableVectorIterator<Track> mit(result);
-      while (mit.hasNext()) {
-        auto track = mit.next();
-        if (!track.isCue() && cues.contains(track.path())) {
-          mit.remove();
-        }
-      }
-    }
+    remove_tracks_added_from_cue(cues, result);
 
     return result;
+  }
+
+  void Loader::remove_tracks_added_from_cue(const QStringList &cues, QVector<Track> &tracks) const {
+    if (cues.isEmpty()) {
+      return;
+    }
+    QMutableVectorIterator<Track> mit(tracks);
+    while (mit.hasNext()) {
+      auto track = mit.next();
+      if (!track.isCue() && cues.contains(track.path())) {
+        mit.remove();
+      }
+    }
   }
 
   bool Loader::is_file() const {
