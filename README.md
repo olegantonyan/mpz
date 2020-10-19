@@ -99,3 +99,4 @@ mpz supports global media keys (typically found on a keyboard play/pause/stop/..
 - Ctrl+2 - focus playlists;
 - Ctrl+1 - focus library (directory tree);
 - Ctrl+Q - exit;
+- Ctrl+S - open sort menu;
