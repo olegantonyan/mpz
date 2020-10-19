@@ -16,7 +16,7 @@ namespace Playlist {
 
   private:
     QDir path;
-    QString parseLine(const QString &line) const;
+    QString parseLine(const QString &line, bool &is_stream) const;
   };
 }
 

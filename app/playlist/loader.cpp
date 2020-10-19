@@ -16,6 +16,15 @@ namespace Playlist {
     return QStringList() << "m3u" << "pls";
   }
 
+  bool Loader::is_supported_file(const QString &name) {
+    for (auto i : Loader::supportedFileFormats()) {
+      if (name.endsWith(i, Qt::CaseInsensitive)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   QVector<Track> Loader::tracks() const {
     if (is_playlist_file()) {
       return FileParser(path).tracks_list();
@@ -59,15 +68,6 @@ namespace Playlist {
     }
   }
 
-  bool Loader::is_file() const {
-    for (auto i : Loader::supportedFileFormats()) {
-      if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   bool Loader::is_dir_empty() const {
   #if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
     return path.isEmpty();
@@ -77,7 +77,7 @@ namespace Playlist {
   }
 
   bool Loader::is_single_file() const {
-    return is_dir_empty() && is_file();
+    return is_dir_empty() && Loader::is_supported_file(path.dirName());
   }
 
   bool Loader::is_playlist_file() const {
