@@ -1,3 +1,7 @@
+## [1.0.4] - 2020-10-19
+### Added
+- Playlist custom sort with UI
+
 ## [1.0.3] - 2020-10-16
 ### Added
 - Ability to create playlist from multiple folders (multiselect)
