@@ -27,6 +27,9 @@ namespace PlaylistUi {
     view->setAlternatingRowColors(true);
     view->setFocus();
 
+    view->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    view->verticalHeader()->setDefaultSectionSize(view->verticalHeader()->minimumSectionSize());
+
     for (int c = 0; c < view->horizontalHeader()->count(); ++c) {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
