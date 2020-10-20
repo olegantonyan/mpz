@@ -13,7 +13,7 @@ namespace Playlist {
   }
 
   QStringList Loader::supportedPlaylistFileFormats() {
-    return QStringList() << "m3u" << "pls";
+    return QStringList() << "m3u" << "m3u8" << "pls";
   }
 
   bool Loader::is_supported_file(const QString &name) {
