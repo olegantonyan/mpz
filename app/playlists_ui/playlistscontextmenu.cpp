@@ -41,6 +41,7 @@ namespace PlaylistsUi {
         i->rename(new_name);
       }
     });
+
     QAction clear_filter(tr("Clear filter"));
     if (!search->text().isEmpty()) {
        connect(&clear_filter, &QAction::triggered, [=]() {
@@ -52,11 +53,11 @@ namespace PlaylistsUi {
 
     connect(&savem3u, &QAction::triggered, [&]() {
       auto i = model->itemAt(proxy->mapToSource(index));
-      QStringList m3u = i->toM3U();
+      QByteArray m3u = i->toM3U();
       QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
       QFile f(fname);
       if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        f.write(m3u.join("\n").toUtf8());
+        f.write(m3u);
         f.close();
       } else {
         qWarning() << "error opening file " << fname << "for writing";

@@ -47,7 +47,7 @@ namespace Playlist {
 
     void sortBy(const QString &criteria);
 
-    QStringList toM3U() const;
+    QByteArray toM3U() const;
 
   signals:
     void loadAsyncFinished(Playlist *pl);
