@@ -26,12 +26,12 @@ namespace Playlist {
     QString rename(const QString &value);
     QVector<Track> tracks() const;
 
-    bool load(const QDir &path);
-    bool load(const QVector<Track> &tracks);
-    bool load(const QList<QDir> &dirs);
+    void load(const QDir &path);
+    void load(const QVector<Track> &tracks);
+    void load(const QList<QDir> &dirs);
     void loadAsync(const QList<QDir> &dirs);
-    bool concat(const QDir &path);
-    bool concat(const QList<QDir> &dirs);
+    void concat(const QDir &path);
+    void concat(const QList<QDir> &dirs);
     void concatAsync(const QList<QDir> &dirs);
 
     quint64 uid() const;

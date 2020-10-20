@@ -34,9 +34,9 @@ namespace Playlist {
     return tracks_list;
   }
 
-  bool Playlist::load(const QDir &path) {
+  void Playlist::load(const QDir &path) {
     rename(nameBy(path));
-    return concat(path);
+    concat(path);
   }
 
   void Playlist::loadAsync(const QList<QDir> &dirs) {
@@ -46,25 +46,20 @@ namespace Playlist {
     });
   }
 
-  bool Playlist::load(const QVector<Track> &tracks) {
+  void Playlist::load(const QVector<Track> &tracks) {
     tracks_list.append(tracks);
-    return true;
   }
 
-  bool Playlist::load(const QList<QDir> &dirs) {
-    bool ok = true;
+  void Playlist::load(const QList<QDir> &dirs) {
+    QStringList names;
     for (auto i : dirs) {
-      if (!load(i)) {
-        ok = false;
-      }
+      load(i);
+      names << nameBy(i);
     }
-    QStringList lst;
-    for (auto i : dirs) { lst << nameBy(i); }
-    rename(lst.join(", "));
-    return ok;
+    rename(names.join(", "));
   }
 
-  bool Playlist::concat(const QDir &path) {
+  void Playlist::concat(const QDir &path) {
     Loader loader(path);
     auto tracks = loader.tracks();
     if (loader.is_playlist_file()) {
@@ -72,17 +67,12 @@ namespace Playlist {
     } else {
       tracks_list.append(sort(tracks));
     }
-    return true;
   }
 
-  bool Playlist::concat(const QList<QDir> &dirs) {
-    bool ok = true;
+  void Playlist::concat(const QList<QDir> &dirs) {
     for (auto i : dirs) {
-      if (!concat(i)) {
-        ok = false;
-      }
+      concat(i);
     }
-    return ok;
   }
 
   void Playlist::concatAsync(const QList<QDir> &dirs) {
