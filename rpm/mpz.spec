@@ -1,5 +1,5 @@
 Name:       mpz
-Version:    1.0.4
+Version:    1.0.5
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
