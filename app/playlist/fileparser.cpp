@@ -1,20 +1,36 @@
-#include "fileparser.h"
+#include "playlist/fileparser.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QFile>
+#include <QUrl>
 #include <QTextStream>
+#include <QFileInfo>
 
 namespace Playlist {
   FileParser::FileParser(const QDir &p) : path(p) {
   }
 
-  QString FileParser::parseLine(const QString &line) const {
+  QString FileParser::parseLine(const QString &line, bool &is_stream) const {
     QString result;
 
-    if (line.startsWith("http", Qt::CaseInsensitive)) { // m3u
+    if (line.startsWith("http", Qt::CaseInsensitive)) { // m3u stream
       result = line;
-    } else if (line.startsWith("File", Qt::CaseInsensitive)) { // pls
+      is_stream = true;
+    } else if (line.startsWith("File", Qt::CaseInsensitive)) { // pls stream
       result = line.mid(6);
+      is_stream = true;
+    } else if (Loader::is_supported_file(line)) { // probably local m3u
+      is_stream = false;
+      QFileInfo fi(line);
+      if (fi.isAbsolute() && fi.exists()) {
+        result = line;
+      } else if (fi.isRelative()) {
+        auto full_path = QDir(current_dir()).filePath(line);
+        if (QFileInfo(full_path).exists()) {
+          result = full_path;
+        }
+      }
     }
 
     if (result.contains(".pls", Qt::CaseInsensitive)) { // bullshit format - link to a pls file instead of stream itself
@@ -24,6 +40,10 @@ namespace Playlist {
     }
 
     return result;
+  }
+
+  QString FileParser::current_dir() const {
+    return QFileInfo(path.absolutePath()).absolutePath();
   }
 
   QVector<Track> FileParser::tracks_list() const {
@@ -38,9 +58,14 @@ namespace Playlist {
     while (!in.atEnd()) {
       auto line = in.readLine().trimmed();
       if (!line.startsWith("#") && !line.isEmpty()) {
-        auto parsed_line = parseLine(line);
+        bool is_stream;
+        auto parsed_line = parseLine(line, is_stream);
         if (!parsed_line.isEmpty()) {
-          items << Track(QUrl(parsed_line));
+          if (is_stream) {
+            items << Track(QUrl(parsed_line));
+          } else {
+            items << Track(parsed_line);
+          }
         }
       }
     }

@@ -5,7 +5,7 @@
 
 #include <QVector>
 #include <QDir>
-#include <QStringList>
+#include <QString>
 
 namespace Playlist {
   class FileParser {
@@ -16,7 +16,9 @@ namespace Playlist {
 
   private:
     QDir path;
-    QString parseLine(const QString &line) const;
+    QString parseLine(const QString &line, bool &is_stream) const;
+
+    QString current_dir() const;
   };
 }
 

@@ -1,3 +1,7 @@
+## [1.0.5] - 2020-10-20
+### Added
+- Load and save m3u playlists
+
 ## [1.0.4] - 2020-10-19
 ### Added
 - Playlist custom sort with UI
