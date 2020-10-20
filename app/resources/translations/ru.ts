@@ -371,22 +371,28 @@
 <context>
     <name>PlaylistsUi::PlaylistsContextMenu</name>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="26"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="28"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="27"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="29"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="36"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="57"/>
+        <source>Save as m3u</source>
+        <translation>Сохранить как m3u</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="39"/>
         <source>Rename playlist</source>
         <translation>Переименовать плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="41"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="45"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
