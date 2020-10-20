@@ -7,6 +7,8 @@
 #include <QApplication>
 #include <QUrl>
 #include <QInputDialog>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 namespace PlaylistsUi {
   PlaylistsContextMenu::PlaylistsContextMenu(Model *m, ProxyFilterModel *p, QListView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), proxy(p), view(v), search(s) {
@@ -25,6 +27,7 @@ namespace PlaylistsUi {
     QMenu menu;
     QAction remove(tr("Remove"));
     QAction rename(tr("Rename"));
+    QAction savem3u(tr("Save as m3u"));
 
     connect(&remove, &QAction::triggered, [&]() {
       emit removed(index);
@@ -47,8 +50,22 @@ namespace PlaylistsUi {
        menu.addSeparator();
     }
 
+    connect(&savem3u, &QAction::triggered, [&]() {
+      auto i = model->itemAt(proxy->mapToSource(index));
+      QStringList m3u = i->toM3U();
+      QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
+      QFile f(fname);
+      if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        f.write(m3u.join("\n").toUtf8());
+        f.close();
+      } else {
+        qWarning() << "error opening file " << fname << "for writing";
+      }
+    });
+
     menu.addAction(&rename);
     menu.addAction(&remove);
+    menu.addAction(&savem3u);
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 }

@@ -131,6 +131,18 @@ namespace Playlist {
     tracks_list = sort(tracks_list, Sorter(criteria));
   }
 
+  QStringList Playlist::toM3U() const {
+    QStringList result;
+    for (auto i : tracks()) {
+      if (i.isStream()) {
+        result << i.url().toString();
+      } else {
+        result << i.path();
+      } // TODO handle CUE maybe?
+    }
+    return result;
+  }
+
   QString Playlist::nameBy(const QDir &path) {
     return path.dirName();
   }
