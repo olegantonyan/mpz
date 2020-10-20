@@ -28,9 +28,12 @@ namespace DirectoryUi {
 
     QMenu menu;
     QAction clear_filter(tr("Clear filter"));
+    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
     QAction create_playlist(tr("Create new playlist"));
+
     QAction append_to_playlist(tr("Append to current playlist"));
     QAction open_in_filemanager(tr("Open in file manager"));
+    open_in_filemanager.setIcon(view->style()->standardIcon(QStyle::SP_DirLinkIcon));
 
     connect(&create_playlist, &QAction::triggered, [&]() {
       emit createNewPlaylist(selected_dirs);

@@ -28,21 +28,20 @@ namespace PlaylistsUi {
     QAction remove(tr("Remove"));
     QAction rename(tr("Rename"));
     QAction savem3u(tr("Save as m3u"));
+    remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
+    savem3u.setIcon(view->style()->standardIcon(QStyle::SP_DialogSaveButton));
+    //rename.setIcon(view->style()->standardIcon(QStyle::SP_FileIcon));
 
     connect(&remove, &QAction::triggered, [&]() {
       emit removed(index);
     });
 
     connect(&rename, &QAction::triggered, [&]() {
-      auto i = model->itemAt(proxy->mapToSource(index));
-      bool ok;
-      QString new_name = QInputDialog::getText(view, QString("%1 '%2'").arg(tr("Rename playlist")).arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
-      if (ok && !new_name.isEmpty()) {
-        i->rename(new_name);
-      }
+      on_rename(index);
     });
 
     QAction clear_filter(tr("Clear filter"));
+    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
     if (!search->text().isEmpty()) {
        connect(&clear_filter, &QAction::triggered, [=]() {
          search->clear();
@@ -52,21 +51,34 @@ namespace PlaylistsUi {
     }
 
     connect(&savem3u, &QAction::triggered, [&]() {
-      auto i = model->itemAt(proxy->mapToSource(index));
-      QByteArray m3u = i->toM3U();
-      QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
-      QFile f(fname);
-      if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        f.write(m3u);
-        f.close();
-      } else {
-        qWarning() << "error opening file " << fname << "for writing";
-      }
+      on_savem3u(index);
     });
 
     menu.addAction(&rename);
     menu.addAction(&remove);
     menu.addAction(&savem3u);
     menu.exec(view->viewport()->mapToGlobal(pos));
+  }
+
+  void PlaylistsContextMenu::on_rename(const QModelIndex &index)  {
+    auto i = model->itemAt(proxy->mapToSource(index));
+    bool ok;
+    QString new_name = QInputDialog::getText(view, QString("%1 '%2'").arg(tr("Rename playlist")).arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
+    if (ok && !new_name.isEmpty()) {
+      i->rename(new_name);
+    }
+  }
+
+  void PlaylistsContextMenu::on_savem3u(const QModelIndex &index) {
+    auto i = model->itemAt(proxy->mapToSource(index));
+    QByteArray m3u = i->toM3U();
+    QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
+    QFile f(fname);
+    if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      f.write(m3u);
+      f.close();
+    } else {
+      qWarning() << "error opening file " << fname << "for writing";
+    }
   }
 }

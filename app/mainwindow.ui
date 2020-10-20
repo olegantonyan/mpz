@@ -101,6 +101,9 @@
         <property name="text">
          <string>Sort</string>
         </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        </property>
        </widget>
       </item>
       <item>

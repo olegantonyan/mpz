@@ -17,18 +17,22 @@ namespace PlaylistUi {
 
     remove.setText(tr("Remove"));
     connect(&remove, &QAction::triggered, this, &PlaylistContextMenu::on_remove);
+    remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
 
     show_in_filemanager.setText(tr("Show in file manager"));
     connect(&show_in_filemanager, &QAction::triggered, this, &PlaylistContextMenu::on_showInFilemanager);
+    show_in_filemanager.setIcon(view->style()->standardIcon(QStyle::SP_DirLinkIcon));
 
     copy_name.setText(tr("Copy name"));
     connect(&copy_name, &QAction::triggered, this, &PlaylistContextMenu::on_copyName);
 
     clear_filter.setText(tr("Clear filter"));
     connect(&clear_filter, &QAction::triggered, this, &PlaylistContextMenu::on_clearFilter);
+    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
 
     info.setText(tr("Track info"));
     connect(&info, &QAction::triggered, this, &PlaylistContextMenu::on_trackInfo);
+    info.setIcon(view->style()->standardIcon(QStyle::SP_MessageBoxInformation));
   }
 
   void PlaylistContextMenu::show(const QPoint &pos) {

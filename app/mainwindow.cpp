@@ -363,6 +363,8 @@ void MainWindow::setupPlaybackLog() {
 void MainWindow::setupSortMenu() {
   sort_menu = new SortUi::SortMenu(ui->sortButton, global_conf);
 
+  ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
+
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
 
   //ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));

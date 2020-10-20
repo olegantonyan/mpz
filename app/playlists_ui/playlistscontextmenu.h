@@ -29,6 +29,10 @@ namespace PlaylistsUi {
     ProxyFilterModel *proxy;
     QListView *view;
     QLineEdit *search;
+
+  private slots:
+    void on_rename(const QModelIndex &index);
+    void on_savem3u(const QModelIndex &index);
   };
 }
 
