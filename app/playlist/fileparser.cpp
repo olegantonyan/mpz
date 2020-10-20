@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QUrl>
 #include <QTextStream>
 #include <QFileInfo>
 
@@ -19,13 +20,13 @@ namespace Playlist {
     } else if (line.startsWith("File", Qt::CaseInsensitive)) { // pls stream
       result = line.mid(6);
       is_stream = true;
-    } else if (Loader::is_supported_file(line)) {
+    } else if (Loader::is_supported_file(line)) { // probably local m3u
       is_stream = false;
-      if (QFileInfo(line).isAbsolute()) {
+      QFileInfo fi(line);
+      if (fi.isAbsolute() && fi.exists()) {
         result = line;
-      } else {
-        auto dir = QFileInfo(path.absolutePath()).absolutePath();
-        auto full_path = QDir(dir).filePath(line);
+      } else if (fi.isRelative()) {
+        auto full_path = QDir(current_dir()).filePath(line);
         if (QFileInfo(full_path).exists()) {
           result = full_path;
         }
@@ -39,6 +40,10 @@ namespace Playlist {
     }
 
     return result;
+  }
+
+  QString FileParser::current_dir() const {
+    return QFileInfo(path.absolutePath()).absolutePath();
   }
 
   QVector<Track> FileParser::tracks_list() const {
