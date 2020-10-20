@@ -21,6 +21,8 @@ namespace PlaylistsUi {
   public slots:
     void show(const QPoint &pos);
 
+    void on_rename(const QModelIndex &index);
+
   signals:
     void removed(const QModelIndex &index);
 
@@ -31,7 +33,6 @@ namespace PlaylistsUi {
     QLineEdit *search;
 
   private slots:
-    void on_rename(const QModelIndex &index);
     void on_savem3u(const QModelIndex &index);
   };
 }

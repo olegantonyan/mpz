@@ -55,8 +55,9 @@ namespace PlaylistsUi {
     });
 
     menu.addAction(&rename);
-    menu.addAction(&remove);
     menu.addAction(&savem3u);
+    menu.addSeparator();
+    menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 

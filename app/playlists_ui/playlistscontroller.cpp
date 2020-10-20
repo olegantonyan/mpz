@@ -74,6 +74,11 @@ namespace PlaylistsUi {
         for (auto i : view->selectionModel()->selectedIndexes()) {
           on_removeItem(i);
         }
+      } else if (keyevent->key() == Qt::Key_F2) {
+        auto selected = view->selectionModel()->selectedIndexes();
+        if (!selected.isEmpty() && selected.first().isValid()) {
+          context_menu->on_rename(selected.first());
+        }
       }
     }
   }
