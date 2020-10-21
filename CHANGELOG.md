@@ -1,3 +1,10 @@
+## [1.0.6] - 2020-10-21
+### Fixed
+- Tracks rows height set to minimum regardless of distro default
+
+### Added
+- Context menu icons
+
 ## [1.0.5] - 2020-10-20
 ### Added
 - Load and save m3u playlists
