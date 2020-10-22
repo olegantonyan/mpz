@@ -378,9 +378,18 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   if (preload_files.isEmpty()) {
     return;
   }
+
   QEventLoop loop;
-  connect(playlists, &PlaylistsUi::Controller::selected, &loop, &QEventLoop::quit);
-  playlists->on_createPlaylist(preload_files);
+  std::shared_ptr<Playlist::Playlist> pl;
+  auto conn = connect(playlists, &PlaylistsUi::Controller::loaded, [&](const std::shared_ptr<Playlist::Playlist> item) {
+    pl = item;
+    loop.quit();
+  });
+
+  emit library->createNewPlaylist(preload_files);
   loop.exec();
-  QTimer::singleShot(1000, dispatch, &Playback::Dispatch::on_startRequested);
+  if (pl != nullptr && pl->tracks().size() > 0) {
+    emit playlist->activated(pl->tracks().first());
+  }
+  disconnect(conn);
 }

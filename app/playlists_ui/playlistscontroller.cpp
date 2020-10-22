@@ -165,6 +165,7 @@ namespace PlaylistsUi {
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     persist(index.row());
+    emit loaded(item);
     emit selected(item);
     spinner->hide();
   }

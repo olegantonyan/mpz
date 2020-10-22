@@ -35,6 +35,7 @@ namespace PlaylistsUi {
 
   signals:
     void selected(const std::shared_ptr<Playlist::Playlist> item);
+    void loaded(const std::shared_ptr<Playlist::Playlist> item);
     void emptied();
 
   private slots:
