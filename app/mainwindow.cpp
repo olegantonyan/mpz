@@ -8,7 +8,7 @@
 #include <QStyle>
 #include <QEvent>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
+MainWindow::MainWindow(const QStringList &args, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   setupWindowTitle();
   setupPlaybackLog();
   setupSortMenu();
+
+  preloadPlaylist(args);
 }
 
 MainWindow::~MainWindow() {
@@ -368,4 +370,18 @@ void MainWindow::setupSortMenu() {
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
 
   //ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
+}
+
+void MainWindow::preloadPlaylist(const QStringList &args) {
+  QList<QDir> preload_files;
+  for (auto i : args) {
+    preload_files << QDir(i);
+  }
+  if (!preload_files.isEmpty()) {
+    QEventLoop loop;
+    connect(playlists, &PlaylistsUi::Controller::selected, &loop, &QEventLoop::quit);
+    playlists->on_createPlaylist(preload_files);
+    loop.exec();
+    QTimer::singleShot(400, dispatch, &Playback::Dispatch::on_startRequested);
+  }
 }

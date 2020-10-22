@@ -24,6 +24,8 @@ int main(int argc, char *argv[]) {
 
   RNJesus::seed();
 
+  qDebug() << "starting" << a.applicationDisplayName();
+
 
   QString lang = QLocale::system().name().split("_").first();
   QTranslator trans;
@@ -34,7 +36,12 @@ int main(int argc, char *argv[]) {
   }
 
 
-  MainWindow w;
+  QStringList args;
+  for (int i = 1; i < argc; i++) {
+    args << argv[i];
+  }
+
+  MainWindow w(args);
   w.show();
   return a.exec();
 }
