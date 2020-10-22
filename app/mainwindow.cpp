@@ -368,8 +368,6 @@ void MainWindow::setupSortMenu() {
   ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
 
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
-
-  //ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
 }
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
@@ -377,11 +375,12 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   for (auto i : args) {
     preload_files << QDir(i);
   }
-  if (!preload_files.isEmpty()) {
-    QEventLoop loop;
-    connect(playlists, &PlaylistsUi::Controller::selected, &loop, &QEventLoop::quit);
-    playlists->on_createPlaylist(preload_files);
-    loop.exec();
-    QTimer::singleShot(400, dispatch, &Playback::Dispatch::on_startRequested);
+  if (preload_files.isEmpty()) {
+    return;
   }
+  QEventLoop loop;
+  connect(playlists, &PlaylistsUi::Controller::selected, &loop, &QEventLoop::quit);
+  playlists->on_createPlaylist(preload_files);
+  loop.exec();
+  QTimer::singleShot(400, dispatch, &Playback::Dispatch::on_startRequested);
 }
