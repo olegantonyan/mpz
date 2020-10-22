@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>app/resources/icons/mpz.png</file>
         <file>app/resources/translations/ru.qm</file>
         <file>CHANGELOG.md</file>
+        <file>app/resources/icons/64x64/mpz.png</file>
     </qresource>
 </RCC>
