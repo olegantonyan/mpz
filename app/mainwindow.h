@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  MainWindow(QWidget *parent = nullptr);
+  MainWindow(const QStringList &args, QWidget *parent = nullptr);
   ~MainWindow() override;
 
 public slots:
@@ -77,6 +77,8 @@ private:
   void setupWindowTitle();
   void setupPlaybackLog();
   void setupSortMenu();
+
+  void preloadPlaylist(const QStringList &args);
   
 protected:
   void closeEvent(QCloseEvent *event) override;
