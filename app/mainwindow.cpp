@@ -382,5 +382,5 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   connect(playlists, &PlaylistsUi::Controller::selected, &loop, &QEventLoop::quit);
   playlists->on_createPlaylist(preload_files);
   loop.exec();
-  QTimer::singleShot(400, dispatch, &Playback::Dispatch::on_startRequested);
+  QTimer::singleShot(1000, dispatch, &Playback::Dispatch::on_startRequested);
 }
