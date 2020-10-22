@@ -1,3 +1,9 @@
+## [1.0.7] - 2020-10-22
+### Added
+- Create new plylist from command line arguments
+- MimeTypes support - able to open audio files in filemanager
+- Icon of diffrent sizes for better desktop integration
+
 ## [1.0.6] - 2020-10-21
 ### Fixed
 - Tracks rows height set to minimum regardless of distro default
