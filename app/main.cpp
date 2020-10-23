@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i < argc; i++) {
     args << argv[i];
   }
-  //args << "/mnt/storage/music/ZZ Top/tejas/10_zz_top_asleep_in_the_desert.mp3";
 
   MainWindow w(args);
   w.show();

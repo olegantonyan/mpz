@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include "storage.h"
+#include "sort_ui/sortingpresetsdialog.h"
 
 #include <QPair>
 #include <QList>
@@ -28,8 +29,8 @@ namespace Config {
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
 
-    QList<QPair<QString, QString> > sortPresets() const;
-    bool saveSortPresets(const QList<QPair<QString, QString> >& arg);
+    QList<SortingPreset> sortPresets() const;
+    bool saveSortPresets(const QList<SortingPreset> &arg);
 
   private:
     Config::Storage storage;

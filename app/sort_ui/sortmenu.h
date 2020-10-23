@@ -2,6 +2,7 @@
 #define SORTMENU_H
 
 #include "config/global.h"
+#include "sort_ui/sortingpresetsdialog.h"
 
 #include <QObject>
 #include <QToolButton>
@@ -13,7 +14,7 @@ namespace SortUi {
   public:
     explicit SortMenu(QToolButton *button, Config::Global &global_c);
 
-    static QList<QPair<QString, QString> > standardPresets();
+    static QList<SortingPreset> standardPresets();
 
   signals:
     void triggered(const QString& criteria);

@@ -50,8 +50,8 @@ namespace Config {
     storage.set("minimize_to_tray", Config::Value(arg));
   }
 
-  QList<QPair<QString, QString> > Global::sortPresets() const {
-    QList<QPair<QString, QString> > result;
+  QList<SortingPreset> Global::sortPresets() const {
+    QList<SortingPreset> result;
 
     auto raw = storage.get("sort_presets");
     if (raw.listType() != Config::Value::Map) {
@@ -64,13 +64,13 @@ namespace Config {
       QString name = map.value("name").get<QString>();
       QString value = map.value("value").get<QString>();
 
-      result << QPair<QString, QString>(name, value);
+      result << SortingPreset(name, value);
     }
 
     return result;
   }
 
-  bool Global::saveSortPresets(const QList<QPair<QString, QString> > &arg) {
+  bool Global::saveSortPresets(const QList<SortingPreset> &arg) {
     QList<Config::Value> result;
     for (auto i : arg) {
       QMap<QString, Config::Value> mp;

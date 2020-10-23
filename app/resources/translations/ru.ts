@@ -64,17 +64,17 @@
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="32"/>
         <source>Create new playlist</source>
         <translation>Создать новый плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="32"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="34"/>
         <source>Append to current playlist</source>
         <translation>Добавить в текущий плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
         <source>Open in file manager</source>
         <translation>Открыть в файловом менеджере</translation>
     </message>
@@ -198,7 +198,7 @@
         <translation>Выполняется фоновая операция</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="109"/>
+        <location filename="../../mainwindow.ui" line="112"/>
         <source>Volume</source>
         <translation>Громкость</translation>
     </message>
@@ -208,100 +208,100 @@
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="122"/>
+        <location filename="../../mainwindow.ui" line="125"/>
         <source>Main menu</source>
         <translation>Главное меню</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="143"/>
+        <location filename="../../mainwindow.ui" line="146"/>
         <source>Configure library folders</source>
         <translation>Настроить папки с музыкой</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="146"/>
+        <location filename="../../mainwindow.ui" line="149"/>
         <source>⚙</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="153"/>
+        <location filename="../../mainwindow.ui" line="156"/>
         <source>Select library folder</source>
         <translation>Выбрать папку с музыкой</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="162"/>
+        <location filename="../../mainwindow.ui" line="165"/>
         <source>Filter library</source>
         <translation>Фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="176"/>
+        <location filename="../../mainwindow.ui" line="179"/>
         <source>Filter playlists</source>
         <translation>Фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="199"/>
+        <location filename="../../mainwindow.ui" line="202"/>
         <source>Filter tracks</source>
         <translation>Фильтр треков</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="206"/>
+        <location filename="../../mainwindow.ui" line="209"/>
         <source>Playback follows selection</source>
         <translation>Воспроизведение следует за выделением</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="209"/>
+        <location filename="../../mainwindow.ui" line="212"/>
         <source>Playback follows cursor</source>
         <translation>Воспроизведение следует за курсором</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="216"/>
+        <location filename="../../mainwindow.ui" line="219"/>
         <source>Order:</source>
         <translation>Порядок:</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="223"/>
+        <location filename="../../mainwindow.ui" line="226"/>
         <source>global</source>
         <translation>глобальный</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="230"/>
+        <location filename="../../mainwindow.ui" line="233"/>
         <source>Default playback order</source>
         <translation>Порядок воспроизедения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="237"/>
+        <location filename="../../mainwindow.ui" line="240"/>
         <source>playlist</source>
         <translation>плейлист</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="244"/>
+        <location filename="../../mainwindow.ui" line="247"/>
         <source>Override playback for current playlist</source>
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="137"/>
-        <location filename="../../mainwindow.cpp" line="159"/>
+        <location filename="../../mainwindow.cpp" line="139"/>
+        <location filename="../../mainwindow.cpp" line="161"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="138"/>
-        <location filename="../../mainwindow.cpp" line="158"/>
+        <location filename="../../mainwindow.cpp" line="140"/>
+        <location filename="../../mainwindow.cpp" line="160"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="157"/>
+        <location filename="../../mainwindow.cpp" line="159"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="285"/>
-        <location filename="../../mainwindow.cpp" line="289"/>
+        <location filename="../../mainwindow.cpp" line="287"/>
+        <location filename="../../mainwindow.cpp" line="291"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="291"/>
+        <location filename="../../mainwindow.cpp" line="293"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -348,22 +348,22 @@
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="21"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="22"/>
         <source>Show in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="24"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="26"/>
         <source>Copy name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="29"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="30"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="33"/>
         <source>Track info</source>
         <translation>Информация о треке</translation>
     </message>
@@ -382,17 +382,17 @@
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="57"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="76"/>
         <source>Save as m3u</source>
         <translation>Сохранить как m3u</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="39"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="67"/>
         <source>Rename playlist</source>
         <translation>Переименовать плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="45"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="43"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
@@ -447,23 +447,26 @@
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
+</context>
+<context>
+    <name>SortingPresetsDialog</name>
     <message>
-        <location filename="../../sort_ui/sortingpresets.cpp" line="86"/>
-        <source>Fields available to sort (case insensitive):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;By default sort in ascending order. Add - before the field name to change to descending order.&lt;br /&gt;Use / to build nested multilevel sorting criteria. Examples:&lt;br /&gt; * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title&lt;br /&gt; * -Title : sort only by title in descending order&lt;br /&gt;</source>
-        <translation>Поля доступные для сортировки (регистр не важен):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;По умолчанию порядок возрастающий. Добавьте - перед названием поля чтобы сортировать в убывающем порядке.&lt;br /&gt;Используйте / чтобы получить многоуровневую сортировку. Примеры:&lt;br /&gt; * Artist / -Year / Title : сортировка по артисту, дате в убывающем порядке и названию&lt;br /&gt; * -Title : сортировка только по названию в убывающем порядке&lt;br /&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../sort_ui/sortingpresets.cpp" line="52"/>
-        <source>Rename sorting preset</source>
-        <translation>Переименовать пресет сортировки</translation>
-    </message>
-    <message>
-        <location filename="../../sort_ui/sortingpresets.cpp" line="14"/>
+        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="14"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../../sort_ui/sortingpresets.cpp" line="102"/>
+        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="52"/>
+        <source>Rename sorting preset</source>
+        <translation>Переименовать пресет сортировки</translation>
+    </message>
+    <message>
+        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="86"/>
+        <source>Fields available to sort (case insensitive):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;By default sort in ascending order. Add - before the field name to change to descending order.&lt;br /&gt;Use / to build nested multilevel sorting criteria. Examples:&lt;br /&gt; * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title&lt;br /&gt; * -Title : sort only by title in descending order&lt;br /&gt;</source>
+        <translation>Поля доступные для сортировки (регистр не важен):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;По умолчанию порядок возрастающий. Добавьте - перед названием поля чтобы сортировать в убывающем порядке.&lt;br /&gt;Используйте / чтобы получить многоуровневую сортировку. Примеры:&lt;br /&gt; * Artist / -Year / Title : сортировка по артисту, дате в убывающем порядке и названию&lt;br /&gt; * -Title : сортировка только по названию в убывающем порядке&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="102"/>
         <source>Sorting presets description</source>
         <translation>Описание пресетов сортировки</translation>
     </message>

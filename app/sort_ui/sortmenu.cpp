@@ -1,6 +1,6 @@
 #include "sort_ui/sortmenu.h"
 #include "playlist/sorter.h"
-#include "sort_ui/sortingpresets.h"
+#include "sort_ui/sortingpresetsdialog.h"
 
 #include <QMenu>
 #include <QAction>
@@ -13,16 +13,16 @@ namespace SortUi {
     //button->setMenu(new QMenu(button)); // to show small arrow
   }
 
-  QList<QPair<QString, QString> > SortMenu::standardPresets(){
-    QList<QPair<QString, QString> > result;
+  QList<SortingPreset> SortMenu::standardPresets(){
+    QList<SortingPreset> result;
 
-    result << QPair<QString, QString>("", "Title");
-    result << QPair<QString, QString>("", "-Title");
-    result << QPair<QString, QString>("", "Artist");
-    result << QPair<QString, QString>("", "-Artist");
-    result << QPair<QString, QString>("", "Album / Title");
-    result << QPair<QString, QString>("", "-Album / Title");
-    result << QPair<QString, QString>("", "Arist / Album / TrackNumber / Filename / Title");
+    result << SortingPreset("", "Title");
+    result << SortingPreset("", "-Title");
+    result << SortingPreset("", "Artist");
+    result << SortingPreset("", "-Artist");
+    result << SortingPreset("", "Album / Title");
+    result << SortingPreset("", "-Album / Title");
+    result << SortingPreset("", "Arist / Album / TrackNumber / Filename / Title");
 
     return result;
   }
@@ -70,16 +70,16 @@ namespace SortUi {
   }
 
   void SortMenu::showEditPresetsDialog() {
-    SortingPresets *dlg = new SortingPresets(global_conf.sortPresets());
+    SortingPresetsDialog *dlg = new SortingPresetsDialog(global_conf.sortPresets());
     dlg->setModal(false);
-    connect(dlg, &SortingPresets::finished, [=](int result) {
+    connect(dlg, &SortingPresetsDialog::finished, [=](int result) {
       if (result == QDialog::Accepted) {
         auto presets = dlg->currentPresets();
         global_conf.saveSortPresets(presets);
       }
       dlg->deleteLater();
     });
-    connect(dlg, &SortingPresets::triggeredSort, this, &SortMenu::triggered);
+    connect(dlg, &SortingPresetsDialog::triggeredSort, this, &SortMenu::triggered);
     dlg->show();
   }
 }

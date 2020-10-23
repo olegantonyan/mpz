@@ -1,4 +1,4 @@
-#include "sortingpresets.h"
+#include "sortingpresetsdialog.h"
 #include "ui_sortingpresets.h"
 #include "playlist/sorter.h"
 
@@ -6,7 +6,7 @@
 #include <QStyle>
 #include <QMessageBox>
 
-SortingPresets::SortingPresets(const QList<QPair<QString, QString> > &_pr, QWidget *parent) : QDialog(parent), ui(new Ui::SortingPresets), presets(_pr) {
+SortingPresetsDialog::SortingPresetsDialog(const QList<SortingPreset> &_pr, QWidget *parent) : QDialog(parent), ui(new Ui::SortingPresets), presets(_pr) {
   ui->setupUi(this);
   ui->listViewPresets->setModel(&model);
   ui->buttonHelp->setIcon(style()->standardIcon(QStyle::SP_DialogHelpButton));
@@ -14,15 +14,15 @@ SortingPresets::SortingPresets(const QList<QPair<QString, QString> > &_pr, QWidg
   ui->labelDefault->setText(tr("Default") + ": " + Playlist::Sorter::defaultCriteria());
 }
 
-SortingPresets::~SortingPresets() {
+SortingPresetsDialog::~SortingPresetsDialog() {
   delete ui;
 }
 
-QList<QPair<QString, QString> > SortingPresets::currentPresets() const {
+QList<SortingPreset> SortingPresetsDialog::currentPresets() const {
   return presets;
 }
 
-void SortingPresets::on_buttonTest_clicked() {
+void SortingPresetsDialog::on_buttonTest_clicked() {
   //TODO validate format
   QString value = ui->lineEditNewPreset->text();
   if (value.isEmpty()) {
@@ -31,18 +31,18 @@ void SortingPresets::on_buttonTest_clicked() {
   emit triggeredSort(value);
 }
 
-void SortingPresets::on_buttonAdd_clicked() {
+void SortingPresetsDialog::on_buttonAdd_clicked() {
   QString value = ui->lineEditNewPreset->text();
   if (value.isEmpty()) {
     return;
   }
   //TODO validate format
-  QPair<QString, QString> item("", value);
+  SortingPreset item("", value);
   presets << item;
   refreshModel();
 }
 
-void SortingPresets::on_buttonRename_clicked() {
+void SortingPresetsDialog::on_buttonRename_clicked() {
   auto current_index = ui->listViewPresets->currentIndex();
   if (!current_index.isValid() || current_index.row() >= model.stringList().size()) {
     return;
@@ -51,13 +51,13 @@ void SortingPresets::on_buttonRename_clicked() {
   bool ok;
   QString name = QInputDialog::getText(this, tr("Rename sorting preset"), "", QLineEdit::Normal, presets.at(current_index.row()).first, &ok, Qt::Widget);
   if (ok && !name.isEmpty()) {
-    QPair<QString, QString> item(name, presets.at(current_index.row()).second);
+    SortingPreset item(name, presets.at(current_index.row()).second);
     presets.replace(current_index.row(), item);
     refreshModel();
   }
 }
 
-void SortingPresets::on_buttonRemove_clicked() {
+void SortingPresetsDialog::on_buttonRemove_clicked() {
   auto current_index = ui->listViewPresets->currentIndex();
   if (!current_index.isValid() || current_index.row() >= model.stringList().size()) {
     return;
@@ -66,11 +66,11 @@ void SortingPresets::on_buttonRemove_clicked() {
   refreshModel();
 }
 
-void SortingPresets::refreshModel() {
+void SortingPresetsDialog::refreshModel() {
   model.setStringList(itemList(presets));
 }
 
-QStringList SortingPresets::itemList(const QList<QPair<QString, QString> > &presets) const {
+QStringList SortingPresetsDialog::itemList(const QList<SortingPreset> &presets) const {
   QStringList list;
   for (auto i : presets) {
     if (i.first.isEmpty() || i.first == i.second) {
@@ -82,7 +82,7 @@ QStringList SortingPresets::itemList(const QList<QPair<QString, QString> > &pres
   return list;
 }
 
-void SortingPresets::on_buttonHelp_clicked() {
+void SortingPresetsDialog::on_buttonHelp_clicked() {
   static const QString HELP_TEXT = tr(
         "Fields available to sort (case insensitive):<br />"
         " * Artist<br />"

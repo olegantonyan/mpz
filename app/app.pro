@@ -75,7 +75,7 @@ SOURCES += \
     playlists_ui/playlistsproxyfiltermodel.cpp \
     rnjesus.cpp \
     shortcuts.cpp \
-    sort_ui/sortingpresets.cpp \
+    sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
     sysinfo.cpp \
@@ -124,7 +124,7 @@ HEADERS += \
     playlists_ui/playlistsproxyfiltermodel.h \
     rnjesus.h \
     shortcuts.h \
-    sort_ui/sortingpresets.h \
+    sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \
     sysinfo.h \

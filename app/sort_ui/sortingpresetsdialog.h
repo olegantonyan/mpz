@@ -7,18 +7,20 @@
 #include <QString>
 #include <QStringListModel>
 
+typedef QPair<QString, QString> SortingPreset;
+
 namespace Ui {
   class SortingPresets;
 }
 
-class SortingPresets : public QDialog {
+class SortingPresetsDialog : public QDialog {
   Q_OBJECT
 
 public:
-  explicit SortingPresets(const QList<QPair<QString, QString> > &presets, QWidget *parent = nullptr);
-  ~SortingPresets();
+  explicit SortingPresetsDialog(const QList<SortingPreset> &presets, QWidget *parent = nullptr);
+  ~SortingPresetsDialog();
 
-  QList<QPair<QString, QString> > currentPresets() const;
+  QList<SortingPreset> currentPresets() const;
 
 signals:
   void triggeredSort(const QString &criteria);
@@ -34,10 +36,10 @@ private slots:
 private:
   Ui::SortingPresets *ui;
   QStringListModel model;
-  QList<QPair<QString, QString> > presets;
+  QList<SortingPreset> presets;
 
   void refreshModel();
-  QStringList itemList(const QList<QPair<QString, QString> > &presets) const;
+  QStringList itemList(const QList<SortingPreset> &presets) const;
 };
 
 #endif // SORTINGPRESETS_H
