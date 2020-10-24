@@ -44,7 +44,7 @@ namespace IPC {
     auto string = QString::fromStdString(request.toStdString());
     auto content = string.split("\r\n").last();
     auto json = QJsonDocument::fromJson(content.toUtf8());
-    if (!json["files"].isArray()) {
+    if (json.isNull() || json.isEmpty()) {
       return false;
     }
     qDebug() << json["files"].toArray();
