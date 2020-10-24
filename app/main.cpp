@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "rnjesus.h"
+#include "ipc/instance.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -39,6 +40,11 @@ int main(int argc, char *argv[]) {
   QStringList args;
   for (int i = 1; i < argc; i++) {
     args << argv[i];
+  }
+
+  IPC::Instance instance;
+  if (instance.isAnotherRunning()) {
+    qDebug() << "another instance is running";
   }
 
   MainWindow w(args);
