@@ -44,7 +44,10 @@ int main(int argc, char *argv[]) {
 
   IPC::Instance instance;
   if (instance.isAnotherRunning()) {
-    qDebug() << "another instance is running";
+    qDebug() << "another instance is running, reusing it";
+    QVariantMap m;
+    m.insert("files", args);
+    return instance.send(m) == true ? 0 : 1;
   } else {
     qDebug() << "first instance started";
     instance.start();

@@ -7,6 +7,7 @@
 #include <QTcpSocket>
 #include <QList>
 #include <QUrl>
+#include <QVariantMap>
 
 namespace IPC {
   class Instance : public QObject {
@@ -17,11 +18,11 @@ namespace IPC {
     bool isAnotherRunning() const;
 
   public slots:
-    bool send(const QVariant &data) const;
+    bool send(const QVariantMap &data) const;
     void start();
 
   signals:
-    void received(const QVariant &data);
+    void received(const QVariantMap &data);
 
   private:
     const int timeout_ms;

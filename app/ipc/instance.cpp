@@ -5,8 +5,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QApplication>
 
 namespace IPC {
@@ -15,27 +13,45 @@ namespace IPC {
   }
 
   bool Instance::isAnotherRunning() const {
-    return send(QVariant());
+    return send(QVariantMap());
   }
 
-  bool Instance::send(const QVariant &data) const {
+  bool Instance::send(const QVariantMap &data) const {
     QTimer timer;
     timer.setSingleShot(true);
     timer.setInterval(timeout_ms);
 
-    QNetworkRequest request(url());
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QNetworkAccessManager nam;
-    QNetworkReply *reply = nam.post(request, QJsonDocument::fromVariant(data).toJson());
-    connect(&timer, &QTimer::timeout, reply, &QNetworkReply::abort);
-    while (!reply->isFinished()) {
-      qApp->processEvents();
+    auto bytes = QJsonDocument::fromVariant(data).toJson(QJsonDocument::Compact);
+
+    QTcpSocket socket;
+    socket.setSocketOption(QAbstractSocket::LowDelayOption, true);
+
+    bool ok = true;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    auto conn_error = connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
+#else
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
+#endif
+      Q_UNUSED(code);
+      ok = false;
+    });
+
+    socket.connectToHost(QHostAddress::LocalHost, port);
+    socket.waitForConnected(timeout_ms);
+    if (socket.state() == QTcpSocket::ConnectedState) {
+      socket.write("POST / HTTP/1.1\r\n\r\n");
+      socket.write("Content-Type: application/json\r\n");
+      socket.write(QString("Content-Length: %1\r\n").arg(bytes.length()).toUtf8());
+      socket.write("Connection: Close\r\n");
+      socket.write("\r\n");
+      socket.write(bytes);
+      socket.waitForBytesWritten(timeout_ms);
+    } else {
+      ok = false;
     }
-    timer.stop();
+    socket.close();
+    disconnect(conn_error);
 
-    bool ok = reply->error() == QNetworkReply::NoError && reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200;
-
-    reply->deleteLater();
     return ok;
   }
 
@@ -54,7 +70,10 @@ namespace IPC {
     auto string = QString::fromStdString(request.toStdString());
     auto content = string.split("\r\n").last();
     auto json = QJsonDocument::fromJson(content.toUtf8());
-    emit received(json.toVariant());
+    if (json.isObject()) {
+      qDebug() << json.toVariant().toMap();
+      emit received(json.toVariant().toMap());
+    }
   }
 
   QUrl Instance::url() const {
