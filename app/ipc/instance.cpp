@@ -5,51 +5,61 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QApplication>
 
 namespace IPC {
-  Instance::Instance(QObject *parent) : QObject(parent) {
-    server.listen(QHostAddress::LocalHost, 10001);
+  Instance::Instance(int timeo, int prt, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
     connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
   }
 
   bool Instance::isAnotherRunning() const {
-    return false;
+    return send(QVariant());
   }
 
-  void Instance::send(const QVariant &data) {
+  bool Instance::send(const QVariant &data) const {
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.setInterval(timeout_ms);
 
-  }
-
-  QByteArray Instance::response(bool ok) const {
-    QByteArray result("HTTP/1.1 ");
-    if (ok) {
-      result.append("200 OK");
-    } else {
-      result.append("400 Bad Request");
+    QNetworkRequest request(url());
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QNetworkAccessManager nam;
+    QNetworkReply *reply = nam.post(request, QJsonDocument::fromVariant(data).toJson());
+    connect(&timer, &QTimer::timeout, reply, &QNetworkReply::abort);
+    while (!reply->isFinished()) {
+      qApp->processEvents();
     }
-    result.append("\r\n\r\n");
+    timer.stop();
 
-    QStringList headers;
-    //headers << "Content-Type: application/json; charset=UTF-8";
-    //headers << "Content-Length: 0";
-    headers << "Connection: close";
+    bool ok = reply->error() == QNetworkReply::NoError && reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200;
 
-    result.append(headers.join("\r\n").toUtf8());
+    reply->deleteLater();
+    return ok;
+  }
+
+  void Instance::start() {
+    server.listen(QHostAddress::LocalHost, port);
+  }
+
+  QByteArray Instance::response() const {
+    QByteArray result("HTTP/1.1 200 OK\r\n\r\n");
+    result.append("Connection: close\r\n");
     result.append("\r\n");
-
     return result;
   }
 
-  bool Instance::process(const QByteArray &request) {
+  void Instance::process(const QByteArray &request) {
     auto string = QString::fromStdString(request.toStdString());
     auto content = string.split("\r\n").last();
     auto json = QJsonDocument::fromJson(content.toUtf8());
-    if (json.isNull() || json.isEmpty()) {
-      return false;
-    }
-    qDebug() << json["files"].toArray();
+    emit received(json.toVariant());
+  }
 
-    return true;
+  QUrl Instance::url() const {
+    auto i = QString("http://%1:%2").arg(QHostAddress(QHostAddress::LocalHost).toString()).arg(port);
+    return QUrl(i);
   }
 
   void Instance::on_server_connection() {
@@ -58,16 +68,19 @@ namespace IPC {
     QEventLoop loop;
 
     timer.setSingleShot(true);
-    timer.setInterval(5000);
+    timer.setInterval(timeout_ms);
+    timer.start();
     auto conn_read = connect(socket, &QTcpSocket::readyRead, [&]() {
-      bool ok = process(socket->readAll());
-      socket->write(response(ok));
-      socket->waitForBytesWritten(5000);
+      process(socket->readAll());
+      socket->write(response());
+      socket->waitForBytesWritten(timeout_ms);
       loop.quit();
     });
     auto conn_timer = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 
     loop.exec();
+
+    timer.stop();
     disconnect(conn_read);
     disconnect(conn_timer);
 

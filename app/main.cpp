@@ -45,6 +45,9 @@ int main(int argc, char *argv[]) {
   IPC::Instance instance;
   if (instance.isAnotherRunning()) {
     qDebug() << "another instance is running";
+  } else {
+    qDebug() << "first instance started";
+    instance.start();
   }
 
   MainWindow w(args);

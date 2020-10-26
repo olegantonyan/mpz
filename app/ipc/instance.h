@@ -6,26 +6,31 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QList>
+#include <QUrl>
 
 namespace IPC {
   class Instance : public QObject {
     Q_OBJECT
   public:
-    explicit Instance(QObject *parent = nullptr);
+    explicit Instance(int timeout_ms = 800, int port = 10001, QObject *parent = nullptr);
 
     bool isAnotherRunning() const;
 
   public slots:
-    void send(const QVariant &data);
+    bool send(const QVariant &data) const;
+    void start();
 
   signals:
     void received(const QVariant &data);
 
   private:
+    const int timeout_ms;
+    const int port;
     QTcpServer server;
 
-    QByteArray response(bool ok) const;
-    bool process(const QByteArray &request);
+    QByteArray response() const;
+    void process(const QByteArray &request);
+    QUrl url() const;
 
   private slots:
     void on_server_connection();
