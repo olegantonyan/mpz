@@ -32,6 +32,8 @@ namespace Config {
     QList<SortingPreset> sortPresets() const;
     bool saveSortPresets(const QList<SortingPreset> &arg);
 
+    QString language() const;
+
   private:
     Config::Storage storage;
   };

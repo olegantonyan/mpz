@@ -8,7 +8,9 @@
 #include <QStyle>
 #include <QEvent>
 
-MainWindow::MainWindow(const QStringList &args, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), trayicon(nullptr) {
+MainWindow::MainWindow(const QStringList &args, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
+  QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
+  trayicon = nullptr;
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
@@ -171,7 +173,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
     }
   });
   connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
-    auto current_playlist = playlists->playlistByTrackUid(dispatch->state().playingTrack());
+    auto current_playlist = playlists->playlistByTrackUid(dispatch->state().selectedTrack());
     if (current_playlist != nullptr) {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
       playlists->on_playlistChanged(current_playlist);

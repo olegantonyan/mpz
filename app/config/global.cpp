@@ -80,4 +80,8 @@ namespace Config {
     }
     return storage.set("sort_presets", Config::Value(result));
   }
+
+  QString Global::language() const {
+    return storage.get("language").get<QString>();
+  }
 }
