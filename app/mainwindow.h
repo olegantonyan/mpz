@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  MainWindow(const QStringList &args, QWidget *parent = nullptr);
+  MainWindow(const QStringList &args, Config::Local &local_c, Config::Global &global_c, QWidget *parent = nullptr);
   ~MainWindow() override;
 
 public slots:
@@ -45,8 +45,8 @@ private:
   PlaylistUi::Controller *playlist;
   Playback::Controller *player;
   Playback::Dispatch *dispatch;
-  Config::Local local_conf;
-  Config::Global global_conf;
+  Config::Local &local_conf;
+  Config::Global &global_conf;
   BusySpinner *spinner;
   TrayIcon *trayicon;
   VolumeControl *volume;
