@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 
 namespace PlaylistUi {    
-  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();

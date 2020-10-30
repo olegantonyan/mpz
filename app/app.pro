@@ -61,6 +61,7 @@ SOURCES += \
     playlist/fileparser.cpp \
     playlist/loader.cpp \
     playlist/sorter.cpp \
+    playlist_ui/columnsconfig.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist/playlist.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     playlist/fileparser.h \
     playlist/loader.h \
     playlist/sorter.h \
+    playlist_ui/columnsconfig.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \

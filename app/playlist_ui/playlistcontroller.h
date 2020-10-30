@@ -5,6 +5,7 @@
 #include "playlist/playlist.h"
 #include "track.h"
 #include "config/local.h"
+#include "config/global.h"
 #include "playlistproxyfiltermodel.h"
 #include "playlist_ui/playlistcontextmenu.h"
 #include "busyspinner.h"
@@ -20,7 +21,7 @@ namespace PlaylistUi {
   class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);
@@ -50,6 +51,7 @@ namespace PlaylistUi {
     Model *model;
     BusySpinner *spinner;
     Config::Local &local_conf;
+    Config::Global &global_conf;
     bool restore_scroll_once;
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
