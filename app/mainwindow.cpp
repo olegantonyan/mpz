@@ -55,6 +55,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   connect(instance, &IPC::Instance::load_files_received, [=](const QStringList &lst) {
     preloadPlaylist(lst);
+    show();
+    raise();
+    setFocus();
   });
 
   setupUiSettings();
