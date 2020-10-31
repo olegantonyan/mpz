@@ -24,6 +24,7 @@
 #include <QtDebug>
 #include <QFileInfo>
 #include <QtGlobal>
+#include <QDebug>
 
 namespace Playlist {
   static const char* kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
@@ -62,16 +63,17 @@ namespace Playlist {
     QList<CueEntry> entries;
     int files = 0;
 
+    QString album_artist;
+    QString album;
+    QString album_composer;
+    QString file;
+    QString file_type;
+    QString genre;
+    QString date;
+    QString disc;
+
     // -- whole file
     while (!text_stream.atEnd()) {
-      QString album_artist;
-      QString album;
-      QString album_composer;
-      QString file;
-      QString file_type;
-      QString genre;
-      QString date;
-      QString disc;
 
       // -- FILE section
       do {
@@ -167,9 +169,7 @@ namespace Playlist {
           // please note that the same code is repeated just after this 'do-while'
           // loop
           if (valid_file && !index.isEmpty() && (track_type.isEmpty() || track_type == kAudioTrackType)) {
-            entries.append(CueEntry(file, index, title, artist, album_artist,
-                                    album, composer, album_composer, genre,
-                                    date, disc));
+            entries.append(CueEntry(file, index, title, artist, album_artist, album, composer, album_composer, genre, date, disc));
           }
 
           // clear the state
@@ -218,12 +218,12 @@ namespace Playlist {
     for (int i = 0; i < entries.length(); i++) {
       CueEntry entry = entries.at(i);
 
-      //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.date << entry.artist << entry.album << entry.file;
+      //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.artist << entry.album;
 
       bool fuck;
       Track track(entry.file,
                   begin_by_index(entry.index),
-                  entry.artist,
+                  entry.artist.isEmpty() ? entry.album_artist : entry.artist,
                   entry.album,
                   entry.title,
                   i + 1,
@@ -236,12 +236,19 @@ namespace Playlist {
       track.setCue();
       if (i < entries.length() - 1) {
         CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
-        quint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
-        track.setDuration(duration);
+        qint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
+        if (duration < 0) {
+          quint32 duration = track.duration() - begin_by_index(entry.index); // last track for this file - got duration from audio properties
+          track.setDuration(duration);
+        } else {
+          track.setDuration(duration);
+        }
       } else {
         quint32 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
         track.setDuration(duration);
       }
+
+      //qDebug() << track.track_number() << track.title() << track.artist();
 
       tracks << track;
     }

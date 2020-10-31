@@ -26,7 +26,6 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 ## Limitations
 
 - Uses external codecs installed on your OS (through QtMultimedia, on Linux - GStreamer backend), like the most other multimedia players;
-- CUE must contain only 1 source audio file, multi-file CUEs are not supported;
 - Lacks some "expected" features like tracks rearranging within playlist.
 - Global hotkeys don't work in Wayland
 
