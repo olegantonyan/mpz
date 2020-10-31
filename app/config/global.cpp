@@ -86,14 +86,14 @@ namespace Config {
   }
 
   int Global::ipcPort() const {
-    return storage.get("ipc_port").get<int>();
+    return storage.get("single_instance_ipc_port").get<int>();
   }
 
   bool Global::saveIpcPort(int arg) {
-    return storage.set("ipc_port", Config::Value(arg));
+    return storage.set("single_instance_ipc_port", Config::Value(arg));
   }
 
   bool Global::singleInstance() const {
-    return storage.get("").get<bool>();
+    return storage.get("single_instance").get<bool>();
   }
 }
