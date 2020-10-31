@@ -148,7 +148,6 @@ namespace PlaylistUi {
       view->setColumnWidth(2, static_cast<int>(total_width * 0.28));
       view->setColumnWidth(3, static_cast<int>(total_width * 0.28));
       view->setColumnWidth(4, static_cast<int>(total_width * 0.05));
-      //view->setColumnWidth(4, total_width * 0.05);
       view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
 
     } else if (event->type() == QEvent::WindowActivate) {
