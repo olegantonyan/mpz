@@ -44,7 +44,7 @@ void load_locale(QApplication &a, const QString &conf_language) {
 
 int ipc_port(Config::Global &global_conf) {
   if (global_conf.ipcPort() == 0) {
-    global_conf.saveIpcPort(54912);
+    global_conf.saveIpcPort(54913);
   }
   return global_conf.ipcPort();
 }
