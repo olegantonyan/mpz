@@ -17,10 +17,10 @@ namespace IPC {
   public:
     explicit Instance(int port, int timeout_ms = 500, QObject *parent = nullptr);
 
-    bool isAnotherRunning() const;
+    int anotherPid() const;
 
   public slots:
-    bool send(const QVariantMap &data) const;
+    int send(const QVariantMap &data) const;
     bool start();
     bool load_files_send(const QStringList &list);
 

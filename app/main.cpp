@@ -65,7 +65,9 @@ int main(int argc, char *argv[]) {
 
   IPC::Instance instance(ipc_port(global_conf));
   if (global_conf.singleInstance()) {
-    if (instance.isAnotherRunning()) {
+    int another_pid = instance.anotherPid();
+    if (another_pid > 0) {
+      qDebug() << "reusing another instance with pid" << another_pid;
       return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
     } else {
       instance.start();
