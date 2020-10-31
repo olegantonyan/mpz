@@ -92,4 +92,8 @@ namespace Config {
   bool Global::saveIpcPort(int arg) {
     return storage.set("ipc_port", Config::Value(arg));
   }
+
+  bool Global::singleInstance() const {
+    return storage.get("single_instance").get<bool>();
+  }
 }

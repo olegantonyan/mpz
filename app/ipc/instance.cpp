@@ -9,7 +9,6 @@
 
 namespace IPC {
   Instance::Instance(int prt, int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
-    connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
   }
 
   bool Instance::isAnotherRunning() const {
@@ -71,6 +70,7 @@ namespace IPC {
       return false;
     }
     qDebug() << "first instance started";
+    connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
     return true;
   }
 

@@ -37,6 +37,8 @@ namespace Config {
     int ipcPort() const;
     bool saveIpcPort(int arg);
 
+    bool singleInstance() const;
+
   private:
     Config::Storage storage;
   };

@@ -61,10 +61,12 @@ int main(int argc, char *argv[]) {
   }
 
   IPC::Instance instance(global_conf.ipcPort());
-  if (instance.isAnotherRunning()) {
-    return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
-  } else {
-    instance.start();
+  if (global_conf.singleInstance()) {
+    if (instance.isAnotherRunning()) {
+      return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
+    } else {
+      instance.start();
+    }
   }
 
   MainWindow w(args(argc, argv), &instance, local_conf, global_conf);
