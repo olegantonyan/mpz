@@ -1,3 +1,7 @@
+## [1.0.8] - 2020-10-31
+### Added
+- Support CUE with multiple files
+
 ## [1.0.7] - 2020-10-22
 ### Added
 - Create new plylist from command line arguments

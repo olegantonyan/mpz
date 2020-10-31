@@ -42,7 +42,9 @@ namespace Playlist {
       if (is_cue(current_path)) {
         auto current_cues = CueParser(current_path).tracks_list();
         if (!current_cues.isEmpty()) {
-          cues.append(current_cues.first().path());
+          for (auto c : current_cues) {
+            cues.append(c.path());
+          }
           result.append(current_cues);
         }
       } else {
