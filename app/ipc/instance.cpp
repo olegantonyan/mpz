@@ -95,9 +95,7 @@ namespace IPC {
         for (auto i : json["load_files"].toArray()) {
           lst.append(i.toString());
         }
-        if (!lst.isEmpty()) {
-          emit load_files_received(lst);
-        }
+        emit load_files_received(lst);
       }
     }
 

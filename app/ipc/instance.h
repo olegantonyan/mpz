@@ -15,7 +15,7 @@ namespace IPC {
   class Instance : public QObject {
     Q_OBJECT
   public:
-    explicit Instance(int port, int timeout_ms = 800, QObject *parent = nullptr);
+    explicit Instance(int port, int timeout_ms = 500, QObject *parent = nullptr);
 
     bool isAnotherRunning() const;
 
