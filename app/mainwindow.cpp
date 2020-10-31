@@ -53,13 +53,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
 
-  connect(instance, &IPC::Instance::load_files_received, [=](const QStringList &lst) {
-    preloadPlaylist(lst);
-    show();
-    raise();
-    setFocus();
-  });
-
   setupUiSettings();
 
   setupPlaybackDispatch();
@@ -79,6 +72,13 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupSortMenu();
 
   preloadPlaylist(args);
+
+  connect(instance, &IPC::Instance::load_files_received, [=](const QStringList &lst) {
+    preloadPlaylist(lst);
+    show();
+    raise();
+    setFocus();
+  });
 }
 
 MainWindow::~MainWindow() {

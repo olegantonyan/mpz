@@ -42,6 +42,13 @@ void load_locale(QApplication &a, const QString &conf_language) {
   }
 }
 
+int ipc_port(Config::Global &global_conf) {
+  if (global_conf.ipcPort() == 0) {
+    global_conf.saveIpcPort(54912);
+  }
+  return global_conf.ipcPort();
+}
+
 int main(int argc, char *argv[]) {
   registerMetaTypes();
   RNJesus::seed();
@@ -56,11 +63,7 @@ int main(int argc, char *argv[]) {
 
   load_locale(a, global_conf.language());
 
-  if (global_conf.ipcPort() == 0) {
-    global_conf.saveIpcPort(54912);
-  }
-
-  IPC::Instance instance(global_conf.ipcPort());
+  IPC::Instance instance(ipc_port(global_conf));
   if (global_conf.singleInstance()) {
     if (instance.isAnotherRunning()) {
       return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;

@@ -94,6 +94,6 @@ namespace Config {
   }
 
   bool Global::singleInstance() const {
-    return storage.get("single_instance").get<bool>();
+    return storage.get("").get<bool>();
   }
 }
