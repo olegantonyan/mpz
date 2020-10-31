@@ -34,6 +34,9 @@ namespace Config {
 
     QString language() const;
 
+    int ipcPort() const;
+    bool saveIpcPort(int arg);
+
   private:
     Config::Storage storage;
   };

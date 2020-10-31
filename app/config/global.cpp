@@ -84,4 +84,12 @@ namespace Config {
   QString Global::language() const {
     return storage.get("language").get<QString>();
   }
+
+  int Global::ipcPort() const {
+    return storage.get("ipc_port").get<int>();
+  }
+
+  bool Global::saveIpcPort(int arg) {
+    return storage.set("ipc_port", Config::Value(arg));
+  }
 }

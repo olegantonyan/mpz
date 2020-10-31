@@ -16,6 +16,7 @@
 #include "shortcuts.h"
 #include "playback_log_ui/playbackloguicontroller.h"
 #include "sort_ui/sortmenu.h"
+#include "ipc/instance.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -32,7 +33,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  MainWindow(const QStringList &args, Config::Local &local_c, Config::Global &global_c, QWidget *parent = nullptr);
+  MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent = nullptr);
   ~MainWindow() override;
 
 public slots:

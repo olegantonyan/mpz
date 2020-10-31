@@ -56,18 +56,18 @@ int main(int argc, char *argv[]) {
 
   load_locale(a, global_conf.language());
 
-  IPC::Instance instance;
+  if (global_conf.ipcPort() == 0) {
+    global_conf.saveIpcPort(54912);
+  }
+
+  IPC::Instance instance(global_conf.ipcPort());
   if (instance.isAnotherRunning()) {
-    qDebug() << "another instance is running, reusing it";
-    QVariantMap m;
-    m.insert("files", args(argc, argv));
-    return instance.send(m) == true ? 0 : 1;
+    return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
   } else {
-    qDebug() << "first instance started";
     instance.start();
   }
 
-  MainWindow w(args(argc, argv), local_conf, global_conf);
+  MainWindow w(args(argc, argv), &instance, local_conf, global_conf);
 
   w.show();
   return a.exec();

@@ -8,7 +8,7 @@
 #include <QApplication>
 
 namespace IPC {
-  Instance::Instance(int timeo, int prt, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
+  Instance::Instance(int prt, int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
     connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
   }
 
@@ -46,6 +46,16 @@ namespace IPC {
       socket.write("\r\n");
       socket.write(bytes);
       socket.waitForBytesWritten(timeout_ms);
+      if (socket.waitForReadyRead(timeout_ms)) {
+        auto data = QString::fromUtf8(socket.readAll());
+        if (data.startsWith("HTTP/1.1 200 OK\r\n\r\n")) {
+          ok = true;
+        } else {
+          ok = false;
+        }
+      } else {
+        ok = false;
+      }
     } else {
       ok = false;
     }
@@ -55,25 +65,43 @@ namespace IPC {
     return ok;
   }
 
-  void Instance::start() {
-    server.listen(QHostAddress::LocalHost, port);
+  bool Instance::start() {
+    if (!server.listen(QHostAddress::LocalHost, port)) {
+      qWarning() << "error starting tcp server instance" << server.errorString();
+      return false;
+    }
+    qDebug() << "first instance started";
+    return true;
   }
 
-  QByteArray Instance::response() const {
+  bool Instance::load_files_send(const QStringList &list) {
+    qDebug() << "sending arguments to another running instance";
+    QVariantMap map;
+    map["load_files"] = list;
+    return send(map);
+  }
+
+  QByteArray Instance::process(const QByteArray &request) {
     QByteArray result("HTTP/1.1 200 OK\r\n\r\n");
     result.append("Connection: close\r\n");
     result.append("\r\n");
-    return result;
-  }
 
-  void Instance::process(const QByteArray &request) {
     auto string = QString::fromStdString(request.toStdString());
     auto content = string.split("\r\n").last();
     auto json = QJsonDocument::fromJson(content.toUtf8());
     if (json.isObject()) {
-      qDebug() << json.toVariant().toMap();
-      emit received(json.toVariant().toMap());
+      if (json["load_files"].isArray()) {
+        QStringList lst;
+        for (auto i : json["load_files"].toArray()) {
+          lst.append(i.toString());
+        }
+        if (!lst.isEmpty()) {
+          emit load_files_received(lst);
+        }
+      }
     }
+
+    return result;
   }
 
   QUrl Instance::url() const {
@@ -90,9 +118,10 @@ namespace IPC {
     timer.setInterval(timeout_ms);
     timer.start();
     auto conn_read = connect(socket, &QTcpSocket::readyRead, [&]() {
-      process(socket->readAll());
-      socket->write(response());
+      socket->write(process(socket->readAll()));
       socket->waitForBytesWritten(timeout_ms);
+      socket->flush();
+      socket->disconnectFromHost();
       loop.quit();
     });
     auto conn_timer = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
@@ -104,5 +133,6 @@ namespace IPC {
     disconnect(conn_timer);
 
     socket->close();
+    socket->deleteLater();
   }
 }

@@ -8,7 +8,7 @@
 #include <QStyle>
 #include <QEvent>
 
-MainWindow::MainWindow(const QStringList &args, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
+MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
   trayicon = nullptr;
 #if defined(MPRIS_ENABLE)
@@ -52,6 +52,10 @@ MainWindow::MainWindow(const QStringList &args, Config::Local &local_c, Config::
   connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
+
+  connect(instance, &IPC::Instance::load_files_received, [=](const QStringList &lst) {
+    preloadPlaylist(lst);
+  });
 
   setupUiSettings();
 
