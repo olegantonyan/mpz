@@ -98,7 +98,7 @@ bool Track::isValid() const {
 }
 
 bool Track::fillAudioProperties() {
-  TagLib::FileRef f(path().toStdString().c_str());
+  TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
       _duration = static_cast<quint32>(f.audioProperties()->length());
@@ -112,7 +112,7 @@ bool Track::fillAudioProperties() {
 }
 
 bool Track::fillTags() {
-  TagLib::FileRef f(path().toStdString().c_str());
+  TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
