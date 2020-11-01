@@ -32,7 +32,7 @@ namespace IPC {
     const int port;
     QTcpServer server;
 
-    QByteArray process(const QByteArray &request);
+    QByteArray process_received(const QByteArray &request);
     QUrl url() const;
 
   private slots:

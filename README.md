@@ -67,6 +67,8 @@ sudo make install
 #### Windows
 
 Use static binaries from releases page: https://github.com/olegantonyan/mpz/releases
+You'll need codecs installed on your system, for example, [K-Lite Codec Pack](https://www.codecguide.com/download_kl.htm).
+NOTE: Windows binaries aren't tested as thoroughly as Linux and may contain Windows-specific bugs.
 
 #### MacOS
 
@@ -81,6 +83,7 @@ The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/
 Some config options can be changed only by editing config files:
 
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
+- `single_instance` in `global.yml` - when `true` the player will reuse 1 instance, launching another instance with files as command line arguments will send these files to running instance as a new playlist;
 
 ## Hotkeys
 

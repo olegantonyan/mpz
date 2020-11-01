@@ -8,7 +8,8 @@
 #include <QApplication>
 
 namespace IPC {
-  static const auto STATUS_LINE_OK = "HTTP/1.1 257 UR U OK?\r\n\r\n";
+  static const auto STATUS_LINE_RESPONSE_OK = "HTTP/1.1 257 R U OK\r\n\r\n";
+  static const auto STATUS_LINE_REQUEST = "POST / HTTP/1.1\r\n\r\n";
 
   Instance::Instance(int prt, int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
     connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
@@ -23,8 +24,6 @@ namespace IPC {
     timer.setSingleShot(true);
     timer.setInterval(timeout_ms);
 
-    auto bytes = QJsonDocument::fromVariant(data).toJson(QJsonDocument::Compact);
-
     QTcpSocket socket;
 
     int pid = -1;
@@ -38,18 +37,19 @@ namespace IPC {
     });
 
     socket.connectToHost(QHostAddress::LocalHost, port);
-    socket.waitForConnected(timeout_ms);
-    if (socket.state() == QTcpSocket::ConnectedState) {
-      socket.write("POST / HTTP/1.1\r\n\r\n");
-      socket.write("\r\n");
-      socket.write(bytes);
-      socket.waitForBytesWritten(timeout_ms);
-      if (socket.waitForReadyRead(timeout_ms)) {
-        auto data = QString::fromUtf8(socket.readAll());
-        if (data.startsWith(STATUS_LINE_OK)) {
-          auto body = QJsonDocument::fromJson(data.split("\r\n").last().toUtf8());
-          if (body.isObject()) {
-            pid = body["pid"].toInt();
+    if (socket.waitForConnected(timeout_ms)) {
+      if (socket.state() == QTcpSocket::ConnectedState) {
+        socket.write(STATUS_LINE_REQUEST);
+        socket.write("\r\n");
+        socket.write(QJsonDocument::fromVariant(data).toJson(QJsonDocument::Compact));
+        socket.waitForBytesWritten(timeout_ms);
+        if (socket.waitForReadyRead(timeout_ms)) {
+          auto recvd_data = QString::fromUtf8(socket.readAll());
+          if (recvd_data.startsWith(STATUS_LINE_RESPONSE_OK)) {
+            auto body = QJsonDocument::fromJson(recvd_data.split("\r\n").last().toUtf8());
+            if (body.isObject()) {
+              pid = body["pid"].toInt();
+            }
           }
         }
       }
@@ -75,28 +75,27 @@ namespace IPC {
     return send(map) > 0;
   }
 
-  QByteArray Instance::process(const QByteArray &request) {
-    QByteArray result(STATUS_LINE_OK);
-    result.append("\r\n");
+  QByteArray Instance::process_received(const QByteArray &request) {
+    QByteArray response(STATUS_LINE_RESPONSE_OK);
+    response.append("\r\n");
 
-    auto string = QString::fromStdString(request.toStdString());
-    auto content = string.split("\r\n").last();
-    auto json = QJsonDocument::fromJson(content.toUtf8());
-    if (json.isObject()) {
-      if (json["load_files"].isArray()) {
+    auto body = QString::fromStdString(request.toStdString()).split("\r\n").last();
+    auto json_body = QJsonDocument::fromJson(body.toUtf8());
+    if (json_body.isObject()) {
+      if (json_body["load_files"].isArray()) {
         QStringList lst;
-        for (auto i : json["load_files"].toArray()) {
+        for (auto i : json_body["load_files"].toArray()) {
           lst.append(i.toString());
         }
         emit load_files_received(lst);
       }
     }
 
-    QVariantMap map;
-    map["pid"] = qApp->applicationPid();
-    result.append(QJsonDocument::fromVariant(map).toJson(QJsonDocument::Compact));
+    QVariantMap json_body_response;
+    json_body_response["pid"] = qApp->applicationPid();
+    response.append(QJsonDocument::fromVariant(json_body_response).toJson(QJsonDocument::Compact));
 
-    return result;
+    return response;
   }
 
   QUrl Instance::url() const {
@@ -113,7 +112,7 @@ namespace IPC {
     timer.setInterval(timeout_ms);
     timer.start();
     auto conn_read = connect(socket, &QTcpSocket::readyRead, [&]() {
-      socket->write(process(socket->readAll()));
+      socket->write(process_received(socket->readAll()));
       socket->waitForBytesWritten(timeout_ms);
       socket->flush();
       socket->disconnectFromHost();
