@@ -48,7 +48,7 @@ namespace IPC {
           if (recvd_data.startsWith(STATUS_LINE_RESPONSE_OK)) {
             auto body = QJsonDocument::fromJson(recvd_data.split("\r\n").last().toUtf8());
             if (body.isObject()) {
-              pid = body["pid"].toInt();
+              pid = body.object()["pid"].toInt();
             }
           }
         }
@@ -82,9 +82,9 @@ namespace IPC {
     auto body = QString::fromStdString(request.toStdString()).split("\r\n").last();
     auto json_body = QJsonDocument::fromJson(body.toUtf8());
     if (json_body.isObject()) {
-      if (json_body["load_files"].isArray()) {
+      if (json_body.object()["load_files"].isArray()) {
         QStringList lst;
-        for (auto i : json_body["load_files"].toArray()) {
+        for (auto i : json_body.object()["load_files"].toArray()) {
           lst.append(i.toString());
         }
         emit load_files_received(lst);
