@@ -30,7 +30,7 @@ namespace IPC {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     auto conn_error = connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
 #else
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
 #endif
       Q_UNUSED(code);
       pid = -1;
