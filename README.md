@@ -84,6 +84,7 @@ Some config options can be changed only by editing config files:
 
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
 - `single_instance` in `global.yml` - when `true` the player will reuse 1 instance, launching another instance with files as command line arguments will send these files to running instance as a new playlist;
+- `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 
 ## Hotkeys
 
