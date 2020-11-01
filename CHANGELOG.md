@@ -1,3 +1,7 @@
+## [1.0.9] - 2020-11-01
+### Added
+- Option to keep only one instance
+
 ## [1.0.8] - 2020-10-31
 ### Added
 - Support CUE with multiple files
