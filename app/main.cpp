@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "rnjesus.h"
+#include "ipc/instance.h"
 #include "track.h"
 #include "streammetadata.h"
 #include "config/global.h"
@@ -41,6 +42,13 @@ void load_locale(QApplication &a, const QString &conf_language) {
   }
 }
 
+int ipc_port(Config::Global &global_conf) {
+  if (global_conf.ipcPort() == 0) {
+    global_conf.saveIpcPort(54913);
+  }
+  return global_conf.ipcPort();
+}
+
 int main(int argc, char *argv[]) {
   registerMetaTypes();
   RNJesus::seed();
@@ -55,7 +63,19 @@ int main(int argc, char *argv[]) {
 
   load_locale(a, global_conf.language());
 
-  MainWindow w(args(argc, argv), local_conf, global_conf);
+  IPC::Instance instance(ipc_port(global_conf));
+  if (global_conf.singleInstance()) {
+    int another_pid = instance.anotherPid();
+    if (another_pid > 0) {
+      qDebug() << "reusing another instance with pid" << another_pid;
+      return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
+    } else {
+      instance.start();
+    }
+  }
+
+  MainWindow w(args(argc, argv), &instance, local_conf, global_conf);
+
   w.show();
   return a.exec();
 }

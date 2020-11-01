@@ -45,6 +45,7 @@ SOURCES += \
     directory_ui/directorycontroller.cpp \
     directory_ui/directorysettings.cpp \
     feedback_ui/feedbackform.cpp \
+    ipc/instance.cpp \
     main.cpp \
     mainmenu.cpp \
     mainwindow.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     directory_ui/directorycontroller.h \
     directory_ui/directorysettings.h \
     feedback_ui/feedbackform.h \
+    ipc/instance.h \
     mainmenu.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
