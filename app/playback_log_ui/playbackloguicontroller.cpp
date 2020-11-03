@@ -10,7 +10,7 @@ namespace PlaybackLogUi {
     if (t.isStream() && t.streamMeta().isEmpty()) {
       return;
     }
-    PlaybackLogUi::Item item(t.uid(), t.shortText());
+    PlaybackLogUi::Item item(t.uid(), t.isStream() ? t.shortText() : t.formattedTitle());
     if (model->rowCount() > 0 && model->last().text == item.text && model->last().track_uid == item.track_uid) {
       return;
     }

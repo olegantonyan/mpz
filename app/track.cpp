@@ -226,6 +226,9 @@ QString Track::dir() const {
 }
 
 QString Track::formattedTitle() const {
+  if (year() == 0) {
+    return QString("%1 - %2 - %4").arg(artist()).arg(album()).arg(title());
+  }
   return QString("%1 - %2 (%3) - %4").arg(artist()).arg(album()).arg(year()).arg(title());
 }
 
