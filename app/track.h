@@ -29,6 +29,7 @@ public:
 
   bool fillAudioProperties();
   bool fillTags();
+  bool reload();
   void setDuration(quint32 dur);
   void setCue(bool is_cue = true);
 

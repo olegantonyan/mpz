@@ -28,6 +28,13 @@ namespace PlaylistsUi {
     QAction remove(tr("Remove"));
     QAction rename(tr("Rename"));
     QAction savem3u(tr("Save as m3u"));
+    QAction reload(tr("Reload from filesystem"));
+
+    connect(&reload, &QAction::triggered, [&]() {
+      on_reload(index);
+    });
+    reload.setIcon(view->style()->standardIcon(QStyle::SP_BrowserReload));
+
     remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
     savem3u.setIcon(view->style()->standardIcon(QStyle::SP_DialogSaveButton));
     //rename.setIcon(view->style()->standardIcon(QStyle::SP_FileIcon));
@@ -56,6 +63,7 @@ namespace PlaylistsUi {
 
     menu.addAction(&rename);
     menu.addAction(&savem3u);
+    menu.addAction(&reload);
     menu.addSeparator();
     menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
@@ -81,5 +89,11 @@ namespace PlaylistsUi {
     } else {
       qWarning() << "error opening file " << fname << "for writing";
     }
+  }
+
+  void PlaylistsContextMenu::on_reload(const QModelIndex &index) {
+    model->itemAt(index)->reload();
+    model->persist();
+    emit playlistChanged(model->itemAt(index));
   }
 }

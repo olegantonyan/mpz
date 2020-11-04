@@ -1,3 +1,8 @@
+## [1.0.10] - 
+### Added
+- Option to reload playlist from filesystem
+- Verbose title string in playback log
+
 ## [1.0.9] - 2020-11-01
 ### Added
 - Option to keep only one instance

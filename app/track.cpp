@@ -127,6 +127,10 @@ bool Track::fillTags() {
   return false;
 }
 
+bool Track::reload() {
+  return fillAudioProperties() && fillTags();
+}
+
 void Track::setDuration(quint32 dur) {
   _duration = dur;
 }

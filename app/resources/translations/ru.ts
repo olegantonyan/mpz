@@ -278,30 +278,30 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="139"/>
-        <location filename="../../mainwindow.cpp" line="161"/>
+        <location filename="../../mainwindow.cpp" line="148"/>
+        <location filename="../../mainwindow.cpp" line="170"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="140"/>
-        <location filename="../../mainwindow.cpp" line="160"/>
+        <location filename="../../mainwindow.cpp" line="149"/>
+        <location filename="../../mainwindow.cpp" line="169"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="159"/>
+        <location filename="../../mainwindow.cpp" line="168"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="287"/>
-        <location filename="../../mainwindow.cpp" line="291"/>
+        <location filename="../../mainwindow.cpp" line="296"/>
+        <location filename="../../mainwindow.cpp" line="300"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="293"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -382,17 +382,22 @@
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="76"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="84"/>
         <source>Save as m3u</source>
         <translation>Сохранить как m3u</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="67"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="31"/>
+        <source>Reload from filesystem</source>
+        <translation>Перезагрузить с файловой системы</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="75"/>
         <source>Rename playlist</source>
         <translation>Переименовать плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="43"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="50"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>

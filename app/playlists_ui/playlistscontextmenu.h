@@ -25,6 +25,7 @@ namespace PlaylistsUi {
 
   signals:
     void removed(const QModelIndex &index);
+    void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
 
   private:
     Model *model;
@@ -34,6 +35,7 @@ namespace PlaylistsUi {
 
   private slots:
     void on_savem3u(const QModelIndex &index);
+    void on_reload(const QModelIndex &index);
   };
 }
 

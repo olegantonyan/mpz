@@ -41,6 +41,8 @@ namespace PlaylistsUi {
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QListView::customContextMenuRequested, context_menu, &PlaylistsContextMenu::show);
+
+    connect(context_menu, &PlaylistsContextMenu::playlistChanged, this, &Controller::selected);
   }
 
   void Controller::load() {
