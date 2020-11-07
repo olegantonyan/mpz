@@ -29,6 +29,8 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 - Lacks some "expected" features like tracks rearranging within playlist.
 - Global hotkeys don't work in Wayland
 
+## [What's new?](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)
+
 ## Installation
 
 #### openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia
