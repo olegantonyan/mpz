@@ -1,4 +1,4 @@
-## [1.0.10] - 
+## [1.0.10] - 2020-11-07
 ### Added
 - Option to reload playlist from filesystem
 - Verbose title string in playback log
