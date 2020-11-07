@@ -1,3 +1,7 @@
+## [1.0.11] - 
+### Added
+
+
 ## [1.0.10] - 2020-11-07
 ### Added
 - Option to reload playlist from filesystem
