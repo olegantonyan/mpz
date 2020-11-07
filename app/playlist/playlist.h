@@ -49,6 +49,8 @@ namespace Playlist {
 
     QByteArray toM3U() const;
 
+    void reload();
+
   signals:
     void loadAsyncFinished(Playlist *pl);
     void concatAsyncFinished(Playlist *pl);

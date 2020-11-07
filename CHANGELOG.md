@@ -1,3 +1,21 @@
+## [1.0.11] - 
+### Added
+
+
+## [1.0.10] - 2020-11-07
+### Added
+- Option to reload playlist from filesystem
+- Verbose title string in playback log
+- Double click on playlist starts playing the first track
+
+## [1.0.9] - 2020-11-01
+### Added
+- Option to keep only one instance
+
+## [1.0.8] - 2020-10-31
+### Added
+- Support CUE with multiple files
+
 ## [1.0.7] - 2020-10-22
 ### Added
 - Create new plylist from command line arguments

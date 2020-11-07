@@ -88,6 +88,13 @@ namespace Playback {
     }
   }
 
+  void Dispatch::on_startFromPlaylistRequested(const std::shared_ptr<Playlist::Playlist> plst) {
+    if (plst != nullptr && !plst->tracks().isEmpty()) {
+      Track t = plst->tracks().first();
+      emit play(t);
+    }
+  }
+
   void Dispatch::on_startRequested() {
     quint64 selected_track_uid = player_state.selectedTrack();
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);

@@ -23,6 +23,7 @@ namespace Playback {
     void on_nextRequested();
     void on_prevRequested();
     void on_startRequested();
+    void on_startFromPlaylistRequested(const std::shared_ptr<Playlist::Playlist> plst);
 
   private:
     Config::Global &global_conf;

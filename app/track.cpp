@@ -98,7 +98,7 @@ bool Track::isValid() const {
 }
 
 bool Track::fillAudioProperties() {
-  TagLib::FileRef f(path().toStdString().c_str());
+  TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
       _duration = static_cast<quint32>(f.audioProperties()->length());
@@ -112,7 +112,7 @@ bool Track::fillAudioProperties() {
 }
 
 bool Track::fillTags() {
-  TagLib::FileRef f(path().toStdString().c_str());
+  TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
@@ -125,6 +125,10 @@ bool Track::fillTags() {
     }
   }
   return false;
+}
+
+bool Track::reload() {
+  return fillAudioProperties() && fillTags();
 }
 
 void Track::setDuration(quint32 dur) {
@@ -226,6 +230,9 @@ QString Track::dir() const {
 }
 
 QString Track::formattedTitle() const {
+  if (year() == 0) {
+    return QString("%1 - %2 - %4").arg(artist()).arg(album()).arg(title());
+  }
   return QString("%1 - %2 (%3) - %4").arg(artist()).arg(album()).arg(year()).arg(title());
 }
 

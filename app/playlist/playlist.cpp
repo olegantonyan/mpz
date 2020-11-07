@@ -143,6 +143,13 @@ namespace Playlist {
     return result.join("\n").toUtf8();
   }
 
+  void Playlist::reload() {
+    QMutableVectorIterator<Track> mit(tracks_list);
+    while (mit.hasNext()) {
+      mit.next().reload();
+    }
+  }
+
   QString Playlist::nameBy(const QDir &path) {
     return path.dirName();
   }

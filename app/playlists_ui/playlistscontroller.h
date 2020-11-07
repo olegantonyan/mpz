@@ -37,6 +37,7 @@ namespace PlaylistsUi {
     void selected(const std::shared_ptr<Playlist::Playlist> item);
     void loaded(const std::shared_ptr<Playlist::Playlist> item);
     void emptied();
+    void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
 
   private slots:
     void on_itemActivated(const QModelIndex &index);
@@ -44,6 +45,7 @@ namespace PlaylistsUi {
     void on_search(const QString& term);
     void load();
     void on_removeItem(const QModelIndex &index);
+    void on_itemDoubleClicked(const QModelIndex &index);
 
   private:
     QListView *view;
