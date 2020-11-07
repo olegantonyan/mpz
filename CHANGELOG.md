@@ -2,6 +2,7 @@
 ### Added
 - Option to reload playlist from filesystem
 - Verbose title string in playback log
+- Double click on playlist starts playing the first track
 
 ## [1.0.9] - 2020-11-01
 ### Added

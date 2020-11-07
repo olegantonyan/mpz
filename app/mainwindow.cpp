@@ -273,6 +273,8 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
+
+  connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }
 
 void MainWindow::setupStatusBar() {

@@ -29,6 +29,7 @@ namespace PlaylistsUi {
     view->setSelectionMode(QAbstractItemView::NoSelection);
 
     connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
+    connect(view, &QListView::doubleClicked, this, &Controller::on_itemDoubleClicked);
 
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
@@ -117,6 +118,15 @@ namespace PlaylistsUi {
     if (model->listSize() == 0) {
       emit emptied();
     }
+  }
+
+  void Controller::on_itemDoubleClicked(const QModelIndex &index) {
+    if (model->listSize() <= 0) {
+      return;
+    }
+    auto source_index = proxy->mapToSource(index);
+    auto item = model->itemAt(source_index);
+    emit doubleclicked(item);
   }
 
   void Controller::on_start(const Track &t) {
