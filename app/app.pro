@@ -43,6 +43,7 @@ SOURCES += \
     config/storage.cpp \
     config/value.cpp \
     directory_ui/directorycontroller.cpp \
+    directory_ui/directoryproxyfiltermodel.cpp \
     directory_ui/directorysettings.cpp \
     feedback_ui/feedbackform.cpp \
     ipc/instance.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     config/storage.h \
     config/value.h \
     directory_ui/directorycontroller.h \
+    directory_ui/directoryproxyfiltermodel.h \
     directory_ui/directorysettings.h \
     feedback_ui/feedbackform.h \
     ipc/instance.h \

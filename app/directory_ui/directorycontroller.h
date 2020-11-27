@@ -4,6 +4,7 @@
 #include "directorymodel.h"
 #include "config/local.h"
 #include "directorycontextmenu.h"
+#include "directoryproxyfiltermodel.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -33,6 +34,7 @@ namespace DirectoryUi {
   private:
     QTreeView *view;
     Model *model;
+    ProxyFilterModel *proxy;
     QLineEdit *search;
     Config::Local &local_conf;
     bool restore_scroll_once;

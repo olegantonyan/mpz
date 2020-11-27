@@ -28,6 +28,8 @@ namespace DirectoryUi {
     restore_scroll_once = true;
 
     model = new Model(this);
+    proxy = new ProxyFilterModel(model, this);
+
     if (local_conf.libraryPaths().empty()) {
       model->loadAsync(QDir::homePath());
       libswitch->addItem(QDir::homePath());
@@ -50,8 +52,8 @@ namespace DirectoryUi {
     }
 
     connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
-      view->setModel(model);
-      view->setRootIndex(model->index(model->rootPath()));
+      view->setModel(proxy);
+      view->setRootIndex(proxy->mapToSource(model->index(model->rootPath())));
       view->setHeaderHidden(true);
       view->setColumnHidden(1, true);
       view->setColumnHidden(2, true);
@@ -101,7 +103,7 @@ namespace DirectoryUi {
     if (!index.isValid()) {
       return;
     }
-    auto filepath = model->filePath(index);
+    auto filepath = model->filePath(proxy->mapToSource(index));
     QFileInfo fi(filepath);
     if (fi.exists() && fi.isFile()) {
       emit createNewPlaylist({ QDir(filepath) });
@@ -114,7 +116,7 @@ namespace DirectoryUi {
       if (me->button() == Qt::MidButton) {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
-          auto filepath = QDir(model->filePath(index));
+          auto filepath = QDir(model->filePath(proxy->mapToSource(index)));
           emit createNewPlaylist({filepath});
         }
       }
