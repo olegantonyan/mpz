@@ -355,7 +355,7 @@ void MainWindow::setupWindowTitle() {
 }
 
 void MainWindow::setupPlaybackLog() {
-  playback_log = new PlaybackLogUi::Controller(local_conf, this);
+  playback_log = new PlaybackLogUi::Controller(local_conf, global_conf, this);
   connect(main_menu, &MainMenu::openPlaybackLog, playback_log, &PlaybackLogUi::Controller::showWindow);
   connect(player, &Playback::Controller::started, playback_log, &PlaybackLogUi::Controller::append);
   connect(player, &Playback::Controller::trackChanged, playback_log, &PlaybackLogUi::Controller::append);

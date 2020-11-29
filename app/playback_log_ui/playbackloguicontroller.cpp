@@ -2,8 +2,12 @@
 #include "playback_log_ui/playbacklogdialog.h"
 
 namespace PlaybackLogUi {
-  Controller::Controller(Config::Local &local_c, QObject *parent) : QObject(parent) {
-    model = new PlaybackLogUi::Model(local_c, 100, this);
+  Controller::Controller(Config::Local &local_c, Config::Global &global_c, QObject *parent) : QObject(parent) {
+    int size = 100;
+    if (global_c.playbackLogSize() > 0) {
+      size = global_c.playbackLogSize();
+    }
+    model = new PlaybackLogUi::Model(local_c, size, this);
   }
 
   void Controller::append(const Track &t) {

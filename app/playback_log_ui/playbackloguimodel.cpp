@@ -63,7 +63,7 @@ namespace PlaybackLogUi {
   }
 
   void Model::append(const Item &item) {
-    if (items.size() > max_size) {
+    if (items.size() >= max_size) {
       beginRemoveRows(QModelIndex(), 0, 0);
       items.pop_back();
       endRemoveRows();

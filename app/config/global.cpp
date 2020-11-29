@@ -96,4 +96,8 @@ namespace Config {
   bool Global::singleInstance() const {
     return storage.get("single_instance").get<bool>();
   }
+
+  int Global::playbackLogSize() const {
+    return storage.get("playback_log_size").get<int>();
+  }
 }
