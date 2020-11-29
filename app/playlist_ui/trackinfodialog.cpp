@@ -52,7 +52,8 @@ void TrackInfoDialog::setup_table(const Track &track) {
   add_table_row(tr("Channels"), QString::number(track.channels()));
   if (track.isStream()) {
     add_table_row(tr("Stream url"), track.url().toString());
-  } else {
+  }
+  if (!track.path().isEmpty()) {
     add_table_row(tr("File path"), track.path());
   }
   if (track.isCue()) {
