@@ -1,6 +1,9 @@
 ## [1.0.11] - 
 ### Added
+- Playback log size config option
 
+### Fixed
+- Show in file manager works on stream playlists
 
 ## [1.0.10] - 2020-11-07
 ### Added

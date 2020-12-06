@@ -39,6 +39,8 @@ namespace Config {
 
     bool singleInstance() const;
 
+    int playbackLogSize() const;
+
   private:
     Config::Storage storage;
   };

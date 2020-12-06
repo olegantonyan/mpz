@@ -188,7 +188,7 @@ namespace Config {
       t.setCue(cue);
       return t;
     } else {
-     return Track(QUrl(r["url"].get<QString>()));
+     return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>());
     }
   }
 }
