@@ -4,7 +4,7 @@
 #include <QFont>
 
 namespace PlaylistUi {
-  Model::Model(QStyle *stl, ColumnsConfig col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
+  Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
     tracks.clear();
     _playlist = nullptr;
   }
@@ -33,7 +33,11 @@ namespace PlaylistUi {
     }
 
     if (role == Qt::TextAlignmentRole) {
-      return QVariant(columns_config.align(index.column()));
+      if (index.column() == 0) {
+        return Qt::AlignVCenter;
+      } else {
+        return QVariant(columns_config.align(index.column()));
+      }
     }
 
     Track t = tracks.at(index.row());
@@ -56,7 +60,7 @@ namespace PlaylistUi {
        }
     }
 
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole && index.column() > 0) {
       return columns_config.value(index.column(), t);
     }
     return QVariant();

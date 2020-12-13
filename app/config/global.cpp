@@ -100,4 +100,13 @@ namespace Config {
   int Global::playbackLogSize() const {
     return storage.get("playback_log_size").get<int>();
   }
+
+  PlaylistUi::ColumnsConfig Global::columnsConfig() const {
+    auto raw = storage.get("columns_config").get<QList<Config::Value>>();
+    return PlaylistUi::ColumnsConfig::deserialize(raw);
+  }
+
+  bool Global::saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg) {
+    return storage.set("columns_config", arg.serialize());
+  }
 }

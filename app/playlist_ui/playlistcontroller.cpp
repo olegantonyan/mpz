@@ -13,6 +13,9 @@ namespace PlaylistUi {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
+
+    loadColumnsConfig();
+
     model = new Model(view->style(), columns_config, this);
     proxy = new ProxyFilterModel(model, this);
     view->setModel(proxy);
@@ -58,6 +61,15 @@ namespace PlaylistUi {
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
+  }
+
+  void PlaylistUi::Controller::loadColumnsConfig() {
+    auto c = global_conf.columnsConfig();
+    if (c.count() == 0) {
+      global_conf.saveColumnsConfig(columns_config);
+    } else {
+      columns_config = global_conf.columnsConfig();
+    }
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist::Playlist> pi) {

@@ -62,6 +62,8 @@ namespace PlaylistUi {
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
     
+    void loadColumnsConfig();
+
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
   };

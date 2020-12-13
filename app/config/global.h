@@ -3,6 +3,7 @@
 
 #include "storage.h"
 #include "sort_ui/sortingpresetsdialog.h"
+#include "playlist_ui/columnsconfig.h"
 
 #include <QPair>
 #include <QList>
@@ -40,6 +41,9 @@ namespace Config {
     bool singleInstance() const;
 
     int playbackLogSize() const;
+
+    PlaylistUi::ColumnsConfig columnsConfig() const;
+    bool saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg);
 
   private:
     Config::Storage storage;

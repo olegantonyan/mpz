@@ -21,7 +21,7 @@ namespace PlaylistUi {
       Playing,
       Paused
     };
-    explicit Model(QStyle *stl, ColumnsConfig col_cfg, QObject *parent = nullptr);
+    explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -47,7 +47,7 @@ namespace PlaylistUi {
     quint64 highlight_uid;
     QStyle *style;
     enum HighlightState highlight_state;
-    ColumnsConfig columns_config;
+    const ColumnsConfig &columns_config;
   };
 }
 
