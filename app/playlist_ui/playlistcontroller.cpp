@@ -13,7 +13,7 @@ namespace PlaylistUi {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
-    model = new Model(view->style(), this);
+    model = new Model(view->style(), columns_config, this);
     proxy = new ProxyFilterModel(model, this);
     view->setModel(proxy);
     view->horizontalHeader()->hide();
@@ -144,11 +144,16 @@ namespace PlaylistUi {
       int total_width = view->width();
       view->horizontalHeader()->setMinimumSectionSize(20);
       view->setColumnWidth(0, 20);
-      view->setColumnWidth(1, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(2, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(3, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(4, static_cast<int>(total_width * 0.05));
-      view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+
+      for (int col = 1; col <= columns_config.count(); col++) {
+        auto rel_width = columns_config.width(col);
+        if (rel_width > 0) {
+          view->setColumnWidth(col, static_cast<int>(total_width * rel_width));
+        }
+        if (columns_config.stretch(col)) {
+          view->horizontalHeader()->setSectionResizeMode(col, QHeaderView::Stretch);
+        }
+      }
 
     } else if (event->type() == QEvent::WindowActivate) {
       if (restore_scroll_once) {

@@ -9,6 +9,7 @@
 #include "playlistproxyfiltermodel.h"
 #include "playlist_ui/playlistcontextmenu.h"
 #include "busyspinner.h"
+#include "playlist_ui/columnsconfig.h"
 
 #include <QObject>
 #include <QTableView>
@@ -56,6 +57,7 @@ namespace PlaylistUi {
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
+    ColumnsConfig columns_config;
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
