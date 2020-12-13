@@ -1,4 +1,4 @@
-## [1.0.11] -
+## [1.0.11] - 2020-12-13
 ### Added
 - Configurable playlist columns
 - Playback log size config option
