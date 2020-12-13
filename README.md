@@ -88,6 +88,45 @@ Some config options can be changed only by editing config files:
 - `single_instance` in `global.yml` - when `true` the player will reuse 1 instance, launching another instance with files as command line arguments will send these files to running instance as a new playlist;
 - `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
+- `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
+
+#### Columns config
+
+You can change th default columns in the playlist view via `columns_config` option in `global.yml` file.
+
+This config option does not (yet) have UI to change it so you have to edit config file. The defaults are:
+
+```
+columns_config:
+  - align: left
+    field: artist
+    stretch: false
+    width_percent: 28
+  - align: left
+    field: album
+    stretch: false
+    width_percent: 28
+  - align: left
+    field: title
+    stretch: false
+    width_percent: 28
+  - align: right
+    field: year
+    stretch: false
+    width_percent: 5
+  - align: right
+    field: length
+    stretch: true
+    width_percent: 0
+```
+
+Available fields: artist, album, title, year, length, path, url, sample_rate, bitrate, channels, track_number, format, filename.
+
+Availble alignments: left, right.
+
+The sum of `width_percent` of all columns must add up to 100 or below. Sometimes it has to be below 100 to get rid of horizontal scroll, this may happen due to padding and few extra pixels in you desktop theme.
+
+`stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how looks on your desktop.
 
 ## Hotkeys
 

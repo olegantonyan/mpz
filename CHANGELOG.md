@@ -1,9 +1,11 @@
-## [1.0.11] - 
+## [1.0.11] -
 ### Added
+- Configurable playlist columns
 - Playback log size config option
 
 ### Fixed
 - Show in file manager works on stream playlists
+- Single instance IPC port change to non-ephemeral (31341)
 
 ## [1.0.10] - 2020-11-07
 ### Added
