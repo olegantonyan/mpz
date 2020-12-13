@@ -1,3 +1,7 @@
+## [1.0.12] - 
+### Added
+
+
 ## [1.0.11] - 2020-12-13
 ### Added
 - Configurable playlist columns
