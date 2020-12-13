@@ -95,6 +95,24 @@ namespace PlaylistUi {
       return QString::number(track.year());
     } else if (fld == "length") {
       return track.formattedDuration();
+    } else if (fld == "path") {
+      return track.path();
+    } else if (fld == "url") {
+      return track.url().toString();
+    } else if (fld == "sample_rate") {
+      return QString::number(track.sample_rate());
+    } else if (fld == "bitrate") {
+      return QString::number(track.bitrate());
+    } else if (fld == "channels") {
+      return QString::number(track.channels());
+    } else if (fld == "sample_rate") {
+      return QString::number(track.sample_rate());
+    } else if (fld == "track_number") {
+      return QString::number(track.track_number());
+    } else if (fld == "format") {
+      return track.format();
+    } else if (fld == "filename") {
+      return track.filename();
     }
     return QString();
   }
