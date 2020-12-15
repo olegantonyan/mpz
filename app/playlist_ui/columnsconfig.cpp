@@ -25,6 +25,8 @@ namespace PlaylistUi {
     aligns.append(Qt::AlignVCenter);
     aligns.append(Qt::AlignVCenter | Qt::AlignRight);
     aligns.append(Qt::AlignVCenter | Qt::AlignRight);
+
+    vaidate();
   }
 
   ColumnsConfig ColumnsConfig::deserialize(const Config::Value &v) {
@@ -47,6 +49,7 @@ namespace PlaylistUi {
     result.setStretches(stretches);
     result.setFields(fields);
     result.setAligns(aligns);
+    result.vaidate();
     return result;
   }
 
@@ -61,6 +64,13 @@ namespace PlaylistUi {
       r << v;
     }
     return r;
+  }
+
+  void ColumnsConfig::vaidate() {
+    if (widths.size() == stretches.size() && stretches.size() == aligns.size() && aligns.size() == fields.size()) {
+      return;
+    }
+    throw "invalid columns config";
   }
 
   int ColumnsConfig::count() const {

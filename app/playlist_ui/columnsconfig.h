@@ -30,6 +30,8 @@ namespace PlaylistUi {
 
     Config::Value serialize() const;
 
+    void vaidate();
+
   private:
     QVector<double> widths;
     QVector<bool> stretches;
