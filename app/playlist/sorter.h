@@ -25,6 +25,7 @@ namespace Playlist {
     int compare_filename(const Track &t1, const Track &t2) const;
     int compare_title(const Track &t1, const Track &t2) const;
     int compare_artist(const Track &t1, const Track &t2) const;
+    int compare_dir(const Track &t1, const Track &t2) const;
   };
 }
 

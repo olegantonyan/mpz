@@ -11,7 +11,7 @@ namespace Playlist {
   }
 
   QString Sorter::defaultCriteria() {
-    return "YEAR / ALBUM / TRACKNUMBER / FILENAME / TITLE";
+    return "YEAR / ALBUM / DIRECTORY / TRACKNUMBER / FILENAME / TITLE";
   }
 
   bool Sorter::condition(const Track &t1, const Track &t2) const {
@@ -48,6 +48,8 @@ namespace Playlist {
       result = compare_filename(t1, t2);
     } else if (attr == "TITLE") {
       result = compare_title(t1, t2);
+    }else if (attr == "DIRECTORY") {
+      result = compare_dir(t1, t2);
     }
 
     return result * order;
@@ -102,6 +104,15 @@ namespace Playlist {
     if (t1.artist() < t2.artist()) {
       return 1;
     } else if (t1.artist() > t2.artist()) {
+      return -1;
+    }
+    return 0;
+  }
+
+  int Sorter::compare_dir(const Track &t1, const Track &t2) const {
+    if (t1.dir() < t2.dir()) {
+      return 1;
+    } else if (t1.dir() > t2.dir()) {
       return -1;
     }
     return 0;

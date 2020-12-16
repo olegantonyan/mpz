@@ -295,13 +295,13 @@
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="300"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
+        <location filename="../../mainwindow.cpp" line="304"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -466,12 +466,7 @@
         <translation>Переименовать пресет сортировки</translation>
     </message>
     <message>
-        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="86"/>
-        <source>Fields available to sort (case insensitive):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;By default sort in ascending order. Add - before the field name to change to descending order.&lt;br /&gt;Use / to build nested multilevel sorting criteria. Examples:&lt;br /&gt; * Artist / -Year / Title : sort first by artist, then by year in descending order, then by title&lt;br /&gt; * -Title : sort only by title in descending order&lt;br /&gt;</source>
-        <translation>Поля доступные для сортировки (регистр не важен):&lt;br /&gt; * Artist&lt;br /&gt; * Album&lt;br /&gt; * Title&lt;br /&gt; * Year&lt;br /&gt; * Filename&lt;br /&gt; * TrackNumber&lt;br /&gt;&lt;br /&gt;По умолчанию порядок возрастающий. Добавьте - перед названием поля чтобы сортировать в убывающем порядке.&lt;br /&gt;Используйте / чтобы получить многоуровневую сортировку. Примеры:&lt;br /&gt; * Artist / -Year / Title : сортировка по артисту, дате в убывающем порядке и названию&lt;br /&gt; * -Title : сортировка только по названию в убывающем порядке&lt;br /&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="102"/>
+        <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="103"/>
         <source>Sorting presets description</source>
         <translation>Описание пресетов сортировки</translation>
     </message>
@@ -593,17 +588,17 @@
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="56"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="57"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="59"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="60"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="81"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>

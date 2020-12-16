@@ -1,6 +1,6 @@
 ## [1.0.12] - 
 ### Added
-
+- Sort by directory 
 
 ## [1.0.11] - 2020-12-13
 ### Added
