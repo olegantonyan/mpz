@@ -236,15 +236,15 @@ namespace Playlist {
       track.setCue();
       if (i < entries.length() - 1) {
         CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
-        qint32 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
+        quint64 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
         if (duration < 0) {
-          quint32 duration = track.duration() - begin_by_index(entry.index); // last track for this file - got duration from audio properties
+          quint64 duration = track.duration() - begin_by_index(entry.index); // last track for this file - got duration from audio properties
           track.setDuration(duration);
         } else {
           track.setDuration(duration);
         }
       } else {
-        quint32 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
+        quint64 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
         track.setDuration(duration);
       }
 
@@ -270,17 +270,17 @@ namespace Playlist {
     return line_regexp.capturedTexts().filter(QRegExp(".+")).mid(1, -1);
   }
 
-  qint32 CueParser::begin_by_index(const QString& index) const {
+  quint64 CueParser::begin_by_index(const QString& index) const {
     QRegExp index_regexp(kIndexRegExp);
     if (!index_regexp.exactMatch(index)) {
       return -1;
     }
 
     QStringList splitted = index_regexp.capturedTexts().mid(1, -1);
-    qlonglong frames = splitted.at(0).toLongLong() * 60 * 75 +
-                       splitted.at(1).toLongLong() * 75 +
-                       splitted.at(2).toLongLong();
+    quint64 frames = splitted.at(0).toLongLong() * 60 * 75 +
+                     splitted.at(1).toLongLong() * 75 +
+                     splitted.at(2).toLongLong();
 
-    return frames / 75; // seconds
+    return (frames * 1000) / 75; // ms
   }
 }

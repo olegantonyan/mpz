@@ -98,8 +98,8 @@ namespace Playback {
     } else {
       player.setMedia(track.url());
       if (track.isCue()) {
-        offset_begin = track.begin() * 1000;
-        offset_end = offset_begin + track.duration() * 1000;
+        offset_begin = track.begin();
+        offset_end = offset_begin + track.duration();
       }
     }
   }

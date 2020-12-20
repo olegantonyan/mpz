@@ -53,7 +53,7 @@ namespace Playback {
 
   private:
     void on_seek(int position);
-    QString time_text(int pos) const;
+    QString time_text(quint64 pos) const;
     void setup_monotonic_timer();
 
     Playback::Controls _controls;

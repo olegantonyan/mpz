@@ -96,7 +96,7 @@ void Mpris::SetShuffle(bool value) {
 QVariantMap Mpris::Metadata() const {
   QVariantMap h;
   h["mpris:trackid"] = player->currentTrack().uid();
-  h["mpris:length"] = player->currentTrack().duration() * 1000000;
+  h["mpris:length"] = player->currentTrack().duration() * 1000;
   h["xesam:album"] = player->currentTrack().album();
   h["xesam:title"] = player->currentTrack().title();
   h["xesam:trackNumber"] = player->currentTrack().track_number();
@@ -113,7 +113,7 @@ void Mpris::SetVolume(double value) {
 }
 
 qlonglong Mpris::Position() const {
-  return player->position() * 1000000;
+  return player->position() * 1000;
 }
 
 bool Mpris::CanGoNext() const {
@@ -197,13 +197,13 @@ void Mpris::Play() {
 }
 
 void Mpris::Seek(qlonglong offset) {
-  int by = static_cast<int>(offset / 1000000);
+  int by = static_cast<int>(offset / 1000);
   player->seek(player->position() + by);
 }
 
 void Mpris::SetPosition(const QDBusObjectPath &trackId, qlonglong offset) {
   Q_UNUSED(trackId)
-  int value = static_cast<int>(offset / 1000000);
+  int value = static_cast<int>(offset / 1000);
   player->seek(value);
   Seek(offset);
 }
