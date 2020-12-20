@@ -17,7 +17,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 ## Features
 
 - 3-columns UI which allows you to quickly create playlists from folders and switch between playlists;
-- Built with Qt/C++ (yes, you can still do it in 2020) - fast and responsive native UI;
+- Built with C++/Qt - fast and responsive native UI;
 - Supports internet radio in `m3u` and `pls` playlists formats;
 - Supports CUE sheets;
 - Supports MPRIS on Linux for remote control;
@@ -25,9 +25,9 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 ## Limitations
 
-- Uses external codecs installed on your OS (through QtMultimedia, on Linux - GStreamer backend), like the most other multimedia players;
-- Lacks some "expected" features like tracks rearranging within playlist.
-- Global hotkeys don't work in Wayland
+- Uses external codecs installed on your OS (through QtMultimedia, using GStreamer backend on Linux);
+- Lacks some "expected" features like tracks rearranging within playlist;
+- Global hotkeys don't work in Wayland.
 
 ## Installation
 
