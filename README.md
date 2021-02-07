@@ -45,8 +45,6 @@ cd mpz
 makepkg -si
 ```
 
-Please, beware of https://aur.archlinux.org/packages/mpz-git/. This package is not maintained by the author and may be outdated. The only maintained AUR package is this https://aur.archlinux.org/packages/mpz/.
-
 #### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
