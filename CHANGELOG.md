@@ -1,6 +1,7 @@
-## [1.0.12] - 
+## [1.0.12] - 2021-03-13
 ### Added
-- Sort by directory 
+- Sort by directory
+- Stream keep alive
 
 ## [1.0.11] - 2020-12-13
 ### Added
