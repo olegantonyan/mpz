@@ -174,6 +174,8 @@ namespace Playback {
     QMap<QString, QString> headers;
     QTimer timer;
 
+    sock.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
 #else
