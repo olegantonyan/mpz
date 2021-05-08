@@ -94,7 +94,6 @@ HEADERS += \
   yaml-cpp-0.6.3/include/yaml-cpp/node/impl.h \
   yaml-cpp-0.6.3/include/yaml-cpp/node/ptr.h \
   yaml-cpp-0.6.3/include/yaml-cpp/node/convert.h \
-  yaml-cpp-0.6.3/include/yaml-cpp/noncopyable.h \
   yaml-cpp-0.6.3/include/yaml-cpp/dll.h \
   yaml-cpp-0.6.3/include/yaml-cpp/yaml.h \
   yaml-cpp-0.6.3/include/yaml-cpp/traits.h \
