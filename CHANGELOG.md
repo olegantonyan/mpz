@@ -1,3 +1,7 @@
+## [1.0.14] - NEXT
+### Added
+- "Play" context menu item in playlists view
+
 ## [1.0.13] - 2021-03-13
 ### Added
 - Sort by directory

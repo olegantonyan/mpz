@@ -29,6 +29,7 @@ namespace PlaylistsUi {
     QAction rename(tr("Rename"));
     QAction savem3u(tr("Save as m3u"));
     QAction reload(tr("Reload from filesystem"));
+    QAction play(tr("Play"));
 
     connect(&reload, &QAction::triggered, [&]() {
       on_reload(index);
@@ -38,6 +39,7 @@ namespace PlaylistsUi {
     remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
     savem3u.setIcon(view->style()->standardIcon(QStyle::SP_DialogSaveButton));
     //rename.setIcon(view->style()->standardIcon(QStyle::SP_FileIcon));
+    play.setIcon(view->style()->standardIcon(QStyle::SP_MediaPlay));
 
     connect(&remove, &QAction::triggered, [&]() {
       emit removed(index);
@@ -61,6 +63,12 @@ namespace PlaylistsUi {
       on_savem3u(index);
     });
 
+    connect(&play, &QAction::triggered, [&]() {
+      view->doubleClicked(index);
+    });
+
+    menu.addAction(&play);
+    menu.addSeparator();
     menu.addAction(&rename);
     menu.addAction(&savem3u);
     menu.addAction(&reload);

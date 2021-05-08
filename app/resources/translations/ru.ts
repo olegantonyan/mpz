@@ -382,7 +382,7 @@
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="84"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="92"/>
         <source>Save as m3u</source>
         <translation>Сохранить как m3u</translation>
     </message>
@@ -392,12 +392,17 @@
         <translation>Перезагрузить с файловой системы</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="75"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="32"/>
+        <source>Play</source>
+        <translation>Воспроизвести</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="83"/>
         <source>Rename playlist</source>
         <translation>Переименовать плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="50"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="52"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
