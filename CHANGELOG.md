@@ -2,6 +2,10 @@
 ### Added
 - "Play" context menu item in playlists view
 
+### Misc
+- Update Taglib to 1.12
+- Update QHotKey to 1.4.2
+
 ## [1.0.13] - 2021-03-13
 ### Added
 - Sort by directory
