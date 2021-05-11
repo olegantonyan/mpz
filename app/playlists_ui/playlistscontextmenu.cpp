@@ -64,7 +64,7 @@ namespace PlaylistsUi {
     });
 
     connect(&play, &QAction::triggered, [&]() {
-      view->doubleClicked(index);
+      emit view->doubleClicked(index);
     });
 
     menu.addAction(&play);
