@@ -1,6 +1,7 @@
 ## [1.0.14] - NEXT
 ### Added
 - "Play" context menu item in playlists view
+- "Jump to current track" context menu item status bar
 
 ### Misc
 - Update Taglib to 1.12

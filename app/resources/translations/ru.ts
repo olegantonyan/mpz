@@ -505,32 +505,37 @@
         <translation>Показать лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="69"/>
+        <location filename="../../statusbarlabel.cpp" line="61"/>
+        <source>Jump to playing track</source>
+        <translation>Перейти к воспроизводимому треку</translation>
+    </message>
+    <message>
+        <location filename="../../statusbarlabel.cpp" line="74"/>
         <source>stream buffer</source>
         <translation>буфер стрима</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="76"/>
+        <location filename="../../statusbarlabel.cpp" line="81"/>
         <source>KB</source>
         <translation>КБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="76"/>
+        <location filename="../../statusbarlabel.cpp" line="81"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="76"/>
+        <location filename="../../statusbarlabel.cpp" line="81"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="76"/>
+        <location filename="../../statusbarlabel.cpp" line="81"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="79"/>
+        <location filename="../../statusbarlabel.cpp" line="84"/>
         <source>bytes</source>
         <translation>байт</translation>
     </message>
