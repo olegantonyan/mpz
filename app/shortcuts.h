@@ -9,11 +9,14 @@
 #include <QtGlobal>
 #include <QShortcut>
 #include <QDebug>
+#include <QHash>
 
 class Shortcuts : public QObject {
   Q_OBJECT
 public:
   explicit Shortcuts(QWidget *parent, Config::Global &global_c);
+
+  QHash<QString, QString> toStringHash() const;
 
 signals:
   void quit();

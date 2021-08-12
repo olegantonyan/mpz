@@ -7,6 +7,8 @@
 #include <QApplication>
 #include <QStyle>
 #include <QEvent>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
@@ -342,6 +344,35 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::openMainMenu, main_menu, &MainMenu::on_open);
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
+
+  connect(main_menu, &MainMenu::openShortcuts, [=]() {
+    QDialog dlg(this);
+    QVBoxLayout layout(&dlg);
+    QTableWidget tbl(&dlg);
+    auto data = shortcuts->toStringHash();
+    tbl.setRowCount(data.size());
+    tbl.setColumnCount(2);
+    tbl.verticalHeader()->hide();
+    tbl.horizontalHeader()->hide();
+    tbl.horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tbl.horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    QHashIterator<QString, QString> it(data);
+    int row = 0;
+    while (it.hasNext()) {
+      it.next();
+      auto item1 = new QTableWidgetItem(it.key());
+      auto item2 = new QTableWidgetItem(it.value());
+      item1->setFlags(Qt::ItemIsEnabled);
+      item2->setFlags(Qt::ItemIsEnabled);
+      tbl.setItem(row, 0, item1);
+      tbl.setItem(row, 1, item2);
+      row++;
+    }
+    layout.addWidget(&tbl);
+    dlg.setLayout(&layout);
+    dlg.resize(dlg.sizeHint());
+    dlg.exec();
+  });
 }
 
 void MainWindow::setupWindowTitle() {

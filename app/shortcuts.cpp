@@ -26,6 +26,27 @@ Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent
   setupGlobal();
 }
 
+QHash<QString, QString> Shortcuts::toStringHash() const {
+  QHash<QString, QString> r;
+  r[tr("Quit")] =                       _quit.key().toString();
+  r[tr("Focus on library")] =           _focus_library.key().toString();
+  r[tr("Focus on playlists")] =         _focus_playlists.key().toString();
+  r[tr("Focus on playlist")] =          _focus_playlist.key().toString();
+  r[tr("Focus on library filter")] =    _focus_filter_library.key().toString();
+  r[tr("Focus on playlists filter")] =  _focus_filter_playlists.key().toString();
+  r[tr("Focus on playlist filter")] =   _focus_filter_playlist.key().toString();
+  r[tr("Open main menu")] =             _open_main_menu.key().toString();
+  r[tr("Focus on library filter")] =    _open_playback_log.key().toString();
+  r[tr("Open playback log")] =          _focus_filter_library.key().toString();
+  r[tr("Open sort menu")] =             _open_sort_menu.key().toString();
+  r[tr("Play")] =                       _play.key().toString();
+  r[tr("Stop")] =                       _stop.key().toString();
+  r[tr("Pause")] =                      _pause.key().toString();
+  r[tr("Next")] =                       _next.key().toString();
+  r[tr("Previous")] =                   _prev.key().toString();
+  return r;
+}
+
 void Shortcuts::setupGlobal() {
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);

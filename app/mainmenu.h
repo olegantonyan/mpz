@@ -15,6 +15,7 @@ signals:
   void exit();
   void toggleTrayIcon();
   void openPlaybackLog();
+  void openShortcuts();
 
 public slots:
   void on_open();

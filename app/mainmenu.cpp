@@ -26,6 +26,8 @@ void MainMenu::on_open() {
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
   QAction feedback(tr("Got feedback?"));
+  QAction shortcuts(tr("Keyboard shortcuts"));
+
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
   });
@@ -41,6 +43,7 @@ void MainMenu::on_open() {
   connect(&feedback, &QAction::triggered, [=]() {
     FeedbackForm().exec();
   });
+  connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
 
   menu.addAction(&trayicon);
   menu.addAction(&minimize_to_tray);
@@ -49,6 +52,7 @@ void MainMenu::on_open() {
   menu.addAction(&about);
   menu.addSeparator();
   menu.addAction(&feedback);
+  menu.addAction(&shortcuts);
   menu.addSeparator();
   menu.addAction(&quit);
 

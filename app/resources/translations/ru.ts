@@ -154,6 +154,11 @@
         <source>Got feedback?</source>
         <translation>Связаться с автором?</translation>
     </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="29"/>
+        <source>Keyboard shortcuts</source>
+        <translation>Клавиатурные сочетания</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -405,6 +410,85 @@
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="52"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
+    </message>
+</context>
+<context>
+    <name>Shortcuts</name>
+    <message>
+        <location filename="../../shortcuts.cpp" line="31"/>
+        <source>Quit</source>
+        <translation>Выйти</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <source>Focus on library</source>
+        <translation>Фокус на библиотеку</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="33"/>
+        <source>Focus on playlists</source>
+        <translation>Фокус на плейлисты</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="34"/>
+        <source>Focus on playlist</source>
+        <translation>Фокус на плейлист</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="35"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
+        <source>Focus on library filter</source>
+        <translation>Фокус на фильтр библиотеки</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <source>Focus on playlists filter</source>
+        <translation>Фокус на фильтр плейлистов</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <source>Focus on playlist filter</source>
+        <translation>Фокус на фильтр плейлиста</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="38"/>
+        <source>Open main menu</source>
+        <translation>Открыть главное меню</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <source>Open playback log</source>
+        <translation>Открыть лог воспроизведения</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <source>Open sort menu</source>
+        <translation>Открыть меню сортировок</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <source>Play</source>
+        <translation>Воспроизвести</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="44"/>
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="45"/>
+        <source>Next</source>
+        <translation>Следующий</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <source>Previous</source>
+        <translation>Предыдущий</translation>
     </message>
 </context>
 <context>
