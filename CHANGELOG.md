@@ -2,6 +2,7 @@
 ### Added
 - "Play" context menu item in playlists view
 - "Jump to current track" context menu item status bar
+- "Keyboard shortcuts" menu item
 
 ### Misc
 - Update Taglib to 1.12
