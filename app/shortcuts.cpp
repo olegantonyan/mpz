@@ -26,6 +26,26 @@ Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent
   setupGlobal();
 }
 
+QVector<QPair<QString, QString> > Shortcuts::describe() const {
+  QVector<QPair<QString, QString> > r;
+  r << QPair<QString, QString>(tr("Quit"), _quit.key().toString());
+  r << QPair<QString, QString>(tr("Focus on library"), _focus_library.key().toString());
+  r << QPair<QString, QString>(tr("Focus on playlists"), _focus_playlists.key().toString());
+  r << QPair<QString, QString>(tr("Focus on playlist"), _focus_playlist.key().toString());
+  r << QPair<QString, QString>(tr("Focus on library filter"), _focus_filter_library.key().toString());
+  r << QPair<QString, QString>(tr("Focus on playlists filter"), _focus_filter_playlists.key().toString());
+  r << QPair<QString, QString>(tr("Focus on playlist filter"), _focus_filter_playlist.key().toString());
+  r << QPair<QString, QString>(tr("Open main menu"), _open_main_menu.key().toString());
+  r << QPair<QString, QString>(tr("Open playback log"), _open_playback_log.key().toString());
+  r << QPair<QString, QString>(tr("Open sort menu"), _open_sort_menu.key().toString());
+  r << QPair<QString, QString>(tr("Play"), _play.key().toString());
+  r << QPair<QString, QString>(tr("Stop"), _stop.key().toString());
+  r << QPair<QString, QString>(tr("Pause"), _pause.key().toString());
+  r << QPair<QString, QString>(tr("Next"), _next.key().toString());
+  r << QPair<QString, QString>(tr("Previous"), _prev.key().toString());
+  return r;
+}
+
 void Shortcuts::setupGlobal() {
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);

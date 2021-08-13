@@ -9,11 +9,15 @@
 #include <QtGlobal>
 #include <QShortcut>
 #include <QDebug>
+#include <QVector>
+#include <QPair>
 
 class Shortcuts : public QObject {
   Q_OBJECT
 public:
   explicit Shortcuts(QWidget *parent, Config::Global &global_c);
+
+  QVector<QPair<QString, QString>> describe() const;
 
 signals:
   void quit();

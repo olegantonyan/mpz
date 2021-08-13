@@ -2,11 +2,14 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
+#include "shortcutsdialog.h"
 
 #include <QDebug>
 #include <QApplication>
 #include <QStyle>
 #include <QEvent>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
@@ -342,6 +345,13 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::openMainMenu, main_menu, &MainMenu::on_open);
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
+
+  connect(main_menu, &MainMenu::openShortcuts, [=]() {
+    auto dlg = new ShortcutsDialog(shortcuts, this);
+    dlg->setModal(false);
+    connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);
+    dlg->show();
+  });
 }
 
 void MainWindow::setupWindowTitle() {
