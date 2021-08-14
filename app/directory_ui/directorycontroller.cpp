@@ -15,7 +15,7 @@
 #include <QFileInfo>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
@@ -81,6 +81,10 @@ namespace DirectoryUi {
     });
 
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
+
+    connect(libsort, &QToolButton::clicked, [=]() {
+      qDebug() << 1;
+    });
   }
 
   void Controller::on_search(const QString &term) {
