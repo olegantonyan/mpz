@@ -348,12 +348,14 @@ void MainWindow::setupShortcuts() {
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
 
-  connect(main_menu, &MainMenu::openShortcuts, [=]() {
+  auto open_dialog = [=] { // TODO: extract to class
     auto dlg = new ShortcutsDialog(shortcuts, this);
     dlg->setModal(false);
     connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);
     dlg->show();
-  });
+  };
+  connect(main_menu, &MainMenu::openShortcuts, open_dialog);
+  connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
 }
 
 void MainWindow::setupWindowTitle() {

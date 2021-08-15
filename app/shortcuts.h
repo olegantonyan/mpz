@@ -35,6 +35,7 @@ signals:
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();
+  void openShortcutsMenu();
 
 private:
   void setupGlobal();
@@ -57,6 +58,7 @@ private:
   QShortcut _open_main_menu;
   QShortcut _open_playback_log;
   QShortcut _open_sort_menu;
+  QShortcut _open_shortcuts_menu;
 
   QHotkey _play_global;
   QHotkey _pause_global;
