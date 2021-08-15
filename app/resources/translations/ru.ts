@@ -80,6 +80,14 @@
     </message>
 </context>
 <context>
+    <name>DirectoryUi::SortMenu</name>
+    <message>
+        <location filename="../../directory_ui/directorysortmenu.cpp" line="17"/>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+</context>
+<context>
     <name>FeedbackForm</name>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="14"/>
@@ -233,80 +241,80 @@
         <translation>Выбрать папку с музыкой</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="165"/>
+        <location filename="../../mainwindow.ui" line="172"/>
         <source>Filter library</source>
         <translation>Фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="179"/>
+        <location filename="../../mainwindow.ui" line="186"/>
         <source>Filter playlists</source>
         <translation>Фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="202"/>
+        <location filename="../../mainwindow.ui" line="209"/>
         <source>Filter tracks</source>
         <translation>Фильтр треков</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="209"/>
+        <location filename="../../mainwindow.ui" line="216"/>
         <source>Playback follows selection</source>
         <translation>Воспроизведение следует за выделением</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="212"/>
+        <location filename="../../mainwindow.ui" line="219"/>
         <source>Playback follows cursor</source>
         <translation>Воспроизведение следует за курсором</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="219"/>
+        <location filename="../../mainwindow.ui" line="226"/>
         <source>Order:</source>
         <translation>Порядок:</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="226"/>
+        <location filename="../../mainwindow.ui" line="233"/>
         <source>global</source>
         <translation>глобальный</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="233"/>
+        <location filename="../../mainwindow.ui" line="240"/>
         <source>Default playback order</source>
         <translation>Порядок воспроизедения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="240"/>
+        <location filename="../../mainwindow.ui" line="247"/>
         <source>playlist</source>
         <translation>плейлист</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="247"/>
+        <location filename="../../mainwindow.ui" line="254"/>
         <source>Override playback for current playlist</source>
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="151"/>
-        <location filename="../../mainwindow.cpp" line="173"/>
+        <location filename="../../mainwindow.cpp" line="153"/>
+        <location filename="../../mainwindow.cpp" line="175"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="152"/>
-        <location filename="../../mainwindow.cpp" line="172"/>
+        <location filename="../../mainwindow.cpp" line="154"/>
+        <location filename="../../mainwindow.cpp" line="174"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="171"/>
+        <location filename="../../mainwindow.cpp" line="173"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="305"/>
+        <location filename="../../mainwindow.cpp" line="303"/>
+        <location filename="../../mainwindow.cpp" line="307"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="307"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
