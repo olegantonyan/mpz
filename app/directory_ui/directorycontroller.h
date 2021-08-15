@@ -4,6 +4,7 @@
 #include "directorymodel.h"
 #include "config/local.h"
 #include "directorycontextmenu.h"
+#include "directorysortmenu.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -37,6 +38,7 @@ namespace DirectoryUi {
     Config::Local &local_conf;
     bool restore_scroll_once;
     DirectoryContextMenu *context_menu;
+    DirectoryUi::SortMenu *sort_menu;
 
     void settingsDialog(QComboBox *libswitch);
     

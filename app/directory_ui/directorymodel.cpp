@@ -11,4 +11,14 @@ namespace DirectoryUi {
     setRootPath(path);
     //sort(3, Qt::DescendingOrder);
   }
+
+  void Model::sortBy(const QString &direction) {
+    if (direction.toLower() == "default") {
+      sort(0, Qt::AscendingOrder);
+    } else if (direction.toLower() == "date") {
+      sort(3, Qt::AscendingOrder);
+    } else if (direction.toLower() == "- date") {
+      sort(3, Qt::DescendingOrder);
+    }
+  }
 }

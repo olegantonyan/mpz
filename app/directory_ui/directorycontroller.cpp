@@ -1,5 +1,6 @@
 #include "directorycontroller.h"
 #include "directorysettings.h"
+#include "directorysortmenu.h"
 
 #include <QAction>
 #include <QDebug>
@@ -82,9 +83,8 @@ namespace DirectoryUi {
 
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
 
-    connect(libsort, &QToolButton::clicked, [=]() {
-      qDebug() << 1;
-    });
+    sort_menu = new DirectoryUi::SortMenu(libsort);
+    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::Model::sortBy);
   }
 
   void Controller::on_search(const QString &term) {
