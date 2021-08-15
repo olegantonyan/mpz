@@ -12,6 +12,9 @@ namespace DirectoryUi {
     explicit Model(QObject *parent = nullptr);
 
     void loadAsync(const QString &path);
+
+  public slots:
+    void sortBy(const QString &direction);
   };
 }
 
