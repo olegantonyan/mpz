@@ -8,7 +8,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c) : QObject(btn), button(btn), global_conf(global_c) {
+MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c) : QObject(btn), button(btn), global_conf(global_c), local_conf(local_c) {
   connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
 }
 
@@ -27,6 +27,7 @@ void MainMenu::on_open() {
   QAction quit(tr("Quit"));
   QAction feedback(tr("Got feedback?"));
   QAction shortcuts(tr("Keyboard shortcuts"));
+  QAction saves(tr("Save settings"));
 
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
@@ -44,9 +45,14 @@ void MainMenu::on_open() {
     FeedbackForm().exec();
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
+  connect(&saves, &QAction::triggered, [=]() {
+    global_conf.sync();
+    local_conf.sync();
+  });
 
   menu.addAction(&trayicon);
   menu.addAction(&minimize_to_tray);
+  menu.addAction(&saves);
   menu.addSeparator();
   menu.addAction(&lpog);
   menu.addAction(&about);
