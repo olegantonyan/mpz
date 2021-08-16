@@ -1,6 +1,6 @@
 #include "shortcuts.h"
 
-Shortcuts::Shortcuts(QWidget *parent, Config::Global &global_c) : QObject(parent), global_conf(global_c),
+Shortcuts::Shortcuts(QWidget *parent) : QObject(parent),
   _quit(parent),
   _focus_library(parent),
   _focus_playlists(parent),

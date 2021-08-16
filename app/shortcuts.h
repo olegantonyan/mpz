@@ -15,7 +15,7 @@
 class Shortcuts : public QObject {
   Q_OBJECT
 public:
-  explicit Shortcuts(QWidget *parent, Config::Global &global_c);
+  explicit Shortcuts(QWidget *parent);
 
   QVector<QPair<QString, QString>> describe() const;
 
@@ -40,8 +40,6 @@ signals:
 private:
   void setupGlobal();
   void setupLocal();
-
-  Config::Global &global_conf;
 
   QShortcut _quit;
   QShortcut _focus_library;

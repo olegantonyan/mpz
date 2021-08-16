@@ -312,7 +312,7 @@ void MainWindow::setupStatusBar() {
 }
 
 void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(this, global_conf);
+  shortcuts = new Shortcuts(this);
 
   connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
   connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
