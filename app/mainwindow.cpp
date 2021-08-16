@@ -2,11 +2,14 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
+#include "shortcutsdialog.h"
 
 #include <QDebug>
 #include <QApplication>
 #include <QStyle>
 #include <QEvent>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
@@ -19,9 +22,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, local_conf, this);
+  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, this);
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, this);
+
+  ui->toolButtonLibrarySort->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
 
   ui->stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
   ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -223,7 +228,7 @@ void MainWindow::setupVolumeControl() {
 
 void MainWindow::setupMainMenu() {
   ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-  main_menu = new MainMenu(ui->menuButton, global_conf);
+  main_menu = new MainMenu(ui->menuButton, global_conf, local_conf);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
@@ -342,6 +347,15 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::openMainMenu, main_menu, &MainMenu::on_open);
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
+
+  auto open_dialog = [=] { // TODO: extract to class
+    auto dlg = new ShortcutsDialog(shortcuts, this);
+    dlg->setModal(false);
+    connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);
+    dlg->show();
+  };
+  connect(main_menu, &MainMenu::openShortcuts, open_dialog);
+  connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
 }
 
 void MainWindow::setupWindowTitle() {

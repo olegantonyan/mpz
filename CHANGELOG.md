@@ -1,6 +1,25 @@
-## [1.0.12] - 
+## [1.0.15] - NEXT
 ### Added
-- Sort by directory 
+- "Save settings" main menu item to force saving settings and playlists to both config files
+
+## [1.0.14] - 2021-08-16
+### Added
+- "Play" context menu item in playlists view
+- "Jump to current track" context menu item status bar
+- "Keyboard shortcuts" menu item
+- Ability to sort library tree by date
+
+### Misc
+- Update Taglib to 1.12
+- Update QHotKey to 1.4.2
+
+## [1.0.13] - 2021-03-13
+### Added
+- Sort by directory
+- Stream keep alive
+
+## [1.0.12] - 2021-03-13
+### Skipped
 
 ## [1.0.11] - 2020-12-13
 ### Added

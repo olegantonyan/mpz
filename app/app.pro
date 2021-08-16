@@ -72,11 +72,13 @@ SOURCES += \
     playlist_ui/trackinfodialog.cpp \
     playlists_ui/playlistscontextmenu.cpp \
     directory_ui/directorycontextmenu.cpp \
+    directory_ui/directorysortmenu.cpp \
     playlists_ui/playlistscontroller.cpp \
     playlists_ui/playlistsmodel.cpp \
     playlists_ui/playlistsproxyfiltermodel.cpp \
     rnjesus.cpp \
     shortcuts.cpp \
+    shortcutsdialog.cpp \
     sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
@@ -120,6 +122,7 @@ HEADERS += \
     playlist_ui/trackinfodialog.h \
     playlists_ui/playlistscontextmenu.h \
     directory_ui/directorycontextmenu.h \
+    directory_ui/directorysortmenu.h \
     playlist/playlist.h \
     playback/playerstate.h \
     playlist_ui/playlistproxyfiltermodel.h \
@@ -128,6 +131,7 @@ HEADERS += \
     playlists_ui/playlistsproxyfiltermodel.h \
     rnjesus.h \
     shortcuts.h \
+    shortcutsdialog.h \
     sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \
@@ -145,15 +149,16 @@ FORMS += \
     mainwindow.ui \
     playback_log_ui/playbacklogdialog.ui \
     playlist_ui/trackinfodialog.ui \
+    shortcutsdialog.ui \
     sort_ui/sortingpresets.ui
 
 # Libraries
 INCLUDEPATH += \
-  ../libs/taglib/taglib-1.11.1/taglib \
-  ../libs/taglib/taglib-1.11.1/taglib/toolkit \
+  ../libs/taglib/taglib-1.12/taglib \
+  ../libs/taglib/taglib-1.12/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.6.3/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.4.1
+  ../libs/qhotkey/QHotkey-1.4.2
 
 LIBS += \
   -L../libs/taglib -ltaglib \

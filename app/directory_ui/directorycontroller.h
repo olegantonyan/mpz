@@ -4,6 +4,7 @@
 #include "directorymodel.h"
 #include "config/local.h"
 #include "directorycontextmenu.h"
+#include "directorysortmenu.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -20,7 +21,7 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths);
@@ -37,6 +38,7 @@ namespace DirectoryUi {
     Config::Local &local_conf;
     bool restore_scroll_once;
     DirectoryContextMenu *context_menu;
+    DirectoryUi::SortMenu *sort_menu;
 
     void settingsDialog(QComboBox *libswitch);
     

@@ -4,6 +4,7 @@
 # -*- makefile -*-
 
 export DESTROOT=$(CURDIR)/debian/mpz
+export QT_SELECT=qt5
 
 %:
 	dh $@

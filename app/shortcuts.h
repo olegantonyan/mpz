@@ -9,11 +9,15 @@
 #include <QtGlobal>
 #include <QShortcut>
 #include <QDebug>
+#include <QVector>
+#include <QPair>
 
 class Shortcuts : public QObject {
   Q_OBJECT
 public:
   explicit Shortcuts(QWidget *parent, Config::Global &global_c);
+
+  QVector<QPair<QString, QString>> describe() const;
 
 signals:
   void quit();
@@ -31,6 +35,7 @@ signals:
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();
+  void openShortcutsMenu();
 
 private:
   void setupGlobal();
@@ -53,6 +58,7 @@ private:
   QShortcut _open_main_menu;
   QShortcut _open_playback_log;
   QShortcut _open_sort_menu;
+  QShortcut _open_shortcuts_menu;
 
   QHotkey _play_global;
   QHotkey _pause_global;

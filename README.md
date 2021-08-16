@@ -45,8 +45,6 @@ cd mpz
 makepkg -si
 ```
 
-Please, beware of https://aur.archlinux.org/packages/mpz-git/. This package is not maintained by the author and may be outdated. The only maintained AUR package is this https://aur.archlinux.org/packages/mpz/.
-
 #### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
@@ -127,23 +125,5 @@ Availble alignments: left, right.
 The sum of `width_percent` of all columns must add up to 100 or below. Sometimes it has to be below 100 to get rid of horizontal scroll, this may happen due to padding and few extra pixels in you desktop theme.
 
 `stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how looks on your desktop.
-
-## Hotkeys
-
-mpz supports global media keys (typically found on a keyboard play/pause/stop/...) as well as non-global shortcuts:
-- Ctrl+L - open playback log;
-- Alt+T - next track;
-- Alt+R - previous track;
-- Alt+W - pause;
-- Alt+Q - stop;
-- Alt+E - play;
-- Alt+3 - focus playlists filter;
-- Alt+2 - focus playlists filter;
-- Alt+1 - focus library (directory tree) filter;
-- Ctrl+3 - focus playlist;
-- Ctrl+2 - focus playlists;
-- Ctrl+1 - focus library (directory tree);
-- Ctrl+Q - exit;
-- Ctrl+S - open sort menu;
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)

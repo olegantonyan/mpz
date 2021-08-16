@@ -58,6 +58,11 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   });
   QAction show_log(tr("Show playback log"));
   connect(&show_log, &QAction::triggered, this, &StatusBarLabel::showPlaybackLog);
+  QAction jump_to(tr("Jump to playing track"));
+  connect(&jump_to, &QAction::triggered, this, &StatusBarLabel::doubleclicked);
+
+  menu.addAction(&jump_to);
+  menu.addSeparator();
   menu.addAction(&copy_name);
   menu.addAction(&show_log);
   menu.exec(mapToGlobal(pos));
