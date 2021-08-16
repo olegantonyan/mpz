@@ -1,4 +1,6 @@
-## [1.0.14] - NEXT
+## [1.0.15] - NEXT
+
+## [1.0.14] - 2021-08-16
 ### Added
 - "Play" context menu item in playlists view
 - "Jump to current track" context menu item status bar
