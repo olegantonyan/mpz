@@ -82,6 +82,8 @@ namespace PlaylistsUi {
         if (!selected.isEmpty() && selected.first().isValid()) {
           context_menu->on_rename(selected.first());
         }
+      } else if (keyevent->key() == Qt::Key_Return) {
+        on_itemActivated(view->currentIndex());
       }
     }
   }
