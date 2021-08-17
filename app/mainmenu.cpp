@@ -1,5 +1,5 @@
 #include "mainmenu.h"
-#include "aboutdialog.h"
+#include "about_ui/aboutdialog.h"
 #include "feedback_ui/feedbackform.h"
 
 #include <QDebug>

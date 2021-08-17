@@ -36,7 +36,7 @@ unix: DEFINES += MPRIS_ENABLE
 INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown namespace/class
 
 SOURCES += \
-    aboutdialog.cpp \
+    about_ui/aboutdialog.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -90,7 +90,7 @@ SOURCES += \
     streammetadata.cpp
 
 HEADERS += \
-    aboutdialog.h \
+    about_ui/aboutdialog.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
@@ -143,7 +143,7 @@ HEADERS += \
     streammetadata.h
 
 FORMS += \
-    aboutdialog.ui \
+    about_ui/aboutdialog.ui \
     directory_ui/directorysettings.ui \
     feedback_ui/feedbackform.ui \
     mainwindow.ui \

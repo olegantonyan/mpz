@@ -1,4 +1,4 @@
-#include "aboutdialog.h"
+#include "about_ui/aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
