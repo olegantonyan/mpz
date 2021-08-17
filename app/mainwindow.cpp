@@ -348,7 +348,7 @@ void MainWindow::setupShortcuts() {
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
 
-  auto open_dialog = [=] { // TODO: extract to class
+  auto open_dialog = [=] {
     auto dlg = new ShortcutsDialog(shortcuts, this);
     dlg->setModal(false);
     connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);
