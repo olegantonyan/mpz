@@ -1,4 +1,4 @@
-#include "shortcutsdialog.h"
+#include "shortcuts_ui/shortcutsdialog.h"
 #include "ui_shortcutsdialog.h"
 
 ShortcutsDialog::ShortcutsDialog(const Shortcuts *shortcuts, QWidget *parent) : QDialog(parent), ui(new Ui::ShortcutsDialog) {

@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
-#include "shortcutsdialog.h"
+#include "shortcuts_ui/shortcutsdialog.h"
 
 #include <QDebug>
 #include <QApplication>
