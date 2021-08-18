@@ -6,6 +6,7 @@ SUBDIRS = \
   libs/yaml-cpp \
   libs/qtwaitingspinner \
   libs/qhotkey \
+  libs/qBreakpad \
   app
 
 # make install

@@ -39,6 +39,11 @@ AboutDialog::~AboutDialog() {
 }
 
 void AboutDialog::show_changelog() {
+  int a;
+  a = 0;
+  *(int*)0 = a;
+  qDebug() << a;
+
   QFile file(":/CHANGELOG.md");
   if (!file.open(QIODevice::ReadOnly)) {
     qWarning() << "error opening changelog resource file";
