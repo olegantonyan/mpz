@@ -20,6 +20,7 @@ public:
 private slots:
   void on_copy(const QPoint &pos);
   void on_toolButtonOpenFileManager_clicked();
+  void on_search(const QPoint &pos);
 
 private:
   Ui::TrackInfoDialog *ui;

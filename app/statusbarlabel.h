@@ -36,6 +36,7 @@ private:
   QString _state;
   quint32 _stream_buffer;
   QString humanized_bytes(quint32 bytes) const;
+  QString trackTitle() const;
 };
 
 #endif // STATUSBARLABEL_H
