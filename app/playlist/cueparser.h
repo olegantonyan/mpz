@@ -38,7 +38,7 @@ namespace Playlist {
     QString path;
 
     QStringList split_cue_line(const QString& line) const;
-    quint64 begin_by_index(const QString& index) const;
+    qint64 begin_by_index(const QString& index) const;
 
     // A single TRACK entry in .cue file.
     class CueEntry {
