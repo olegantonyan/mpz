@@ -2,6 +2,7 @@
 ### Added
 - "Save settings" main menu item to force saving settings and playlists to both config files
 - Ability to select playlist via enter key
+- Added "Search on web" track dialog menu item
 
 ## [1.0.14] - 2021-08-16
 ### Added
