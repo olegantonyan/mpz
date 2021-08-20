@@ -103,7 +103,7 @@ namespace Playback {
     if (track.isStream()) {
       _controls.seekbar->setMaximum(1);
     } else {
-      _controls.seekbar->setMaximum(static_cast<int>(track.duration()));
+      _controls.seekbar->setMaximum(static_cast<int>(track.duration() / 1000));
     }
   }
 
@@ -142,13 +142,13 @@ namespace Playback {
     emit seeked(seek_value);
   }
 
-  QString Controller::time_text(int pos) const {
+  QString Controller::time_text(quint64 pos) const {
     return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.formattedDuration());
   }
 
   void Controller::on_positionChanged(quint64 pos) {
     int v = static_cast<int>(pos / 1000);
-    _controls.time->setText(time_text(v));
+    _controls.time->setText(time_text(pos));
     if (!_current_track.isStream()) {
       _controls.seekbar->setValue(v);
     }

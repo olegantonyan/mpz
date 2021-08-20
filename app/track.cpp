@@ -36,13 +36,13 @@ Track::Track(const QString &fp, quint32 bgn) {
 }
 
 Track::Track(const QString &fp,
-             quint32 bgn,
+             quint64 bgn,
              const QString &artst,
              const QString &albm,
              const QString &ttle,
              quint16 tracknum,
              quint16 yr,
-             quint32 dur,
+             quint64 dur,
              quint8 chans,
              quint16 bitrt,
              quint16 samplert) {
@@ -80,7 +80,8 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   filepath = filepath_reference;
 }
 
-QString Track::formattedTime(quint32 tm) {
+QString Track::formattedTime(quint64 tm) {
+  tm /= 1000;
   quint32 seconds = tm % 60;
   quint32 minutes = (tm / 60) % 60;
   quint32 hours = (tm / 60 / 60);
@@ -102,7 +103,7 @@ bool Track::fillAudioProperties() {
   TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
-      _duration = static_cast<quint32>(f.audioProperties()->length());
+      _duration = static_cast<quint32>(f.audioProperties()->length() * 1000);
       _channels = static_cast<quint8>(f.audioProperties()->channels());
       _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
       _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());

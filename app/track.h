@@ -11,19 +11,19 @@ public:
   explicit Track();
   explicit Track(const QString &filepath, quint32 begin = 0);
   explicit Track(const QString &filepath,
-                 quint32 begin,
+                 quint64 begin,
                  const QString &artist,
                  const QString &album,
                  const QString &title,
                  quint16 tracknum,
                  quint16 year,
-                 quint32 duration,
+                 quint64 duration,
                  quint8 channels,
                  quint16 bitrate,
                  quint16 samplerate);
   explicit Track(const QUrl &stream_url, const QString &filepath_reference);
 
-  static QString formattedTime(quint32 tm);
+  static QString formattedTime(quint64 tm);
 
   bool isValid() const;
 
@@ -72,14 +72,14 @@ private:
   QString _album;
   QString _title;
   quint16 _year;
-  quint32 _duration;
+  quint64 _duration;
   quint16 _sample_rate;
   quint8 _channels;
   quint16 _bitrate;
   QString _format;
   quint16 _track_number;
   QUrl _stream_url;
-  quint32 _begin;
+  quint64 _begin;
 
   quint64 _uid;
 
