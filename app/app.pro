@@ -36,7 +36,7 @@ unix: DEFINES += MPRIS_ENABLE
 INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown namespace/class
 
 SOURCES += \
-    aboutdialog.cpp \
+    about_ui/aboutdialog.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -78,7 +78,7 @@ SOURCES += \
     playlists_ui/playlistsproxyfiltermodel.cpp \
     rnjesus.cpp \
     shortcuts.cpp \
-    shortcutsdialog.cpp \
+    shortcuts_ui/shortcutsdialog.cpp \
     sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
@@ -90,7 +90,7 @@ SOURCES += \
     streammetadata.cpp
 
 HEADERS += \
-    aboutdialog.h \
+    about_ui/aboutdialog.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
@@ -131,7 +131,7 @@ HEADERS += \
     playlists_ui/playlistsproxyfiltermodel.h \
     rnjesus.h \
     shortcuts.h \
-    shortcutsdialog.h \
+    shortcuts_ui/shortcutsdialog.h \
     sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \
@@ -143,13 +143,13 @@ HEADERS += \
     streammetadata.h
 
 FORMS += \
-    aboutdialog.ui \
+    about_ui/aboutdialog.ui \
     directory_ui/directorysettings.ui \
     feedback_ui/feedbackform.ui \
     mainwindow.ui \
     playback_log_ui/playbacklogdialog.ui \
     playlist_ui/trackinfodialog.ui \
-    shortcutsdialog.ui \
+    shortcuts_ui/shortcutsdialog.ui \
     sort_ui/sortingpresets.ui
 
 # Libraries

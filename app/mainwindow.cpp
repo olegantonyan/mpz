@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "config/storage.h"
 #include "waitingspinnerwidget.h"
-#include "shortcutsdialog.h"
+#include "shortcuts_ui/shortcutsdialog.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -312,7 +312,7 @@ void MainWindow::setupStatusBar() {
 }
 
 void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(this, global_conf);
+  shortcuts = new Shortcuts(this);
 
   connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
   connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
@@ -348,7 +348,7 @@ void MainWindow::setupShortcuts() {
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
 
-  auto open_dialog = [=] { // TODO: extract to class
+  auto open_dialog = [=] {
     auto dlg = new ShortcutsDialog(shortcuts, this);
     dlg->setModal(false);
     connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);

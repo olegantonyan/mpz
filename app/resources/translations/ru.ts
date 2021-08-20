@@ -4,28 +4,28 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../../aboutdialog.ui" line="29"/>
-        <location filename="../../aboutdialog.cpp" line="65"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="29"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="65"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.ui" line="36"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="36"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.ui" line="43"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="43"/>
         <source>Contact with developer</source>
         <translation>Связь с автором</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.ui" line="14"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="14"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../aboutdialog.cpp" line="32"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="32"/>
         <source>Using opensource libraries</source>
         <translation>Использует опенсорсные библиотеки</translation>
     </message>
@@ -328,7 +328,7 @@
     <name>PlaybackLogDialog</name>
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.ui" line="25"/>
-        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="80"/>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="93"/>
         <source>Save as CSV</source>
         <translation>Сохранить как CSV</translation>
     </message>
@@ -338,24 +338,29 @@
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="46"/>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="47"/>
         <source>Total time played</source>
         <translation>Общее время воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="50"/>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="51"/>
         <source>This session time played</source>
         <translation>Время воспроизвдения в этой сессии</translation>
     </message>
     <message>
-        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="61"/>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="69"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="65"/>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="73"/>
         <source>Jump to</source>
         <translation>Перейти к</translation>
+    </message>
+    <message>
+        <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="78"/>
+        <source>Search on web</source>
+        <translation>Искать в интернете</translation>
     </message>
 </context>
 <context>
@@ -428,82 +433,82 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
         <source>Open shortcuts dialog</source>
         <translation>Открыть диалог клавиатурных сочетаний</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
         <source>Quit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="34"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
         <source>Focus on library</source>
         <translation>Фокус на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="35"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
         <source>Focus on playlists</source>
         <translation>Фокус на плейлисты</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
         <source>Focus on playlist</source>
         <translation>Фокус на плейлист</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
         <source>Focus on library filter</source>
         <translation>Фокус на фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
         <source>Focus on playlists filter</source>
         <translation>Фокус на фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
         <source>Focus on playlist filter</source>
         <translation>Фокус на фильтр плейлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
         <source>Open main menu</source>
         <translation>Открыть главное меню</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="44"/>
         <source>Open playback log</source>
         <translation>Открыть лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="45"/>
         <source>Open sort menu</source>
         <translation>Открыть меню сортировок</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
+        <location filename="../../shortcuts.cpp" line="33"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="45"/>
+        <location filename="../../shortcuts.cpp" line="34"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="35"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
@@ -511,7 +516,7 @@
 <context>
     <name>ShortcutsDialog</name>
     <message>
-        <location filename="../../shortcutsdialog.ui" line="14"/>
+        <location filename="../../shortcuts_ui/shortcutsdialog.ui" line="14"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
@@ -588,63 +593,68 @@
 <context>
     <name>StatusBarLabel</name>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="17"/>
-        <location filename="../../statusbarlabel.cpp" line="37"/>
+        <location filename="../../statusbarlabel.cpp" line="18"/>
+        <location filename="../../statusbarlabel.cpp" line="38"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="23"/>
+        <location filename="../../statusbarlabel.cpp" line="24"/>
         <source>Playing</source>
         <translation>Воспроизводится</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="30"/>
+        <location filename="../../statusbarlabel.cpp" line="31"/>
         <source>Paused</source>
         <translation>На паузе</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="55"/>
+        <location filename="../../statusbarlabel.cpp" line="56"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="59"/>
+        <location filename="../../statusbarlabel.cpp" line="60"/>
         <source>Show playback log</source>
         <translation>Показать лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="61"/>
+        <location filename="../../statusbarlabel.cpp" line="62"/>
         <source>Jump to playing track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="74"/>
+        <location filename="../../statusbarlabel.cpp" line="64"/>
+        <source>Search on web</source>
+        <translation>Искать в интернете</translation>
+    </message>
+    <message>
+        <location filename="../../statusbarlabel.cpp" line="81"/>
         <source>stream buffer</source>
         <translation>буфер стрима</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="81"/>
+        <location filename="../../statusbarlabel.cpp" line="88"/>
         <source>KB</source>
         <translation>КБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="81"/>
+        <location filename="../../statusbarlabel.cpp" line="88"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="81"/>
+        <location filename="../../statusbarlabel.cpp" line="88"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="81"/>
+        <location filename="../../statusbarlabel.cpp" line="88"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../../statusbarlabel.cpp" line="84"/>
+        <location filename="../../statusbarlabel.cpp" line="91"/>
         <source>bytes</source>
         <translation>байт</translation>
     </message>
@@ -652,74 +662,79 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="34"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="41"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="37"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="44"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="40"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="43"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="50"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="46"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="53"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="54"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="49"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="56"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="50"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="57"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="51"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="58"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="52"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="59"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="54"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="61"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="57"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="64"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="60"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="67"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="89"/>
         <source>Copy</source>
         <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="93"/>
+        <source>Search on web</source>
+        <translation>Искать в интернете</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.ui" line="14"/>

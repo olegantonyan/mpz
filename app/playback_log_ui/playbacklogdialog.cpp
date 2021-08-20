@@ -7,6 +7,7 @@
 #include <QClipboard>
 #include <QFileDialog>
 #include <QFile>
+#include <QDesktopServices>
 
 PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) : QDialog(parent), ui(new Ui::PlaybackLogDialog), model(m) {
   ui->setupUi(this);
@@ -50,6 +51,13 @@ void PlaybackLogDialog::on_thisSessionPlayTimeChanged(int value) {
   ui->labelThisSessionPlayTime->setText(tr("This session time played") + ": " + Track::formattedTime(value));
 }
 
+void PlaybackLogDialog::on_search(const QPoint &pos) {
+  auto index = ui->tableView->indexAt(pos);
+  auto text = model->data(index).toString();
+  auto term = QString("https://duckduckgo.com/?q=%1").arg(QString(QUrl::toPercentEncoding(text)));
+  QDesktopServices::openUrl(QUrl(term));
+}
+
 void PlaybackLogDialog::setup_context_menu() {
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -67,8 +75,13 @@ void PlaybackLogDialog::setup_context_menu() {
       auto index = ui->tableView->indexAt(pos);
       on_jumpTo(index);
     });
+    QAction search(tr("Search on web"));
+    connect(&search, &QAction::triggered, [=]() {
+      on_search(pos);
+    });
 
     menu.addAction(&copy);
+    menu.addAction(&search);
     menu.addAction(&jump_to);
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });

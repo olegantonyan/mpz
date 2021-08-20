@@ -9,7 +9,6 @@ namespace DirectoryUi {
 
   void Model::loadAsync(const QString &path) {
     setRootPath(path);
-    //sort(3, Qt::DescendingOrder);
   }
 
   void Model::sortBy(const QString &direction) {

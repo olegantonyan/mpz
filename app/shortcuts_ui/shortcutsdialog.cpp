@@ -1,4 +1,4 @@
-#include "shortcutsdialog.h"
+#include "shortcuts_ui/shortcutsdialog.h"
 #include "ui_shortcutsdialog.h"
 
 ShortcutsDialog::ShortcutsDialog(const Shortcuts *shortcuts, QWidget *parent) : QDialog(parent), ui(new Ui::ShortcutsDialog) {
@@ -13,12 +13,12 @@ ShortcutsDialog::ShortcutsDialog(const Shortcuts *shortcuts, QWidget *parent) : 
   ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
   for (int row = 0; row < data.size(); row++) {
-    auto item1 = new QTableWidgetItem(data[row].first);
-    auto item2 = new QTableWidgetItem(data[row].second);
-    item1->setFlags(Qt::ItemIsEnabled);
-    item2->setFlags(Qt::ItemIsEnabled);
-    ui->tableWidget->setItem(row, 0, item1);
-    ui->tableWidget->setItem(row, 1, item2);
+    auto name = new QTableWidgetItem(data[row].first);
+    auto shortcut = new QTableWidgetItem(data[row].second);
+    name->setFlags(Qt::ItemIsEnabled);
+    shortcut->setFlags(Qt::ItemIsEnabled);
+    ui->tableWidget->setItem(row, 0, name);
+    ui->tableWidget->setItem(row, 1, shortcut);
   }
 }
 
