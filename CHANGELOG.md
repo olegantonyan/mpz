@@ -4,6 +4,9 @@
 - Ability to select playlist via enter key
 - Added "Search on web" track dialog menu item
 
+### Misc
+- Update yaml cpp to 0.7.0
+
 ## [1.0.14] - 2021-08-16
 ### Added
 - "Play" context menu item in playlists view
