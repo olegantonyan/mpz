@@ -4,7 +4,7 @@
 #include <QFont>
 
 namespace PlaylistUi {
-  Model::Model(QStyle *stl, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl) {
+  Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
     tracks.clear();
     _playlist = nullptr;
   }
@@ -24,7 +24,7 @@ namespace PlaylistUi {
     if (parent.isValid()) {
       return 0;
     }
-    return 6;
+    return columns_config.count() + 1;
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
@@ -33,10 +33,10 @@ namespace PlaylistUi {
     }
 
     if (role == Qt::TextAlignmentRole) {
-      if (index.column() == 4 || index.column() == 5) {
-        return (Qt::AlignRight + Qt::AlignVCenter);
-      } else {
+      if (index.column() == 0) {
         return Qt::AlignVCenter;
+      } else {
+        return QVariant(columns_config.align(index.column()));
       }
     }
 
@@ -60,23 +60,8 @@ namespace PlaylistUi {
        }
     }
 
-    if (role == Qt::DisplayRole) {
-      switch (index.column()) {
-        case 1:
-          return t.artist();
-        case 2:
-          return t.album();
-        case 3:
-          return t.title();
-        case 4:
-          if (t.year() == 0) {
-            return QVariant();
-          } else {
-            return t.year();
-          }
-        case 5:
-          return t.formattedDuration();
-      }
+    if (role == Qt::DisplayRole && index.column() > 0) {
+      return columns_config.value(index.column(), t);
     }
     return QVariant();
   }

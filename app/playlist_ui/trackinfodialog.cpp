@@ -29,6 +29,13 @@ void TrackInfoDialog::on_copy(const QPoint &pos) {
   qApp->clipboard()->setText(text.toString());
 }
 
+void TrackInfoDialog::on_search(const QPoint &pos) {
+  auto index = ui->tableView->indexAt(pos);
+  auto text = model.data(index).toString();
+  auto term = QString("https://duckduckgo.com/?q=%1").arg(QString(QUrl::toPercentEncoding(text)));
+  QDesktopServices::openUrl(QUrl(term));
+}
+
 void TrackInfoDialog::setup_table(const Track &track) {
   if (!track.artist().isEmpty()) {
     add_table_row(tr("Artist"), track.artist());
@@ -52,7 +59,8 @@ void TrackInfoDialog::setup_table(const Track &track) {
   add_table_row(tr("Channels"), QString::number(track.channels()));
   if (track.isStream()) {
     add_table_row(tr("Stream url"), track.url().toString());
-  } else {
+  }
+  if (!track.path().isEmpty()) {
     add_table_row(tr("File path"), track.path());
   }
   if (track.isCue()) {
@@ -82,7 +90,12 @@ void TrackInfoDialog::setup_context_menu() {
     connect(&copy, &QAction::triggered, [=]() {
       on_copy(pos);
     });
+    QAction search(tr("Search on web"));
+    connect(&search, &QAction::triggered, [=]() {
+      on_search(pos);
+    });
     menu.addAction(&copy);
+    menu.addAction(&search);
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });
 }

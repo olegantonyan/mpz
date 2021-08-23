@@ -83,7 +83,7 @@ QStringList SortingPresetsDialog::itemList(const QList<SortingPreset> &presets) 
 }
 
 void SortingPresetsDialog::on_buttonHelp_clicked() {
-  static const QString HELP_TEXT = tr(
+  static const QString HELP_TEXT = (
         "Fields available to sort (case insensitive):<br />"
         " * Artist<br />"
         " * Album<br />"
@@ -91,6 +91,7 @@ void SortingPresetsDialog::on_buttonHelp_clicked() {
         " * Year<br />"
         " * Filename<br />"
         " * TrackNumber<br />"
+        " * Directory</br />"
         "<br />"
         "By default sort in ascending order. Add - before the field name to change to descending order.<br />"
         "Use / to build nested multilevel sorting criteria. Examples:<br />"

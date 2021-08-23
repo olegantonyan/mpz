@@ -1,6 +1,39 @@
-## [1.0.11] - 
+## [1.0.15] - NEXT
 ### Added
+- "Save settings" main menu item to force saving settings and playlists to both config files
+- Ability to select playlist via enter key
+- Added "Search on web" track dialog menu item
 
+### Misc
+- Update yaml cpp to 0.7.0
+
+## [1.0.14] - 2021-08-16
+### Added
+- "Play" context menu item in playlists view
+- "Jump to current track" context menu item status bar
+- "Keyboard shortcuts" menu item
+- Ability to sort library tree by date
+
+### Misc
+- Update Taglib to 1.12
+- Update QHotKey to 1.4.2
+
+## [1.0.13] - 2021-03-13
+### Added
+- Sort by directory
+- Stream keep alive
+
+## [1.0.12] - 2021-03-13
+### Skipped
+
+## [1.0.11] - 2020-12-13
+### Added
+- Configurable playlist columns
+- Playback log size config option
+
+### Fixed
+- Show in file manager works on stream playlists
+- Single instance IPC port change to non-ephemeral (31341)
 
 ## [1.0.10] - 2020-11-07
 ### Added

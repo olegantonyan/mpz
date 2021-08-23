@@ -65,7 +65,7 @@ Track::Track(const QString &fp,
   _format = detectFormat();
 }
 
-Track::Track(const QUrl &stream_url) {
+Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   _duration = 0;
   _channels = 0;
   _bitrate = 0;
@@ -77,6 +77,7 @@ Track::Track(const QUrl &stream_url) {
 
   _uid = generateUid();
   _stream_url = stream_url;
+  filepath = filepath_reference;
 }
 
 QString Track::formattedTime(quint32 tm) {

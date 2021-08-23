@@ -36,7 +36,7 @@ unix: DEFINES += MPRIS_ENABLE
 INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown namespace/class
 
 SOURCES += \
-    aboutdialog.cpp \
+    about_ui/aboutdialog.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -63,6 +63,7 @@ SOURCES += \
     playlist/fileparser.cpp \
     playlist/loader.cpp \
     playlist/sorter.cpp \
+    playlist_ui/columnsconfig.cpp \
     playlist_ui/playlistcontroller.cpp \
     playlist_ui/playlistmodel.cpp \
     playlist/playlist.cpp \
@@ -72,11 +73,13 @@ SOURCES += \
     playlist_ui/trackinfodialog.cpp \
     playlists_ui/playlistscontextmenu.cpp \
     directory_ui/directorycontextmenu.cpp \
+    directory_ui/directorysortmenu.cpp \
     playlists_ui/playlistscontroller.cpp \
     playlists_ui/playlistsmodel.cpp \
     playlists_ui/playlistsproxyfiltermodel.cpp \
     rnjesus.cpp \
     shortcuts.cpp \
+    shortcuts_ui/shortcutsdialog.cpp \
     sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
@@ -88,7 +91,7 @@ SOURCES += \
     streammetadata.cpp
 
 HEADERS += \
-    aboutdialog.h \
+    about_ui/aboutdialog.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
@@ -114,12 +117,14 @@ HEADERS += \
     playlist/fileparser.h \
     playlist/loader.h \
     playlist/sorter.h \
+    playlist_ui/columnsconfig.h \
     playlist_ui/playlistcontroller.h \
     playlist_ui/playlistmodel.h \
     playlist_ui/playlistcontextmenu.h \
     playlist_ui/trackinfodialog.h \
     playlists_ui/playlistscontextmenu.h \
     directory_ui/directorycontextmenu.h \
+    directory_ui/directorysortmenu.h \
     playlist/playlist.h \
     playback/playerstate.h \
     playlist_ui/playlistproxyfiltermodel.h \
@@ -128,6 +133,7 @@ HEADERS += \
     playlists_ui/playlistsproxyfiltermodel.h \
     rnjesus.h \
     shortcuts.h \
+    shortcuts_ui/shortcutsdialog.h \
     sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \
@@ -139,21 +145,22 @@ HEADERS += \
     streammetadata.h
 
 FORMS += \
-    aboutdialog.ui \
+    about_ui/aboutdialog.ui \
     directory_ui/directorysettings.ui \
     feedback_ui/feedbackform.ui \
     mainwindow.ui \
     playback_log_ui/playbacklogdialog.ui \
     playlist_ui/trackinfodialog.ui \
+    shortcuts_ui/shortcutsdialog.ui \
     sort_ui/sortingpresets.ui
 
 # Libraries
 INCLUDEPATH += \
-  ../libs/taglib/taglib-1.11.1/taglib \
-  ../libs/taglib/taglib-1.11.1/taglib/toolkit \
-  ../libs/yaml-cpp/yaml-cpp-0.6.3/include \
+  ../libs/taglib/taglib-1.12/taglib \
+  ../libs/taglib/taglib-1.12/taglib/toolkit \
+  ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.4.1
+  ../libs/qhotkey/QHotkey-1.4.2
 
 LIBS += \
   -L../libs/taglib -ltaglib \

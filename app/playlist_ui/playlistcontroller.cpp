@@ -9,11 +9,14 @@
 #include <QMouseEvent>
 
 namespace PlaylistUi {    
-  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
-    model = new Model(view->style(), this);
+
+    loadColumnsConfig();
+
+    model = new Model(view->style(), columns_config, this);
     proxy = new ProxyFilterModel(model, this);
     view->setModel(proxy);
     view->horizontalHeader()->hide();
@@ -58,6 +61,15 @@ namespace PlaylistUi {
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
+  }
+
+  void PlaylistUi::Controller::loadColumnsConfig() {
+    auto c = global_conf.columnsConfig();
+    if (c.count() == 0) {
+      global_conf.saveColumnsConfig(columns_config);
+    } else {
+      columns_config = global_conf.columnsConfig();
+    }
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist::Playlist> pi) {
@@ -144,12 +156,16 @@ namespace PlaylistUi {
       int total_width = view->width();
       view->horizontalHeader()->setMinimumSectionSize(20);
       view->setColumnWidth(0, 20);
-      view->setColumnWidth(1, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(2, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(3, static_cast<int>(total_width * 0.28));
-      view->setColumnWidth(4, static_cast<int>(total_width * 0.05));
-      //view->setColumnWidth(4, total_width * 0.05);
-      view->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+
+      for (int col = 1; col <= columns_config.count(); col++) {
+        auto rel_width = columns_config.width(col);
+        if (rel_width > 0) {
+          view->setColumnWidth(col, static_cast<int>(total_width * rel_width));
+        }
+        if (columns_config.stretch(col)) {
+          view->horizontalHeader()->setSectionResizeMode(col, QHeaderView::Stretch);
+        }
+      }
 
     } else if (event->type() == QEvent::WindowActivate) {
       if (restore_scroll_once) {

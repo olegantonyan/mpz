@@ -24,6 +24,7 @@ private slots:
   void on_jumpTo(const QModelIndex &idx);
   void on_totalPlayTimeChanged(int value);
   void on_thisSessionPlayTimeChanged(int value);
+  void on_search(const QPoint &pos);
 
   void on_buttonSaveCsv_clicked();
 

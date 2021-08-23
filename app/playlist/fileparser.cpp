@@ -62,7 +62,7 @@ namespace Playlist {
         auto parsed_line = parseLine(line, is_stream);
         if (!parsed_line.isEmpty()) {
           if (is_stream) {
-            items << Track(QUrl(parsed_line));
+            items << Track(QUrl(parsed_line), path.absolutePath());
           } else {
             items << Track(parsed_line);
           }

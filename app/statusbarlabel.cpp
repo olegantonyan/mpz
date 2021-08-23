@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QClipboard>
 #include <QApplication>
+#include <QDesktopServices>
 
 StatusBarLabel::StatusBarLabel(QWidget *parent) : QLabel(parent) {
   on_playerStopped();
@@ -54,11 +55,22 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   QMenu menu;
   QAction copy_name(tr("Copy"));
   connect(&copy_name, &QAction::triggered, [=]() {
-     qApp->clipboard()->setText(text());
+     qApp->clipboard()->setText(trackTitle());
   });
   QAction show_log(tr("Show playback log"));
   connect(&show_log, &QAction::triggered, this, &StatusBarLabel::showPlaybackLog);
+  QAction jump_to(tr("Jump to playing track"));
+  connect(&jump_to, &QAction::triggered, this, &StatusBarLabel::doubleclicked);
+  QAction search(tr("Search on web"));
+  connect(&search, &QAction::triggered, [=]() {
+    auto term = QString("https://duckduckgo.com/?q=%1").arg(QString(QUrl::toPercentEncoding(trackTitle())));
+    QDesktopServices::openUrl(QUrl(term));
+  });
+
+  menu.addAction(&jump_to);
+  menu.addSeparator();
   menu.addAction(&copy_name);
+  menu.addAction(&search);
   menu.addAction(&show_log);
   menu.exec(mapToGlobal(pos));
 }
@@ -83,4 +95,8 @@ QString StatusBarLabel::humanized_bytes(quint32 bytes) const {
       bytes /= 1024;
     }
     return QString().setNum(bytes, 10) + " " + unit;
+}
+
+QString StatusBarLabel::trackTitle() const {
+  return text().split("|").first().replace(_state + ": ", "");
 }
