@@ -1,4 +1,8 @@
-## [1.0.15] - NEXT
+## [1.0.16] - NEXT
+### Added
+
+
+## [1.0.15] - 2021-08-24
 ### Added
 - "Save settings" main menu item to force saving settings and playlists to both config files
 - Ability to select playlist via enter key
