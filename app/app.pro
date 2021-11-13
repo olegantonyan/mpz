@@ -158,7 +158,7 @@ INCLUDEPATH += \
   ../libs/taglib/taglib-1.12/taglib/toolkit \
   ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
   ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.4.2
+  ../libs/qhotkey/QHotkey-1.5.0
 
 LIBS += \
   -L../libs/taglib -ltaglib \
