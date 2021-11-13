@@ -25,7 +25,7 @@
     <property name='PlaybackStatus' type='s' access='read'/>
     <property name='Shuffle' type='b' access='readwrite'/>
     <property name='Metadata' type='a{sv}' access='read'>
-      <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
     </property>
     <property name='Volume' type='d' access='readwrite'/>
     <property name='Position' type='x' access='read'/>
