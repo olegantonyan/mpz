@@ -10,7 +10,7 @@ namespace PlaylistsUi {
   }
 
   void Model::loadAsync() {
-    QtConcurrent::run([=]() {
+    (void)QtConcurrent::run([=]() {
       list = local_conf.playlists();
       beginInsertRows(QModelIndex(), 0, list.size());
       endInsertRows();

@@ -31,7 +31,11 @@ namespace Playback {
     }
     clear();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    _future = QtConcurrent::run(&Stream::thread, this);
+#else
     _future = QtConcurrent::run(this, &Stream::thread);
+#endif
 
     return _future.isStarted();
   }

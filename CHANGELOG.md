@@ -1,6 +1,9 @@
 ## [1.0.16] - NEXT
 ### Added
 
+### Misc
+- Qt6 support
+- Update QHotKey to 1.5.0
 
 ## [1.0.15] - 2021-08-24
 ### Added

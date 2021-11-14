@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
-#include <QTextCodec>
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");

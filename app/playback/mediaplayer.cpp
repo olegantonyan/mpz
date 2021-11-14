@@ -7,13 +7,20 @@
 
 namespace Playback {
   MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QObject *parent) : QObject(parent), stream(stream_buffer_size) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    player.setAudioOutput(&audio_output);
+#endif
     connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
       if (offset_end > 0 && pos >= offset_end) {
         stop();
       }
     });
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(&player, &QMediaPlayer::playbackStateChanged, [=](QMediaPlayer::PlaybackState state) {
+#else
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
+#endif
       switch (state) {
         case QMediaPlayer::StoppedState:
           emit stateChanged(MediaPlayer::StoppedState);
@@ -26,7 +33,11 @@ namespace Playback {
           break;
       }
     });
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(&player, &QMediaPlayer::errorOccurred, [=](QMediaPlayer::Error err) {
+#else
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), [=](QMediaPlayer::Error err) {
+#endif
       emit error(QString("QMediaPlayer error %1").arg(err));
     });
     connect(&stream, &Stream::fillChanged, this, &MediaPlayer::streamBufferfillChanged);
@@ -39,7 +50,11 @@ namespace Playback {
   }
 
   MediaPlayer::State MediaPlayer::state() const {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    switch (player.playbackState()) {
+#else
     switch (player.state()) {
+#endif
       case QMediaPlayer::StoppedState:
         return MediaPlayer::StoppedState;
       case QMediaPlayer::PlayingState:
@@ -51,7 +66,11 @@ namespace Playback {
   }
 
   int MediaPlayer::volume() const {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    return audio_output.volume() * 100;
+#else
     return player.volume();
+#endif
   }
 
   qint64 MediaPlayer::position() const {
@@ -85,7 +104,11 @@ namespace Playback {
   }
 
   void MediaPlayer::setVolume(int vol) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    audio_output.setVolume(vol / 100.0);
+#else
     player.setVolume(vol);
+#endif
   }
 
   void MediaPlayer::setTrack(const Track &track) {
@@ -94,9 +117,18 @@ namespace Playback {
     stream.stop();
     if (track.isStream()) {
       stream.setUrl(track.url());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+      player.setSourceDevice(&stream, track.url());
+#else
       player.setMedia(track.url(), &stream);
+#endif
     } else {
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+      player.setSource(track.url());
+#else
       player.setMedia(track.url());
+#endif
       if (track.isCue()) {
         offset_begin = track.begin() * 1000;
         offset_end = offset_begin + track.duration() * 1000;
@@ -105,7 +137,11 @@ namespace Playback {
   }
 
   void MediaPlayer::clearTrack() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    player.setSource(QUrl(nullptr));
+#else
     player.setMedia(nullptr);
+#endif
     offset_begin = 0;
     offset_end = 0;
   }

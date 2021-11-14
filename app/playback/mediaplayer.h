@@ -6,6 +6,9 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  #include <QAudioOutput>
+#endif
 
 namespace Playback {
   class MediaPlayer : public QObject {
@@ -42,6 +45,9 @@ namespace Playback {
   private:
     QMediaPlayer player;
     Stream stream;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QAudioOutput audio_output;
+#endif
 
     quint64 offset_begin;
     quint64 offset_end;

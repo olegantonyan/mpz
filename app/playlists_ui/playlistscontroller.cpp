@@ -91,7 +91,7 @@ namespace PlaylistsUi {
   void Controller::eventFilterViewport(QEvent *event) {
     if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
-      if (me->button() == Qt::MidButton) {
+      if (me->button() == Qt::MiddleButton) {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
           on_removeItem(index);

@@ -8,7 +8,11 @@
 #include <QDirIterator>
 #include <QtConcurrent>
 #include <QFileInfo>
-#include <QMutableVectorIterator>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  #include <QMutableListIterator>
+#else
+  #include <QMutableVectorIterator>
+#endif
 
 namespace Playlist {
   Playlist::Playlist() : QObject(nullptr) {
@@ -40,7 +44,7 @@ namespace Playlist {
   }
 
   void Playlist::loadAsync(const QList<QDir> &dirs) {
-    QtConcurrent::run([=]() {
+    (void)QtConcurrent::run([=]() {
       load(dirs);
       emit loadAsyncFinished(this);
     });
@@ -76,7 +80,7 @@ namespace Playlist {
   }
 
   void Playlist::concatAsync(const QList<QDir> &dirs) {
-    QtConcurrent::run([=]() {
+    (void)QtConcurrent::run([=]() {
       concat(dirs);
       emit concatAsyncFinished(this);
     });
@@ -144,7 +148,11 @@ namespace Playlist {
   }
 
   void Playlist::reload() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMutableListIterator<Track> mit(tracks_list);
+#else
     QMutableVectorIterator<Track> mit(tracks_list);
+#endif
     while (mit.hasNext()) {
       mit.next().reload();
     }
