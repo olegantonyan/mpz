@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
+#include <iostream>
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
@@ -57,6 +58,12 @@ int main(int argc, char *argv[]) {
   a.setApplicationVersion(VERSION);
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
 
+  auto arguments = args(argc, argv);
+  if (arguments.size() == 1 && arguments.first() == "--version") {
+    std::cout << a.applicationVersion().toStdString() << std::endl;
+    return 0;
+  }
+
   Config::Global global_conf;
   Config::Local local_conf;
 
@@ -67,13 +74,13 @@ int main(int argc, char *argv[]) {
     int another_pid = instance.anotherPid();
     if (another_pid > 0) {
       qDebug() << "reusing another instance with pid" << another_pid;
-      return instance.load_files_send(args(argc, argv)) == true ? 0 : 1;
+      return instance.load_files_send(arguments) == true ? 0 : 1;
     } else {
       instance.start();
     }
   }
 
-  MainWindow w(args(argc, argv), &instance, local_conf, global_conf);
+  MainWindow w(arguments, &instance, local_conf, global_conf);
 
   w.show();
   return a.exec();
