@@ -61,7 +61,7 @@ namespace Playlist {
 
     QTextStream text_stream(&device);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    text_stream.setEncoding(QStringConverter::Utf8);
+    text_stream.setEncoding(QStringConverter::encodingForData(device.peek(1024)).value_or(QStringConverter::Utf8));
 #else
     text_stream.setCodec(QTextCodec::codecForUtfText(device.peek(1024), QTextCodec::codecForName("UTF-8")));
 #endif
