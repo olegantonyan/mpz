@@ -71,9 +71,9 @@ namespace Playlist {
   }
 
   bool Loader::is_dir_empty() const {
-  #if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
     return path.isEmpty();
-  #else
+#else
     return path.count() == 0;
 #endif
   }
