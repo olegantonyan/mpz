@@ -20,7 +20,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 - Built with C++/Qt - fast and responsive native UI;
 - Supports internet radio in `m3u` and `pls` playlists formats;
 - Supports CUE sheets;
-- Supports MPRIS on Linux for remote control;
+- Supports MPRIS on Linux for remote control (for example, via [KDE Connect](https://kdeconnect.kde.org/));
 - Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation).
 
 ## Limitations
@@ -48,7 +48,7 @@ makepkg -si
 #### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
-Packages' names may differ in different distros. Qt5 and Qt6 are supported.
+Packages' names may differ in different distros. Both Qt5 and Qt6 are supported.
 
 ```
 git clone git@github.com:olegantonyan/mpz.git
