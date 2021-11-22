@@ -42,9 +42,9 @@ namespace PlaylistUi {
 
     Track t = tracks.at(index.row());
 
-    if (role == Qt::FontRole && t.uid() == highlight_uid) {
+    if (role == Qt::FontRole) {
       QFont font;
-      font.setBold(true);
+      font.setBold(t.uid() == highlight_uid);
       return font;
     }
 
