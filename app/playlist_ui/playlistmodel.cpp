@@ -9,8 +9,8 @@ namespace PlaylistUi {
     _playlist = nullptr;
   }
 
-  QModelIndex Model::buildIndex(int row) const {
-    return createIndex(row, 0);
+  QModelIndex Model::buildIndex(int row, int col) const {
+    return createIndex(row, col);
   }
 
   int Model::rowCount(const QModelIndex &parent) const {
@@ -80,6 +80,12 @@ namespace PlaylistUi {
     emit dataChanged(top, bottom, {Qt::DisplayRole});*/
   }
 
+  void Model::allDataChanged() {
+    for (int col = 0; col < columnCount(); col++) {
+      emit dataChanged(buildIndex(0, col), buildIndex(tracks.size() - 1, col));
+    }
+  }
+
   void Model::setPlaylist(std::shared_ptr<Playlist::Playlist> pl) {
     _playlist = pl;
     reload();
@@ -100,7 +106,7 @@ namespace PlaylistUi {
     highlight_uid = uid;
     highlight_state = st;
     if (tracks.size() > 0) {
-      emit dataChanged(buildIndex(0), buildIndex(tracks.size() - 1));
+       allDataChanged();
     }
   }
 
