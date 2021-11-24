@@ -1,3 +1,5 @@
+## [1.0.17] - NEXT
+
 ## [1.0.16] - 2021-11-24
 ### Added
 - Ability to inhibit automatic sleep while playing on Linux
