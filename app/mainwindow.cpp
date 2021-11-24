@@ -402,7 +402,7 @@ void MainWindow::setupSleepLock() {
     return;
   }
 
-  sleep_lock = new ShutdownLock(this);
+  sleep_lock = new SleepLock(this);
   connect(player, &Playback::Controller::started, [=](Track _track) {
     Q_UNUSED(_track);
     sleep_lock->activate(true);

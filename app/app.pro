@@ -79,7 +79,7 @@ SOURCES += \
     rnjesus.cpp \
     shortcuts.cpp \
     shortcuts_ui/shortcutsdialog.cpp \
-    shutdownlock.cpp \
+    sleeplock.cpp \
     sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
@@ -133,7 +133,7 @@ HEADERS += \
     rnjesus.h \
     shortcuts.h \
     shortcuts_ui/shortcutsdialog.h \
-    shutdownlock.h \
+    sleeplock.h \
     sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \

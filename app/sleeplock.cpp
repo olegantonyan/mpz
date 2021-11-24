@@ -1,10 +1,10 @@
-#include "shutdownlock.h"
+#include "sleeplock.h"
 
 #include <QStringList>
 #include <QApplication>
 #include <QDebug>
 
-ShutdownLock::ShutdownLock(QObject *parent) : QObject(parent), proc(parent) {
+SleepLock::SleepLock(QObject *parent) : QObject(parent), proc(parent) {
 #ifdef Q_OS_LINUX
   proc.setProgram("systemd-inhibit");
   QStringList args;
@@ -17,7 +17,7 @@ ShutdownLock::ShutdownLock(QObject *parent) : QObject(parent), proc(parent) {
 #endif
 }
 
-void ShutdownLock::activate(bool state) {
+void SleepLock::activate(bool state) {
 #ifdef Q_OS_LINUX
   try {
     if (state) {

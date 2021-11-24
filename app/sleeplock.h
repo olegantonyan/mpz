@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QProcess>
 
-class ShutdownLock : public QObject {
+class SleepLock : public QObject {
   Q_OBJECT
 public:
-  explicit ShutdownLock(QObject *parent = nullptr);
+  explicit SleepLock(QObject *parent = nullptr);
 
 public slots:
   void activate(bool state);

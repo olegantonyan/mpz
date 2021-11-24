@@ -17,7 +17,7 @@
 #include "playback_log_ui/playbackloguicontroller.h"
 #include "sort_ui/sortmenu.h"
 #include "ipc/instance.h"
-#include "shutdownlock.h"
+#include "sleeplock.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -61,7 +61,7 @@ private:
   Shortcuts *shortcuts;
   PlaybackLogUi::Controller *playback_log;
   SortUi::SortMenu *sort_menu;
-  ShutdownLock *sleep_lock;
+  SleepLock *sleep_lock;
 
   int streamBuffer();
   void setupUiSettings();
