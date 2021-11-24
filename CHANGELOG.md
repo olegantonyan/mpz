@@ -1,5 +1,6 @@
 ## [1.0.16] - NEXT
 ### Added
+- Ability to inhibit automatic sleep while playing on Linux
 
 ### Misc
 - Qt6 support
