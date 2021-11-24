@@ -398,6 +398,7 @@ void MainWindow::setupSortMenu() {
 
 void MainWindow::setupSleepLock() {
   if (!global_conf.inhibitSleepWhilePlaying()) {
+    sleep_lock = nullptr;
     return;
   }
 
