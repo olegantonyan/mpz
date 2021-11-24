@@ -75,6 +75,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupWindowTitle();
   setupPlaybackLog();
   setupSortMenu();
+  setupSleepLock();
 
   preloadPlaylist(args);
 
@@ -393,6 +394,25 @@ void MainWindow::setupSortMenu() {
   ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
 
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
+}
+
+void MainWindow::setupSleepLock() {
+  if (!global_conf.inhibitSleepWhilePlaying()) {
+    return;
+  }
+
+  sleep_lock = new ShutdownLock(this);
+  connect(player, &Playback::Controller::started, [=](Track _track) {
+    Q_UNUSED(_track);
+    sleep_lock->activate(true);
+  });
+  connect(player, &Playback::Controller::paused, [=](Track _track) {
+    Q_UNUSED(_track);
+    sleep_lock->activate(false);
+  });
+  connect(player, &Playback::Controller::stopped, [=]() {
+    sleep_lock->activate(false);
+  });
 }
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
