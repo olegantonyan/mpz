@@ -39,5 +39,7 @@ void SleepLock::activate(bool state) {
   }  catch (...) {
     qDebug() << "error starting/stopping sleep lock";
   }
+#else
+  Q_UNUSED(state)
 #endif
 }
