@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QHash>
 
 namespace Playlist {
   class Covers : public QObject {
@@ -14,6 +15,11 @@ namespace Playlist {
 
   private:
     explicit Covers(QObject *parent = nullptr);
+
+    QString keyByFilepath(const QString& filepath) const;
+    QString findCoverLocally(const QString &dir);
+
+    QHash <QString, QString> cache;
   };
 }
 
