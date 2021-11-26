@@ -6,15 +6,14 @@
 #include <QHash>
 
 namespace Playlist {
-  class Covers : public QObject {
-    Q_OBJECT
+  class Covers {
   public:
     static Covers &instance();
 
     QString get(const QString& filepath);
 
   private:
-    explicit Covers(QObject *parent = nullptr);
+    explicit Covers();
 
     QString keyByFilepath(const QString& filepath) const;
     QString findCoverLocally(const QString &dir);

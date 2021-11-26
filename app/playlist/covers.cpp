@@ -14,7 +14,7 @@ namespace Playlist {
     return *self;
   }
 
-  Covers::Covers(QObject *parent) : QObject(parent) {
+  Covers::Covers() {
   }
 
   QString Covers::get(const QString &filepath) {
