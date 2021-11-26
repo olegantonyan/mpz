@@ -18,6 +18,9 @@ namespace Playlist {
   }
 
   QString Covers::get(const QString &filepath) {
+    if (filepath.isEmpty()) {
+      return QString();
+    }
     auto key = keyByFilepath(filepath);
     if (cache.contains(key)) {
       return cache.value(key);
