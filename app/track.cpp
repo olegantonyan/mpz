@@ -1,5 +1,6 @@
 #include "track.h"
 #include "rnjesus.h"
+#include "playlist/covers.h"
 
 #include "fileref.h"
 #include "tag.h"
@@ -251,6 +252,10 @@ void Track::clearStreamMeta() {
 
 const StreamMetaData &Track::streamMeta() const {
   return _stream_meta;
+}
+
+QString Track::albumCover() const {
+  return Playlist::Covers::instance().get(filepath);
 }
 
 quint16 Track::sample_rate() const {

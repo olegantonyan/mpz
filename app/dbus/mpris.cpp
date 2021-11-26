@@ -101,6 +101,11 @@ QVariantMap Mpris::Metadata() const {
   h["xesam:title"] = player->currentTrack().title();
   h["xesam:trackNumber"] = player->currentTrack().track_number();
   h["xesam:artist"] = player->currentTrack().artist();
+
+  auto art = player->currentTrack().albumCover();
+  if (!art.isEmpty()) {
+    h["mpris:artUrl"] = QUrl::fromLocalFile(art).toString();
+  }
   return h;
 }
 
