@@ -2,6 +2,9 @@
 ### Added
 - expose album covers through MPRIS: show them in KDE media player widget
 
+### Fixed
+- MPRIS fix seek (was broken in KDE media player widget)
+
 ## [1.0.16] - 2021-11-24
 ### Added
 - Ability to inhibit automatic sleep while playing on Linux
