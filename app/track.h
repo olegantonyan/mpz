@@ -66,7 +66,7 @@ public:
 
   const StreamMetaData &streamMeta() const;
 
-  QString albumCover() const;
+  QString artCover() const;
 
 private:
   QString filepath;

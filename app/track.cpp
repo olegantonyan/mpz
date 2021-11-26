@@ -254,7 +254,7 @@ const StreamMetaData &Track::streamMeta() const {
   return _stream_meta;
 }
 
-QString Track::albumCover() const {
+QString Track::artCover() const {
   return Playlist::Covers::instance().get(filepath);
 }
 
