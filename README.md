@@ -62,16 +62,6 @@ make -j`nproc`
 sudo make install
 ```
 
-#### Windows
-
-Use static binaries from releases page: https://github.com/olegantonyan/mpz/releases
-You'll need codecs installed on your system, for example, [K-Lite Codec Pack](https://www.codecguide.com/download_kl.htm).
-NOTE: Windows binaries aren't tested as thoroughly as Linux and may contain Windows-specific bugs.
-
-#### MacOS
-
-It should be possible to build mpz for Mac, but I don't have a hardware to test it. If you're interested in Mac builds - drop an issue here https://github.com/olegantonyan/mpz/issues/new
-
 ## Configuration
 
 The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/$USERNAME/AppData/Local/mpz/mpz`. There are 2 files:
