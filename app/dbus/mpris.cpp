@@ -61,6 +61,10 @@ QString Mpris::Identity() const {
   return qApp->applicationName() + "@" + QHostInfo::localHostName();
 }
 
+QString Mpris::DesktopEntry() const {
+  return qApp->applicationName();
+}
+
 QStringList Mpris::SupportedUriSchemes() const {
   return QStringList();
 }
