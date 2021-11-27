@@ -66,11 +66,43 @@ QString Mpris::DesktopEntry() const {
 }
 
 QStringList Mpris::SupportedUriSchemes() const {
-  return QStringList();
+  static QStringList res = QStringList() << "file"
+                                         << "http"
+                                         << "https";
+  return res;
 }
 
 QStringList Mpris::SupportedMimeTypes() const {
-  return QStringList() << "audio/mpeg";
+  static QStringList res = QStringList() << "x-content/audio-player"
+                                         << "application/ogg"
+                                         << "application/x-ogg"
+                                         << "application/x-ogm-audio"
+                                         << "audio/flac"
+                                         << "audio/ogg"
+                                         << "audio/vorbis"
+                                         << "audio/aac"
+                                         << "audio/mp4"
+                                         << "audio/mpeg"
+                                         << "audio/mpegurl"
+                                         << "audio/vnd.rn-realaudio"
+                                         << "audio/x-flac"
+                                         << "audio/x-oggflac"
+                                         << "audio/x-vorbis"
+                                         << "audio/x-vorbis+ogg"
+                                         << "audio/x-speex"
+                                         << "audio/x-wav"
+                                         << "audio/x-wavpack"
+                                         << "audio/x-ape"
+                                         << "audio/x-mp3"
+                                         << "audio/x-mpeg"
+                                         << "audio/x-mpegurl"
+                                         << "audio/x-ms-wma"
+                                         << "audio/x-musepack"
+                                         << "audio/x-pn-realaudio"
+                                         << "audio/x-scpls"
+                                         << "video/x-ms-asf";
+
+  return res;
 }
 
 QString Mpris::PlaybackStatus() const {
