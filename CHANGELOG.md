@@ -1,4 +1,9 @@
 ## [1.0.17] - NEXT
+### Added
+- expose album covers through MPRIS: show them in KDE media player widget
+
+### Fixed
+- MPRIS fix seek (was broken in KDE media player widget)
 
 ## [1.0.16] - 2021-11-24
 ### Added

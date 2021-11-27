@@ -95,12 +95,17 @@ void Mpris::SetShuffle(bool value) {
 
 QVariantMap Mpris::Metadata() const {
   QVariantMap h;
-  h["mpris:trackid"] = player->currentTrack().uid();
+  h["mpris:trackid"] = QDBusObjectPath(QString("/%1").arg(player->currentTrack().uid()));
   h["mpris:length"] = player->currentTrack().duration() * 1000000;
   h["xesam:album"] = player->currentTrack().album();
   h["xesam:title"] = player->currentTrack().title();
   h["xesam:trackNumber"] = player->currentTrack().track_number();
   h["xesam:artist"] = player->currentTrack().artist();
+
+  auto art = player->currentTrack().artCover();
+  if (!art.isEmpty()) {
+    h["mpris:artUrl"] = QUrl::fromLocalFile(art).toString();
+  }
   return h;
 }
 

@@ -58,6 +58,7 @@ SOURCES += \
     playback_log_ui/playbacklogdialog.cpp \
     playback_log_ui/playbackloguicontroller.cpp \
     playback_log_ui/playbackloguimodel.cpp \
+    playlist/covers.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
     playlist/loader.cpp \
@@ -112,6 +113,7 @@ HEADERS += \
     playback_log_ui/playbacklogdialog.h \
     playback_log_ui/playbackloguicontroller.h \
     playback_log_ui/playbackloguimodel.h \
+    playlist/covers.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
     playlist/loader.h \
