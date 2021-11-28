@@ -1,6 +1,7 @@
-## [1.0.18] - NEXT
+## [1.0.18] - 2021-11-28
 
 ### Fixed
+- build with older Qt versions fixed
 - MPRIS track info updates with the stream metadata
 
 ## [1.0.17] - 2021-11-28
