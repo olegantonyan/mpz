@@ -123,7 +123,7 @@ puts "***** END OF SRCINFO *****"
   git_ssh = "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'"
 
   puts "cloning aur repo..."
-  puts "#{git_ssh} git clone #{aur_repo}"
+  puts "#{git_ssh} git clone #{aur_repo} --branch master"
   `cd #{d} && #{git_ssh} git clone #{aur_repo}`
 
   ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
