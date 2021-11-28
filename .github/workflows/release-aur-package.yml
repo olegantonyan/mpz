@@ -1,9 +1,9 @@
 name: Release AUR package
 
 on:
-  #push:
-  #  branches:
-  #    - master
+  push:
+    branches:
+      - master
   release:
     types: [published, created, edited, prereleased, deleted, unpublished]
 
