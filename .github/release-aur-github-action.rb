@@ -124,7 +124,7 @@ puts "***** END OF SRCINFO *****"
 
   puts "cloning aur repo..."
   puts "#{git_ssh} git clone --branch master #{aur_repo}"
-  `cd #{d} && #{git_ssh} git clone #{aur_repo}`
+  `cd #{d} && #{git_ssh} git clone --branch master #{aur_repo}`
 
   ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
   ::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
