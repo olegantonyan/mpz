@@ -34,6 +34,10 @@ Mpris::Mpris(Playback::Controller *pl, QObject *parent) : QObject(parent), playe
     notify("PlaybackStatus", PlaybackStatus());
     notify("Metadata", Metadata());
   });
+  connect(player, &Playback::Controller::trackChanged, [=](const Track &t) {
+    Q_UNUSED(t)
+    notify("Metadata", Metadata());
+  });
 
   connect(player, &Playback::Controller::volumeChanged, [=](int val) {
     Q_UNUSED(val)
@@ -174,7 +178,7 @@ bool Mpris::CanPause() const {
 }
 
 bool Mpris::CanSeek() const {
-  return true;
+  return player->currentTrack().isValid() && !player->currentTrack().isStream();
 }
 
 bool Mpris::CanControl() const {

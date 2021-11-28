@@ -1,5 +1,8 @@
 ## [1.0.18] - NEXT
 
+### Fixed
+- MPRIS track info updates with the stream metadata
+
 ## [1.0.17] - 2021-11-28
 ### Added
 - expose album covers through MPRIS: show them in KDE media player widget
