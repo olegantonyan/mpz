@@ -1,7 +1,4 @@
-QT       += core gui multimedia concurrent network
-unix: QT += dbus
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += widgets core gui multimedia concurrent network
 
 CONFIG += c++11
 
@@ -156,6 +153,20 @@ FORMS += \
     shortcuts_ui/shortcutsdialog.ui \
     sort_ui/sortingpresets.ui
 
+contains(DEFINES, MPRIS_ENABLE) {
+  DBUS_ADAPTORS += \
+    dbus/org.mpris.MediaPlayer2.xml \
+    dbus/org.mpris.MediaPlayer2.Player.xml
+
+  HEADERS += \
+    dbus/mpris.h
+
+  SOURCES += \
+    dbus/mpris.cpp
+
+  QT += dbus
+}
+
 # Libraries
 INCLUDEPATH += \
   ../libs/taglib/taglib-1.12/taglib \
@@ -172,18 +183,6 @@ LIBS += \
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries
-
-unix: {
-  DBUS_ADAPTORS += \
-    dbus/org.mpris.MediaPlayer2.xml \
-    dbus/org.mpris.MediaPlayer2.Player.xml
-
-  HEADERS += \
-    dbus/mpris.h
-
-  SOURCES += \
-    dbus/mpris.cpp
-}
 
 RESOURCES += \
   ../resources.qrc
