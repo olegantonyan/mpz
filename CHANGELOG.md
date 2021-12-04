@@ -1,3 +1,8 @@
+## [1.0.19] - NEXT
+
+### Fixed
+- saving renamed playlist
+
 ## [1.0.18] - 2021-11-28
 
 ### Fixed
