@@ -84,6 +84,7 @@ namespace PlaylistsUi {
     if (ok && !new_name.isEmpty()) {
       i->rename(new_name);
     }
+    model->persist();
   }
 
   void PlaylistsContextMenu::on_savem3u(const QModelIndex &index) {
