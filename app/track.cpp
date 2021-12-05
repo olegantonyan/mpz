@@ -1,6 +1,6 @@
 #include "track.h"
 #include "rnjesus.h"
-#include "playlist/covers.h"
+#include "coverart/covers.h"
 
 #include "fileref.h"
 #include "tag.h"
@@ -255,7 +255,7 @@ const StreamMetaData &Track::streamMeta() const {
 }
 
 QString Track::artCover() const {
-  return Playlist::Covers::instance().get(filepath);
+  return CoverArt::Covers::instance().get(filepath);
 }
 
 quint16 Track::sample_rate() const {

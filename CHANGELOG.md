@@ -3,6 +3,9 @@
 ### Fixed
 - saving renamed playlist
 
+### Added
+- support embedded covers
+
 ## [1.0.18] - 2021-11-28
 
 ### Fixed

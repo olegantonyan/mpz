@@ -39,6 +39,7 @@ SOURCES += \
     config/local.cpp \
     config/storage.cpp \
     config/value.cpp \
+    coverart/embedded.cpp \
     directory_ui/directorycontroller.cpp \
     directory_ui/directorysettings.cpp \
     feedback_ui/feedbackform.cpp \
@@ -55,7 +56,7 @@ SOURCES += \
     playback_log_ui/playbacklogdialog.cpp \
     playback_log_ui/playbackloguicontroller.cpp \
     playback_log_ui/playbackloguimodel.cpp \
-    playlist/covers.cpp \
+    coverart/covers.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
     playlist/loader.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     config/local.h \
     config/storage.h \
     config/value.h \
+    coverart/embedded.h \
     directory_ui/directorycontroller.h \
     directory_ui/directorysettings.h \
     feedback_ui/feedbackform.h \
@@ -110,7 +112,7 @@ HEADERS += \
     playback_log_ui/playbacklogdialog.h \
     playback_log_ui/playbackloguicontroller.h \
     playback_log_ui/playbackloguimodel.h \
-    playlist/covers.h \
+    coverart/covers.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
     playlist/loader.h \
@@ -171,6 +173,7 @@ contains(DEFINES, MPRIS_ENABLE) {
 INCLUDEPATH += \
   ../libs/taglib/taglib-1.12/taglib \
   ../libs/taglib/taglib-1.12/taglib/toolkit \
+  ../libs/taglib/taglib-1.12/taglib/mpeg/id3v2 \
   ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
   ../libs/qtwaitingspinner \
   ../libs/qhotkey/QHotkey-1.5.0

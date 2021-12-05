@@ -1,11 +1,13 @@
-#include "covers.h"
+#include "coverart/covers.h"
 
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
+#include <QImage>
+#include <QBuffer>
 
-namespace Playlist {
+namespace CoverArt {
   Covers &Covers::instance() {
     static Covers *self = nullptr;
     if (nullptr == self) {
@@ -21,13 +23,19 @@ namespace Playlist {
     if (filepath.isEmpty()) {
       return QString();
     }
+
     auto key = keyByFilepath(filepath);
     if (cache.contains(key)) {
       return cache.value(key);
     }
 
     auto found = findCoverLocally(key);
-    if (!found.isEmpty()) {
+    if (found.isEmpty()) {
+      auto img = embedded_covers.get(filepath);
+      if (!img.isEmpty()) {
+        return img;
+      }
+    } else {
       cache.insert(key, found);
     }
     return found;

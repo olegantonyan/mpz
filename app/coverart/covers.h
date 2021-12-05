@@ -1,11 +1,13 @@
 #ifndef PLAYLIST_COVERS_H
 #define PLAYLIST_COVERS_H
 
+#include "coverart/embedded.h"
+
 #include <QObject>
 #include <QString>
 #include <QHash>
 
-namespace Playlist {
+namespace CoverArt {
   class Covers {
   public:
     static Covers &instance();
@@ -19,6 +21,7 @@ namespace Playlist {
     QString findCoverLocally(const QString &dir);
 
     QHash <QString, QString> cache;
+    CoverArt::Embedded embedded_covers;
   };
 }
 
