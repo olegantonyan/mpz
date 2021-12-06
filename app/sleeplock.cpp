@@ -37,7 +37,7 @@ void SleepLock::activate(bool state) {
       proc.kill();
     }
   }  catch (...) {
-    qDebug() << "error starting/stopping sleep lock";
+    //qDebug() << "error starting/stopping sleep lock";
   }
 #else
   Q_UNUSED(state)
