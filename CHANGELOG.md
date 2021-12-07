@@ -5,6 +5,7 @@
 
 ### Added
 - support embedded covers
+- show covers in track info dialog
 
 ## [1.0.18] - 2021-11-28
 

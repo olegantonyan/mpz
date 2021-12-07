@@ -5,6 +5,7 @@
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QPixmap>
 
 TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
   ui->setupUi(this);
@@ -16,6 +17,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   ui->tableView->setModel(&model);
   setup_context_menu();
   setup_table(track);
+  setup_cover_art(track);
   track_dir = track.dir();
 }
 
@@ -98,6 +100,18 @@ void TrackInfoDialog::setup_context_menu() {
     menu.addAction(&search);
     menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
   });
+}
+
+void TrackInfoDialog::setup_cover_art(const Track &track) {
+  auto path = track.artCover();
+  if (path.isEmpty()) {
+    return;
+  }
+  QPixmap cover(track.artCover());
+  if (cover.isNull()) {
+    return;
+  }
+  ui->labelCoverArt->setPixmap(cover.scaledToHeight(height()));
 }
 
 void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
