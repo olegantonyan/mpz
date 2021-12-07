@@ -107,7 +107,7 @@ void TrackInfoDialog::setup_cover_art(const Track &track) {
   if (path.isEmpty()) {
     return;
   }
-  QPixmap cover(track.artCover());
+  QPixmap cover(path);
   if (cover.isNull()) {
     return;
   }
