@@ -1,10 +1,10 @@
-## [1.0.19] - NEXT
+## [1.0.19] - 2021-12-08
 
 ### Fixed
 - saving renamed playlist
 
 ### Added
-- support embedded covers
+- support embedded album covers
 - show covers in track info dialog
 
 ## [1.0.18] - 2021-11-28
