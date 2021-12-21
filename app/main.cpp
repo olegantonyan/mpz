@@ -6,6 +6,8 @@
 #include "config/global.h"
 #include "config/local.h"
 
+#include <QBreakpadHandler.h>
+
 #include <QApplication>
 #include <QDebug>
 #include <QTranslator>
@@ -50,6 +52,8 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
+  QBreakpadInstance.setDumpPath(QLatin1String("/tmp/mpz_crashes"));
+
   registerMetaTypes();
   RNJesus::seed();
 
