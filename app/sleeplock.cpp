@@ -21,7 +21,9 @@ void SleepLock::activate(bool state) {
 #ifdef Q_OS_LINUX
   try {
     if (state) {
-      proc.start();
+      if (proc.state() == QProcess::NotRunning) {
+        proc.start();
+      }
       /*
       connect(&proc, &QProcess::errorOccurred, [=](QProcess::ProcessError error) {
         qDebug() << error;

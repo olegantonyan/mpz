@@ -1,3 +1,8 @@
+## [1.0.20] - NEXT
+
+### Fixed
+- reduce stdout spam from sleep lock
+
 ## [1.0.19] - 2021-12-08
 
 ### Fixed
