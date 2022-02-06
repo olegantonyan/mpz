@@ -83,8 +83,8 @@
     <name>DirectoryUi::SortMenu</name>
     <message>
         <location filename="../../directory_ui/directorysortmenu.cpp" line="17"/>
-        <source>Default</source>
-        <translation>По умолчанию</translation>
+        <source>Default (Name)</source>
+        <translation>По умолчанию (Имя)</translation>
     </message>
 </context>
 <context>
@@ -296,30 +296,30 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="153"/>
-        <location filename="../../mainwindow.cpp" line="175"/>
+        <location filename="../../mainwindow.cpp" line="154"/>
+        <location filename="../../mainwindow.cpp" line="176"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="154"/>
-        <location filename="../../mainwindow.cpp" line="174"/>
+        <location filename="../../mainwindow.cpp" line="155"/>
+        <location filename="../../mainwindow.cpp" line="175"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="173"/>
+        <location filename="../../mainwindow.cpp" line="174"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="307"/>
+        <location filename="../../mainwindow.cpp" line="304"/>
+        <location filename="../../mainwindow.cpp" line="308"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="310"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -405,7 +405,7 @@
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="92"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="93"/>
         <source>Save as m3u</source>
         <translation>Сохранить как m3u</translation>
     </message>
@@ -662,77 +662,77 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="41"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="43"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="44"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="46"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="47"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="49"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="50"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="52"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="53"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="55"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="54"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="56"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="56"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="58"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="57"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="59"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="58"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="60"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="59"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="61"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="61"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="63"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="64"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="66"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="67"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="69"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="89"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="91"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="93"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="95"/>
         <source>Search on web</source>
         <translation>Искать в интернете</translation>
     </message>
@@ -742,7 +742,7 @@
         <translation>Информация о треке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="30"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="41"/>
         <source>Show in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
