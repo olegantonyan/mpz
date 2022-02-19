@@ -25,7 +25,7 @@ source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
 
 build() {
-    cd $pkgname-<%= commit_hash %>
+    cd mpz-<%= commit_hash %>
 
     rm -rf build
     mkdir build
@@ -35,7 +35,7 @@ build() {
 }
 
 package() {
-    cd $pkgname-<%= commit_hash %>
+    cd mpz-<%= commit_hash %>
 
     cd build
     make install INSTALL_ROOT=$pkgdir
