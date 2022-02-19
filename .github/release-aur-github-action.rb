@@ -11,7 +11,7 @@ PKGBUILD = <<~HEREDOC
 # Maintainer: Oleg Antonyan <oleg.b.antonyan@gmail.com>
 # Contributor: Oleg Antonyan <oleg.b.antonyan@gmail.com>
 
-pkgname=mpz
+pkgname=<%= pkgname %>
 pkgver=<%= pkgver %>
 pkgrel=<%= pkgrel %>
 pkgdesc='Music player for the large local collections'
@@ -19,7 +19,7 @@ arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
 depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme')
-provides=('mpz')
+provides=('<%= pkgname %>')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
 
@@ -42,7 +42,7 @@ package() {
 HEREDOC
 
 SRCINFO =<<~HEREDOC
-pkgbase = mpz
+pkgbase = <%= pkgname %>
 	pkgdesc = Music player for the large local collections
 	pkgver = <%= pkgver %>
 	pkgrel = <%= pkgrel %>
@@ -52,11 +52,11 @@ pkgbase = mpz
 	depends = qt5-multimedia
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
-	provides = mpz
-	source = mpz-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
+	provides = <%= pkgname %>
+	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
-pkgname = mpz
+pkgname = <%= pkgname %>
 HEREDOC
 
 puts "PWD: #{::Dir.pwd}"
@@ -67,17 +67,9 @@ puts "Commit hash: #{commit_hash}"
 source = "https://github.com/olegantonyan/mpz/archive/#{commit_hash}.zip"
 puts "Source tarball: #{source}"
 
-# don't need this it looks like
-#15.times do |attempt|
-#  status = open(source).status.first rescue nil
-#  break if status == '200'
-#  raise "timeout waiting for #{source}" if attempt >= 14
-#  puts "waiting for #{source}... attempt #{attempt}"
-#  sleep 10
-#end
-
 aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
 
+pkgname = 'mpz'
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
 pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
 sha256sums = ::Digest::SHA256.hexdigest(open(source).read)
@@ -92,6 +84,7 @@ puts "git describe --tags: #{`git describe --tags`}"
 raise "Commits mismtach: #{commit_hash} != #{last_commit_hash}" unless commit_hash.start_with?(last_commit_hash)
 
 pkgbuild = ::ERB.new(PKGBUILD, nil, '-').result_with_hash(
+  pkgname: pkgname,
   pkgver: pkgver,
   pkgrel: pkgrel,
   sha256sums: sha256sums,
@@ -103,6 +96,7 @@ puts pkgbuild
 puts "***** END OF PKGBUILD *****"
 
 srcinfo = ::ERB.new(SRCINFO, nil, '-').result_with_hash(
+  pkgname: pkgname,
   pkgver: pkgver,
   pkgrel: pkgrel,
   sha256sums: sha256sums,
