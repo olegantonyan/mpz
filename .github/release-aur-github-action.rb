@@ -69,9 +69,9 @@ puts "Commit hash: #{commit_hash}"
 source = "https://github.com/olegantonyan/mpz/archive/#{commit_hash}.zip"
 puts "Source tarball: #{source}"
 
-aur_repo = 'ssh://aur@aur.archlinux.org/mpz.git'
-
 pkgname = 'mpz'
+aur_repo = "ssh://aur@aur.archlinux.org/#{pkgname}.git"
+
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
 pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
 sha256sums = ::Digest::SHA256.hexdigest(::URI.open(source).read)
@@ -123,8 +123,8 @@ puts "***** END OF SRCINFO *****"
   puts clone_cmd
   `cd #{d} && #{clone_cmd}`
 
-  ::File.open("#{d}/mpz/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
-  ::File.open("#{d}/mpz/.SRCINFO", 'w') { |f| f.write(srcinfo) }
+  ::File.open("#{d}/#{pkgname}/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
+  ::File.open("#{d}/#{pkgname}/.SRCINFO", 'w') { |f| f.write(srcinfo) }
 
   raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
   raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
