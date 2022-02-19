@@ -1,0 +1,26 @@
+name: Release AUR package Qt6
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published, created, edited, prereleased, deleted, unpublished]
+
+jobs:
+  release_aur_package:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+
+    - name: Run release script
+      env:
+        AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+      run: ./.github/release-aur-github-action-qt6.rb
