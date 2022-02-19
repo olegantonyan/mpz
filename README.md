@@ -63,7 +63,7 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake-qt5 CONFIG+=release ..
+qmake-qt5 CONFIG+=release .. # use qmake6 instead of qmake-qt5 for Qt6
 make -j`nproc`
 # now you now use app/mpz binary directly
 # optionally, install to /usr:
