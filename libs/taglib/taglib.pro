@@ -113,18 +113,11 @@ SOURCES += \
   taglib-1.12/taglib/mpeg/xingheader.cpp \
   taglib-1.12/taglib/mpeg/id3v1/id3v1tag.cpp \
   taglib-1.12/taglib/mpeg/id3v1/id3v1genres.cpp \
-  taglib-1.12/taglib/tagunion.cpp \
-  taglib-1.12/examples/framelist.cpp \
-  taglib-1.12/examples/tagreader.cpp \
-  taglib-1.12/examples/tagwriter.cpp \
-  taglib-1.12/examples/strip-id3v1.cpp \
-  taglib-1.12/bindings/c/tag_c.cpp
+  taglib-1.12/taglib/tagunion.cpp
 
 
 HEADERS += \
   taglib-1.12/taglib/taglib_config.h \
-  taglib-1.12/tests/utils.h \
-  taglib-1.12/tests/plainfile.h \
   taglib-1.12/3rdparty/utf8-cpp/core.h \
   taglib-1.12/3rdparty/utf8-cpp/checked.h \
   taglib-1.12/taglib/toolkit/tlist.h \
@@ -238,8 +231,7 @@ HEADERS += \
   taglib-1.12/taglib/mpeg/mpegfile.h \
   taglib-1.12/taglib/mpeg/mpegutils.h \
   taglib-1.12/taglib/mpeg/id3v1/id3v1genres.h \
-  taglib-1.12/taglib/mpeg/id3v1/id3v1tag.h \
-  taglib-1.12/bindings/c/tag_c.h
+  taglib-1.12/taglib/mpeg/id3v1/id3v1tag.h
 
 INCLUDEPATH += \
   taglib-1.12/taglib \
