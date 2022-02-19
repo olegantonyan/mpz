@@ -1,0 +1,15 @@
+pkgbase = <%= pkgname %>
+	pkgdesc = Music player for the large local collections
+	pkgver = <%= pkgver %>
+	pkgrel = <%= pkgrel %>
+	url = https://github.com/olegantonyan/mpz
+	arch = x86_64
+	license = GPL3
+	depends = qt6-multimedia
+	depends = hicolor-icon-theme
+	provides = <%= pkgname %>
+  conflicts = mpz
+	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
+	sha256sums = <%= sha256sums %>
+
+pkgname = <%= pkgname %>
