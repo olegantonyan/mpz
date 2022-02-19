@@ -53,6 +53,10 @@ cd mpz-qt6
 makepkg -si
 ```
 
+#### Windows
+
+Grab static binary from releases page: https://github.com/olegantonyan/mpz/releases/
+
 #### From sources
 
 Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
