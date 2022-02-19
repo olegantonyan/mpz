@@ -1,9 +1,9 @@
 name: Release AUR package
 
-on: [workflow_dispatch]
-
-#  release:
-#    types: [published, created, edited, prereleased, deleted, unpublished]
+on:
+  workflow_dispatch:
+  release:
+    types: [published, created, edited, prereleased, deleted, unpublished]
 
 jobs:
   release_aur_package:
@@ -18,7 +18,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.1
+        ruby-version: 2.7
 
     - name: Run release script
       env:
