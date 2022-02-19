@@ -20,7 +20,12 @@ jobs:
       with:
         ruby-version: 3.1
 
-    - name: Run release script
+    - name: Run release script (Qt5)
       env:
         AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
       run: ./.github/release-aur-github-action.rb
+
+    - name: Run release script (Qt6)
+      env:
+        AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+      run: ./.github/release-aur-github-action-qt6.rb
