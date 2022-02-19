@@ -126,8 +126,8 @@ puts "***** END OF SRCINFO *****"
   ::File.open("#{d}/#{pkgname}/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
   ::File.open("#{d}/#{pkgname}/.SRCINFO", 'w') { |f| f.write(srcinfo) }
 
-  raise '.SRCINFO file mismatch' if ::File.read("#{d}/mpz/.SRCINFO") != srcinfo
-  raise 'PKGBUILD file mismatch' if ::File.read("#{d}/mpz/PKGBUILD") != pkgbuild
+  raise '.SRCINFO file mismatch' if ::File.read("#{d}/#{pkgname}/.SRCINFO") != srcinfo
+  raise 'PKGBUILD file mismatch' if ::File.read("#{d}/#{pkgname}/PKGBUILD") != pkgbuild
 
   `git config --global user.email "#{author_email}"`
   `git config --global user.name "#{author_name}"`
