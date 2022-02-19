@@ -1,7 +1,7 @@
 # Run inside build dir
-# pack ./mpz/ as distrubution
+# pack ./deploy/ as distrubution
 
 export PATH=$PATH:/e/Qt/Tools/mingw810_64/bin/:/e/Qt/5.15.2/mingw81_64/bin/
 
-windeployqt.exe ./app/mpz.exe --dir mpz/
-cp ./app/mpz.exe mpz/
+windeployqt.exe ./app/mpz.exe --dir deploy/
+cp ./app/mpz.exe deploy/
