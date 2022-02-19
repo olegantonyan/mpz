@@ -37,11 +37,19 @@ Use Open Build Service repositories: https://software.opensuse.org//download.htm
 
 #### Arch
 
-Use AUR package: https://aur.archlinux.org/packages/mpz/
+Use AUR package (Qt5): https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
 cd mpz
+makepkg -si
+```
+
+For Qt6 version use this package: https://aur.archlinux.org/packages/mpz-qt6
+
+```
+git clone https://aur.archlinux.org/mpz-qt6.git
+cd mpz-qt6
 makepkg -si
 ```
 
