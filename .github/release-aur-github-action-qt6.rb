@@ -132,5 +132,5 @@ puts "***** END OF SRCINFO *****"
   `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/mpz && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_url})" && #{git_ssh} git push`
+  `cd #{d}/#{pkgname} && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_url})" && #{git_ssh} git push`
 end
