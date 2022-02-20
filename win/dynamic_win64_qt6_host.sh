@@ -1,5 +1,4 @@
-# Run inside build dir
-# pack ./deploy/ as distrubution
+#!/bin/bash
 
 export PATH=$PATH:/e/Qt/Tools/mingw900_64/bin/:/e/Qt/6.2.3/mingw_64/bin/
 
