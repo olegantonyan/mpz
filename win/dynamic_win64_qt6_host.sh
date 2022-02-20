@@ -1,14 +1,14 @@
 # Run inside build dir
 # pack ./deploy/ as distrubution
 
-export PATH=$PATH:/e/Qt/Tools/mingw810_32/bin/:/e/Qt/5.15.2/mingw81_32/bin/
+export PATH=$PATH:/e/Qt/Tools/mingw900_64/bin/:/e/Qt/6.2.3/mingw_64/bin/
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
-TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
+TMP_DIR=$(mktemp -d -t mpz-build-win64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
-ARTIFACT_NAME=mpz-$VERSION-win32-dynamic/
+ARTIFACT_NAME=mpz-$VERSION-win64-qt6-dynamic/
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -24,4 +24,4 @@ echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
-# gh release upload 1.0.19 ~/Desktop/mpz-1.0.19-win32-dynamic.zip
+# gh release upload 1.0.19 ~/Desktop/mpz-1.0.19-win64-qt6-dynamic.zip
