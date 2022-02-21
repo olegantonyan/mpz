@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>mpz music player</Name>
+    <Version>SED_ME</Version>
+    <Title>>mpz music player installer</Title>
+    <Publisher>Oleg Antonyan</Publisher>
+    <StartMenuDir>mpz music player</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/mpz-player</TargetDir>
+</Installer>
