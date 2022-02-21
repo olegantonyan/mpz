@@ -23,6 +23,6 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
 
-$QTMINGW_DIR/bin/qmake CONFIG+=release CONFIG+=static QMAKE_LFLAGS+=-static $SRC_DIR && \
+$QTMINGW_DIR/bin/qmake CONFIG+=release CONFIG+=static QMAKE_LFLAGS+=-static DEFINES+=DISABLE_HTTPS $SRC_DIR && \
 $MAKE -j8 && \
 mv app/mpz.exe ~/Desktop/$ARTIFACT_NAME

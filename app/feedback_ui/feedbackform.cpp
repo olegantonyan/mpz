@@ -83,7 +83,7 @@ bool FeedbackForm::send() {
   beginSend();
 
   QUrl url("https://mpz-feedback.herokuapp.com/api/feedback");
-#ifdef Q_OS_WIN32
+#ifdef DISABLE_HTTPS
   url.setScheme("http"); // TODO: https make openssl static build for windows
 #endif
   QNetworkRequest request(url);
