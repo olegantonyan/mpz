@@ -173,7 +173,6 @@ contains(DEFINES, MPRIS_ENABLE) {
 
 # Libraries
 INCLUDEPATH += \
-  ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
   ../libs/qtwaitingspinner \
   ../libs/qhotkey/QHotkey-1.5.0
 !contains(DEFINES, USE_SYSTEM_TAGLIB) {
@@ -182,15 +181,23 @@ INCLUDEPATH += \
     ../libs/taglib/taglib-1.12/taglib/toolkit \
     ../libs/taglib/taglib-1.12/taglib/mpeg/id3v2
 }
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  INCLUDEPATH += \
+    ../libs/yaml-cpp/yaml-cpp-0.7.0/include
+}
 
 LIBS += \
-  -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
   -L../libs/qhotkey -lqhotkey
 contains(DEFINES, USE_SYSTEM_TAGLIB) {
   LIBS += -ltag
 } else {
   LIBS += -L../libs/taglib -ltaglib
+}
+contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  LIBS += -lyaml-cpp
+} else {
+  LIBS += -L../libs/yaml-cpp -lyaml-cpp
 }
 
 include(../libs/qhotkey/qhotkey.pri)

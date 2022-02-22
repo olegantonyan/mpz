@@ -74,7 +74,8 @@ make -j`nproc`
 sudo make install
 ```
 
-You can also link with shared Taglib installed on your OS instead of using vendored statically compiled version. To do this you have to add `DEFINES+=USE_SYSTEM_TAGLIB` to qmake cli.
+You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions. 
+To do this you have to add `DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP` to qmake cli.
 
 ```
 ```
@@ -82,7 +83,7 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB ..
+qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
 make -j`nproc`
 # now you now use app/mpz binary directly
 # optionally, install to /usr:

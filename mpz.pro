@@ -2,11 +2,13 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-  libs/yaml-cpp \
   libs/qtwaitingspinner \
   libs/qhotkey
 !contains(DEFINES, USE_SYSTEM_TAGLIB) {
   SUBDIRS += libs/taglib
+}
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  SUBDIRS += libs/yaml-cpp
 }
 SUBDIRS += app
 
