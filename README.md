@@ -78,7 +78,6 @@ You can also link against shared libraries Taglib and/or Yaml-cpp installed on y
 To do this you have to add `DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP` to qmake cli.
 
 ```
-```
 git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
