@@ -2,9 +2,15 @@
 #include "rnjesus.h"
 #include "coverart/covers.h"
 
-#include "fileref.h"
-#include "tag.h"
-#include "tpropertymap.h"
+#ifdef USE_SYSTEM_TAGLIB
+  #include "taglib/fileref.h"
+  #include "taglib/tag.h"
+  #include "taglib/tpropertymap.h"
+#else
+  #include "fileref.h"
+  #include "tag.h"
+  #include "tpropertymap.h"
+#endif
 
 #include <QDateTime>
 #include <QDebug>

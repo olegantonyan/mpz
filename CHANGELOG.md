@@ -3,6 +3,9 @@
 ### Fixed
 - reduce stdout spam from sleep lock
 
+### Misc
+- ability to build agains system taglib via USE_SYSTEM_TAGLIB define
+
 ## [1.0.19] - 2021-12-08
 
 ### Fixed

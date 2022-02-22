@@ -74,6 +74,22 @@ make -j`nproc`
 sudo make install
 ```
 
+You can also link with shared Taglib installed on your OS instead of using vendored statically compiled version. To do this you have to add `DEFINES+=USE_SYSTEM_TAGLIB` to qmake cli.
+
+```
+```
+git clone git@github.com:olegantonyan/mpz.git
+cd mpz
+mkdir build
+cd build
+qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB ..
+make -j`nproc`
+# now you now use app/mpz binary directly
+# optionally, install to /usr:
+sudo make install
+```
+
+
 ## Configuration
 
 The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/$USERNAME/AppData/Local/mpz/mpz`. There are 2 files:

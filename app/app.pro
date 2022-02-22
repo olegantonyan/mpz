@@ -4,8 +4,6 @@ CONFIG += c++11
 
 TARGET = mpz
 
-DEFINES += TAGLIB_STATIC
-
 win32: {
   CONFIG -= debug_and_release
   #CONFIG += static
@@ -169,20 +167,31 @@ contains(DEFINES, MPRIS_ENABLE) {
   QT += dbus
 }
 
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  DEFINES += TAGLIB_STATIC
+}
+
 # Libraries
 INCLUDEPATH += \
-  ../libs/taglib/taglib-1.12/taglib \
-  ../libs/taglib/taglib-1.12/taglib/toolkit \
-  ../libs/taglib/taglib-1.12/taglib/mpeg/id3v2 \
   ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
   ../libs/qtwaitingspinner \
   ../libs/qhotkey/QHotkey-1.5.0
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  INCLUDEPATH += \
+    ../libs/taglib/taglib-1.12/taglib \
+    ../libs/taglib/taglib-1.12/taglib/toolkit \
+    ../libs/taglib/taglib-1.12/taglib/mpeg/id3v2
+}
 
 LIBS += \
-  -L../libs/taglib -ltaglib \
   -L../libs/yaml-cpp -lyaml-cpp \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
   -L../libs/qhotkey -lqhotkey
+contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  LIBS += -ltag
+} else {
+  LIBS += -L../libs/taglib -ltaglib
+}
 
 include(../libs/qhotkey/qhotkey.pri)
 # End of libraries
