@@ -4,7 +4,7 @@
 - reduce stdout spam from sleep lock
 
 ### Misc
-- ability to build against system Taglib and Yaml-cpp
+- ability to build against system taglib and yaml-cpp (used by default for AUR packages)
 
 ## [1.0.19] - 2021-12-08
 
