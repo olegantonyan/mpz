@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = taglib
+TARGET = tag
 
 CONFIG += warn_off
 CONFIG += staticlib

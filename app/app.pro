@@ -188,16 +188,14 @@ INCLUDEPATH += \
 
 LIBS += \
   -L../libs/qtwaitingspinner -lqtwaitingspinner \
-  -L../libs/qhotkey -lqhotkey
-contains(DEFINES, USE_SYSTEM_TAGLIB) {
-  LIBS += -ltag
-} else {
-  LIBS += -L../libs/taglib -ltaglib
+  -L../libs/qhotkey -lqhotkey \
+  -ltag \
+  -lyaml-cpp
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  LIBS += -L../libs/taglib
 }
-contains(DEFINES, USE_SYSTEM_YAMLCPP) {
-  LIBS += -lyaml-cpp
-} else {
-  LIBS += -L../libs/yaml-cpp -lyaml-cpp
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  LIBS += -L../libs/yaml-cpp
 }
 
 include(../libs/qhotkey/qhotkey.pri)
