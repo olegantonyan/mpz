@@ -8,6 +8,8 @@ pkgbase = <%= pkgname %>
 	depends = qt5-multimedia
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
+  depends = yaml-cpp
+  depends = taglib
 	provides = <%= pkgname %>
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>

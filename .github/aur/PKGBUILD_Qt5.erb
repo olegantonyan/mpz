@@ -8,7 +8,7 @@ pkgdesc='Music player for the large local collections'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
-depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme')
+depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme' 'yaml-cpp' 'taglib')
 provides=('<%= pkgname %>')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
@@ -19,7 +19,7 @@ build() {
     rm -rf build
     mkdir build
     cd build
-    qmake-qt5 CONFIG+=release ..
+    qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
     make
 }
 

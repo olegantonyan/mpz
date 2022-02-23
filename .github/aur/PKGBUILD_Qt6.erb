@@ -8,7 +8,7 @@ pkgdesc='Music player for the large local collections (Qt6 version)'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
-depends=('qt6-multimedia' 'hicolor-icon-theme')
+depends=('qt6-multimedia' 'hicolor-icon-theme' 'yaml-cpp' 'taglib')
 provides=('mpz')
 conflicts=('mpz')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
@@ -20,7 +20,7 @@ build() {
     rm -rf build
     mkdir build
     cd build
-    qmake6 CONFIG+=release ..
+    qmake6 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
     make
 }
 
