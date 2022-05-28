@@ -55,7 +55,7 @@ makepkg -si
 
 #### Windows
 
-Grab static binary from releases page: https://github.com/olegantonyan/mpz/releases/
+Grab installer or portable "dynamic" binary from releases page: https://github.com/olegantonyan/mpz/releases/
 
 #### From sources
 
