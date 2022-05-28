@@ -1,4 +1,6 @@
 ## [1.0.20] - NEXT
+### Added
+- keyboard shortcut to jump to playing track
 
 ### Fixed
 - reduce stdout spam from sleep lock

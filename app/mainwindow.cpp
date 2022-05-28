@@ -357,6 +357,7 @@ void MainWindow::setupShortcuts() {
   };
   connect(main_menu, &MainMenu::openShortcuts, open_dialog);
   connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
+  connect(shortcuts, &Shortcuts::jumpToPLayingTrack, status_label, &StatusBarLabel::doubleclicked);
 }
 
 void MainWindow::setupWindowTitle() {

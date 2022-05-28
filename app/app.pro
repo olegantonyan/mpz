@@ -207,3 +207,6 @@ RESOURCES += \
 # make install
 target.path = /usr/bin/
 INSTALLS += target
+
+TRANSLATIONS += \
+    resources/translations/ru.ts

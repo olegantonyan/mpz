@@ -17,6 +17,7 @@ Shortcuts::Shortcuts(QWidget *parent) : QObject(parent),
   _open_playback_log(parent),
   _open_sort_menu(parent),
   _open_shortcuts_menu(parent),
+  _jump_to_playing_track(parent),
   _play_global(parent),
   _pause_global(parent),
   _stop_global(parent),
@@ -44,6 +45,7 @@ QVector<QPair<QString, QString> > Shortcuts::describe() const {
   r << QPair<QString, QString>(tr("Open playback log"), _open_playback_log.key().toString());
   r << QPair<QString, QString>(tr("Open sort menu"), _open_sort_menu.key().toString());
   r << QPair<QString, QString>(tr("Open shortcuts dialog"), _open_shortcuts_menu.key().toString());
+  r << QPair<QString, QString>(tr("Jump to playing track"), _jump_to_playing_track.key().toString());
   r << QPair<QString, QString>(tr("Quit"), _quit.key().toString());
   return r;
 }
@@ -79,6 +81,7 @@ void Shortcuts::setupLocal() {
   connect(&_open_playback_log, &QShortcut::activated, this, &Shortcuts::openPlabackLog);
   connect(&_open_sort_menu, &QShortcut::activated, this, &Shortcuts::openSortMenu);
   connect(&_open_shortcuts_menu, &QShortcut::activated, this, &Shortcuts::openShortcutsMenu);
+  connect(&_jump_to_playing_track, &QShortcut::activated, this, &Shortcuts::jumpToPLayingTrack);
 
   _quit.setKey(Qt::CTRL | Qt::Key_Q);
   _focus_library.setKey(Qt::CTRL | Qt::Key_1);
@@ -96,4 +99,5 @@ void Shortcuts::setupLocal() {
   _open_playback_log.setKey(Qt::CTRL | Qt::Key_L);
   _open_sort_menu.setKey(Qt::CTRL | Qt::Key_S);
   _open_shortcuts_menu.setKey(Qt::ALT | Qt::Key_S);
+  _jump_to_playing_track.setKey(Qt::ALT | Qt::Key_J);
 }
