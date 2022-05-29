@@ -7,7 +7,7 @@ VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
 TMP_DIR=$(mktemp -d -t mpz-build-win64-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
-ARTIFACT_NAME=mpz-$VERSION-win64-dynamic/
+ARTIFACT_NAME=mpz-$VERSION-win64-qt5-dynamic/
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
