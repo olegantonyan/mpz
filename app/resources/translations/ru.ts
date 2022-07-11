@@ -135,7 +135,7 @@
     <message>
         <location filename="../../mainmenu.cpp" line="17"/>
         <source>Tray icon</source>
-        <translation>Иконка в трее</translation>
+        <translation>Значок в трее</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="20"/>
