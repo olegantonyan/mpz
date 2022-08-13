@@ -1,6 +1,7 @@
 ## [1.0.20] - 2022-05-28
 ### Added
 - keyboard shortcut to jump to playing track
+- config files location in "about" dialog
 
 ### Fixed
 - reduce stdout spam from sleep lock

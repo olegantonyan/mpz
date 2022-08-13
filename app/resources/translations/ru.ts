@@ -5,7 +5,7 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="29"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="65"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="68"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -25,9 +25,14 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="32"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="33"/>
         <source>Using opensource libraries</source>
         <translation>Использует опенсорсные библиотеки</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="37"/>
+        <source>Config files path: </source>
+        <translation>Расположение кофигурационных файлов: </translation>
     </message>
 </context>
 <context>
