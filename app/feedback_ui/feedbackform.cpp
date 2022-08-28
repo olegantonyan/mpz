@@ -82,12 +82,11 @@ QByteArray FeedbackForm::buildJson() {
 bool FeedbackForm::send() {
   beginSend();
 
-  QUrl url("https://mpz-feedback.herokuapp.com/api/feedback");
+  QUrl url("https://us-central1-random-360814.cloudfunctions.net/mpz-feedback");
 #ifdef DISABLE_HTTPS
   url.setScheme("http"); // TODO: https make openssl static build for windows
 #endif
   QNetworkRequest request(url);
-  request.setRawHeader("APIKEY", "imsecurehaha"); // what could possibly go wrong? (:
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QNetworkAccessManager nam;
   QNetworkReply *reply = nam.post(request, buildJson());
@@ -95,7 +94,7 @@ bool FeedbackForm::send() {
     qApp->processEvents();
   }
 
-  bool ok = reply->error() == QNetworkReply::NoError && reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 201;
+  bool ok = reply->error() == QNetworkReply::NoError;
   endSend(ok ? "" : reply->errorString());
 
   reply->deleteLater();

@@ -1,3 +1,7 @@
+## [1.0.21] - NEXT
+### Misc
+- new endpoint for feedback form (Heroku no longer free)
+
 ## [1.0.20] - 2022-05-28
 ### Added
 - keyboard shortcut to jump to playing track
