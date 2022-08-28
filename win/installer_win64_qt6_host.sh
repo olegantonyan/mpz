@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH=$PATH:/e/Qt/Tools/mingw1120_64/bin/:/e/Qt/6.3.0/mingw_64/bin/:/e/Qt/Tools/QtInstallerFramework/4.3/bin
+export PATH=$PATH:/e/Qt/Tools/mingw1120_64/bin/:/e/Qt/6.3.1/mingw_64/bin/:/e/Qt/Tools/QtInstallerFramework/4.4/bin
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
