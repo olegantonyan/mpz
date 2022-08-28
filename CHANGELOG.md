@@ -1,4 +1,4 @@
-## [1.0.21] - NEXT
+## [1.0.21] - 2022-08-28
 ### Misc
 - new endpoint for feedback form (Heroku no longer free)
 
