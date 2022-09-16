@@ -1,5 +1,5 @@
 build*/
-*.user
+*.user*
 libs/
 app/
 _site
