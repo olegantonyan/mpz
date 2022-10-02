@@ -1,6 +1,10 @@
 #!/bin/bash
 
-export PATH=$PATH:/e/Qt/Tools/mingw1120_64/bin/:/e/Qt/6.3.1/mingw_64/bin/:/e/Qt/Tools/QtInstallerFramework/4.4/bin
+QT_PATH=/e/Qt/6.4.0/mingw_64/
+TOOLCHAIN_PATH=/e/Qt/Tools/mingw1120_64/bin
+INSTALLER_FRAMEWORK_PATH=/e/Qt/Tools/QtInstallerFramework/4.4/bin
+
+export PATH=$PATH:$TOOLCHAIN_PATH:$QT_PATH/bin/:$INSTALLER_FRAMEWORK_PATH
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
@@ -20,6 +24,7 @@ echo -e "build dir:\t$TMP_DIR"
 qmake.exe CONFIG+=release $SRC_DIR && mingw32-make.exe -j6
 windeployqt.exe ./app/mpz.exe --dir $ARTIFACT_PATH
 cp ./app/mpz.exe $ARTIFACT_PATH
+cp -R $QT_PATH/plugins/multimedia $ARTIFACT_PATH
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/
