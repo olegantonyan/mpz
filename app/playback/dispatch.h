@@ -4,7 +4,6 @@
 #include "config/global.h"
 #include "playlists_ui/playlistscontroller.h"
 #include "playback/playerstate.h"
-#include "playback/playbackcontroller.h"
 #include "playback/randomtrail.h"
 
 #include <QObject>
