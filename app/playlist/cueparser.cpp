@@ -71,7 +71,6 @@ namespace Playlist {
     QString line = text_stream.readLine();
 
     QList<CueEntry> entries;
-    int files = 0;
 
     QString album_artist;
     QString album;
@@ -138,7 +137,6 @@ namespace Playlist {
 
           // end of the header -> go into the track mode
         } else if (line_name == kTrack) {
-          files++;
           break;
         }
 
