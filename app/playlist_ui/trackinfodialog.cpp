@@ -15,10 +15,12 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->tableView->setModel(&model);
+  ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
   setup_context_menu();
   setup_table(track);
   setup_cover_art(track);
   track_dir = track.dir();
+  cover_art_path = track.artCover();
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -117,3 +119,25 @@ void TrackInfoDialog::setup_cover_art(const Track &track) {
 void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
   QDesktopServices::openUrl(QUrl::fromLocalFile(track_dir));
 }
+
+void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &pos) {
+  if (cover_art_path.isEmpty() || cover_art_path.isNull()) {
+    return;
+  }
+
+  QMenu menu;
+  QAction copy(tr("Copy to clipboard"));
+  connect(&copy, &QAction::triggered, [=]() {
+    QApplication::clipboard()->setPixmap(QPixmap(cover_art_path));
+  });
+
+  QAction show_in_filemanager(tr("Show in file manager"));
+  show_in_filemanager.setIcon(ui->labelCoverArt->style()->standardIcon(QStyle::SP_DirLinkIcon));
+  connect(&show_in_filemanager, &QAction::triggered, [=]() {
+     QDesktopServices::openUrl(QUrl::fromLocalFile(cover_art_path));
+  });
+  menu.addAction(&copy);
+  menu.addAction(&show_in_filemanager);
+  menu.exec(ui->labelCoverArt->mapToGlobal(pos));
+}
+

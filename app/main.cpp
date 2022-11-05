@@ -50,6 +50,7 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
+  //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
   RNJesus::seed();
 

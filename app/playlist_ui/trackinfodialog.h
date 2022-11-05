@@ -21,12 +21,14 @@ private slots:
   void on_copy(const QPoint &pos);
   void on_toolButtonOpenFileManager_clicked();
   void on_search(const QPoint &pos);
+  void on_labelCoverArt_customContextMenuRequested(const QPoint &pos);
 
 private:
   Ui::TrackInfoDialog *ui;
 
   QStandardItemModel model;
   QString track_dir;
+  QString cover_art_path;
 
   void setup_table(const Track &track);
   void setup_context_menu();

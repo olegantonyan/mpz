@@ -1,7 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "config/storage.h"
-#include "waitingspinnerwidget.h"
 #include "shortcuts_ui/shortcutsdialog.h"
 
 #include <QDebug>
