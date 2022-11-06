@@ -209,4 +209,5 @@ target.path = /usr/bin/
 INSTALLS += target
 
 TRANSLATIONS += \
-    resources/translations/ru.ts
+    resources/translations/ru.ts \
+    resources/translations/sr.ts

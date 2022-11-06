@@ -1,6 +1,7 @@
 ## [1.0.22] - 
 ### Added
 - track info window: context menu for cover art
+- Serbian language translation
 
 ## [1.0.21] - 2022-08-28
 ### Misc
