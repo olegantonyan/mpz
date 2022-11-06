@@ -121,14 +121,17 @@ void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
 }
 
 void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &pos) {
-  if (cover_art_path.isEmpty() || cover_art_path.isNull()) {
+  if (cover_art_path.isEmpty()) {
     return;
   }
 
   QMenu menu;
   QAction copy(tr("Copy to clipboard"));
   connect(&copy, &QAction::triggered, [=]() {
-    QApplication::clipboard()->setPixmap(QPixmap(cover_art_path));
+    QPixmap pixmap(cover_art_path);
+    if (!pixmap.isNull()) {
+      QApplication::clipboard()->setPixmap(pixmap);
+    }
   });
 
   QAction show_in_filemanager(tr("Show in file manager"));
