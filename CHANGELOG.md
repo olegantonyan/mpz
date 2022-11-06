@@ -2,6 +2,7 @@
 ### Added
 - track info window: context menu for cover art
 - Serbian language translation
+- update built-in Taglib to 1.13
 
 ## [1.0.21] - 2022-08-28
 ### Misc
