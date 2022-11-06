@@ -132,7 +132,7 @@ void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &
     }
   });
 
-  QAction show_in_filemanager(tr("Show in file manager"));
+  QAction show_in_filemanager(tr("Open in external viewer"));
   show_in_filemanager.setIcon(ui->labelCoverArt->style()->standardIcon(QStyle::SP_DirLinkIcon));
   connect(&show_in_filemanager, &QAction::triggered, [=]() {
     if (!cover_art_path.isEmpty()) {
