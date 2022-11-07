@@ -23,6 +23,7 @@ namespace Playback {
 #endif
       switch (state) {
         case QMediaPlayer::StoppedState:
+          emit positionChanged(0);
           emit stateChanged(MediaPlayer::StoppedState);
           break;
         case QMediaPlayer::PlayingState:
@@ -100,7 +101,9 @@ namespace Playback {
   }
 
   void MediaPlayer::setPosition(qint64 pos) {
-    player.setPosition(pos + offset_begin);
+    if (player.isSeekable()) {
+      player.setPosition(pos + offset_begin);
+    }
   }
 
   void MediaPlayer::setVolume(int vol) {
