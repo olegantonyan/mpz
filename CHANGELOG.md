@@ -1,9 +1,11 @@
-## [1.0.22] - 
+## [1.0.22] - 2022-11-07
 ### Added
 - track info window: context menu for cover art
 - Serbian language translation
-- update built-in Taglib to 1.13
 - scroll playlists view to bottom upon addind new playlist
+
+### Misc
+- update built-in Taglib to 1.13
 
 ## [1.0.21] - 2022-08-28
 ### Misc
