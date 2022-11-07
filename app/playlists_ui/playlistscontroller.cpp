@@ -178,6 +178,7 @@ namespace PlaylistsUi {
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    view->scrollToBottom();
     persist(index.row());
     emit loaded(item);
     emit selected(item);
