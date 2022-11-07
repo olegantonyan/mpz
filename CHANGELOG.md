@@ -1,3 +1,5 @@
+## [1.0.23] -
+
 ## [1.0.22] - 2022-11-07
 ### Added
 - track info window: context menu for cover art
