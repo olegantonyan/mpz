@@ -4,7 +4,7 @@
 
 ![image](https://raw.githubusercontent.com/olegantonyan/mpz/gh-pages/images/mpz-workflow.apng)
 
-If you like to organize your music in folders, then this player might be for you. It doesn't try to index all the files into a library, but rather treats your files and folders as a library and provides a convenient way to create playlists directly from folders. Similar to Foobar2000's Album List, but it's not an attempt to clone.
+If you like organizing your music in folders, then this player might be for you. It doesn't try to index all the files into a library, but rather treats your files and folders as the library and provides a convenient way to create playlists directly from folders. Similar to Foobar2000's Album List, but it's not an attempt to clone.
 
 More screenshots here: https://mpz-player.org
 
