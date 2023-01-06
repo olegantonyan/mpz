@@ -4,6 +4,10 @@
 #include <QApplication>
 #include <QDebug>
 
+#ifdef Q_OS_WIN
+  #include <windows.h>
+#endif
+
 SleepLock::SleepLock(QObject *parent) : QObject(parent), proc(parent) {
 #ifdef Q_OS_LINUX
   proc.setProgram("systemd-inhibit");
@@ -18,7 +22,7 @@ SleepLock::SleepLock(QObject *parent) : QObject(parent), proc(parent) {
 }
 
 void SleepLock::activate(bool state) {
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)
   try {
     if (state) {
       if (proc.state() == QProcess::NotRunning) {
@@ -40,6 +44,12 @@ void SleepLock::activate(bool state) {
     }
   }  catch (...) {
     //qDebug() << "error starting/stopping sleep lock";
+  }
+#elif defined(Q_OS_WIN)
+  if (state) {
+    SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
+  } else {
+    SetThreadExecutionState(ES_CONTINUOUS);
   }
 #else
   Q_UNUSED(state)
