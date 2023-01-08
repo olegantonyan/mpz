@@ -177,6 +177,11 @@
         <source>Save settings</source>
         <translation>Сачувај подешавања</translation>
     </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="31"/>
+        <source>Open config directory</source>
+        <translation>Отворите конфигурациони директоријум</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>

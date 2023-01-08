@@ -177,6 +177,11 @@
         <source>Save settings</source>
         <translation>Сохранить настройки</translation>
     </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="31"/>
+        <source>Open config directory</source>
+        <translation>Открыть папку с конфигами</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
