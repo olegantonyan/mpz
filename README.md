@@ -104,6 +104,7 @@ Some config options can be changed only by editing config files:
 - `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
+- `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 
 If you messed up any of the config opions you can remove it completly (or even remove the whole file) and it will reset to default.
 

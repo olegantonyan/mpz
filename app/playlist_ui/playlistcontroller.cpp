@@ -30,8 +30,13 @@ namespace PlaylistUi {
     view->setAlternatingRowColors(true);
     view->setFocus();
 
+    auto row_height = view->verticalHeader()->minimumSectionSize(); //broken in Plasma 5.27
     view->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    view->verticalHeader()->setDefaultSectionSize(view->verticalHeader()->minimumSectionSize());
+    if (global_conf.playlistRowHeight() != 0) {
+      row_height = global_conf.playlistRowHeight();
+    }
+    view->verticalHeader()->setMinimumSectionSize(row_height);
+    view->verticalHeader()->setDefaultSectionSize(row_height);
 
     for (int c = 0; c < view->horizontalHeader()->count(); ++c) {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);

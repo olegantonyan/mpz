@@ -2,6 +2,7 @@
 ### Added
 - ability to inhibit sleep on Windows
 - "Open config directory" main menu option
+- workaround for KDE Plasma 5.27 - playlist row height can be set in global config via "playlist_row_height"
 
 ## [1.0.22] - 2022-11-07
 ### Added
