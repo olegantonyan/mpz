@@ -1,4 +1,4 @@
-## [1.0.23] -
+## [1.0.23] - 2023-02-18
 ### Added
 - ability to inhibit sleep on Windows
 - "Open config directory" main menu option
