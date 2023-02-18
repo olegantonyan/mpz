@@ -48,7 +48,6 @@ namespace Config {
     bool inhibitSleepWhilePlaying() const;
 
     int playlistRowHeight() const;
-    bool savePlaylistRowHeight(int arg);
 
   private:
     Config::Storage storage;

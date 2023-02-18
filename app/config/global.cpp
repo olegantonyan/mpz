@@ -117,8 +117,4 @@ namespace Config {
   int Global::playlistRowHeight() const {
     return storage.get("playlist_row_height").get<int>();
   }
-
-  bool Global::savePlaylistRowHeight(int arg) {
-    return storage.set("playlist_row_height", Config::Value(arg));
-  }
 }
