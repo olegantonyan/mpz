@@ -1,3 +1,6 @@
+## [1.0.24] - 
+### Added
+
 ## [1.0.23] - 2023-02-18
 ### Added
 - ability to inhibit sleep on Windows
