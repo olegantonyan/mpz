@@ -1,4 +1,5 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![build result](https://build.opensuse.org/projects/home:oleg_antonyan/packages/mpz/badge.svg?type=percent)](https://build.opensuse.org/package/show/home:oleg_antonyan/mpz)
 
 # Music player for big local collections
 
