@@ -1,0 +1,12 @@
+Source: mpz
+Section: sound
+Priority: optional
+Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), build-essential, {{ build_dependencies | join: ', ' }}
+Standards-Version: 3.9.4
+Homepage: https://github.com/olegantonyan/mpz
+
+Package: mpz
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, {{ runtime_dependencies | join: ', ' }}
+Description: Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to "album list" in Foobar2000.

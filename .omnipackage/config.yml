@@ -1,0 +1,32 @@
+extract_version:
+  provider: 'file'
+  file:
+    file: 'version.pri'
+    regex: 'VERSION=\\\\\\"(.+)\\\\\\"'
+
+rpm: &rpm
+  installable_package_name: 'mpz'
+  rpm:
+    spec_template: '.omnipackage/mpz.spec.liquid'
+
+deb: &deb
+  installable_package_name: 'mpz'
+  deb:
+    debian_templates: '.omnipackage/deb'
+
+builds:
+- distro: 'opensuse_15.3'
+  build_dependencies: [gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel]
+  <<: *rpm
+
+- distro: 'opensuse_15.4'
+  build_dependencies: [gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel]
+  <<: *rpm
+
+- distro: 'opensuse_15.5'
+  build_dependencies: [gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel]
+  <<: *rpm
+
+- distro: 'opensuse_tumbleweed'
+  build_dependencies: [gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel]
+  <<: *rpm
