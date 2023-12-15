@@ -79,36 +79,36 @@ builds:
 
 - distro: 'fedora_38'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'fedora_39'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'fedora_rawhide'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'almalinux_8'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'almalinux_9'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'rockylinux_8'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'rockylinux_9'
   <<: *dependencies_redhat
-  <<: *deb
+  <<: *rpm
 
 - distro: 'mageia_8'
   build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  <<: *deb
+  <<: *rpm
 
 - distro: 'mageia_cauldron'
   build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  <<: *deb
+  <<: *rpm
