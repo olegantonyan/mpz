@@ -44,7 +44,7 @@ builds:
 - distro: 'debian_10'
   <<: *dependencies_debian
   <<: *deb
-  before_build_script: '.omnipackage/deb/debian10_install_gcc.sh'
+  before_build_script: '.omnipackage/debian10_before_build.sh'
 
 - distro: 'debian_11'
   <<: *dependencies_debian
