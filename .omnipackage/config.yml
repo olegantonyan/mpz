@@ -44,7 +44,9 @@ builds:
 - distro: 'debian_10'
   <<: *dependencies_debian
   <<: *deb
-  before_build_script: '.omnipackage/debian10_before_build.sh'
+  deb:
+    debian_templates: '.omnipackage/deb_debian10'
+  before_build_script: '.omnipackage/deb_debian10/before_build.sh'
 
 - distro: 'debian_11'
   <<: *dependencies_debian

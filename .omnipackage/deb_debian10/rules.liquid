@@ -5,7 +5,8 @@
 
 export DESTROOT=$(CURDIR)/debian/mpz
 export QT_SELECT=qt5
-
+export LDFLAGS=-static-libstdc++ -static-libgcc
+export CPPFLAGS=-static-libstdc++ -static-libgcc
 
 %:
 	dh $@
