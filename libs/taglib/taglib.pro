@@ -122,10 +122,6 @@ SOURCES += \
   taglib-2.0/taglib/trueaudio/trueaudiofile.cpp \
   taglib-2.0/taglib/s3m/s3mproperties.cpp \
   taglib-2.0/taglib/s3m/s3mfile.cpp \
-  taglib-2.0/examples/tagreader.cpp \
-  taglib-2.0/examples/strip-id3v1.cpp \
-  taglib-2.0/examples/framelist.cpp \
-  taglib-2.0/examples/tagwriter.cpp \
   taglib-2.0/bindings/c/tag_c.cpp
 
 
