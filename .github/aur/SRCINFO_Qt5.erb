@@ -10,7 +10,8 @@ pkgbase = <%= pkgname %>
 	depends = hicolor-icon-theme
   depends = yaml-cpp
   depends = taglib
-	provides = <%= pkgname %>
+  provides = mpz
+  conflicts = mpz
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
