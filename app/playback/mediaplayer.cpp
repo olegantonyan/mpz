@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QThread>
 #include <QtConcurrent>
+#include <QEventLoop>
+#include <QTimer>
 
 namespace Playback {
   MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QObject *parent) : QObject(parent), stream(stream_buffer_size) {
@@ -82,6 +84,22 @@ namespace Playback {
     player.pause();
   }
 
+  void Playback::MediaPlayer::seek_to_offset_begin() {
+    QTimer timer;
+    QEventLoop loop;
+    timer.setSingleShot(true);
+    timer.setInterval(1000);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    connect(&player, &QMediaPlayer::seekableChanged, &loop, &QEventLoop::quit);
+    timer.start();
+    loop.exec();
+
+    if (!player.isSeekable()) {
+      qWarning() << "player is not seekable, setting offset begin will probably fail";
+    }
+    player.setPosition(offset_begin);
+  }
+
   void MediaPlayer::play() {
     if (!stream.isRunning() && stream.isValidUrl()) {
       if (!stream.start()) {
@@ -91,7 +109,7 @@ namespace Playback {
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
-      player.setPosition(offset_begin);
+      seek_to_offset_begin();
     }
   }
 

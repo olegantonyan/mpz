@@ -51,6 +51,7 @@ namespace Playback {
 
     quint64 offset_begin;
     quint64 offset_end;
+    void seek_to_offset_begin();
   };
 }
 
