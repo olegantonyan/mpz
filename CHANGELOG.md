@@ -1,6 +1,9 @@
 ## [1.0.24] - 
 ### Added
 
+### Fixed
+- start position of track with CUE
+
 ## [1.0.23] - 2023-02-18
 ### Added
 - ability to inhibit sleep on Windows

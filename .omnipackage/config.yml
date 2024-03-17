@@ -38,7 +38,8 @@ builds:
   <<: *rpm
 
 - distro: 'opensuse_tumbleweed'
-  <<: *dependencies_opensuse
+  build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
+  qmake: qmake6
   <<: *rpm
 
 - distro: 'debian_10'

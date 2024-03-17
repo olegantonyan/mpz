@@ -13,7 +13,7 @@ More screenshots here: https://mpz-player.org
 
 In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but this solution is not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
 
-Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is to play music you own, not rent), "big" means it's big enough so managing it becomes hard.
+Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is playing music you have on your hard drive), "big" means it's big enough so managing it becomes hard. Radio streaming also supported.
 
 ## Features
 
@@ -30,6 +30,8 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 - Lacks some "expected" features like tracks rearranging within playlist;
 - Global hotkeys don't work in Wayland.
 
+Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
+
 ## Installation
 
 #### openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia
@@ -38,7 +40,7 @@ Use Open Build Service repositories: https://software.opensuse.org//download.htm
 
 #### Arch
 
-Use AUR package (Qt5): https://aur.archlinux.org/packages/mpz/
+Use AUR package: https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
@@ -46,11 +48,11 @@ cd mpz
 makepkg -si
 ```
 
-For Qt6 version use this package: https://aur.archlinux.org/packages/mpz-qt6
+For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ```
-git clone https://aur.archlinux.org/mpz-qt6.git
-cd mpz-qt6
+git clone https://aur.archlinux.org/mpz-qt5.git
+cd mpz-qt5
 makepkg -si
 ```
 
@@ -60,15 +62,15 @@ Grab installer or portable "dynamic" binary from releases page: https://github.c
 
 #### From sources
 
-Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel).
-Packages' names may differ in different distros. Both Qt5 and Qt6 are supported.
+Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 on and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 openSUSE).
+Packages' names may differ in different distros. Both Qt6 and Qt5 are supported.
 
 ```
 git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake-qt5 CONFIG+=release .. # use qmake6 instead of qmake-qt5 for Qt6
+qmake6 CONFIG+=release .. # use qmake-qt5 instead of qmake6 for Qt5
 make -j`nproc`
 # now you now use app/mpz binary directly
 # optionally, install to /usr:
@@ -83,7 +85,7 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
+qmake6 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
 make -j`nproc`
 # now you now use app/mpz binary directly
 # optionally, install to /usr:

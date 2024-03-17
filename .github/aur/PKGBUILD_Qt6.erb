@@ -4,13 +4,12 @@
 pkgname=<%= pkgname %>
 pkgver=<%= pkgver %>
 pkgrel=<%= pkgrel %>
-pkgdesc='Music player for the large local collections (Qt6 version)'
+pkgdesc='Music player for the large local collections'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
 depends=('qt6-multimedia' 'hicolor-icon-theme' 'yaml-cpp' 'taglib')
-provides=('mpz')
-conflicts=('mpz')
+provides=('<%= pkgname %>')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
 
