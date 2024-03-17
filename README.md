@@ -51,7 +51,7 @@ makepkg -si
 For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ```
-git clone https://aur.archlinux.org/mpz-qt6.git
+git clone https://aur.archlinux.org/mpz-qt5.git
 cd mpz-qt5
 makepkg -si
 ```
