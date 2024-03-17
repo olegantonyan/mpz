@@ -13,7 +13,7 @@ More screenshots here: https://mpz-player.org
 
 In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but this solution is not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
 
-Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is to play music you own, not rent), "big" means it's big enough so managing it becomes hard.
+Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is playing music you have on your hard drive), "big" means it's big enough so managing it becomes hard. Radio streaming also supported.
 
 ## Features
 
