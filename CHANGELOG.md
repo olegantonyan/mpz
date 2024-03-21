@@ -4,6 +4,9 @@
 ### Fixed
 - start position of track with CUE
 
+### Misc
+- no more crash under Wayland (disabled QHotKey registration)
+
 ## [1.0.23] - 2023-02-18
 ### Added
 - ability to inhibit sleep on Windows
