@@ -113,3 +113,7 @@ builds:
 - distro: 'mageia_cauldron'
   build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
   <<: *rpm
+
+- distro: 'mageia_9'
+  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
+  <<: *rpm
