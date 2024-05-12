@@ -37,6 +37,10 @@ builds:
   <<: *dependencies_opensuse
   <<: *rpm
 
+- distro: 'opensuse_15.6'
+  <<: *dependencies_opensuse
+  <<: *rpm
+
 - distro: 'opensuse_tumbleweed'
   build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
   qmake: qmake6
