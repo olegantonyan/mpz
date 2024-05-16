@@ -2,7 +2,7 @@
 ### Added
 
 ### Fixed
-- start position of track with CUE
+- start position of track with CUE 
 
 ### Misc
 - no more crash under Wayland (disabled QHotKey registration)
