@@ -82,6 +82,10 @@ builds:
   <<: *dependencies_debian
   <<: *deb
 
+- distro: 'ubuntu_24.04'
+  <<: *dependencies_debian
+  <<: *deb
+
 - distro: 'fedora_38'
   <<: *dependencies_redhat
   <<: *rpm
