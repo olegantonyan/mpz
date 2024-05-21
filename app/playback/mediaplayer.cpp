@@ -48,6 +48,9 @@ namespace Playback {
     connect(&stream, &Stream::error, [&](const QString& message) {
       qWarning() << "stream error" << message;
     });
+    connect(&player, &QMediaPlayer::mediaStatusChanged, [&](QMediaPlayer::MediaStatus status) {
+      qDebug() << "media status changed" << status << player.errorString();
+    });
     offset_begin = 0;
     offset_end = 0;
   }
@@ -101,11 +104,6 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
-    if (!stream.isRunning() && stream.isValidUrl()) {
-      if (!stream.start()) {
-        qWarning() << "error starting stream form" << stream.url();
-      }
-    }
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
@@ -139,7 +137,8 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-      player.setSourceDevice(&stream, track.url());
+      start_stream();
+      player.setSourceDevice(&stream);
 #else
       player.setMedia(track.url(), &stream);
 #endif
@@ -155,6 +154,24 @@ namespace Playback {
         offset_end = offset_begin + track.duration() * 1000;
       }
     }
+  }
+
+  bool MediaPlayer::start_stream() {
+    if (!stream.isRunning() && stream.isValidUrl()) {
+      if (!stream.start()) {
+        qWarning() << "error starting stream form" << stream.url();
+        return false;
+      }
+    }
+    QTimer timer;
+    QEventLoop loop;
+    timer.setSingleShot(true);
+    timer.setInterval(3000);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    connect(&stream, &Stream::readyRead, &loop, &QEventLoop::quit);
+    timer.start();
+    loop.exec();
+    return stream.bytesAvailable() > 0;
   }
 
   void MediaPlayer::clearTrack() {
