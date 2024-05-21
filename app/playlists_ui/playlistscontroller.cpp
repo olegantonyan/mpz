@@ -186,12 +186,13 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_search(const QString &term) {
-    proxy->setFilterWildcard("*" + term + "*");
-
-    QTimer::singleShot(20, [=]() {
-      if (!view->selectionModel()->selectedRows().isEmpty()) {
-        view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
-      }
-    });
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRegularExpression regex(term);
+    proxy->setFilterRegularExpression(regex);
+#else
+    QRegExp regex(term, Qt::CaseInsensitive, QRegExp::Wildcard);
+    proxy->setFilterRegExp(regex);
+#endif
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
   }
 }
