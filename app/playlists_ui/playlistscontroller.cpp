@@ -194,5 +194,11 @@ namespace PlaylistsUi {
     proxy->setFilterRegExp(regex);
 #endif
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    /*QTimer::singleShot(20, [=]() {
+      if (!view->selectionModel()->selectedRows().isEmpty()) {
+        view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
+      }
+    });*/
   }
 }
