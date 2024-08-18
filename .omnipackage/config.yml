@@ -37,6 +37,10 @@ builds:
   <<: *dependencies_opensuse
   <<: *rpm
 
+- distro: 'opensuse_15.6'
+  <<: *dependencies_opensuse
+  <<: *rpm
+
 - distro: 'opensuse_tumbleweed'
   build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
   qmake: qmake6
@@ -81,6 +85,10 @@ builds:
   <<: *dependencies_debian
   <<: *deb
 
+- distro: 'ubuntu_24.04'
+  <<: *dependencies_debian
+  <<: *deb
+
 - distro: 'fedora_38'
   <<: *dependencies_redhat
   <<: *rpm
@@ -114,5 +122,9 @@ builds:
   <<: *rpm
 
 - distro: 'mageia_cauldron'
+  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
+  <<: *rpm
+
+- distro: 'mageia_9'
   build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
   <<: *rpm

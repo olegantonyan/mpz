@@ -1,5 +1,7 @@
 #include "shortcuts.h"
 
+#include <QGuiApplication>
+
 Shortcuts::Shortcuts(QWidget *parent) : QObject(parent),
   _quit(parent),
   _focus_library(parent),
@@ -51,6 +53,11 @@ QVector<QPair<QString, QString> > Shortcuts::describe() const {
 }
 
 void Shortcuts::setupGlobal() {
+  if (QGuiApplication::platformName() == "wayland") {
+    // wayland not supported and results in crash
+    // https://github.com/olegantonyan/mpz/issues/129
+    return;
+  }
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);
   connect(&_stop_global, &QHotkey::activated, this, &Shortcuts::stop);
