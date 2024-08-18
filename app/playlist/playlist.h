@@ -17,7 +17,8 @@ namespace Playlist {
     enum PlaylistRandom {
       None = 0,
       Random,
-      Sequential
+      Sequential,
+      SequentialNoLoop
     };
 
     explicit Playlist();

@@ -306,30 +306,36 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="152"/>
-        <location filename="../../mainwindow.cpp" line="174"/>
+        <location filename="../../mainwindow.cpp" line="153"/>
+        <location filename="../../mainwindow.cpp" line="184"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="153"/>
-        <location filename="../../mainwindow.cpp" line="173"/>
+        <location filename="../../mainwindow.cpp" line="154"/>
+        <location filename="../../mainwindow.cpp" line="183"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="172"/>
+        <location filename="../../mainwindow.cpp" line="155"/>
+        <location filename="../../mainwindow.cpp" line="185"/>
+        <source>sequential (no loop)</source>
+        <translation>последовательно (без повтора)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="182"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="306"/>
+        <location filename="../../mainwindow.cpp" line="316"/>
+        <location filename="../../mainwindow.cpp" line="320"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="308"/>
+        <location filename="../../mainwindow.cpp" line="322"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
@@ -443,87 +449,87 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="49"/>
         <source>Open shortcuts dialog</source>
         <translation>Открыть диалог клавиатурных сочетаний</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
         <source>Jump to playing track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
         <source>Quit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
         <source>Focus on library</source>
         <translation>Фокус на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
         <source>Focus on playlists</source>
         <translation>Фокус на плейлисты</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
         <source>Focus on playlist</source>
         <translation>Фокус на плейлист</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
         <source>Focus on library filter</source>
         <translation>Фокус на фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="44"/>
         <source>Focus on playlists filter</source>
         <translation>Фокус на фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="45"/>
         <source>Focus on playlist filter</source>
         <translation>Фокус на фильтр плейлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
         <source>Open main menu</source>
         <translation>Открыть главное меню</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="45"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
         <source>Open playback log</source>
         <translation>Открыть лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
         <source>Open sort menu</source>
         <translation>Открыть меню сортировок</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
+        <location filename="../../shortcuts.cpp" line="35"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="34"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="35"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
