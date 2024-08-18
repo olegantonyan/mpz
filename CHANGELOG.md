@@ -1,8 +1,15 @@
-## [1.0.24] - 
+## [1.0.25] -
 ### Added
 
 ### Fixed
-- start position of track with CUE 
+
+### Misc
+
+## [1.0.24] - 2024-05-21
+
+### Fixed
+- start position of track with CUE
+- filter playlists with long list view
 
 ### Misc
 - no more crash under Wayland (disabled QHotKey registration)

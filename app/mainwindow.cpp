@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QHash>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
@@ -151,13 +152,22 @@ void MainWindow::changeEvent(QEvent *event) {
 void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem(tr("sequential"));
   ui->orderComboBox->addItem(tr("random"));
-  ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
+  ui->orderComboBox->addItem(tr("sequential (no loop)"));
+
+  QHash<QString, int> combobox_item_position;
+  combobox_item_position.insert("sequential", 0);
+  combobox_item_position.insert("random", 1);
+  combobox_item_position.insert("sequential (no loop)", 2);
+
+  ui->orderComboBox->setCurrentIndex(combobox_item_position.value(global_conf.playbackOrder(), 0));
+
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-    global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
+    QString order_name = combobox_item_position.key(idx, "sequential");
+    global_conf.savePlaybackOrder(order_name);
     global_conf.sync();
 #if defined(MPRIS_ENABLE)
     if (mpris) {
-      mpris->on_shuffleChanged(idx == 1);
+      mpris->on_shuffleChanged(order_name == "random");
     }
 #endif
   });
@@ -172,12 +182,15 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem(tr("(use global)"));
   ui->perPlaylistOrdercomboBox->addItem(tr("random"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("sequential (no loop)"));
   connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
       } else if (playlist->random() == Playlist::Playlist::Sequential) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
+      } else if (playlist->random() == Playlist::Playlist::SequentialNoLoop) {
+        ui->perPlaylistOrdercomboBox->setCurrentIndex(3);
       } else if (playlist->random() == Playlist::Playlist::None) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
       }
@@ -277,6 +290,7 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
+  connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
 
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }

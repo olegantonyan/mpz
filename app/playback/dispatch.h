@@ -17,6 +17,7 @@ namespace Playback {
 
   signals:
     void play(const Track &track);
+    void stop();
 
   public slots:
     void on_nextRequested();

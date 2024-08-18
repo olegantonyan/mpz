@@ -1,6 +1,4 @@
 #include "playlist/playlist.h"
-#include "playlist/fileparser.h"
-#include "playlist/cueparser.h"
 #include "playlist/loader.h"
 #include "rnjesus.h"
 
