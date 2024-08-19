@@ -1,6 +1,6 @@
 #!/bin/bash
 
-QT_PATH=/e/Qt/6.7.1/mingw_64/
+QT_PATH=/e/Qt/6.7.2/mingw_64/
 TOOLCHAIN_PATH=/e/Qt/Tools/mingw1120_64/bin
 INSTALLER_FRAMEWORK_PATH=/e/Qt/Tools/QtInstallerFramework/4.8/bin
 
