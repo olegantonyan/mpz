@@ -1,7 +1,9 @@
-## [1.0.25] -
+## [1.0.25] - 2024-08-19
 ### Added
+- sequential (no loop) playback order
 
 ### Fixed
+- minor fixes in translations
 
 ### Misc
 
