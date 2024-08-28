@@ -69,7 +69,7 @@ puts "***** END OF SRCINFO *****"
   git_ssh = "GIT_SSH_COMMAND='ssh -i #{keyfile} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'"
 
   puts "cloning aur repo..."
-  clone_cmd = "#{git_ssh} git clone --branch master #{aur_repo}"
+  clone_cmd = "#{git_ssh} git clone #{aur_repo}"
   puts clone_cmd
   `cd #{d} && #{clone_cmd}`
 
