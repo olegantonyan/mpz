@@ -3,7 +3,7 @@ TARGET = yaml-cpp
 
 CONFIG += warn_off
 CONFIG += staticlib
-CONFIG += c++11
+CONFIG += c++17
 
 win32: CONFIG -= debug_and_release
 
