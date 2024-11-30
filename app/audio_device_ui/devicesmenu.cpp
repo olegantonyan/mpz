@@ -22,11 +22,11 @@ namespace AudioDeviceUi {
     addAction(action_default);
     addSeparator();
 
+    bool device_exists = false;
     if (isDefaultOutput()) {
       action_default->setChecked(true);
+      device_exists = true;
     }
-
-    bool device_exists = false;
 
     action_group->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
     for (auto &device : devices) {
@@ -49,7 +49,7 @@ namespace AudioDeviceUi {
       action_group->addAction(action);
       addAction(action);
 
-      if (currentOutput() == device.id()) {
+      if (!isDefaultOutput() && currentOutput() == device.id()) {
         action->setChecked(true);
         device_exists = true;
       }
