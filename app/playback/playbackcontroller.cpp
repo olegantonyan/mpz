@@ -97,8 +97,19 @@ namespace Playback {
 
   void Controller::play(const Track &track) {
     next_after_stop = false;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (track.isStream()) {
+      _player.stop();
+      _current_track = track;
+      _player.setTrack(track);
+    } else {
+      _player.setTrack(track);
+      _current_track = track;
+    }
+#else
     _player.setTrack(track);
     _current_track = track;
+#endif
     _player.play();
     if (track.isStream()) {
       _controls.seekbar->setMaximum(1);
