@@ -23,6 +23,7 @@ namespace Playback {
 #else
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
 #endif
+      qDebug() << "stateChanged" << state;
       switch (state) {
         case QMediaPlayer::StoppedState:
           emit positionChanged(0);
@@ -47,9 +48,6 @@ namespace Playback {
     connect(&stream, &Stream::metadataChanged, this, &MediaPlayer::streamMetaChanged);
     connect(&stream, &Stream::error, [&](const QString& message) {
       qWarning() << "stream error" << message;
-    });
-    connect(&player, &QMediaPlayer::mediaStatusChanged, [&](QMediaPlayer::MediaStatus status) {
-      qDebug() << "media status changed" << status << player.errorString();
     });
     offset_begin = 0;
     offset_end = 0;
@@ -104,6 +102,13 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    if (!stream.isRunning() && stream.isValidUrl()) {
+      if (!stream.start()) {
+        qWarning() << "error starting stream form" << stream.url();
+      }
+    }
+#endif
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
@@ -157,7 +162,7 @@ namespace Playback {
   }
 
   bool MediaPlayer::start_stream() {
-    if (!stream.isRunning() && stream.isValidUrl()) {
+    if (stream.isValidUrl()) {
       if (!stream.start()) {
         qWarning() << "error starting stream form" << stream.url();
         return false;
