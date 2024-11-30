@@ -94,6 +94,10 @@ builds:
   <<: *dependencies_redhat
   <<: *rpm
 
+- distro: 'fedora_40'
+  <<: *dependencies_redhat
+  <<: *rpm
+
 - distro: 'fedora_rawhide'
   <<: *dependencies_redhat
   <<: *rpm
