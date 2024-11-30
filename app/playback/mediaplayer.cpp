@@ -23,7 +23,6 @@ namespace Playback {
 #else
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
 #endif
-      qDebug() << "stateChanged" << state;
       switch (state) {
         case QMediaPlayer::StoppedState:
           emit positionChanged(0);

@@ -40,7 +40,7 @@ namespace Playback {
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
-    connect(&_player, &MediaPlayer::streamMetaChanged, [&](const StreamMetaData &meta) {
+    connect(&_player, &MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
     });
@@ -97,8 +97,8 @@ namespace Playback {
 
   void Controller::play(const Track &track) {
     next_after_stop = false;
-    _current_track = track;
     _player.setTrack(track);
+    _current_track = track;
     _player.play();
     if (track.isStream()) {
       _controls.seekbar->setMaximum(1);
