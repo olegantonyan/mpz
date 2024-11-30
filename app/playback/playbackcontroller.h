@@ -4,6 +4,7 @@
 #include "controls.h"
 #include "track.h"
 #include "playback/mediaplayer.h"
+#include "playback/audiodevice.h"
 
 #include <QObject>
 #include <memory>
@@ -61,6 +62,9 @@ namespace Playback {
     Track _current_track;
     bool next_after_stop;
     QTimer monotonic_timer;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    Playback::AudioDevice _audio_device;
+#endif
 
   private slots:
     void on_positionChanged(quint64 pos);

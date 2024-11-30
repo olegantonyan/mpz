@@ -75,6 +75,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupPlaybackLog();
   setupSortMenu();
   setupSleepLock();
+  setupOutputDevice();
 
   preloadPlaylist(args);
 
@@ -427,6 +428,21 @@ void MainWindow::setupSleepLock() {
   connect(player, &Playback::Controller::stopped, [=]() {
     sleep_lock->activate(false);
   });
+}
+
+void MainWindow::setupOutputDevice() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
+    std::shared_ptr<AudioDeviceUi::DevicesMenu> device_menu(new AudioDeviceUi::DevicesMenu(this, local_conf));
+    int menu_width = device_menu->sizeHint().width();
+    int x = ui->toolButtonOutputDevice->width() - menu_width;
+    int y = ui->toolButtonOutputDevice->height();
+    QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
+    device_menu->exec(pos);
+  });
+#else
+  ui->toolButtonOutputDevice->setVisible(false);
+#endif
 }
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
