@@ -74,13 +74,13 @@ builds:
   <<: *dependencies_debian
   <<: *deb
 
-- distro: 'ubuntu_23.10'
-  <<: *dependencies_debian
-  <<: *deb
+#- distro: 'ubuntu_23.10'
+#  <<: *dependencies_debian
+#  <<: *deb
 
-- distro: 'ubuntu_23.04'
-  <<: *dependencies_debian
-  <<: *deb
+#- distro: 'ubuntu_23.04'
+#  <<: *dependencies_debian
+#  <<: *deb
 
 - distro: 'ubuntu_24.04'
   <<: *dependencies_debian
