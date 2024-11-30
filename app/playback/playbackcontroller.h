@@ -4,7 +4,6 @@
 #include "controls.h"
 #include "track.h"
 #include "playback/mediaplayer.h"
-#include "playback/audiodevice.h"
 
 #include <QObject>
 #include <memory>

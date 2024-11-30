@@ -8,6 +8,8 @@
 #include <QMediaPlayer>
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   #include <QAudioOutput>
+  #include <QMediaDevices>
+  #include <QAudioDevice>
 #endif
 
 namespace Playback {
@@ -50,11 +52,17 @@ namespace Playback {
     Stream stream;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
+    QMediaDevices media_devices;
 #endif
 
     quint64 offset_begin;
     quint64 offset_end;
     void seek_to_offset_begin();
+
+  private slots:
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void onAudioDevicesChanged();
+#endif
   };
 }
 
