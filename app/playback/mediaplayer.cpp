@@ -143,8 +143,9 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-      start_stream();
-      player.setSourceDevice(&stream);
+      if (start_stream()) {
+        player.setSourceDevice(&stream);
+      }
 #else
       player.setMedia(track.url(), &stream);
 #endif
