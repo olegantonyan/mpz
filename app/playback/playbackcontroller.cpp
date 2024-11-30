@@ -4,7 +4,7 @@
 #include <QDebug>
 
 namespace Playback {
-  Controller::Controller(const Controls &c, quint32 stream_buffer_size, QObject *parent) : QObject(parent), _controls(c), _player(stream_buffer_size) {
+  Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), _controls(c), _player(stream_buffer_size, outdevid) {
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
     //connect(&_player, &MediaPlayer::error, this, &Controller::on_error);
@@ -199,4 +199,10 @@ namespace Playback {
     }
     return QObject::eventFilter(obj, event);
   }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  void Controller::setOutputDevice(QByteArray deviceid) {
+    _player.setOutputDevice(deviceid);
+  }
+#endif
 }

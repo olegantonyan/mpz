@@ -18,6 +18,7 @@
 #include "sort_ui/sortmenu.h"
 #include "ipc/instance.h"
 #include "sleeplock.h"
+#include "audio_device_ui/devicesmenu.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -81,6 +82,7 @@ private:
   void setupPlaybackLog();
   void setupSortMenu();
   void setupSleepLock();
+  void setupOutputDevice();
 
   void preloadPlaylist(const QStringList &args);
   

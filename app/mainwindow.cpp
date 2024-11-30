@@ -40,7 +40,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -75,6 +75,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupPlaybackLog();
   setupSortMenu();
   setupSleepLock();
+  setupOutputDevice();
 
   preloadPlaylist(args);
 
@@ -427,6 +428,22 @@ void MainWindow::setupSleepLock() {
   connect(player, &Playback::Controller::stopped, [=]() {
     sleep_lock->activate(false);
   });
+}
+
+void MainWindow::setupOutputDevice() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
+    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
+    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+    int menu_width = device_menu.sizeHint().width();
+    int x = ui->toolButtonOutputDevice->width() - menu_width;
+    int y = ui->toolButtonOutputDevice->height();
+    QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
+    device_menu.exec(pos);
+  });
+#else
+  ui->toolButtonOutputDevice->setVisible(false);
+#endif
 }
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
