@@ -28,6 +28,12 @@ signals:
 private:
   Config::Local &local_conf;
 
+  bool isDefaultOutput() const;
+  QByteArray currentOutput() const;
+
+  bool saveDefaultOutput();
+  bool saveOutput(QByteArray id);
+
 private slots:
   void on_selected(QByteArray deviceid);
 };

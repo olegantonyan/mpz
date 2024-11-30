@@ -149,7 +149,7 @@ namespace Config {
   }
 
   QByteArray Local::outputDeviceId() const {
-    return storage.get("output_device_id").get<QByteArray>();
+    return storage.getByteArray("output_device_id");
   }
 
   bool Local::saveOutputDeviceId(const QByteArray &arg) {
