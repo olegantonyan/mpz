@@ -1,9 +1,6 @@
 #!/bin/bash
 
-QT_PATH=/e/Qt/6.8.0/mingw_64/
-TOOLCHAIN_PATH=/e/Qt/Tools/mingw1310_64/bin
-
-export PATH=$PATH:$QT_PATH/bin/:$TOOLCHAIN_PATH
+source `dirname $0`/env_qt6_win64.sh
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
