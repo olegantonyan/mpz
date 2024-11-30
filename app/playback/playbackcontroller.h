@@ -51,6 +51,9 @@ namespace Playback {
     void stop();
     void setVolume(int value);
     void seek(int seconds);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void setOutputDevice(QByteArray deviceid);
+#endif
 
   private:
     void on_seek(int position);
@@ -62,9 +65,6 @@ namespace Playback {
     Track _current_track;
     bool next_after_stop;
     QTimer monotonic_timer;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    Playback::AudioDevice _audio_device;
-#endif
 
   private slots:
     void on_positionChanged(quint64 pos);

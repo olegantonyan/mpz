@@ -47,7 +47,6 @@ SOURCES += \
     mainmenu.cpp \
     mainwindow.cpp \
     directory_ui/directorymodel.cpp \
-    playback/audiodevice.cpp \
     playback/controls.cpp \
     playback/dispatch.cpp \
     playback/mediaplayer.cpp \
@@ -105,7 +104,6 @@ HEADERS += \
     mainmenu.h \
     mainwindow.h \
     directory_ui/directorymodel.h \
-    playback/audiodevice.h \
     playback/controls.h \
     playback/dispatch.h \
     playback/mediaplayer.h \

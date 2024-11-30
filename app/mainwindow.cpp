@@ -433,13 +433,15 @@ void MainWindow::setupSleepLock() {
 void MainWindow::setupOutputDevice() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
-    std::shared_ptr<AudioDeviceUi::DevicesMenu> device_menu(new AudioDeviceUi::DevicesMenu(this, local_conf));
-    int menu_width = device_menu->sizeHint().width();
+    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
+    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+    int menu_width = device_menu.sizeHint().width();
     int x = ui->toolButtonOutputDevice->width() - menu_width;
     int y = ui->toolButtonOutputDevice->height();
     QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
-    device_menu->exec(pos);
+    device_menu.exec(pos);
   });
+  player->setOutputDevice(local_conf.outputDeviceId());
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif

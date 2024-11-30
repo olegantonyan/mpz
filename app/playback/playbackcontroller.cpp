@@ -188,4 +188,10 @@ namespace Playback {
     }
     return QObject::eventFilter(obj, event);
   }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  void Controller::setOutputDevice(QByteArray deviceid) {
+    _player.setOutputDevice(deviceid);
+  }
+#endif
 }

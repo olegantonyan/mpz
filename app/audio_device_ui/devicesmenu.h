@@ -24,6 +24,7 @@ public:
   explicit DevicesMenu(QWidget *parent, Config::Local &local_c);
 
 signals:
+  void outputDeviceChanged(QByteArray id);
 
 private:
   Config::Local &local_conf;

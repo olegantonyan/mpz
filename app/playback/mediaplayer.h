@@ -41,6 +41,9 @@ namespace Playback {
     void setVolume(int volume);
     void setTrack(const Track &track);
     void clearTrack();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void setOutputDevice(QByteArray deviceid);
+#endif
 
   private:
     QMediaPlayer player;

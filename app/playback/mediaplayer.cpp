@@ -6,11 +6,14 @@
 #include <QtConcurrent>
 #include <QEventLoop>
 #include <QTimer>
+#include <QMediaDevices>
+#include <QAudioDevice>
 
 namespace Playback {
   MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QObject *parent) : QObject(parent), stream(stream_buffer_size) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setAudioOutput(&audio_output);
+    setOutputDevice(QByteArray());
 #endif
     connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
@@ -166,4 +169,20 @@ namespace Playback {
     offset_begin = 0;
     offset_end = 0;
   }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  void MediaPlayer::setOutputDevice(QByteArray deviceid) {
+    if (deviceid.isEmpty()) {
+      audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+    } else {
+      auto devices = QMediaDevices::audioOutputs();
+      for (auto device : devices) {
+        if (device.id() == deviceid) {
+          audio_output.setDevice(device);
+          break;
+        }
+      }
+    }
+  }
+#endif
 }

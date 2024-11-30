@@ -56,11 +56,14 @@ namespace AudioDeviceUi {
   void DevicesMenu::on_selected(QByteArray deviceid) {
     if (deviceid.isEmpty()) {
       saveDefaultOutput();
+      emit outputDeviceChanged(deviceid);
     } else {
       auto devices = QMediaDevices::audioOutputs();
       for (auto &device : devices) {
         if (device.id() == deviceid) {
           saveOutput(deviceid);
+          emit outputDeviceChanged(deviceid);
+          break;
         }
       }
     }
