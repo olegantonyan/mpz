@@ -13,6 +13,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <QList>
+#include <QActionGroup>
 
 namespace AudioDeviceUi {
 
@@ -26,6 +27,9 @@ signals:
 
 private:
   Config::Local &local_conf;
+
+private slots:
+  void on_selected(QByteArray deviceid);
 };
 
 } // namespace AudioDeviceUi
