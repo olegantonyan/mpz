@@ -1,9 +1,9 @@
 #!/bin/bash
 
-QT_PATH=/e/Qt/6.7.1/mingw_64/
-TOOLCHAIN_PATH=/e/Qt/Tools/mingw1120_64/bin
+QT_PATH=/e/Qt/6.8.0/mingw_64/
+TOOLCHAIN_PATH=/e/Qt/Tools/mingw1310_64/bin
 
-export PATH=$PATH:$TOOLCHAIN_PATH:$QT_PATH/bin/
+export PATH=$PATH:$QT_PATH/bin/:$TOOLCHAIN_PATH
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
@@ -17,7 +17,7 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
 qmake.exe CONFIG+=release $SRC_DIR && mingw32-make.exe -j6
-windeployqt.exe ./app/mpz.exe --dir $ARTIFACT_NAME
+windeployqt6.exe ./app/mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release
 cp ./app/mpz.exe $ARTIFACT_NAME
 cp -R $QT_PATH/plugins/multimedia $ARTIFACT_NAME
 rm -rf $HOME/Desktop/$ARTIFACT_NAME
