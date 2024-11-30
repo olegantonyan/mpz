@@ -40,7 +40,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -441,7 +441,6 @@ void MainWindow::setupOutputDevice() {
     QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
     device_menu.exec(pos);
   });
-  player->setOutputDevice(local_conf.outputDeviceId());
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif

@@ -22,7 +22,7 @@ namespace Playback {
       PausedState
     };
 
-    explicit MediaPlayer(quint32 stream_buffer_size, QObject *parent = nullptr);
+    explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 
     MediaPlayer::State state() const;
     int volume() const;
@@ -50,6 +50,7 @@ namespace Playback {
   private:
     QMediaPlayer player;
     Stream stream;
+    QByteArray output_device_id;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
     QMediaDevices media_devices;

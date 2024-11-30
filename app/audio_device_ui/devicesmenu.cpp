@@ -26,6 +26,8 @@ namespace AudioDeviceUi {
       action_default->setChecked(true);
     }
 
+    bool device_exists = false;
+
     action_group->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
     for (auto &device : devices) {
       auto action = new QAction(action_group);
@@ -49,7 +51,18 @@ namespace AudioDeviceUi {
 
       if (currentOutput() == device.id()) {
         action->setChecked(true);
+        device_exists = true;
       }
+    }
+
+    if (!device_exists) {
+      auto action = new QAction(action_group);
+      action->setText(QString::fromStdString(currentOutput().toStdString()));
+      action->setDisabled(true);
+      action->setCheckable(true);
+      action->setChecked(true);
+      action_group->addAction(action);
+      addAction(action);
     }
   }
 
