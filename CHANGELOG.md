@@ -1,3 +1,5 @@
+## [1.0.27] - 
+
 ## [1.0.26] - 2024-12-01
 ### Added
 - Output device selector in Qt6
