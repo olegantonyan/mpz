@@ -179,9 +179,9 @@ INCLUDEPATH += \
   ../libs/qhotkey/QHotkey-1.5.0
 !contains(DEFINES, USE_SYSTEM_TAGLIB) {
   INCLUDEPATH += \
-    ../libs/taglib/taglib-2.0/taglib \
-    ../libs/taglib/taglib-2.0/taglib/toolkit \
-    ../libs/taglib/taglib-2.0/taglib/mpeg/id3v2
+    ../libs/taglib/taglib-2.0.2/taglib \
+    ../libs/taglib/taglib-2.0.2/taglib/toolkit \
+    ../libs/taglib/taglib-2.0.2/taglib/mpeg/id3v2
 }
 !contains(DEFINES, USE_SYSTEM_YAMLCPP) {
   INCLUDEPATH += \
