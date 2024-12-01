@@ -1,10 +1,6 @@
 #!/bin/bash
 
-QT_PATH=/e/Qt/6.7.1/mingw_64/
-TOOLCHAIN_PATH=/e/Qt/Tools/mingw1120_64/bin
-INSTALLER_FRAMEWORK_PATH=/e/Qt/Tools/QtInstallerFramework/4.8/bin
-
-export PATH=$PATH:$TOOLCHAIN_PATH:$QT_PATH/bin/:$INSTALLER_FRAMEWORK_PATH
+source `dirname $0`/env_qt6_win64.sh
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' $SRC_DIR/version.pri)
@@ -22,7 +18,7 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
 qmake.exe CONFIG+=release $SRC_DIR && mingw32-make.exe -j6
-windeployqt.exe ./app/mpz.exe --dir $ARTIFACT_PATH
+windeployqt6.exe ./app/mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release
 cp ./app/mpz.exe $ARTIFACT_PATH
 cp -R $QT_PATH/plugins/multimedia $ARTIFACT_PATH
 
@@ -36,7 +32,7 @@ sed -Ei "s/<ReleaseDate>(.*)<\/ReleaseDate>/<ReleaseDate>$(date +%Y-%m-%d)<\/Rel
 cat ./config/config.xml
 cat ./packages/mpz/meta/package.xml
 
-binarycreator.exe -c config/config.xml -p packages $ARTIFACT_NAME
+binarycreator.exe --offline-only -c config/config.xml -p packages $ARTIFACT_NAME
 cp ./$ARTIFACT_NAME $HOME/Desktop
 
 

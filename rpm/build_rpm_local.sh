@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' rpm/version.pri)
+VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' version.pri)
 TMP_DIR=$(mktemp -d -t mpz-build-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 TMP_SRC_DIR=mpz-$VERSION
 TMP_SRC_FULL_DIR=$TMP_DIR/mpz-$VERSION
@@ -21,6 +21,8 @@ cp -ar mpz.pro       $TMP_SRC_FULL_DIR
 cp -ar mpz.desktop   $TMP_SRC_FULL_DIR
 cp -ar license.txt   $TMP_SRC_FULL_DIR
 cp -ar version.pri   $TMP_SRC_FULL_DIR
+cp -ar resources.qrc $TMP_SRC_FULL_DIR
+cp -ar CHANGELOG.md  $TMP_SRC_FULL_DIR
 ls -latrh $TMP_SRC_FULL_DIR
 
 tree $TMP_SRC_FULL_DIR
@@ -35,8 +37,8 @@ cd $SRC_DIR
 cp $SPECFILE ~/rpmbuild/SPECS
 tree ~/rpmbuild/
 
-rpmbuild -bs $SPECFILE
-rpmbuild -bb $SPECFILE
+rpmbuild --with qt6 -bs $SPECFILE
+rpmbuild --with qt6 -bb $SPECFILE
 
 
 rm -rf $TMP_DIR

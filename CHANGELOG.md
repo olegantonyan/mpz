@@ -1,7 +1,20 @@
-## [1.0.25] -
+## [1.0.27] - 
+
+## [1.0.26] - 2024-12-01
 ### Added
+- Output device selector in Qt6
 
 ### Fixed
+- Bug with radio streams in Qt6
+
+### Misc
+
+## [1.0.25] - 2024-08-19
+### Added
+- sequential (no loop) playback order
+
+### Fixed
+- minor fixes in translations
 
 ### Misc
 

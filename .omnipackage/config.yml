@@ -14,117 +14,119 @@ deb: &deb
   deb:
     debian_templates: '.omnipackage/deb'
 
-dependencies_opensuse: &dependencies_opensuse
+
+opensuse_qt5: &opensuse_qt5
   build_dependencies: [gcc, make, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel]
-
-dependencies_debian: &dependencies_debian
-  build_dependencies: [gcc, make, qt5-qmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev]
-  runtime_dependencies: [libqt5multimedia5-plugins]
-
-dependencies_redhat: &dependencies_redhat
-  build_dependencies: [gcc, make, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
-
-builds:
-- distro: 'opensuse_15.3'
-  <<: *dependencies_opensuse
   <<: *rpm
 
-- distro: 'opensuse_15.4'
-  <<: *dependencies_opensuse
-  <<: *rpm
-
-- distro: 'opensuse_15.5'
-  <<: *dependencies_opensuse
-  <<: *rpm
-
-- distro: 'opensuse_15.6'
-  <<: *dependencies_opensuse
-  <<: *rpm
-
-- distro: 'opensuse_tumbleweed'
+opensuse_qt6: &opensuse_qt6
   build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
   qmake: qmake6
   <<: *rpm
 
-- distro: 'debian_10'
-  <<: *dependencies_debian
+
+mageia_qt5: &mageia_qt5
+  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
+  <<: *rpm
+
+
+readhat_qt5: &readhat_qt5
+  build_dependencies: [gcc, make, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
+  <<: *rpm
+
+readhat_qt6: &readhat_qt6
+  build_dependencies: [gcc, make, qt6-qtbase-devel, qt6-qtmultimedia-devel]
+  qmake: qmake6
+  <<: *rpm
+
+
+debian_qt5: &debian_qt5
+  build_dependencies: [gcc, make, qt5-qmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev]
+  runtime_dependencies: [libqt5multimedia5-plugins]
+  qt_select: qt5
   <<: *deb
   before_build_script: '.omnipackage/debian10_before_build.sh'
   LDFLAGS: '-static-libstdc++ -static-libgcc'
   CPPFLAGS: '-static-libstdc++ -static-libgcc'
 
-- distro: 'debian_11'
-  <<: *dependencies_debian
+debian_qt6: &debian_qt6
+  build_dependencies: [gcc, make, qmake6, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev]
+  before_build_script: '.omnipackage/debian_qt6_hack.sh'
   <<: *deb
+
+
+builds:
+- distro: 'opensuse_15.3'
+  <<: *opensuse_qt5
+
+- distro: 'opensuse_15.4'
+  <<: *opensuse_qt5
+
+- distro: 'opensuse_15.5'
+  <<: *opensuse_qt5
+
+- distro: 'opensuse_15.6'
+  <<: *opensuse_qt5
+
+- distro: 'opensuse_tumbleweed'
+  <<: *opensuse_qt6
+
+- distro: 'debian_10'
+  <<: *debian_qt5
+
+- distro: 'debian_11'
+  <<: *debian_qt5
 
 - distro: 'debian_12'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt5
 
 - distro: 'debian_testing'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt6
 
 - distro: 'debian_unstable'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt6
 
 - distro: 'ubuntu_20.04'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt5
 
 - distro: 'ubuntu_22.04'
-  <<: *dependencies_debian
-  <<: *deb
-
-- distro: 'ubuntu_23.10'
-  <<: *dependencies_debian
-  <<: *deb
-
-- distro: 'ubuntu_23.04'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt5
 
 - distro: 'ubuntu_24.04'
-  <<: *dependencies_debian
-  <<: *deb
+  <<: *debian_qt5
 
 - distro: 'fedora_38'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
 
 - distro: 'fedora_39'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
+
+- distro: 'fedora_40'
+  <<: *readhat_qt6
+
+- distro: 'fedora_41'
+  <<: *readhat_qt6
 
 - distro: 'fedora_rawhide'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt6
 
 - distro: 'almalinux_8'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
 
 - distro: 'almalinux_9'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
 
 - distro: 'rockylinux_8'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
 
 - distro: 'rockylinux_9'
-  <<: *dependencies_redhat
-  <<: *rpm
+  <<: *readhat_qt5
 
 - distro: 'mageia_8'
-  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  <<: *rpm
+  <<: *mageia_qt5
 
 - distro: 'mageia_cauldron'
-  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  <<: *rpm
+  <<: *mageia_qt5
 
 - distro: 'mageia_9'
-  build_dependencies: [gcc, make, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  <<: *rpm
+  <<: *mageia_qt5

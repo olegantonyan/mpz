@@ -8,9 +8,11 @@
 #include <QTimer>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QObject *parent) : QObject(parent), stream(stream_buffer_size) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    connect(&media_devices, &QMediaDevices::audioOutputsChanged, this, &MediaPlayer::onAudioDevicesChanged);
     player.setAudioOutput(&audio_output);
+    setOutputDevice(output_device_id);
 #endif
     connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
@@ -101,11 +103,13 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     if (!stream.isRunning() && stream.isValidUrl()) {
       if (!stream.start()) {
         qWarning() << "error starting stream form" << stream.url();
       }
     }
+#endif
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
@@ -139,7 +143,9 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-      player.setSourceDevice(&stream, track.url());
+      if (start_stream()) {
+        player.setSourceDevice(&stream);
+      }
 #else
       player.setMedia(track.url(), &stream);
 #endif
@@ -157,6 +163,24 @@ namespace Playback {
     }
   }
 
+  bool MediaPlayer::start_stream() {
+    if (stream.isValidUrl()) {
+      if (!stream.start()) {
+        qWarning() << "error starting stream form" << stream.url();
+        return false;
+      }
+    }
+    QTimer timer;
+    QEventLoop loop;
+    timer.setSingleShot(true);
+    timer.setInterval(3000);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    connect(&stream, &Stream::readyRead, &loop, &QEventLoop::quit);
+    timer.start();
+    loop.exec();
+    return stream.bytesAvailable() > 0;
+  }
+
   void MediaPlayer::clearTrack() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setSource(QUrl(nullptr));
@@ -166,4 +190,31 @@ namespace Playback {
     offset_begin = 0;
     offset_end = 0;
   }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  void MediaPlayer::setOutputDevice(QByteArray deviceid) {
+    if (deviceid.isEmpty()) {
+      audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+    } else {
+      auto devices = QMediaDevices::audioOutputs();
+      for (auto device : devices) {
+        if (device.id() == deviceid) {
+          audio_output.setDevice(device);
+          break;
+        }
+      }
+    }
+  }
+
+  void MediaPlayer::onAudioDevicesChanged() {
+    auto devices = QMediaDevices::audioOutputs();
+    for (auto device : devices) {
+      if (device.id() == output_device_id) {
+        audio_output.setDevice(QMediaDevices::defaultAudioOutput()); // hack to force device change if it was disconnected
+        audio_output.setDevice(device);
+        break;
+      }
+    }
+  }
+#endif
 }

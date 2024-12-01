@@ -32,6 +32,7 @@ INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown na
 
 SOURCES += \
     about_ui/aboutdialog.cpp \
+    audio_device_ui/devicesmenu.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
@@ -89,6 +90,7 @@ SOURCES += \
 
 HEADERS += \
     about_ui/aboutdialog.h \
+    audio_device_ui/devicesmenu.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
