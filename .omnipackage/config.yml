@@ -45,9 +45,6 @@ debian_qt5: &debian_qt5
   runtime_dependencies: [libqt5multimedia5-plugins]
   qt_select: qt5
   <<: *deb
-  before_build_script: '.omnipackage/debian10_before_build.sh'
-  LDFLAGS: '-static-libstdc++ -static-libgcc'
-  CPPFLAGS: '-static-libstdc++ -static-libgcc'
 
 debian_qt6: &debian_qt6
   build_dependencies: [gcc, make, qmake6, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev]
@@ -73,6 +70,9 @@ builds:
 
 - distro: 'debian_10'
   <<: *debian_qt5
+  before_build_script: '.omnipackage/debian10_before_build.sh'
+  LDFLAGS: '-static-libstdc++ -static-libgcc'
+  CPPFLAGS: '-static-libstdc++ -static-libgcc'
 
 - distro: 'debian_11'
   <<: *debian_qt5
