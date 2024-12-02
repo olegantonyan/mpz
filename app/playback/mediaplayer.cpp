@@ -173,9 +173,10 @@ namespace Playback {
     QTimer timer;
     QEventLoop loop;
     timer.setSingleShot(true);
-    timer.setInterval(3000);
+    timer.setInterval(30000);
     connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
     connect(&stream, &Stream::readyRead, &loop, &QEventLoop::quit);
+    connect(&stream, &Stream::error, &loop, &QEventLoop::quit);
     timer.start();
     loop.exec();
     return stream.bytesAvailable() > 0;
