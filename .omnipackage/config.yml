@@ -70,6 +70,9 @@ builds:
 
 - distro: 'debian_10'
   <<: *debian_qt5
+  before_build_script: '.omnipackage/debian10_before_build.sh'
+  LDFLAGS: '-static-libstdc++ -static-libgcc'
+  CPPFLAGS: '-static-libstdc++ -static-libgcc'
 
 - distro: 'debian_11'
   <<: *debian_qt5

@@ -1,5 +1,8 @@
 ## [1.0.27] - 
 
+### Misc
+- update built-in Taglib to 2.0.2 and Yaml cpp to 0.8.0
+
 ## [1.0.26] - 2024-12-01
 ### Added
 - Output device selector in Qt6

@@ -6,6 +6,13 @@
 export DESTROOT=$(CURDIR)/debian/mpz
 export QT_SELECT={{ qt_select | default: "qt5" }}
 
+{% if LDFLAGS %}
+export LDFLAGS={{ LDFLAGS }}
+{% endif %}
+{% if CPPFLAGS %}
+export CPPFLAGS={{ CPPFLAGS }}
+{% endif %}
+
 %:
 	dh $@
 

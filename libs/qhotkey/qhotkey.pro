@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG += c++11
+CONFIG += c++17
 
 TARGET = qhotkey
 

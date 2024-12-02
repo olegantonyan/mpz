@@ -1,6 +1,6 @@
 QT       += widgets core gui multimedia concurrent network
 
-CONFIG += c++11
+CONFIG += c++17
 
 TARGET = mpz
 
@@ -179,13 +179,13 @@ INCLUDEPATH += \
   ../libs/qhotkey/QHotkey-1.5.0
 !contains(DEFINES, USE_SYSTEM_TAGLIB) {
   INCLUDEPATH += \
-    ../libs/taglib/taglib-1.13/taglib \
-    ../libs/taglib/taglib-1.13/taglib/toolkit \
-    ../libs/taglib/taglib-1.13/taglib/mpeg/id3v2
+    ../libs/taglib/taglib-2.0.2/taglib \
+    ../libs/taglib/taglib-2.0.2/taglib/toolkit \
+    ../libs/taglib/taglib-2.0.2/taglib/mpeg/id3v2
 }
 !contains(DEFINES, USE_SYSTEM_YAMLCPP) {
   INCLUDEPATH += \
-    ../libs/yaml-cpp/yaml-cpp-0.7.0/include
+    ../libs/yaml-cpp/yaml-cpp-0.8.0/include
 }
 
 LIBS += \
