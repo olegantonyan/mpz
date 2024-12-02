@@ -1,5 +1,8 @@
 ## [1.0.27] - 
 
+### Fixed
+- improve radio streams in Qt6
+
 ### Misc
 - update built-in Taglib to 2.0.2 and Yaml cpp to 0.8.0
 
