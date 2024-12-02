@@ -97,7 +97,7 @@ namespace Playback {
 
   void Controller::play(const Track &track) {
     next_after_stop = false;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#ifdef QT6_STREAM_HACKS
     if (track.isStream()) {
       _player.stop();
       _current_track = track;

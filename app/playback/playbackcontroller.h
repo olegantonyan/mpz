@@ -6,7 +6,6 @@
 #include "playback/mediaplayer.h"
 
 #include <QObject>
-#include <memory>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QTimer>

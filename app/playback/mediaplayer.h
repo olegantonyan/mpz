@@ -10,6 +10,7 @@
   #include <QAudioOutput>
   #include <QMediaDevices>
   #include <QAudioDevice>
+  #define QT6_STREAM_HACKS
 #endif
 
 namespace Playback {

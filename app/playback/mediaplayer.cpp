@@ -103,7 +103,7 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#ifndef QT6_STREAM_HACKS
     if (!stream.isRunning() && stream.isValidUrl()) {
       if (!stream.start()) {
         qWarning() << "error starting stream form" << stream.url();
@@ -142,7 +142,7 @@ namespace Playback {
     stream.stop();
     if (track.isStream()) {
       stream.setUrl(track.url());
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#ifdef QT6_STREAM_HACKS
       emit stateChanged(MediaPlayer::PlayingState); // optimistic state update b/c start_stream will block
       if (start_stream()) {
         player.setSourceDevice(&stream);
