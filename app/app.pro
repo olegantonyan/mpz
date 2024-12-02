@@ -185,7 +185,7 @@ INCLUDEPATH += \
 }
 !contains(DEFINES, USE_SYSTEM_YAMLCPP) {
   INCLUDEPATH += \
-    ../libs/yaml-cpp/yaml-cpp-0.7.0/include
+    ../libs/yaml-cpp/yaml-cpp-0.8.0/include
 }
 
 LIBS += \
