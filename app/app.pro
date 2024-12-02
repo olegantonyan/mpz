@@ -201,6 +201,8 @@ LIBS += \
 }
 
 include(../libs/qhotkey/qhotkey.pri)
+
+include(../libs/qBreakpad/qBreakpad.pri)
 # End of libraries
 
 RESOURCES += \
