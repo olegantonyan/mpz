@@ -1,12 +1,18 @@
+%global __brp_check_rpaths %{nil}
 Name:       mpz
-Version:    1.0.15
+Version:    1.0.27
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
 URL:        https://github.com/olegantonyan/%{name}
 Source0:    %{name}-%{version}.tar.gz
 
-BuildRequires:  gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+%bcond_with qt6
+%if %{with qt6}
+BuildRequires: gcc make qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+%else
+BuildRequires: gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+%endif
 
 
 %description
@@ -22,7 +28,11 @@ Similar to "album list" in Foobar2000.
 %build
 mkdir build
 cd build
+%if %{with qt6}
+qmake6 CONFIG+=release CONFIG+=force_debug_info ..
+%else
 qmake-qt5 CONFIG+=release CONFIG+=force_debug_info ..
+%endif
 make %{?_smp_mflags}
 
 

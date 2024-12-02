@@ -109,4 +109,12 @@ namespace Config {
   bool Global::saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg) {
     return storage.set("columns_config", arg.serialize());
   }
+
+  bool Global::inhibitSleepWhilePlaying() const {
+    return storage.get("inhibit_sleep_while_playing").get<bool>();
+  }
+
+  int Global::playlistRowHeight() const {
+    return storage.get("playlist_row_height").get<int>();
+  }
 }

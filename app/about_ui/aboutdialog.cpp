@@ -2,6 +2,7 @@
 #include "ui_aboutdialog.h"
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
+#include "config/storage.h"
 
 #include <QFile>
 #include <QDebug>
@@ -32,6 +33,8 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));
+
+  ui->configfileLabel->setText(tr("Config files path: ") + Config::Storage::configPath());
 }
 
 AboutDialog::~AboutDialog() {

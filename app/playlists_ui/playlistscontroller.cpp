@@ -91,7 +91,7 @@ namespace PlaylistsUi {
   void Controller::eventFilterViewport(QEvent *event) {
     if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
-      if (me->button() == Qt::MidButton) {
+      if (me->button() == Qt::MiddleButton) {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
           on_removeItem(index);
@@ -178,6 +178,7 @@ namespace PlaylistsUi {
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    view->scrollToBottom();
     persist(index.row());
     emit loaded(item);
     emit selected(item);
@@ -185,12 +186,19 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_search(const QString &term) {
-    proxy->setFilterWildcard("*" + term + "*");
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRegularExpression regex(term);
+    proxy->setFilterRegularExpression(regex);
+#else
+    QRegExp regex(term, Qt::CaseInsensitive, QRegExp::Wildcard);
+    proxy->setFilterRegExp(regex);
+#endif
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    QTimer::singleShot(20, [=]() {
+    /*QTimer::singleShot(20, [=]() {
       if (!view->selectionModel()->selectedRows().isEmpty()) {
         view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
       }
-    });
+    });*/
   }
 }

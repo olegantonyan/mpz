@@ -2,12 +2,17 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS = \
-  libs/taglib \
-  libs/yaml-cpp \
   libs/qtwaitingspinner \
   libs/qhotkey \
-  libs/qBreakpad \
-  app
+  libs/qBreakpad
+
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  SUBDIRS += libs/taglib
+}
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  SUBDIRS += libs/yaml-cpp
+}
+SUBDIRS += app
 
 # make install
 desktop.path = /usr/share/applications/

@@ -16,6 +16,7 @@ public:
   Q_PROPERTY(bool CanRaise READ CanRaise)
   Q_PROPERTY(bool HasTrackList READ HasTrackList)
   Q_PROPERTY(QString Identity READ Identity)
+  Q_PROPERTY(QString DesktopEntry READ DesktopEntry)
   Q_PROPERTY(QStringList SupportedUriSchemes READ SupportedUriSchemes)
   Q_PROPERTY(QStringList SupportedMimeTypes READ SupportedMimeTypes)
 
@@ -40,6 +41,7 @@ public:
   bool CanRaise() const;
   bool HasTrackList() const;
   QString Identity() const;
+  QString DesktopEntry() const;
   QStringList SupportedMimeTypes() const;
   QStringList SupportedUriSchemes() const;
 

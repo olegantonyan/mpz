@@ -58,7 +58,7 @@ namespace Playlist {
     while (!in.atEnd()) {
       auto line = in.readLine().trimmed();
       if (!line.startsWith("#") && !line.isEmpty()) {
-        bool is_stream;
+        bool is_stream = false;
         auto parsed_line = parseLine(line, is_stream);
         if (!parsed_line.isEmpty()) {
           if (is_stream) {
