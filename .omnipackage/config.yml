@@ -67,8 +67,8 @@ builds:
 
 - distro: 'opensuse_tumbleweed'
   <<: *opensuse_qt6
-  build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, yaml-cpp-devel, libtag-devel]
-  qmake_extra_args: "DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP"
+  #build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, yaml-cpp-devel, libtag-devel]
+  #qmake_extra_args: "DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP"
 
 - distro: 'debian_10'
   <<: *debian_qt5
