@@ -3,7 +3,7 @@
 set -xEeuo pipefail
 
 
-GCC_VERSION="12.3.0"
+GCC_VERSION="12.3.0" # highest version that can be built on Debian 10
 
 if [ "$(gcc -dumpfullversion)" == $GCC_VERSION ]; then
     exit 0
