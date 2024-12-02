@@ -177,7 +177,7 @@ namespace Playback {
       }
     }
   }
-
+#ifdef QT6_STREAM_HACKS
   bool MediaPlayer::start_stream() {
     if (stream.isValidUrl()) {
       if (!stream.start()) {
@@ -196,7 +196,7 @@ namespace Playback {
     loop.exec();
     return stream.bytesAvailable() > 0;
   }
-
+#endif
   void MediaPlayer::clearTrack() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setSource(QUrl(nullptr));
