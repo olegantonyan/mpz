@@ -24,7 +24,7 @@ Similar to "album list" in Foobar2000.
 %build
 mkdir build
 cd build
-{{ qmake | default: "qmake-qt5" }} CONFIG+=release CONFIG+=force_debug_info ..
+{{ qmake | default: "qmake-qt5" }} CONFIG+=release CONFIG+=force_debug_info {{ qmake_extra_args | default: "" }} ..
 make %{?_smp_mflags}
 
 
