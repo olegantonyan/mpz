@@ -109,7 +109,7 @@ bool Track::fillAudioProperties() {
   TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
-      _duration = static_cast<quint32>(f.audioProperties()->length());
+      _duration = static_cast<quint32>(f.audioProperties()->lengthInSeconds());
       _channels = static_cast<quint8>(f.audioProperties()->channels());
       _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
       _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());

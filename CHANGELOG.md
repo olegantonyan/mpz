@@ -5,6 +5,7 @@
 
 ### Misc
 - update built-in Taglib to 2.0.2 and Yaml cpp to 0.8.0
+- fix deprecation warnings
 
 ## [1.0.26] - 2024-12-01
 ### Added

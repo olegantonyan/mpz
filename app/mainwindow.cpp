@@ -220,7 +220,11 @@ void MainWindow::setupMpris() {
 
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+  connect(ui->followCursorCheckBox, &QCheckBox::checkStateChanged, [=](Qt::CheckState state) {
+#else
   connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
+#endif
     global_conf.savePlaybackFollowCursor(state == Qt::Checked);
     global_conf.sync();
   });
