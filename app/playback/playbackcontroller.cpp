@@ -101,7 +101,6 @@ namespace Playback {
     if (track.isStream()) {
       _player.stop();
       _current_track = track;
-      on_stateChanged(MediaPlayer::PlayingState); // optimistic state update b/c setTrack will block
       _player.setTrack(track);
     } else {
       _player.setTrack(track);

@@ -143,8 +143,11 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+      emit stateChanged(MediaPlayer::PlayingState); // optimistic state update b/c start_stream will block
       if (start_stream()) {
         player.setSourceDevice(&stream);
+      } else {
+        emit stateChanged(MediaPlayer::StoppedState);
       }
 #else
       player.setMedia(track.url(), &stream);
