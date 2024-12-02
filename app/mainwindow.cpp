@@ -1,7 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "config/storage.h"
-#include "waitingspinnerwidget.h"
 #include "shortcuts_ui/shortcutsdialog.h"
 
 #include <QDebug>
@@ -10,6 +8,7 @@
 #include <QEvent>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QHash>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
@@ -41,7 +40,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -75,6 +74,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupWindowTitle();
   setupPlaybackLog();
   setupSortMenu();
+  setupSleepLock();
+  setupOutputDevice();
 
   preloadPlaylist(args);
 
@@ -152,13 +153,22 @@ void MainWindow::changeEvent(QEvent *event) {
 void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem(tr("sequential"));
   ui->orderComboBox->addItem(tr("random"));
-  ui->orderComboBox->setCurrentIndex(global_conf.playbackOrder() == "random" ? 1 : 0);
+  ui->orderComboBox->addItem(tr("sequential (no loop)"));
+
+  QHash<QString, int> combobox_item_position;
+  combobox_item_position.insert("sequential", 0);
+  combobox_item_position.insert("random", 1);
+  combobox_item_position.insert("sequential (no loop)", 2);
+
+  ui->orderComboBox->setCurrentIndex(combobox_item_position.value(global_conf.playbackOrder(), 0));
+
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-    global_conf.savePlaybackOrder(idx == 1 ? "random" : "sequential");
+    QString order_name = combobox_item_position.key(idx, "sequential");
+    global_conf.savePlaybackOrder(order_name);
     global_conf.sync();
 #if defined(MPRIS_ENABLE)
     if (mpris) {
-      mpris->on_shuffleChanged(idx == 1);
+      mpris->on_shuffleChanged(order_name == "random");
     }
 #endif
   });
@@ -173,12 +183,15 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem(tr("(use global)"));
   ui->perPlaylistOrdercomboBox->addItem(tr("random"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
+  ui->perPlaylistOrdercomboBox->addItem(tr("sequential (no loop)"));
   connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
       } else if (playlist->random() == Playlist::Playlist::Sequential) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(2);
+      } else if (playlist->random() == Playlist::Playlist::SequentialNoLoop) {
+        ui->perPlaylistOrdercomboBox->setCurrentIndex(3);
       } else if (playlist->random() == Playlist::Playlist::None) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(0);
       }
@@ -207,7 +220,11 @@ void MainWindow::setupMpris() {
 
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+  connect(ui->followCursorCheckBox, &QCheckBox::checkStateChanged, [=](Qt::CheckState state) {
+#else
   connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
+#endif
     global_conf.savePlaybackFollowCursor(state == Qt::Checked);
     global_conf.sync();
   });
@@ -278,6 +295,7 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
+  connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
 
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }
@@ -356,6 +374,7 @@ void MainWindow::setupShortcuts() {
   };
   connect(main_menu, &MainMenu::openShortcuts, open_dialog);
   connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
+  connect(shortcuts, &Shortcuts::jumpToPLayingTrack, status_label, &StatusBarLabel::doubleclicked);
 }
 
 void MainWindow::setupWindowTitle() {
@@ -393,6 +412,42 @@ void MainWindow::setupSortMenu() {
   ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
 
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
+}
+
+void MainWindow::setupSleepLock() {
+  if (!global_conf.inhibitSleepWhilePlaying()) {
+    sleep_lock = nullptr;
+    return;
+  }
+
+  sleep_lock = new SleepLock(this);
+  connect(player, &Playback::Controller::started, [=](Track _track) {
+    Q_UNUSED(_track);
+    sleep_lock->activate(true);
+  });
+  connect(player, &Playback::Controller::paused, [=](Track _track) {
+    Q_UNUSED(_track);
+    sleep_lock->activate(false);
+  });
+  connect(player, &Playback::Controller::stopped, [=]() {
+    sleep_lock->activate(false);
+  });
+}
+
+void MainWindow::setupOutputDevice() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
+    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
+    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+    int menu_width = device_menu.sizeHint().width();
+    int x = ui->toolButtonOutputDevice->width() - menu_width;
+    int y = ui->toolButtonOutputDevice->height();
+    QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
+    device_menu.exec(pos);
+  });
+#else
+  ui->toolButtonOutputDevice->setVisible(false);
+#endif
 }
 
 void MainWindow::preloadPlaylist(const QStringList &args) {

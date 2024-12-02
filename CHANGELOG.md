@@ -1,4 +1,100 @@
-## [1.0.15] - NEXT
+## [1.0.27] - 
+
+### Fixed
+- improve radio streams in Qt6
+
+### Misc
+- update built-in Taglib to 2.0.2 and Yaml cpp to 0.8.0
+- fix deprecation warnings
+
+## [1.0.26] - 2024-12-01
+### Added
+- Output device selector in Qt6
+
+### Fixed
+- Bug with radio streams in Qt6
+
+### Misc
+
+## [1.0.25] - 2024-08-19
+### Added
+- sequential (no loop) playback order
+
+### Fixed
+- minor fixes in translations
+
+### Misc
+
+## [1.0.24] - 2024-05-21
+
+### Fixed
+- start position of track with CUE
+- filter playlists with long list view
+
+### Misc
+- no more crash under Wayland (disabled QHotKey registration)
+
+## [1.0.23] - 2023-02-18
+### Added
+- ability to inhibit sleep on Windows
+- "Open config directory" main menu option
+- workaround for KDE Plasma 5.27 - playlist row height can be set in global config via "playlist_row_height"
+
+## [1.0.22] - 2022-11-07
+### Added
+- track info window: context menu for cover art
+- Serbian language translation
+- scroll playlists view to bottom upon addind new playlist
+
+### Misc
+- update built-in Taglib to 1.13
+
+## [1.0.21] - 2022-08-28
+### Misc
+- new endpoint for feedback form (Heroku no longer free)
+
+## [1.0.20] - 2022-05-28
+### Added
+- keyboard shortcut to jump to playing track
+- config files location in "about" dialog
+
+### Fixed
+- reduce stdout spam from sleep lock
+
+### Misc
+- ability to build against system taglib and yaml-cpp (used by default for AUR packages)
+
+## [1.0.19] - 2021-12-08
+
+### Fixed
+- saving renamed playlist
+
+### Added
+- support embedded album covers
+- show covers in track info dialog
+
+## [1.0.18] - 2021-11-28
+
+### Fixed
+- build with older Qt versions fixed
+- MPRIS track info updates with the stream metadata
+
+## [1.0.17] - 2021-11-28
+### Added
+- expose album covers through MPRIS: show them in KDE media player widget
+
+### Fixed
+- MPRIS fix seek (was broken in KDE media player widget)
+
+## [1.0.16] - 2021-11-24
+### Added
+- Ability to inhibit automatic sleep while playing on Linux
+
+### Misc
+- Qt6 support
+- Update QHotKey to 1.5.0
+
+## [1.0.15] - 2021-08-24
 ### Added
 - "Save settings" main menu item to force saving settings and playlists to both config files
 - Ability to select playlist via enter key

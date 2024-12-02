@@ -6,7 +6,6 @@
 #include "playback/mediaplayer.h"
 
 #include <QObject>
-#include <memory>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QTimer>
@@ -22,7 +21,7 @@ namespace Playback {
       Paused
     };
 
-    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QObject *parent = nullptr);
+    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
     int volume() const;
@@ -50,6 +49,9 @@ namespace Playback {
     void stop();
     void setVolume(int value);
     void seek(int seconds);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void setOutputDevice(QByteArray deviceid);
+#endif
 
   private:
     void on_seek(int position);

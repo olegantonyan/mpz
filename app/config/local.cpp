@@ -148,6 +148,14 @@ namespace Config {
     return storage.set("total_playback_time", Config::Value(arg));
   }
 
+  QByteArray Local::outputDeviceId() const {
+    return storage.getByteArray("output_device_id");
+  }
+
+  bool Local::saveOutputDeviceId(const QByteArray &arg) {
+    return storage.set("output_device_id", arg);
+  }
+
   Value Local::serializeTrack(const Track &t) const {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();

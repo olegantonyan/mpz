@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>mpz music player</DisplayName>
+    <Description>Install mpz music player</Description>
+    <Version>SED_ME</Version>
+    <ReleaseDate>SED_ME</ReleaseDate>
+    <Licenses>
+        <License name="GPLv3" file="license.txt" />
+    </Licenses>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
+</Package>

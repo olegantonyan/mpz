@@ -17,7 +17,6 @@
 
 #include "track.h"
 
-#include <QRegExp>
 #include <QDebug>
 #include <QDir>
 #include <QStringList>

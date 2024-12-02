@@ -1,0 +1,32 @@
+# Maintainer: Oleg Antonyan <oleg.b.antonyan@gmail.com>
+# Contributor: Oleg Antonyan <oleg.b.antonyan@gmail.com>
+
+pkgname=<%= pkgname %>
+pkgver=<%= pkgver %>
+pkgrel=<%= pkgrel %>
+pkgdesc='Music player for the large local collections (Qt5 version)'
+arch=('x86_64')
+url="https://github.com/olegantonyan/mpz"
+license=('GPL3')
+depends=('qt5-multimedia' 'qt5-x11extras' 'hicolor-icon-theme' 'yaml-cpp' 'taglib')
+provides=('mpz')
+conflicts=('mpz')
+source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
+sha256sums=('<%= sha256sums %>')
+
+build() {
+    cd mpz-<%= commit_hash %>
+
+    rm -rf build
+    mkdir build
+    cd build
+    qmake-qt5 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
+    make
+}
+
+package() {
+    cd mpz-<%= commit_hash %>
+
+    cd build
+    make install INSTALL_ROOT=$pkgdir
+}

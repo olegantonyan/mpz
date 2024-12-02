@@ -17,6 +17,8 @@
 #include "playback_log_ui/playbackloguicontroller.h"
 #include "sort_ui/sortmenu.h"
 #include "ipc/instance.h"
+#include "sleeplock.h"
+#include "audio_device_ui/devicesmenu.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -60,6 +62,7 @@ private:
   Shortcuts *shortcuts;
   PlaybackLogUi::Controller *playback_log;
   SortUi::SortMenu *sort_menu;
+  SleepLock *sleep_lock;
 
   int streamBuffer();
   void setupUiSettings();
@@ -78,6 +81,8 @@ private:
   void setupWindowTitle();
   void setupPlaybackLog();
   void setupSortMenu();
+  void setupSleepLock();
+  void setupOutputDevice();
 
   void preloadPlaylist(const QStringList &args);
   

@@ -1,13 +1,8 @@
-QT       += core gui multimedia concurrent network
-unix: QT += dbus
+QT       += widgets core gui multimedia concurrent network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-CONFIG += c++11
+CONFIG += c++17
 
 TARGET = mpz
-
-DEFINES += TAGLIB_STATIC
 
 win32: {
   CONFIG -= debug_and_release
@@ -37,11 +32,13 @@ INCLUDEPATH += . # without this lupdate shows errors: Qualifying with unknown na
 
 SOURCES += \
     about_ui/aboutdialog.cpp \
+    audio_device_ui/devicesmenu.cpp \
     busyspinner.cpp \
     config/global.cpp \
     config/local.cpp \
     config/storage.cpp \
     config/value.cpp \
+    coverart/embedded.cpp \
     directory_ui/directorycontroller.cpp \
     directory_ui/directoryproxyfiltermodel.cpp \
     directory_ui/directorysettings.cpp \
@@ -59,6 +56,7 @@ SOURCES += \
     playback_log_ui/playbacklogdialog.cpp \
     playback_log_ui/playbackloguicontroller.cpp \
     playback_log_ui/playbackloguimodel.cpp \
+    coverart/covers.cpp \
     playlist/cueparser.cpp \
     playlist/fileparser.cpp \
     playlist/loader.cpp \
@@ -80,6 +78,7 @@ SOURCES += \
     rnjesus.cpp \
     shortcuts.cpp \
     shortcuts_ui/shortcutsdialog.cpp \
+    sleeplock.cpp \
     sort_ui/sortingpresetsdialog.cpp \
     sort_ui/sortmenu.cpp \
     statusbarlabel.cpp \
@@ -92,11 +91,13 @@ SOURCES += \
 
 HEADERS += \
     about_ui/aboutdialog.h \
+    audio_device_ui/devicesmenu.h \
     busyspinner.h \
     config/global.h \
     config/local.h \
     config/storage.h \
     config/value.h \
+    coverart/embedded.h \
     directory_ui/directorycontroller.h \
     directory_ui/directoryproxyfiltermodel.h \
     directory_ui/directorysettings.h \
@@ -113,6 +114,7 @@ HEADERS += \
     playback_log_ui/playbacklogdialog.h \
     playback_log_ui/playbackloguicontroller.h \
     playback_log_ui/playbackloguimodel.h \
+    coverart/covers.h \
     playlist/cueparser.h \
     playlist/fileparser.h \
     playlist/loader.h \
@@ -134,6 +136,7 @@ HEADERS += \
     rnjesus.h \
     shortcuts.h \
     shortcuts_ui/shortcutsdialog.h \
+    sleeplock.h \
     sort_ui/sortingpresetsdialog.h \
     sort_ui/sortmenu.h \
     statusbarlabel.h \
@@ -154,24 +157,7 @@ FORMS += \
     shortcuts_ui/shortcutsdialog.ui \
     sort_ui/sortingpresets.ui
 
-# Libraries
-INCLUDEPATH += \
-  ../libs/taglib/taglib-1.12/taglib \
-  ../libs/taglib/taglib-1.12/taglib/toolkit \
-  ../libs/yaml-cpp/yaml-cpp-0.7.0/include \
-  ../libs/qtwaitingspinner \
-  ../libs/qhotkey/QHotkey-1.4.2
-
-LIBS += \
-  -L../libs/taglib -ltaglib \
-  -L../libs/yaml-cpp -lyaml-cpp \
-  -L../libs/qtwaitingspinner -lqtwaitingspinner \
-  -L../libs/qhotkey -lqhotkey
-
-include(../libs/qhotkey/qhotkey.pri)
-# End of libraries
-
-unix: {
+contains(DEFINES, MPRIS_ENABLE) {
   DBUS_ADAPTORS += \
     dbus/org.mpris.MediaPlayer2.xml \
     dbus/org.mpris.MediaPlayer2.Player.xml
@@ -181,7 +167,43 @@ unix: {
 
   SOURCES += \
     dbus/mpris.cpp
+
+  QT += dbus
 }
+
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  DEFINES += TAGLIB_STATIC
+}
+
+# Libraries
+INCLUDEPATH += \
+  ../libs/qtwaitingspinner \
+  ../libs/qhotkey/QHotkey-1.5.0
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  INCLUDEPATH += \
+  ../libs/taglib/taglib-2.0.2/taglib \
+  ../libs/taglib/taglib-2.0.2/taglib/toolkit \
+  ../libs/taglib/taglib-2.0.2/taglib/mpeg/id3v2
+}
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  INCLUDEPATH += \
+    ../libs/yaml-cpp/yaml-cpp-0.8.0/include
+}
+
+LIBS += \
+  -L../libs/qtwaitingspinner -lqtwaitingspinner \
+  -L../libs/qhotkey -lqhotkey \
+  -ltag \
+  -lyaml-cpp
+!contains(DEFINES, USE_SYSTEM_TAGLIB) {
+  LIBS += -L../libs/taglib
+}
+!contains(DEFINES, USE_SYSTEM_YAMLCPP) {
+  LIBS += -L../libs/yaml-cpp
+}
+
+include(../libs/qhotkey/qhotkey.pri)
+# End of libraries
 
 RESOURCES += \
   ../resources.qrc
@@ -189,3 +211,7 @@ RESOURCES += \
 # make install
 target.path = /usr/bin/
 INSTALLS += target
+
+TRANSLATIONS += \
+    resources/translations/ru.ts \
+    resources/translations/sr.ts

@@ -45,6 +45,10 @@ namespace Config {
     PlaylistUi::ColumnsConfig columnsConfig() const;
     bool saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg);
 
+    bool inhibitSleepWhilePlaying() const;
+
+    int playlistRowHeight() const;
+
   private:
     Config::Storage storage;
   };

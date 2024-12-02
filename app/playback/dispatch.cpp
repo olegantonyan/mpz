@@ -49,6 +49,10 @@ namespace Playback {
     int current = current_playlist->trackIndex(current_track_uid);
     auto next = current + 1;
     if (next > current_playlist->tracks().size() - 1) {
+      if (selected_playlist->random() == Playlist::Playlist::SequentialNoLoop || global_conf.playbackOrder() == "sequential (no loop)") {
+        emit stop();
+        return;
+      }
       Track t = current_playlist->tracks().at(0);
       emit play(t);
     } else {
