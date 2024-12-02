@@ -56,6 +56,9 @@ namespace Playback {
     QAudioOutput audio_output;
     QMediaDevices media_devices;
 #endif
+#ifdef QT6_STREAM_HACKS
+    bool suppress_emit_playing_state;
+#endif
 
     quint64 offset_begin;
     quint64 offset_end;

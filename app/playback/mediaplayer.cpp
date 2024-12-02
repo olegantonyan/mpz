@@ -31,6 +31,12 @@ namespace Playback {
           emit stateChanged(MediaPlayer::StoppedState);
           break;
         case QMediaPlayer::PlayingState:
+#ifdef QT6_STREAM_HACKS
+          if (suppress_emit_playing_state) {
+            suppress_emit_playing_state = false;
+            break;
+          }
+#endif
           emit stateChanged(MediaPlayer::PlayingState);
           break;
         case QMediaPlayer::PausedState:
@@ -52,6 +58,9 @@ namespace Playback {
     });
     offset_begin = 0;
     offset_end = 0;
+#ifdef QT6_STREAM_HACKS
+    suppress_emit_playing_state = false;
+#endif
   }
 
   MediaPlayer::State MediaPlayer::state() const {
@@ -143,7 +152,10 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #ifdef QT6_STREAM_HACKS
-      emit stateChanged(MediaPlayer::PlayingState); // optimistic state update b/c start_stream will block
+      // optimistic state update b/c start_stream will block
+      // also prevent double emit playing state after player starts playing
+      suppress_emit_playing_state = true;
+      emit stateChanged(MediaPlayer::PlayingState);
       if (start_stream()) {
         player.setSourceDevice(&stream);
       } else {
