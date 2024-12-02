@@ -1,12 +1,22 @@
 #include "coverart/embedded.h"
 
-#include "taglib/mp4file.h"
-#include "taglib/id3v2frame.h"
-#include "taglib/attachedpictureframe.h"
-#include "taglib/id3v2tag.h"
-#include "taglib/mpegfile.h"
-#include "taglib/flacfile.h"
-#include "taglib/flacpicture.h"
+#ifdef USE_SYSTEM_TAGLIB
+  #include "taglib/mp4file.h"
+  #include "taglib/id3v2frame.h"
+  #include "taglib/attachedpictureframe.h"
+  #include "taglib/id3v2tag.h"
+  #include "taglib/mpegfile.h"
+  #include "taglib/flacfile.h"
+  #include "taglib/flacpicture.h"
+#else
+  #include "mp4/mp4file.h"
+  #include "mpeg/id3v2/id3v2frame.h"
+  #include "mpeg/id3v2/frames/attachedpictureframe.h"
+  #include "mpeg/id3v2/id3v2tag.h"
+  #include "mpeg/mpegfile.h"
+  #include "flac/flacfile.h"
+  #include "flac/flacpicture.h"
+#endif
 
 #include <QDebug>
 #include <QBuffer>
