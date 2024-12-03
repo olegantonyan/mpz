@@ -54,6 +54,9 @@ namespace Config {
 
     Config::Value serializeTrack(const Track &t) const;
     Track deserializeTrack(const Config::Value &v) const;
+
+    bool _duration_migrated_to_ms;
+    quint64 trackDuration(int value) const;
   };
 }
 

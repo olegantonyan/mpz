@@ -4,6 +4,10 @@
 
 namespace Config {
   Local::Local() : storage("local.yml") {
+    _duration_migrated_to_ms = storage.get("_duration_migrated_to_ms").get<bool>();
+    if (!_duration_migrated_to_ms) {
+      storage.set("_duration_migrated_to_ms", Config::Value(true));
+    }
   }
 
   bool Local::sync() {
@@ -188,7 +192,7 @@ namespace Config {
             r["title"].get<QString>(),
             static_cast<quint16>(r["track_number"].get<int>()),
             static_cast<quint16>(r["year"].get<int>()),
-            static_cast<quint32>(r["duration"].get<int>()),
+            trackDuration(static_cast<quint64>(r["duration"].get<int>())),
             static_cast<quint8>(r["channels"].get<int>()),
             static_cast<quint16>(r["bitrate"].get<int>()),
             static_cast<quint16>(r["samplerate"].get<int>())
@@ -197,6 +201,14 @@ namespace Config {
       return t;
     } else {
      return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>());
+    }
+  }
+
+  quint64 Local::trackDuration(int value) const {
+    if (_duration_migrated_to_ms) {
+      return value;
+    } else {
+      return value * 1000;
     }
   }
 }
