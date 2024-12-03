@@ -4,7 +4,6 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QDir>
-#include <QApplication>
 
 namespace Config {
   Storage::Storage(const QString &filename) : changed(false) {
@@ -22,7 +21,6 @@ namespace Config {
     }
 
     reload();
-    set("__app_version__", qApp->applicationVersion());
   }
 
   Storage::~Storage() {
@@ -106,6 +104,7 @@ namespace Config {
     if (!changed) {
       return true;
     }
+    set("__app_version__", QString(VERSION));
     QFile file(filepath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
       qWarning() << "error opening file for writing" << filepath << ":" << file.errorString();

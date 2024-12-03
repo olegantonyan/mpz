@@ -5,9 +5,10 @@
 
 namespace Config {
   Local::Local() : storage("local.yml") {
-    _duration_migrated_to_ms = storage.get("_duration_migrated_to_ms").get<bool>();
-    if (!_duration_migrated_to_ms) {
-      storage.set("_duration_migrated_to_ms", Config::Value(true));
+    if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 0, 27)) {
+      durationSeconds = true;
+    } else {
+      durationSeconds = false;
     }
   }
 
@@ -206,10 +207,10 @@ namespace Config {
   }
 
   quint64 Local::trackDuration(int value) const {
-    if (_duration_migrated_to_ms) {
-      return value;
-    } else {
+    if (durationSeconds) {
       return value * 1000;
+    } else {
+      return value;
     }
   }
 }
