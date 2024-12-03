@@ -29,7 +29,7 @@ namespace PlaylistUi {
     void setPlaylist(std::shared_ptr<Playlist::Playlist> pl);
 
     Track itemAt(const QModelIndex &index) const;
-    QModelIndex buildIndex(int row) const;
+    QModelIndex buildIndex(int row, int col = 0) const;
     int tracksSize() const;
     void highlight(quint64 uid, enum HighlightState st);
     QModelIndex indexOf(quint64 uid) const;
@@ -41,6 +41,7 @@ namespace PlaylistUi {
 
   private:
     void setTracks(const QVector<Track> &tracks);
+    void allDataChanged();
 
     std::shared_ptr<Playlist::Playlist> _playlist;
     QVector<Track> tracks;

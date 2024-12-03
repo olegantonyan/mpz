@@ -18,6 +18,8 @@ namespace Config {
     explicit Storage(const QString &filename);
     ~Storage();
 
+    static QString configPath();
+
     Config::Value get(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const Config::Value &value);
 

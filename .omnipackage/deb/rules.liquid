@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+# debian.rules
+# Be carefull, this is a Makefile, so the indents are tabs and not spaces!
+# -*- makefile -*-
+
+export DESTROOT=$(CURDIR)/debian/mpz
+export QT_SELECT={{ qt_select | default: "qt5" }}
+
+{% if LDFLAGS %}
+export LDFLAGS={{ LDFLAGS }}
+{% endif %}
+{% if CPPFLAGS %}
+export CPPFLAGS={{ CPPFLAGS }}
+{% endif %}
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	make install INSTALL_ROOT=$(DESTROOT)

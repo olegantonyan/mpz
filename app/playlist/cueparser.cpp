@@ -18,13 +18,19 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QStringBuilder>
-#include <QRegExp>
-#include <QTextCodec>
 #include <QTextStream>
 #include <QtDebug>
 #include <QFileInfo>
 #include <QtGlobal>
 #include <QDebug>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  #include <QStringConverter>
+  #include <QRegularExpression>
+  #include <QRegularExpressionMatch>
+#else
+  #include <QTextCodec>
+  #include <QRegExp>
+#endif
 
 namespace Playlist {
   static const char* kFileLineRegExp = "(\\S+)\\s+(?:\"([^\"]+)\"|(\\S+))\\s*(?:\"([^\"]+)\"|(\\S+))?";
@@ -54,14 +60,17 @@ namespace Playlist {
     }
 
     QTextStream text_stream(&device);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    text_stream.setEncoding(QStringConverter::encodingForData(device.peek(1024)).value_or(QStringConverter::Utf8));
+#else
     text_stream.setCodec(QTextCodec::codecForUtfText(device.peek(1024), QTextCodec::codecForName("UTF-8")));
+#endif
 
     QString dir_path = QFileInfo(path).absoluteDir().absolutePath();
     // read the first line already
     QString line = text_stream.readLine();
 
     QList<CueEntry> entries;
-    int files = 0;
 
     QString album_artist;
     QString album;
@@ -128,7 +137,6 @@ namespace Playlist {
 
           // end of the header -> go into the track mode
         } else if (line_name == kTrack) {
-          files++;
           break;
         }
 
@@ -261,6 +269,16 @@ namespace Playlist {
   // line into logical parts and getting rid of all the unnecessary whitespaces
   // and quoting.
   QStringList CueParser::split_cue_line(const QString& line) const {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRegularExpression line_regexp(kFileLineRegExp);
+    QRegularExpressionMatch re_match = line_regexp.match(line.trimmed());
+    if (!re_match.hasMatch()) {
+      return QStringList();
+    }
+
+    // Let's remove the empty entries while we're at it
+    return re_match.capturedTexts().filter(QRegularExpression(".+")).mid(1, -1).replaceInStrings(QRegularExpression("^\"\"$"), "");
+#else
     QRegExp line_regexp(kFileLineRegExp);
     if (!line_regexp.exactMatch(line.trimmed())) {
       return QStringList();
@@ -268,18 +286,30 @@ namespace Playlist {
 
     // let's remove the empty entries while we're at it
     return line_regexp.capturedTexts().filter(QRegExp(".+")).mid(1, -1);
+#endif
   }
 
   qint64 CueParser::begin_by_index(const QString& index) const {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QRegularExpression index_regexp(kIndexRegExp);
+    QRegularExpressionMatch re_match = index_regexp.match(index);
+    if (!re_match.hasMatch()) {
+      return -1;
+    }
+
+    QStringList splitted = re_match.capturedTexts().mid(1, -1);
+#else
     QRegExp index_regexp(kIndexRegExp);
     if (!index_regexp.exactMatch(index)) {
       return -1;
     }
 
     QStringList splitted = index_regexp.capturedTexts().mid(1, -1);
-    qint64 frames = splitted.at(0).toLongLong() * 60 * 75 +
-                    splitted.at(1).toLongLong() * 75 +
-                    splitted.at(2).toLongLong();
+#endif
+
+    qlonglong frames = splitted.at(0).toLongLong() * 60 * 75 +
+                       splitted.at(1).toLongLong() * 75 +
+                       splitted.at(2).toLongLong();
 
     return (frames * 1000) / 75; // ms
   }

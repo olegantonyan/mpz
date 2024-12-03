@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
+    <width>345</width>
     <height>303</height>
    </rect>
   </property>
@@ -68,6 +68,13 @@
    </item>
    <item>
     <widget class="QLabel" name="sysinfo">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="configfileLabel">
      <property name="text">
       <string/>
      </property>

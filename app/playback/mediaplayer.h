@@ -6,6 +6,12 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  #include <QAudioOutput>
+  #include <QMediaDevices>
+  #include <QAudioDevice>
+  #define QT6_STREAM_HACKS
+#endif
 
 namespace Playback {
   class MediaPlayer : public QObject {
@@ -17,7 +23,7 @@ namespace Playback {
       PausedState
     };
 
-    explicit MediaPlayer(quint32 stream_buffer_size, QObject *parent = nullptr);
+    explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 
     MediaPlayer::State state() const;
     int volume() const;
@@ -38,13 +44,31 @@ namespace Playback {
     void setVolume(int volume);
     void setTrack(const Track &track);
     void clearTrack();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void setOutputDevice(QByteArray deviceid);
+#endif
 
   private:
     QMediaPlayer player;
     Stream stream;
+    QByteArray output_device_id;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QAudioOutput audio_output;
+    QMediaDevices media_devices;
+#endif
+#ifdef QT6_STREAM_HACKS
+    bool suppress_emit_playing_state;
+    bool start_stream();
+#endif
 
     quint64 offset_begin;
     quint64 offset_end;
+    void seek_to_offset_begin();
+
+  private slots:
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    void onAudioDevicesChanged();
+#endif
   };
 }
 

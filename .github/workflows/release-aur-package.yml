@@ -1,9 +1,7 @@
 name: Release AUR package
 
 on:
-  #push:
-  #  branches:
-  #    - master
+  workflow_dispatch:
   release:
     types: [published, created, edited, prereleased, deleted, unpublished]
 
@@ -12,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    #- name: Sleep (wait for master.zip)
-    #  run: sleep 42
-
     - name: Checkout code
       uses: actions/checkout@v2
       with:
@@ -23,9 +18,20 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: 3.1
 
     - name: Run release script
       env:
         AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        PKGNAME: mpz
+        PKGBUILD: ./.github/aur/PKGBUILD_Qt6.erb
+        SRCINFO: ./.github/aur/SRCINFO_Qt6.erb
+      run: ./.github/release-aur-github-action.rb
+
+    - name: Run release script (Qt5)
+      env:
+        AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        PKGNAME: mpz-qt5
+        PKGBUILD: ./.github/aur/PKGBUILD_Qt5.erb
+        SRCINFO: ./.github/aur/SRCINFO_Qt5.erb
       run: ./.github/release-aur-github-action.rb

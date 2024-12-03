@@ -1,9 +1,14 @@
 #include "track.h"
 #include "rnjesus.h"
+#include "coverart/covers.h"
 
-#include "fileref.h"
-#include "tag.h"
-#include "tpropertymap.h"
+#ifdef USE_SYSTEM_TAGLIB
+  #include "taglib/fileref.h"
+  #include "taglib/tag.h"
+#else
+  #include "fileref.h"
+  #include "tag.h"
+#endif
 
 #include <QDateTime>
 #include <QDebug>
@@ -103,7 +108,7 @@ bool Track::fillAudioProperties() {
   TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
-      _duration = static_cast<quint32>(f.audioProperties()->length() * 1000);
+      _duration = static_cast<quint64>(f.audioProperties()->lengthInMilliseconds());
       _channels = static_cast<quint8>(f.audioProperties()->channels());
       _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
       _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());
@@ -252,6 +257,10 @@ void Track::clearStreamMeta() {
 
 const StreamMetaData &Track::streamMeta() const {
   return _stream_meta;
+}
+
+QString Track::artCover() const {
+  return CoverArt::Covers::instance().get(filepath);
 }
 
 quint16 Track::sample_rate() const {

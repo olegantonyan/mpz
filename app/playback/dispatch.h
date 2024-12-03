@@ -4,7 +4,6 @@
 #include "config/global.h"
 #include "playlists_ui/playlistscontroller.h"
 #include "playback/playerstate.h"
-#include "playback/playbackcontroller.h"
 #include "playback/randomtrail.h"
 
 #include <QObject>
@@ -18,6 +17,7 @@ namespace Playback {
 
   signals:
     void play(const Track &track);
+    void stop();
 
   public slots:
     void on_nextRequested();

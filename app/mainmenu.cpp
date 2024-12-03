@@ -28,6 +28,7 @@ void MainMenu::on_open() {
   QAction feedback(tr("Got feedback?"));
   QAction shortcuts(tr("Keyboard shortcuts"));
   QAction saves(tr("Save settings"));
+  QAction confdir(tr("Open config directory"));
 
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
@@ -49,10 +50,14 @@ void MainMenu::on_open() {
     global_conf.sync();
     local_conf.sync();
   });
+  connect(&confdir, &QAction::triggered, [=]() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
+  });
 
   menu.addAction(&trayicon);
   menu.addAction(&minimize_to_tray);
   menu.addAction(&saves);
+  menu.addAction(&confdir);
   menu.addSeparator();
   menu.addAction(&lpog);
   menu.addAction(&about);

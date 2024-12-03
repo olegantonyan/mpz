@@ -14,7 +14,7 @@ namespace DirectoryUi {
       emit triggered(action->data().toString());
     });
 
-    QAction defau(tr("Default"));
+    QAction defau(tr("Default (Name)"));
     defau.setData("Default");
     menu.addAction(&defau);
     menu.addSeparator();

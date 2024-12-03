@@ -46,6 +46,9 @@ namespace Config {
     int totalPlaybackTime() const;
     bool saveTotalPlaybackTime(int arg);
 
+    QByteArray outputDeviceId() const;
+    bool saveOutputDeviceId(const QByteArray &arg);
+
   private:
     Config::Storage storage;
 

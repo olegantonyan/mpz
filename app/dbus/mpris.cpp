@@ -34,6 +34,10 @@ Mpris::Mpris(Playback::Controller *pl, QObject *parent) : QObject(parent), playe
     notify("PlaybackStatus", PlaybackStatus());
     notify("Metadata", Metadata());
   });
+  connect(player, &Playback::Controller::trackChanged, [=](const Track &t) {
+    Q_UNUSED(t)
+    notify("Metadata", Metadata());
+  });
 
   connect(player, &Playback::Controller::volumeChanged, [=](int val) {
     Q_UNUSED(val)
@@ -61,12 +65,48 @@ QString Mpris::Identity() const {
   return qApp->applicationName() + "@" + QHostInfo::localHostName();
 }
 
+QString Mpris::DesktopEntry() const {
+  return qApp->applicationName();
+}
+
 QStringList Mpris::SupportedUriSchemes() const {
-  return QStringList();
+  static QStringList res = QStringList() << "file"
+                                         << "http"
+                                         << "https";
+  return res;
 }
 
 QStringList Mpris::SupportedMimeTypes() const {
-  return QStringList() << "audio/mpeg";
+  static QStringList res = QStringList() << "x-content/audio-player"
+                                         << "application/ogg"
+                                         << "application/x-ogg"
+                                         << "application/x-ogm-audio"
+                                         << "audio/flac"
+                                         << "audio/ogg"
+                                         << "audio/vorbis"
+                                         << "audio/aac"
+                                         << "audio/mp4"
+                                         << "audio/mpeg"
+                                         << "audio/mpegurl"
+                                         << "audio/vnd.rn-realaudio"
+                                         << "audio/x-flac"
+                                         << "audio/x-oggflac"
+                                         << "audio/x-vorbis"
+                                         << "audio/x-vorbis+ogg"
+                                         << "audio/x-speex"
+                                         << "audio/x-wav"
+                                         << "audio/x-wavpack"
+                                         << "audio/x-ape"
+                                         << "audio/x-mp3"
+                                         << "audio/x-mpeg"
+                                         << "audio/x-mpegurl"
+                                         << "audio/x-ms-wma"
+                                         << "audio/x-musepack"
+                                         << "audio/x-pn-realaudio"
+                                         << "audio/x-scpls"
+                                         << "video/x-ms-asf";
+
+  return res;
 }
 
 QString Mpris::PlaybackStatus() const {
@@ -95,12 +135,17 @@ void Mpris::SetShuffle(bool value) {
 
 QVariantMap Mpris::Metadata() const {
   QVariantMap h;
-  h["mpris:trackid"] = player->currentTrack().uid();
+  h["mpris:trackid"] = QVariant::fromValue(QDBusObjectPath(QString("/%1").arg(player->currentTrack().uid())));
   h["mpris:length"] = player->currentTrack().duration() * 1000;
   h["xesam:album"] = player->currentTrack().album();
   h["xesam:title"] = player->currentTrack().title();
   h["xesam:trackNumber"] = player->currentTrack().track_number();
   h["xesam:artist"] = player->currentTrack().artist();
+
+  auto art = player->currentTrack().artCover();
+  if (!art.isEmpty()) {
+    h["mpris:artUrl"] = QUrl::fromLocalFile(art).toString();
+  }
   return h;
 }
 
