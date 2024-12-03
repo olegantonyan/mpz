@@ -34,8 +34,8 @@ namespace Config {
     return QString("%1/mpz").arg(cfg_path);
   }
 
-  QString Storage::appVersion() const {
-    return get("__app_version__").get<QString>();
+  QVersionNumber Storage::appVersion() const {
+    return QVersionNumber::fromString(get("__app_version__").get<QString>());
   }
 
   Value Storage::get(const QString &key, bool *ok) const {

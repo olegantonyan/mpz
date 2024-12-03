@@ -11,6 +11,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QByteArray>
+#include <QVersionNumber>
 
 namespace Config {
   class Storage {
@@ -34,7 +35,7 @@ namespace Config {
     bool save();
     bool reload();
 
-    QString appVersion() const;
+    QVersionNumber appVersion() const;
 
   private:
     QString filepath;
