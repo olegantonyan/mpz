@@ -30,7 +30,7 @@ public:
   bool fillAudioProperties();
   bool fillTags();
   bool reload();
-  void setDuration(quint32 dur);
+  void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
 
   QString path() const;

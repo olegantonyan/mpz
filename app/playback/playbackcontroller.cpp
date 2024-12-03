@@ -154,7 +154,7 @@ namespace Playback {
   }
 
   QString Controller::time_text(quint64 pos) const {
-    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(_current_track.formattedDuration());
+    return QString("%1/%2").arg(Track::formattedTime(static_cast<quint64>(pos))).arg(_current_track.formattedDuration());
   }
 
   void Controller::on_positionChanged(quint64 pos) {
