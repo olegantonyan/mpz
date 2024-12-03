@@ -1,9 +1,11 @@
 #include "local.h"
 
 #include <QDebug>
+#include <QApplication>
 
 namespace Config {
   Local::Local() : storage("local.yml") {
+    storage.set("__app_version__", qApp->applicationVersion());
   }
 
   bool Local::sync() {

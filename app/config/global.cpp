@@ -1,9 +1,11 @@
 #include "global.h"
 
 #include <QDebug>
+#include <QApplication>
 
 namespace Config {
   Global::Global() : storage("global.yml") {
+    storage.set("__app_version__", qApp->applicationVersion());
   }
 
   bool Global::sync() {
