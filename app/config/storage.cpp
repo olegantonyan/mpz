@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QDir>
+#include <QApplication>
 
 namespace Config {
   Storage::Storage(const QString &filename) : changed(false) {
@@ -21,6 +22,7 @@ namespace Config {
     }
 
     reload();
+    set("__app_version__", qApp->applicationVersion());
   }
 
   Storage::~Storage() {
@@ -30,6 +32,10 @@ namespace Config {
   QString Storage::configPath() {
     auto cfg_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
     return QString("%1/mpz").arg(cfg_path);
+  }
+
+  QString Storage::appVersion() const {
+    return get("__app_version__").get<QString>();
   }
 
   Value Storage::get(const QString &key, bool *ok) const {
@@ -88,6 +94,12 @@ namespace Config {
     auto i = Config::Value(vl);
     i.setListType(Config::Value::Type::Integer);
     return set(key, i);
+  }
+
+  void Storage::remove(const QString &key) {
+    if (data.remove(key) > 0) {
+      changed = true;
+    }
   }
 
   bool Storage::save() {

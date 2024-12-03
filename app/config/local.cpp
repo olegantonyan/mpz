@@ -1,6 +1,7 @@
 #include "local.h"
 
 #include <QDebug>
+#include <QApplication>
 
 namespace Config {
   Local::Local() : storage("local.yml") {
