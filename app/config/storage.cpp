@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QDir>
+#include <QApplication>
 
 namespace Config {
   Storage::Storage(const QString &filename) : changed(false) {
@@ -21,6 +22,7 @@ namespace Config {
     }
 
     reload();
+    set("__app_version__", qApp->applicationVersion());
   }
 
   Storage::~Storage() {
