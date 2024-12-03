@@ -5,7 +5,7 @@
 
 namespace Config {
   Local::Local() : storage("local.yml") {
-    if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 0, 27)) {
+    if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 1, 0)) {
       durationSeconds = true;
     } else {
       durationSeconds = false;
