@@ -103,7 +103,6 @@ namespace Config {
   bool Storage::save() {
     if (appVersion().isNull() || appVersion() != QVersionNumber::fromString(QString(VERSION))) {
       set("__app_version__", QString(VERSION));
-      changed = true;
     }
     if (!changed) {
       return true;
