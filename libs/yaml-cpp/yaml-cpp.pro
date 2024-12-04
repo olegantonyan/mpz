@@ -5,6 +5,8 @@ CONFIG += warn_off
 CONFIG += staticlib
 CONFIG += c++17
 
+DEFINES += YAML_CPP_STATIC_DEFINE
+
 win32: CONFIG -= debug_and_release
 
 SOURCES += \
