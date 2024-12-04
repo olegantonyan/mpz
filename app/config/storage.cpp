@@ -101,10 +101,13 @@ namespace Config {
   }
 
   bool Storage::save() {
+    if (appVersion().isNull() || appVersion() != QVersionNumber::fromString(QString(VERSION))) {
+      set("__app_version__", QString(VERSION));
+      changed = true;
+    }
     if (!changed) {
       return true;
     }
-    set("__app_version__", QString(VERSION));
     QFile file(filepath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
       qWarning() << "error opening file for writing" << filepath << ":" << file.errorString();
