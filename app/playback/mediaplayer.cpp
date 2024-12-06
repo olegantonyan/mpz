@@ -93,6 +93,9 @@ namespace Playback {
 
   void MediaPlayer::pause() {
     player.pause();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    setPosition(position() -1); // in Qt6 unpausing after a long pause leads to no sound until you seek or stop/start or change output
+#endif
   }
 
   void Playback::MediaPlayer::seek_to_offset_begin() {
