@@ -98,9 +98,9 @@ namespace Playback {
 
   void MediaPlayer::unpause_workaround() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    if (state() == MediaPlayer::PausedState) {
+    //if (state() == MediaPlayer::PausedState) {
       setPosition(position() -1); // in Qt6 unpausing after a long pause leads to no sound until you seek or stop/start or change output
-    }
+    //}
 #endif
   }
 
