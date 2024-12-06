@@ -93,8 +93,14 @@ namespace Playback {
 
   void MediaPlayer::pause() {
     player.pause();
+    unpause_workaround();
+  }
+
+  void MediaPlayer::unpause_workaround() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    setPosition(position() -1); // in Qt6 unpausing after a long pause leads to no sound until you seek or stop/start or change output
+    if (state() == MediaPlayer::PausedState) {
+      setPosition(position() -1); // in Qt6 unpausing after a long pause leads to no sound until you seek or stop/start or change output
+    }
 #endif
   }
 
@@ -127,6 +133,7 @@ namespace Playback {
     if (ff && offset_begin > 0) {
       seek_to_offset_begin();
     }
+    unpause_workaround();
   }
 
   void MediaPlayer::stop() {

@@ -64,6 +64,7 @@ namespace Playback {
     quint64 offset_begin;
     quint64 offset_end;
     void seek_to_offset_begin();
+    void unpause_workaround();
 
   private slots:
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
