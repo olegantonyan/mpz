@@ -14,30 +14,33 @@
 #include <QDebug>
 #include <QList>
 #include <QActionGroup>
+#include <QHash>
 
 namespace AudioDeviceUi {
+  class DevicesMenu : public QMenu
+  {
+    Q_OBJECT
 
-class DevicesMenu : public QMenu
-{
-  Q_OBJECT
-public:
-  explicit DevicesMenu(QWidget *parent, Config::Local &local_c);
+  public:
+    explicit DevicesMenu(QWidget *parent, Config::Local &local_c);
 
-signals:
-  void outputDeviceChanged(QByteArray id);
+  signals:
+    void outputDeviceChanged(QByteArray id);
 
-private:
-  Config::Local &local_conf;
+  private:
+    Config::Local &local_conf;
 
-  bool isDefaultOutput() const;
-  QByteArray currentOutput() const;
+    bool isDefaultOutput() const;
+    QByteArray currentOutput() const;
 
-  bool saveDefaultOutput();
-  bool saveOutput(QByteArray id);
+    bool saveDefaultOutput();
+    bool saveOutput(QByteArray id);
 
-private slots:
-  void on_selected(QByteArray deviceid);
-};
+  private slots:
+    void on_selected(QByteArray deviceid);
+  };
+
+  static QHash<QByteArray, QString> devices_id_description_cache;
 
 } // namespace AudioDeviceUi
 

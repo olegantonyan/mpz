@@ -53,11 +53,17 @@ namespace AudioDeviceUi {
         action->setChecked(true);
         device_exists = true;
       }
+
+      devices_id_description_cache.insert(device.id(), device.description());
     }
 
     if (!device_exists) {
       auto action = new QAction(action_group);
-      action->setText(QString::fromStdString(currentOutput().toStdString()));
+      auto text = devices_id_description_cache.value(
+            currentOutput(),
+            QString::fromStdString(currentOutput().toStdString())
+            );
+      action->setText(text);
       action->setDisabled(true);
       action->setCheckable(true);
       action->setChecked(true);
