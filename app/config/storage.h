@@ -11,6 +11,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QByteArray>
+#include <QVersionNumber>
 
 namespace Config {
   class Storage {
@@ -29,8 +30,12 @@ namespace Config {
     QList<int> getIntList(const QString &key, bool *ok = nullptr) const;
     bool set(const QString &key, const QList<int> &value);
 
+    void remove(const QString &key);
+
     bool save();
     bool reload();
+
+    QVersionNumber appVersion() const;
 
   private:
     QString filepath;

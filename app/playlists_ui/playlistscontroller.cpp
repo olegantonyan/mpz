@@ -51,8 +51,9 @@ namespace PlaylistsUi {
     if (model->listSize() > 0) {
       auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
       auto item = model->itemAt(idx);
-      view->setCurrentIndex(idx);
+      view->setCurrentIndex(proxy->mapFromSource(idx));
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
+
       emit selected(item);
     }
   }

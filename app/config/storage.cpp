@@ -32,6 +32,10 @@ namespace Config {
     return QString("%1/mpz").arg(cfg_path);
   }
 
+  QVersionNumber Storage::appVersion() const {
+    return QVersionNumber::fromString(get("__app_version__").get<QString>());
+  }
+
   Value Storage::get(const QString &key, bool *ok) const {
     if (!data.contains(key)) {
       if (ok) {
@@ -90,7 +94,16 @@ namespace Config {
     return set(key, i);
   }
 
+  void Storage::remove(const QString &key) {
+    if (data.remove(key) > 0) {
+      changed = true;
+    }
+  }
+
   bool Storage::save() {
+    if (appVersion().isNull() || appVersion() != QVersionNumber::fromString(QString(VERSION))) {
+      set("__app_version__", QString(VERSION));
+    }
     if (!changed) {
       return true;
     }

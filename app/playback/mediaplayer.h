@@ -56,11 +56,15 @@ namespace Playback {
     QAudioOutput audio_output;
     QMediaDevices media_devices;
 #endif
+#ifdef QT6_STREAM_HACKS
+    bool suppress_emit_playing_state;
+    bool start_stream();
+#endif
 
     quint64 offset_begin;
     quint64 offset_end;
     void seek_to_offset_begin();
-    bool start_stream();
+    void unpause_workaround();
 
   private slots:
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

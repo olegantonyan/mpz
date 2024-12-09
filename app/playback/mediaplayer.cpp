@@ -31,6 +31,12 @@ namespace Playback {
           emit stateChanged(MediaPlayer::StoppedState);
           break;
         case QMediaPlayer::PlayingState:
+#ifdef QT6_STREAM_HACKS
+          if (suppress_emit_playing_state) {
+            suppress_emit_playing_state = false;
+            break;
+          }
+#endif
           emit stateChanged(MediaPlayer::PlayingState);
           break;
         case QMediaPlayer::PausedState:
@@ -52,6 +58,9 @@ namespace Playback {
     });
     offset_begin = 0;
     offset_end = 0;
+#ifdef QT6_STREAM_HACKS
+    suppress_emit_playing_state = false;
+#endif
   }
 
   MediaPlayer::State MediaPlayer::state() const {
@@ -84,6 +93,15 @@ namespace Playback {
 
   void MediaPlayer::pause() {
     player.pause();
+    unpause_workaround();
+  }
+
+  void MediaPlayer::unpause_workaround() {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    //if (state() == MediaPlayer::PausedState) {
+      setPosition(position() -1); // in Qt6 unpausing after a long pause leads to no sound until you seek or stop/start or change output
+    //}
+#endif
   }
 
   void Playback::MediaPlayer::seek_to_offset_begin() {
@@ -115,6 +133,7 @@ namespace Playback {
     if (ff && offset_begin > 0) {
       seek_to_offset_begin();
     }
+    unpause_workaround();
   }
 
   void MediaPlayer::stop() {
@@ -143,7 +162,10 @@ namespace Playback {
     if (track.isStream()) {
       stream.setUrl(track.url());
 #ifdef QT6_STREAM_HACKS
-      emit stateChanged(MediaPlayer::PlayingState); // optimistic state update b/c start_stream will block
+      // optimistic state update b/c start_stream will block
+      // also prevent double emit playing state after player starts playing
+      suppress_emit_playing_state = true;
+      emit stateChanged(MediaPlayer::PlayingState);
       if (start_stream()) {
         player.setSourceDevice(&stream);
       } else {
@@ -160,12 +182,12 @@ namespace Playback {
       player.setMedia(track.url());
 #endif
       if (track.isCue()) {
-        offset_begin = track.begin() * 1000;
-        offset_end = offset_begin + track.duration() * 1000;
+        offset_begin = track.begin();
+        offset_end = offset_begin + track.duration();
       }
     }
   }
-
+#ifdef QT6_STREAM_HACKS
   bool MediaPlayer::start_stream() {
     if (stream.isValidUrl()) {
       if (!stream.start()) {
@@ -184,7 +206,7 @@ namespace Playback {
     loop.exec();
     return stream.bytesAvailable() > 0;
   }
-
+#endif
   void MediaPlayer::clearTrack() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setSource(QUrl(nullptr));
