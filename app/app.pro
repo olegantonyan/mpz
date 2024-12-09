@@ -204,6 +204,12 @@ LIBS += \
 }
 
 include(../libs/qhotkey/qhotkey.pri)
+
+include(../libs/qBreakpad/qBreakpad.pri)
+
+QMAKE_LIBDIR += ../libs/qBreakpad//handler
+LIBS += -lqBreakpad
+QMAKE_LFLAGS += -z noexecstack
 # End of libraries
 
 RESOURCES += \

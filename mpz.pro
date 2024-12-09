@@ -3,7 +3,9 @@ CONFIG += ordered
 
 SUBDIRS = \
   libs/qtwaitingspinner \
-  libs/qhotkey
+  libs/qhotkey \
+  libs/qBreakpad
+
 !contains(DEFINES, USE_SYSTEM_TAGLIB) {
   SUBDIRS += libs/taglib
 }
