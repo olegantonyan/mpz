@@ -1,8 +1,8 @@
 extract_version:
   provider: 'file'
   file:
-    file: 'version.pri'
-    regex: 'VERSION=\\\\\\"(.+)\\\\\\"'
+    file: 'CMakeLists.txt'
+    regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
 rpm: &rpm
   installable_package_name: 'mpz'
