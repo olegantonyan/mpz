@@ -78,7 +78,6 @@ signals:
 public slots:
   void on_shuffleChanged(bool val);
 
-private slots:
   void Raise();
   void Quit();
   void Next();

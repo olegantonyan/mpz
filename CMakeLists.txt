@@ -22,6 +22,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
+if (UNIX AND NOT APPLE)
+  set(ENABLE_DBUS True)
+  find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
+endif()
+
 
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
@@ -91,12 +96,16 @@ set(PROJECT_SOURCES
   resources.qrc
 )
 
-if (UNIX AND NOT APPLE)
+if (ENABLE_DBUS)
   ADD_DEFINITIONS(-DMPRIS_ENABLE)
-  set(ENABLE_DBUS True)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
-  qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml mediaplayer2adaptor.h)
-  qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml playeradaptor.h)
+  if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml dbus/mpris.h Mpris)
+    qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml dbus/mpris.h Mpris)
+  else()
+    qt5_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml dbus/mpris.h Mpris)
+    qt5_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml dbus/mpris.h Mpris)
+  endif()
 endif()
 
 if (WIN32)
@@ -266,7 +275,7 @@ install(FILES app/resources/icons/24x24/mpz.png DESTINATION share/icons/hicolor/
 install(FILES app/resources/icons/22x22/mpz.png DESTINATION share/icons/hicolor/22x22/apps/)
 install(FILES app/resources/icons/16x16/mpz.png DESTINATION share/icons/hicolor/16x16/apps/)
 install(FILES license.txt DESTINATION share/licenses/${CMAKE_PROJECT_NAME})
-install(FILES CHANGELOG.md DESTINATION share/doc/packages/${CMAKE_PROJECT_NAME})
+# install(FILES CHANGELOG.md DESTINATION share/doc/packages/${CMAKE_PROJECT_NAME})
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
