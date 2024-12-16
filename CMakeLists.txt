@@ -221,7 +221,6 @@ endif()
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
 set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
 add_subdirectory(${QHOTKEY_DIR})
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${QHOTKEY_DIR})
 message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
 # ENDOF QHOTKEY
 
