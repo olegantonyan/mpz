@@ -1,7 +1,7 @@
 #include "mpris.h"
 
-#include "player_adaptor.h" // generated
-#include "mediaplayer2_adaptor.h" // generated
+#include "playeradaptor.h" // generated
+#include "mediaplayer2adaptor.h" // generated
 
 #include <QDebug>
 #include <QHostInfo>
