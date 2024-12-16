@@ -91,11 +91,11 @@ set(PROJECT_SOURCES
   resources.qrc
 )
 
-if (UNIX)
-  #ADD_DEFINITIONS(-DMPRIS_ENABLE)
-  #list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
-  #qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml mediaplayer2adaptor.h)
-  #qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml playeradaptor.h)
+if (UNIX AND NOT APPLE)
+  ADD_DEFINITIONS(-DMPRIS_ENABLE)
+  list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
+  qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml mediaplayer2adaptor.h)
+  qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml playeradaptor.h)
 endif()
 
 if (WIN32)
