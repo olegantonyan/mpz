@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+# set(CMAKE_SKIP_INSTALL_RULES True)
 
 OPTION(USE_QT5, "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
@@ -136,6 +137,30 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+
+
+
+
+
+
+
+
+
+
+
+# 3RDPATY
+if(NOT DEFINED _DISABLE_INSTALLATION)
+  # This variable is responsible for installation disabling.
+  set(_DISABLE_INSTALLATION FALSE)
+  # Replace install() with conditional installation.
+  macro(install)
+    if (NOT _DISABLE_INSTALLATION)
+      _install(${ARGN})
+    endif()
+  endmacro()
+endif()
+set(_DISABLE_INSTALLATION TRUE)
+
 # YAML-CPP
 OPTION(USE_SYSTEM_YAMLCPP, "Use Yaml-cpp provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
@@ -207,12 +232,42 @@ target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
-set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
+set(_DISABLE_INSTALLATION FALSE)
+# ENDOF 3RDPATY
+
+
+
+
+
+
+
+
+
+
+
+
+
 include(GNUInstallDirs)
 install(TARGETS ${CMAKE_PROJECT_NAME}
   BUNDLE DESTINATION .
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+install(FILES mpz.desktop DESTINATION share/applications)
+install(FILES app/resources/icons/512x512/mpz.png DESTINATION share/icons/hicolor/512x512/apps/)
+install(FILES app/resources/icons/256x256/mpz.png DESTINATION share/icons/hicolor/256x256/apps/)
+install(FILES app/resources/icons/192x192/mpz.png DESTINATION share/icons/hicolor/192x192/apps/)
+install(FILES app/resources/icons/128x128/mpz.png DESTINATION share/icons/hicolor/128x128/apps/)
+install(FILES app/resources/icons/96x96/mpz.png DESTINATION share/icons/hicolor/96x96/apps/)
+install(FILES app/resources/icons/72x72/mpz.png DESTINATION share/icons/hicolor/72x72/apps/)
+install(FILES app/resources/icons/64x64/mpz.png DESTINATION share/icons/hicolor/64x64/apps/)
+install(FILES app/resources/icons/48x48/mpz.png DESTINATION share/icons/hicolor/48x48/apps/)
+install(FILES app/resources/icons/32x32/mpz.png DESTINATION share/icons/hicolor/32x32/apps/)
+install(FILES app/resources/icons/24x24/mpz.png DESTINATION share/icons/hicolor/24x24/apps/)
+install(FILES app/resources/icons/22x22/mpz.png DESTINATION share/icons/hicolor/22x22/apps/)
+install(FILES app/resources/icons/16x16/mpz.png DESTINATION share/icons/hicolor/16x16/apps/)
+install(FILES license.txt DESTINATION share/licenses/${CMAKE_PROJECT_NAME})
+install(FILES CHANGELOG.md DESTINATION share/doc/packages/${CMAKE_PROJECT_NAME})
+
 
 if(QT_VERSION_MAJOR EQUAL 6)
   qt_finalize_executable(${CMAKE_PROJECT_NAME})
