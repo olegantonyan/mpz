@@ -87,6 +87,7 @@ set(PROJECT_SOURCES
   app/playlist_ui/trackinfodialog.ui
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
+  resources.qrc
 )
 
 if (UNIX)
@@ -94,6 +95,11 @@ if (UNIX)
   #list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   #qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml mediaplayer2adaptor.h)
   #qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml playeradaptor.h)
+endif()
+
+if (WIN32)
+  enable_language("RC")
+  list(APPEND PROJECT_SOURCES app/resources/icons/mpz.ico)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -201,6 +207,12 @@ target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
+include(GNUInstallDirs)
+install(TARGETS ${CMAKE_PROJECT_NAME}
+  BUNDLE DESTINATION .
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
 if(QT_VERSION_MAJOR EQUAL 6)
   qt_finalize_executable(${CMAKE_PROJECT_NAME})
