@@ -4,7 +4,7 @@
 # -*- makefile -*-
 
 export DESTROOT=$(CURDIR)/debian/mpz
-export QT_SELECT={{ qt_select | default: "qt5" }}
+# export QT_SELECT={{ qt_select | default: "qt5" }}
 
 {% if LDFLAGS %}
 export LDFLAGS={{ LDFLAGS }}
@@ -17,4 +17,8 @@ export CPPFLAGS={{ CPPFLAGS }}
 	dh $@
 
 override_dh_auto_install:
-	make install INSTALL_ROOT=$(DESTROOT)
+	cd build
+	make install INSTALL_ROOT=$(DESTROOT)/usr
+
+override_dh_auto_configure:
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(DESTROOT)/usr {{ CMAKE_EXTRA_CLI }} .

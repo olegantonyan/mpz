@@ -27,23 +27,24 @@ opensuse_qt6: &opensuse_qt6
 
 mageia_qt5: &mageia_qt5
   build_dependencies: [gcc, make, cmake, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
+  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
   <<: *rpm
 
 
 readhat_qt5: &readhat_qt5
   build_dependencies: [gcc, make, cmake, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
+  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
   <<: *rpm
 
 readhat_qt6: &readhat_qt6
   build_dependencies: [gcc, make, cmake, qt6-qtbase-devel, qt6-qtmultimedia-devel]
-  qmake: qmake6
   <<: *rpm
 
 
 debian_qt5: &debian_qt5
   build_dependencies: [gcc, make, cmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev]
   runtime_dependencies: [libqt5multimedia5-plugins]
-  qt_select: qt5
+  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
   <<: *deb
 
 debian_qt6: &debian_qt6
