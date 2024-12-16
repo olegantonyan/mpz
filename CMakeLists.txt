@@ -93,6 +93,7 @@ set(PROJECT_SOURCES
 
 if (UNIX AND NOT APPLE)
   ADD_DEFINITIONS(-DMPRIS_ENABLE)
+  set(ENABLE_DBUS True)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml mediaplayer2adaptor.h)
   qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml playeradaptor.h)
@@ -116,7 +117,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Multi
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
-if (DEFINED MPRIS_ENABLE)
+if (ENABLE_DBUS)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::DBus)
 endif()
 
