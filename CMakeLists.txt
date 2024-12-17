@@ -194,6 +194,7 @@ else()
   set(utf8cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/utfcpp-4.0.6/source) # dependency required by taglib
   set(TAGLIB_DIR 3rdparty/taglib-2.0.2)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
+  ADD_DEFINITIONS(-DTAGLIB_STATIC)
   add_subdirectory(${TAGLIB_DIR})
   target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
    ${TAGLIB_DIR}

@@ -1,65 +1,36 @@
-#!/bin/sh
 
-usage()
-{
-  echo "usage: $0 [OPTIONS]"
-cat << EOH
+####### Expanded from @PACKAGE_INIT@ by configure_package_config_file() #######
+####### Any changes to this file will be overwritten by the next CMake run ####
+####### The input file was taglib-config.cmake.in                            ########
 
-options:
-  [--libs]
-  [--cflags]
-  [--version]
-  [--prefix]
-EOH
-  exit 1
-}
+get_filename_component(PACKAGE_PREFIX_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../" ABSOLUTE)
 
-# Looks useless as it is, but could be replaced with a "pcfiledir" by Buildroot.
-prefix=
-exec_prefix=
+macro(set_and_check _var _file)
+  set(${_var} "${_file}")
+  if(NOT EXISTS "${_file}")
+    message(FATAL_ERROR "File or directory ${_file} referenced by variable ${_var} does not exist !")
+  endif()
+endmacro()
 
-if test -z "$prefix"; then
-  includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
-else
-  includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
-fi
-if test -z "$exec_prefix"; then
-  libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-else
-  libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
-fi
+macro(check_required_components _NAME)
+  foreach(comp ${${_NAME}_FIND_COMPONENTS})
+    if(NOT ${_NAME}_${comp}_FOUND)
+      if(${_NAME}_FIND_REQUIRED_${comp})
+        set(${_NAME}_FOUND FALSE)
+      endif()
+    endif()
+  endforeach()
+endmacro()
 
-flags=""
+####################################################################################
 
-if test $# -eq 0 ; then
-  usage
-fi
+include("${CMAKE_CURRENT_LIST_DIR}/taglib-targets.cmake")
 
-while test $# -gt 0
-do
-  case $1 in
-    --libs)
-      flags="$flags -L$libdir -ltag@TAGLIB_INSTALL_SUFFIX@ @ZLIB_LIBRARIES_FLAGS@"
-      ;;
-    --cflags)
-      flags="$flags -I$includedir -I$includedir/taglib@TAGLIB_INSTALL_SUFFIX@"
-      ;;
-    --version)
-      echo @TAGLIB_LIB_VERSION_STRING@
-      ;;
-    --prefix)
-      echo ${prefix:-@CMAKE_INSTALL_PREFIX@}
-      ;;
-    *)
-      echo "$0: unknown option $1"
-      echo
-      usage
-      ;;
-  esac
-  shift
-done
+set(TAGLIB_FOUND ${TagLib_FOUND})
+set(TAGLIB_VERSION ${TagLib_VERSION})
 
-if test -n "$flags"
-then
-  echo $flags
-fi
+check_required_components("TagLib")
+
+if(NOT TARGET TagLib::TagLib)
+  add_library(TagLib::TagLib ALIAS TagLib::tag)
+endif()
