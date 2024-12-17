@@ -14,8 +14,8 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $SRC_DIR && ninja
-windeployqt6.exe ./app/mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release
-cp ./app/mpz.exe $ARTIFACT_NAME
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release
+cp ./mpz.exe $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME
 rm -rf $HOME/Desktop/$ARTIFACT_NAME
 cp -R $ARTIFACT_NAME $HOME/Desktop/
