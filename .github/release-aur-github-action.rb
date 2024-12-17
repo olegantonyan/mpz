@@ -23,7 +23,7 @@ puts "Source tarball: #{source}"
 
 aur_repo = "ssh://aur@aur.archlinux.org/#{pkgname}.git"
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
-pkgver = /(?<=").+(?=\\\\\\\")/.match(::File.read('version.pri')).to_s.strip
+pkgver = /project\(mpz VERSION (.+) LANGUAGES/.match(::File.read('CMakeLists.txt'))[1].to_s.strip
 sha256sums = ::Digest::SHA256.hexdigest(::URI.open(source).read)
 author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
