@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-# set(CMAKE_SKIP_INSTALL_RULES True)
 
 OPTION(USE_QT5, "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
@@ -176,7 +175,6 @@ OPTION(USE_SYSTEM_YAMLCPP, "Use Yaml-cpp provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
 if(USE_SYSTEM_YAMLCPP)
   message(STATUS "using system-wide yaml-cpp")
-  ADD_DEFINITIONS(-DUSE_SYSTEM_YAMLCPP)
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.8.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
@@ -277,7 +275,6 @@ install(FILES app/resources/icons/24x24/mpz.png DESTINATION share/icons/hicolor/
 install(FILES app/resources/icons/22x22/mpz.png DESTINATION share/icons/hicolor/22x22/apps/)
 install(FILES app/resources/icons/16x16/mpz.png DESTINATION share/icons/hicolor/16x16/apps/)
 install(FILES license.txt DESTINATION share/licenses/${CMAKE_PROJECT_NAME})
-# install(FILES CHANGELOG.md DESTINATION share/doc/packages/${CMAKE_PROJECT_NAME})
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
