@@ -110,7 +110,7 @@ endif()
 
 if (WIN32)
   enable_language("RC")
-  list(APPEND PROJECT_SOURCES app/resources/icons/mpz.ico)
+  list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
