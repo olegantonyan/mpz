@@ -22,15 +22,15 @@ Similar to "album list" in Foobar2000.
 
 
 %build
-mkdir build
-cd build
+mkdir _build
+cd _build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr {{ CMAKE_EXTRA_CLI }} ..
 make %{?_smp_mflags}
 
 
 
 %install
-cd build
+cd _build
 make install
 
 
