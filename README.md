@@ -33,7 +33,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
 
-NOTE: currently on openSUSE Tumbleweed they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`
+NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
 
 ## Installation
 
