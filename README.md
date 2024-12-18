@@ -33,7 +33,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
 
-NOTE: currently on openSUSE Tumbleweed they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`
+NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
 
 ## Installation
 
@@ -73,25 +73,25 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake6 CONFIG+=release .. # use qmake-qt5 instead of qmake6 for Qt5
+cmake -DCMAKE_BUILD_TYPE=Release .. # for Qt5 add -DUSE_QT5
 make -j`nproc`
-# now you now use app/mpz binary directly
-# optionally, install to /usr:
+# now you now use mpz binary directly
+# optionally, install to /usr/local:
 sudo make install
 ```
 
 You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions. 
-To do this you have to add `DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP` to qmake cli.
+To do this you have to add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON` to cmake cli.
 
 ```
 git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-qmake6 CONFIG+=release DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP ..
+cmake -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON ..
 make -j`nproc`
-# now you now use app/mpz binary directly
-# optionally, install to /usr:
+# now you now use mpz binary directly
+# optionally, install to /usr/local:
 sudo make install
 ```
 

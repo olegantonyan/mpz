@@ -2,7 +2,7 @@
 #define SHORTCUTS_H
 
 #include "config/global.h"
-#include "QHotkey/qhotkey.h"
+#include <qhotkey.h>
 
 #include <QObject>
 #include <QWidget>

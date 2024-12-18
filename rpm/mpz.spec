@@ -9,9 +9,9 @@ Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
 %if %{with qt6}
-BuildRequires: gcc make qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
 %else
-BuildRequires: gcc make libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
 %endif
 
 
@@ -29,16 +29,16 @@ Similar to "album list" in Foobar2000.
 mkdir build
 cd build
 %if %{with qt6}
-qmake6 CONFIG+=release CONFIG+=force_debug_info ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
 %else
-qmake-qt5 CONFIG+=release CONFIG+=force_debug_info ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DUSE_QT5=ON ..
 %endif
 make %{?_smp_mflags}
 
 
 %install
 cd build
-make install INSTALL_ROOT=%{buildroot}
+make install
 
 
 %files

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(grep -oP '(?<=").+(?=\\\\\\\")' version.pri)
+VERSION=$(gawk 'match($0, /project\(mpz VERSION (.+) LANGUAGES/, m) { print m[1]; }' < CMakeLists.txt | tr -d '\n')
 TMP_DIR=$(mktemp -d -t mpz-build-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 TMP_SRC_DIR=mpz-$VERSION
 TMP_SRC_FULL_DIR=$TMP_DIR/mpz-$VERSION
@@ -13,16 +13,8 @@ echo -e "tmp dir:\t$TMP_DIR"
 echo -e "tmp source dir:\t$TMP_SRC_DIR"
 echo -e "tmp source full dir:\t$TMP_SRC_FULL_DIR"
 
-mkdir -p             $TMP_SRC_FULL_DIR/app
-cp -ar app/*         $TMP_SRC_FULL_DIR/app
-mkdir -p             $TMP_SRC_FULL_DIR/libs
-cp -ar libs/*        $TMP_SRC_FULL_DIR/libs
-cp -ar mpz.pro       $TMP_SRC_FULL_DIR
-cp -ar mpz.desktop   $TMP_SRC_FULL_DIR
-cp -ar license.txt   $TMP_SRC_FULL_DIR
-cp -ar version.pri   $TMP_SRC_FULL_DIR
-cp -ar resources.qrc $TMP_SRC_FULL_DIR
-cp -ar CHANGELOG.md  $TMP_SRC_FULL_DIR
+mkdir -p   $TMP_SRC_FULL_DIR/
+cp -ar ./* $TMP_SRC_FULL_DIR/
 ls -latrh $TMP_SRC_FULL_DIR
 
 tree $TMP_SRC_FULL_DIR
@@ -37,7 +29,7 @@ cd $SRC_DIR
 cp $SPECFILE ~/rpmbuild/SPECS
 tree ~/rpmbuild/
 
-rpmbuild --with qt6 -bs $SPECFILE
+# rpmbuild --with qt6 -bs $SPECFILE
 rpmbuild --with qt6 -bb $SPECFILE
 
 

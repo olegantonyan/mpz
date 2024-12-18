@@ -1,4 +1,4 @@
-## [1.1.0] - 
+## [1.1.0] - 2024-12-18
 
 ### BREAKING CHANGE
 - Track duration is now in milliseconds. It will be converted from seconds to milliseconds upon loading playlists from local config. Previous versions won't be able to work with updated config. To use old version after launching the new one you'll have to remove all playlists, or manually divide duration by 1000 in local config
@@ -8,6 +8,7 @@
 - unpause after a long pause in Qt6 on Linux/ffmpeg sometimes caused no sound
 
 ### Misc
+- switch to CMake
 - update built-in Taglib to 2.0.2 and Yaml cpp to 0.8.0
 - fix deprecation warnings
 - C++17

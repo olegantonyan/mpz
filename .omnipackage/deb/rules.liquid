@@ -3,9 +3,6 @@
 # Be carefull, this is a Makefile, so the indents are tabs and not spaces!
 # -*- makefile -*-
 
-export DESTROOT=$(CURDIR)/debian/mpz
-export QT_SELECT={{ qt_select | default: "qt5" }}
-
 {% if LDFLAGS %}
 export LDFLAGS={{ LDFLAGS }}
 {% endif %}
@@ -16,5 +13,5 @@ export CPPFLAGS={{ CPPFLAGS }}
 %:
 	dh $@
 
-override_dh_auto_install:
-	make install INSTALL_ROOT=$(DESTROOT)
+override_dh_auto_configure:
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr {{ CMAKE_EXTRA_CLI }}
