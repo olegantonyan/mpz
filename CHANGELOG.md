@@ -1,3 +1,12 @@
+## [1.1.1] - 
+
+### Added
+
+### Fixed
+
+### Misc
+- embedded covers use cache dir instead of tmp
+
 ## [1.1.0] - 2024-12-18
 
 ### BREAKING CHANGE

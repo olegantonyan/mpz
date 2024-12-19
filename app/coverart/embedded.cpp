@@ -23,10 +23,12 @@
 #include <QDir>
 #include <QApplication>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 namespace CoverArt {
   Embedded::Embedded() {
-    temp_dir = QDir::tempPath() + QDir::separator() + qAppName() + "_embedded_covers" + QDir::separator();
+    temp_dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "embedded_covers" + QDir::separator();
+    //QDir::tempPath() + QDir::separator() + qAppName() + "_embedded_covers" + QDir::separator();
     if (!QDir(temp_dir).exists()) {
       QDir().mkdir(temp_dir);
     }
