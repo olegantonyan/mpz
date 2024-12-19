@@ -11,6 +11,11 @@
 #include <QTranslator>
 #include <QLocale>
 #include <iostream>
+#include <QDir>
+
+#ifdef SENTRY_DSN
+  #include <sentry.h>
+#endif
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
@@ -64,6 +69,20 @@ int main(int argc, char *argv[]) {
     std::cout << a.applicationVersion().toStdString() << std::endl;
     return 0;
   }
+
+#ifdef SENTRY_DSN
+  sentry_options_t *options = sentry_options_new();
+  sentry_options_set_dsn(options, SENTRY_DSN);
+  auto crashes_path = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+  sentry_options_set_database_path(options, crashes_path.toLocal8Bit().data());
+  auto release = QString("%1@%2").arg(a.applicationName(), a.applicationVersion());
+  sentry_options_set_release(options, release.toLocal8Bit().data());
+  sentry_options_set_debug(options, 1);
+  auto handler = QDir::toNativeSeparators(a.applicationDirPath() + "/mpz_crashpad_handler");;
+  sentry_options_set_handler_path(options, QDir::toNativeSeparators(handler).toLocal8Bit().data());
+  sentry_init(options);
+  auto sentryClose = qScopeGuard([] { sentry_close(); });
+#endif
 
   Config::Global global_conf;
   Config::Local local_conf;
