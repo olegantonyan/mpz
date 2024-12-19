@@ -170,6 +170,8 @@ if(NOT DEFINED _DISABLE_INSTALLATION)
 endif()
 set(_DISABLE_INSTALLATION TRUE)
 
+set(BUILD_SHARED_LIBS OFF)
+
 # YAML-CPP
 OPTION(USE_SYSTEM_YAMLCPP, "Use Yaml-cpp provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
@@ -241,7 +243,22 @@ target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
+# SENTRY
+if (SENTRY_DSN)
+  add_definitions(-DSENTRY_DSN="${SENTRY_DSN}")
+  set(SENTRY_BACKEND crashpad)
+  set(SENTRY_INTEGRATION_QT YES)
+  set(SENTRY_BUILD_SHARED_LIBS OFF)
+  add_definitions(-DSENTRY_BUILD_STATIC=1)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sentry)
+  set(SENTRY_DIR 3rdparty/sentry-native-0.7.17)
+  add_subdirectory(${SENTRY_DIR})
+  message(STATUS "using vendored sentry from ${SENTRY_DIR}")
+endif()
+# ENDOFSENTRY
+
 set(_DISABLE_INSTALLATION FALSE)
+
 # ENDOF 3RDPATY
 
 
@@ -252,6 +269,17 @@ set(_DISABLE_INSTALLATION FALSE)
 
 
 
+cmake_host_system_information(RESULT _host_name QUERY HOSTNAME)
+string(TIMESTAMP _timestamp "%Y%m%d%H%M%S")
+set(DEBUG_SYMBOLS_FILE "${_host_name}-${_timestamp}-${CMAKE_PROJECT_NAME}.debug")
+add_custom_command(
+  TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+  COMMAND objcopy --only-keep-debug ${CMAKE_PROJECT_NAME} ${DEBUG_SYMBOLS_FILE}
+  COMMAND objcopy --strip-debug --strip-unneeded ${CMAKE_PROJECT_NAME}
+  COMMAND objcopy --add-gnu-debuglink=${DEBUG_SYMBOLS_FILE} ${CMAKE_PROJECT_NAME}
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 
 
 
@@ -261,20 +289,23 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
   BUNDLE DESTINATION .
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(FILES mpz.desktop DESTINATION share/applications)
-install(FILES app/resources/icons/512x512/mpz.png DESTINATION share/icons/hicolor/512x512/apps/)
-install(FILES app/resources/icons/256x256/mpz.png DESTINATION share/icons/hicolor/256x256/apps/)
-install(FILES app/resources/icons/192x192/mpz.png DESTINATION share/icons/hicolor/192x192/apps/)
-install(FILES app/resources/icons/128x128/mpz.png DESTINATION share/icons/hicolor/128x128/apps/)
-install(FILES app/resources/icons/96x96/mpz.png DESTINATION share/icons/hicolor/96x96/apps/)
-install(FILES app/resources/icons/72x72/mpz.png DESTINATION share/icons/hicolor/72x72/apps/)
-install(FILES app/resources/icons/64x64/mpz.png DESTINATION share/icons/hicolor/64x64/apps/)
-install(FILES app/resources/icons/48x48/mpz.png DESTINATION share/icons/hicolor/48x48/apps/)
-install(FILES app/resources/icons/32x32/mpz.png DESTINATION share/icons/hicolor/32x32/apps/)
-install(FILES app/resources/icons/24x24/mpz.png DESTINATION share/icons/hicolor/24x24/apps/)
-install(FILES app/resources/icons/22x22/mpz.png DESTINATION share/icons/hicolor/22x22/apps/)
-install(FILES app/resources/icons/16x16/mpz.png DESTINATION share/icons/hicolor/16x16/apps/)
-install(FILES license.txt DESTINATION share/licenses/${CMAKE_PROJECT_NAME})
+install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
+install(FILES app/resources/icons/512x512/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/apps/)
+install(FILES app/resources/icons/256x256/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps/)
+install(FILES app/resources/icons/192x192/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/192x192/apps/)
+install(FILES app/resources/icons/128x128/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps/)
+install(FILES app/resources/icons/96x96/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/96x96/apps/)
+install(FILES app/resources/icons/72x72/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/72x72/apps/)
+install(FILES app/resources/icons/64x64/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps/)
+install(FILES app/resources/icons/48x48/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps/)
+install(FILES app/resources/icons/32x32/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps/)
+install(FILES app/resources/icons/24x24/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/24x24/apps/)
+install(FILES app/resources/icons/22x22/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/22x22/apps/)
+install(FILES app/resources/icons/16x16/mpz.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16x16/apps/)
+install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/licenses/${CMAKE_PROJECT_NAME})
+if (SENTRY_DSN)
+  install(FILES ${CMAKE_BINARY_DIR}/${SENTRY_DIR}/crashpad_build/handler/crashpad_handler DESTINATION ${CMAKE_INSTALL_BINDIR} RENAME mpz_crashpad_handler PERMISSIONS WORLD_EXECUTE GROUP_EXECUTE OWNER_EXECUTE)
+endif()
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
