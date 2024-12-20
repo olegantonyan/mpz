@@ -65,7 +65,7 @@ Grab installer or portable "dynamic" binary from releases page: https://github.c
 
 #### From sources
 
-Dependencies: gcc, make, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 on and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 openSUSE).
+Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 on and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 openSUSE).
 Packages' names may differ in different distros. Both Qt6 and Qt5 are supported.
 
 ```
