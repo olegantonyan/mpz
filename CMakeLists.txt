@@ -272,11 +272,12 @@ set(_DISABLE_INSTALLATION FALSE)
 cmake_host_system_information(RESULT _host_name QUERY HOSTNAME)
 string(TIMESTAMP _timestamp "%Y%m%d%H%M%S")
 set(DEBUG_SYMBOLS_FILE "${_host_name}-${_timestamp}-${CMAKE_PROJECT_NAME}.debug")
+set(EXECUTABLE_FILENAME ${CMAKE_PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
 add_custom_command(
   TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-  COMMAND objcopy --only-keep-debug ${CMAKE_PROJECT_NAME} ${DEBUG_SYMBOLS_FILE}
-  COMMAND objcopy --strip-debug --strip-unneeded ${CMAKE_PROJECT_NAME}
-  COMMAND objcopy --add-gnu-debuglink=${DEBUG_SYMBOLS_FILE} ${CMAKE_PROJECT_NAME}
+  COMMAND objcopy --only-keep-debug ${EXECUTABLE_FILENAME} ${DEBUG_SYMBOLS_FILE}
+  COMMAND objcopy --strip-debug --strip-unneeded ${EXECUTABLE_FILENAME}
+  COMMAND objcopy --add-gnu-debuglink=${DEBUG_SYMBOLS_FILE} ${EXECUTABLE_FILENAME}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
