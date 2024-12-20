@@ -61,7 +61,7 @@ makepkg -si
 
 #### Windows
 
-Grab installer or portable "dynamic" binary from releases page: https://github.com/olegantonyan/mpz/releases/
+Grab installer or portable "dynamic" binary from releases page: https://github.com/olegantonyan/mpz/releases/. Only Qt5 version available for 32-bit Windows. On 64-bit prefer Qt6 version.
 
 #### From sources
 
