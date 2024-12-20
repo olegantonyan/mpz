@@ -244,7 +244,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY
 
-
+add_library(crashpad INTERFACE)
+add_dependencies(crashpad crashpad_init)
+target_link_libraries(crashpad INTERFACE ${OUTPUT_LIBS})
+target_include_directories(crashpad INTERFACE ${SOURCE_DIR})
+target_include_directories(crashpad INTERFACE ${SOURCE_DIR}/third_party/mini_chromium/mini_chromium)
 
 
 
