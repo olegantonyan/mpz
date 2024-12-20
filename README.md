@@ -27,7 +27,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 ## Limitations
 
-- Uses external codecs installed on your OS (through QtMultimedia, using GStreamer backend on Linux);
+- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
 - Lacks some "expected" features like tracks rearranging within playlist;
 - Global hotkeys don't work in Wayland.
 
@@ -65,8 +65,8 @@ Grab installer or portable "dynamic" binary from releases page: https://github.c
 
 #### From sources
 
-Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 on and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 openSUSE).
-Packages' names may differ in different distros. Both Qt6 and Qt5 are supported.
+Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 on openSUSE).
+Packages' names may differ in different distros.
 
 ```
 git clone git@github.com:olegantonyan/mpz.git
