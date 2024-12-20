@@ -245,7 +245,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 
 # SENTRY
 if (SENTRY_DSN)
-  set(CRASHPAD_ZLIB_SYSTEM_DEFAULT OFF)
   add_definitions(-DSENTRY_DSN="${SENTRY_DSN}")
   set(SENTRY_BACKEND crashpad)
   set(SENTRY_INTEGRATION_QT YES)
