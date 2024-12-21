@@ -61,7 +61,7 @@ makepkg -si
 
 #### Windows
 
-Grab installer or portable "dynamic" binary from releases page: https://github.com/olegantonyan/mpz/releases/. Only Qt5 version available for 32-bit Windows. On 64-bit prefer Qt6 version.
+Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
 #### From sources
 
@@ -80,7 +80,7 @@ make -j`nproc`
 sudo make install
 ```
 
-You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions. 
+You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions.
 To do this you have to add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON` to cmake cli.
 
 ```
