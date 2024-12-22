@@ -22,7 +22,7 @@ VERSION=$(gawk 'match($0, /project\(mpz VERSION (.+) LANGUAGES/, m) { print m[1]
 TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
-ARTIFACT_NAME=mpz-$VERSION-win32-qt5-dynamic/
+ARTIFACT_NAME=mpz-$VERSION-win32-qt5-portable/
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -38,4 +38,4 @@ echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 
-# gh release upload 1.0.19 ~/Desktop/mpz-1.0.19-win32-dynamic.zip
+# gh release upload 1.0.19 ~/Desktop/mpz-1.0.19-win32-portable.zip

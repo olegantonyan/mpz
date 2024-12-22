@@ -27,7 +27,7 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 
 ## Limitations
 
-- Uses external codecs installed on your OS (through QtMultimedia, using GStreamer backend on Linux);
+- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
 - Lacks some "expected" features like tracks rearranging within playlist;
 - Global hotkeys don't work in Wayland.
 
@@ -61,12 +61,12 @@ makepkg -si
 
 #### Windows
 
-Grab installer or portable "dynamic" binary from releases page: https://github.com/olegantonyan/mpz/releases/. Only Qt5 version available for 32-bit Windows. On 64-bit prefer Qt6 version.
+Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
 #### From sources
 
-Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 on and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 openSUSE).
-Packages' names may differ in different distros. Both Qt6 and Qt5 are supported.
+Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 on openSUSE).
+Packages' names may differ in different distros.
 
 ```
 git clone git@github.com:olegantonyan/mpz.git
@@ -80,7 +80,7 @@ make -j`nproc`
 sudo make install
 ```
 
-You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions. 
+You can also link against shared libraries Taglib and/or Yaml-cpp installed on your OS instead of using vendored statically compiled versions.
 To do this you have to add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON` to cmake cli.
 
 ```
