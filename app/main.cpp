@@ -12,6 +12,17 @@
 #include <QLocale>
 #include <iostream>
 
+#include "libfault++.h"
+
+void setup_crash_reports() {
+  libfault::init();
+  libfault::app_name("mpz");  /* Name put into log */
+  libfault::app_version(VERSION);               /* Version put into log */
+  libfault::log_name("/tmp/libfault-test1."); /* Prefix for log files */
+  libfault::bugreport_url("https://foo.com/bugs.cgi?report=new");
+  libfault::install();
+}
+
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
   qRegisterMetaType<StreamMetaData>("StreamMetaData");
@@ -52,6 +63,7 @@ int ipc_port(Config::Global &global_conf) {
 int main(int argc, char *argv[]) {
   //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
+  setup_crash_reports();
   RNJesus::seed();
 
   QApplication a(argc, argv);

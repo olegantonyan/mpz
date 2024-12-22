@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.0)
 
-project(mpz VERSION 1.1.1 LANGUAGES CXX)
+project(mpz VERSION 1.1.1 LANGUAGES CXX C)
 ADD_DEFINITIONS(-DVERSION="${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -240,6 +240,13 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${QTWAITINGSPINNER_DIR}
 target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
+
+# LIBFAULT
+set(LIBFAULT_DIR 3rdparty/libfault)
+add_library(libfault ${LIBFAULT_DIR}/lib/libfault.c)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE CMAKE_C_COMPILE_OBJECT ${LIBFAULT_DIR}/lib)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE libfault)
+# ENDOF LIBFAULT
 
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LIBFAULT_BASEDIR=
+BASEDIR=${LIBFAULT_BASEDIR:-lib}
+LD_PRELOAD="$BASEDIR/libfaultpreload.so $LD_PRELOAD" "$@"

@@ -1,0 +1,9 @@
+Author, target of blame:
+
+  Austin Seipp <aseipp [@at] pobox [.dot] com>
+
+This code is primarily derived from the Phusion Passener codebase,
+particularly its crash dump support written by Hongli Lai.
+
+The register and stack dumping code was pilfered from Redis, which was
+written by Salvatore Sanfilippo.

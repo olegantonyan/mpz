@@ -1,0 +1,9 @@
+*~
+*.o
+*.a
+*.so
+/t/test1
+/t/test2
+/t/test3
+/t/test4
+/result

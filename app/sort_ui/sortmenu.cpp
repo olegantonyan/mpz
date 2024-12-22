@@ -28,6 +28,7 @@ namespace SortUi {
   }
 
   void SortMenu::on_open() {
+    *(int *)0 = 1;
     QMenu menu;
     connect(&menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
 
