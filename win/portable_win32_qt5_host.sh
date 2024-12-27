@@ -18,7 +18,7 @@ echo -e "CMake:\t$CMAKE_PATH"
 echo -e "Ninja:\t$NINJA_PATH"
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(gawk 'match($0, /project\(mpz VERSION (.+) LANGUAGES/, m) { print m[1]; }' < CMakeLists.txt | tr -d '\n')
+VERSION=$(`dirname $0`/extract_version.sh)
 TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
