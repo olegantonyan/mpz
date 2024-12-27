@@ -3,7 +3,7 @@
 source `dirname $0`/_env.sh
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(`dirname $0`/extract_version.sh)
+VERSION=$(`dirname $0`/_extract_version.sh)
 TMP_DIR=$(mktemp -d -t mpz-build-win64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 

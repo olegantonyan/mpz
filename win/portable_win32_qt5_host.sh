@@ -18,7 +18,7 @@ echo -e "CMake:\t$CMAKE_PATH"
 echo -e "Ninja:\t$NINJA_PATH"
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(`dirname $0`/extract_version.sh)
+VERSION=$(`dirname $0`/_extract_version.sh)
 TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
