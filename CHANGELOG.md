@@ -3,6 +3,7 @@
 ### Added
 
 ### Fixed
+- fix current time on tray menu
 
 ### Misc
 - embedded covers use cache dir instead of tmp

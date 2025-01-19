@@ -90,7 +90,7 @@ void TrayIcon::on_playerProgress(const Track &track, int current_seconds) {
 }
 
 QString TrayIcon::time_text(const Track &track, int pos) const {
-  return QString("%1/%2").arg(Track::formattedTime(static_cast<quint32>(pos))).arg(track.formattedDuration());
+  return QString("%1/%2").arg(Track::formattedTime(static_cast<quint64>(pos * 1000))).arg(track.formattedDuration());
 }
 
 void TrayIcon::update_menu_now_playing(const Track &track, int pos) {
