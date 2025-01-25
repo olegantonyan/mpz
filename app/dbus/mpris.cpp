@@ -22,16 +22,16 @@ Mpris::Mpris(Playback::Controller *pl, QObject *parent) : QObject(parent), playe
 
   connect(player, &Playback::Controller::started, [=](const Track &t) {
     Q_UNUSED(t)
-    notify("PlaybackStatus", PlaybackStatus());
+    notify("PlaybackStatus", "Playing");
     notify("Metadata", Metadata());
   });
   connect(player, &Playback::Controller::paused, [=](const Track &t) {
     Q_UNUSED(t)
-    notify("PlaybackStatus", PlaybackStatus());
+    notify("PlaybackStatus", "Paused");
     notify("Metadata", Metadata());
   });
   connect(player, &Playback::Controller::stopped, [=]() {
-    notify("PlaybackStatus", PlaybackStatus());
+    notify("PlaybackStatus", "Stopped");
     notify("Metadata", Metadata());
   });
   connect(player, &Playback::Controller::trackChanged, [=](const Track &t) {

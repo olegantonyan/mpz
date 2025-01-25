@@ -4,6 +4,7 @@
 
 ### Fixed
 - fix current time on tray menu
+- fix MPRIS "Stop" when playing radio stream
 
 ### Misc
 - embedded covers use cache dir instead of tmp
