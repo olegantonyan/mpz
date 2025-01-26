@@ -158,7 +158,7 @@ void Mpris::SetVolume(double value) {
 }
 
 qlonglong Mpris::Position() const {
-  return player->position() * 1000;
+  return player->position() * 1000000;
 }
 
 bool Mpris::CanGoNext() const {
@@ -242,14 +242,14 @@ void Mpris::Play() {
 }
 
 void Mpris::Seek(qlonglong offset) {
-  int by = static_cast<int>(offset / 1000);
-  player->seek(player->position() + by);
+  int by = static_cast<int>(offset / 1000000);
+  player->seek(by);
 }
 
 void Mpris::SetPosition(const QDBusObjectPath &trackId, qlonglong offset) {
   Q_UNUSED(trackId)
-  int value = static_cast<int>(offset / 1000);
-  player->seek(value);
+  //int value = static_cast<int>(offset / 1000000);
+  //player->seek(value);
   Seek(offset);
 }
 
