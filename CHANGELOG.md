@@ -1,6 +1,4 @@
-## [1.1.1] - 
-
-### Added
+## [1.1.1] - 2025-01-31
 
 ### Fixed
 - fix current time on tray menu
