@@ -132,6 +132,8 @@ endif()
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
+add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
