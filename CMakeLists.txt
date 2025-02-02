@@ -195,6 +195,7 @@ else()
   set(TAGLIB_DIR 3rdparty/taglib-2.0.2)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   ADD_DEFINITIONS(-DTAGLIB_STATIC)
+  set(BUILD_TESTING OFF)
   add_subdirectory(${TAGLIB_DIR})
   target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
    ${TAGLIB_DIR}
