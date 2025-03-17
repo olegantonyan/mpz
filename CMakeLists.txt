@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.10.0)
 
 project(mpz VERSION 1.1.2 LANGUAGES CXX)
 ADD_DEFINITIONS(-DVERSION="${PROJECT_VERSION}")
