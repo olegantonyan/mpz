@@ -4,13 +4,20 @@ extract_version:
     file: 'CMakeLists.txt'
     regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
+common: &common
+  package_name: mpz
+  maintainer: 'Oleg Antonyan <oleg.b.antonyan@gmail.com>'
+  homepage: https://mpz-player.org/
+  summary: Music player for the large local collections
+  description: "Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to \"album list\" in Foobar2000."
+
 rpm: &rpm
-  installable_package_name: 'mpz'
+  <<: *common
   rpm:
     spec_template: '.omnipackage/mpz.spec.liquid'
 
 deb: &deb
-  installable_package_name: 'mpz'
+  <<: *common
   deb:
     debian_templates: '.omnipackage/deb'
 
