@@ -38,6 +38,9 @@ namespace Playback {
           }
 #endif
           emit stateChanged(MediaPlayer::PlayingState);
+          if (unpause_workaround_needed_on_playing_state_change) {
+            unpause_workaround();
+          }
           break;
         case QMediaPlayer::PausedState:
           emit stateChanged(MediaPlayer::PausedState);
@@ -161,6 +164,7 @@ namespace Playback {
     stream.stop();
     if (track.isStream()) {
       stream.setUrl(track.url());
+      unpause_workaround_needed_on_playing_state_change = false;
 #ifdef QT6_STREAM_HACKS
       // optimistic state update b/c start_stream will block
       // also prevent double emit playing state after player starts playing
@@ -175,7 +179,7 @@ namespace Playback {
       player.setMedia(track.url(), &stream);
 #endif
     } else {
-
+      unpause_workaround_needed_on_playing_state_change = true;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       player.setSource(track.url());
 #else

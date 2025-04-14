@@ -60,6 +60,7 @@ namespace Playback {
     bool suppress_emit_playing_state;
     bool start_stream();
 #endif
+    bool unpause_workaround_needed_on_playing_state_change;
 
     quint64 offset_begin;
     quint64 offset_end;
