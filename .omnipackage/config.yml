@@ -143,8 +143,8 @@ builds:
   <<: *mageia_qt5
 
 - distro: 'mageia_cauldron'
-  CMAKE_EXTRA_CLI: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
   <<: *mageia_qt5
+  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5'
 
 - distro: 'mageia_9'
   <<: *mageia_qt5
