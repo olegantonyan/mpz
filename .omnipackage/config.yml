@@ -139,9 +139,6 @@ builds:
 - distro: 'rockylinux_9'
   <<: *readhat_qt5
 
-- distro: 'mageia_8'
-  <<: *mageia_qt5
-
 - distro: 'mageia_cauldron'
   <<: *mageia_qt5
   CMAKE_EXTRA_CLI: '-DUSE_QT5=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5'
