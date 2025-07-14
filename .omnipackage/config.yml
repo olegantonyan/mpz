@@ -105,6 +105,9 @@ builds:
 - distro: 'ubuntu_24.04'
   <<: *debian_qt6
 
+- distro: 'ubuntu_25.04'
+  <<: *debian_qt6
+
 - distro: 'fedora_38'
   <<: *readhat_qt5
 
