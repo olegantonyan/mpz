@@ -21,15 +21,16 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent = nullptr);
 
   signals:
-    void createNewPlaylist(const QList<QDir> &filepaths);
+    void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
 
   private slots:
     void on_search(const QString& term);
     void on_doubleclick(const QModelIndex &index);
+    void on_createNewPlaylist(const QList<QDir> &filepaths);
 
   private:
     QTreeView *view;
@@ -39,6 +40,7 @@ namespace DirectoryUi {
     bool restore_scroll_once;
     DirectoryContextMenu *context_menu;
     DirectoryUi::SortMenu *sort_menu;
+    QComboBox *libswitch;
 
     void settingsDialog(QComboBox *libswitch);
     

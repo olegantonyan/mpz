@@ -140,10 +140,11 @@ namespace PlaylistsUi {
     model->higlight(nullptr);
   }
 
-  void Controller::on_createPlaylist(const QList<QDir> &filepaths) {
+  void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
+    qDebug() << libraryDir;
     auto pl = new Playlist::Playlist();
     connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    pl->loadAsync(filepaths);
+    pl->loadAsync(filepaths, libraryDir);
     spinner->show();
   }
 

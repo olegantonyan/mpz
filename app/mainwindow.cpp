@@ -466,7 +466,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
     loop.quit();
   });
 
-  emit library->createNewPlaylist(preload_files);
+  emit library->createNewPlaylist(preload_files, "");
   loop.exec();
   if (pl != nullptr && pl->tracks().size() > 0) {
     emit playlist->activated(pl->tracks().first());

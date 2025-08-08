@@ -36,14 +36,14 @@ namespace Playlist {
     return tracks_list;
   }
 
-  void Playlist::load(const QDir &path) {
-    rename(nameBy(path));
+  void Playlist::load(const QDir &path, const QString &libraryDir) {
+    rename(nameBy(path, libraryDir));
     concat(path);
   }
 
-  void Playlist::loadAsync(const QList<QDir> &dirs) {
+  void Playlist::loadAsync(const QList<QDir> &dirs, const QString &libraryDir) {
     (void)QtConcurrent::run([=]() {
-      load(dirs);
+      load(dirs, libraryDir);
       emit loadAsyncFinished(this);
     });
   }
@@ -52,11 +52,11 @@ namespace Playlist {
     tracks_list.append(tracks);
   }
 
-  void Playlist::load(const QList<QDir> &dirs) {
+  void Playlist::load(const QList<QDir> &dirs, const QString &libraryDir) {
     QStringList names;
     for (auto i : dirs) {
       load(i);
-      names << nameBy(i);
+      names << nameBy(i, libraryDir);
     }
     rename(names.join(", "));
   }
@@ -156,8 +156,13 @@ namespace Playlist {
     }
   }
 
-  QString Playlist::nameBy(const QDir &path) {
-    return path.dirName();
+  QString Playlist::nameBy(const QDir &path, const QString &libraryDir) {
+    auto result = path.absolutePath().remove(libraryDir);
+    if (result.startsWith("/")) {
+      return result.remove(0, 1);
+    } else {
+      return result;
+    }
   }
 }
 

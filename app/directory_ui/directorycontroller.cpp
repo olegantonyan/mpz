@@ -16,11 +16,12 @@
 #include <QFileInfo>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent) :
+Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
-    local_conf(local_cfg) {
+    local_conf(local_cfg),
+    libswitch(_libswitch) {
     Q_ASSERT(search);
     Q_ASSERT(view);
 
@@ -67,7 +68,7 @@ namespace DirectoryUi {
     search->setClearButtonEnabled(true);
 
     context_menu = new DirectoryContextMenu(model, view, search, this);
-    connect(context_menu, &DirectoryContextMenu::createNewPlaylist, this, &Controller::createNewPlaylist);
+    connect(context_menu, &DirectoryContextMenu::createNewPlaylist, this, &Controller::on_createNewPlaylist);
     connect(context_menu, &DirectoryContextMenu::appendToCurrentPlaylist, this, &Controller::appendToCurrentPlaylist);
     connect(view, &QTreeView::customContextMenuRequested, context_menu, &DirectoryContextMenu::show);
 
@@ -78,7 +79,7 @@ namespace DirectoryUi {
     });
 
     connect(libcfg, &QToolButton::clicked, [=]() {
-      settingsDialog(libswitch);
+      settingsDialog(_libswitch);
     });
 
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
@@ -108,7 +109,7 @@ namespace DirectoryUi {
     auto filepath = model->filePath(index);
     QFileInfo fi(filepath);
     if (fi.exists() && fi.isFile()) {
-      emit createNewPlaylist({ QDir(filepath) });
+      on_createNewPlaylist({ QDir(filepath) });
     }
   }
 
@@ -119,7 +120,7 @@ namespace DirectoryUi {
         auto index = view->indexAt(me->pos());
         if (index.isValid()) {
           auto filepath = QDir(model->filePath(index));
-          emit createNewPlaylist({filepath});
+          on_createNewPlaylist({filepath});
         }
       }
       if (me->button() == Qt::BackButton) {
@@ -152,5 +153,10 @@ namespace DirectoryUi {
         }
       }
     }
+  }
+
+  void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {
+    auto libraryDir = local_conf.libraryPaths()[libswitch->currentIndex()];
+    emit createNewPlaylist(filepaths, libraryDir);
   }
 }
