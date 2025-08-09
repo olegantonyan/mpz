@@ -74,9 +74,9 @@ builds:
   <<: *opensuse_qt5
 
 - distro: 'opensuse_tumbleweed'
+  CMAKE_EXTRA_CLI: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5' # -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON
   <<: *opensuse_qt6
   #build_dependencies: [gcc, make, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, yaml-cpp-devel, libtag-devel]
-  #qmake_extra_args: "DEFINES+=USE_SYSTEM_TAGLIB DEFINES+=USE_SYSTEM_YAMLCPP"
 
 - distro: 'debian_10'
   <<: *debian_qt5
