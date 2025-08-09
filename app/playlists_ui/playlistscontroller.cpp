@@ -141,7 +141,6 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
-    qDebug() << libraryDir;
     auto pl = new Playlist::Playlist();
     connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
     pl->loadAsync(filepaths, libraryDir);
@@ -176,7 +175,7 @@ namespace PlaylistsUi {
   void Controller::on_playlistLoadFinished(Playlist::Playlist *pl) {
     disconnect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
     auto item = std::shared_ptr<Playlist::Playlist>(pl);
-    auto index = model->append(item);
+    auto index = proxy->mapFromSource(model->append(item));
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});

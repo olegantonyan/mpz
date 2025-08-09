@@ -2,9 +2,13 @@
 
 ### Added
 
+- when creating playlist from directory tree name it as full relative to library path
+
 ### Fixed
 
 ### Misc
+
+- update built-in Taglib to 2.1.1
 
 ## [1.1.1] - 2025-01-31
 

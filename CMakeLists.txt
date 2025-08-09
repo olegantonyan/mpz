@@ -192,7 +192,7 @@ if (USE_SYSTEM_TAGLIB)
   ADD_DEFINITIONS(-DUSE_SYSTEM_TAGLIB)
 else()
   set(utf8cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/utfcpp-4.0.6/source) # dependency required by taglib
-  set(TAGLIB_DIR 3rdparty/taglib-2.0.2)
+  set(TAGLIB_DIR 3rdparty/taglib-2.1.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   ADD_DEFINITIONS(-DTAGLIB_STATIC)
   set(BUILD_TESTING OFF)
