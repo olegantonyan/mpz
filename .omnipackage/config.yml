@@ -90,6 +90,9 @@ builds:
 - distro: 'debian_12'
   <<: *debian_qt5
 
+- distro: 'debian_13'
+  <<: *debian_qt6
+
 - distro: 'debian_testing'
   <<: *debian_qt6
 
