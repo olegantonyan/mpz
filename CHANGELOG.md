@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- added hack for Linux PipeWire to avoid output streams duplication when unpausing
+
 ### Misc
 
 - update built-in Taglib to 2.1.1
