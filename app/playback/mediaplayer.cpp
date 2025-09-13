@@ -283,7 +283,17 @@ namespace Playback {
     auto devices = QMediaDevices::audioOutputs();
     for (auto device : devices) {
       if (device.id() == output_device_id) {
-        audio_output.setDevice(QMediaDevices::defaultAudioOutput()); // hack to force device change if it was disconnected
+        // hack to force device change if it was disconnected
+        // desperation delay because sometimes it switches to default and keep playing through it
+        audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+        QTimer timer;
+        QEventLoop loop;
+        timer.setSingleShot(true);
+        timer.setInterval(100);
+        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        timer.start();
+        loop.exec();
+
         audio_output.setDevice(device);
         break;
       }
