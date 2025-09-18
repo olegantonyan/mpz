@@ -12,7 +12,7 @@
   #include <QAudioDevice>
   #define QT6_STREAM_HACKS
 #endif
-#if defined(Q_OS_LINUX) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)) && !defined(DISABLE_PIPEWIRE_STREAM_NAME_HACK)
+#if defined(Q_OS_LINUX) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)) && defined(ENABLE_PIPEWIRE_STREAM_NAME_HACK)
   #define PIPEWIRE_STREAM_NAME_HACK
 #endif
 

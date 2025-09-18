@@ -6,7 +6,7 @@
 
 ### Fixed
 
-- added hack for Linux PipeWire to avoid output streams duplication when unpausing
+- added optional hack for Linux PipeWire to avoid output streams duplication when unpausing, enabled at compile time via ENABLE_PIPEWIRE_STREAM_NAME_HACK macro 
 
 ### Misc
 
