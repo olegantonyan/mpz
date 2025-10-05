@@ -138,7 +138,6 @@ bool Mpris::Shuffle() const {
 }
 
 void Mpris::SetShuffle(bool value) {
-  IGNORE_BLACKLISTED_SENDER
   emit shuffleChanged(value);
 }
 
