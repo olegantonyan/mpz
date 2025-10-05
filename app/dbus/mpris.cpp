@@ -15,6 +15,8 @@ static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
 static const auto MPRIS_ENTRY = "org.mpris.MediaPlayer2.Player";
 static const auto FREEDESKTOP_PATH = "org.freedesktop.DBus.Properties";
 
+#define IGNORE_BLACKLISTED_SENDER if (isBlacklistedSender()) { return; }
+
 Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QObject(parent), player(pl), global_conf(c), shuffle(false) {
   register_to_dbus();
 
@@ -136,6 +138,7 @@ bool Mpris::Shuffle() const {
 }
 
 void Mpris::SetShuffle(bool value) {
+  IGNORE_BLACKLISTED_SENDER
   emit shuffleChanged(value);
 }
 
@@ -216,37 +219,27 @@ void Mpris::Raise() {
 }
 
 void Mpris::Quit() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit quit();
 }
 
 void Mpris::Next() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit next();
 }
 
 void Mpris::Previous() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit prev();
 }
 
 void Mpris::Pause() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit pause();
 }
 
 void Mpris::PlayPause() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   if (player->isStopped()) {
     emit play();
   } else {
@@ -255,32 +248,24 @@ void Mpris::PlayPause() {
 }
 
 void Mpris::Stop() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit stop();
 }
 
 void Mpris::Play() {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   emit play();
 }
 
 void Mpris::Seek(qlonglong offset) {
-  if (isBlacklistedSender()) {
-    return;
-  }
+  IGNORE_BLACKLISTED_SENDER
   int by = static_cast<int>(offset / 1000000);
   player->seek(by);
 }
 
 void Mpris::SetPosition(const QDBusObjectPath &trackId, qlonglong offset) {
-  if (isBlacklistedSender()) {
-    return;
-  }
   Q_UNUSED(trackId)
+  IGNORE_BLACKLISTED_SENDER
   //int value = static_cast<int>(offset / 1000000);
   //player->seek(value);
   Seek(offset);
