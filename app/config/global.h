@@ -49,6 +49,9 @@ namespace Config {
 
     int playlistRowHeight() const;
 
+    QStringList mprisBlacklist() const;
+    bool savemMrisBlacklist(const QStringList &arg);
+
   private:
     Config::Storage storage;
   };

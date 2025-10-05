@@ -5,13 +5,17 @@
 
 #include <QDebug>
 #include <QHostInfo>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusReply>
+#include <QFile>
 
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
 static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
 static const auto MPRIS_ENTRY = "org.mpris.MediaPlayer2.Player";
 static const auto FREEDESKTOP_PATH = "org.freedesktop.DBus.Properties";
 
-Mpris::Mpris(Playback::Controller *pl, QObject *parent) : QObject(parent), player(pl), shuffle(false) {
+Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QObject(parent), player(pl), global_conf(c), shuffle(false) {
   register_to_dbus();
 
   connect(this, &Mpris::play, player->controls().play, &QToolButton::click);
@@ -47,6 +51,8 @@ Mpris::Mpris(Playback::Controller *pl, QObject *parent) : QObject(parent), playe
   connect(player, &Playback::Controller::seeked, [&](int val) {
     emit Seeked(val * 1000000);
   });
+
+  qDebug() << "MPRIS blacklist: " << global_conf.mprisBlacklist();
 }
 
 bool Mpris::CanQuit() const {
@@ -210,22 +216,37 @@ void Mpris::Raise() {
 }
 
 void Mpris::Quit() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit quit();
 }
 
 void Mpris::Next() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit next();
 }
 
 void Mpris::Previous() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit prev();
 }
 
 void Mpris::Pause() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit pause();
 }
 
 void Mpris::PlayPause() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   if (player->isStopped()) {
     emit play();
   } else {
@@ -234,19 +255,31 @@ void Mpris::PlayPause() {
 }
 
 void Mpris::Stop() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit stop();
 }
 
 void Mpris::Play() {
+  if (isBlacklistedSender()) {
+    return;
+  }
   emit play();
 }
 
 void Mpris::Seek(qlonglong offset) {
+  if (isBlacklistedSender()) {
+    return;
+  }
   int by = static_cast<int>(offset / 1000000);
   player->seek(by);
 }
 
 void Mpris::SetPosition(const QDBusObjectPath &trackId, qlonglong offset) {
+  if (isBlacklistedSender()) {
+    return;
+  }
   Q_UNUSED(trackId)
   //int value = static_cast<int>(offset / 1000000);
   //player->seek(value);
@@ -282,4 +315,32 @@ void Mpris::notify(const QString &name, const QVariant &value) {
   if (!QDBusConnection::sessionBus().send(msg)) {
     qWarning() <<"cannot send message to dbus";
   }
+}
+
+bool Mpris::isBlacklistedSender() {
+  const QString sender = message().service();
+  if (sender.isEmpty() || sender.isNull()) {
+    return false;
+  }
+  QDBusMessage pid_msg = QDBusMessage::createMethodCall(
+    "org.freedesktop.DBus",
+    "/org/freedesktop/DBus",
+    "org.freedesktop.DBus",
+    "GetConnectionUnixProcessID");
+  pid_msg << sender;
+  QDBusReply<uint> pid_reply = QDBusConnection::sessionBus().call(pid_msg);
+
+  if (pid_reply.isValid()) {
+    QFile cmd_line(QString("/proc/%1/cmdline").arg(pid_reply.value()));
+    if (cmd_line.open(QIODevice::ReadOnly)) {
+      auto line = QString::fromUtf8(cmd_line.readAll());
+      for (auto item : global_conf.mprisBlacklist()) {
+        if (line.contains(item)) {
+          qDebug() << "MPRIS: ignoring blacklisted sender " << line << sender;
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }

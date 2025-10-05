@@ -117,4 +117,25 @@ namespace Config {
   int Global::playlistRowHeight() const {
     return storage.get("playlist_row_height").get<int>();
   }
+
+  QStringList Global::mprisBlacklist() const {
+    auto raw = storage.get("mpris_blacklist");
+    QStringList result;
+    if (raw.listType() != Config::Value::String) {
+      return result;
+    }
+    auto list = raw.get<QList<Config::Value> >();
+    for (auto i : list) {
+      result << i.get<QString>();
+    }
+    return result;
+  }
+
+  bool Global::savemMrisBlacklist(const QStringList &arg) {
+    QList<Config::Value> list;
+    for (auto i : arg) {
+      list << Config::Value(i);
+    }
+    return storage.set("mpris_blacklist", Config::Value(list));
+  }
 }

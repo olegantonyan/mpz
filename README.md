@@ -152,4 +152,14 @@ The sum of `width_percent` of all columns must add up to 100 or below. Sometimes
 
 `stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how looks on your desktop.
 
+#### Block certain MPRIS senders
+
+You can ignore MPRIS commands from certain senders, for example, in `global.yml` file:
+```
+mpris_blacklist: ["wireplumber"]
+```
+
+This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues MPRIS Pause comamnd. Until they make it configurable, blocking wireplumber is viable workaround if you also find this feature annoying.
+
+
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)

@@ -3,6 +3,7 @@
 ### Added
 
 - when creating playlist from directory tree name it as full relative to library path
+- mpris_blacklist global config option which allows to ignore certain MPRIS senders
 
 ### Fixed
 

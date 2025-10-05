@@ -208,7 +208,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
 
 #if defined(MPRIS_ENABLE)
 void MainWindow::setupMpris() {
-  mpris = new Mpris(player, this);
+  mpris = new Mpris(player, global_conf, this);
   connect(mpris, &Mpris::quit, this, &QMainWindow::close);
   connect(mpris, &Mpris::shuffleChanged, [=](bool val) {
     ui->orderComboBox->setCurrentIndex(val ? 1 : 0);

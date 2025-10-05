@@ -2,14 +2,17 @@
 #define MPRIS_H
 
 #include "playback/playbackcontroller.h"
+#include "config/global.h"
 
 #include <QObject>
 #include <QtDBus/QtDBus>
+#include <QDBusContext>
 
-class Mpris : public QObject {
+
+class Mpris : public QObject, protected QDBusContext {
   Q_OBJECT
 public:
-  explicit Mpris(Playback::Controller *pl, QObject *parent = nullptr);
+  explicit Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent = nullptr);
 
   //org.mpris.MediaPlayer2 MPRIS 2.0 Root interface
   Q_PROPERTY(bool CanQuit READ CanQuit)
@@ -92,9 +95,12 @@ public slots:
 
 private:
   Playback::Controller *player;
+  Config::Global &global_conf;
   void register_to_dbus();
   void notify(const QString &name, const QVariant &value);
   bool shuffle;
+
+  bool isBlacklistedSender();
 };
 
 #endif // MPRIS_H
