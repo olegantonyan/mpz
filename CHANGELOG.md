@@ -1,10 +1,8 @@
-## [1.1.3] -
-
-### Added
+## [1.1.3] - 2025-10-08
 
 ### Fixed
 
-### Misc
+- hotfix: segfault when creating playlist without configured library paths
 
 ## [1.1.2] - 2025-10-05
 
