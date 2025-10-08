@@ -156,7 +156,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
   }
 
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {
-    auto libraryDir = local_conf.libraryPaths()[libswitch->currentIndex()];
+    QString libraryDir = "";
+    if (local_conf.libraryPaths().size() > 0 && libswitch->currentIndex() < local_conf.libraryPaths().size()) {
+      libraryDir = local_conf.libraryPaths()[libswitch->currentIndex()];
+    }
     emit createNewPlaylist(filepaths, libraryDir);
   }
 }
