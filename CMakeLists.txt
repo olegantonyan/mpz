@@ -252,7 +252,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
 # LIBMPDCLIENT
-OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpd client" ON)
+OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
 if (ENABLE_MPD_SUPPORT)
   OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
   if (USE_SYSTEM_LIBMPDCLIENT)
