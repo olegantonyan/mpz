@@ -1,0 +1,109 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'build/**'
+      - 'doc/**'
+    branches:
+      - master
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: linux
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y --no-install-recommends \
+            meson \
+            check
+
+      - name: Full Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output/full
+          setup-options: -Ddocumentation=false -Dtest=true
+          options: --verbose
+
+      - name: Mini Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output/mini
+          setup-options: -Ddocumentation=false -Dtest=true -Dtcp=false
+          options: --verbose
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: macos
+
+      - uses: actions/setup-python@v1
+
+      - name: Install dependencies
+        run: |
+          brew install \
+            meson ninja \
+            check
+
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: test
+          directory: output
+          setup-options: -Ddocumentation=false -Dtest=true
+          options: --verbose
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: build
+          directory: output
+          setup-options: -Ddocumentation=false
+          options: --verbose
+          meson-version: 1.3.0
+
+  build-windows-msvc:
+    runs-on: windows-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - name: Add VisualStudio command line tools into path
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Meson Build
+        uses: BSFishy/meson-build@v1.0.3
+        with:
+          action: build
+          directory: output
+          setup-options: -Ddocumentation=false
+          options: --verbose
+          meson-version: 1.3.0

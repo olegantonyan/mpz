@@ -251,6 +251,33 @@ target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
+# LIBMPDCLIENT
+OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpd client" ON)
+if (ENABLE_MPD_SUPPORT)
+  OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
+  if (USE_SYSTEM_LIBMPDCLIENT)
+    message(STATUS "using system-wide libmpdclient")
+    find_library(MPDCLIENT_LIB mpdclient REQUIRED)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MPDCLIENT_LIB})
+  else()
+    set(LIBMPDCLIENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmpdclient-2.23)
+    message(STATUS "using vendored libmpdclient from ${LIBMPDCLIENT_DIR}")
+    set(LIBMPDCLIENT_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libmpdclient)
+    add_custom_command(
+        OUTPUT ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a
+        COMMAND meson setup ${LIBMPDCLIENT_BUILD_DIR} ${LIBMPDCLIENT_DIR} --default-library=static
+        COMMAND ninja -C ${LIBMPDCLIENT_BUILD_DIR}
+        DEPENDS ${LIBMPDCLIENT_DIR}/meson.build
+        COMMENT "Building libmpdclient with Meson"
+    )
+    add_custom_target(build_libmpdclient DEPENDS ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+    add_dependencies(${CMAKE_PROJECT_NAME} build_libmpdclient)
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_DIR}/include)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+  endif()
+endif()
+# ENDOF LIBMPDCLIENT
+
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY
 
