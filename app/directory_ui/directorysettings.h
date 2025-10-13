@@ -19,7 +19,8 @@ public:
   QStringList libraryPaths() const;
 
 private slots:
-  void on_pushButtonAdd_clicked();
+  void on_pushButtonAddFolder_clicked();
+  void on_pushButtonAddMpd_clicked();
   void on_pushButtonRemove_clicked();
 
 private:

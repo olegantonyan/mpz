@@ -45,7 +45,13 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
-          model->loadAsync(local_conf.libraryPaths()[idx]);
+          auto path = local_conf.libraryPaths()[idx];
+          if (path.startsWith("mpd://")) {
+            qDebug() << "TODO: MPD selected" << path;
+            // TODO replace model, emit global event to reload state in all related components
+          } else {
+            model->loadAsync(path);
+          }
           local_conf.saveCurrentLibraryPath(idx);
         }
       });
@@ -61,8 +67,6 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       view->setContextMenuPolicy(Qt::CustomContextMenu);
     });
 
-    model->setNameFilterDisables(false);
-    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
 
     search->setClearButtonEnabled(true);

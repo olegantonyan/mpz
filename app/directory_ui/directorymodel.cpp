@@ -5,6 +5,8 @@
 namespace DirectoryUi {
   Model::Model(QObject *parent) : QFileSystemModel(parent) {
     setReadOnly(true);
+    setNameFilterDisables(false);
+    setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
   }
 
   void Model::loadAsync(const QString &path) {
