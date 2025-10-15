@@ -27,19 +27,8 @@ namespace Playback {
 #endif
       switch (state) {
         case QMediaPlayer::StoppedState:
-#ifdef PIPEWIRE_STREAM_NAME_HACK
-          if (stopped_emit_paused_state) {
-            stopped_emit_paused_state = false;
-            emit stateChanged(MediaPlayer::PausedState);
-            emit positionChanged(paused_position - offset_begin);
-          } else {
-            emit positionChanged(0);
-            emit stateChanged(MediaPlayer::StoppedState);
-          }
-#else
           emit positionChanged(0);
           emit stateChanged(MediaPlayer::StoppedState);
-#endif
           break;
         case QMediaPlayer::PlayingState:
 #ifdef QT6_STREAM_HACKS
@@ -75,10 +64,6 @@ namespace Playback {
 #ifdef QT6_STREAM_HACKS
     suppress_emit_playing_state = false;
 #endif
-#ifdef PIPEWIRE_STREAM_NAME_HACK
-    paused_position = -1;
-    stopped_emit_paused_state = false;
-#endif
   }
 
   MediaPlayer::State MediaPlayer::state() const {
@@ -110,22 +95,8 @@ namespace Playback {
   }
 
   void MediaPlayer::pause() {
-#ifdef PIPEWIRE_STREAM_NAME_HACK
-    if (paused_position > 0) { // paused
-      player.setPosition(paused_position);
-      player.play();
-      audio_output.setMuted(false);
-      paused_position = -1;
-    } else {
-      paused_position = player.position();
-      audio_output.setMuted(true);
-      stopped_emit_paused_state = true;
-      player.stop();
-    }
-#else
     player.pause();
     unpause_workaround();
-#endif
   }
 
   void MediaPlayer::unpause_workaround() {
@@ -160,26 +131,12 @@ namespace Playback {
       }
     }
 #endif
-#ifdef PIPEWIRE_STREAM_NAME_HACK
-    if (paused_position > 0) { // unpausing
-      player.setPosition(paused_position);
-      player.play();
-      audio_output.setMuted(false);
-      paused_position = -1;
-    } else {
-      player.play();
-      if (offset_begin > 0) {
-        seek_to_offset_begin();
-      }
-    }
-#else
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
       seek_to_offset_begin();
     }
     unpause_workaround();
-#endif
   }
 
   void MediaPlayer::stop() {

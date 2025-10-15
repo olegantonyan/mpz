@@ -12,9 +12,6 @@
   #include <QAudioDevice>
   #define QT6_STREAM_HACKS
 #endif
-#if defined(Q_OS_LINUX) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)) && defined(ENABLE_PIPEWIRE_STREAM_NAME_HACK)
-  #define PIPEWIRE_STREAM_NAME_HACK
-#endif
 
 namespace Playback {
   class MediaPlayer : public QObject {
@@ -62,10 +59,6 @@ namespace Playback {
 #ifdef QT6_STREAM_HACKS
     bool suppress_emit_playing_state;
     bool start_stream();
-#endif
-#ifdef PIPEWIRE_STREAM_NAME_HACK
-    qint64 paused_position;
-    bool stopped_emit_paused_state;
 #endif
     bool unpause_workaround_needed_on_playing_state_change;
 
