@@ -13,9 +13,6 @@ namespace DirectoryUi {
       explicit Localfs(QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
-
-    public slots:
-      void sortBy(const QString &direction);
     };
   }
 }

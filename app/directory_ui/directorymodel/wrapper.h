@@ -2,6 +2,9 @@
 #define DIRECTORYDATAMODELWRAPPER_H
 
 #include "localfs.h"
+#ifdef ENABLE_MPD_SUPPORT
+  #include "mpd.h"
+#endif
 
 #include <QObject>
 #include <QString>
@@ -19,6 +22,7 @@ namespace DirectoryUi {
 
       QAbstractItemModel *model() const;
       QModelIndex rootIndex() const;
+      QString rootPath() const;
       QString filePath(const QModelIndex &index) const;
       void setNameFilters(const QStringList &filters);
 
@@ -30,6 +34,9 @@ namespace DirectoryUi {
 
     private:
       Localfs *localfs;
+#ifdef ENABLE_MPD_SUPPORT
+      Mpd *mpd;
+#endif
     };
   }
 }

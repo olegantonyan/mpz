@@ -26,7 +26,6 @@ if (UNIX AND NOT APPLE)
   find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
 endif()
 
-
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
   app/audio_device_ui/devicesmenu.cpp
@@ -95,6 +94,13 @@ set(PROJECT_SOURCES
   app/sort_ui/sortingpresets.ui
   resources.qrc
 )
+
+OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
+
+if (ENABLE_MPD_SUPPORT)
+  ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
+endif()
 
 if (ENABLE_DBUS)
   ADD_DEFINITIONS(-DMPRIS_ENABLE)
@@ -253,9 +259,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
 
 # LIBMPDCLIENT
-OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
 if (ENABLE_MPD_SUPPORT)
-  ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
   OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
   if (USE_SYSTEM_LIBMPDCLIENT)
     message(STATUS "using system-wide libmpdclient")

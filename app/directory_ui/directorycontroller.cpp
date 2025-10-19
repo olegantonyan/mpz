@@ -46,9 +46,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
           auto path = local_conf.libraryPaths()[idx];
-          if (path.startsWith("mpd://")) {
-            qDebug() << "TODO: MPD selected" << path;
-            // TODO replace model, emit global event to reload state in all related components
+          if (path.startsWith("mpd://") && !model->rootPath().startsWith("mpd://")) {
+            qDebug() << "TODO: swtich mpd " << path;
+          } else if (!path.startsWith("mpd://") && model->rootPath().startsWith("mpd://")) {
+            qDebug() << "TODO: swtich to localfs " << path;
           } else {
             model->loadAsync(path);
           }
