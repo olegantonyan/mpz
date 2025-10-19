@@ -4,12 +4,16 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-  Wrapper::Wrapper(QObject *parent) : QObject(parent), localfs(nullptr) {
+    Wrapper::Wrapper(QObject *parent) : QObject(parent), localfs(nullptr), active(ActiveMode::DIRECTORY_MODEL_LOCALFS) {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(this);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Wrapper::directoryLoaded);
+    }
+
+    void Wrapper::setActiveMode(ActiveMode new_active) {
+      active = new_active;
     }
 
     void Wrapper::loadAsync(const QString &path) {

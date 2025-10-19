@@ -16,7 +16,14 @@ namespace DirectoryUi {
       Q_OBJECT
 
     public:
+      enum ActiveMode {
+        DIRECTORY_MODEL_LOCALFS,
+        DIRECTORY_MODEL_MPD
+      };
+
       explicit Wrapper(QObject *parent = nullptr);
+
+      void setActiveMode(enum ActiveMode new_active);
 
       void loadAsync(const QString &path);
 
@@ -37,6 +44,7 @@ namespace DirectoryUi {
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
 #endif
+      enum ActiveMode active;
     };
   }
 }
