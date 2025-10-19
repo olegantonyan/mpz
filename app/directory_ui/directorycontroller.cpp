@@ -29,7 +29,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
     restore_scroll_once = true;
 
-    model = new Model(this);
+    model = new DirectoryModel::Wrapper(this);
     if (local_conf.libraryPaths().empty()) {
       model->loadAsync(QDir::homePath());
       libswitch->addItem(QDir::homePath());
@@ -57,9 +57,9 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       });
     }
 
-    connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
-      view->setModel(model);
-      view->setRootIndex(model->index(model->rootPath()));
+    connect(model, &DirectoryUi::DirectoryModel::Wrapper::directoryLoaded, [=] {
+      view->setModel(model->model());
+      view->setRootIndex(model->rootIndex());
       view->setHeaderHidden(true);
       view->setColumnHidden(1, true);
       view->setColumnHidden(2, true);
@@ -89,7 +89,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
 
     sort_menu = new DirectoryUi::SortMenu(libsort);
-    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::Model::sortBy);
+    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::DirectoryModel::Wrapper::sortBy);
   }
 
   void Controller::on_search(const QString &term) {

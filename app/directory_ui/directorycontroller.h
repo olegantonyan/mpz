@@ -1,7 +1,7 @@
 ﻿#ifndef DIRECTORYTREEVIEWMODEL_H
 #define DIRECTORYTREEVIEWMODEL_H
 
-#include "directorymodel.h"
+#include "directorymodel/wrapper.h"
 #include "config/local.h"
 #include "directorycontextmenu.h"
 #include "directorysortmenu.h"
@@ -34,7 +34,7 @@ namespace DirectoryUi {
 
   private:
     QTreeView *view;
-    Model *model;
+    DirectoryModel::Wrapper *model;
     QLineEdit *search;
     Config::Local &local_conf;
     bool restore_scroll_once;
