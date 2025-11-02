@@ -13,5 +13,9 @@ namespace DirectoryUi {
     void Localfs::loadAsync(const QString &path) {
       setRootPath(path);
     }
+
+    QModelIndex Localfs::rootIndex() const {
+      return index(rootPath());
+    }
   }
 }

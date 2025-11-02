@@ -23,13 +23,13 @@ namespace DirectoryUi {
 
       explicit Wrapper(QObject *parent = nullptr);
 
-      void setActiveMode(enum ActiveMode new_active);
+      void setActiveMode(ActiveMode new_active);
+      ActiveMode activeMode() const;
 
       void loadAsync(const QString &path);
 
       QAbstractItemModel *model() const;
       QModelIndex rootIndex() const;
-      QString rootPath() const;
       QString filePath(const QModelIndex &index) const;
       void setNameFilters(const QStringList &filters);
 
@@ -44,7 +44,7 @@ namespace DirectoryUi {
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
 #endif
-      enum ActiveMode active;
+      ActiveMode active;
     };
   }
 }

@@ -13,31 +13,72 @@ namespace DirectoryUi {
     }
 
     void Wrapper::setActiveMode(ActiveMode new_active) {
-      active = new_active;
+#ifndef ENABLE_MPD_SUPPORT
+      if (new_active == DIRECTORY_MODEL_MPD) {
+        return;
+      }
+#endif
+      active = new_active;    
     }
 
     void Wrapper::loadAsync(const QString &path) {
-      localfs->loadAsync(path);
+      switch (active) {
+      case DIRECTORY_MODEL_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+        mpd->loadAsync(path);
+#endif
+      case DIRECTORY_MODEL_LOCALFS:
+      default:
+        localfs->loadAsync(path);
+      }
     }
 
     QAbstractItemModel *Wrapper::model() const {
-      return localfs;
+      switch (active) {
+      case DIRECTORY_MODEL_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+        return mpd;
+#endif
+      case DIRECTORY_MODEL_LOCALFS:
+      default:
+        return localfs;
+      }
     }
 
     QModelIndex Wrapper::rootIndex() const {
-      return localfs->index(localfs->rootPath());
-    }
-
-    QString Wrapper::rootPath() const {
-      return localfs->rootPath();
+      switch (active) {
+      case DIRECTORY_MODEL_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+        return mpd->rootIndex();
+#endif
+      case DIRECTORY_MODEL_LOCALFS:
+      default:
+        return localfs->rootIndex();
+      }
     }
 
     QString Wrapper::filePath(const QModelIndex &index) const {
-      return localfs->filePath(index);
+      switch (active) {
+      case DIRECTORY_MODEL_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+        return mpd->filePath(index);
+#endif
+      case DIRECTORY_MODEL_LOCALFS:
+      default:
+        return localfs->filePath(index);
+      }
     }
 
-    void Wrapper::setNameFilters(const QStringList &filters) {
-      localfs->setNameFilters(filters);
+    void Wrapper::setNameFilters(const QStringList &filters) { 
+      switch (active) {
+      case DIRECTORY_MODEL_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+        mpd->setNameFilters(filters);
+#endif
+      case DIRECTORY_MODEL_LOCALFS:
+      default:
+        localfs->setNameFilters(filters);
+      }
     }
 
     void Wrapper::sortBy(const QString &direction) {
@@ -48,6 +89,10 @@ namespace DirectoryUi {
       } else if (direction.toLower() == "- date") {
         model()->sort(3, Qt::DescendingOrder);
       }
+    }
+
+    Wrapper::ActiveMode Wrapper::activeMode() const {
+      return active;
     }
   }
 }

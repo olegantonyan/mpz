@@ -15,6 +15,9 @@ namespace DirectoryUi {
       explicit Mpd(QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
+      void setNameFilters(const QStringList &filters);
+      QModelIndex rootIndex() const;
+      QString filePath(const QModelIndex &index) const;
 
       // QAbstractItemModel interface
       QModelIndex index(int row, int column, const QModelIndex &parent) const;

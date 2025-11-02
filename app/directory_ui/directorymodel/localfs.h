@@ -13,6 +13,7 @@ namespace DirectoryUi {
       explicit Localfs(QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
+      QModelIndex rootIndex() const;
     };
   }
 }

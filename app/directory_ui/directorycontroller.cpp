@@ -46,10 +46,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
           auto path = local_conf.libraryPaths()[idx];
-          if (path.startsWith("mpd://") && !model->rootPath().startsWith("mpd://")) {
+          if (path.startsWith("mpd://") && model->activeMode() == DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_LOCALFS) {
             qDebug() << "TODO: swtich mpd " << path;
             model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD);
-          } else if (!path.startsWith("mpd://") && model->rootPath().startsWith("mpd://")) {
+          } else if (!path.startsWith("mpd://") && model->activeMode() == DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD) {
             qDebug() << "TODO: swtich to localfs " << path;
             model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_LOCALFS);
           }
