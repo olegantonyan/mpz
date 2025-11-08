@@ -94,7 +94,6 @@ namespace DirectoryUi {
 
           TreeItem* item = new TreeItem(dirName, fullPath, true, parent);
           new_items.append(item);
-          qDebug() << fullPath;
         } else if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
           const struct mpd_song* song = mpd_entity_get_song(entity);
           const char* songPath = mpd_song_get_uri(song);
@@ -106,7 +105,6 @@ namespace DirectoryUi {
 
           TreeItem* item = new TreeItem(songName, fullPath, false, parent);
           new_items.append(item);
-          qDebug() << fullPath;
         }
 
         mpd_entity_free(entity);
