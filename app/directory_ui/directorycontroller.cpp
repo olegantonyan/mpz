@@ -39,7 +39,11 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       }
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
       libswitch->setCurrentIndex(current_index);
-      model->loadAsync(local_conf.libraryPaths().at(current_index));
+      auto current_path = local_conf.libraryPaths().at(current_index);
+      if (current_path.startsWith("mpd://")) {
+        model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD);
+      }
+      model->loadAsync(current_path);
     }
 
     if (libswitch->count() > 1) {
