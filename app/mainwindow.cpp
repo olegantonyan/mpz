@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
+#include "modusoperandi.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -20,6 +21,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
+
+  ModusOperandi::init(local_conf, this);
 
   library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, this);
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);

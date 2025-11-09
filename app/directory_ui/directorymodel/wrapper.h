@@ -1,6 +1,7 @@
 #ifndef DIRECTORYDATAMODELWRAPPER_H
 #define DIRECTORYDATAMODELWRAPPER_H
 
+#include "modusoperandi.h"
 #include "localfs.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd.h"
@@ -16,15 +17,7 @@ namespace DirectoryUi {
       Q_OBJECT
 
     public:
-      enum ActiveMode {
-        DIRECTORY_MODEL_LOCALFS,
-        DIRECTORY_MODEL_MPD
-      };
-
       explicit Wrapper(QObject *parent = nullptr);
-
-      void setActiveMode(ActiveMode new_active);
-      ActiveMode activeMode() const;
 
       void loadAsync(const QString &path);
 
@@ -44,7 +37,6 @@ namespace DirectoryUi {
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
 #endif
-      ActiveMode active;
     };
   }
 }

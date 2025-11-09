@@ -1,6 +1,7 @@
 #include "directorycontroller.h"
 #include "directorysettings.h"
 #include "directorysortmenu.h"
+#include "modusoperandi.h"
 
 #include <QAction>
 #include <QDebug>
@@ -40,9 +41,6 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
       libswitch->setCurrentIndex(current_index);
       auto current_path = local_conf.libraryPaths().at(current_index);
-      if (current_path.startsWith("mpd://")) {
-        model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD);
-      }
       model->loadAsync(current_path);
     }
 
@@ -50,12 +48,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
           auto path = local_conf.libraryPaths()[idx];
-          if (path.startsWith("mpd://") && model->activeMode() == DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_LOCALFS) {
-            qDebug() << "TODO: swtich mpd " << path;
-            model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD);
-          } else if (!path.startsWith("mpd://") && model->activeMode() == DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_MPD) {
-            qDebug() << "TODO: swtich to localfs " << path;
-            model->setActiveMode(DirectoryModel::Wrapper::ActiveMode::DIRECTORY_MODEL_LOCALFS);
+          if (path.startsWith("mpd://") && ModusOperandi::instance().get() == ModusOperandi::MODUS_LOCALFS) {
+            ModusOperandi::instance().set(ModusOperandi::MODUS_MPD);
+          } else if (!path.startsWith("mpd://") && ModusOperandi::instance().get() == ModusOperandi::MODUS_MPD) {
+            ModusOperandi::instance().set(ModusOperandi::MODUS_LOCALFS);
           }
           model->loadAsync(path);
           local_conf.saveCurrentLibraryPath(idx);
