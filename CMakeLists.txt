@@ -84,6 +84,7 @@ set(PROJECT_SOURCES
   app/volumecontrol.cpp
   app/playback/stream.cpp
   app/streammetadata.cpp
+  app/modusoperandi.cpp
   app/about_ui/aboutdialog.ui
   app/directory_ui/directorysettings.ui
   app/feedback_ui/feedbackform.ui
@@ -100,6 +101,7 @@ OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
 if (ENABLE_MPD_SUPPORT)
   ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
 endif()
 
 if (ENABLE_DBUS)
@@ -128,10 +130,11 @@ endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
-  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES}
-    app/modusoperandi.h app/modusoperandi.cpp)
+qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
 
+target_link_libraries(mpz PRIVATE Qt6::Core)
 target_link_libraries(mpz PRIVATE Qt6::Core)
 message(STATUS "using Qt6")
 else()

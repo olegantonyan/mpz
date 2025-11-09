@@ -6,26 +6,10 @@
 #include <QString>
 
 #include "mpd/client.h"
+#include "mpd/treeitem.h"
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-
-    struct TreeItem {
-      QString name;
-      QString path;
-      bool isDirectory;
-      time_t last_modified;
-      TreeItem* parent;
-      QVector<TreeItem*> children;
-      bool loaded;
-
-      TreeItem(const QString& n, const QString& p, bool isDir, TreeItem* par = nullptr) : name(n), path(p), isDirectory(isDir), parent(par), loaded(false) {}
-
-      ~TreeItem() {
-        qDeleteAll(children);
-      }
-    };
-
     class Mpd: public QAbstractItemModel {
       Q_OBJECT
 
@@ -58,6 +42,8 @@ namespace DirectoryUi {
 
       struct mpd_connection *connection;
       TreeItem *root_item;
+
+      TreeItem *tree_item_from_index(const QModelIndex &index) const;
     };
   }
 }

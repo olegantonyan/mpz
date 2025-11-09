@@ -11,7 +11,7 @@ namespace DirectoryUi {
   namespace DirectoryModel {
     Mpd::Mpd(QObject *parent) : QAbstractItemModel{parent} {
       connection = nullptr;
-      root_item = new TreeItem("", "", true);
+      root_item = new TreeItem(true, "");
     }
 
     Mpd::~Mpd() {
@@ -23,7 +23,7 @@ namespace DirectoryUi {
 
     void Mpd::loadAsync(const QString &path) {
       delete root_item;
-      root_item = new TreeItem("", "", true);
+      root_item = new TreeItem(true, "");
 
       auto url = QUrl(path);
       qDebug() << "MPD load async" << url.host() << url.port();
@@ -68,7 +68,7 @@ namespace DirectoryUi {
         return QModelIndex();
       }
 
-      TreeItem* parentItem = parent.isValid() ? static_cast<TreeItem*>(parent.internalPointer()) : root_item;
+      TreeItem* parentItem = parent.isValid() ? tree_item_from_index(parent) : root_item;
 
       if (row < parentItem->children.size()) {
         return createIndex(row, column, parentItem->children[row]);
@@ -81,7 +81,7 @@ namespace DirectoryUi {
         return QModelIndex();
       }
 
-      TreeItem* childItem = static_cast<TreeItem*>(child.internalPointer());
+      TreeItem* childItem = tree_item_from_index(child);
       TreeItem* parentItem = childItem->parent;
 
       if (!parentItem || parentItem == root_item) {
@@ -96,7 +96,7 @@ namespace DirectoryUi {
     }
 
     int DirectoryUi::DirectoryModel::Mpd::rowCount(const QModelIndex &parent) const {
-      TreeItem* parent_item = parent.isValid() ? static_cast<TreeItem*>(parent.internalPointer()) : root_item;
+      TreeItem* parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
       return parent_item->children.size();
     }
 
@@ -110,7 +110,7 @@ namespace DirectoryUi {
         return QVariant();
       }
 
-      TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
+      TreeItem* item = tree_item_from_index(index);
 
       switch (role) {
       case Qt::DisplayRole:
@@ -118,7 +118,7 @@ namespace DirectoryUi {
       case Qt::UserRole:
         return item->path;
       case Qt::DecorationRole:
-        if (item->isDirectory) {
+        if (item->is_directory) {
           return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
         } else {
           return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
@@ -141,31 +141,26 @@ namespace DirectoryUi {
 
       struct mpd_entity* entity;
       QVector<TreeItem*> new_items;
-
       while ((entity = mpd_recv_entity(connection)) != nullptr) {
         if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY) {
           const struct mpd_directory* dir = mpd_entity_get_directory(entity);
-          const char* dirPath = mpd_directory_get_path(dir);
-          QString fullPath = QString::fromUtf8(dirPath);
-          QString dirName = fullPath.split('/').last();
-
-          TreeItem* item = new TreeItem(dirName, fullPath, true, parent);
-          item->last_modified = mpd_directory_get_last_modified(dir);
+          auto item = new TreeItem(
+            true,
+            QString::fromUtf8(mpd_directory_get_path(dir)),
+            mpd_directory_get_last_modified(dir),
+            parent
+          );
           new_items.append(item);
         } else if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
           const struct mpd_song* song = mpd_entity_get_song(entity);
-          const char* songPath = mpd_song_get_uri(song);
-          //const char* title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
-
-          //QString songName = title ? QString::fromUtf8(title) : QString::fromUtf8(songPath).split('/').last();
-          QString fullPath = QString::fromUtf8(songPath);
-          QString filename = QString::fromUtf8(songPath).split('/').last();
-
-          TreeItem* item = new TreeItem(filename, fullPath, false, parent);
-          item->last_modified = mpd_song_get_last_modified(song);
+          auto item = new TreeItem(
+            false,
+            QString::fromUtf8(mpd_song_get_uri(song)),
+            mpd_song_get_last_modified(song),
+            parent
+          );
           new_items.append(item);
         }
-
         mpd_entity_free(entity);
       }
 
@@ -181,7 +176,6 @@ namespace DirectoryUi {
 
       mpd_response_finish(connection);
       parent->loaded = true;
-
     }
 
     QModelIndex Mpd::createIndexForItem(TreeItem *item) const {
@@ -194,30 +188,34 @@ namespace DirectoryUi {
 
     bool Mpd::hasChildren(const QModelIndex &parent) const {
       if (parent.isValid()) {
-        TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
-        return item->isDirectory;
+        TreeItem* item = tree_item_from_index(parent);
+        return item->is_directory;
       }
-      return root_item->isDirectory;
+      return root_item->is_directory;
     }
 
     bool Mpd::canFetchMore(const QModelIndex &parent) const {
       if (!parent.isValid()) {
         return false;
       }
-      TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
-      return item->isDirectory && !item->loaded;
+      TreeItem* item = tree_item_from_index(parent);
+      return item->is_directory && !item->loaded;
     }
 
     void Mpd::fetchMore(const QModelIndex &parent) {
       if (!parent.isValid() || !connection) {
         return;
       }
-      TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
-      if (!item->isDirectory || item->loaded) {
+      TreeItem* item = tree_item_from_index(parent);
+      if (!item->is_directory || item->loaded) {
         return;
       }
       load_directory(item, item->path);
       item->loaded = true;
+    }
+
+    TreeItem *Mpd::tree_item_from_index(const QModelIndex &index) const {
+      return static_cast<TreeItem*>(index.internalPointer());
     }
 
     void Mpd::sort(int column, Qt::SortOrder order) {
@@ -225,9 +223,9 @@ namespace DirectoryUi {
          [column, order](const TreeItem *a, const TreeItem *b) {
              switch (column) {
              case 0: {
-               if (a->isDirectory && !b->isDirectory) {
+               if (a->is_directory && !b->is_directory) {
                  return true;
-               } else if (!a->isDirectory && b->isDirectory) {
+               } else if (!a->is_directory && b->is_directory) {
                  return false;
                }
                if (order == Qt::AscendingOrder) {
