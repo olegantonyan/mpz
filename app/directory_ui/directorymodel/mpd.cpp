@@ -4,6 +4,8 @@
 #include <QUrl>
 #include <QVector>
 #include <QVariant>
+#include <QApplication>
+#include <QStyle>
 
 namespace DirectoryUi {
   namespace DirectoryModel {
@@ -20,6 +22,9 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadAsync(const QString &path) {
+      delete root_item;
+      root_item = new TreeItem("", "", true);
+
       auto url = QUrl(path);
       qDebug() << "MPD load async" << url.host() << url.port();
       if (connection) {
@@ -39,6 +44,7 @@ namespace DirectoryUi {
       beginResetModel();
       load_directory(root_item, "");
       endResetModel();
+      sort(0, Qt::AscendingOrder);
 
       emit directoryLoaded(path);
     }
@@ -47,6 +53,9 @@ namespace DirectoryUi {
     }
 
     QModelIndex Mpd::rootIndex() const {
+      if (!root_item) {
+        return QModelIndex();
+      }
       return createIndexForItem(root_item);
     }
 
@@ -109,7 +118,11 @@ namespace DirectoryUi {
       case Qt::UserRole:
         return item->path;
       case Qt::DecorationRole:
-        return item->isDirectory ? "📁" : "🎵";
+        if (item->isDirectory) {
+          return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+        } else {
+          return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+        }
       }
 
       return QVariant();
@@ -137,17 +150,19 @@ namespace DirectoryUi {
           QString dirName = fullPath.split('/').last();
 
           TreeItem* item = new TreeItem(dirName, fullPath, true, parent);
+          item->last_modified = mpd_directory_get_last_modified(dir);
           new_items.append(item);
         } else if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
           const struct mpd_song* song = mpd_entity_get_song(entity);
           const char* songPath = mpd_song_get_uri(song);
-          const char* title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
+          //const char* title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
 
-          QString songName = title ? QString::fromUtf8(title)
-                                   : QString::fromUtf8(songPath).split('/').last();
+          //QString songName = title ? QString::fromUtf8(title) : QString::fromUtf8(songPath).split('/').last();
           QString fullPath = QString::fromUtf8(songPath);
+          QString filename = QString::fromUtf8(songPath).split('/').last();
 
-          TreeItem* item = new TreeItem(songName, fullPath, false, parent);
+          TreeItem* item = new TreeItem(filename, fullPath, false, parent);
+          item->last_modified = mpd_song_get_last_modified(song);
           new_items.append(item);
         }
 
@@ -204,6 +219,37 @@ namespace DirectoryUi {
       load_directory(item, item->path);
       item->loaded = true;
     }
+
+    void Mpd::sort(int column, Qt::SortOrder order) {
+       std::sort(root_item->children.begin(), root_item->children.end(),
+         [column, order](const TreeItem *a, const TreeItem *b) {
+             switch (column) {
+             case 0: {
+               if (a->isDirectory && !b->isDirectory) {
+                 return true;
+               } else if (!a->isDirectory && b->isDirectory) {
+                 return false;
+               }
+               if (order == Qt::AscendingOrder) {
+                 return a->name < b->name;
+               } else {
+                 return a->name > b->name;
+               }
+             }
+             case 3: {
+               if (order == Qt::AscendingOrder) {
+                 return a->last_modified < b->last_modified;
+               } else {
+                 return a->last_modified > b->last_modified;
+               }
+             }
+
+             default:
+                return false;
+             }
+         });
+
+       emit layoutChanged();
+    }
   }
 }
-

@@ -14,6 +14,7 @@ namespace DirectoryUi {
       QString name;
       QString path;
       bool isDirectory;
+      time_t last_modified;
       TreeItem* parent;
       QVector<TreeItem*> children;
       bool loaded;
@@ -49,6 +50,7 @@ namespace DirectoryUi {
       bool canFetchMore(const QModelIndex &parent) const;
       void fetchMore(const QModelIndex &parent);
       bool hasChildren(const QModelIndex &parent) const;
+      void sort(int column, Qt::SortOrder order);
 
     private:
       void load_directory(TreeItem* parent, const QString& path);
