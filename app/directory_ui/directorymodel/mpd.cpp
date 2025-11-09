@@ -6,6 +6,8 @@
 #include <QVariant>
 #include <QApplication>
 #include <QStyle>
+#include <QFileInfo>
+#include <QFileIconProvider>
 
 namespace DirectoryUi {
   namespace DirectoryModel {
@@ -121,7 +123,8 @@ namespace DirectoryUi {
         if (item->is_directory) {
           return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
         } else {
-          return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+          return QFileIconProvider().icon(QFileInfo(item->name));
+          //return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
         }
       }
 
