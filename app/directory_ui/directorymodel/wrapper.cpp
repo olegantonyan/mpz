@@ -8,6 +8,7 @@ namespace DirectoryUi {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(this);
+      connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Wrapper::directoryLoaded);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Wrapper::directoryLoaded);
     }

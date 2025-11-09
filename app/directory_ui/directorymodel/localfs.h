@@ -14,6 +14,9 @@ namespace DirectoryUi {
 
       void loadAsync(const QString &path);
       QModelIndex rootIndex() const;
+
+      // QAbstractItemModel interface
+      int columnCount(const QModelIndex &parent) const;
     };
   }
 }

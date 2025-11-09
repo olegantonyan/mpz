@@ -28,6 +28,9 @@ namespace DirectoryUi {
     class Mpd: public QAbstractItemModel {
       Q_OBJECT
 
+    signals:
+      void directoryLoaded(const QString &path);
+
     public:
       explicit Mpd(QObject *parent = nullptr);
       ~Mpd();
@@ -43,6 +46,9 @@ namespace DirectoryUi {
       int rowCount(const QModelIndex &parent) const;
       int columnCount(const QModelIndex &parent) const;
       QVariant data(const QModelIndex &index, int role) const;
+      bool canFetchMore(const QModelIndex &parent) const;
+      void fetchMore(const QModelIndex &parent);
+      bool hasChildren(const QModelIndex &parent) const;
 
     private:
       void load_directory(TreeItem* parent, const QString& path);
@@ -50,7 +56,6 @@ namespace DirectoryUi {
 
       struct mpd_connection *connection;
       TreeItem *root_item;
-
     };
   }
 }

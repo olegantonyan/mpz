@@ -3,12 +3,13 @@
 #include <QDebug>
 #include <QUrl>
 #include <QVector>
+#include <QVariant>
 
 namespace DirectoryUi {
   namespace DirectoryModel {
     Mpd::Mpd(QObject *parent) : QAbstractItemModel{parent} {
       connection = nullptr;
-      root_item = new TreeItem("Music", "", true);
+      root_item = new TreeItem("", "", true);
     }
 
     Mpd::~Mpd() {
@@ -38,13 +39,15 @@ namespace DirectoryUi {
       beginResetModel();
       load_directory(root_item, "");
       endResetModel();
+
+      emit directoryLoaded(path);
     }
 
     void Mpd::setNameFilters(const QStringList &filters) {
     }
 
     QModelIndex Mpd::rootIndex() const {
-      return QModelIndex();
+      return createIndexForItem(root_item);
     }
 
     QString Mpd::filePath(const QModelIndex &index) const {
@@ -52,23 +55,64 @@ namespace DirectoryUi {
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::index(int row, int column, const QModelIndex &parent) const {
+      if (!hasIndex(row, column, parent)) {
+        return QModelIndex();
+      }
+
+      TreeItem* parentItem = parent.isValid() ? static_cast<TreeItem*>(parent.internalPointer()) : root_item;
+
+      if (row < parentItem->children.size()) {
+        return createIndex(row, column, parentItem->children[row]);
+      }
       return QModelIndex();
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::parent(const QModelIndex &child) const {
-      return QModelIndex();
+      if (!child.isValid()) {
+        return QModelIndex();
+      }
+
+      TreeItem* childItem = static_cast<TreeItem*>(child.internalPointer());
+      TreeItem* parentItem = childItem->parent;
+
+      if (!parentItem || parentItem == root_item) {
+          return QModelIndex();
+      }
+      TreeItem* grandparent = parentItem->parent;
+      if (!grandparent) {
+          return QModelIndex();
+      }
+      int row = grandparent->children.indexOf(parentItem);
+      return createIndex(row, 0, parentItem);
     }
 
     int DirectoryUi::DirectoryModel::Mpd::rowCount(const QModelIndex &parent) const {
-      return 0;
+      TreeItem* parent_item = parent.isValid() ? static_cast<TreeItem*>(parent.internalPointer()) : root_item;
+      return parent_item->children.size();
     }
 
     int DirectoryUi::DirectoryModel::Mpd::columnCount(const QModelIndex &parent) const {
-      return 0;
+      Q_UNUSED(parent);
+      return 1;
     }
 
     QVariant DirectoryUi::DirectoryModel::Mpd::data(const QModelIndex &index, int role) const {
-      return QVariant("0");
+      if (!index.isValid()) {
+        return QVariant();
+      }
+
+      TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
+
+      switch (role) {
+      case Qt::DisplayRole:
+        return item->name;
+      case Qt::UserRole:
+        return item->path;
+      case Qt::DecorationRole:
+        return item->isDirectory ? "📁" : "🎵";
+      }
+
+      return QVariant();
     }
 
     void Mpd::load_directory(TreeItem *parent, const QString &path) {
@@ -131,6 +175,34 @@ namespace DirectoryUi {
       }
       int row = item->parent->children.indexOf(item);
       return createIndex(row, 0, item);
+    }
+
+    bool Mpd::hasChildren(const QModelIndex &parent) const {
+      if (parent.isValid()) {
+        TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
+        return item->isDirectory;
+      }
+      return root_item->isDirectory;
+    }
+
+    bool Mpd::canFetchMore(const QModelIndex &parent) const {
+      if (!parent.isValid()) {
+        return false;
+      }
+      TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
+      return item->isDirectory && !item->loaded;
+    }
+
+    void Mpd::fetchMore(const QModelIndex &parent) {
+      if (!parent.isValid() || !connection) {
+        return;
+      }
+      TreeItem* item = static_cast<TreeItem*>(parent.internalPointer());
+      if (!item->isDirectory || item->loaded) {
+        return;
+      }
+      load_directory(item, item->path);
+      item->loaded = true;
     }
   }
 }

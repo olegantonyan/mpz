@@ -17,5 +17,13 @@ namespace DirectoryUi {
     QModelIndex Localfs::rootIndex() const {
       return index(rootPath());
     }
+
+    int Localfs::columnCount(const QModelIndex &parent) const {
+      Q_UNUSED(parent);
+      return 1;
+    }
   }
 }
+
+
+
