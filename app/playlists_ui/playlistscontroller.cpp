@@ -19,8 +19,8 @@ namespace PlaylistsUi {
 
     model = new PlaylistsUi::Model(conf, this);
     spinner->show();
-    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
-    connect(model, &Model::asynLoadFinished, this, &Controller::load);
+    connect(model, &Model::asyncLoadFinished, spinner, &BusySpinner::hide);
+    connect(model, &Model::asyncLoadFinished, this, &Controller::load);
     model->loadAsync();
 
     proxy = new ProxyFilterModel(model, this);

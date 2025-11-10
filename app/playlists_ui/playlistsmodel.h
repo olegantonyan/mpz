@@ -37,7 +37,7 @@ namespace PlaylistsUi {
     void higlight(std::shared_ptr<Playlist::Playlist> playlist);
 
   signals:
-    void asynLoadFinished();
+    void asyncLoadFinished();
 
   private:
     QList<std::shared_ptr<Playlist::Playlist>> list;

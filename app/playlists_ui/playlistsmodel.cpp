@@ -15,7 +15,7 @@ namespace PlaylistsUi {
       beginInsertRows(QModelIndex(), 0, list.size());
       endInsertRows();
       emit dataChanged(buildIndex(0), buildIndex(list.size()));
-      emit asynLoadFinished();
+      emit asyncLoadFinished();
       persist();
     });
   }
