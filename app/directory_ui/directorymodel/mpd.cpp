@@ -66,14 +66,21 @@ namespace DirectoryUi {
     }
 
     void Mpd::setNameFilters(const QStringList &filters) {
-      // TODO
+      name_filters = filters;
+      refresh();
+    }
+
+    void Mpd::refresh() {
+      beginResetModel();
+      // TODO filter here
+      endResetModel();
     }
 
     QModelIndex Mpd::rootIndex() const {
       if (!root_item) {
         return QModelIndex();
       }
-      return createIndexForItem(root_item);
+      return create_index_for_item(root_item);
     }
 
     QString Mpd::filePath(const QModelIndex &index) const {
@@ -192,7 +199,7 @@ namespace DirectoryUi {
         int first = parent->children.size();
         int last = first + new_items.size() - 1;
 
-        QModelIndex parentIndex = parent == root_item ? QModelIndex() : createIndexForItem(parent);
+        QModelIndex parentIndex = parent == root_item ? QModelIndex() : create_index_for_item(parent);
         beginInsertRows(parentIndex, first, last);
         parent->children.append(new_items);
         endInsertRows();
@@ -202,7 +209,7 @@ namespace DirectoryUi {
       parent->loaded = true;
     }
 
-    QModelIndex Mpd::createIndexForItem(TreeItem *item) const {
+    QModelIndex Mpd::create_index_for_item(TreeItem *item) const {
       if (!item || !item->parent) {
         return QModelIndex();
       }

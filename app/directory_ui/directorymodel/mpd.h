@@ -4,6 +4,7 @@
 #include <QAbstractItemModel>
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 #include "mpd/client.h"
 #include "mpd/treeitem.h"
@@ -38,15 +39,15 @@ namespace DirectoryUi {
 
     private:
       void load_directory(TreeItem* parent, const QString& path);
-      QModelIndex createIndexForItem(TreeItem* item) const;
+      QModelIndex create_index_for_item(TreeItem* item) const;
+      TreeItem *tree_item_from_index(const QModelIndex &index) const;
+      TreeItem *create_root_item();
+      bool establish_connection(const QUrl &url);
+      void refresh();
 
       struct mpd_connection *connection;
       TreeItem *root_item;
-
-      TreeItem *tree_item_from_index(const QModelIndex &index) const;
-      TreeItem *create_root_item();
-
-      bool establish_connection(const QUrl &url);
+      QStringList name_filters;
     };
   }
 }
