@@ -24,7 +24,7 @@ namespace DirectoryUi {
       QAbstractItemModel *model() const;
       QModelIndex rootIndex() const;
       QString filePath(const QModelIndex &index) const;
-      void setNameFilters(const QStringList &filters);
+      void filter(const QString &filter);
 
     signals:
       void directoryLoaded(const QString &path);

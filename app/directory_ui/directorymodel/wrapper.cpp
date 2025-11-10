@@ -61,15 +61,20 @@ namespace DirectoryUi {
       }
     }
 
-    void Wrapper::setNameFilters(const QStringList &filters) { 
+    void Wrapper::filter(const QString &term) {
       switch (ModusOperandi::instance().get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
-        mpd->setNameFilters(filters);
+        mpd->filter(term);
 #endif
       case ModusOperandi::MODUS_LOCALFS:
       default:
-        localfs->setNameFilters(filters);
+        if (term.isEmpty()) {
+          localfs->setNameFilters(QStringList());
+        } else {
+          QString wc = QString("*%1*").arg(term);
+          localfs->setNameFilters(QStringList() << wc);
+        }
       }
     }
 

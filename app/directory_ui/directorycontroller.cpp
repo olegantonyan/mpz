@@ -93,16 +93,13 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
   void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
-      model->setNameFilters(QStringList());
       QTimer::singleShot(20, [=]() {
         if (!view->selectionModel()->selectedRows().isEmpty()) {
           view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
         }
       });
-      return;
     }
-    QString wc = QString("*%1*").arg(term);
-    model->setNameFilters(QStringList() << wc);
+    model->filter(term);
   }
 
   void Controller::on_doubleclick(const QModelIndex &index) {

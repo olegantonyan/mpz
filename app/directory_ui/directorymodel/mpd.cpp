@@ -65,17 +65,13 @@ namespace DirectoryUi {
       emit directoryLoaded(path);
     }
 
-    void Mpd::setNameFilters(const QStringList &filters) {
-      name_filters = filters;
-      refresh();
-    }
-
-    void Mpd::refresh() {
+    void Mpd::filter(const QString &term) {
       beginResetModel();
-      // TODO filter here
+      for (auto i : root_item->children) {
+        i->update_visibility(term);
+      }
       endResetModel();
     }
-
     QModelIndex Mpd::rootIndex() const {
       if (!root_item) {
         return QModelIndex();
@@ -100,11 +96,14 @@ namespace DirectoryUi {
       }
 
       TreeItem* parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
+      TreeItem *child_item = parent_item->child(row);
 
-      if (row < parent_item->children.size()) {
-        return createIndex(row, column, parent_item->children[row]);
-      }
-      return QModelIndex();
+      return child_item ? createIndex(row, column, child_item) : QModelIndex();
+
+      //if (row < parent_item->children.size()) {
+      //  return createIndex(row, column, parent_item->children[row]);
+      //}
+      //return QModelIndex();
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::parent(const QModelIndex &child) const {
@@ -118,17 +117,17 @@ namespace DirectoryUi {
       if (!parent_item || parent_item == root_item) {
         return QModelIndex();
       }
-      TreeItem *grandparent = parent_item->parent;
-      if (!grandparent) {
-        return QModelIndex();
-      }
-      int row = grandparent->children.indexOf(parent_item);
-      return createIndex(row, 0, parent_item);
+      //TreeItem *grandparent = parent_item->parent;
+      //if (!grandparent) {
+      //  return QModelIndex();
+      //}
+      //int row = grandparent->children.indexOf(parent_item);
+      return createIndex(parent_item->row(), 0, parent_item);
     }
 
     int DirectoryUi::DirectoryModel::Mpd::rowCount(const QModelIndex &parent) const {
       TreeItem *parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
-      return parent_item->children.size();
+      return parent_item->visible_children_count();
     }
 
     int DirectoryUi::DirectoryModel::Mpd::columnCount(const QModelIndex &parent) const {

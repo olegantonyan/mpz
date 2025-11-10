@@ -13,6 +13,11 @@ namespace DirectoryUi {
       ~TreeItem();
 
       void setPathWName(const QString &path);
+      bool match(const QString &filter) const;
+      bool update_visibility(const QString &filter);
+      int visible_children_count() const;
+      int row() const;
+      TreeItem *child(int row);
 
       QString name;
       QString path;
@@ -21,6 +26,7 @@ namespace DirectoryUi {
       TreeItem* parent;
       QVector<TreeItem*> children;
       bool loaded;
+      bool visible;
     };
   }
 }

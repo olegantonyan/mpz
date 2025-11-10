@@ -22,7 +22,7 @@ namespace DirectoryUi {
       ~Mpd();
 
       void loadAsync(const QString &path);
-      void setNameFilters(const QStringList &filters);
+      void filter(const QString &term);
       QModelIndex rootIndex() const;
       QString filePath(const QModelIndex &index) const;
 
@@ -43,11 +43,9 @@ namespace DirectoryUi {
       TreeItem *tree_item_from_index(const QModelIndex &index) const;
       TreeItem *create_root_item();
       bool establish_connection(const QUrl &url);
-      void refresh();
 
       struct mpd_connection *connection;
       TreeItem *root_item;
-      QStringList name_filters;
     };
   }
 }
