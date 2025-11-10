@@ -17,7 +17,7 @@ namespace DirectoryUi {
       Q_OBJECT
 
     public:
-      explicit Wrapper(QObject *parent = nullptr);
+      explicit Wrapper(ModusOperandi *modus, QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
 
@@ -33,6 +33,7 @@ namespace DirectoryUi {
       void sortBy(const QString &direction);
 
     private:
+      ModusOperandi *modus_operandi;
       Localfs *localfs;
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;

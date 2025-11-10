@@ -9,14 +9,13 @@ class ModusOperandi : public QObject {
   Q_OBJECT
 
 public:
+  explicit ModusOperandi(Config::Local &local_cfg, QObject *parent = nullptr);
+
   enum ActiveMode {
     MODUS_LOCALFS,
     MODUS_MPD
   };
   Q_ENUM(ActiveMode)
-
-  static ModusOperandi& init(Config::Local &local_cfg, QObject *parent = nullptr);
-  static ModusOperandi& instance();
 
   ActiveMode get() const;
 
@@ -27,15 +26,8 @@ signals:
   void changed(ActiveMode new_mode);
 
 private:
-  explicit ModusOperandi(Config::Local &local_cfg, QObject *parent = nullptr);
-  ~ModusOperandi() = default;
-
-  static ModusOperandi *_instance;
-
   Config::Local local_config;
   ActiveMode active;
-
-  Q_DISABLE_COPY(ModusOperandi)
 };
 
 #endif // MODUSOPERANDI_H

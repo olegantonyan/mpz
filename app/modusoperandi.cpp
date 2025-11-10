@@ -2,8 +2,6 @@
 
 #include <QDebug>
 
-ModusOperandi* ModusOperandi::_instance = nullptr;
-
 ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObject{parent}, local_config(local_cfg) {
   if (local_config.libraryPaths().empty()) {
     active = MODUS_LOCALFS;
@@ -17,19 +15,6 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObjec
     }
   }
   qDebug() << "ModusOperandi initilized in" << active;
-}
-
-ModusOperandi &ModusOperandi::init(Config::Local &local_cfg, QObject *parent) {
-  if (_instance) {
-    return instance();
-  }
-  _instance = new ModusOperandi(local_cfg, parent);
-  return instance();
-}
-
-ModusOperandi &ModusOperandi::instance() {
-  Q_ASSERT(_instance && "ModusOperandi not initialized!");
-  return *_instance;
 }
 
 void ModusOperandi::set(ActiveMode new_mode) {

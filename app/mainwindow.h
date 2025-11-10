@@ -19,6 +19,7 @@
 #include "ipc/instance.h"
 #include "sleeplock.h"
 #include "audio_device_ui/devicesmenu.h"
+#include "modusoperandi.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -63,6 +64,7 @@ private:
   PlaybackLogUi::Controller *playback_log;
   SortUi::SortMenu *sort_menu;
   SleepLock *sleep_lock;
+  ModusOperandi *modus_operandi;
 
   int streamBuffer();
   void setupUiSettings();
@@ -85,7 +87,7 @@ private:
   void setupOutputDevice();
 
   void preloadPlaylist(const QStringList &args);
-  
+
 protected:
   void closeEvent(QCloseEvent *event) override;
   void changeEvent(QEvent *) override;

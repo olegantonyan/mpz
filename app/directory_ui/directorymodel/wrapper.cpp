@@ -4,7 +4,7 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    Wrapper::Wrapper(QObject *parent) : QObject(parent), localfs(nullptr) {
+    Wrapper::Wrapper(ModusOperandi *modus, QObject *parent) : QObject(parent), modus_operandi(modus) {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(this);
@@ -14,7 +14,7 @@ namespace DirectoryUi {
     }
 
     void Wrapper::loadAsync(const QString &path) {
-      switch (ModusOperandi::instance().get()) {
+      switch (modus_operandi->get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         mpd->loadAsync(path);
@@ -26,7 +26,7 @@ namespace DirectoryUi {
     }
 
     QAbstractItemModel *Wrapper::model() const {
-      switch (ModusOperandi::instance().get()) {
+      switch (modus_operandi->get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         return mpd;
@@ -38,7 +38,7 @@ namespace DirectoryUi {
     }
 
     QModelIndex Wrapper::rootIndex() const {
-      switch (ModusOperandi::instance().get()) {
+      switch (modus_operandi->get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         return mpd->rootIndex();
@@ -50,7 +50,7 @@ namespace DirectoryUi {
     }
 
     QString Wrapper::filePath(const QModelIndex &index) const {
-      switch (ModusOperandi::instance().get()) {
+      switch (modus_operandi->get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         return mpd->filePath(index);
@@ -62,7 +62,7 @@ namespace DirectoryUi {
     }
 
     void Wrapper::filter(const QString &term) {
-      switch (ModusOperandi::instance().get()) {
+      switch (modus_operandi->get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         mpd->filter(term);

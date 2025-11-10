@@ -1,7 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
-#include "modusoperandi.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -12,8 +11,8 @@
 #include <QHash>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
-  QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
-  trayicon = nullptr;
+  QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c), trayicon(nullptr) {
+  modus_operandi = new ModusOperandi(local_conf, this);
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
@@ -22,9 +21,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  ModusOperandi::init(local_conf, this);
-
-  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, this);
+  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, modus_operandi, this);
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, this);
 
