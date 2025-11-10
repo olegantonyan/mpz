@@ -99,11 +99,6 @@ namespace DirectoryUi {
       TreeItem *child_item = parent_item->child(row);
 
       return child_item ? createIndex(row, column, child_item) : QModelIndex();
-
-      //if (row < parent_item->children.size()) {
-      //  return createIndex(row, column, parent_item->children[row]);
-      //}
-      //return QModelIndex();
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::parent(const QModelIndex &child) const {
@@ -117,11 +112,6 @@ namespace DirectoryUi {
       if (!parent_item || parent_item == root_item) {
         return QModelIndex();
       }
-      //TreeItem *grandparent = parent_item->parent;
-      //if (!grandparent) {
-      //  return QModelIndex();
-      //}
-      //int row = grandparent->children.indexOf(parent_item);
       return createIndex(parent_item->row(), 0, parent_item);
     }
 

@@ -24,7 +24,7 @@ public slots:
   void set(ActiveMode new_mode);
 
 signals:
-  void changed(ActiveMode new_node);
+  void changed(ActiveMode new_mode);
 
 private:
   explicit ModusOperandi(Config::Local &local_cfg, QObject *parent = nullptr);
