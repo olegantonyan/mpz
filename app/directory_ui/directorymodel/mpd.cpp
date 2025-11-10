@@ -11,47 +11,62 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    Mpd::Mpd(QObject *parent) : QAbstractItemModel{parent} {
-      connection = nullptr;
-      root_item = new TreeItem(true, "");
+    Mpd::Mpd(QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(nullptr) {
+      create_root_item();
     }
 
     Mpd::~Mpd() {
       if (connection) {
         mpd_connection_free(connection);
       }
-      delete root_item;
+      if (root_item) {
+        delete root_item;
+      }
     }
 
-    void Mpd::loadAsync(const QString &path) {
-      delete root_item;
+    TreeItem *Mpd::create_root_item() {
+      if (root_item) {
+        delete root_item;
+      }
       root_item = new TreeItem(true, "");
+      return root_item;
+    }
 
-      auto url = QUrl(path);
-      qDebug() << "MPD load async" << url.host() << url.port();
+    bool Mpd::establish_connection(const QUrl &url) {
+      qDebug() << "connecting to mpd at" << url;
       if (connection) {
         mpd_connection_free(connection);
       }
       connection = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
       if (!connection) {
         qWarning() << "error allocation mpd connection";
-        return;
+        return false;
       }
       if (mpd_connection_get_error(connection) != MPD_ERROR_SUCCESS) {
-        qWarning() << mpd_connection_get_error_message(connection);
+        qWarning() << "error connecting to mpd:" << mpd_connection_get_error_message(connection);
         mpd_connection_free(connection);
+        return false;
+      }
+
+      return true;
+    }
+
+    void Mpd::loadAsync(const QString &path) {
+      if (!establish_connection(QUrl(path))) {
         return;
       }
 
       beginResetModel();
-      load_directory(root_item, "");
+      load_directory(create_root_item(), "");
       endResetModel();
+
       sort(0, Qt::AscendingOrder);
 
       emit directoryLoaded(path);
     }
 
     void Mpd::setNameFilters(const QStringList &filters) {
+      // TODO
     }
 
     QModelIndex Mpd::rootIndex() const {
@@ -62,7 +77,14 @@ namespace DirectoryUi {
     }
 
     QString Mpd::filePath(const QModelIndex &index) const {
-      return "";
+      if (!index.isValid()) {
+        return "";
+      }
+      auto i = tree_item_from_index(index);
+      if (!i) {
+        return "";
+      }
+      return i->path;
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::index(int row, int column, const QModelIndex &parent) const {
@@ -70,10 +92,10 @@ namespace DirectoryUi {
         return QModelIndex();
       }
 
-      TreeItem* parentItem = parent.isValid() ? tree_item_from_index(parent) : root_item;
+      TreeItem* parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
 
-      if (row < parentItem->children.size()) {
-        return createIndex(row, column, parentItem->children[row]);
+      if (row < parent_item->children.size()) {
+        return createIndex(row, column, parent_item->children[row]);
       }
       return QModelIndex();
     }
@@ -83,22 +105,22 @@ namespace DirectoryUi {
         return QModelIndex();
       }
 
-      TreeItem* childItem = tree_item_from_index(child);
-      TreeItem* parentItem = childItem->parent;
+      TreeItem *child_item = tree_item_from_index(child);
+      TreeItem *parent_item = child_item->parent;
 
-      if (!parentItem || parentItem == root_item) {
-          return QModelIndex();
+      if (!parent_item || parent_item == root_item) {
+        return QModelIndex();
       }
-      TreeItem* grandparent = parentItem->parent;
+      TreeItem *grandparent = parent_item->parent;
       if (!grandparent) {
-          return QModelIndex();
+        return QModelIndex();
       }
-      int row = grandparent->children.indexOf(parentItem);
-      return createIndex(row, 0, parentItem);
+      int row = grandparent->children.indexOf(parent_item);
+      return createIndex(row, 0, parent_item);
     }
 
     int DirectoryUi::DirectoryModel::Mpd::rowCount(const QModelIndex &parent) const {
-      TreeItem* parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
+      TreeItem *parent_item = parent.isValid() ? tree_item_from_index(parent) : root_item;
       return parent_item->children.size();
     }
 
@@ -124,7 +146,6 @@ namespace DirectoryUi {
           return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
         } else {
           return QFileIconProvider().icon(QFileInfo(item->name));
-          //return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
         }
       }
 
@@ -222,35 +243,34 @@ namespace DirectoryUi {
     }
 
     void Mpd::sort(int column, Qt::SortOrder order) {
-       std::sort(root_item->children.begin(), root_item->children.end(),
-         [column, order](const TreeItem *a, const TreeItem *b) {
-             switch (column) {
-             case 0: {
-               if (a->is_directory && !b->is_directory) {
-                 return true;
-               } else if (!a->is_directory && b->is_directory) {
-                 return false;
-               }
-               if (order == Qt::AscendingOrder) {
-                 return a->name < b->name;
-               } else {
-                 return a->name > b->name;
-               }
-             }
-             case 3: {
-               if (order == Qt::AscendingOrder) {
-                 return a->last_modified < b->last_modified;
-               } else {
-                 return a->last_modified > b->last_modified;
-               }
-             }
+      std::sort(root_item->children.begin(), root_item->children.end(), [column, order](const TreeItem *a, const TreeItem *b) {
+        switch (column) {
+        case 0: {
+         if (a->is_directory && !b->is_directory) {
+           return true;
+         } else if (!a->is_directory && b->is_directory) {
+           return false;
+         }
+         if (order == Qt::AscendingOrder) {
+           return a->name < b->name;
+         } else {
+           return a->name > b->name;
+         }
+        }
+        case 3: {
+         if (order == Qt::AscendingOrder) {
+           return a->last_modified < b->last_modified;
+         } else {
+           return a->last_modified > b->last_modified;
+         }
+        }
 
-             default:
-                return false;
-             }
-         });
+        default:
+          return false;
+        }
+      });
 
-       emit layoutChanged();
+      emit layoutChanged();
     }
   }
 }

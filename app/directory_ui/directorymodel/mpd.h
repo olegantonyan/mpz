@@ -44,6 +44,9 @@ namespace DirectoryUi {
       TreeItem *root_item;
 
       TreeItem *tree_item_from_index(const QModelIndex &index) const;
+      TreeItem *create_root_item();
+
+      bool establish_connection(const QUrl &url);
     };
   }
 }
