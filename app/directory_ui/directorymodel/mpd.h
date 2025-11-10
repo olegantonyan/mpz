@@ -6,7 +6,7 @@
 #include <QString>
 #include <QStringList>
 
-#include "mpd/client.h"
+#include "mpdconnection.h"
 #include "mpd/treeitem.h"
 
 namespace DirectoryUi {
@@ -42,9 +42,8 @@ namespace DirectoryUi {
       QModelIndex create_index_for_item(TreeItem* item) const;
       TreeItem *tree_item_from_index(const QModelIndex &index) const;
       TreeItem *create_root_item();
-      bool establish_connection(const QUrl &url);
 
-      struct mpd_connection *connection;
+      MpdConnection connection;
       TreeItem *root_item;
     };
   }

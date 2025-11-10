@@ -102,6 +102,7 @@ if (ENABLE_MPD_SUPPORT)
   ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
+  list(APPEND PROJECT_SOURCES app/mpdconnection.cpp)
 endif()
 
 if (ENABLE_DBUS)

@@ -12,12 +12,13 @@
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c), trayicon(nullptr) {
-  modus_operandi = new ModusOperandi(local_conf, this);
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
   ui->setupUi(this);
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
+
+  modus_operandi = new ModusOperandi(local_conf, this);
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
