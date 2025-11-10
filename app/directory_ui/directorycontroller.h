@@ -22,7 +22,7 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi *modus_operandi, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
@@ -42,6 +42,7 @@ namespace DirectoryUi {
     DirectoryContextMenu *context_menu;
     DirectoryUi::SortMenu *sort_menu;
     QComboBox *libswitch;
+    ModusOperandi &modus_operandi;
 
     void settingsDialog(QComboBox *libswitch);
 

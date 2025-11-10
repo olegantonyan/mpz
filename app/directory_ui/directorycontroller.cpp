@@ -17,12 +17,14 @@
 #include <QFileInfo>
 
 namespace DirectoryUi {
-Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi *modus_operandi, QObject *parent) :
+Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
     local_conf(local_cfg),
-    libswitch(_libswitch) {
+    libswitch(_libswitch),
+    modus_operandi(modus)
+    {
     Q_ASSERT(search);
     Q_ASSERT(view);
 
@@ -55,10 +57,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         if (idx >= 0) {
           auto path = local_conf.libraryPaths()[idx];
-          if (path.startsWith("mpd://") && modus_operandi->get() == ModusOperandi::MODUS_LOCALFS) {
-            modus_operandi->set(ModusOperandi::MODUS_MPD);
-          } else if (!path.startsWith("mpd://") && modus_operandi->get() == ModusOperandi::MODUS_MPD) {
-            modus_operandi->set(ModusOperandi::MODUS_LOCALFS);
+          if (path.startsWith("mpd://") && modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
+            modus_operandi.set(ModusOperandi::MODUS_MPD);
+          } else if (!path.startsWith("mpd://") && modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+            modus_operandi.set(ModusOperandi::MODUS_LOCALFS);
           }
           model->loadAsync(path);
           local_conf.saveCurrentLibraryPath(idx);

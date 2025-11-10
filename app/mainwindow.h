@@ -64,7 +64,7 @@ private:
   PlaybackLogUi::Controller *playback_log;
   SortUi::SortMenu *sort_menu;
   SleepLock *sleep_lock;
-  ModusOperandi *modus_operandi;
+  ModusOperandi modus_operandi;
 
   int streamBuffer();
   void setupUiSettings();
