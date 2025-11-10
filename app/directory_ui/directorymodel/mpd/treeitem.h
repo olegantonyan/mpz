@@ -12,7 +12,7 @@ namespace DirectoryUi {
       TreeItem(bool is_dir, const QString& path, time_t last_mod = 0, TreeItem *parent_item = nullptr);
       ~TreeItem();
 
-      void setPathWName(const QString &path);
+      void set_path_with_name(const QString &path);
       bool match(const QString &filter) const;
       bool update_visibility(const QString &filter);
       int visible_children_count() const;
