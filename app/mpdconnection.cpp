@@ -38,7 +38,7 @@ bool MpdConnection::establish(const QUrl &url) {
     return false;
   }
   establish_idle(url);
-  emit connected(this);
+  emit connected();
   return true;
 }
 
@@ -63,13 +63,13 @@ bool MpdConnection::establish_idle(const QUrl &url) {
 void MpdConnection::on_idle_readable() {
   enum mpd_idle event = mpd_recv_idle(idle_conn, false);
   if (event & MPD_IDLE_DATABASE) {
-    qDebug() << "mpd database changed";
+    emit database_updated();
   }
   if (event & MPD_IDLE_PLAYER) {
-    qDebug() << "mpd player state changed";
+    emit player_state_changed();
   }
   if (event & MPD_IDLE_STORED_PLAYLIST) {
-    qDebug() << "mpd playlist changed";
+    emit playlist_updated();
   }
   mpd_send_idle(idle_conn);
 }

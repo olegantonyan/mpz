@@ -25,7 +25,10 @@ public:
   QString last_error() const;
 
 signals:
-  void connected(MpdConnection *self);
+  void connected();
+  void database_updated();
+  void playlist_updated();
+  void player_state_changed();
 
 private slots:
   void on_idle_readable();

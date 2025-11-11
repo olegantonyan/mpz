@@ -13,6 +13,7 @@ namespace DirectoryUi {
   namespace DirectoryModel {
     Mpd::Mpd(MpdConnection &conn, QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(conn) {
       create_root_item();
+      connect(&conn, &MpdConnection::database_updated, this, &Mpd::on_database_updated);
     }
 
     Mpd::~Mpd() {
@@ -29,16 +30,19 @@ namespace DirectoryUi {
       return root_item;
     }
 
+    void Mpd::on_database_updated() {
+      beginResetModel();
+      load_directory(create_root_item(), "");
+      endResetModel();
+      sort(0, Qt::AscendingOrder);
+    }
+
     void Mpd::loadAsync(const QString &path) {
       if (!connection.establish(QUrl(path))) {
         return;
       }
 
-      beginResetModel();
-      load_directory(create_root_item(), "");
-      endResetModel();
-
-      sort(0, Qt::AscendingOrder);
+      on_database_updated();
 
       emit directoryLoaded(path);
     }

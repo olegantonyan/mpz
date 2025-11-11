@@ -37,6 +37,9 @@ namespace DirectoryUi {
       bool hasChildren(const QModelIndex &parent) const;
       void sort(int column, Qt::SortOrder order);
 
+    public slots:
+      void on_database_updated();
+
     private:
       void load_directory(TreeItem* parent, const QString& path);
       QModelIndex create_index_for_item(TreeItem* item) const;
