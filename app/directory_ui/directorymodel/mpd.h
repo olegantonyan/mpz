@@ -18,7 +18,7 @@ namespace DirectoryUi {
       void directoryLoaded(const QString &path);
 
     public:
-      explicit Mpd(QObject *parent = nullptr);
+      explicit Mpd(MpdConnection &conn, QObject *parent = nullptr);
       ~Mpd();
 
       void loadAsync(const QString &path);
@@ -43,7 +43,7 @@ namespace DirectoryUi {
       TreeItem *tree_item_from_index(const QModelIndex &index) const;
       TreeItem *create_root_item();
 
-      MpdConnection connection;
+      MpdConnection &connection;
       TreeItem *root_item;
     };
   }

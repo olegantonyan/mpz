@@ -11,7 +11,7 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    Mpd::Mpd(QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(nullptr) {
+    Mpd::Mpd(MpdConnection &conn, QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(conn) {
       create_root_item();
     }
 
@@ -127,19 +127,21 @@ namespace DirectoryUi {
     }
 
     void Mpd::load_directory(TreeItem *parent, const QString &path) {
-      if (!connection.get()) {
+      QMutexLocker locker(&connection.mutex);
+
+      if (!connection.ping()) {
         qWarning() << "mpd connection does not exist";
         return;
       }
 
-      if (!mpd_send_list_meta(connection.get(), path.toUtf8().constData())) {
-        qWarning() << "mpd_send_list_all:" << mpd_connection_get_error_message(connection.get());
+      if (!mpd_send_list_meta(connection.conn, path.toUtf8().constData())) {
+        qWarning() << "mpd_send_list_all:" << connection.last_error();
         return;
       }
 
       struct mpd_entity* entity;
       QVector<TreeItem*> new_items;
-      while ((entity = mpd_recv_entity(connection.get())) != nullptr) {
+      while ((entity = mpd_recv_entity(connection.conn)) != nullptr) {
         if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY) {
           const struct mpd_directory* dir = mpd_entity_get_directory(entity);
           auto item = new TreeItem(
@@ -172,7 +174,7 @@ namespace DirectoryUi {
         endInsertRows();
       }
 
-      mpd_response_finish(connection.get());
+      mpd_response_finish(connection.conn);
       parent->loaded = true;
     }
 
@@ -201,7 +203,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::fetchMore(const QModelIndex &parent) {
-      if (!parent.isValid() || !connection.get()) {
+      if (!parent.isValid() || !connection.conn) {
         return;
       }
       TreeItem* item = tree_item_from_index(parent);

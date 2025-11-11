@@ -2,6 +2,7 @@
 #define MODUSOPERANDI_H
 
 #include "config/local.h"
+#include "mpdconnection.h"
 
 #include <QObject>
 
@@ -18,6 +19,10 @@ public:
   Q_ENUM(ActiveMode)
 
   ActiveMode get() const;
+
+#ifdef ENABLE_MPD_SUPPORT
+  MpdConnection mpd_connection;
+#endif
 
 public slots:
   void set(ActiveMode new_mode);

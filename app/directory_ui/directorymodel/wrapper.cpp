@@ -7,7 +7,7 @@ namespace DirectoryUi {
     Wrapper::Wrapper(ModusOperandi &modus, QObject *parent) : QObject(parent), modus_operandi(modus) {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
-      mpd = new Mpd(this);
+      mpd = new Mpd(modus.mpd_connection, this);
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Wrapper::directoryLoaded);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Wrapper::directoryLoaded);
