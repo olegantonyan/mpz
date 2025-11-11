@@ -42,7 +42,7 @@ set(PROJECT_SOURCES
   app/main.cpp
   app/mainmenu.cpp
   app/mainwindow.cpp
-  app/directory_ui/directorymodel/wrapper.cpp
+  app/directory_ui/directorymodel/proxy.cpp
   app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp

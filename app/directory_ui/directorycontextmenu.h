@@ -1,7 +1,7 @@
 #ifndef DIRECTORYCONTEXTMENU_H
 #define DIRECTORYCONTEXTMENU_H
 
-#include "directorymodel/wrapper.h"
+#include "directorymodel/proxy.h"
 #include "playlist/playlist.h"
 
 #include <QObject>
@@ -16,7 +16,7 @@ namespace DirectoryUi {
   class DirectoryContextMenu : public QObject {
     Q_OBJECT
   public:
-    explicit DirectoryContextMenu(DirectoryModel::Wrapper *model, QTreeView *view, QLineEdit *seacrh, QObject *parent = nullptr);
+    explicit DirectoryContextMenu(DirectoryModel::Proxy *model, QTreeView *view, QLineEdit *seacrh, QObject *parent = nullptr);
 
   public slots:
     void show(const QPoint &pos);
@@ -26,7 +26,7 @@ namespace DirectoryUi {
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
 
   private:
-    DirectoryModel::Wrapper *model;
+    DirectoryModel::Proxy *model;
     QTreeView *view;
     QLineEdit *search;
   };

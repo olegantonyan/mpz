@@ -1,5 +1,5 @@
-#ifndef DIRECTORYDATAMODELWRAPPER_H
-#define DIRECTORYDATAMODELWRAPPER_H
+#ifndef DIRECTORYDATAMODELPROXY_H
+#define DIRECTORYDATAMODELPROXY_H
 
 #include "modusoperandi.h"
 #include "localfs.h"
@@ -10,18 +10,18 @@
 #include <QObject>
 #include <QString>
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    class Wrapper : public QObject {
+    class Proxy: public QSortFilterProxyModel {
       Q_OBJECT
 
     public:
-      explicit Wrapper(ModusOperandi &modus, QObject *parent = nullptr);
+      explicit Proxy(ModusOperandi &modus, QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
 
-      QAbstractItemModel *model() const;
       QModelIndex rootIndex() const;
       QString filePath(const QModelIndex &index) const;
       void filter(const QString &filter);
@@ -31,6 +31,9 @@ namespace DirectoryUi {
 
     public slots:
       void sortBy(const QString &direction);
+
+    private slots:
+      void swtich_to(ModusOperandi::ActiveMode new_mode);
 
     private:
       ModusOperandi &modus_operandi;
@@ -42,4 +45,4 @@ namespace DirectoryUi {
   }
 }
 
-#endif // DIRECTORYDATAMODELWRAPPER_H
+#endif // DIRECTORYDATAMODELPROXY_H

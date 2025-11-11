@@ -8,7 +8,7 @@
 #include <QUrl>
 
 namespace DirectoryUi {
-  DirectoryContextMenu::DirectoryContextMenu(DirectoryModel::Wrapper *m, QTreeView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), view(v), search(s) {
+  DirectoryContextMenu::DirectoryContextMenu(DirectoryModel::Proxy *m, QTreeView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), view(v), search(s) {
     Q_ASSERT(model);
     Q_ASSERT(view);
     Q_ASSERT(search);

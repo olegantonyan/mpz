@@ -32,9 +32,9 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
     restore_scroll_once = true;
 
-    model = new DirectoryModel::Wrapper(modus_operandi, this);
-    connect(model, &DirectoryUi::DirectoryModel::Wrapper::directoryLoaded, [=] {
-      view->setModel(model->model());
+    model = new DirectoryModel::Proxy(modus_operandi, this);
+    connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, [=] {
+      view->setModel(model);
       view->setRootIndex(model->rootIndex());
       view->setHeaderHidden(true);
       view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -90,7 +90,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
 
     sort_menu = new DirectoryUi::SortMenu(libsort);
-    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::DirectoryModel::Wrapper::sortBy);
+    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::DirectoryModel::Proxy::sortBy);
   }
 
   void Controller::on_search(const QString &term) {
