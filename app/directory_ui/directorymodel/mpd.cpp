@@ -13,6 +13,8 @@ namespace DirectoryUi {
   namespace DirectoryModel {
     Mpd::Mpd(MpdConnection &conn, QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(conn) {
       create_root_item();
+      last_sort_column = 0;
+      last_sort_order = Qt::AscendingOrder;
       connect(&conn, &MpdConnection::database_updated, this, &Mpd::on_database_updated);
     }
 
@@ -34,7 +36,8 @@ namespace DirectoryUi {
       beginResetModel();
       load_directory(create_root_item(), "");
       endResetModel();
-      sort(0, Qt::AscendingOrder);
+      sort(last_sort_column, last_sort_order);
+      filter(last_filter_term);
     }
 
     void Mpd::loadAsync(const QString &path) {
@@ -53,6 +56,7 @@ namespace DirectoryUi {
         i->update_visibility(term);
       }
       endResetModel();
+      last_filter_term = term;
     }
     QModelIndex Mpd::rootIndex() const {
       if (!root_item) {
@@ -249,6 +253,9 @@ namespace DirectoryUi {
           return false;
         }
       });
+
+      last_sort_column = column;
+      last_sort_order = order;
 
       emit layoutChanged();
     }

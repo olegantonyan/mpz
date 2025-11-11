@@ -48,6 +48,10 @@ namespace DirectoryUi {
 
       MpdConnection &connection;
       TreeItem *root_item;
+
+      int last_sort_column;
+      Qt::SortOrder last_sort_order;
+      QString last_filter_term;
     };
   }
 }
