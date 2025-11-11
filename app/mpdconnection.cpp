@@ -44,8 +44,11 @@ bool MpdConnection::establish(const QUrl &url) {
 
 bool MpdConnection::establish_idle(const QUrl &url) {
   idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
-
-  if (!idle_conn || mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
+  if (!idle_conn) {
+    qWarning() << "error allocation mpd idle connection";
+    return false;
+  }
+  if (mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
     qWarning() << "error establishing idle connection" << mpd_connection_get_error_message(idle_conn);
     return false;
   }
