@@ -8,6 +8,7 @@
 #include <QStyle>
 #include <QFileInfo>
 #include <QFileIconProvider>
+#include <QtConcurrent>
 
 namespace DirectoryUi {
   namespace DirectoryModel {
@@ -44,10 +45,10 @@ namespace DirectoryUi {
       if (!connection.establish(QUrl(path))) {
         return;
       }
-
-      on_database_updated();
-
-      emit directoryLoaded(path);
+      (void)QtConcurrent::run([=]() {
+        on_database_updated();
+        emit directoryLoaded(path);
+      });
     }
 
     void Mpd::filter(const QString &term) {
