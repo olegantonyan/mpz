@@ -59,6 +59,7 @@ namespace DirectoryUi {
       endResetModel();
       last_filter_term = term;
     }
+
     QModelIndex Mpd::rootIndex() const {
       if (!root_item) {
         return QModelIndex();
