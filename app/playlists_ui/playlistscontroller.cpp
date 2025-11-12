@@ -14,7 +14,6 @@ namespace PlaylistsUi {
     QObject(parent),
     view(v),
     search(s),
-    local_conf(conf),
     spinner(_spinner) {
 
     model = new PlaylistsUi::Model(conf, this);
@@ -49,7 +48,7 @@ namespace PlaylistsUi {
   void Controller::load() {
     view->setModel(proxy);
     if (model->listSize() > 0) {
-      auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
+      auto idx = model->currentPlaylistIndex();
       auto item = model->itemAt(idx);
       view->setCurrentIndex(proxy->mapFromSource(idx));
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
@@ -102,12 +101,6 @@ namespace PlaylistsUi {
         search->clear();
       }
     }
-  }
-
-  void Controller::persist(int current_index) {
-    auto max_index = qMax(model->listSize() - 1, 0);
-    auto save_index = qMin(current_index, max_index);
-    local_conf.saveCurrentPlaylist(save_index);
   }
 
   void Controller::on_removeItem(const QModelIndex &index) {
@@ -166,7 +159,7 @@ namespace PlaylistsUi {
     }
     auto source_index = proxy->mapToSource(index);
     auto item = model->itemAt(source_index);
-    persist(source_index.row());
+    model->saveCurrentPlaylistIndex(source_index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     emit selected(item);
@@ -180,7 +173,7 @@ namespace PlaylistsUi {
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     view->scrollToBottom();
-    persist(index.row());
+    model->saveCurrentPlaylistIndex(index);
     emit loaded(item);
     emit selected(item);
     spinner->hide();

@@ -135,4 +135,15 @@ namespace PlaylistsUi {
   QList<std::shared_ptr<Playlist::Playlist> > Model::itemList() const {
     return list;
   }
+
+  QModelIndex Model::currentPlaylistIndex() const {
+    return buildIndex(qMin(local_conf.currentPlaylist(), listSize() - 1));
+  }
+
+  void Model::saveCurrentPlaylistIndex(const QModelIndex &idx) {
+    int current_index = idx.row();
+    auto max_index = qMax(listSize() - 1, 0);
+    auto save_index = qMin(current_index, max_index);
+    local_conf.saveCurrentPlaylist(save_index);
+  }
 }

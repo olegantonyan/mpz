@@ -51,12 +51,9 @@ namespace PlaylistsUi {
     QListView *view;
     QLineEdit *search;
     Model *model;
-    Config::Local &local_conf;
     BusySpinner *spinner;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
-
-    void persist(int current_index);
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
