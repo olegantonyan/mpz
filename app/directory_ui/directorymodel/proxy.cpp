@@ -67,12 +67,12 @@ namespace DirectoryUi {
       switch (modus_operandi.get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
-        result = mpd->filePath(mapFromSource(index));
+        result = mpd->filePath(mapToSource(index));
 #endif
         break;
       case ModusOperandi::MODUS_LOCALFS:
       default:
-        result = localfs->filePath(mapFromSource(index));
+        result = localfs->filePath(mapToSource(index));
         break;
       }
 
