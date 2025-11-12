@@ -33,7 +33,7 @@ namespace DirectoryUi {
       void sortBy(const QString &direction);
 
     private slots:
-      void swtich_to(ModusOperandi::ActiveMode new_mode);
+      void switchTo(ModusOperandi::ActiveMode new_mode);
 
     private:
       ModusOperandi &modus_operandi;

@@ -11,11 +11,11 @@ namespace DirectoryUi {
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
-      connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::swtich_to);
-      swtich_to(modus_operandi.get());
+      connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
+      switchTo(modus_operandi.get());
     }
 
-    void Proxy::swtich_to(ModusOperandi::ActiveMode new_mode) {
+    void Proxy::switchTo(ModusOperandi::ActiveMode new_mode) {
       switch (new_mode) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT

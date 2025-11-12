@@ -38,13 +38,13 @@ namespace DirectoryUi {
       void sort(int column, Qt::SortOrder order);
 
     public slots:
-      void on_database_updated();
+      void onDatabaseUpdated();
 
     private:
-      void load_directory(TreeItem* parent, const QString& path);
-      QModelIndex create_index_for_item(TreeItem* item) const;
-      TreeItem *tree_item_from_index(const QModelIndex &index) const;
-      TreeItem *create_root_item();
+      void loadDirectory(TreeItem* parent, const QString& path);
+      QModelIndex createIndexForItem(TreeItem* item) const;
+      TreeItem *treeItemFromIndex(const QModelIndex &index) const;
+      TreeItem *createRootItem();
 
       MpdConnection &connection;
       TreeItem *root_item;
