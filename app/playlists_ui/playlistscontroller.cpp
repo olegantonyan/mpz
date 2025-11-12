@@ -37,7 +37,7 @@ namespace PlaylistsUi {
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
 
-    context_menu = new PlaylistsContextMenu(model, proxy, view, search, this);
+    context_menu = new PlaylistsContextMenu(proxy, view, search, this);
     connect(context_menu, &PlaylistsContextMenu::removed, this, &Controller::on_removeItem);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);

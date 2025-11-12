@@ -23,4 +23,14 @@ namespace PlaylistsUi {
     }
     return 0;
   }
+
+  std::shared_ptr<Playlist::Playlist> ProxyFilterModel::itemAt(const QModelIndex &index) const {
+    Model *s = qobject_cast<Model *>(sourceModel());
+    return s->itemAt(mapToSource(index));
+  }
+
+  bool ProxyFilterModel::persist() {
+    Model *s = qobject_cast<Model *>(sourceModel());
+    return s->persist();
+  }
 }

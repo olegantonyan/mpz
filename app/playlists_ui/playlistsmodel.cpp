@@ -4,17 +4,16 @@
 #include <QtConcurrent>
 #include <QFont>
 
-namespace PlaylistsUi {  
+namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
     list.clear();
   }
 
   void Model::loadAsync() {
     (void)QtConcurrent::run([=]() {
+      beginResetModel();
       list = local_conf.playlists();
-      beginInsertRows(QModelIndex(), 0, list.size());
-      endInsertRows();
-      emit dataChanged(buildIndex(0), buildIndex(list.size()));
+      endResetModel();
       emit asyncLoadFinished();
       persist();
     });
