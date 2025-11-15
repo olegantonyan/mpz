@@ -11,13 +11,13 @@
 #include <QMouseEvent>
 
 namespace PlaylistsUi {
-  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
+  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
     spinner(_spinner) {
 
-    proxy = new ProxyFilterModel(conf, this);
+    proxy = new ProxyFilterModel(conf, modus, this);
     spinner->show();
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);

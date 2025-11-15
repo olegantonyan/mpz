@@ -7,6 +7,7 @@
 #include "busyspinner.h"
 #include "playlistsproxyfiltermodel.h"
 #include "playlistscontextmenu.h"
+#include "modusoperandi.h"
 
 #include <QObject>
 #include <QListView>
@@ -22,7 +23,7 @@ namespace PlaylistsUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
+    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent = nullptr);
     std::shared_ptr<Playlist::Playlist> playlistByTrackUid(quint64 track_uid) const;
 
   public slots:

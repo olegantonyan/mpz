@@ -2,6 +2,7 @@
 #define PLAYLISTSPROXYFILTERMODEL_H
 
 #include "playlistsmodel.h"
+#include "modusoperandi.h"
 
 #include <QObject>
 #include <QSortFilterProxyModel>
@@ -10,7 +11,7 @@ namespace PlaylistsUi {
   class ProxyFilterModel : public QSortFilterProxyModel {
     Q_OBJECT
   public:
-    explicit ProxyFilterModel(Config::Local &conf, QObject *parent = nullptr);
+    explicit ProxyFilterModel(Config::Local &conf, ModusOperandi &modus, QObject *parent = nullptr);
 
     std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
     QModelIndex append(std::shared_ptr<Playlist::Playlist> pl);
@@ -24,6 +25,15 @@ namespace PlaylistsUi {
   signals:
     void asyncLoadFinished();
     void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
+
+  private slots:
+    void switchTo(ModusOperandi::ActiveMode new_mode);
+
+  private:
+    ModusOperandi &modus_operandi;
+    PlaylistsUi::Model *localfs;
+#ifdef ENABLE_MPD_SUPPORT
+#endif
   };
 }
 

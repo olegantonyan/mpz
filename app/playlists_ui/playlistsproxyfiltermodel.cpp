@@ -1,14 +1,29 @@
 #include "playlistsproxyfiltermodel.h"
 
 namespace PlaylistsUi {
-  ProxyFilterModel::ProxyFilterModel(Config::Local &conf, QObject *parent) : QSortFilterProxyModel(parent) {
-    auto source_model = new PlaylistsUi::Model(conf, this);
-    setSourceModel(source_model);
-
-    connect(source_model, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
-    connect(source_model, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
-
+  ProxyFilterModel::ProxyFilterModel(Config::Local &conf, ModusOperandi &modus, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus) {
     setFilterCaseSensitivity(Qt::CaseInsensitive);
+    
+    localfs = new PlaylistsUi::Model(conf, this);
+    connect(localfs, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(localfs, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+#ifdef ENABLE_MPD_SUPPORT
+#endif
+    switchTo(modus_operandi.get());
+  }
+
+  void ProxyFilterModel::switchTo(ModusOperandi::ActiveMode new_mode) {
+    switch (new_mode) {
+    case ModusOperandi::MODUS_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+      //setSourceModel(mpd);
+      break;
+#endif
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+      setSourceModel(localfs);
+      break;
+    }
   }
 
   int ProxyFilterModel::rowCount(const QModelIndex &parent) const {

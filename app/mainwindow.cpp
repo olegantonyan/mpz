@@ -16,7 +16,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   local_conf(local_c),
   global_conf(global_c),
   trayicon(nullptr),
-  modus_operandi(local_c) 
+  modus_operandi(local_c)
   {
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
@@ -27,7 +27,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
   library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, modus_operandi, this);
-  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
+  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, this);
 
   ui->toolButtonLibrarySort->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
