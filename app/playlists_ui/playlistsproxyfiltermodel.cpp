@@ -1,9 +1,13 @@
 #include "playlistsproxyfiltermodel.h"
 
 namespace PlaylistsUi {
-  ProxyFilterModel::ProxyFilterModel(Model *source_model, QObject *parent) : QSortFilterProxyModel(parent) {
-    Q_ASSERT(source_model);
+  ProxyFilterModel::ProxyFilterModel(Config::Local &conf, QObject *parent) : QSortFilterProxyModel(parent) {
+    auto source_model = new PlaylistsUi::Model(conf, this);
     setSourceModel(source_model);
+
+    connect(source_model, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(source_model, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+
     setFilterCaseSensitivity(Qt::CaseInsensitive);
   }
 

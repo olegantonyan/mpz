@@ -17,14 +17,12 @@ namespace PlaylistsUi {
     search(s),
     spinner(_spinner) {
 
-    auto model = new PlaylistsUi::Model(conf, this);
+    proxy = new ProxyFilterModel(conf, this);
     spinner->show();
-    connect(model, &Model::asyncLoadFinished, spinner, &BusySpinner::hide);
-    connect(model, &Model::asyncLoadFinished, this, &Controller::load);
-    connect(model, &Model::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    model->loadAsync();
-
-    proxy = new ProxyFilterModel(model, this);
+    connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
+    connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);
+    connect(proxy, &ProxyFilterModel::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
+    proxy->activeModel()->loadAsync();
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
