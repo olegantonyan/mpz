@@ -1,5 +1,6 @@
 #include "playlistscontroller.h"
 #include "playlist/playlist.h"
+#include "playlistsmodel.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -16,7 +17,7 @@ namespace PlaylistsUi {
     search(s),
     spinner(_spinner) {
 
-    model = new PlaylistsUi::Model(conf, this);
+    auto model = new PlaylistsUi::Model(conf, this);
     spinner->show();
     connect(model, &Model::asyncLoadFinished, spinner, &BusySpinner::hide);
     connect(model, &Model::asyncLoadFinished, this, &Controller::load);
@@ -48,9 +49,9 @@ namespace PlaylistsUi {
 
   void Controller::load() {
     view->setModel(proxy);
-    if (model->listSize() > 0) {
-      auto idx = model->currentPlaylistIndex();
-      auto item = model->itemAt(idx);
+    if (proxy->activeModel()->listSize() > 0) {
+      auto idx = proxy->activeModel()->currentPlaylistIndex();
+      auto item = proxy->activeModel()->itemAt(idx);
       view->setCurrentIndex(proxy->mapFromSource(idx));
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
 
@@ -59,7 +60,7 @@ namespace PlaylistsUi {
   }
 
   std::shared_ptr<Playlist::Playlist> Controller::playlistByTrackUid(quint64 track_uid) const {
-    return model->itemByTrack(track_uid);
+    return proxy->activeModel()->itemByTrack(track_uid);
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
@@ -105,37 +106,36 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_removeItem(const QModelIndex &index) {
-    model->remove(proxy->mapToSource(index));
+    proxy->activeModel()->remove(proxy->mapToSource(index));
     if (view->selectionModel()->selectedIndexes().size() > 0) {
       auto selected_idx = view->selectionModel()->selectedIndexes().first();
-      if (selected_idx == index || model->listSize() == 1) {
-        on_itemActivated(model->buildIndex(0));
+      if (selected_idx == index || proxy->activeModel()->listSize() == 1) {
+        on_itemActivated(proxy->activeModel()->buildIndex(0));
       }
     }
-    if (model->listSize() == 0) {
+    if (proxy->activeModel()->listSize() == 0) {
       emit emptied();
     }
   }
 
   void Controller::on_itemDoubleClicked(const QModelIndex &index) {
-    if (model->listSize() <= 0) {
+    if (proxy->activeModel()->listSize() <= 0) {
       return;
     }
-    auto source_index = proxy->mapToSource(index);
-    auto item = model->itemAt(source_index);
+    auto item = proxy->itemAt(index);
     emit doubleclicked(item);
   }
 
   void Controller::on_start(const Track &t) {
-    model->higlight(model->itemByTrack(t.uid()));
+    proxy->activeModel()->higlight(proxy->activeModel()->itemByTrack(t.uid()));
   }
 
   void Controller::on_stop() {
-    model->higlight(nullptr);
+    proxy->activeModel()->higlight(nullptr);
   }
 
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
-    model->createPlaylistAsync(filepaths, libraryDir);
+    proxy->activeModel()->createPlaylistAsync(filepaths, libraryDir);
     spinner->show();
   }
 
@@ -144,21 +144,21 @@ namespace PlaylistsUi {
       return;
     }
 
-    on_itemActivated(proxy->mapFromSource(model->itemIndex(playlist)));
+    on_itemActivated(proxy->mapFromSource(proxy->activeModel()->itemIndex(playlist)));
   }
 
   void Controller::on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl) {
     Q_UNUSED(pl)
-    model->persist();
+    proxy->activeModel()->persist();
   }
 
   void Controller::on_itemActivated(const QModelIndex &index) {
-    if (model->listSize() <= 0) {
+    if (proxy->activeModel()->listSize() <= 0) {
       return;
     }
     auto source_index = proxy->mapToSource(index);
-    auto item = model->itemAt(source_index);
-    model->saveCurrentPlaylistIndex(source_index);
+    auto item = proxy->activeModel()->itemAt(source_index);
+    proxy->activeModel()->saveCurrentPlaylistIndex(source_index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     emit selected(item);
@@ -170,7 +170,7 @@ namespace PlaylistsUi {
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     view->scrollToBottom();
-    model->saveCurrentPlaylistIndex(index);
+    proxy->activeModel()->saveCurrentPlaylistIndex(index);
     emit loaded(pl);
     emit selected(pl);
     spinner->hide();

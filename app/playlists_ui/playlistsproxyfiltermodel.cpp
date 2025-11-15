@@ -30,12 +30,15 @@ namespace PlaylistsUi {
   }
 
   bool ProxyFilterModel::persist() {
-    Model *s = qobject_cast<Model *>(sourceModel());
-    return s->persist();
+    return activeModel()->persist();
   }
 
   QModelIndex ProxyFilterModel::append(std::shared_ptr<Playlist::Playlist> pl) {
+    return mapFromSource(activeModel()->append(pl));
+  }
+
+  Model *ProxyFilterModel::activeModel() const {
     Model *s = qobject_cast<Model *>(sourceModel());
-    return mapFromSource(s->append(pl));
+    return s;
   }
 }

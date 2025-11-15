@@ -18,6 +18,8 @@ namespace PlaylistsUi {
     bool persist();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    Model *activeModel() const;
   };
 }
 

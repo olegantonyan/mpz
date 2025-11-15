@@ -1,7 +1,6 @@
 #ifndef PLAYLISTSVIEWMODEL_H
 #define PLAYLISTSVIEWMODEL_H
 
-#include "playlistsmodel.h"
 #include "playlist/playlist.h"
 #include "config/local.h"
 #include "track.h"
@@ -50,7 +49,6 @@ namespace PlaylistsUi {
   private:
     QListView *view;
     QLineEdit *search;
-    Model *model;
     BusySpinner *spinner;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
