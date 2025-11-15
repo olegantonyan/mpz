@@ -20,6 +20,7 @@ namespace PlaylistsUi {
     spinner->show();
     connect(model, &Model::asyncLoadFinished, spinner, &BusySpinner::hide);
     connect(model, &Model::asyncLoadFinished, this, &Controller::load);
+    connect(model, &Model::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
     model->loadAsync();
 
     proxy = new ProxyFilterModel(model, this);
@@ -134,9 +135,7 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
-    auto pl = new Playlist::Playlist();
-    connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    pl->loadAsync(filepaths, libraryDir);
+    model->createPlaylistAsync(filepaths, libraryDir);
     spinner->show();
   }
 
@@ -165,17 +164,15 @@ namespace PlaylistsUi {
     emit selected(item);
   }
 
-  void Controller::on_playlistLoadFinished(Playlist::Playlist *pl) {
-    disconnect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    auto item = std::shared_ptr<Playlist::Playlist>(pl);
-    auto index = proxy->mapFromSource(model->append(item));
+  void Controller::on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl) {
+    auto index = proxy->append(pl);
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     view->scrollToBottom();
     model->saveCurrentPlaylistIndex(index);
-    emit loaded(item);
-    emit selected(item);
+    emit loaded(pl);
+    emit selected(pl);
     spinner->hide();
   }
 

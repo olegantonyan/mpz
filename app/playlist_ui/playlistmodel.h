@@ -39,6 +39,11 @@ namespace PlaylistUi {
 
     void remove(const QList<QModelIndex> &items);
 
+    void appendToPlaylistAsync(const QList<QDir> &filepaths);
+
+  signals:
+    void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
+
   private:
     void setTracks(const QVector<Track> &tracks);
     void allDataChanged();

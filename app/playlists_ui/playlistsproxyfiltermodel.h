@@ -13,6 +13,7 @@ namespace PlaylistsUi {
     explicit ProxyFilterModel(Model *source_model, QObject *parent = nullptr);
 
     std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
+    QModelIndex append(std::shared_ptr<Playlist::Playlist> pl);
 
     bool persist();
 

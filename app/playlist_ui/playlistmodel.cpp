@@ -1,7 +1,9 @@
 #include "playlistmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QFont>
+#include <QtConcurrent>
 
 namespace PlaylistUi {
   Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
@@ -141,5 +143,20 @@ namespace PlaylistUi {
       playlist()->removeTrack(i.row());
     }
     reload();
+  }
+
+  void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
+    if (!playlist()) {
+      return;
+    }
+
+    (void)QtConcurrent::run([=]() {
+      for (auto path : filepaths) {
+        Playlist::Loader loader(path);
+        playlist()->append(loader.tracks(), !loader.is_playlist_file());
+      }
+
+      emit appendToPlaylistAsyncFinished(playlist());
+    });
   }
 }

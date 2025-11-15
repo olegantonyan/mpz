@@ -36,52 +36,17 @@ namespace Playlist {
     return tracks_list;
   }
 
-  void Playlist::load(const QDir &path, const QString &libraryDir) {
-    rename(nameBy(path, libraryDir));
-    concat(path);
-  }
-
-  void Playlist::loadAsync(const QList<QDir> &dirs, const QString &libraryDir) {
-    (void)QtConcurrent::run([=]() {
-      load(dirs, libraryDir);
-      emit loadAsyncFinished(this);
-    });
-  }
-
   void Playlist::load(const QVector<Track> &tracks) {
+    tracks_list.clear();
     tracks_list.append(tracks);
   }
 
-  void Playlist::load(const QList<QDir> &dirs, const QString &libraryDir) {
-    QStringList names;
-    for (auto i : dirs) {
-      load(i);
-      names << nameBy(i, libraryDir);
-    }
-    rename(names.join(", "));
-  }
-
-  void Playlist::concat(const QDir &path) {
-    Loader loader(path);
-    auto tracks = loader.tracks();
-    if (loader.is_playlist_file()) {
-      tracks_list.append(tracks);
-    } else {
+  void Playlist::append(const QVector<Track> &tracks, bool with_sort) {
+    if (with_sort) {
       tracks_list.append(sort(tracks));
+    } else {
+      tracks_list.append(tracks);
     }
-  }
-
-  void Playlist::concat(const QList<QDir> &dirs) {
-    for (auto i : dirs) {
-      concat(i);
-    }
-  }
-
-  void Playlist::concatAsync(const QList<QDir> &dirs) {
-    (void)QtConcurrent::run([=]() {
-      concat(dirs);
-      emit concatAsyncFinished(this);
-    });
   }
 
   quint64 Playlist::uid() const {
@@ -155,14 +120,4 @@ namespace Playlist {
       mit.next().reload();
     }
   }
-
-  QString Playlist::nameBy(const QDir &path, const QString &libraryDir) {
-    auto result = path.absolutePath().remove(libraryDir);
-    if (result.startsWith("/")) {
-      return result.remove(0, 1);
-    } else {
-      return result;
-    }
-  }
 }
-

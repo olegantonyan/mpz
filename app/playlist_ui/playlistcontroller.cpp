@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <QMouseEvent>
 
-namespace PlaylistUi {    
+namespace PlaylistUi {
   Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg) {
     restore_scroll_once = true;
     view = v;
@@ -66,6 +66,8 @@ namespace PlaylistUi {
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
+
+    connect(model, &Model::appendToPlaylistAsyncFinished, this, &Controller::on_appendAsyncFinished);
   }
 
   void PlaylistUi::Controller::loadColumnsConfig() {
@@ -117,8 +119,7 @@ namespace PlaylistUi {
 
   void Controller::on_appendToPlaylist(const QList<QDir> &filepaths) {
     if (model->playlist() != nullptr) {
-      connect(&*model->playlist(), &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
-      model->playlist()->concatAsync(filepaths);
+      model->appendToPlaylistAsync(filepaths);
       spinner->show();
     }
   }
@@ -131,8 +132,9 @@ namespace PlaylistUi {
     }
   }
 
-  void Controller::on_appendAsyncFinished(Playlist::Playlist *pl) {
-    disconnect(pl, &Playlist::Playlist::concatAsyncFinished, this, &Controller::on_appendAsyncFinished);
+  void Controller::on_appendAsyncFinished(std::shared_ptr<Playlist::Playlist> pl) {
+    Q_ASSERT(pl == model->playlist());
+    
     model->reload();
     emit changed(model->playlist());
     spinner->hide();

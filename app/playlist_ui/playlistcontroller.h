@@ -41,7 +41,7 @@ namespace PlaylistUi {
     void sortBy(const QString &criteria);
 
   private slots:
-    void on_appendAsyncFinished(Playlist::Playlist *pl);
+    void on_appendAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
     void on_search(const QString &term);
     void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
     void on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -61,7 +61,7 @@ namespace PlaylistUi {
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
-    
+
     void loadColumnsConfig();
 
   protected:

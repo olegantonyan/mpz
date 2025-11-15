@@ -41,7 +41,7 @@ namespace PlaylistsUi {
 
   private slots:
     void on_itemActivated(const QModelIndex &index);
-    void on_playlistLoadFinished(Playlist::Playlist *pl);
+    void on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl);
     void on_search(const QString& term);
     void load();
     void on_removeItem(const QModelIndex &index);

@@ -34,10 +34,15 @@ namespace PlaylistsUi {
     QModelIndex currentPlaylistIndex() const;
     void saveCurrentPlaylistIndex(const QModelIndex &idx);
 
+    void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
+
   signals:
     void asyncLoadFinished();
+    void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
 
   private:
+    QString playlistNameBy(const QDir &path, const QString &libraryDir = "");
+
     QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
 

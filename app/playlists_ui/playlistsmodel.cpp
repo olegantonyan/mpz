@@ -1,4 +1,5 @@
 #include "playlistsmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QtConcurrent>
@@ -145,5 +146,31 @@ namespace PlaylistsUi {
     auto max_index = qMax(listSize() - 1, 0);
     auto save_index = qMin(current_index, max_index);
     local_conf.saveCurrentPlaylist(save_index);
+  }
+
+  void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
+    Q_ASSERT(filepaths.size() > 0);
+
+    auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
+
+    (void)QtConcurrent::run([=]() {
+      QStringList names;
+      for (auto path : filepaths) {
+        Playlist::Loader loader(path);
+        pl->append(loader.tracks(), !loader.is_playlist_file());
+        names << playlistNameBy(path, libraryDir);
+      }
+      pl->rename(names.join(", "));
+      emit createPlaylistAsyncFinished(pl);
+    });
+  }
+
+  QString Model::playlistNameBy(const QDir &path, const QString &libraryDir) {
+    auto result = path.absolutePath().remove(libraryDir);
+    if (result.startsWith("/")) {
+      return result.remove(0, 1);
+    } else {
+      return result;
+    }
   }
 }
