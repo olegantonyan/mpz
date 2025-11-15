@@ -22,7 +22,6 @@ namespace PlaylistsUi {
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);
     connect(proxy, &ProxyFilterModel::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    proxy->activeModel()->loadAsync();
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);

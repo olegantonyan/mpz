@@ -20,13 +20,18 @@ namespace PlaylistsUi {
       explicit Model(Config::Local &conf, MpdConnection &conn, QObject *parent = nullptr);
 
       bool persist() override;
-      void loadAsync() override;
       QModelIndex currentPlaylistIndex() const override;
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
 
+    public slots:
+      void loadAsync() override;
+
     private:
       MpdConnection &connection;
+
+      QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
+      QVector<Track> loadPlaylistTracks(const QString &name);
     };
   }
 }

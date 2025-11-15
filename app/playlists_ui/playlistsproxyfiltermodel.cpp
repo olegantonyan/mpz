@@ -12,6 +12,7 @@ namespace PlaylistsUi {
     connect(mpd, &Mpd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
     connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
 #endif
+    connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());
   }
 
@@ -20,11 +21,13 @@ namespace PlaylistsUi {
     case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
       setSourceModel(mpd);
+      activeModel()->loadAsync();
       break;
 #endif
     case ModusOperandi::MODUS_LOCALFS:
     default:
       setSourceModel(localfs);
+      activeModel()->loadAsync();
       break;
     }
   }
