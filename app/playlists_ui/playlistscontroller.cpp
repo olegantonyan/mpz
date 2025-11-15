@@ -22,6 +22,7 @@ namespace PlaylistsUi {
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);
     connect(proxy, &ProxyFilterModel::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
+    connect(proxy, &ProxyFilterModel::asyncTracksLoadFinished, this, &Controller::selected);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
@@ -51,8 +52,7 @@ namespace PlaylistsUi {
       auto item = proxy->activeModel()->itemAt(idx);
       view->setCurrentIndex(proxy->mapFromSource(idx));
       view->selectionModel()->select(idx, {QItemSelectionModel::Select});
-
-      emit selected(item);
+      proxy->activeModel()->asyncTracksLoad(item);
     }
   }
 
@@ -158,7 +158,7 @@ namespace PlaylistsUi {
     proxy->activeModel()->saveCurrentPlaylistIndex(source_index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
-    emit selected(item);
+    proxy->activeModel()->asyncTracksLoad(item);
   }
 
   void Controller::on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl) {

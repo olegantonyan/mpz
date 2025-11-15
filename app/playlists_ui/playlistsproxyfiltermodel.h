@@ -26,6 +26,7 @@ namespace PlaylistsUi {
   signals:
     void asyncLoadFinished();
     void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
+    void asyncTracksLoadFinished(std::shared_ptr<Playlist::Playlist> playlist);
 
   private slots:
     void switchTo(ModusOperandi::ActiveMode new_mode);

@@ -20,6 +20,10 @@ namespace PlaylistsUi {
     });
   }
 
+  void Model::asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) {
+    emit asyncTracksLoadFinished(playlist);
+  }
+
   void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist == nullptr) {
       highlight_uid = 0;

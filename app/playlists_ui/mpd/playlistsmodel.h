@@ -23,6 +23,7 @@ namespace PlaylistsUi {
       QModelIndex currentPlaylistIndex() const override;
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
+      void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
 
     public slots:
       void loadAsync() override;

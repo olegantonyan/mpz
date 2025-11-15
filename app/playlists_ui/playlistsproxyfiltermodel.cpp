@@ -7,10 +7,12 @@ namespace PlaylistsUi {
     localfs = new PlaylistsUi::Model(conf, this);
     connect(localfs, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
     connect(localfs, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+    connect(localfs, &Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
 #ifdef ENABLE_MPD_SUPPORT
     mpd = new Mpd::Model(conf, modus.mpd_connection, this);
     connect(mpd, &Mpd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
     connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+    connect(mpd, &Mpd::Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
 #endif
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());

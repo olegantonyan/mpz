@@ -42,12 +42,17 @@ namespace PlaylistsUi {
       }
       mpd_response_finish(connection.conn);
 
-      // TODO lazy-load songs upon playlist selection
-      for (auto i : result) {
-        i->append(loadPlaylistTracks(i->name()), true);
-      }
-
       return result;
+    }
+
+    void Model::asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) {
+      if (!playlist) {
+        return;
+      }
+      (void)QtConcurrent::run([=]() {
+        playlist->load(loadPlaylistTracks(playlist->name()));
+        emit asyncTracksLoadFinished(playlist);
+      });
     }
 
     QVector<Track> Model::loadPlaylistTracks(const QString &name) {
