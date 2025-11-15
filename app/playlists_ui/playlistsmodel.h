@@ -27,20 +27,19 @@ namespace PlaylistsUi {
     std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
     int listSize() const;
     QModelIndex itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const;
-    bool persist();
+    virtual bool persist();
     QList<std::shared_ptr<Playlist::Playlist>> itemList() const;
-    void loadAsync();
+    virtual void loadAsync();
     void higlight(std::shared_ptr<Playlist::Playlist> playlist);
-    QModelIndex currentPlaylistIndex() const;
-    void saveCurrentPlaylistIndex(const QModelIndex &idx);
-
-    void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
+    virtual QModelIndex currentPlaylistIndex() const;
+    virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
+    virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
 
   signals:
     void asyncLoadFinished();
     void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
 
-  private:
+  protected:
     QString playlistNameBy(const QDir &path, const QString &libraryDir = "");
 
     QList<std::shared_ptr<Playlist::Playlist>> list;

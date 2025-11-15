@@ -2,6 +2,7 @@
 #define PLAYLISTSPROXYFILTERMODEL_H
 
 #include "playlistsmodel.h"
+#include "mpd/playlistsmodel.h"
 #include "modusoperandi.h"
 
 #include <QObject>
@@ -31,8 +32,9 @@ namespace PlaylistsUi {
 
   private:
     ModusOperandi &modus_operandi;
-    PlaylistsUi::Model *localfs;
+    Model *localfs;
 #ifdef ENABLE_MPD_SUPPORT
+    Mpd::Model *mpd;
 #endif
   };
 }

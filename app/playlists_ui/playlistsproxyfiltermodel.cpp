@@ -3,11 +3,14 @@
 namespace PlaylistsUi {
   ProxyFilterModel::ProxyFilterModel(Config::Local &conf, ModusOperandi &modus, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus) {
     setFilterCaseSensitivity(Qt::CaseInsensitive);
-    
+
     localfs = new PlaylistsUi::Model(conf, this);
     connect(localfs, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
     connect(localfs, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
 #ifdef ENABLE_MPD_SUPPORT
+    mpd = new Mpd::Model(conf, modus.mpd_connection, this);
+    connect(mpd, &Mpd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
 #endif
     switchTo(modus_operandi.get());
   }
@@ -16,7 +19,7 @@ namespace PlaylistsUi {
     switch (new_mode) {
     case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
-      //setSourceModel(mpd);
+      setSourceModel(mpd);
       break;
 #endif
     case ModusOperandi::MODUS_LOCALFS:
@@ -37,15 +40,14 @@ namespace PlaylistsUi {
       return QSortFilterProxyModel::rowCount(parent);
     }
 #endif
-    if (sourceModel()) {
-      return sourceModel()->rowCount();
+    if (activeModel()) {
+      return activeModel()->rowCount();
     }
     return 0;
   }
 
   std::shared_ptr<Playlist::Playlist> ProxyFilterModel::itemAt(const QModelIndex &index) const {
-    Model *s = qobject_cast<Model *>(sourceModel());
-    return s->itemAt(mapToSource(index));
+    return activeModel()->itemAt(mapToSource(index));
   }
 
   bool ProxyFilterModel::persist() {
@@ -57,7 +59,14 @@ namespace PlaylistsUi {
   }
 
   Model *ProxyFilterModel::activeModel() const {
-    Model *s = qobject_cast<Model *>(sourceModel());
-    return s;
+    switch (modus_operandi.get()) {
+    case ModusOperandi::MODUS_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+      return qobject_cast<Mpd::Model *>(sourceModel());
+#endif
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+      return qobject_cast<Model *>(sourceModel());
+    }
   }
 }
