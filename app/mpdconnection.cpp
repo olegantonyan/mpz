@@ -101,6 +101,7 @@ void MpdConnection::destroy() {
   if (idle_notifier) {
     delete idle_notifier;
   }
+  current_connection_url = QUrl();
 }
 
 MpdConnection::~MpdConnection() {
