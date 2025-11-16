@@ -102,14 +102,22 @@ namespace PlaylistsUi {
     }
 
     QModelIndex Model::currentPlaylistIndex() const {
-      return QModelIndex(); //buildIndex(qMin(local_conf.currentPlaylist(), listSize() - 1));
+      auto name = local_conf.currentMpdPlaylist();
+      for (int i = 0; i < list.size(); i++) {
+        auto pl = list.at(i);
+        if (pl->name() == name) {
+          return buildIndex(i);
+        }
+      }
+      return QModelIndex();
     }
 
     void Model::saveCurrentPlaylistIndex(const QModelIndex &idx) {
-      /*int current_index = idx.row();
-      auto max_index = qMax(listSize() - 1, 0);
-      auto save_index = qMin(current_index, max_index);
-      local_conf.saveCurrentPlaylist(save_index);*/
+      auto pl = itemAt(idx);
+      if (!pl) {
+        return;
+      }
+      local_conf.saveCurrentMpdPlaylist(pl->name());
     }
 
     void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {

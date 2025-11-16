@@ -93,6 +93,14 @@ namespace Config {
     return storage.set("current_playlist", Config::Value(idx));
   }
 
+  QString Local::currentMpdPlaylist() const {
+    return storage.get("current_mpd_playlist").get<QString>();
+  }
+
+  bool Local::saveCurrentMpdPlaylist(const QString &name) {
+    return storage.set("current_mpd_playlist", Config::Value(name));
+  }
+
   QStringList Local::libraryPaths() const {
     auto raw = storage.get("library_paths");
     QStringList result;
