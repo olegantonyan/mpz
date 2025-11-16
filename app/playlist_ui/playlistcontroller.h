@@ -22,7 +22,7 @@ namespace PlaylistUi {
   class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent = nullptr);
+    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);
