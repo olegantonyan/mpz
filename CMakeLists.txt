@@ -104,6 +104,7 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
   list(APPEND PROJECT_SOURCES app/mpdconnection.cpp)
   list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
+  list(APPEND PROJECT_SOURCES app/playlist/mpdloader.cpp)
 endif()
 
 if (ENABLE_DBUS)
