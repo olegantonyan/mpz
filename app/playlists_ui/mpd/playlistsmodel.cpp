@@ -140,6 +140,22 @@ namespace PlaylistsUi {
       });
     }
 
+    QString Model::playlistUniqueName(const QString &name) const {
+      QString result = name;
+      if (indexByName(result).isValid()) {
+        QString base_name = result;
+        QStringList existing;
+        for (auto pl : list) {
+          existing << pl->name();
+        }
+        int suffix = 1;
+        while (existing.contains(result)) {
+          result = QString("%1 (%2)").arg(base_name).arg(suffix++);
+        }
+      }
+      return result;
+    }
+
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir) {
       QMutexLocker locker(&connection.mutex);
 
@@ -164,12 +180,8 @@ namespace PlaylistsUi {
 
         mpd_response_finish(connection.conn);
       }
-      QString result = names.join(", ");
+      QString result = playlistUniqueName(names.join(", "));
       QByteArray result_bytes = result.toUtf8();
-
-      if (indexByName(result).isValid()) {
-        remove(indexByName(result));
-      }
 
       mpd_run_clear(connection.conn);
 

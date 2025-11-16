@@ -37,6 +37,7 @@ namespace PlaylistsUi {
       QVector<Track> loadPlaylistTracks(const QString &name);
       QString createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir);
       QModelIndex indexByName(const QString &name) const;
+      QString playlistUniqueName(const QString &name) const;
     };
   }
 }
