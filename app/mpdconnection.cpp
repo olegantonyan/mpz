@@ -48,6 +48,7 @@ bool MpdConnection::establish(const QUrl &url) {
   if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
     qWarning() << "error connecting to mpd:" << last_error();
     mpd_connection_free(conn);
+    conn = nullptr;
     return false;
   }
   establish_idle(url);
