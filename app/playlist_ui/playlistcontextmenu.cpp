@@ -9,8 +9,7 @@
 #include <QUrl>
 
 namespace PlaylistUi {
-  PlaylistContextMenu::PlaylistContextMenu(Model *m, ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), proxy(p), view(v), search(s) {
-    Q_ASSERT(model);
+  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), proxy(p), view(v), search(s) {
     Q_ASSERT(proxy);
     Q_ASSERT(view);
     Q_ASSERT(search);
@@ -68,8 +67,8 @@ namespace PlaylistUi {
     for (auto i : view->selectionModel()->selectedRows()) {
       lst << proxy->mapToSource(i);
     }
-    model->remove(lst);
-    emit playlistChanged(model->playlist());
+    proxy->activeModel()->remove(lst);
+    emit playlistChanged(proxy->activeModel()->playlist());
   }
 
   void PlaylistContextMenu::on_clearFilter() {
@@ -79,7 +78,7 @@ namespace PlaylistUi {
   void PlaylistContextMenu::on_copyName() {
     QStringList str;
     for (auto i : view->selectionModel()->selectedRows()) {
-      str << model->itemAt(proxy->mapToSource(i)).formattedTitle();
+      str << proxy->activeModel()->itemAt(proxy->mapToSource(i)).formattedTitle();
     }
     qApp->clipboard()->setText(str.join('\n'));
   }
@@ -87,7 +86,7 @@ namespace PlaylistUi {
   void PlaylistContextMenu::on_showInFilemanager() {
     QStringList str;
     for (auto i : view->selectionModel()->selectedRows()) {
-      auto dir = model->itemAt(proxy->mapToSource(i)).dir();
+      auto dir = proxy->activeModel()->itemAt(proxy->mapToSource(i)).dir();
       if (!str.contains(dir)) {
         str << dir;
         QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
@@ -98,7 +97,7 @@ namespace PlaylistUi {
   void PlaylistContextMenu::on_trackInfo() {
     auto selection = view->selectionModel()->selectedRows().first();
     if (selection.isValid()) {
-      auto track = model->itemAt(proxy->mapToSource(selection));
+      auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
       TrackInfoDialog *dlg = new TrackInfoDialog(track);
       dlg->setModal(false);
       connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);

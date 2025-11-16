@@ -49,7 +49,6 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     QLineEdit *search;
-    Model *model;
     BusySpinner *spinner;
     Config::Local &local_conf;
     Config::Global &global_conf;

@@ -2,8 +2,10 @@
 #define PLAYLISTSPROXYFILTERMODEL_H
 
 #include "playlistsmodel.h"
-#include "mpd/playlistsmodel.h"
 #include "modusoperandi.h"
+#ifdef ENABLE_MPD_SUPPORT
+  #include "mpd/playlistsmodel.h"
+#endif
 
 #include <QObject>
 #include <QSortFilterProxyModel>

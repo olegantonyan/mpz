@@ -16,8 +16,7 @@ namespace PlaylistUi {
 
     loadColumnsConfig();
 
-    model = new Model(view->style(), columns_config, this);
-    proxy = new ProxyFilterModel(model, this);
+    proxy = new ProxyFilterModel(view->style(), columns_config, this);
     view->setModel(proxy);
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
@@ -46,7 +45,7 @@ namespace PlaylistUi {
     view->installEventFilter(this);
 
     connect(view, &QTableView::activated, [=](const QModelIndex &index) {
-      emit activated(model->itemAt(proxy->mapToSource(index)));
+      emit activated(proxy->activeModel()->itemAt(proxy->mapToSource(index)));
     });
 
     connect(view->selectionModel(), &QItemSelectionModel::currentChanged, this, &Controller::on_currentSelectionChanged);
@@ -56,18 +55,18 @@ namespace PlaylistUi {
     search->setClearButtonEnabled(true);
 
     connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
-      if (model->playlist() != nullptr) {
-        scroll_positions[model->playlist()->uid()] = val;
+      if (proxy->activeModel()->playlist() != nullptr) {
+        scroll_positions[proxy->activeModel()->playlist()->uid()] = val;
       }
     });
 
-    context_menu = new PlaylistContextMenu(model, proxy, view, search, this);
+    context_menu = new PlaylistContextMenu(proxy, view, search, this);
     connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
 
-    connect(model, &Model::appendToPlaylistAsyncFinished, this, &Controller::on_appendAsyncFinished);
+    connect(proxy, &ProxyFilterModel::appendToPlaylistAsyncFinished, this, &Controller::on_appendAsyncFinished);
   }
 
   void PlaylistUi::Controller::loadColumnsConfig() {
@@ -83,7 +82,7 @@ namespace PlaylistUi {
     if (pi == nullptr) {
       return;
     }
-    model->setPlaylist(pi);
+    proxy->activeModel()->setPlaylist(pi);
 
     if (scroll_positions.contains(pi->uid())) {
       QTimer::singleShot(20, [=]() { // hack: https://stackoverflow.com/questions/50989433/qtableviewscrollto-immediately-after-model-reset-and-after-some-delay
@@ -93,23 +92,23 @@ namespace PlaylistUi {
   }
 
   void Controller::on_unload() {
-    model->setPlaylist(nullptr);
+    proxy->activeModel()->setPlaylist(nullptr);
   }
 
   void Controller::on_stop() {
-    model->highlight(0, Model::HighlightState::None);
+    proxy->activeModel()->highlight(0, Model::HighlightState::None);
   }
 
   void Controller::on_start(const Track &t) {
-    model->highlight(t.uid(), Model::HighlightState::Playing);
+    proxy->activeModel()->highlight(t.uid(), Model::HighlightState::Playing);
   }
 
   void Controller::on_pause(const Track &t) {
-    model->highlight(t.uid(), Model::HighlightState::Paused);
+    proxy->activeModel()->highlight(t.uid(), Model::HighlightState::Paused);
   }
 
   void Controller::on_scrollTo(const Track &track) {
-    QModelIndex index = proxy->mapFromSource(model->indexOf(track.uid()));
+    QModelIndex index = proxy->mapFromSource(proxy->activeModel()->indexOf(track.uid()));
     if (index.isValid()) {
       view->setCurrentIndex(index);
       view->scrollTo(index, QAbstractItemView::PositionAtCenter);
@@ -118,25 +117,25 @@ namespace PlaylistUi {
   }
 
   void Controller::on_appendToPlaylist(const QList<QDir> &filepaths) {
-    if (model->playlist() != nullptr) {
-      model->appendToPlaylistAsync(filepaths);
+    if (proxy->activeModel()->playlist() != nullptr) {
+      proxy->activeModel()->appendToPlaylistAsync(filepaths);
       spinner->show();
     }
   }
 
   void Controller::sortBy(const QString &criteria) {
-    if (model->playlist() != nullptr) {
-      model->playlist()->sortBy(criteria);
-      model->reload();
-      emit changed(model->playlist());
+    if (proxy->activeModel()->playlist() != nullptr) {
+      proxy->activeModel()->playlist()->sortBy(criteria);
+      proxy->activeModel()->reload();
+      emit changed(proxy->activeModel()->playlist());
     }
   }
 
   void Controller::on_appendAsyncFinished(std::shared_ptr<Playlist::Playlist> pl) {
-    Q_ASSERT(pl == model->playlist());
-    
-    model->reload();
-    emit changed(model->playlist());
+    Q_ASSERT(pl == proxy->activeModel()->playlist());
+
+    proxy->activeModel()->reload();
+    emit changed(proxy->activeModel()->playlist());
     spinner->hide();
   }
 
@@ -205,8 +204,8 @@ namespace PlaylistUi {
   void Controller::on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev) {
     Q_UNUSED(prev)
     auto source_index = proxy->mapToSource(index);
-    if (index.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
-      emit selected(model->itemAt(source_index));
+    if (index.isValid() && source_index.isValid() && source_index.row() < proxy->activeModel()->rowCount()) {
+      emit selected(proxy->activeModel()->itemAt(source_index));
     }
   }
 
@@ -217,8 +216,8 @@ namespace PlaylistUi {
     quint32 selection_time = 0;
     for (auto i: view->selectionModel()->selectedRows()) {
       auto source_index = proxy->mapToSource(i);
-      if (i.isValid() && source_index.isValid() && source_index.row() < model->rowCount()) {
-        selection_time += model->itemAt(source_index).duration();
+      if (i.isValid() && source_index.isValid() && source_index.row() < proxy->activeModel()->rowCount()) {
+        selection_time += proxy->activeModel()->itemAt(source_index).duration();
       }
     }
     emit durationOfSelectedChanged(selection_time);
