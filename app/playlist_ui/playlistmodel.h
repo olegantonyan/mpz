@@ -44,6 +44,9 @@ namespace PlaylistUi {
   signals:
     void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
 
+  protected:
+    virtual void removeTracksFromPlaylist(const QList<int> &indecies);
+
   private:
     void setTracks(const QVector<Track> &tracks);
     void allDataChanged();

@@ -22,8 +22,10 @@ namespace PlaylistUi {
       explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdConnection &conn, QObject *parent = nullptr);
 
       void reload() override;
-      void remove(const QList<QModelIndex> &items) override;
       void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
+
+    protected:
+      void removeTracksFromPlaylist(const QList<int> &indecies) override;
 
     private:
       MpdConnection &connection;

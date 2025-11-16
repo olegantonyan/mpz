@@ -15,7 +15,31 @@ namespace PlaylistUi {
       PlaylistUi::Model::reload();
     }
 
-    void Model::remove(const QList<QModelIndex> &items) {
+    void Model::removeTracksFromPlaylist(const QList<int> &indecies) {
+      PlaylistUi::Model::removeTracksFromPlaylist(indecies);
+
+      QMutexLocker locker(&connection.mutex);
+
+      if (!mpd_command_list_begin(connection.conn, true)) {
+        qWarning() << "mpd_command_list_begin:" << connection.last_error();
+        mpd_response_finish(connection.conn);
+        return;
+      }
+
+      for (int i : indecies) {
+        if (!mpd_send_playlist_delete(connection.conn, playlist()->name().toUtf8().constData(), i)) {
+          qWarning() << "mpd_command_list_end:" << connection.last_error();
+          mpd_response_finish(connection.conn);
+          return;
+        }
+      }
+
+      if (!mpd_command_list_end(connection.conn)) {
+        qWarning() << "mpd_command_list_end:" << connection.last_error();
+      }
+      if (!mpd_response_finish(connection.conn)) {
+        qWarning() << "mpd_response_finish:" << connection.last_error();
+      }
     }
 
     void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {

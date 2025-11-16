@@ -135,14 +135,21 @@ namespace PlaylistUi {
 
   void Model::remove(const QList<QModelIndex> &items) {
     QList<QModelIndex> sorted = items;
-
     std::sort(sorted.begin(), sorted.end(), [](const QModelIndex &t1, const QModelIndex &t2) -> bool {
       return t1.row() > t2.row();
     });
+    QList<int> indecies;
     for (auto i : sorted) {
-      playlist()->removeTrack(i.row());
+      indecies << i.row();
     }
+    removeTracksFromPlaylist(indecies);
     reload();
+  }
+
+  void Model::removeTracksFromPlaylist(const QList<int> &indecies) {
+    for (int i : indecies) {
+      playlist()->removeTrack(i);
+    }
   }
 
   void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
