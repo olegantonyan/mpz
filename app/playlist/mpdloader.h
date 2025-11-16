@@ -12,7 +12,7 @@
 namespace Playlist {
   class MpdLoader : public Loader {
   public:
-    explicit MpdLoader(const QDir &path, MpdConnection &conn);
+    explicit MpdLoader(const QString &playlist_name, MpdConnection &conn);
 
     QVector<Track> tracks() const override;
     bool is_playlist_file() const override;

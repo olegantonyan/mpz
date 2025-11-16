@@ -51,7 +51,7 @@ namespace PlaylistsUi {
         return;
       }
       (void)QtConcurrent::run([=]() {
-        Playlist::MpdLoader loader(QDir(playlist->name()), connection);
+        Playlist::MpdLoader loader(playlist->name(), connection);
         playlist->load(loader.tracks());
         emit asyncTracksLoadFinished(playlist);
       });

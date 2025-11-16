@@ -3,8 +3,7 @@
 #include <QDebug>
 
 namespace Playlist {
-  MpdLoader::MpdLoader(const QDir &path, MpdConnection &conn) : Loader(path), connection(conn) {
-    name = path.path();
+  MpdLoader::MpdLoader(const QString &playlist_name, MpdConnection &conn) : Loader(QDir()), connection(conn), name(playlist_name) {
   }
 
   QVector<Track> MpdLoader::tracks() const {
