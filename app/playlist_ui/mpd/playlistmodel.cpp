@@ -1,5 +1,5 @@
 #include "playlistmodel.h"
-#include "playlist/mpd_track.h"
+#include "playlist/mpdloader.h"
 
 #include <QDebug>
 #include <QtConcurrent>
@@ -24,39 +24,11 @@ namespace PlaylistUi {
       }
 
       (void)QtConcurrent::run([=]() {
-        auto tracks = loadDirsTracks(filepaths, playlist()->name());
+        auto tracks = Playlist::MpdLoader(connection).dirsTracks(filepaths, playlist()->name());
         playlist()->append(tracks, true);
         appendToPlaylist(tracks, playlist()->name());
         emit appendToPlaylistAsyncFinished(playlist());
       });
-    }
-
-    QVector<Track> Model::loadDirsTracks(const QList<QDir> &filepaths, const QString &playlist_name) const {
-      QMutexLocker locker(&connection.mutex);
-
-      QVector<Track> result;
-      QStringList names;
-      for (auto path : filepaths) {
-        names << path.path();
-
-        QByteArray path_bytes = path.path().toUtf8();
-        if (!mpd_send_list_all_meta(connection.conn, path_bytes.constData())) {
-          qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
-          mpd_response_finish(connection.conn);
-          return result;
-        }
-
-        struct mpd_song *song;
-        while ((song = mpd_recv_song(connection.conn)) != NULL) {
-          result << Playlist::MpdTrack::build(song, playlist_name);
-          
-          mpd_song_free(song);
-        }
-
-        mpd_response_finish(connection.conn);
-      }
-
-      return result;
     }
 
     bool Model::appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name) {

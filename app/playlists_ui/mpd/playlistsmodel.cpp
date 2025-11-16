@@ -1,5 +1,5 @@
 #include "playlistsmodel.h"
-#include "playlist/mpd_track.h"
+#include "playlist/mpdloader.h"
 
 #include <QDebug>
 #include <QtConcurrent>
@@ -51,7 +51,8 @@ namespace PlaylistsUi {
         return;
       }
       (void)QtConcurrent::run([=]() {
-        playlist->load(loadPlaylistTracks(playlist->name()));
+        auto tracks = Playlist::MpdLoader(connection).playlistTracks(playlist->name());
+        playlist->load(tracks);
         emit asyncTracksLoadFinished(playlist);
       });
     }
@@ -156,29 +157,6 @@ namespace PlaylistsUi {
         qWarning() << "mpd_run_save: " << connection.last_error();
         return "";
       }
-
-      return result;
-    }
-
-    QVector<Track> Model::loadPlaylistTracks(const QString &playlist_name) const {
-      QMutexLocker locker(&connection.mutex);
-
-      QVector<Track> result;
-
-      QByteArray playlist_name_bytes = playlist_name.toUtf8();
-      if (!mpd_send_list_playlist_meta(connection.conn, playlist_name_bytes.constData())) {
-        qWarning() << "mpd_send_list_playlist_meta:" << connection.last_error();
-        return result;
-      }
-
-      struct mpd_song *song;
-      while ((song = mpd_recv_song(connection.conn)) != nullptr) {
-        result << Playlist::MpdTrack::build(song, playlist_name);
-
-        mpd_song_free(song);
-      }
-
-      mpd_response_finish(connection.conn);
 
       return result;
     }
