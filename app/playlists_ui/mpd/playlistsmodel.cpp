@@ -124,8 +124,7 @@ namespace PlaylistsUi {
       for (auto path : filepaths) {
         names << path.path();
 
-        QByteArray path_bytes = path.path().toUtf8();
-        if (!mpd_send_list_all_meta(connection.conn, path_bytes.constData())) {
+        if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
           qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
           mpd_response_finish(connection.conn);
           return "";
@@ -141,19 +140,17 @@ namespace PlaylistsUi {
         mpd_response_finish(connection.conn);
       }
       QString result = playlistUniqueName(names.join(", "));
-      QByteArray result_bytes = result.toUtf8();
 
       mpd_run_clear(connection.conn);
 
       for (auto song : songs) {
-        QByteArray song_bytes = song.toUtf8();
-        if (!mpd_run_add(connection.conn, song_bytes.constData())) {
+        if (!mpd_run_add(connection.conn, song.toUtf8().constData())) {
           qWarning() << "mpd_run_add: " << connection.last_error();
           return "";
         }
       }
 
-      if (!mpd_run_save(connection.conn, result_bytes.constData())) {
+      if (!mpd_run_save(connection.conn, result.toUtf8().constData())) {
         qWarning() << "mpd_run_save: " << connection.last_error();
         return "";
       }
@@ -168,8 +165,7 @@ namespace PlaylistsUi {
       }
 
       QMutexLocker locker(&connection.mutex);
-      QByteArray name_bytes = pl->name().toUtf8();
-      if (!mpd_run_rm(connection.conn, name_bytes.constData())) {
+      if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
         qWarning() << "error deleting mpd playlist:" << connection.last_error();
         return;
       }

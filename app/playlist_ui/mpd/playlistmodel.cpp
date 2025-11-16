@@ -39,12 +39,9 @@ namespace PlaylistUi {
         return false;
       }
 
-      QByteArray playlist_name_bytes = playlist_name.toUtf8();
       bool ok = true;
-
       for (auto track : tracks) {
-        QByteArray filepath_bytes = track.path().toUtf8();
-        if (!mpd_send_playlist_add(connection.conn, playlist_name_bytes.constData(), filepath_bytes.constData())) {
+        if (!mpd_send_playlist_add(connection.conn, playlist_name.toUtf8().constData(), track.path().toUtf8().constData())) {
           qWarning() << "mpd_send_playlist_add: " << connection.last_error();
           ok = false;
         }

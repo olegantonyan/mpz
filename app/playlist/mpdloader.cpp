@@ -9,8 +9,7 @@ namespace Playlist {
 
     QVector<Track> result;
 
-    QByteArray playlist_name_bytes = playlist_name.toUtf8();
-    if (!mpd_send_list_playlist_meta(connection.conn, playlist_name_bytes.constData())) {
+    if (!mpd_send_list_playlist_meta(connection.conn, playlist_name.toUtf8().constData())) {
       qWarning() << "mpd_send_list_playlist_meta:" << connection.last_error();
       return result;
     }
@@ -34,8 +33,7 @@ namespace Playlist {
     for (auto path : filepaths) {
       names << path.path();
 
-      QByteArray path_bytes = path.path().toUtf8();
-      if (!mpd_send_list_all_meta(connection.conn, path_bytes.constData())) {
+      if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
         qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
         mpd_response_finish(connection.conn);
         return result;
