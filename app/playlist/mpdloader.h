@@ -12,6 +12,7 @@
 namespace Playlist {
   class MpdLoader : public Loader {
   public:
+    explicit MpdLoader(const QDir &path, MpdConnection &conn);
     explicit MpdLoader(const QString &playlist_name, MpdConnection &conn);
 
     QVector<Track> tracks() const override;
@@ -19,7 +20,9 @@ namespace Playlist {
 
   private:
     MpdConnection &connection;
-    QString name;
+    QString playlist_name;
+
+    QVector<Track> loadFromPlaylist(const QString &playlist_name) const;
   };
 }
 

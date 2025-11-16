@@ -17,9 +17,13 @@ namespace PlaylistUi {
   namespace Mpd {
     class Model : public PlaylistUi::Model {
       Q_OBJECT
-      
+
     public:
       explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdConnection &conn, QObject *parent = nullptr);
+
+      void reload() override;
+      void remove(const QList<QModelIndex> &items) override;
+      void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
 
     private:
       MpdConnection &connection;

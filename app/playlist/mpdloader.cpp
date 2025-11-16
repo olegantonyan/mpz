@@ -3,15 +3,32 @@
 #include <QDebug>
 
 namespace Playlist {
-  MpdLoader::MpdLoader(const QString &playlist_name, MpdConnection &conn) : Loader(QDir()), connection(conn), name(playlist_name) {
+  MpdLoader::MpdLoader(const QDir &path, MpdConnection &conn) : Loader(path), connection(conn), playlist_name("") {
+  }
+
+  MpdLoader::MpdLoader(const QString &pl_name, MpdConnection &conn) : Loader(QDir()), connection(conn), playlist_name(pl_name) {
   }
 
   QVector<Track> MpdLoader::tracks() const {
+    if (playlist_name.isEmpty()) {
+      qDebug() << "TODO implement tracks loading by path";
+      return QVector<Track>();
+    } else {
+      return loadFromPlaylist(playlist_name);
+    }
+  }
+
+  bool MpdLoader::is_playlist_file() const {
+    return false;
+  }
+
+  QVector<Track> MpdLoader::loadFromPlaylist(const QString &playlist_name) const {
     QMutexLocker locker(&connection.mutex);
 
     QVector<Track> result;
 
-    if (!mpd_send_list_playlist_meta(connection.conn, name.toUtf8().constData())) {
+    QByteArray playlist_name_bytes = playlist_name.toUtf8();
+    if (!mpd_send_list_playlist_meta(connection.conn, playlist_name_bytes.constData())) {
       qWarning() << "mpd_send_list_playlist_meta:" << connection.last_error();
       return result;
     }
@@ -46,9 +63,5 @@ namespace Playlist {
     mpd_response_finish(connection.conn);
 
     return result;
-  }
-
-  bool MpdLoader::is_playlist_file() const {
-    return false;
   }
 }
