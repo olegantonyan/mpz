@@ -20,6 +20,7 @@ namespace PlaylistsUi {
       explicit Model(Config::Local &conf, MpdConnection &conn, QObject *parent = nullptr);
 
       bool persist() override;
+      void remove(const QModelIndex &index) override;
       QModelIndex currentPlaylistIndex() const override;
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;

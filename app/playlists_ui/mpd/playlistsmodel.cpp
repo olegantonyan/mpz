@@ -128,5 +128,19 @@ namespace PlaylistsUi {
         emit createPlaylistAsyncFinished(pl);
       });
     }
+
+    void Model::remove(const QModelIndex &index) {
+      auto pl = itemAt(index);
+      if (!pl) {
+        return;
+      }
+
+      QMutexLocker locker(&connection.mutex);
+      if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
+        qWarning() << "error deleting mpd playlist:" << connection.last_error();
+        return;
+      }
+      PlaylistsUi::Model::remove(index);
+    }
   }
 }

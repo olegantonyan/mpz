@@ -21,7 +21,7 @@ namespace PlaylistsUi {
 
     QModelIndex buildIndex(int row) const;
     QModelIndex append(std::shared_ptr<Playlist::Playlist> item);
-    void remove(const QModelIndex &index);
+    virtual void remove(const QModelIndex &index);
     std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
     std::shared_ptr<Playlist::Playlist> itemBy(quint64 uid) const;
     std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
