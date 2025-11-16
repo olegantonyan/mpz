@@ -25,8 +25,14 @@ namespace PlaylistUi {
   }
 
   void ProxyFilterModel::filter(const QString &term) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 10, 0))
+    beginFilterChange();
+    filter_term = term;
+    endFilterChange();
+#else
     filter_term = term;
     invalidateFilter();
+#endif
   }
 
   bool ProxyFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const {
