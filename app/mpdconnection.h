@@ -23,6 +23,7 @@ public:
   void destroy();
   QString last_error() const;
   void wait_connected();
+  QUrl current_url() const;
 
 signals:
   void connected();
@@ -37,6 +38,7 @@ private:
   QRecursiveMutex mutex;
   struct mpd_connection *idle_conn;
   QSocketNotifier *idle_notifier;
+  QUrl current_connection_url;
 
   bool establish_idle(const QUrl &url);
 

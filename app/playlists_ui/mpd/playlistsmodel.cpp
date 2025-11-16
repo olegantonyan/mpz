@@ -8,7 +8,7 @@
 namespace PlaylistsUi {
   namespace Mpd {
     Model::Model(Config::Local &conf, MpdConnection &conn, QObject *parent) : PlaylistsUi::Model(conf, parent), connection(conn) {
-      connect(&conn, &MpdConnection::playlist_updated, this, &Model::loadAsync);
+      connect(&connection, &MpdConnection::playlist_updated, this, &Model::loadAsync);
     }
 
     void Model::loadAsync() {
@@ -76,7 +76,12 @@ namespace PlaylistsUi {
         creating_playlist_name = "";
         return index;
       }
-      auto name = local_conf.currentMpdPlaylist();
+      if (connection.current_url().isEmpty()) {
+        return QModelIndex();
+      }
+
+      auto names = local_conf.currentMpdPlaylist();
+      auto name = names.value(connection.current_url().toString());
       if (name.isEmpty()) {
         return QModelIndex();
       }
@@ -88,7 +93,11 @@ namespace PlaylistsUi {
       if (!pl) {
         return;
       }
-      local_conf.saveCurrentMpdPlaylist(pl->name());
+      if (!connection.current_url().isEmpty()) {
+        auto names = local_conf.currentMpdPlaylist();
+        names[connection.current_url().toString()] = pl->name();
+        local_conf.saveCurrentMpdPlaylist(names);
+      }
     }
 
     void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {

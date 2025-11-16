@@ -28,8 +28,8 @@ namespace Config {
     int currentPlaylist() const;
     bool saveCurrentPlaylist(int idx);
 
-    QString currentMpdPlaylist() const;
-    bool saveCurrentMpdPlaylist(const QString &name);
+    QMap<QString, QString> currentMpdPlaylist() const;
+    bool saveCurrentMpdPlaylist(const QMap<QString, QString> &name_for_library_url);
 
     QStringList libraryPaths() const;
     bool saveLibraryPaths(const QStringList &arg);

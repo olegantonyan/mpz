@@ -93,12 +93,24 @@ namespace Config {
     return storage.set("current_playlist", Config::Value(idx));
   }
 
-  QString Local::currentMpdPlaylist() const {
-    return storage.get("current_mpd_playlist").get<QString>();
+  QMap<QString, QString> Local::currentMpdPlaylist() const {
+    auto mv = storage.get("current_mpd_playlist").get<QMap<QString, Config::Value>>();
+    QMap<QString, QString> result;
+    for (auto it : mv.asKeyValueRange()) {
+      result[it.first] = it.second.get<QString>();
+    }
+
+    return result;
   }
 
-  bool Local::saveCurrentMpdPlaylist(const QString &name) {
-    return storage.set("current_mpd_playlist", Config::Value(name));
+  bool Local::saveCurrentMpdPlaylist(const QMap<QString, QString> &name_for_library_url) {
+    QMap<QString, Config::Value> mv;
+
+    for (auto it : name_for_library_url.asKeyValueRange()) {
+      mv[it.first] = Config::Value(it.second);
+    }
+
+    return storage.set("current_mpd_playlist", Config::Value(mv));
   }
 
   QStringList Local::libraryPaths() const {

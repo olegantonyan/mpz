@@ -10,6 +10,10 @@ QString MpdConnection::last_error() const {
   return QString::fromUtf8(mpd_connection_get_error_message(conn));
 }
 
+QUrl MpdConnection::current_url() const {
+  return current_connection_url;
+}
+
 void MpdConnection::wait_connected() {
   if (!ping()) {
     QEventLoop loop;
@@ -47,6 +51,7 @@ bool MpdConnection::establish(const QUrl &url) {
     return false;
   }
   establish_idle(url);
+  current_connection_url = url;
   emit connected();
   return true;
 }

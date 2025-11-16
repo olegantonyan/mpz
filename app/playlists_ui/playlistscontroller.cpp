@@ -49,10 +49,14 @@ namespace PlaylistsUi {
     view->setModel(proxy);
     if (proxy->activeModel()->listSize() > 0) {
       auto idx = proxy->activeModel()->currentPlaylistIndex();
-      auto item = proxy->activeModel()->itemAt(idx);
-      view->setCurrentIndex(proxy->mapFromSource(idx));
-      view->selectionModel()->select(idx, {QItemSelectionModel::Select});
-      proxy->activeModel()->asyncTracksLoad(item);
+      if (idx.isValid()) {
+        auto item = proxy->activeModel()->itemAt(idx);
+        if (item) {
+          view->setCurrentIndex(proxy->mapFromSource(idx));
+          view->selectionModel()->select(idx, {QItemSelectionModel::Select});
+          proxy->activeModel()->asyncTracksLoad(item);
+        }
+      }
     }
   }
 
