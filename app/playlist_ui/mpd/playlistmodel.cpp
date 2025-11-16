@@ -1,5 +1,4 @@
 #include "playlistmodel.h"
-#include "playlist/mpdloader.h"
 
 #include <QDebug>
 #include <QtConcurrent>
@@ -25,8 +24,8 @@ namespace PlaylistUi {
 
       (void)QtConcurrent::run([=]() {
         for (auto path : filepaths) {
-          Playlist::MpdLoader loader(path, connection);
-          playlist()->append(loader.tracks(), !loader.is_playlist_file());
+          //Playlist::MpdLoader loader(path, connection);
+          //playlist()->append(loader.tracks(), !loader.is_playlist_file());
         }
 
         emit appendToPlaylistAsyncFinished(playlist());

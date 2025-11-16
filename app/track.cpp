@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QHash>
 
 Track::Track() {
   Track("", 0);
@@ -136,6 +137,11 @@ bool Track::fillTags() {
 
 bool Track::reload() {
   return fillAudioProperties() && fillTags();
+}
+
+void Track::generateUidByHashing(const QString &prefix) {
+  QByteArray utf8 = (prefix + filepath).toUtf8();
+  _uid = qHashBits(utf8.constData(), utf8.size());
 }
 
 void Track::setDuration(quint64 dur) {

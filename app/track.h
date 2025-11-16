@@ -32,6 +32,7 @@ public:
   bool reload();
   void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
+  void generateUidByHashing(const QString &prefix);
 
   QString path() const;
   QUrl url() const;
