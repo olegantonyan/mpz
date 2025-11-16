@@ -27,6 +27,9 @@ namespace PlaylistUi {
 
     private:
       MpdConnection &connection;
+
+      bool appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name);
+      QVector<Track> loadDirsTracks(const QList<QDir> &filepaths, const QString &playlist_name) const;
     };
   }
 }
