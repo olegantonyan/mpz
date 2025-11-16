@@ -29,7 +29,7 @@ bool MpdConnection::ping() {
   }
   struct mpd_status *status = mpd_run_status(conn);
   if (!status) {
-    qWarning() << "mpd connection failed" << last_error();
+    qWarning() << "mpd_run_status failed:" << last_error();
     return false;
   }
   mpd_status_free(status);
