@@ -17,12 +17,12 @@ public:
   ~MpdConnection();
 
   struct mpd_connection *conn;
-  QRecursiveMutex mutex;
 
   bool establish(const QUrl &url);
   bool ping();
   void destroy();
   QString last_error() const;
+  void wait_connected();
 
 signals:
   void connected();
@@ -34,10 +34,26 @@ private slots:
   void on_idle_readable();
 
 private:
+  QRecursiveMutex mutex;
   struct mpd_connection *idle_conn;
   QSocketNotifier *idle_notifier;
 
   bool establish_idle(const QUrl &url);
+
+  friend class MpdConnectionLocker;
+};
+
+class MpdConnectionLocker {
+public:
+  explicit MpdConnectionLocker(MpdConnection &c) : locker(nullptr) {
+    c.wait_connected();
+    locker = new QMutexLocker<QRecursiveMutex>(&c.mutex);
+  }
+  ~MpdConnectionLocker() {
+    delete locker;
+  }
+private:
+  QMutexLocker<QRecursiveMutex> *locker;
 };
 
 #endif // MPDCONNECTION_H

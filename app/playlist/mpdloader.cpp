@@ -5,7 +5,7 @@ namespace Playlist {
   }
 
   QVector<Track> MpdLoader::playlistTracks(const QString& playlist_name) {
-    QMutexLocker locker(&connection.mutex);
+    MpdConnectionLocker locker(connection);
 
     QVector<Track> result;
 
@@ -26,7 +26,7 @@ namespace Playlist {
   }
 
   QVector<Track> MpdLoader::dirsTracks(const QList<QDir> &filepaths, const QString &playlist_name) {
-    QMutexLocker locker(&connection.mutex);
+    MpdConnectionLocker locker(connection);
 
     QVector<Track> result;
     QStringList names;

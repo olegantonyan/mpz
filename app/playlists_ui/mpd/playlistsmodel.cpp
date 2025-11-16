@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QFont>
-#include <QMutexLocker>
 
 namespace PlaylistsUi {
   namespace Mpd {
@@ -23,7 +22,7 @@ namespace PlaylistsUi {
     }
 
     QList<std::shared_ptr<Playlist::Playlist>> Model::loadMpdPlaylists() {
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
       QList<std::shared_ptr<Playlist::Playlist>> result;
 
       if (!mpd_send_list_playlists(connection.conn)) {
@@ -117,7 +116,7 @@ namespace PlaylistsUi {
     }
 
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir) {
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
 
       QStringList songs;
       QStringList names;
@@ -164,7 +163,7 @@ namespace PlaylistsUi {
         return;
       }
 
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
       if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
         qWarning() << "error deleting mpd playlist:" << connection.last_error();
         return;

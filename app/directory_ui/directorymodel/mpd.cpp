@@ -137,7 +137,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadDirectory(TreeItem *parent, const QString &path) {
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
 
       if (!connection.ping()) {
         qWarning() << "mpd connection does not exist";

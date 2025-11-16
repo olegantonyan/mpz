@@ -18,7 +18,7 @@ namespace PlaylistUi {
     void Model::removeTracksFromPlaylist(const QList<int> &indecies) {
       PlaylistUi::Model::removeTracksFromPlaylist(indecies);
 
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
 
       if (!mpd_command_list_begin(connection.conn, true)) {
         qWarning() << "mpd_command_list_begin:" << connection.last_error();
@@ -56,7 +56,7 @@ namespace PlaylistUi {
     }
 
     bool Model::appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name) {
-      QMutexLocker locker(&connection.mutex);
+      MpdConnectionLocker locker(connection);
 
       if (!mpd_command_list_begin(connection.conn, true)) {
         qWarning() << "mpd_send_list_all_meta: " << connection.last_error();

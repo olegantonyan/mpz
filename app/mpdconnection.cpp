@@ -1,12 +1,21 @@
 #include "mpdconnection.h"
 
 #include <QDebug>
+#include <QEventLoop>
 
 MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), idle_conn(nullptr), idle_notifier(nullptr) {
 }
 
 QString MpdConnection::last_error() const {
   return QString::fromUtf8(mpd_connection_get_error_message(conn));
+}
+
+void MpdConnection::wait_connected() {
+  if (!ping()) {
+    QEventLoop loop;
+    connect(this, &MpdConnection::connected, &loop, &QEventLoop::quit);
+    loop.exec();
+  }
 }
 
 bool MpdConnection::ping() {
