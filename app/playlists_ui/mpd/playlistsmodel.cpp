@@ -101,8 +101,7 @@ namespace PlaylistsUi {
       return true; //local_conf.savePlaylists(list);
     }
 
-    QModelIndex Model::currentPlaylistIndex() const {
-      auto name = local_conf.currentMpdPlaylist();
+    QModelIndex Model::indexByName(const QString &name) const {
       for (int i = 0; i < list.size(); i++) {
         auto pl = list.at(i);
         if (pl->name() == name) {
@@ -110,6 +109,19 @@ namespace PlaylistsUi {
         }
       }
       return QModelIndex();
+    }
+
+    QModelIndex Model::currentPlaylistIndex() {
+      if (!creating_playlist_name.isEmpty()) {
+        auto index = indexByName(creating_playlist_name);
+        creating_playlist_name = "";
+        return index;
+      }
+      auto name = local_conf.currentMpdPlaylist();
+      if (name.isEmpty()) {
+        return QModelIndex();
+      }
+      return indexByName(name);
     }
 
     void Model::saveCurrentPlaylistIndex(const QModelIndex &idx) {
@@ -123,18 +135,58 @@ namespace PlaylistsUi {
     void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
       Q_ASSERT(filepaths.size() > 0);
 
-      auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
-
       (void)QtConcurrent::run([=]() {
-        QStringList names;
-        for (auto path : filepaths) {
-          //Playlist::Loader loader(path);
-          //pl->append(loader.tracks(), !loader.is_playlist_file());
-          names << playlistNameBy(path, libraryDir);
-        }
-        pl->rename(names.join(", "));
-        emit createPlaylistAsyncFinished(pl);
+        creating_playlist_name = createPlaylistFromDirs(filepaths, libraryDir);
       });
+    }
+
+    QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir) {
+      QMutexLocker locker(&connection.mutex);
+
+      QStringList songs;
+      QStringList names;
+      for (auto path : filepaths) {
+        names << path.path();
+
+        QByteArray path_bytes = path.path().toUtf8();
+        if (!mpd_send_list_all_meta(connection.conn, path_bytes.constData())) {
+          qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
+          mpd_response_finish(connection.conn);
+          return "";
+        }
+
+        struct mpd_song *song;
+        while ((song = mpd_recv_song(connection.conn)) != NULL) {
+          const char *uri = mpd_song_get_uri(song);
+          songs << uri;
+          mpd_song_free(song);
+        }
+
+        mpd_response_finish(connection.conn);
+      }
+      QString result = names.join(", ");
+      QByteArray result_bytes = result.toUtf8();
+
+      if (indexByName(result).isValid()) {
+        remove(indexByName(result));
+      }
+
+      mpd_run_clear(connection.conn);
+
+      for (auto song : songs) {
+        QByteArray song_bytes = song.toUtf8();
+        if (!mpd_run_add(connection.conn, song_bytes.constData())) {
+          qWarning() << "mpd_run_add: " << connection.last_error();
+          return "";
+        }
+      }
+
+      if (!mpd_run_save(connection.conn, result_bytes.constData())) {
+        qWarning() << "mpd_run_save: " << connection.last_error();
+        return "";
+      }
+
+      return result;
     }
 
     void Model::remove(const QModelIndex &index) {
@@ -144,7 +196,8 @@ namespace PlaylistsUi {
       }
 
       QMutexLocker locker(&connection.mutex);
-      if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
+      QByteArray name_bytes = pl->name().toUtf8();
+      if (!mpd_run_rm(connection.conn, name_bytes.constData())) {
         qWarning() << "error deleting mpd playlist:" << connection.last_error();
         return;
       }

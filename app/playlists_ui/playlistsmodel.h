@@ -30,7 +30,7 @@ namespace PlaylistsUi {
     virtual bool persist();
     QList<std::shared_ptr<Playlist::Playlist>> itemList() const;
     void higlight(std::shared_ptr<Playlist::Playlist> playlist);
-    virtual QModelIndex currentPlaylistIndex() const;
+    virtual QModelIndex currentPlaylistIndex();
     virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
     virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
     virtual void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist);

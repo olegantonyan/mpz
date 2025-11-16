@@ -21,7 +21,7 @@ namespace PlaylistsUi {
 
       bool persist() override;
       void remove(const QModelIndex &index) override;
-      QModelIndex currentPlaylistIndex() const override;
+      QModelIndex currentPlaylistIndex() override;
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
       void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
@@ -31,9 +31,12 @@ namespace PlaylistsUi {
 
     private:
       MpdConnection &connection;
+      QString creating_playlist_name;
 
       QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
       QVector<Track> loadPlaylistTracks(const QString &name);
+      QString createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir);
+      QModelIndex indexByName(const QString &name) const;
     };
   }
 }

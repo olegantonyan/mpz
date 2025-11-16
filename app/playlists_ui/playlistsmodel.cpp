@@ -141,7 +141,7 @@ namespace PlaylistsUi {
     return list;
   }
 
-  QModelIndex Model::currentPlaylistIndex() const {
+  QModelIndex Model::currentPlaylistIndex() {
     return buildIndex(qMin(local_conf.currentPlaylist(), listSize() - 1));
   }
 
