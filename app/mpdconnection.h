@@ -7,6 +7,7 @@
 #include <QSocketNotifier>
 #include <QRecursiveMutex>
 #include <QMutexLocker>
+#include <QTimer>
 
 #include "mpd/client.h"
 
@@ -27,6 +28,8 @@ public:
 
 signals:
   void connected();
+  void connectionLost();
+  void connectionFailed();
   void databaseUpdated();
   void playlistUpdated();
   void playerStateChanged();
@@ -39,6 +42,7 @@ private:
   struct mpd_connection *idle_conn;
   QSocketNotifier *idle_notifier;
   QUrl current_connection_url;
+  QTimer conn_timer;
 
   bool establish_idle(const QUrl &url);
 

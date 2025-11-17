@@ -4,6 +4,18 @@
 #include <QEventLoop>
 
 MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), idle_conn(nullptr), idle_notifier(nullptr) {
+  conn_timer.setInterval(1500);
+  connect(&conn_timer, &QTimer::timeout, [=] {
+    if (currentUrl().isEmpty()) {
+      return;
+    }
+    if (!ping()) {
+      qWarning() << "mpd connection lost with" << currentUrl();
+      emit connectionLost();
+      conn_timer.stop();
+    }
+  });
+
 }
 
 QString MpdConnection::lastError() const {
@@ -37,27 +49,38 @@ bool MpdConnection::ping() {
 }
 
 bool MpdConnection::establish(const QUrl &url) {
+  if (url.isEmpty()) {
+    return false;
+  }
+
   QMutexLocker locker(&mutex);
   qDebug() << "connecting to mpd at" << url;
   destroy();
   conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!conn) {
     qWarning() << "error allocation mpd connection";
+    emit connectionFailed();
     return false;
   }
   if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
     qWarning() << "error connecting to mpd:" << lastError();
     mpd_connection_free(conn);
     conn = nullptr;
+    emit connectionFailed();
     return false;
   }
   establish_idle(url);
   current_connection_url = url;
   emit connected();
+  conn_timer.start();
   return true;
 }
 
 bool MpdConnection::establish_idle(const QUrl &url) {
+  if (url.isEmpty()) {
+    return false;
+  }
+
   idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!idle_conn) {
     qWarning() << "error allocation mpd idle connection";
@@ -100,8 +123,10 @@ void MpdConnection::destroy() {
   }
   if (idle_notifier) {
     delete idle_notifier;
+    idle_notifier = nullptr;
   }
   current_connection_url = QUrl();
+  conn_timer.stop();
 }
 
 MpdConnection::~MpdConnection() {
