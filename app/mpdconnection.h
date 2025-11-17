@@ -28,9 +28,9 @@ public:
 
 signals:
   void connected(const QUrl &url);
-  void destroyed();
-  void connectionLost();
-  void connectionFailed();
+  void disconnected();
+  void lost();
+  void failed();
   void databaseUpdated();
   void playlistUpdated();
   void playerStateChanged();

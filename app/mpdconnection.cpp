@@ -11,7 +11,7 @@ MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), 
     }
     if (!ping()) {
       qWarning() << "mpd connection lost with" << currentUrl();
-      emit connectionLost();
+      emit lost();
       conn_timer.stop();
     }
   });
@@ -59,17 +59,22 @@ bool MpdConnection::establish(const QUrl &url) {
   conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!conn) {
     qWarning() << "error allocation mpd connection";
-    emit connectionFailed();
+    emit failed();
     return false;
   }
   if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
     qWarning() << "error connecting to mpd:" << lastError();
     mpd_connection_free(conn);
     conn = nullptr;
-    emit connectionFailed();
+    emit failed();
     return false;
   }
-  establish_idle(url);
+  if (!establish_idle(url)) {
+    mpd_connection_free(conn);
+    conn = nullptr;
+    emit failed();
+    return false;
+  }
   current_connection_url = url;
   emit connected(url);
   conn_timer.start();
@@ -113,6 +118,7 @@ void MpdConnection::on_idle_readable() {
 }
 
 void MpdConnection::destroy() {
+  bool should_emit = !!conn;
   if (conn) {
     mpd_connection_free(conn);
     conn = nullptr;
@@ -127,7 +133,9 @@ void MpdConnection::destroy() {
   }
   current_connection_url = QUrl();
   conn_timer.stop();
-  emit destroyed();
+  if (should_emit) {
+    emit disconnected();
+  }
 }
 
 MpdConnection::~MpdConnection() {
