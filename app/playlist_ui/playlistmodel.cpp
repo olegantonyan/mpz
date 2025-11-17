@@ -168,8 +168,4 @@ namespace PlaylistUi {
       emit appendToPlaylistAsyncFinished(playlist());
     });
   }
-
-  void Model::clear() {
-    setPlaylist(nullptr);
-  }
 }

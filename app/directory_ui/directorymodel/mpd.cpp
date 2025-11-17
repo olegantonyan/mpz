@@ -22,12 +22,10 @@ namespace DirectoryUi {
     Mpd::~Mpd() {
       if (root_item) {
         delete root_item;
-        root_item = nullptr;
       }
     }
 
     TreeItem *Mpd::createRootItem() {
-      QMutexLocker locker(&mutex);
       if (root_item) {
         delete root_item;
       }
@@ -56,12 +54,6 @@ namespace DirectoryUi {
         onDatabaseUpdated();
         emit directoryLoaded(connection.currentUrl().toString());
       });
-    }
-
-    void Mpd::clear() {
-      beginResetModel();
-      createRootItem();
-      endResetModel();
     }
 
     void Mpd::filter(const QString &term) {

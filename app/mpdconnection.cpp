@@ -118,8 +118,6 @@ void MpdConnection::on_idle_readable() {
 }
 
 void MpdConnection::destroy() {
-  QMutexLocker locker(&mutex);
-
   bool should_emit = !!conn;
   if (conn) {
     mpd_connection_free(conn);

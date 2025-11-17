@@ -13,7 +13,6 @@ namespace PlaylistUi {
     mpd = new Mpd::Model(stl, col_cfg, modus.mpd_connection, this);
     connect(mpd, &Mpd::Model::appendToPlaylistAsyncFinished, this, &ProxyFilterModel::appendToPlaylistAsyncFinished);
     connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::reload);
-    //connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &Mpd::Model::clear);
 #endif
 
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);

@@ -20,12 +20,6 @@ namespace PlaylistsUi {
     });
   }
 
-  void Model::clear() {
-    beginResetModel();
-    list.clear();
-    endResetModel();
-  }
-
   void Model::asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) {
     emit asyncTracksLoadFinished(playlist);
   }

@@ -10,7 +10,6 @@ namespace DirectoryUi {
       mpd = new Mpd(modus.mpd_connection, this);
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
       connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &DirectoryModel::Mpd::onMpdReady);
-      //connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &DirectoryModel::Mpd::clear);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
       connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);

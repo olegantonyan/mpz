@@ -41,9 +41,6 @@ namespace PlaylistUi {
 
     virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
 
-  public slots:
-    void clear();
-
   signals:
     void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
 
