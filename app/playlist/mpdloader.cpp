@@ -29,10 +29,8 @@ namespace Playlist {
     MpdConnectionLocker locker(connection);
 
     QVector<Track> result;
-    QStringList names;
-    for (auto path : filepaths) {
-      names << path.path();
 
+    for (auto path : filepaths) {
       if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
         qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
         mpd_response_finish(connection.conn);
@@ -40,7 +38,7 @@ namespace Playlist {
       }
 
       struct mpd_song *song;
-      while ((song = mpd_recv_song(connection.conn)) != NULL) {
+      while ((song = mpd_recv_song(connection.conn)) != nullptr) {
         result << buildTrack(song, playlist_name);
         mpd_song_free(song);
       }

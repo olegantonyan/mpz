@@ -139,7 +139,7 @@ namespace PlaylistsUi {
         }
 
         struct mpd_song *song;
-        while ((song = mpd_recv_song(connection.conn)) != NULL) {
+        while ((song = mpd_recv_song(connection.conn)) != nullptr) {
           const char *uri = mpd_song_get_uri(song);
           songs << uri;
           mpd_song_free(song);
