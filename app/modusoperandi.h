@@ -26,13 +26,17 @@ public:
 
 public slots:
   void set(ActiveMode new_mode);
+  void onLibraryPathChange(const QString &path);
 
 signals:
   void changed(ActiveMode new_mode);
+  void mpdChanged(const QString &path);
 
 private:
   Config::Local local_config;
   ActiveMode active;
+
+  void waitForConnected() const;
 };
 
 #endif // MODUSOPERANDI_H

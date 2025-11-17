@@ -55,13 +55,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-        if (idx >= 0) {
+        if (0 <= idx && idx < local_conf.libraryPaths().size()) {
           auto path = local_conf.libraryPaths()[idx];
-          if (path.startsWith("mpd://") && modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
-            modus_operandi.set(ModusOperandi::MODUS_MPD);
-          } else if (!path.startsWith("mpd://") && modus_operandi.get() == ModusOperandi::MODUS_MPD) {
-            modus_operandi.set(ModusOperandi::MODUS_LOCALFS);
-          }
+          modus_operandi.onLibraryPathChange(path);
+          model->switchTo(modus_operandi.get());
           model->loadAsync(path);
           local_conf.saveCurrentLibraryPath(idx);
         }

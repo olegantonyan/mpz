@@ -11,7 +11,8 @@ namespace DirectoryUi {
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
-      connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
+      // no signal here b/c the switch happen in controller explicitly
+      //connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
       switchTo(modus_operandi.get());
     }
 

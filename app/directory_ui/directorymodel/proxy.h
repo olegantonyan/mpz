@@ -31,8 +31,6 @@ namespace DirectoryUi {
 
     public slots:
       void sortBy(const QString &direction);
-
-    private slots:
       void switchTo(ModusOperandi::ActiveMode new_mode);
 
     private:
