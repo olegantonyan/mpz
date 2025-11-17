@@ -41,6 +41,8 @@ void ModusOperandi::onLibraryPathChange(const QString &path) {
 #ifdef ENABLE_MPD_SUPPORT
   if (new_mode == MODUS_MPD) {
     mpd_connection.establish(QUrl(path));
+  } else {
+    mpd_connection.destroy();
   }
 #endif
 }

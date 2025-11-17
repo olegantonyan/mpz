@@ -28,6 +28,7 @@ public:
 
 signals:
   void connected(const QUrl &url);
+  void destroyed();
   void connectionLost();
   void connectionFailed();
   void databaseUpdated();

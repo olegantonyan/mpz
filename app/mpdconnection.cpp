@@ -127,6 +127,7 @@ void MpdConnection::destroy() {
   }
   current_connection_url = QUrl();
   conn_timer.stop();
+  emit destroyed();
 }
 
 MpdConnection::~MpdConnection() {
