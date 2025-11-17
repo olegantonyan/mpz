@@ -56,7 +56,6 @@ namespace Playlist {
     const char *title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
     const char *artist = mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
     const char *album = mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
-    const char *genre = mpd_song_get_tag(song, MPD_TAG_GENRE, 0);
     const char *tracknum  = mpd_song_get_tag(song, MPD_TAG_TRACK, 0);
     const char *year   = mpd_song_get_tag(song, MPD_TAG_DATE, 0);
 
