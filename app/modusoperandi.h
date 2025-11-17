@@ -36,8 +36,6 @@ signals:
 private:
   Config::Local local_config;
   ActiveMode active;
-
-  void waitForConnected() const;
 };
 
 #endif // MODUSOPERANDI_H

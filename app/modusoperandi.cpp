@@ -16,7 +16,9 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObjec
     }
   }
   qDebug() << "ModusOperandi initilized in" << active;
+#ifdef ENABLE_MPD_SUPPORT
   connect(&mpd_connection, &MpdConnection::connected, this, &ModusOperandi::mpdReady);
+#endif
 }
 
 void ModusOperandi::set(ActiveMode new_mode) {
@@ -36,9 +38,11 @@ void ModusOperandi::onLibraryPathChange(const QString &path) {
   if (new_mode != active) {
     set(new_mode);
   }
+#ifdef ENABLE_MPD_SUPPORT
   if (new_mode == MODUS_MPD) {
     mpd_connection.establish(QUrl(path));
   }
+#endif
 }
 
 QString ModusOperandi::onLibraryPathChange(int idx) {
@@ -51,11 +55,6 @@ QString ModusOperandi::onLibraryPathChange(int idx) {
     return path;
   }
   return QString();
-}
-
-void ModusOperandi::waitForConnected() const {
-  QEventLoop loop;
-  connect(&mpd_connection, &MpdConnection::connected, &loop, &QEventLoop::quit);
 }
 
 ModusOperandi::ActiveMode ModusOperandi::get() const {
