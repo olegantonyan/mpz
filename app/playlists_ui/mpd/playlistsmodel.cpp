@@ -8,7 +8,7 @@
 namespace PlaylistsUi {
   namespace Mpd {
     Model::Model(Config::Local &conf, MpdConnection &conn, QObject *parent) : PlaylistsUi::Model(conf, parent), connection(conn) {
-      connect(&connection, &MpdConnection::playlist_updated, this, &Model::loadAsync);
+      connect(&connection, &MpdConnection::playlistUpdated, this, &Model::loadAsync);
     }
 
     void Model::loadAsync() {
@@ -26,7 +26,7 @@ namespace PlaylistsUi {
       QList<std::shared_ptr<Playlist::Playlist>> result;
 
       if (!mpd_send_list_playlists(connection.conn)) {
-        qWarning() << "mpd_send_list_playlists:" << connection.last_error();
+        qWarning() << "mpd_send_list_playlists:" << connection.lastError();
         return result;
       }
 
@@ -76,12 +76,12 @@ namespace PlaylistsUi {
         creating_playlist_name = "";
         return index;
       }
-      if (connection.current_url().isEmpty()) {
+      if (connection.currentUrl().isEmpty()) {
         return QModelIndex();
       }
 
       auto names = local_conf.currentMpdPlaylist();
-      auto name = names.value(connection.current_url().toString());
+      auto name = names.value(connection.currentUrl().toString());
       if (name.isEmpty()) {
         return QModelIndex();
       }
@@ -93,9 +93,9 @@ namespace PlaylistsUi {
       if (!pl) {
         return;
       }
-      if (!connection.current_url().isEmpty()) {
+      if (!connection.currentUrl().isEmpty()) {
         auto names = local_conf.currentMpdPlaylist();
-        names[connection.current_url().toString()] = pl->name();
+        names[connection.currentUrl().toString()] = pl->name();
         local_conf.saveCurrentMpdPlaylist(names);
       }
     }
@@ -133,7 +133,7 @@ namespace PlaylistsUi {
         names << path.path();
 
         if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
-          qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
+          qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
           mpd_response_finish(connection.conn);
           return "";
         }
@@ -153,13 +153,13 @@ namespace PlaylistsUi {
 
       for (auto song : songs) {
         if (!mpd_run_add(connection.conn, song.toUtf8().constData())) {
-          qWarning() << "mpd_run_add: " << connection.last_error();
+          qWarning() << "mpd_run_add: " << connection.lastError();
           return "";
         }
       }
 
       if (!mpd_run_save(connection.conn, result.toUtf8().constData())) {
-        qWarning() << "mpd_run_save: " << connection.last_error();
+        qWarning() << "mpd_run_save: " << connection.lastError();
         return "";
       }
 
@@ -174,7 +174,7 @@ namespace PlaylistsUi {
 
       MpdConnectionLocker locker(connection);
       if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
-        qWarning() << "error deleting mpd playlist:" << connection.last_error();
+        qWarning() << "error deleting mpd playlist:" << connection.lastError();
         return;
       }
       PlaylistsUi::Model::remove(index);

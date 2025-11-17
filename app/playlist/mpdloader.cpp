@@ -10,7 +10,7 @@ namespace Playlist {
     QVector<Track> result;
 
     if (!mpd_send_list_playlist_meta(connection.conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_send_list_playlist_meta:" << connection.last_error();
+      qWarning() << "mpd_send_list_playlist_meta:" << connection.lastError();
       return result;
     }
 
@@ -34,7 +34,7 @@ namespace Playlist {
       names << path.path();
 
       if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
-        qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
+        qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
         mpd_response_finish(connection.conn);
         return result;
       }

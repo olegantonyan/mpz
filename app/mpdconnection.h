@@ -21,15 +21,15 @@ public:
   bool establish(const QUrl &url);
   bool ping();
   void destroy();
-  QString last_error() const;
-  void wait_connected();
-  QUrl current_url() const;
+  QString lastError() const;
+  void waitConnected();
+  QUrl currentUrl() const;
 
 signals:
   void connected();
-  void database_updated();
-  void playlist_updated();
-  void player_state_changed();
+  void databaseUpdated();
+  void playlistUpdated();
+  void playerStateChanged();
 
 private slots:
   void on_idle_readable();
@@ -48,7 +48,7 @@ private:
 class MpdConnectionLocker {
 public:
   explicit MpdConnectionLocker(MpdConnection &c) : locker(nullptr) {
-    c.wait_connected();
+    c.waitConnected();
     locker = new QMutexLocker<QRecursiveMutex>(&c.mutex);
   }
   ~MpdConnectionLocker() {

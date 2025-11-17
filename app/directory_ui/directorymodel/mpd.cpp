@@ -16,7 +16,7 @@ namespace DirectoryUi {
       createRootItem();
       last_sort_column = 0;
       last_sort_order = Qt::AscendingOrder;
-      connect(&conn, &MpdConnection::database_updated, this, &Mpd::onDatabaseUpdated);
+      connect(&conn, &MpdConnection::databaseUpdated, this, &Mpd::onDatabaseUpdated);
     }
 
     Mpd::~Mpd() {
@@ -145,7 +145,7 @@ namespace DirectoryUi {
       }
 
       if (!mpd_send_list_meta(connection.conn, path.toUtf8().constData())) {
-        qWarning() << "mpd_send_list_all:" << connection.last_error();
+        qWarning() << "mpd_send_list_all:" << connection.lastError();
         return;
       }
 

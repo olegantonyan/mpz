@@ -21,24 +21,24 @@ namespace PlaylistUi {
       MpdConnectionLocker locker(connection);
 
       if (!mpd_command_list_begin(connection.conn, true)) {
-        qWarning() << "mpd_command_list_begin:" << connection.last_error();
+        qWarning() << "mpd_command_list_begin:" << connection.lastError();
         mpd_response_finish(connection.conn);
         return;
       }
 
       for (int i : indecies) {
         if (!mpd_send_playlist_delete(connection.conn, playlist()->name().toUtf8().constData(), i)) {
-          qWarning() << "mpd_command_list_end:" << connection.last_error();
+          qWarning() << "mpd_command_list_end:" << connection.lastError();
           mpd_response_finish(connection.conn);
           return;
         }
       }
 
       if (!mpd_command_list_end(connection.conn)) {
-        qWarning() << "mpd_command_list_end:" << connection.last_error();
+        qWarning() << "mpd_command_list_end:" << connection.lastError();
       }
       if (!mpd_response_finish(connection.conn)) {
-        qWarning() << "mpd_response_finish:" << connection.last_error();
+        qWarning() << "mpd_response_finish:" << connection.lastError();
       }
     }
 
@@ -59,25 +59,25 @@ namespace PlaylistUi {
       MpdConnectionLocker locker(connection);
 
       if (!mpd_command_list_begin(connection.conn, true)) {
-        qWarning() << "mpd_send_list_all_meta: " << connection.last_error();
+        qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
         return false;
       }
 
       bool ok = true;
       for (auto track : tracks) {
         if (!mpd_send_playlist_add(connection.conn, playlist_name.toUtf8().constData(), track.path().toUtf8().constData())) {
-          qWarning() << "mpd_send_playlist_add: " << connection.last_error();
+          qWarning() << "mpd_send_playlist_add: " << connection.lastError();
           ok = false;
         }
       }
 
       if (!mpd_command_list_end(connection.conn)) {
-        qWarning() << "mpd_send_playlist_add: " << connection.last_error();
+        qWarning() << "mpd_send_playlist_add: " << connection.lastError();
         ok = false;
       }
 
       if (!mpd_response_finish(connection.conn)) {
-        qWarning() << "mpd_send_playlist_add: " << connection.last_error();
+        qWarning() << "mpd_send_playlist_add: " << connection.lastError();
         ok = false;
       }
 

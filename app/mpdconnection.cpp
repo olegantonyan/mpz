@@ -6,15 +6,15 @@
 MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), idle_conn(nullptr), idle_notifier(nullptr) {
 }
 
-QString MpdConnection::last_error() const {
+QString MpdConnection::lastError() const {
   return QString::fromUtf8(mpd_connection_get_error_message(conn));
 }
 
-QUrl MpdConnection::current_url() const {
+QUrl MpdConnection::currentUrl() const {
   return current_connection_url;
 }
 
-void MpdConnection::wait_connected() {
+void MpdConnection::waitConnected() {
   if (!ping()) {
     QEventLoop loop;
     connect(this, &MpdConnection::connected, &loop, &QEventLoop::quit);
@@ -29,7 +29,7 @@ bool MpdConnection::ping() {
   }
   struct mpd_status *status = mpd_run_status(conn);
   if (!status) {
-    qWarning() << "mpd_run_status failed:" << last_error();
+    qWarning() << "mpd_run_status failed:" << lastError();
     return false;
   }
   mpd_status_free(status);
@@ -46,7 +46,7 @@ bool MpdConnection::establish(const QUrl &url) {
     return false;
   }
   if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
-    qWarning() << "error connecting to mpd:" << last_error();
+    qWarning() << "error connecting to mpd:" << lastError();
     mpd_connection_free(conn);
     conn = nullptr;
     return false;
@@ -78,13 +78,13 @@ bool MpdConnection::establish_idle(const QUrl &url) {
 void MpdConnection::on_idle_readable() {
   enum mpd_idle event = mpd_recv_idle(idle_conn, false);
   if (event & MPD_IDLE_DATABASE) {
-    emit database_updated();
+    emit databaseUpdated();
   }
   if (event & MPD_IDLE_PLAYER) {
-    emit player_state_changed();
+    emit playerStateChanged();
   }
   if (event & MPD_IDLE_STORED_PLAYLIST) {
-    emit playlist_updated();
+    emit playlistUpdated();
   }
   mpd_send_idle(idle_conn);
 }
