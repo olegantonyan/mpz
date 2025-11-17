@@ -26,6 +26,7 @@ namespace DirectoryUi {
     }
 
     TreeItem *Mpd::createRootItem() {
+      QMutexLocker locker(&loading_mutex);
       if (root_item) {
         delete root_item;
       }
@@ -34,6 +35,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::onDatabaseUpdated() {
+      QMutexLocker locker(&loading_mutex);
       beginResetModel();
       loadDirectory(createRootItem(), "");
       endResetModel();
