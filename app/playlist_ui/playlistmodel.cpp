@@ -30,8 +30,10 @@ namespace PlaylistUi {
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
+    QVariant none;
+
     if (!index.isValid()) {
-      return QVariant();
+      return none;
     }
 
     if (role == Qt::TextAlignmentRole) {
@@ -65,7 +67,7 @@ namespace PlaylistUi {
     if (role == Qt::DisplayRole && index.column() > 0) {
       return columns_config.value(index.column(), t);
     }
-    return QVariant();
+    return none;
   }
 
   void Model::setTracks(const QVector<Track> &t) {

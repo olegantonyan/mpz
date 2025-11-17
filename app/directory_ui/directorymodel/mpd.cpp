@@ -114,8 +114,10 @@ namespace DirectoryUi {
     }
 
     QVariant DirectoryUi::DirectoryModel::Mpd::data(const QModelIndex &index, int role) const {
+      QVariant none;
+
       if (!index.isValid()) {
-        return QVariant();
+        return none;
       }
 
       TreeItem* item = treeItemFromIndex(index);
@@ -133,7 +135,7 @@ namespace DirectoryUi {
         }
       }
 
-      return QVariant();
+      return none;
     }
 
     void Mpd::loadDirectory(TreeItem *parent, const QString &path) {

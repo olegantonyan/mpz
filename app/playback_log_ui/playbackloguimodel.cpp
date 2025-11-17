@@ -23,8 +23,10 @@ namespace PlaybackLogUi {
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
+    QVariant none;
+
     if (!index.isValid()) {
-      return QVariant();
+      return none;
     }
 
     auto item = items.at(index.row());
@@ -39,7 +41,7 @@ namespace PlaybackLogUi {
           break;
       }
     }
-    return QVariant();
+    return none;
   }
 
   Item Model::last() const {

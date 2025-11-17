@@ -111,8 +111,10 @@ namespace PlaylistsUi {
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
+    QVariant none;
+
     if (!index.isValid()) {
-      return QVariant();
+      return none;
     }
 
     auto pl = list.at(index.row());
@@ -126,11 +128,11 @@ namespace PlaylistsUi {
       if (list.size() > index.row()) {
         return list.at(index.row())->name();
       } else {
-        return QVariant();
+        return none;
       }
     }
 
-    return QVariant();
+    return none;
   }
 
   bool Model::persist() {
