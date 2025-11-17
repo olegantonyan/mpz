@@ -16,6 +16,7 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObjec
     }
   }
   qDebug() << "ModusOperandi initilized in" << active;
+  connect(&mpd_connection, &MpdConnection::connected, this, &ModusOperandi::mpdReady);
 }
 
 void ModusOperandi::set(ActiveMode new_mode) {
@@ -26,29 +27,30 @@ void ModusOperandi::set(ActiveMode new_mode) {
   active = new_mode;
   if (change) {
     qDebug() << "ModusOperandi switched to" << active;
-    if (active == MODUS_LOCALFS) {
-      emit changed(active);
-    } else {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-        waitForConnected();
-        emit changed(active);
-      });
-    }
+    emit changed(active);
   }
 }
 
 void ModusOperandi::onLibraryPathChange(const QString &path) {
   ActiveMode new_mode = path.startsWith("mpd://") ? MODUS_MPD : MODUS_LOCALFS;
-
   if (new_mode != active) {
     set(new_mode);
-  } else if (new_mode == MODUS_MPD && active == MODUS_MPD) {
-    qDebug() << "ModusOperandi MPD changed to" << path;
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-      waitForConnected();
-      emit mpdChanged(path);
-    });
   }
+  if (new_mode == MODUS_MPD) {
+    mpd_connection.establish(QUrl(path));
+  }
+}
+
+QString ModusOperandi::onLibraryPathChange(int idx) {
+  if (0 <= idx && idx < local_config.libraryPaths().size()) {
+    auto path = local_config.libraryPaths()[idx];
+    if (!path.isEmpty()) {
+      onLibraryPathChange(path);
+      local_config.saveCurrentLibraryPath(idx);
+    }
+    return path;
+  }
+  return QString();
 }
 
 void ModusOperandi::waitForConnected() const {

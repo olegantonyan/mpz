@@ -55,12 +55,10 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-        if (0 <= idx && idx < local_conf.libraryPaths().size()) {
-          auto path = local_conf.libraryPaths()[idx];
-          modus_operandi.onLibraryPathChange(path);
+        auto path = modus_operandi.onLibraryPathChange(idx);
+        if (!path.isEmpty()) {
           model->switchTo(modus_operandi.get());
           model->loadAsync(path);
-          local_conf.saveCurrentLibraryPath(idx);
         }
       });
     }

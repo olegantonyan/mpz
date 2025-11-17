@@ -39,6 +39,7 @@ namespace DirectoryUi {
 
     public slots:
       void onDatabaseUpdated();
+      void onMpdReady();
 
     private:
       void loadDirectory(TreeItem* parent, const QString& path);

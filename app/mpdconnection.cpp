@@ -71,7 +71,7 @@ bool MpdConnection::establish(const QUrl &url) {
   }
   establish_idle(url);
   current_connection_url = url;
-  emit connected();
+  emit connected(url);
   conn_timer.start();
   return true;
 }

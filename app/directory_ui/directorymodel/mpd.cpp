@@ -42,12 +42,17 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadAsync(const QString &path) {
-      if (!connection.establish(QUrl(path))) {
-        return;
+      if (connection.currentUrl().isEmpty()) {
+        // only on initial load
+        connection.establish(QUrl(path));
       }
+    }
+
+    void Mpd::onMpdReady() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+        connection.waitConnected();
         onDatabaseUpdated();
-        emit directoryLoaded(path);
+        emit directoryLoaded(connection.currentUrl().toString());
       });
     }
 

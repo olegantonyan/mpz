@@ -30,7 +30,7 @@ namespace DirectoryUi {
     int TreeItem::visible_children_count() const {
       int count = 0;
       for (auto item : children) {
-        if (item->visible) {
+        if (item && item->visible) {
           count++;
         }
       }
@@ -56,7 +56,7 @@ namespace DirectoryUi {
     TreeItem *TreeItem::child(int row) {
       int visible_row = 0;
       for (auto item : children) {
-        if (item->visible) {
+        if (item && item->visible) {
           if (visible_row == row) {
             return item;
           }

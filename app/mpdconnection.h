@@ -27,7 +27,7 @@ public:
   QUrl currentUrl() const;
 
 signals:
-  void connected();
+  void connected(const QUrl &url);
   void connectionLost();
   void connectionFailed();
   void databaseUpdated();

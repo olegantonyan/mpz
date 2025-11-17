@@ -9,10 +9,10 @@ namespace DirectoryUi {
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(modus.mpd_connection, this);
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
+      connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &DirectoryModel::Mpd::onMpdReady);
 #endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
-      // no signal here b/c the switch happen in controller explicitly
-      //connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
+      connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
       switchTo(modus_operandi.get());
     }
 

@@ -27,10 +27,11 @@ public:
 public slots:
   void set(ActiveMode new_mode);
   void onLibraryPathChange(const QString &path);
+  QString onLibraryPathChange(int idx);
 
 signals:
   void changed(ActiveMode new_mode);
-  void mpdChanged(const QString &path);
+  void mpdReady();
 
 private:
   Config::Local local_config;

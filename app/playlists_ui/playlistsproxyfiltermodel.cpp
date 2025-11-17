@@ -13,7 +13,7 @@ namespace PlaylistsUi {
     connect(mpd, &Mpd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
     connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
     connect(mpd, &Mpd::Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
-    connect(&modus_operandi, &ModusOperandi::mpdChanged, mpd, &Mpd::Model::loadAsync);
+    connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::loadAsync);
 #endif
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());
@@ -24,15 +24,14 @@ namespace PlaylistsUi {
     case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
       setSourceModel(mpd);
-      activeModel()->loadAsync();
       break;
 #endif
     case ModusOperandi::MODUS_LOCALFS:
     default:
       setSourceModel(localfs);
-      activeModel()->loadAsync();
       break;
-    }
+    } 
+    activeModel()->loadAsync();
   }
 
   int ProxyFilterModel::rowCount(const QModelIndex &parent) const {
