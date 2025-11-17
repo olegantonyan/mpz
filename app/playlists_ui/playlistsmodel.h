@@ -37,6 +37,7 @@ namespace PlaylistsUi {
 
   public slots:
     virtual void loadAsync();
+    void clear();
 
   signals:
     void asyncLoadFinished();

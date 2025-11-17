@@ -18,6 +18,9 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObjec
   qDebug() << "ModusOperandi initilized in" << active;
 #ifdef ENABLE_MPD_SUPPORT
   connect(&mpd_connection, &MpdConnection::connected, this, &ModusOperandi::mpdReady);
+  connect(&mpd_connection, &MpdConnection::disconnected, this, &ModusOperandi::mpdLost);
+  connect(&mpd_connection, &MpdConnection::lost, this, &ModusOperandi::mpdLost);
+  connect(&mpd_connection, &MpdConnection::failed, this, &ModusOperandi::mpdLost);
 #endif
 }
 

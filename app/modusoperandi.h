@@ -32,6 +32,7 @@ public slots:
 signals:
   void changed(ActiveMode new_mode);
   void mpdReady(const QUrl &url);
+  void mpdLost();
 
 private:
   Config::Local local_config;
