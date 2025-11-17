@@ -73,7 +73,7 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release .. # for Qt5 add -DUSE_QT5
+cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release .. # for Qt5 add -DUSE_QT5=ON
 make -j`nproc`
 # now you now use mpz binary directly
 # optionally, install to /usr/local:
@@ -88,7 +88,7 @@ git clone git@github.com:olegantonyan/mpz.git
 cd mpz
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON ..
+cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON ..
 make -j`nproc`
 # now you now use mpz binary directly
 # optionally, install to /usr/local:
