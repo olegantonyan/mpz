@@ -157,7 +157,7 @@ namespace PlaylistUi {
       return;
     }
 
-    (void)QtConcurrent::run([=]() {
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
       for (auto path : filepaths) {
         Playlist::Loader loader(path);
         playlist()->append(loader.tracks(), !loader.is_playlist_file());

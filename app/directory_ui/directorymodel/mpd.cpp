@@ -45,7 +45,7 @@ namespace DirectoryUi {
       if (!connection.establish(QUrl(path))) {
         return;
       }
-      (void)QtConcurrent::run([=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         onDatabaseUpdated();
         emit directoryLoaded(path);
       });

@@ -96,8 +96,9 @@ namespace Config {
   QMap<QString, QString> Local::currentMpdPlaylist() const {
     auto mv = storage.get("current_mpd_playlist").get<QMap<QString, Config::Value>>();
     QMap<QString, QString> result;
-    for (auto it : mv.asKeyValueRange()) {
-      result[it.first] = it.second.get<QString>();
+
+    for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
+      result[it.key()] = it.value().get<QString>();
     }
 
     return result;
@@ -106,8 +107,8 @@ namespace Config {
   bool Local::saveCurrentMpdPlaylist(const QMap<QString, QString> &name_for_library_url) {
     QMap<QString, Config::Value> mv;
 
-    for (auto it : name_for_library_url.asKeyValueRange()) {
-      mv[it.first] = Config::Value(it.second);
+    for (auto it = name_for_library_url.constBegin(); it != name_for_library_url.constEnd(); ++it) {
+      mv[it.key()] = Config::Value(it.value());
     }
 
     return storage.set("current_mpd_playlist", Config::Value(mv));

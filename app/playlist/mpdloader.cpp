@@ -1,5 +1,7 @@
 #include "mpdloader.h"
 
+#include <QDebug>
+
 namespace Playlist {
   MpdLoader::MpdLoader(MpdConnection &conn) : connection(conn) {
   }

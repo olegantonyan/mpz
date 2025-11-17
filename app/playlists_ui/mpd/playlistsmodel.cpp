@@ -49,7 +49,7 @@ namespace PlaylistsUi {
       if (!playlist) {
         return;
       }
-      (void)QtConcurrent::run([=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         auto tracks = Playlist::MpdLoader(connection).playlistTracks(playlist->name());
         playlist->load(tracks);
         emit asyncTracksLoadFinished(playlist);
@@ -104,7 +104,7 @@ namespace PlaylistsUi {
       Q_ASSERT(filepaths.size() > 0);
       Q_UNUSED(libraryDir);
 
-      (void)QtConcurrent::run([=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         creating_playlist_name = createPlaylistFromDirs(filepaths);
       });
     }
