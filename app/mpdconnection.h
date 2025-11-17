@@ -49,13 +49,22 @@ class MpdConnectionLocker {
 public:
   explicit MpdConnectionLocker(MpdConnection &c) : locker(nullptr) {
     c.waitConnected();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     locker = new QMutexLocker<QRecursiveMutex>(&c.mutex);
+#else
+    locker = new QMutexLocker(&c.mutex);
+#endif
+
   }
   ~MpdConnectionLocker() {
     delete locker;
   }
 private:
-  QMutexLocker<QRecursiveMutex> *locker;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMutexLocker<QRecursiveMutex> *locker;
+#else
+    QMutexLocker*locker;
+#endif
 };
 
 #endif // MPDCONNECTION_H

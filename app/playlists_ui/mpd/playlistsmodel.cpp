@@ -12,7 +12,7 @@ namespace PlaylistsUi {
     }
 
     void Model::loadAsync() {
-      (void)QtConcurrent::run([=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         beginResetModel();
         list = loadMpdPlaylists();
         endResetModel();
@@ -102,9 +102,10 @@ namespace PlaylistsUi {
 
     void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
       Q_ASSERT(filepaths.size() > 0);
+      Q_UNUSED(libraryDir);
 
       (void)QtConcurrent::run([=]() {
-        creating_playlist_name = createPlaylistFromDirs(filepaths, libraryDir);
+        creating_playlist_name = createPlaylistFromDirs(filepaths);
       });
     }
 
@@ -124,7 +125,7 @@ namespace PlaylistsUi {
       return result;
     }
 
-    QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir) {
+    QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths) {
       MpdConnectionLocker locker(connection);
 
       QStringList songs;

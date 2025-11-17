@@ -34,7 +34,7 @@ namespace PlaylistsUi {
       QString creating_playlist_name;
 
       QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
-      QString createPlaylistFromDirs(const QList<QDir> &filepaths, const QString &libraryDir);
+      QString createPlaylistFromDirs(const QList<QDir> &filepaths);
       QModelIndex indexByName(const QString &name) const;
       QString playlistUniqueName(const QString &name) const;
     };
