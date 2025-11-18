@@ -102,13 +102,29 @@ QPair<bool, QString> MpdConnection::probe(const QUrl &url) {
     return result;
   }
   const unsigned int *ver = mpd_connection_get_server_version(probed_conn);
-  result.second = QString("version %1.%2.%3") \
-      .arg(ver[0]) \
-      .arg(ver[1]) \
-      .arg(ver[2]) \
-  ;
+  auto version = QString("protocol version %1.%2.%3").arg(ver[0]).arg(ver[1]).arg(ver[2]);
 
+  if (!mpd_send_stats(probed_conn)) {
+    result.first = false;
+    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    mpd_connection_free(probed_conn);
+    return result;
+  }
+
+  struct mpd_stats *stats = mpd_recv_stats(probed_conn);
+  if (!stats) {
+    result.first = false;
+    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    mpd_connection_free(probed_conn);
+    return result;
+  }
+
+  unsigned int songs = mpd_stats_get_number_of_songs(stats);
+  mpd_stats_free(stats);
+  mpd_response_finish(probed_conn);
   mpd_connection_free(probed_conn);
+
+  result.second = QString("%1, %2 songs").arg(version).arg(songs);
   return result;
 }
 
