@@ -20,6 +20,7 @@ public:
   struct mpd_connection *conn;
 
   bool establish(const QUrl &url);
+  QString probe(const QUrl &url);
   bool ping();
   void destroy();
   QString lastError() const;

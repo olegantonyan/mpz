@@ -134,7 +134,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
   }
 
   void Controller::settingsDialog(QComboBox *libswitch) {
-    DirectorySettings dlg(local_conf.libraryPaths());
+    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi);
     auto old_paths = local_conf.libraryPaths();
     if(dlg.exec() == QDialog::Accepted) {
       if (old_paths != dlg.libraryPaths()) {

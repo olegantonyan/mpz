@@ -4,15 +4,18 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QDebug>
+#include <QApplication>
 
-DirectorySettings::DirectorySettings(const QStringList &paths, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings) {
+DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus) {
   ui->setupUi(this);
 
   model.setStringList(paths);
   ui->listView->setModel(&model);
 #ifndef ENABLE_MPD_SUPPORT
-  ui->pushButtonAddMpd.hide();
+  ui->pushButtonAddMpd->hide();
 #endif
+  connect(ui->listView, &QListView::clicked, this, &DirectorySettings::on_itemSelected);
+  ui->pushButtonTestMpd->hide();
 }
 
 DirectorySettings::~DirectorySettings() {
@@ -54,5 +57,40 @@ void DirectorySettings::on_pushButtonRemove_clicked() {
     return;
   }
   model.removeRows(current_index.row(), 1);
+}
+
+void DirectorySettings::on_itemSelected(const QModelIndex &index) {
+  auto text = index.data().toString();
+
+  if (text.startsWith("mpd://")) {
+    ui->pushButtonTestMpd->show();
+  } else {
+    ui->pushButtonTestMpd->hide();
+  }
+  ui->labelMpdResult->clear();
+}
+
+
+void DirectorySettings::on_pushButtonTestMpd_clicked() {
+#ifdef ENABLE_MPD_SUPPORT
+  //ui->labelMpdResult->setPixmap(QApplication::style()->standardPixmap(QStyle::SP_DialogApplyButton));
+  //QApplication::style()->standardPixmap(QStyle::SP_MessageBoxCritical)
+
+  QModelIndex index = ui->listView->currentIndex();
+  if (!index.isValid()) {
+    return;
+  }
+  QString path = index.data().toString();
+  if (path.isEmpty()) {
+    return;
+  }
+  QString error = modus_operandi.mpd_connection.probe(QUrl(path));
+  if (error.isEmpty()) {
+    ui->labelMpdResult->setText(tr("Success"));
+  } else {
+    ui->labelMpdResult->setText(QString("%1: %2").arg(tr("Failure")).arg(error));
+  }
+  modus_operandi.mpd_connection.destroy();
+#endif
 }
 
