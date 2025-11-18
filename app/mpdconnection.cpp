@@ -87,7 +87,7 @@ bool MpdConnection::establish(const QUrl &url) {
 }
 
 QPair<bool, QString> MpdConnection::probe(const QUrl &url) {
-  QPair<bool, QString> result(false, "");
+  QPair<bool, QString> result(true, "");
 
   auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!probed_conn) {
@@ -101,23 +101,14 @@ QPair<bool, QString> MpdConnection::probe(const QUrl &url) {
     mpd_connection_free(probed_conn);
     return result;
   }
-  struct mpd_status *status = mpd_run_status(probed_conn);
-  if (!status) {
-    result.first = false;
-    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
-    mpd_connection_free(probed_conn);
-    return result;
-  }
-
-  result.first = true;
-  auto ver = mpd_connection_get_server_version(probed_conn);
+  const unsigned int *ver = mpd_connection_get_server_version(probed_conn);
   result.second = QString("version %1.%2.%3") \
       .arg(ver[0]) \
       .arg(ver[1]) \
       .arg(ver[2]) \
   ;
 
-  mpd_status_free(status);
+  mpd_connection_free(probed_conn);
   return result;
 }
 
