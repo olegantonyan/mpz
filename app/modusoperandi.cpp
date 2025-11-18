@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QtConcurrent>
 
-ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObject{parent}, local_config(local_cfg) {
+ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QObject *parent) : QObject{parent}, local_config(local_cfg) {
   if (local_config.libraryPaths().empty()) {
     active = MODUS_LOCALFS;
   } else {
@@ -18,6 +18,20 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, QObject *parent) : QObjec
   qDebug() << "ModusOperandi initilized in" << active;
 #ifdef ENABLE_MPD_SUPPORT
   connect(&mpd_connection, &MpdConnection::connected, this, &ModusOperandi::mpdReady);
+  connect(&mpd_connection, &MpdConnection::error, this, &ModusOperandi::mpdLost);
+  connect(&mpd_connection, &MpdConnection::disconnected, this, &ModusOperandi::mpdLost);
+
+  connect(&mpd_connection, &MpdConnection::error, [=] {
+    banner->showMessage(tr("mpd connection error"), SlidingBanner::BannerType::Error);
+  });
+  connect(&mpd_connection, &MpdConnection::connected, [=] {
+    banner->showMessage(tr("mpd connected"), SlidingBanner::BannerType::Success, 3456);
+  });
+  connect(this, &ModusOperandi::changed, [=](auto mode) {
+    if (mode == ModusOperandi::ActiveMode::MODUS_LOCALFS) {
+      banner->collapse();
+    }
+  });
 #endif
 }
 

@@ -16,12 +16,14 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   local_conf(local_c),
   global_conf(global_c),
   trayicon(nullptr),
-  modus_operandi(local_c)
+  banner(new SlidingBanner(this)),
+  modus_operandi(local_c, banner)
   {
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
   ui->setupUi(this);
+  ui->verticalLayout->insertWidget(1, banner);
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);

@@ -20,6 +20,7 @@
 #include "sleeplock.h"
 #include "audio_device_ui/devicesmenu.h"
 #include "modusoperandi.h"
+#include "slidingbanner.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -64,6 +65,7 @@ private:
   PlaybackLogUi::Controller *playback_log;
   SortUi::SortMenu *sort_menu;
   SleepLock *sleep_lock;
+  SlidingBanner *banner;
   ModusOperandi modus_operandi;
 
   int streamBuffer();

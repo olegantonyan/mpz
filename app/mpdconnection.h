@@ -29,7 +29,8 @@ public:
 
 signals:
   void connected(const QUrl &url);
-  void disconnected();
+  void disconnected(const QUrl &url);
+  void error(const QUrl &url);
   void databaseUpdated();
   void playlistUpdated();
   void playerStateChanged();

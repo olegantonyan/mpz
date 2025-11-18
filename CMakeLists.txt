@@ -94,6 +94,7 @@ set(PROJECT_SOURCES
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
   resources.qrc
+  app/slidingbanner.cpp
 )
 
 OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
