@@ -3,6 +3,14 @@
 #include <QDebug>
 #include <QEventLoop>
 
+class TimerStarter {
+public:
+  explicit TimerStarter(QTimer &tmr) : timer(tmr) { timer.stop(); }
+  ~TimerStarter() { timer.start(); }
+private:
+  QTimer &timer;
+};
+
 MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), idle_conn(nullptr), idle_notifier(nullptr) {
   conn_timer.setInterval(3210);
   connect(&conn_timer, &QTimer::timeout, [=] {
@@ -12,12 +20,9 @@ MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), 
     if (!ping()) {
       qWarning() << "mpd connection lost with" << currentUrl();
       emit disconnected();
-      conn_timer.stop();
       establish(currentUrl());
-      conn_timer.start();
     }
   });
-
 }
 
 QString MpdConnection::lastError() const {
@@ -56,7 +61,8 @@ bool MpdConnection::establish(const QUrl &url) {
 
   QMutexLocker locker(&mutex);
   current_connection_url = url;
-  conn_timer.start();
+  TimerStarter tmr(conn_timer);
+
   qDebug() << "connecting to mpd at" << url;
   deestablish();
   conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
