@@ -15,9 +15,7 @@ namespace PlaylistsUi {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         beginResetModel();
         list = loadMpdPlaylists();
-        if (!currentLibraryPath().isEmpty()) {
-          order = local_conf.mpdPlaylistsOrder()[currentLibraryPath()];
-        }
+        loadPlaylistsOrder();
         sortPlaylistsByOrder();
         endResetModel();
         emit asyncLoadFinished();
@@ -155,6 +153,12 @@ namespace PlaylistsUi {
       std::sort(list.begin(), list.end(), [&](auto a, auto b) {
         return rank.value(a->name(), INT_MAX) < rank.value(b->name(), INT_MAX);
       });
+    }
+
+    void Model::loadPlaylistsOrder() {
+      if (!currentLibraryPath().isEmpty()) {
+        order = local_conf.mpdPlaylistsOrder()[currentLibraryPath()];
+      }
     }
 
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths) {

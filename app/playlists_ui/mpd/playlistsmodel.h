@@ -40,6 +40,7 @@ namespace PlaylistsUi {
       QString playlistUniqueName(const QString &name) const;
       QString currentLibraryPath() const;
       void sortPlaylistsByOrder();
+      void loadPlaylistsOrder();
     };
   }
 }
