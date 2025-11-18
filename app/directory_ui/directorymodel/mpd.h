@@ -40,6 +40,7 @@ namespace DirectoryUi {
     public slots:
       void onDatabaseUpdated();
       void onMpdReady();
+      void onMpdLost();
 
     private:
       void loadDirectory(TreeItem* parent, const QString& path);
@@ -53,7 +54,7 @@ namespace DirectoryUi {
       int last_sort_column;
       Qt::SortOrder last_sort_order;
       QString last_filter_term;
-      QRecursiveMutex loading_mutex;
+      mutable QRecursiveMutex loading_mutex;
     };
   }
 }

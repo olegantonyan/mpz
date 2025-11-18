@@ -114,13 +114,14 @@ namespace Config {
     return storage.set("current_mpd_playlist", Config::Value(mv));
   }
 
-  QMap<QString, QList<QString>> Local::mpdPlaylistsOrder() const {
+  QMap<QString, QStringList> Local::mpdPlaylistsOrder() const {
     auto mv = storage.get("mpd_playlists_order").get<QMap<QString, Config::Value>>();
-    QMap<QString, QList<QString>> result;
+    QMap<QString, QStringList> result;
 
     for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
-      QList<QString> list;
-      for (auto li : it.value().get<QList<Config::Value>>()) {
+      QStringList list;
+      auto raw = it.value().get<QList<Config::Value>>();
+      for (auto li : raw) {
         list << li.get<QString>();
       }
       result[it.key()] = list;
@@ -129,7 +130,7 @@ namespace Config {
     return result;
   }
 
-  bool Local::saveMpdPlaylistsOrder(const QMap<QString, QList<QString>> &playlists_for_library_url) {
+  bool Local::saveMpdPlaylistsOrder(const QMap<QString, QStringList> &playlists_for_library_url) {
     QMap<QString, Config::Value> mv;
 
     for (auto it = playlists_for_library_url.constBegin(); it != playlists_for_library_url.constEnd(); ++it) {
@@ -139,7 +140,6 @@ namespace Config {
       }
       mv[it.key()] = Config::Value(val);
     }
-
     return storage.set("mpd_playlists_order", Config::Value(mv));
   }
 

@@ -14,6 +14,7 @@ namespace PlaylistsUi {
     connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
     connect(mpd, &Mpd::Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
     connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::loadAsync);
+    connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &Mpd::Model::onMpdLost);
 #endif
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());

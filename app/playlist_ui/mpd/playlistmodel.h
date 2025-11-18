@@ -24,6 +24,9 @@ namespace PlaylistUi {
       void reload() override;
       void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
 
+    public slots:
+      void onMpdLost();
+
     protected:
       void removeTracksFromPlaylist(const QList<int> &indecies) override;
 

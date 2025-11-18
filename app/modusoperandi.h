@@ -38,7 +38,7 @@ signals:
   void mpdLost(const QUrl &url);
 
 private:
-  Config::Local local_config;
+  Config::Local &local_config;
   ActiveMode active;
 };
 

@@ -118,6 +118,9 @@ namespace PlaylistsUi {
     }
 
     auto pl = list.at(index.row());
+    if (!pl) {
+      return none;
+    }
     if (role == Qt::FontRole && pl->uid() == highlight_uid) {
       QFont font;
       font.setBold(true);

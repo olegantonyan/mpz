@@ -52,13 +52,21 @@ namespace DirectoryUi {
 
     void Mpd::onMpdReady() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-        connection.waitConnected();
+        // connection.waitConnected();
         onDatabaseUpdated();
         emit directoryLoaded(connection.currentUrl().toString());
       });
     }
 
+    void Mpd::onMpdLost() {
+      QMutexLocker locker(&loading_mutex);
+      beginResetModel();
+      createRootItem();
+      endResetModel();
+    }
+
     void Mpd::filter(const QString &term) {
+      QMutexLocker locker(&loading_mutex);
       beginResetModel();
       for (auto i : root_item->children) {
         i->update_visibility(term);
@@ -68,6 +76,7 @@ namespace DirectoryUi {
     }
 
     QModelIndex Mpd::rootIndex() const {
+      QMutexLocker locker(&loading_mutex);
       if (!root_item) {
         return QModelIndex();
       }
@@ -75,6 +84,7 @@ namespace DirectoryUi {
     }
 
     QString Mpd::filePath(const QModelIndex &index) const {
+      QMutexLocker locker(&loading_mutex);
       if (!index.isValid()) {
         return "";
       }
@@ -86,6 +96,7 @@ namespace DirectoryUi {
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::index(int row, int column, const QModelIndex &parent) const {
+      QMutexLocker locker(&loading_mutex);
       if (!hasIndex(row, column, parent)) {
         return QModelIndex();
       }
@@ -97,6 +108,7 @@ namespace DirectoryUi {
     }
 
     QModelIndex DirectoryUi::DirectoryModel::Mpd::parent(const QModelIndex &child) const {
+      QMutexLocker locker(&loading_mutex);
       if (!child.isValid()) {
         return QModelIndex();
       }
@@ -111,6 +123,7 @@ namespace DirectoryUi {
     }
 
     int DirectoryUi::DirectoryModel::Mpd::rowCount(const QModelIndex &parent) const {
+      QMutexLocker locker(&loading_mutex);
       TreeItem *parent_item = parent.isValid() ? treeItemFromIndex(parent) : root_item;
       return parent_item->visible_children_count();
     }
@@ -121,6 +134,7 @@ namespace DirectoryUi {
     }
 
     QVariant DirectoryUi::DirectoryModel::Mpd::data(const QModelIndex &index, int role) const {
+      QMutexLocker locker(&loading_mutex);
       QVariant none;
 
       if (!index.isValid()) {
@@ -198,6 +212,7 @@ namespace DirectoryUi {
     }
 
     QModelIndex Mpd::createIndexForItem(TreeItem *item) const {
+      QMutexLocker locker(&loading_mutex);
       if (!item || !item->parent) {
         return QModelIndex();
       }
@@ -206,6 +221,7 @@ namespace DirectoryUi {
     }
 
     bool Mpd::hasChildren(const QModelIndex &parent) const {
+      QMutexLocker locker(&loading_mutex);
       if (parent.isValid()) {
         TreeItem* item = treeItemFromIndex(parent);
         return item->is_directory;
@@ -214,6 +230,7 @@ namespace DirectoryUi {
     }
 
     bool Mpd::canFetchMore(const QModelIndex &parent) const {
+      QMutexLocker locker(&loading_mutex);
       if (!parent.isValid()) {
         return false;
       }
@@ -222,6 +239,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::fetchMore(const QModelIndex &parent) {
+      QMutexLocker locker(&loading_mutex);
       if (!parent.isValid() || !connection.conn) {
         return;
       }
@@ -234,10 +252,12 @@ namespace DirectoryUi {
     }
 
     TreeItem *Mpd::treeItemFromIndex(const QModelIndex &index) const {
+      QMutexLocker locker(&loading_mutex);
       return static_cast<TreeItem*>(index.internalPointer());
     }
 
     void Mpd::sort(int column, Qt::SortOrder order) {
+      QMutexLocker locker(&loading_mutex);
       std::sort(root_item->children.begin(), root_item->children.end(), [column, order](const TreeItem *a, const TreeItem *b) {
         switch (column) {
         case 0: {

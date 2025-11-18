@@ -55,6 +55,10 @@ namespace PlaylistUi {
       });
     }
 
+    void Model::onMpdLost() {
+      setPlaylist(nullptr);
+    }
+
     bool Model::appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name) {
       MpdConnectionLocker locker(connection);
 

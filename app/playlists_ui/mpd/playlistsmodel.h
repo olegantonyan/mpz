@@ -28,11 +28,13 @@ namespace PlaylistsUi {
 
     public slots:
       void loadAsync() override;
+      void onMpdLost();
 
     private:
       MpdConnection &connection;
       QString creating_playlist_name;
       QList<QString> order;
+      QMutex loading_mutex;
 
       QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
       QString createPlaylistFromDirs(const QList<QDir> &filepaths);

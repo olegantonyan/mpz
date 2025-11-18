@@ -13,6 +13,7 @@ namespace PlaylistsUi {
 
     void Model::loadAsync() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+        QMutexLocker locker(&loading_mutex);
         beginResetModel();
         list = loadMpdPlaylists();
         loadPlaylistsOrder();
@@ -23,9 +24,18 @@ namespace PlaylistsUi {
       });
     }
 
+    void Model::onMpdLost() {
+      beginResetModel();
+      list.clear();
+      endResetModel();
+    }
+
     QList<std::shared_ptr<Playlist::Playlist>> Model::loadMpdPlaylists() {
       MpdConnectionLocker locker(connection);
       QList<std::shared_ptr<Playlist::Playlist>> result;
+      if (!connection.conn) {
+        return result;
+      }
 
       if (!mpd_send_list_playlists(connection.conn)) {
         qWarning() << "mpd_send_list_playlists:" << connection.lastError();
@@ -66,7 +76,9 @@ namespace PlaylistsUi {
       }
       QList<QString> names;
       for (auto it : list) {
-        names << it->name();
+        if (it) {
+          names << it->name();
+        }
       }
       map[library_path] = names;
       return local_conf.saveMpdPlaylistsOrder(map);
@@ -75,7 +87,7 @@ namespace PlaylistsUi {
     QModelIndex Model::indexByName(const QString &name) const {
       for (int i = 0; i < list.size(); i++) {
         auto pl = list.at(i);
-        if (pl->name() == name) {
+        if (pl && pl->name() == name) {
           return buildIndex(i);
         }
       }
