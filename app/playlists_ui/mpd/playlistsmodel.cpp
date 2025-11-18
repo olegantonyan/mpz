@@ -15,6 +15,10 @@ namespace PlaylistsUi {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         beginResetModel();
         list = loadMpdPlaylists();
+        if (!currentLibraryPath().isEmpty()) {
+          order = local_conf.mpdPlaylistsOrder()[currentLibraryPath()];
+        }
+        sortPlaylistsByOrder();
         endResetModel();
         emit asyncLoadFinished();
         persist();
@@ -57,7 +61,17 @@ namespace PlaylistsUi {
     }
 
     bool Model::persist() {
-      return true; //local_conf.savePlaylists(list);
+      auto map = local_conf.mpdPlaylistsOrder();
+      auto library_path = currentLibraryPath();
+      if (library_path.isEmpty()) {
+        return false;
+      }
+      QList<QString> names;
+      for (auto it : list) {
+        names << it->name();
+      }
+      map[library_path] = names;
+      return local_conf.saveMpdPlaylistsOrder(map);
     }
 
     QModelIndex Model::indexByName(const QString &name) const {
@@ -76,12 +90,12 @@ namespace PlaylistsUi {
         creating_playlist_name = "";
         return index;
       }
-      if (connection.currentUrl().isEmpty()) {
+      if (currentLibraryPath().isEmpty()) {
         return QModelIndex();
       }
 
       auto names = local_conf.currentMpdPlaylist();
-      auto name = names.value(connection.currentUrl().toString());
+      auto name = names.value(currentLibraryPath());
       if (name.isEmpty()) {
         return QModelIndex();
       }
@@ -93,9 +107,9 @@ namespace PlaylistsUi {
       if (!pl) {
         return;
       }
-      if (!connection.currentUrl().isEmpty()) {
+      if (!currentLibraryPath().isEmpty()) {
         auto names = local_conf.currentMpdPlaylist();
-        names[connection.currentUrl().toString()] = pl->name();
+        names[currentLibraryPath()] = pl->name();
         local_conf.saveCurrentMpdPlaylist(names);
       }
     }
@@ -106,6 +120,7 @@ namespace PlaylistsUi {
 
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         creating_playlist_name = createPlaylistFromDirs(filepaths);
+        order << creating_playlist_name;
       });
     }
 
@@ -123,6 +138,23 @@ namespace PlaylistsUi {
         }
       }
       return result;
+    }
+
+    QString Model::currentLibraryPath() const {
+      return connection.currentUrl().toString();
+    }
+
+    void Model::sortPlaylistsByOrder() {
+      QHash<QString, int> rank;
+      rank.reserve(order.size());
+
+      for (int i = 0; i < order.size(); ++i) {
+        rank.insert(order[i], i);
+      }
+
+      std::sort(list.begin(), list.end(), [&](auto a, auto b) {
+        return rank.value(a->name(), INT_MAX) < rank.value(b->name(), INT_MAX);
+      });
     }
 
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths) {
@@ -172,6 +204,7 @@ namespace PlaylistsUi {
       if (!pl) {
         return;
       }
+      order.removeAll(pl->name());
 
       MpdConnectionLocker locker(connection);
       if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {

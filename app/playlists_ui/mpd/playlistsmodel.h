@@ -32,11 +32,14 @@ namespace PlaylistsUi {
     private:
       MpdConnection &connection;
       QString creating_playlist_name;
+      QList<QString> order;
 
       QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
       QString createPlaylistFromDirs(const QList<QDir> &filepaths);
       QModelIndex indexByName(const QString &name) const;
       QString playlistUniqueName(const QString &name) const;
+      QString currentLibraryPath() const;
+      void sortPlaylistsByOrder();
     };
   }
 }

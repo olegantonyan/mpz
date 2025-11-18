@@ -31,6 +31,9 @@ namespace Config {
     QMap<QString, QString> currentMpdPlaylist() const;
     bool saveCurrentMpdPlaylist(const QMap<QString, QString> &name_for_library_url);
 
+    QMap<QString, QList<QString>> mpdPlaylistsOrder() const;
+    bool saveMpdPlaylistsOrder(const QMap<QString, QList<QString>> &playlists_for_library_url);
+
     QStringList libraryPaths() const;
     bool saveLibraryPaths(const QStringList &arg);
 
