@@ -86,17 +86,39 @@ bool MpdConnection::establish(const QUrl &url) {
   return true;
 }
 
-QString MpdConnection::probe(const QUrl &url) {
+QPair<bool, QString> MpdConnection::probe(const QUrl &url) {
+  QPair<bool, QString> result(false, "");
+
   auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!probed_conn) {
-    return QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    result.first = false;
+    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    return result;
   }
   if (mpd_connection_get_error(probed_conn) != MPD_ERROR_SUCCESS) {
-    auto str = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    result.first = false;
+    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
     mpd_connection_free(probed_conn);
-    return str;
+    return result;
   }
-  return QString();
+  struct mpd_status *status = mpd_run_status(probed_conn);
+  if (!status) {
+    result.first = false;
+    result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+    mpd_connection_free(probed_conn);
+    return result;
+  }
+
+  result.first = true;
+  auto ver = mpd_connection_get_server_version(probed_conn);
+  result.second = QString("version %1.%2.%3") \
+      .arg(ver[0]) \
+      .arg(ver[1]) \
+      .arg(ver[2]) \
+  ;
+
+  mpd_status_free(status);
+  return result;
 }
 
 bool MpdConnection::establish_idle(const QUrl &url) {
