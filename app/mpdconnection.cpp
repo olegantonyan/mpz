@@ -4,15 +4,17 @@
 #include <QEventLoop>
 
 MpdConnection::MpdConnection(QObject *parent) : QObject{parent}, conn(nullptr), idle_conn(nullptr), idle_notifier(nullptr) {
-  conn_timer.setInterval(1500);
+  conn_timer.setInterval(3210);
   connect(&conn_timer, &QTimer::timeout, [=] {
     if (currentUrl().isEmpty()) {
       return;
     }
     if (!ping()) {
       qWarning() << "mpd connection lost with" << currentUrl();
-      emit lost();
+      emit disconnected();
       conn_timer.stop();
+      establish(currentUrl());
+      conn_timer.start();
     }
   });
 
@@ -41,7 +43,6 @@ bool MpdConnection::ping() {
   }
   struct mpd_status *status = mpd_run_status(conn);
   if (!status) {
-    qWarning() << "mpd_run_status failed:" << lastError();
     return false;
   }
   mpd_status_free(status);
@@ -54,30 +55,28 @@ bool MpdConnection::establish(const QUrl &url) {
   }
 
   QMutexLocker locker(&mutex);
+  current_connection_url = url;
+  conn_timer.start();
   qDebug() << "connecting to mpd at" << url;
-  destroy();
+  deestablish();
   conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!conn) {
     qWarning() << "error allocation mpd connection";
-    emit failed();
     return false;
   }
   if (mpd_connection_get_error(conn) != MPD_ERROR_SUCCESS) {
     qWarning() << "error connecting to mpd:" << lastError();
     mpd_connection_free(conn);
     conn = nullptr;
-    emit failed();
     return false;
   }
   if (!establish_idle(url)) {
     mpd_connection_free(conn);
     conn = nullptr;
-    emit failed();
     return false;
   }
-  current_connection_url = url;
+  qDebug() << "connected to mpd at" << url;
   emit connected(url);
-  conn_timer.start();
   return true;
 }
 
@@ -103,21 +102,7 @@ bool MpdConnection::establish_idle(const QUrl &url) {
   return true;
 }
 
-void MpdConnection::on_idle_readable() {
-  enum mpd_idle event = mpd_recv_idle(idle_conn, false);
-  if (event & MPD_IDLE_DATABASE) {
-    emit databaseUpdated();
-  }
-  if (event & MPD_IDLE_PLAYER) {
-    emit playerStateChanged();
-  }
-  if (event & MPD_IDLE_STORED_PLAYLIST) {
-    emit playlistUpdated();
-  }
-  mpd_send_idle(idle_conn);
-}
-
-void MpdConnection::destroy() {
+void MpdConnection::deestablish() {
   QMutexLocker locker(&mutex);
 
   bool should_emit = !!conn;
@@ -133,11 +118,29 @@ void MpdConnection::destroy() {
     delete idle_notifier;
     idle_notifier = nullptr;
   }
-  current_connection_url = QUrl();
-  conn_timer.stop();
   if (should_emit) {
     emit disconnected();
   }
+}
+
+void MpdConnection::on_idle_readable() {
+  enum mpd_idle event = mpd_recv_idle(idle_conn, false);
+  if (event & MPD_IDLE_DATABASE) {
+    emit databaseUpdated();
+  }
+  if (event & MPD_IDLE_PLAYER) {
+    emit playerStateChanged();
+  }
+  if (event & MPD_IDLE_STORED_PLAYLIST) {
+    emit playlistUpdated();
+  }
+  mpd_send_idle(idle_conn);
+}
+
+void MpdConnection::destroy() {
+  deestablish();
+  current_connection_url = QUrl();
+  conn_timer.stop();
 }
 
 MpdConnection::~MpdConnection() {

@@ -29,8 +29,6 @@ public:
 signals:
   void connected(const QUrl &url);
   void disconnected();
-  void lost();
-  void failed();
   void databaseUpdated();
   void playlistUpdated();
   void playerStateChanged();
@@ -46,6 +44,7 @@ private:
   QTimer conn_timer;
 
   bool establish_idle(const QUrl &url);
+  void deestablish();
 
   friend class MpdConnectionLocker;
 };
