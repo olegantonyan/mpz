@@ -111,7 +111,6 @@ bool MpdConnection::establish_idle(const QUrl &url) {
 void MpdConnection::deestablish() {
   QMutexLocker locker(&mutex);
 
-  bool should_emit = !!conn;
   if (conn) {
     mpd_connection_free(conn);
     conn = nullptr;
@@ -123,9 +122,6 @@ void MpdConnection::deestablish() {
   if (idle_notifier) {
     delete idle_notifier;
     idle_notifier = nullptr;
-  }
-  if (should_emit) {
-    emit disconnected();
   }
 }
 
@@ -147,6 +143,7 @@ void MpdConnection::destroy() {
   deestablish();
   current_connection_url = QUrl();
   conn_timer.stop();
+  emit disconnected();
 }
 
 MpdConnection::~MpdConnection() {
