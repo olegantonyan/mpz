@@ -64,7 +64,6 @@ bool MpdConnection::establish(const QUrl &url) {
   current_connection_url = url;
   TimerStarter tmr(conn_timer);
 
-  qDebug() << "connecting to mpd at" << url;
   deestablish();
   conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
   if (!conn) {

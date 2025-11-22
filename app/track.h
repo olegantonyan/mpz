@@ -33,6 +33,7 @@ public:
   void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
   void generateUidByHashing(const QString &prefix);
+  void setPlaylistName(const QString &pln);
 
   QString path() const;
   QUrl url() const;
@@ -48,6 +49,7 @@ public:
   QString filename() const;
   quint16 track_number() const;
   quint32 begin() const;
+  QString playlist_name() const;
 
   bool isCue() const;
   QString formattedDuration() const;
@@ -83,6 +85,7 @@ private:
   quint16 _track_number;
   QUrl _stream_url;
   quint64 _begin;
+  QString _playlist_name;
 
   quint64 _uid;
 

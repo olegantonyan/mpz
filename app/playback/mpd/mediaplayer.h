@@ -5,6 +5,7 @@
 #include "mpdconnection.h"
 
 #include <QObject>
+#include <QUrl>
 
 namespace Playback {
   namespace Mpd {
@@ -29,8 +30,14 @@ namespace Playback {
       void clearTrack() override;
       void setOutputDevice(QByteArray deviceid) override;
 
+      void updateStatus();
+
     private:
       MpdConnection &connection;
+      Track current_track;
+
+    private slots:
+      void on_connected(const QUrl &url);
     };
   }
 }

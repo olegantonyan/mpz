@@ -22,6 +22,7 @@ namespace Playback {
       PlayingState,
       PausedState
     };
+    Q_ENUM(State)
 
     explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 

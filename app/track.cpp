@@ -53,6 +53,7 @@ Track::Track(const QString &fp,
              quint16 bitrt,
              quint16 samplert) {
   _uid = generateUid();
+
   _begin = bgn;
 
   filepath = fp;
@@ -142,6 +143,10 @@ bool Track::reload() {
 void Track::generateUidByHashing(const QString &prefix) {
   QByteArray utf8 = (prefix + filepath).toUtf8();
   _uid = qHashBits(utf8.constData(), utf8.size());
+}
+
+void Track::setPlaylistName(const QString &pln) {
+_playlist_name = pln;
 }
 
 void Track::setDuration(quint64 dur) {
@@ -304,6 +309,10 @@ quint16 Track::track_number() const {
 
 quint32 Track::begin() const {
   return _begin;
+}
+
+QString Track::playlist_name() const {
+  return _playlist_name;
 }
 
 bool Track::isCue() const {

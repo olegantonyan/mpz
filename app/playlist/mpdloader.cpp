@@ -73,6 +73,7 @@ namespace Playlist {
       0
     );
     track.generateUidByHashing(playlist_name);
+    track.setPlaylistName(playlist_name);
     return track;
   }
 }
