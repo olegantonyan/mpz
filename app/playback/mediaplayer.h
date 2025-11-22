@@ -36,11 +36,15 @@ namespace Playback {
     void error(const QString &message);
     void streamBufferfillChanged(quint32 current, quint32 total);
     void streamMetaChanged(const StreamMetaData& meta);
+    void prevRequested();
+    void nextRequested();
 
   public slots:
     virtual void pause();
     virtual void play();
     virtual void stop();
+    virtual void next();
+    virtual void prev();
     virtual void setPosition(qint64 position);
     virtual void setVolume(int volume);
     virtual void setTrack(const Track &track);
@@ -53,6 +57,7 @@ namespace Playback {
     QMediaPlayer player;
     Stream stream;
     QByteArray output_device_id;
+    bool next_after_stop;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
     QMediaDevices media_devices;
@@ -67,6 +72,7 @@ namespace Playback {
     quint64 offset_end;
     void seek_to_offset_begin();
     void unpause_workaround();
+    void emitStateChanged(MediaPlayer::State state);
 
   private slots:
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

@@ -15,6 +15,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 {
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
+    connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+
     connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
@@ -27,6 +30,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #ifdef ENABLE_MPD_SUPPORT
     connect(&_mpdplayer, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_mpdplayer, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=]() {
+      qDebug() << "TODO: TRACK CHANGED";
+    });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 
@@ -37,7 +43,6 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(_controls.next, &QToolButton::clicked, this, &Controller::on_controlsNext);
 
     _controls.seekbar->installEventFilter(this);
-    next_after_stop = true;
 
     setup_monotonic_timer();
   }
@@ -99,19 +104,18 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::play(const Track &track) {
-    next_after_stop = false;
 #ifdef QT6_STREAM_HACKS
     if (track.isStream()) {
       player().stop();
-      _current_track = track;
+      setCurrentTrack(track);
       player().setTrack(track);
     } else {
       player().setTrack(track);
-      _current_track = track;
+      setCurrentTrack(track);
     }
 #else
     player().setTrack(track);
-    _current_track = track;
+    setCurrentTrack(track);
 #endif
     player().play();
     if (track.isStream()) {
@@ -122,7 +126,6 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::stop() {
-    next_after_stop = false;
     player().stop();
     emit stopped();
   }
@@ -132,16 +135,14 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::on_controlsNext() {
-    next_after_stop = false;
     if (_current_track.isValid()) {
-      emit nextRequested();
+      player().next();
     }
   }
 
   void Controller::on_controlsPrev() {
-    next_after_stop = false;
     if (_current_track.isValid()) {
-      emit prevRequested();
+      player().prev();
     }
   }
 
@@ -201,14 +202,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         _controls.seekbar->setValue(0);
         player().clearTrack();
         _controls.time->clear();
-        _current_track = Track();
-        if (next_after_stop) {
-          emit nextRequested();
-        }
+        setCurrentTrack(Track());
         break;
       case MediaPlayer::PlayingState:
         emit started(_current_track);
-        next_after_stop = true;
         break;
       case MediaPlayer::PausedState:
         emit paused(_current_track);
@@ -243,6 +240,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   void Controller::setOutputDevice(QByteArray deviceid) {
     player().setOutputDevice(deviceid);
+  }
+
+  void Controller::setCurrentTrack(const Track &track) {
+    _current_track = track;
   }
 #endif
 }

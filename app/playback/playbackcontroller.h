@@ -56,6 +56,7 @@ namespace Playback {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);
 #endif
+    void setCurrentTrack(const Track &track);
 
   private:
     void on_seek(int position);
@@ -69,7 +70,6 @@ namespace Playback {
     Mpd::MediaPlayer _mpdplayer;
 #endif
     Track _current_track;
-    bool next_after_stop;
     QTimer monotonic_timer;
     ModusOperandi &modus_operndi;
 

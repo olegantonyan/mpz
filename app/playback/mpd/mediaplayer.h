@@ -29,12 +29,20 @@ namespace Playback {
       void setTrack(const Track &track) override;
       void clearTrack() override;
       void setOutputDevice(QByteArray deviceid) override;
+      void next() override;
+      void prev() override;
 
       void updateStatus();
+
+    signals:
+      void trackChanged();
 
     private:
       MpdConnection &connection;
       Track current_track;
+      unsigned int playing_song_id;
+
+      QPair<unsigned int, QString> get_current_song();
 
     private slots:
       void on_connected(const QUrl &url);

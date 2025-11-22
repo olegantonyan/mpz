@@ -3,12 +3,12 @@
 
 namespace Playback {
   namespace Mpd {
-    MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdConnection &conn, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, connection(conn) {
+    MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdConnection &conn, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, connection(conn), playing_song_id(0) {
       connect(&connection, &MpdConnection::connected, this, &MediaPlayer::on_connected);
       connect(&connection, &MpdConnection::playerStateChanged, this, &MediaPlayer::on_playerStateChanged);
     }
 
-    MediaPlayer::State Playback::Mpd::MediaPlayer::state() {
+    MediaPlayer::State MediaPlayer::state() {
       MpdConnectionLocker locker(connection);
       State new_state = StoppedState;
 
@@ -33,15 +33,15 @@ namespace Playback {
       return new_state;
     }
 
-    int Playback::Mpd::MediaPlayer::volume() const {
+    int MediaPlayer::volume() const {
       return 0;
     }
 
-    qint64 Playback::Mpd::MediaPlayer::position() const {
+    qint64 MediaPlayer::position() const {
       return 0;
     }
 
-    void Playback::Mpd::MediaPlayer::pause() {
+    void MediaPlayer::pause() {
       MpdConnectionLocker locker(connection);
 
       if (!mpd_run_pause(connection.conn, state() == PausedState ? false : true)) {
@@ -50,7 +50,7 @@ namespace Playback {
       return;
     }
 
-    void Playback::Mpd::MediaPlayer::play() {
+    void MediaPlayer::play() {
       if (current_track.playlist_name().isEmpty()) {
         return;
       }
@@ -92,29 +92,46 @@ namespace Playback {
       updateStatus();
     }
 
-    void Playback::Mpd::MediaPlayer::stop() {
+    void MediaPlayer::stop() {
       MpdConnectionLocker locker(connection);
       if (!mpd_run_stop(connection.conn)) {
+        return;
+      }
+      playing_song_id = 0;
+      updateStatus();
+    }
+
+    void MediaPlayer::setPosition(qint64 position) {
+    }
+
+    void MediaPlayer::setVolume(int volume) {
+    }
+
+    void MediaPlayer::setTrack(const Track &track) {
+      current_track = track;
+    }
+
+    void MediaPlayer::clearTrack() {
+      current_track = Track();
+    }
+
+    void MediaPlayer::setOutputDevice(QByteArray deviceid) {
+    }
+
+    void MediaPlayer::next() {
+      MpdConnectionLocker locker(connection);
+      if (!mpd_run_next(connection.conn)) {
         return;
       }
       updateStatus();
     }
 
-    void Playback::Mpd::MediaPlayer::setPosition(qint64 position) {
-    }
-
-    void Playback::Mpd::MediaPlayer::setVolume(int volume) {
-    }
-
-    void Playback::Mpd::MediaPlayer::setTrack(const Track &track) {
-      current_track = track;
-    }
-
-    void Playback::Mpd::MediaPlayer::clearTrack() {
-      current_track = Track();
-    }
-
-    void Playback::Mpd::MediaPlayer::setOutputDevice(QByteArray deviceid) {
+    void MediaPlayer::prev() {
+      MpdConnectionLocker locker(connection);
+      if (!mpd_run_previous(connection.conn)) {
+        return;
+      }
+      updateStatus();
     }
 
     void MediaPlayer::updateStatus() {
@@ -123,11 +140,35 @@ namespace Playback {
       //emit stateChanged(new_state);
     }
 
+    QPair<unsigned int, QString> MediaPlayer::get_current_song() {
+      MpdConnectionLocker locker(connection);
+      QPair<unsigned int, QString> result;
+      result.first = 0;
+      result.second = "";
+
+      auto *song = mpd_run_current_song(connection.conn);
+      if (song) {
+        result.first = mpd_song_get_id(song);
+        result.second = QString::fromUtf8(mpd_song_get_uri(song));
+        mpd_song_free(song);
+      }
+      return result;
+    }
+
     void MediaPlayer::on_connected(const QUrl &url) {
     }
 
     void MediaPlayer::on_playerStateChanged() {
-      emit stateChanged(state());
+      auto st = state();
+      if (st == PlayingState) {
+        auto this_song = get_current_song();
+        if (this_song.first != playing_song_id) {
+          qDebug() << this_song.second;
+          emit trackChanged();
+        }
+        playing_song_id = this_song.first;
+      }
+      emit stateChanged(st);
     }
   }
 }

@@ -8,7 +8,7 @@
 #include <QTimer>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid), next_after_stop(true) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     connect(&media_devices, &QMediaDevices::audioOutputsChanged, this, &MediaPlayer::onAudioDevicesChanged);
     player.setAudioOutput(&audio_output);
@@ -28,7 +28,10 @@ namespace Playback {
       switch (state) {
         case QMediaPlayer::StoppedState:
           emit positionChanged(0);
-          emit stateChanged(MediaPlayer::StoppedState);
+          emitStateChanged(MediaPlayer::StoppedState);
+          if (next_after_stop) {
+            emit nextRequested();
+          }
           break;
         case QMediaPlayer::PlayingState:
 #ifdef QT6_STREAM_HACKS
@@ -37,13 +40,13 @@ namespace Playback {
             break;
           }
 #endif
-          emit stateChanged(MediaPlayer::PlayingState);
+          emitStateChanged(MediaPlayer::PlayingState);
           if (unpause_workaround_needed_on_playing_state_change) {
             unpause_workaround();
           }
           break;
         case QMediaPlayer::PausedState:
-          emit stateChanged(MediaPlayer::PausedState);
+          emitStateChanged(MediaPlayer::PausedState);
           break;
       }
     });
@@ -111,6 +114,13 @@ namespace Playback {
 #endif
   }
 
+  void MediaPlayer::emitStateChanged(State state) {
+    if (state == PlayingState) {
+      next_after_stop = true;
+    }
+    emit stateChanged(state);
+  }
+
   void Playback::MediaPlayer::seek_to_offset_begin() {
     QTimer timer;
     QEventLoop loop;
@@ -128,6 +138,7 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
+    next_after_stop = false;
 #ifndef QT6_STREAM_HACKS
     if (!stream.isRunning() && stream.isValidUrl()) {
       if (!stream.start()) {
@@ -144,8 +155,19 @@ namespace Playback {
   }
 
   void MediaPlayer::stop() {
+    next_after_stop = false;
     player.stop();
     stream.stop();
+  }
+
+  void MediaPlayer::next() {
+    next_after_stop = false;
+    emit nextRequested();
+  }
+
+  void MediaPlayer::prev() {
+    next_after_stop = false;
+    emit prevRequested();
   }
 
   void MediaPlayer::setPosition(qint64 pos) {
@@ -173,11 +195,11 @@ namespace Playback {
       // optimistic state update b/c start_stream will block
       // also prevent double emit playing state after player starts playing
       suppress_emit_playing_state = true;
-      emit stateChanged(MediaPlayer::PlayingState);
+      emitStateChanged(MediaPlayer::PlayingState);
       if (start_stream()) {
         player.setSourceDevice(&stream);
       } else {
-        emit stateChanged(MediaPlayer::StoppedState);
+        emitStateChanged(MediaPlayer::StoppedState);
       }
 #else
       player.setMedia(track.url(), &stream);

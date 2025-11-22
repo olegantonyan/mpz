@@ -74,6 +74,7 @@ namespace Playlist {
     );
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);
+    track.setMpd(true);
     return track;
   }
 }
