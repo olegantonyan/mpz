@@ -74,6 +74,10 @@ namespace Playback {
     ModusOperandi &modus_operndi;
 
   private slots:
+    void on_controlsPause();
+    void on_controlsNext();
+    void on_controlsPrev();
+    void on_controlsPlay();
     void on_positionChanged(quint64 pos);
     void on_stateChanged(MediaPlayer::State state);
     void switchTo(ModusOperandi::ActiveMode new_mode);

@@ -31,32 +31,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 
     connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
-    connect(_controls.pause, &QToolButton::clicked, [=]() {
-      if (player().state() == MediaPlayer::PausedState) {
-        player().play();
-      } else  {
-        player().pause();
-      }
-    });
-    connect(_controls.play, &QToolButton::clicked, [=]() {
-      if (player().state() == MediaPlayer::PausedState) {
-        player().play();
-      } else  {
-        emit startRequested();
-      }
-    });
-    connect(_controls.prev, &QToolButton::clicked, [=]() {
-      next_after_stop = false;
-      if (_current_track.isValid()) {
-        emit prevRequested();
-      }
-    });
-    connect(_controls.next, &QToolButton::clicked, [=]() {
-      next_after_stop = false;
-      if (_current_track.isValid()) {
-        emit nextRequested();
-      }
-    });
+    connect(_controls.pause, &QToolButton::clicked, this, &Controller::on_controlsPause);
+    connect(_controls.play, &QToolButton::clicked, this, &Controller::on_controlsPlay);
+    connect(_controls.prev, &QToolButton::clicked, this, &Controller::on_controlsPrev);
+    connect(_controls.next, &QToolButton::clicked, this, &Controller::on_controlsNext);
 
     _controls.seekbar->installEventFilter(this);
     next_after_stop = true;
@@ -147,6 +125,32 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     next_after_stop = false;
     player().stop();
     emit stopped();
+  }
+
+  void Controller::on_controlsPause() {
+    player().pause();
+  }
+
+  void Controller::on_controlsNext() {
+    next_after_stop = false;
+    if (_current_track.isValid()) {
+      emit nextRequested();
+    }
+  }
+
+  void Controller::on_controlsPrev() {
+    next_after_stop = false;
+    if (_current_track.isValid()) {
+      emit prevRequested();
+    }
+  }
+
+  void Controller::on_controlsPlay() {
+    if (player().state() == MediaPlayer::PausedState) {
+      player().play();
+    } else  {
+      emit startRequested();
+    }
   }
 
   void Controller::setVolume(int value) {

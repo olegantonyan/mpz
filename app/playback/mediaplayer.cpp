@@ -95,8 +95,12 @@ namespace Playback {
   }
 
   void MediaPlayer::pause() {
-    player.pause();
-    unpause_workaround();
+    if (state() == MediaPlayer::PausedState) {
+      play();
+    } else  {
+      player.pause();
+      unpause_workaround();
+    }
   }
 
   void MediaPlayer::unpause_workaround() {
