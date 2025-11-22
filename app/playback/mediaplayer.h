@@ -26,7 +26,7 @@ namespace Playback {
 
     explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 
-    virtual MediaPlayer::State state() const;
+    virtual MediaPlayer::State state();
     virtual int volume() const;
     virtual qint64 position() const;
 

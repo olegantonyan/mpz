@@ -16,7 +16,7 @@ namespace Playback {
 
       // MediaPlayer interface
     public:
-      MediaPlayer::State state() const override;
+      MediaPlayer::State state() override;
       int volume() const override;
       qint64 position() const override;
 
@@ -38,6 +38,7 @@ namespace Playback {
 
     private slots:
       void on_connected(const QUrl &url);
+      void on_playerStateChanged();
     };
   }
 }

@@ -66,7 +66,7 @@ namespace Playback {
 #endif
   }
 
-  MediaPlayer::State MediaPlayer::state() const {
+  MediaPlayer::State MediaPlayer::state() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     switch (player.playbackState()) {
 #else
