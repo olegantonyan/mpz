@@ -16,7 +16,7 @@ namespace PlaylistUi {
   class PlaylistContextMenu : public QObject {
     Q_OBJECT
   public:
-    explicit PlaylistContextMenu(Model *model, ProxyFilterModel *proxy, QTableView *view, QLineEdit *seacrh, QObject *parent = nullptr);
+    explicit PlaylistContextMenu(ProxyFilterModel *proxy, QTableView *view, QLineEdit *seacrh, QObject *parent = nullptr);
 
   public slots:
     void show(const QPoint &pos);
@@ -26,7 +26,6 @@ namespace PlaylistUi {
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
 
   private:
-    Model *model;
     ProxyFilterModel *proxy;
     QTableView *view;
     QLineEdit *search;

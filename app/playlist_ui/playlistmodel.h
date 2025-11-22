@@ -35,9 +35,17 @@ namespace PlaylistUi {
     QModelIndex indexOf(quint64 uid) const;
 
     std::shared_ptr<Playlist::Playlist> playlist();
-    void reload();
+    virtual void reload();
 
-    void remove(const QList<QModelIndex> &items);
+    virtual void remove(const QList<QModelIndex> &items);
+
+    virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
+
+  signals:
+    void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
+
+  protected:
+    virtual void removeTracksFromPlaylist(const QList<int> &indecies);
 
   private:
     void setTracks(const QVector<Track> &tracks);

@@ -15,6 +15,7 @@
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
   qRegisterMetaType<StreamMetaData>("StreamMetaData");
+  qRegisterMetaType<std::shared_ptr<Playlist::Playlist>>("std::shared_ptr<Playlist::Playlist>");
 }
 
 QStringList args(int argc, char *argv[]) {

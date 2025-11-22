@@ -40,7 +40,7 @@ namespace CoverArt {
 
   QString Embedded::get(const QString &filepath) {
     QString result;
-    if (filepath.isEmpty()) {
+    if (filepath.isEmpty() || !QFile::exists(filepath)) {
       return result;
     }
 

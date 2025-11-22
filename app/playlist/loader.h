@@ -16,11 +16,13 @@ namespace Playlist {
     static QStringList supportedPlaylistFileFormats();
     static bool is_supported_file(const QString &name);
 
-    QVector<Track> tracks() const;
-    bool is_playlist_file() const;
+    virtual QVector<Track> tracks() const;
+    virtual bool is_playlist_file() const;
+
+  protected:
+    QDir path;
 
   private:
-    QDir path;
 
     bool is_dir_empty() const;
     bool is_single_file() const;

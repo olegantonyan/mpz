@@ -1,0 +1,91 @@
+#include "playlistmodel.h"
+#include "playlist/mpdloader.h"
+
+#include <QDebug>
+#include <QtConcurrent>
+
+namespace PlaylistUi {
+  namespace Mpd {
+    Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdConnection &conn, QObject *parent) :
+      PlaylistUi::Model(stl, col_cfg, parent),
+      connection(conn) {
+    }
+
+    void Model::reload() {
+      PlaylistUi::Model::reload();
+    }
+
+    void Model::removeTracksFromPlaylist(const QList<int> &indecies) {
+      PlaylistUi::Model::removeTracksFromPlaylist(indecies);
+
+      MpdConnectionLocker locker(connection);
+
+      if (!mpd_command_list_begin(connection.conn, true)) {
+        qWarning() << "mpd_command_list_begin:" << connection.lastError();
+        mpd_response_finish(connection.conn);
+        return;
+      }
+
+      for (int i : indecies) {
+        if (!mpd_send_playlist_delete(connection.conn, playlist()->name().toUtf8().constData(), i)) {
+          qWarning() << "mpd_command_list_end:" << connection.lastError();
+          mpd_response_finish(connection.conn);
+          return;
+        }
+      }
+
+      if (!mpd_command_list_end(connection.conn)) {
+        qWarning() << "mpd_command_list_end:" << connection.lastError();
+      }
+      if (!mpd_response_finish(connection.conn)) {
+        qWarning() << "mpd_response_finish:" << connection.lastError();
+      }
+    }
+
+    void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
+      if (!playlist()) {
+        return;
+      }
+
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+        auto tracks = Playlist::MpdLoader(connection).dirsTracks(filepaths, playlist()->name());
+        playlist()->append(tracks, true);
+        appendToPlaylist(tracks, playlist()->name());
+        emit appendToPlaylistAsyncFinished(playlist());
+      });
+    }
+
+    void Model::onMpdLost() {
+      setPlaylist(nullptr);
+    }
+
+    bool Model::appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name) {
+      MpdConnectionLocker locker(connection);
+
+      if (!mpd_command_list_begin(connection.conn, true)) {
+        qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
+        return false;
+      }
+
+      bool ok = true;
+      for (auto track : tracks) {
+        if (!mpd_send_playlist_add(connection.conn, playlist_name.toUtf8().constData(), track.path().toUtf8().constData())) {
+          qWarning() << "mpd_send_playlist_add: " << connection.lastError();
+          ok = false;
+        }
+      }
+
+      if (!mpd_command_list_end(connection.conn)) {
+        qWarning() << "mpd_send_playlist_add: " << connection.lastError();
+        ok = false;
+      }
+
+      if (!mpd_response_finish(connection.conn)) {
+        qWarning() << "mpd_send_playlist_add: " << connection.lastError();
+        ok = false;
+      }
+
+      return ok;
+    }
+  }
+}

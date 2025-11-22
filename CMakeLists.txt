@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(mpz VERSION 1.1.4 LANGUAGES CXX)
+project(mpz VERSION 2.0.0 LANGUAGES CXX)
 ADD_DEFINITIONS(-DVERSION="${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -26,7 +26,6 @@ if (UNIX AND NOT APPLE)
   find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
 endif()
 
-
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
   app/audio_device_ui/devicesmenu.cpp
@@ -43,7 +42,8 @@ set(PROJECT_SOURCES
   app/main.cpp
   app/mainmenu.cpp
   app/mainwindow.cpp
-  app/directory_ui/directorymodel.cpp
+  app/directory_ui/directorymodel/proxy.cpp
+  app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp
   app/playback/mediaplayer.cpp
@@ -84,6 +84,7 @@ set(PROJECT_SOURCES
   app/volumecontrol.cpp
   app/playback/stream.cpp
   app/streammetadata.cpp
+  app/modusoperandi.cpp
   app/about_ui/aboutdialog.ui
   app/directory_ui/directorysettings.ui
   app/feedback_ui/feedbackform.ui
@@ -93,7 +94,21 @@ set(PROJECT_SOURCES
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
   resources.qrc
+  app/slidingbanner.cpp
 )
+
+OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
+
+if (ENABLE_MPD_SUPPORT)
+  ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
+  list(APPEND PROJECT_SOURCES app/mpdconnection.cpp)
+  list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
+  list(APPEND PROJECT_SOURCES app/playlist_ui/mpd/playlistmodel.cpp)
+  list(APPEND PROJECT_SOURCES app/playlist/mpdloader.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/mpd/mediaplayer.cpp)
+endif()
 
 if (ENABLE_DBUS)
   ADD_DEFINITIONS(-DMPRIS_ENABLE)
@@ -120,8 +135,14 @@ if (WIN32)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-  message(STATUS "using Qt6")
+  find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
+qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
+
+target_link_libraries(mpz PRIVATE Qt6::Core)
+target_link_libraries(mpz PRIVATE Qt6::Core)
+message(STATUS "using Qt6")
 else()
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
   message(STATUS "using Qt5")
@@ -250,6 +271,32 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${QTWAITINGSPINNER_DIR}
 target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
+
+# LIBMPDCLIENT
+if (ENABLE_MPD_SUPPORT)
+  OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
+  if (USE_SYSTEM_LIBMPDCLIENT)
+    message(STATUS "using system-wide libmpdclient")
+    find_library(MPDCLIENT_LIB mpdclient REQUIRED)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MPDCLIENT_LIB})
+  else()
+    set(LIBMPDCLIENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmpdclient-2.23)
+    message(STATUS "using vendored libmpdclient from ${LIBMPDCLIENT_DIR}")
+    set(LIBMPDCLIENT_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libmpdclient)
+    add_custom_command(
+        OUTPUT ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a
+        COMMAND meson setup ${LIBMPDCLIENT_BUILD_DIR} ${LIBMPDCLIENT_DIR} --default-library=static
+        COMMAND ninja -C ${LIBMPDCLIENT_BUILD_DIR}
+        DEPENDS ${LIBMPDCLIENT_DIR}/meson.build
+        COMMENT "Building libmpdclient with Meson"
+    )
+    add_custom_target(build_libmpdclient DEPENDS ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+    add_dependencies(${CMAKE_PROJECT_NAME} build_libmpdclient)
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_DIR}/include)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+  endif()
+endif()
+# ENDOF LIBMPDCLIENT
 
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY
