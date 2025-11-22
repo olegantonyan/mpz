@@ -25,9 +25,9 @@ namespace Playback {
 
     explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
 
-    MediaPlayer::State state() const;
-    int volume() const;
-    qint64 position() const;
+    virtual MediaPlayer::State state() const;
+    virtual int volume() const;
+    virtual qint64 position() const;
 
   signals:
     void positionChanged(qint64 position);
@@ -37,15 +37,15 @@ namespace Playback {
     void streamMetaChanged(const StreamMetaData& meta);
 
   public slots:
-    void pause();
-    void play();
-    void stop();
-    void setPosition(qint64 position);
-    void setVolume(int volume);
-    void setTrack(const Track &track);
-    void clearTrack();
+    virtual void pause();
+    virtual void play();
+    virtual void stop();
+    virtual void setPosition(qint64 position);
+    virtual void setVolume(int volume);
+    virtual void setTrack(const Track &track);
+    virtual void clearTrack();
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void setOutputDevice(QByteArray deviceid);
+    virtual void setOutputDevice(QByteArray deviceid);
 #endif
 
   private:

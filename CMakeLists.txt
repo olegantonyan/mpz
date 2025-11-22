@@ -107,6 +107,7 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
   list(APPEND PROJECT_SOURCES app/playlist_ui/mpd/playlistmodel.cpp)
   list(APPEND PROJECT_SOURCES app/playlist/mpdloader.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/mpd/mediaplayer.cpp)
 endif()
 
 if (ENABLE_DBUS)

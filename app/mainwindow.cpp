@@ -47,7 +47,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
