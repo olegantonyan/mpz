@@ -28,9 +28,10 @@ namespace Playback {
       switch (state) {
         case QMediaPlayer::StoppedState:
           emit positionChanged(0);
-          emitStateChanged(MediaPlayer::StoppedState);
           if (next_after_stop) {
             emit nextRequested();
+          } else {
+            emitStateChanged(MediaPlayer::StoppedState);
           }
           break;
         case QMediaPlayer::PlayingState:

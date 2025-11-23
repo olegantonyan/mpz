@@ -211,7 +211,7 @@ namespace Playback {
     });
 
     auto conn_fin = connect(&sock, &QTcpSocket::disconnected, &loop, &QEventLoop::quit);
-    auto conn_abort = connect(this, &Stream::stopping, &sock, &QTcpSocket::abort);
+    auto conn_abort = connect(this, &Stream::stopping, &sock, &QTcpSocket::disconnectFromHost);
     auto conn_quit = connect(this, &Stream::stopping, &loop, &QEventLoop::quit);
 
     timer.setSingleShot(true);
@@ -233,6 +233,7 @@ namespace Playback {
     disconnect(conn_quit);
     disconnect(conn_fin);
     disconnect(conn_error);
+    sock.close();
     clear();
     _url.clear();
 

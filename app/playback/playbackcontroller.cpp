@@ -127,9 +127,6 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::stop() {
     player().stop();
-    if (modus_operndi.get() == ModusOperandi::ActiveMode::MODUS_LOCALFS) {
-      emit stopped();
-    }
   }
 
   void Controller::on_controlsPause() {
@@ -205,9 +202,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         player().clearTrack();
         _controls.time->clear();
         setCurrentTrack(Track());
-        if (modus_operndi.get() == ModusOperandi::ActiveMode::MODUS_MPD) {
-          emit stopped();
-        }
+        emit stopped();
         break;
       case MediaPlayer::PlayingState:
         emit started(_current_track);
