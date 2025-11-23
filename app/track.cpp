@@ -110,7 +110,7 @@ bool Track::isValid() const {
 }
 
 bool Track::fillAudioProperties() {
-  if (isMpd()) {
+  if (isMpd() || !isValid()) {
     return false;
   }
   TagLib::FileRef f(path().toUtf8().constData());
@@ -127,7 +127,7 @@ bool Track::fillAudioProperties() {
 }
 
 bool Track::fillTags() {
-  if (isMpd()) {
+  if (isMpd() || !isValid()) {
     return false;
   }
   TagLib::FileRef f(path().toUtf8().constData());
