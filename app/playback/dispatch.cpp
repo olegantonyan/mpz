@@ -99,6 +99,19 @@ namespace Playback {
     }
   }
 
+  void Dispatch::on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint) {
+    auto current_playlist = playlists->playlistByName(playlist_name_hint);
+    if (!current_playlist) {
+      return;
+    }
+    for (auto it : current_playlist->tracks()) {
+      if (it.path() == track_path) {
+        emit trackChangedQueryComplete(it);
+        break;
+      }
+    }
+  }
+
   void Dispatch::on_startRequested() {
     quint64 selected_track_uid = player_state.selectedTrack();
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);

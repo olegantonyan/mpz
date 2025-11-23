@@ -109,10 +109,12 @@ namespace Playback {
 
     void MediaPlayer::setTrack(const Track &track) {
       current_track = track;
+      playing_song_id = 0;
     }
 
     void MediaPlayer::clearTrack() {
       current_track = Track();
+      playing_song_id = 0;
     }
 
     void MediaPlayer::setOutputDevice(QByteArray deviceid) {
@@ -162,9 +164,8 @@ namespace Playback {
       auto st = state();
       if (st == PlayingState) {
         auto this_song = get_current_song();
-        if (this_song.first != playing_song_id) {
-          qDebug() << this_song.second;
-          emit trackChanged();
+        if (playing_song_id != 0 && this_song.first != playing_song_id) {
+          emit trackChanged(this_song.second);
         }
         playing_song_id = this_song.first;
       }

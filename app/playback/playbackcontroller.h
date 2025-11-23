@@ -47,6 +47,7 @@ namespace Playback {
     void streamFill(const Track &track, quint32 bytes);
     void trackChanged(const Track &track);
     void monotonicPlaybackTimerIncrement(int by);
+    void trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
 
   public slots:
     void play(const Track &track);
@@ -57,6 +58,7 @@ namespace Playback {
     void setOutputDevice(QByteArray deviceid);
 #endif
     void setCurrentTrack(const Track &track);
+    void trackChangedQueryComplete(const Track &track);
 
   private:
     void on_seek(int position);

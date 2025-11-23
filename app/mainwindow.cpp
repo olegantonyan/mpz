@@ -301,6 +301,8 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
+  connect(player, &Playback::Controller::trackChangedQuery, dispatch, &Playback::Dispatch::on_trackChangedQuery);
+  connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
   connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
 

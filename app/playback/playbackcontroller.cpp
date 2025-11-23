@@ -30,8 +30,8 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #ifdef ENABLE_MPD_SUPPORT
     connect(&_mpdplayer, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_mpdplayer, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
-    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=]() {
-      qDebug() << "TODO: TRACK CHANGED";
+    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
+      emit trackChangedQuery(path, _current_track.playlist_name());
     });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
@@ -127,7 +127,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::stop() {
     player().stop();
-    emit stopped();
+    if (modus_operndi.get() == ModusOperandi::ActiveMode::MODUS_LOCALFS) {
+      emit stopped();
+    }
   }
 
   void Controller::on_controlsPause() {
@@ -203,6 +205,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         player().clearTrack();
         _controls.time->clear();
         setCurrentTrack(Track());
+        if (modus_operndi.get() == ModusOperandi::ActiveMode::MODUS_MPD) {
+          emit stopped();
+        }
         break;
       case MediaPlayer::PlayingState:
         emit started(_current_track);
@@ -244,6 +249,12 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::setCurrentTrack(const Track &track) {
     _current_track = track;
+  }
+
+  void Controller::trackChangedQueryComplete(const Track &track) {
+    setCurrentTrack(track);
+    player().setTrack(track);
+    emit started(track);
   }
 #endif
 }

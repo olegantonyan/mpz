@@ -35,7 +35,7 @@ namespace Playback {
       void updateStatus();
 
     signals:
-      void trackChanged();
+      void trackChanged(const QString &path);
 
     private:
       MpdConnection &connection;

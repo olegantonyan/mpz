@@ -64,6 +64,15 @@ namespace PlaylistsUi {
     return proxy->activeModel()->itemByTrack(track_uid);
   }
 
+  std::shared_ptr<Playlist::Playlist> Controller::playlistByName(const QString &name) const {
+    for (auto it : proxy->activeModel()->itemList()) {
+      if (it->name() == name) {
+        return it;
+      }
+    }
+    return nullptr;
+  }
+
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
       eventFilterViewport(event);
