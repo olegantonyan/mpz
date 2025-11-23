@@ -33,11 +33,19 @@ namespace Playback {
       return new_state;
     }
 
-    int MediaPlayer::volume() const {
-      return 0;
+    int MediaPlayer::volume() {
+      MpdConnectionLocker locker(connection);
+      struct mpd_status *status = mpd_run_status(connection.conn);
+      if (!status) {
+        qWarning() << "mpd_run_status:" << connection.lastError();
+        return 0;
+      }
+      int volume = qMax(mpd_status_get_volume(status), 0);
+      mpd_status_free(status);
+      return volume;
     }
 
-    qint64 MediaPlayer::position() const {
+    qint64 MediaPlayer::position() {
       return 0;
     }
 
@@ -105,6 +113,10 @@ namespace Playback {
     }
 
     void MediaPlayer::setVolume(int volume) {
+      MpdConnectionLocker locker(connection);
+      if (!mpd_run_set_volume(connection.conn, volume)) {
+         qWarning() << "mpd_run_set_volume:" << connection.lastError();
+      }
     }
 
     void MediaPlayer::setTrack(const Track &track) {
@@ -115,9 +127,6 @@ namespace Playback {
     void MediaPlayer::clearTrack() {
       current_track = Track();
       playing_song_id = 0;
-    }
-
-    void MediaPlayer::setOutputDevice(QByteArray deviceid) {
     }
 
     void MediaPlayer::next() {

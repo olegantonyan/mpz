@@ -181,6 +181,9 @@ void MpdConnection::on_idle_readable() {
   if (event & MPD_IDLE_STORED_PLAYLIST) {
     emit playlistUpdated();
   }
+  if (event & MPD_IDLE_MIXER) {
+    emit mixerChanged();
+  }
   mpd_send_idle(idle_conn);
 }
 

@@ -17,8 +17,8 @@ namespace Playback {
       // MediaPlayer interface
     public:
       MediaPlayer::State state() override;
-      int volume() const override;
-      qint64 position() const override;
+      int volume() override;
+      qint64 position() override;
 
     public slots:
       void pause() override;
@@ -28,7 +28,6 @@ namespace Playback {
       void setVolume(int volume) override;
       void setTrack(const Track &track) override;
       void clearTrack() override;
-      void setOutputDevice(QByteArray deviceid) override;
       void next() override;
       void prev() override;
 

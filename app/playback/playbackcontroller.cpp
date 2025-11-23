@@ -33,6 +33,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
       emit trackChangedQuery(path, _current_track.playlist_name());
     });
+    connect(&modus_operndi.mpd_connection, &MpdConnection::mixerChanged, [=]() {
+      int volume = player().volume();
+      emit volumeChanged(volume);
+    });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 

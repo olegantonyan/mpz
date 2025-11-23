@@ -86,7 +86,7 @@ namespace Playback {
     return MediaPlayer::StoppedState;
   }
 
-  int MediaPlayer::volume() const {
+  int MediaPlayer::volume() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     return audio_output.volume() * 100;
 #else
@@ -94,7 +94,7 @@ namespace Playback {
 #endif
   }
 
-  qint64 MediaPlayer::position() const {
+  qint64 MediaPlayer::position() {
     return player.position() - offset_begin;
   }
 

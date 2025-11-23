@@ -34,6 +34,7 @@ signals:
   void databaseUpdated();
   void playlistUpdated();
   void playerStateChanged();
+  void mixerChanged();
 
 private slots:
   void on_idle_readable();
