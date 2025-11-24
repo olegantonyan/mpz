@@ -14,7 +14,8 @@ namespace MpdClient {
     explicit Client(QObject *parent = nullptr);
     ~Client();
 
-    void establishConnection(const QUrl &url);
+    void openConnection(const QUrl &url);
+    void closeConnection();
     bool ping();
     QVector<Entity> lsDir(const QString &path);
     Status status();

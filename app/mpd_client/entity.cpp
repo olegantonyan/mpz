@@ -46,8 +46,8 @@ namespace MpdClient {
     return _path;
   }
 
-  time_t Entity::modified_at() const {
-    return _modified_at;
+  QDateTime Entity::modified_at() const {
+    return QDateTime::fromSecsSinceEpoch(_modified_at);
   }
 
   QDebug operator<<(QDebug dbg, const Entity &e)

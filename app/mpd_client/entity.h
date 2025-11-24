@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QDateTime>
 
 #include "mpd/client.h"
 
@@ -29,7 +30,7 @@ namespace MpdClient {
     bool isValid() const;
     Type type() const;
     QString path() const;
-    time_t modified_at() const;
+    QDateTime modified_at() const;
 
   private:
     Type _type = ENTITY_UNKNOWN;

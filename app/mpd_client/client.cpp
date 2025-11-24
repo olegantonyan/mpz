@@ -19,12 +19,20 @@ namespace MpdClient {
     delete thread;
   }
 
-  void Client::establishConnection(const QUrl &url) {
+  void Client::openConnection(const QUrl &url) {
     QMetaObject::invokeMethod(
       conn,
-      "establish",
+      "open",
       Qt::QueuedConnection,
       Q_ARG(QUrl, url)
+    );
+  }
+
+  void Client::closeConnection() {
+    QMetaObject::invokeMethod(
+      conn,
+      "close",
+      Qt::QueuedConnection
     );
   }
 

@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     qDebug() << "conencted here" << url;
     qDebug() << "another ping" << cl.ping();
   });
-  cl.establishConnection(QUrl("mpd://localhost:6600"));
+  cl.openConnection(QUrl("mpd://localhost:6600"));
   qDebug() << cl.ping();
   qDebug() << cl.status();
   //qDebug() << cl.lsPlaylistSongs("After Forever");

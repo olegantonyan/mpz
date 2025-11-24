@@ -29,7 +29,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
         qWarning() << "mpd connection lost with" << currentUrl();
         emit error(currentUrl());
         emit disconnected(currentUrl());
-        establish(currentUrl());
+        open(currentUrl());
       }
     });
   }
@@ -300,7 +300,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     return true;
   }
 
-  bool Connection::establish(const QUrl &url) {
+  bool Connection::open(const QUrl &url) {
     if (url.isEmpty()) {
       return false;
     }
@@ -332,7 +332,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     return true;
   }
 
-  void Connection::unestablish() {
+  void Connection::close() {
     destroy();
     auto url = current_connection_url;
     current_connection_url = QUrl();
@@ -426,6 +426,6 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   Connection::~Connection() {
-    unestablish();
+    close();
   }
 }

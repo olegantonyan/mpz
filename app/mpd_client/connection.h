@@ -23,8 +23,8 @@ namespace MpdClient {
     ~Connection();
 
   public slots:
-    bool establish(const QUrl &url);
-    void unestablish();
+    bool open(const QUrl &url);
+    void close();
     QPair<bool, QString> probe(const QUrl &url);
     bool ping();
     QUrl currentUrl() const;
