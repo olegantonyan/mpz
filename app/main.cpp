@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
   QCoreApplication aa(argc, argv);
   MpdClient::Client cl;
 
-  QObject::connect(cl.conn, &MpdClient::Connection::connected, [&](auto url) {
+  QObject::connect(&cl, &MpdClient::Client::connected, [&](auto url) {
     qDebug() << "conencted here" << url;
     qDebug() << "another ping" << cl.ping();
   });
@@ -66,6 +66,8 @@ int main(int argc, char *argv[]) {
   //qDebug() << cl.lsPlaylistSongs("After Forever");
   qDebug() << "**********************************";
   qDebug() << cl.lsDirsSongs(QStringList() << "After Forever" << "Arcturus");
+  qDebug() << "#############################";
+  qDebug() << cl.playlists();
 
 
   return aa.exec();

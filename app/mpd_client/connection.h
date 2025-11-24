@@ -24,9 +24,9 @@ namespace MpdClient {
 
   public slots:
     bool establish(const QUrl &url);
+    void unestablish();
     QPair<bool, QString> probe(const QUrl &url);
     bool ping();
-    void destroy();
     QUrl currentUrl() const;
 
     QVector<Entity> lsDir(const QString &path);
@@ -35,15 +35,21 @@ namespace MpdClient {
     QVector<Song> lsDirsSongs(const QStringList &paths);
     bool appendSongsToPlaylist(const QStringList &paths, const QString &playlist_name);
     bool removeSongsFromPlaylist(const QVector<int> &indecies, const QString &playlist_name);
+    QVector<Entity> playlists();
+    bool removePlaylist(const QString &playlist_name);
+    bool createPlaylist(const QStringList &paths, const QString &playlist_name);
+    bool play(const QString &playlist_name, int position);
+    bool pause();
+    bool unpause();
+    bool stop();
+    bool next();
+    bool prev();
 
   signals:
     void connected(const QUrl &url);
     void disconnected(const QUrl &url);
     void error(const QUrl &url);
-    void databaseUpdated();
-    void playlistUpdated();
-    void playerStateChanged();
-    void mixerChanged();
+    void idleEvent(mpd_idle event);
 
   private slots:
     void on_idle_readable();
@@ -56,7 +62,7 @@ namespace MpdClient {
     QTimer conn_timer;
 
     bool establish_idle(const QUrl &url);
-    void deestablish();
+    void destroy();
     void waitConnected();
     QString lastError() const;
   };

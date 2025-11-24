@@ -175,6 +175,111 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     return true;
   }
 
+  QVector<Entity> Connection::playlists() {
+    QVector<Entity> result;
+
+    if (!mpd_send_list_playlists(conn)) {
+      qWarning() << "mpd_send_list_playlists:" << lastError();
+      return result;
+    }
+
+    struct mpd_playlist *pl;
+    while ((pl = mpd_recv_playlist(conn)) != nullptr) {
+      result.append(Entity(pl));
+      mpd_playlist_free(pl);
+    }
+    mpd_response_finish(conn);
+
+    return result;
+  }
+
+  bool Connection::removePlaylist(const QString &playlist_name) {
+    if (!mpd_run_rm(conn, playlist_name.toUtf8().constData())) {
+      qWarning() << "error deleting mpd playlist:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::createPlaylist(const QStringList &paths, const QString &playlist_name) {
+    auto songs = lsDirsSongs(paths);
+    for (auto song : songs) {
+      if (!mpd_run_add(conn, song.filepath.toUtf8().constData())) {
+        qWarning() << "mpd_run_add: " << lastError();
+        return false;
+      }
+    }
+    if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
+      qWarning() << "mpd_run_save: " << lastError();
+      return false;
+    }
+
+    return true;
+  }
+
+  bool Connection::play(const QString &playlist_name, int position) {
+    if (!mpd_run_clear(conn)) {
+      qWarning() << "mpd_run_clear:" << lastError();
+      return false;
+    }
+    if (!mpd_run_load(conn, playlist_name.toUtf8().constData())) {
+      qWarning() << "mpd_run_load:" << lastError();
+      return false;
+    }
+
+    if (!mpd_run_idle_mask(conn, MPD_IDLE_QUEUE)) {
+      qWarning() << "mpd_run_idle_mask:" << lastError();
+      return false;
+    }
+
+    if (!mpd_run_play_pos(conn, position)) {
+      qWarning() << "mpd_run_play_pos:" << lastError();
+      return false;
+    }
+
+    return true;
+  }
+
+  bool Connection::pause() {
+    if (!mpd_run_pause(conn, true)) {
+      qWarning() << "mpd_run_pause:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::unpause() {
+    if (!mpd_run_pause(conn, false)) {
+      qWarning() << "mpd_run_pause:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::stop() {
+    if (!mpd_run_stop(conn)) {
+      qWarning() << "mpd_run_stop:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::next() {
+    if (!mpd_run_next(conn)) {
+      qWarning() << "mpd_run_next:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::prev() {
+    if (!mpd_run_previous(conn)) {
+      qWarning() << "mpd_run_previous:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;
@@ -203,7 +308,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     current_connection_url = url;
     TimerStarter tmr(conn_timer);
 
-    deestablish();
+    destroy();
     auto new_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
     if (!new_conn) {
       qWarning() << "error allocation mpd connection";
@@ -211,7 +316,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
       return false;
     }
     if (mpd_connection_get_error(new_conn) != MPD_ERROR_SUCCESS) {
-      qWarning() << "error connecting to mpd:" << lastError();
+      qWarning() << "error connecting to mpd:" << QString::fromUtf8(mpd_connection_get_error_message(new_conn));
       mpd_connection_free(new_conn);
       emit error(url);
       return false;
@@ -225,6 +330,14 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     conn = new_conn;
     emit connected(url);
     return true;
+  }
+
+  void Connection::unestablish() {
+    destroy();
+    auto url = current_connection_url;
+    current_connection_url = QUrl();
+    conn_timer.stop();
+    emit disconnected(url);
   }
 
   QPair<bool, QString> Connection::probe(const QUrl &url) {
@@ -291,7 +404,13 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     return true;
   }
 
-  void Connection::deestablish() {
+  void Connection::on_idle_readable() {
+    enum mpd_idle event = mpd_recv_idle(idle_conn, false);
+    emit idleEvent(event);
+    mpd_send_idle(idle_conn);
+  }
+
+  void Connection::destroy() {
     if (conn) {
       mpd_connection_free(conn);
       conn = nullptr;
@@ -306,32 +425,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     }
   }
 
-  void Connection::on_idle_readable() {
-    enum mpd_idle event = mpd_recv_idle(idle_conn, false);
-    if (event & MPD_IDLE_DATABASE) {
-      emit databaseUpdated();
-    }
-    if (event & MPD_IDLE_PLAYER) {
-      emit playerStateChanged();
-    }
-    if (event & MPD_IDLE_STORED_PLAYLIST) {
-      emit playlistUpdated();
-    }
-    if (event & MPD_IDLE_MIXER) {
-      emit mixerChanged();
-    }
-    mpd_send_idle(idle_conn);
-  }
-
-  void Connection::destroy() {
-    deestablish();
-    auto url = current_connection_url;
-    current_connection_url = QUrl();
-    conn_timer.stop();
-    emit disconnected(url);
-  }
-
   Connection::~Connection() {
-    destroy();
+    unestablish();
   }
 }

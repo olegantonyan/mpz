@@ -7,6 +7,10 @@ namespace MpdClient {
     updateFromMpdEntity(entity);
   }
 
+  Entity::Entity(const mpd_playlist *playlist) {
+    updateFromMpdPlaylist(playlist);
+  }
+
   Entity::Entity(Type type, const QString &path, time_t modifiet_at) : _type(type), _path(path), _modified_at(modifiet_at) {
   }
 
@@ -22,6 +26,12 @@ namespace MpdClient {
       _path = QString::fromUtf8(mpd_song_get_uri(song));
       _modified_at = mpd_song_get_last_modified(song);
     }
+  }
+
+  void Entity::updateFromMpdPlaylist(const mpd_playlist *playlist) {
+    _type = Type::ENTITY_PLAYLIST;
+    _path = mpd_playlist_get_path(playlist);
+    _modified_at = mpd_playlist_get_last_modified(playlist);
   }
 
   bool Entity::isValid() const {

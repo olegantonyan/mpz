@@ -6,6 +6,9 @@ namespace MpdClient {
   Client::Client(QObject *parent) : QObject{parent} {
     thread = new QThread;
     conn = new Connection(thread);
+    connect(conn, &Connection::connected, this, &Client::connected);
+    connect(conn, &Connection::disconnected, this, &Client::disconnected);
+    connect(conn, &Connection::error, this, &Client::error);
     thread->start();
   }
 
@@ -98,6 +101,126 @@ namespace MpdClient {
       Q_ARG(QString, playlist_name)
     );
     return result;
+  }
+
+  QVector<Entity> Client::playlists() {
+    QVector<MpdClient::Entity> result;
+
+    QMetaObject::invokeMethod(
+      conn,
+      "playlists",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QVector<MpdClient::Entity>, result)
+    );
+    return result;
+  }
+
+  bool Client::removePlaylist(const QString &playlist_name) {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "removePlaylist",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result),
+      Q_ARG(QString, playlist_name)
+    );
+    return result;
+  }
+
+  bool Client::createPlaylist(const QStringList &paths, const QString &playlist_name) {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "createPlaylist",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result),
+      Q_ARG(QStringList, paths),
+      Q_ARG(QString, playlist_name)
+    );
+    return result;
+  }
+
+  bool Client::play(const QString &playlist_name, int position) {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "play",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result),
+      Q_ARG(QString, playlist_name),
+      Q_ARG(int, position)
+    );
+    return result;
+  }
+
+  bool Client::pause() {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "pause",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result)
+    );
+    return result;
+  }
+
+  bool Client::unpause() {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "unpause",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result)
+    );
+    return result;
+  }
+
+  bool Client::stop() {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "stop",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result)
+    );
+    return result;
+  }
+
+  bool Client::next() {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "next",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result)
+    );
+    return result;
+  }
+
+  bool Client::prev() {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "prev",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result)
+    );
+    return result;
+  }
+
+  void Client::on_idleEvent(mpd_idle event) {
+    if (event & MPD_IDLE_DATABASE) {
+      emit databaseUpdated();
+    }
+    if (event & MPD_IDLE_PLAYER) {
+      emit playerStateChanged();
+    }
+    if (event & MPD_IDLE_STORED_PLAYLIST) {
+      emit playlistUpdated();
+    }
+    if (event & MPD_IDLE_MIXER) {
+      emit mixerChanged();
+    }
   }
 
   QVector<MpdClient::Entity> MpdClient::Client::lsDir(const QString &path) {
