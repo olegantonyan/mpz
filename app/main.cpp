@@ -50,7 +50,27 @@ int ipc_port(Config::Global &global_conf) {
   return global_conf.ipcPort();
 }
 
+#include "mpd_client/client.h"
+
 int main(int argc, char *argv[]) {
+  QCoreApplication aa(argc, argv);
+  MpdClient::Client cl;
+
+  QObject::connect(cl.conn, &MpdClient::Connection::connected, [&](auto url) {
+    qDebug() << "conencted here" << url;
+    qDebug() << "another ping" << cl.ping();
+  });
+  cl.establishConnection(QUrl("mpd://localhost:6600"));
+  qDebug() << cl.ping();
+  qDebug() << cl.status();
+  //qDebug() << cl.lsPlaylistSongs("After Forever");
+  qDebug() << "**********************************";
+  qDebug() << cl.lsDirsSongs(QStringList() << "After Forever" << "Arcturus");
+
+
+  return aa.exec();
+
+
   //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
   RNJesus::seed();
