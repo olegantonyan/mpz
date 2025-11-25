@@ -20,6 +20,9 @@ namespace MpdClient {
   }
 
   QString Connection::lastError() const {
+    if (!conn) {
+      return "";
+    }
     return QString::fromUtf8(mpd_connection_get_error_message(conn));
   }
 
@@ -37,7 +40,6 @@ namespace MpdClient {
   }
 
   QVector<Entity> Connection::lsDir(const QString &path) {
-    waitConnected();
     QVector<Entity> result;
 
     if (!conn) {
@@ -60,7 +62,6 @@ namespace MpdClient {
   }
 
   Status Connection::status() {
-    waitConnected();
     Status result;
 
     if (!conn) {
@@ -79,8 +80,10 @@ namespace MpdClient {
   }
 
   QVector<Song> Connection::lsPlaylistSongs(const QString &playlist_name) {
-    waitConnected();
     QVector<Song> result;
+    if (!conn) {
+      return result;
+    }
 
     if (!mpd_send_list_playlist_meta(conn, playlist_name.toUtf8().constData())) {
       qWarning() << "mpd_send_list_playlist_meta:" << lastError();
@@ -99,8 +102,10 @@ namespace MpdClient {
   }
 
   QVector<Song> Connection::lsDirsSongs(const QStringList &paths) {
-    waitConnected();
     QVector<Song> result;
+    if (!conn) {
+      return result;
+    }
 
     for (auto path : paths) {
       if (!mpd_send_list_all_meta(conn, path.toUtf8().constData())) {
@@ -122,7 +127,9 @@ namespace MpdClient {
   }
 
   bool Connection::appendSongsToPlaylist(const QStringList &paths, const QString &playlist_name) {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_command_list_begin(conn, true)) {
       qWarning() << "mpd_send_list_all_meta: " << lastError();
@@ -150,7 +157,9 @@ namespace MpdClient {
   }
 
   bool Connection::removeSongsFromPlaylist(const QVector<int> &indecies, const QString &playlist_name) {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_command_list_begin(conn, true)) {
       qWarning() << "mpd_command_list_begin:" << lastError();
@@ -178,8 +187,10 @@ namespace MpdClient {
   }
 
   QVector<Entity> Connection::playlists() {
-    waitConnected();
     QVector<Entity> result;
+    if (!conn) {
+      return result;
+    }
 
     if (!mpd_send_list_playlists(conn)) {
       qWarning() << "mpd_send_list_playlists:" << lastError();
@@ -197,7 +208,9 @@ namespace MpdClient {
   }
 
   bool Connection::removePlaylist(const QString &playlist_name) {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_rm(conn, playlist_name.toUtf8().constData())) {
       qWarning() << "error deleting mpd playlist:" << lastError();
@@ -207,7 +220,9 @@ namespace MpdClient {
   }
 
   bool Connection::createPlaylist(const QStringList &song_paths, const QString &playlist_name) {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
       qWarning() << "mpd_run_save: " << lastError();
@@ -244,7 +259,9 @@ namespace MpdClient {
   }
 
   bool Connection::play(const QString &playlist_name, int position) {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_clear(conn)) {
       qWarning() << "mpd_run_clear:" << lastError();
@@ -269,7 +286,9 @@ namespace MpdClient {
   }
 
   bool Connection::pause() {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_pause(conn, true)) {
       qWarning() << "mpd_run_pause:" << lastError();
@@ -279,7 +298,9 @@ namespace MpdClient {
   }
 
   bool Connection::unpause() {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_pause(conn, false)) {
       qWarning() << "mpd_run_pause:" << lastError();
@@ -289,7 +310,9 @@ namespace MpdClient {
   }
 
   bool Connection::stop() {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_stop(conn)) {
       qWarning() << "mpd_run_stop:" << lastError();
@@ -299,7 +322,7 @@ namespace MpdClient {
   }
 
   bool Connection::next() {
-    waitConnected();
+
 
     if (!mpd_run_next(conn)) {
       qWarning() << "mpd_run_next:" << lastError();
@@ -309,7 +332,9 @@ namespace MpdClient {
   }
 
   bool Connection::prev() {
-    waitConnected();
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_previous(conn)) {
       qWarning() << "mpd_run_previous:" << lastError();
@@ -319,9 +344,11 @@ namespace MpdClient {
   }
 
   Song Connection::currentSong() {
-    waitConnected();
-
     Song result;
+    if (!conn) {
+      return result;
+    }
+
     auto *song = mpd_run_current_song(conn);
     if (song) {
       result = Song(song);
