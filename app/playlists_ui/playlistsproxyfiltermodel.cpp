@@ -30,9 +30,9 @@ namespace PlaylistsUi {
     case ModusOperandi::MODUS_LOCALFS:
     default:
       setSourceModel(localfs);
+      localfs->loadAsync();
       break;
     } 
-    activeModel()->loadAsync();
   }
 
   int ProxyFilterModel::rowCount(const QModelIndex &parent) const {
