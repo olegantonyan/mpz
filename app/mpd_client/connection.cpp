@@ -478,6 +478,7 @@ namespace MpdClient {
 
   void Connection::destroy() {
     if (conn) {
+      mpd_response_finish(conn);
       mpd_connection_free(conn);
       conn = nullptr;
     }
