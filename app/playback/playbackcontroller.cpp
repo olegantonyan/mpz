@@ -231,6 +231,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #endif
       break;
     }
+
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

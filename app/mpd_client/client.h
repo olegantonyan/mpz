@@ -30,12 +30,12 @@ namespace MpdClient {
     QVector<Entity> playlists();
     bool removePlaylist(const QString &playlist_name);
     bool createPlaylist(const QStringList &paths, const QString &playlist_name);
-    bool play(const QString &playlist_name, int position);
-    bool pause();
-    bool unpause();
-    bool stop();
-    bool next();
-    bool prev();
+    void play(const QString &playlist_name, int position);
+    void pause();
+    void unpause();
+    void stop();
+    void next();
+    void prev();
     Song currentSong();
 
   signals:

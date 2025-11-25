@@ -34,9 +34,9 @@ namespace Playback {
 
     void MediaPlayer::pause() {
       if (state() == PausedState) {
-        QMetaObject::invokeMethod(&client, "unpause", Qt::QueuedConnection);
+        client.unpause();
       } else {
-        QMetaObject::invokeMethod(&client, "pause", Qt::QueuedConnection);
+        client.pause();
       }
     }
 
@@ -58,18 +58,11 @@ namespace Playback {
         qWarning() << QString("File not found in playlist: %1").arg(current_track.path());
         return;
       }
-
-      QMetaObject::invokeMethod(
-        &client,
-        "play",
-        Qt::QueuedConnection,
-        Q_ARG(QString, current_track.playlist_name()),
-        Q_ARG(int, pos)
-      );
+      client.play(current_track.playlist_name(), pos);
     }
 
     void MediaPlayer::stop() {
-      QMetaObject::invokeMethod(&client, "stop", Qt::QueuedConnection);
+      client.stop();
       playing_song_id = 0;
     }
 
@@ -94,11 +87,11 @@ namespace Playback {
     }
 
     void MediaPlayer::next() {
-      QMetaObject::invokeMethod(&client, "next", Qt::QueuedConnection);
+      client.next();
     }
 
     void MediaPlayer::prev() {
-      QMetaObject::invokeMethod(&client, "prev", Qt::QueuedConnection);
+      client.prev();
     }
 
     void MediaPlayer::on_playerStateChanged() {

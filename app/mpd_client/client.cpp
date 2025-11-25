@@ -158,72 +158,54 @@ namespace MpdClient {
     return result;
   }
 
-  bool Client::play(const QString &playlist_name, int position) {
-    bool result = false;
+  void Client::play(const QString &playlist_name, int position) {
     QMetaObject::invokeMethod(
       conn,
       "play",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result),
+      Qt::QueuedConnection,
       Q_ARG(QString, playlist_name),
       Q_ARG(int, position)
     );
-    return result;
   }
 
-  bool Client::pause() {
-    bool result = false;
+  void Client::pause() {
     QMetaObject::invokeMethod(
       conn,
       "pause",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result)
+      Qt::QueuedConnection
     );
-    return result;
   }
 
-  bool Client::unpause() {
-    bool result = false;
+  void Client::unpause() {
     QMetaObject::invokeMethod(
       conn,
       "unpause",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result)
+      Qt::QueuedConnection
     );
-    return result;
   }
 
-  bool Client::stop() {
-    bool result = false;
+  void Client::stop() {
     QMetaObject::invokeMethod(
       conn,
       "stop",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result)
+      Qt::QueuedConnection
     );
-    return result;
   }
 
-  bool Client::next() {
-    bool result = false;
+  void Client::next() {
     QMetaObject::invokeMethod(
       conn,
       "next",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result)
+      Qt::QueuedConnection
     );
-    return result;
   }
 
-  bool Client::prev() {
-    bool result = false;
+  void Client::prev() {
     QMetaObject::invokeMethod(
       conn,
       "prev",
-      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
-      Q_RETURN_ARG(bool, result)
+      Qt::QueuedConnection
     );
-    return result;
   }
 
   Song Client::currentSong() {
