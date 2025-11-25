@@ -9,6 +9,7 @@ namespace MpdClient {
     connect(conn, &Connection::connected, this, &Client::connected);
     connect(conn, &Connection::disconnected, this, &Client::disconnected);
     connect(conn, &Connection::error, this, &Client::error);
+    connect(conn, &Connection::idleEvent, this, &Client::on_idleEvent);
     thread->start();
   }
 

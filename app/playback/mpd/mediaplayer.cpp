@@ -119,7 +119,6 @@ namespace Playback {
     }
 
     void MediaPlayer::on_playerStateChanged() {
-      qDebug() << "on_playerStateChanged";
       auto st = state();
       if (st == PlayingState) {
         auto this_song = get_current_song();

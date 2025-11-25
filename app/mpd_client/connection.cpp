@@ -212,12 +212,16 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     return true;
   }
 
-  bool Connection::createPlaylist(const QStringList &paths, const QString &playlist_name) {
+  bool Connection::createPlaylist(const QStringList &song_paths, const QString &playlist_name) {
     waitConnected();
 
-    auto songs = lsDirsSongs(paths);
-    for (auto song : songs) {
-      if (!mpd_run_add(conn, song.filepath.toUtf8().constData())) {
+    if (!mpd_run_clear(conn)) {
+      qWarning() << "mpd_run_clear: " << lastError();
+      return false;
+    }
+
+    for (auto path : song_paths) {
+      if (!mpd_run_add(conn, path.toUtf8().constData())) {
         qWarning() << "mpd_run_add: " << lastError();
         return false;
       }

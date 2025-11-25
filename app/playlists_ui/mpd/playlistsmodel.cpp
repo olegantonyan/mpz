@@ -164,9 +164,14 @@ namespace PlaylistsUi {
       for (auto path : filepaths) {
         names << path.path();
       }
+      auto songs = client.lsDirsSongs(names);
       QString playlist_name = playlistUniqueName(names.join(", "));
 
-      client.createPlaylist(names, playlist_name);
+      QStringList songs_paths;
+      for (auto it : songs) {
+        songs_paths << it.filepath;
+      }
+      client.createPlaylist(songs_paths, playlist_name);
 
       return playlist_name;
     }

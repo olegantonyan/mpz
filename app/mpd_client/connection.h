@@ -37,7 +37,7 @@ namespace MpdClient {
     bool removeSongsFromPlaylist(const QVector<int> &indecies, const QString &playlist_name);
     QVector<Entity> playlists();
     bool removePlaylist(const QString &playlist_name);
-    bool createPlaylist(const QStringList &paths, const QString &playlist_name);
+    bool createPlaylist(const QStringList &song_paths, const QString &playlist_name);
     bool play(const QString &playlist_name, int position);
     bool pause();
     bool unpause();
