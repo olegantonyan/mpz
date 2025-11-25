@@ -44,10 +44,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadAsync(const QString &path) {
-      if (client.currentUrl().isEmpty()) {
-        // only on initial load
-        client.openConnection(QUrl(path));
-      }
+      client.openConnection(QUrl(path));
     }
 
     void Mpd::onMpdReady() {

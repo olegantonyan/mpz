@@ -35,7 +35,10 @@ namespace DirectoryUi {
       switch (modus_operandi.get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
-        mpd->loadAsync(path);
+        if (loadAsyncMpdOnce) { // next time it will react to the signal
+          mpd->loadAsync(path);
+          loadAsyncMpdOnce = false;
+        }
 #endif
         break;
       case ModusOperandi::MODUS_LOCALFS:

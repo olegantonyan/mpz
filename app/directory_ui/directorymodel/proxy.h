@@ -38,6 +38,7 @@ namespace DirectoryUi {
       Localfs *localfs;
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
+      bool loadAsyncMpdOnce = true;
 #endif
     };
   }

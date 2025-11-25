@@ -11,7 +11,11 @@ namespace DirectoryUi {
     }
 
     void Localfs::loadAsync(const QString &path) {
-      setRootPath(path);
+      if (rootPath() != path) {
+        setRootPath(path);
+      } else {
+        emit directoryLoaded(path); // emit anyway to let view refresh
+      }
     }
 
     QModelIndex Localfs::rootIndex() const {
