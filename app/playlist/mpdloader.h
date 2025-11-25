@@ -2,7 +2,7 @@
 #define MPDLOAER_H
 
 #include "track.h"
-#include "mpdconnection.h"
+#include "mpd_client/client.h"
 
 #include <QString>
 #include <QVector>
@@ -11,15 +11,15 @@
 namespace Playlist {
   class MpdLoader {
   public:
-    explicit MpdLoader(MpdConnection &conn);
+    explicit MpdLoader(MpdClient::Client &cl);
 
     QVector<Track> playlistTracks(const QString& playlist_name);
     QVector<Track> dirsTracks(const QList<QDir> &filepaths, const QString &playlist_name = QString());
 
   private:
-    Track buildTrack(const struct mpd_song *song, const QString& playlist_name);
+    Track buildTrack(const MpdClient::Song &song, const QString &playlist_name);
 
-    MpdConnection &connection;
+    MpdClient::Client &client;
   };
 }
 

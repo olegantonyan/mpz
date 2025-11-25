@@ -4,7 +4,7 @@
 #include "playlist/playlist.h"
 #include "config/local.h"
 #include "playlists_ui/playlistsmodel.h"
-#include "mpdconnection.h"
+#include "mpd_client/client.h"
 
 #include <QAbstractListModel>
 #include <QList>
@@ -17,7 +17,7 @@ namespace PlaylistsUi {
       Q_OBJECT
 
     public:
-      explicit Model(Config::Local &conf, MpdConnection &conn, QObject *parent = nullptr);
+      explicit Model(Config::Local &conf, MpdClient::Client &cl, QObject *parent = nullptr);
 
       bool persist() override;
       void remove(const QModelIndex &index) override;
@@ -31,7 +31,7 @@ namespace PlaylistsUi {
       void onMpdLost();
 
     private:
-      MpdConnection &connection;
+      MpdClient::Client &client;
       QString creating_playlist_name;
       QList<QString> order;
       QMutex loading_mutex;

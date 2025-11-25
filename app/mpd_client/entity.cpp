@@ -38,6 +38,10 @@ namespace MpdClient {
     return type() != ENTITY_UNKNOWN && !path().isEmpty();
   }
 
+  bool Entity::isDir() const {
+    return type() == ENTITY_DIR;
+  }
+
   Entity::Type Entity::type() const {
     return _type;
   }
@@ -46,7 +50,11 @@ namespace MpdClient {
     return _path;
   }
 
-  QDateTime Entity::modified_at() const {
+  time_t Entity::modified_at() const {
+    return _modified_at;
+  }
+
+  QDateTime Entity::modified_at_datetime() const {
     return QDateTime::fromSecsSinceEpoch(_modified_at);
   }
 

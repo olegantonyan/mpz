@@ -3,7 +3,7 @@
 
 #include "config/local.h"
 #ifdef ENABLE_MPD_SUPPORT
-  #include "mpdconnection.h"
+  #include "mpd_client/client.h"
 #endif
 #include "slidingbanner.h"
 
@@ -24,7 +24,7 @@ public:
   ActiveMode get() const;
 
 #ifdef ENABLE_MPD_SUPPORT
-  MpdConnection mpd_connection;
+  MpdClient::Client mpd_client;
 #endif
 
 public slots:

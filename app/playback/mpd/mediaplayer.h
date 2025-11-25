@@ -2,7 +2,7 @@
 #define MPDMEDIAPLAYER_H
 
 #include "playback/mediaplayer.h"
-#include "mpdconnection.h"
+#include "mpd_client/client.h"
 
 #include <QObject>
 #include <QUrl>
@@ -12,7 +12,7 @@ namespace Playback {
     class MediaPlayer : public Playback::MediaPlayer {
       Q_OBJECT
     public:
-      explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdConnection &conn, QObject *parent = nullptr);
+      explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent = nullptr);
 
       // MediaPlayer interface
     public:
@@ -37,14 +37,13 @@ namespace Playback {
       void trackChanged(const QString &path);
 
     private:
-      MpdConnection &connection;
+      MpdClient::Client &client;
       Track current_track;
       unsigned int playing_song_id;
 
       QPair<unsigned int, QString> get_current_song();
 
     private slots:
-      void on_connected(const QUrl &url);
       void on_playerStateChanged();
     };
   }

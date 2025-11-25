@@ -5,7 +5,7 @@
 #include "playlist/playlist.h"
 #include "playlist_ui/columnsconfig.h"
 #include "playlist_ui/playlistmodel.h"
-#include "mpdconnection.h"
+#include "mpd_client/client.h"
 
 #include <QVector>
 #include <QAbstractTableModel>
@@ -19,7 +19,7 @@ namespace PlaylistUi {
       Q_OBJECT
 
     public:
-      explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdConnection &conn, QObject *parent = nullptr);
+      explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdClient::Client &cl, QObject *parent = nullptr);
 
       void reload() override;
       void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
@@ -31,7 +31,7 @@ namespace PlaylistUi {
       void removeTracksFromPlaylist(const QList<int> &indecies) override;
 
     private:
-      MpdConnection &connection;
+      MpdClient::Client &client;
 
       bool appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name);
     };

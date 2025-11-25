@@ -17,14 +17,14 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QO
   }
   qDebug() << "ModusOperandi initilized in" << active;
 #ifdef ENABLE_MPD_SUPPORT
-  connect(&mpd_connection, &MpdConnection::connected, this, &ModusOperandi::mpdReady);
-  connect(&mpd_connection, &MpdConnection::error, this, &ModusOperandi::mpdLost);
-  connect(&mpd_connection, &MpdConnection::disconnected, this, &ModusOperandi::mpdLost);
+  connect(&mpd_client, &MpdClient::Client::connected, this, &ModusOperandi::mpdReady);
+  connect(&mpd_client, &MpdClient::Client::error, this, &ModusOperandi::mpdLost);
+  connect(&mpd_client, &MpdClient::Client::disconnected, this, &ModusOperandi::mpdLost);
 
-  connect(&mpd_connection, &MpdConnection::error, [=] {
+  connect(&mpd_client, &MpdClient::Client::error, [=] {
     banner->showMessage(tr("mpd connection error"), SlidingBanner::BannerType::Error);
   });
-  connect(&mpd_connection, &MpdConnection::connected, [=] {
+  connect(&mpd_client, &MpdClient::Client::connected, [=] {
     banner->showMessage(tr("mpd connected"), SlidingBanner::BannerType::Success, 3456);
   });
   connect(this, &ModusOperandi::changed, [=](auto mode) {
@@ -54,9 +54,9 @@ void ModusOperandi::onLibraryPathChange(const QString &path) {
   }
 #ifdef ENABLE_MPD_SUPPORT
   if (new_mode == MODUS_MPD) {
-    mpd_connection.establish(QUrl(path));
+    mpd_client.openConnection(QUrl(path));
   } else {
-    mpd_connection.destroy();
+    mpd_client.closeConnection();
   }
 #endif
 }

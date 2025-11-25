@@ -16,6 +16,7 @@ namespace MpdClient {
 
     void openConnection(const QUrl &url);
     void closeConnection();
+    QUrl currentUrl() const;
     bool ping();
     QVector<Entity> lsDir(const QString &path);
     Status status();

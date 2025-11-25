@@ -43,6 +43,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   QVector<Entity> Connection::lsDir(const QString &path) {
+    waitConnected();
     QVector<Entity> result;
 
     if (!conn) {
@@ -65,6 +66,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   Status Connection::status() {
+    waitConnected();
     Status result;
 
     if (!conn) {
@@ -83,6 +85,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   QVector<Song> Connection::lsPlaylistSongs(const QString &playlist_name) {
+    waitConnected();
     QVector<Song> result;
 
     if (!mpd_send_list_playlist_meta(conn, playlist_name.toUtf8().constData())) {
@@ -102,6 +105,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   QVector<Song> Connection::lsDirsSongs(const QStringList &paths) {
+    waitConnected();
     QVector<Song> result;
 
     for (auto path : paths) {
@@ -124,6 +128,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::appendSongsToPlaylist(const QStringList &paths, const QString &playlist_name) {
+    waitConnected();
+
     if (!mpd_command_list_begin(conn, true)) {
       qWarning() << "mpd_send_list_all_meta: " << lastError();
       return false;
@@ -150,6 +156,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::removeSongsFromPlaylist(const QVector<int> &indecies, const QString &playlist_name) {
+    waitConnected();
+
     if (!mpd_command_list_begin(conn, true)) {
       qWarning() << "mpd_command_list_begin:" << lastError();
       mpd_response_finish(conn);
@@ -176,6 +184,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   QVector<Entity> Connection::playlists() {
+    waitConnected();
     QVector<Entity> result;
 
     if (!mpd_send_list_playlists(conn)) {
@@ -194,6 +203,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::removePlaylist(const QString &playlist_name) {
+    waitConnected();
+
     if (!mpd_run_rm(conn, playlist_name.toUtf8().constData())) {
       qWarning() << "error deleting mpd playlist:" << lastError();
       return false;
@@ -202,6 +213,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::createPlaylist(const QStringList &paths, const QString &playlist_name) {
+    waitConnected();
+
     auto songs = lsDirsSongs(paths);
     for (auto song : songs) {
       if (!mpd_run_add(conn, song.filepath.toUtf8().constData())) {
@@ -218,6 +231,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::play(const QString &playlist_name, int position) {
+    waitConnected();
+
     if (!mpd_run_clear(conn)) {
       qWarning() << "mpd_run_clear:" << lastError();
       return false;
@@ -241,6 +256,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::pause() {
+    waitConnected();
+
     if (!mpd_run_pause(conn, true)) {
       qWarning() << "mpd_run_pause:" << lastError();
       return false;
@@ -249,6 +266,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::unpause() {
+    waitConnected();
+
     if (!mpd_run_pause(conn, false)) {
       qWarning() << "mpd_run_pause:" << lastError();
       return false;
@@ -257,6 +276,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::stop() {
+    waitConnected();
+
     if (!mpd_run_stop(conn)) {
       qWarning() << "mpd_run_stop:" << lastError();
       return false;
@@ -265,6 +286,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::next() {
+    waitConnected();
+
     if (!mpd_run_next(conn)) {
       qWarning() << "mpd_run_next:" << lastError();
       return false;
@@ -273,6 +296,8 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   }
 
   bool Connection::prev() {
+    waitConnected();
+
     if (!mpd_run_previous(conn)) {
       qWarning() << "mpd_run_previous:" << lastError();
       return false;

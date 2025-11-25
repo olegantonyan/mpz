@@ -12,11 +12,11 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    Mpd::Mpd(MpdConnection &conn, QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), connection(conn) {
+  Mpd::Mpd(MpdClient::Client &cl, QObject *parent) : QAbstractItemModel{parent}, root_item(nullptr), client(cl) {
       createRootItem();
       last_sort_column = 0;
       last_sort_order = Qt::AscendingOrder;
-      connect(&conn, &MpdConnection::databaseUpdated, this, &Mpd::onDatabaseUpdated);
+      connect(&client, &MpdClient::Client::databaseUpdated, this, &Mpd::onDatabaseUpdated);
     }
 
     Mpd::~Mpd() {
@@ -44,17 +44,16 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadAsync(const QString &path) {
-      if (connection.currentUrl().isEmpty()) {
+      if (client.currentUrl().isEmpty()) {
         // only on initial load
-        connection.establish(QUrl(path));
+        client.openConnection(QUrl(path));
       }
     }
 
     void Mpd::onMpdReady() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-        // connection.waitConnected();
         onDatabaseUpdated();
-        emit directoryLoaded(connection.currentUrl().toString());
+        emit directoryLoaded(client.currentUrl().toString());
       });
     }
 
@@ -160,41 +159,21 @@ namespace DirectoryUi {
     }
 
     void Mpd::loadDirectory(TreeItem *parent, const QString &path) {
-      MpdConnectionLocker locker(connection);
-
-      if (!connection.ping()) {
+      if (!client.ping()) {
         qWarning() << "mpd connection does not exist";
         return;
       }
 
-      if (!mpd_send_list_meta(connection.conn, path.toUtf8().constData())) {
-        qWarning() << "mpd_send_list_all:" << connection.lastError();
-        return;
-      }
-
-      struct mpd_entity* entity;
       QVector<TreeItem*> new_items;
-      while ((entity = mpd_recv_entity(connection.conn)) != nullptr) {
-        if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY) {
-          const struct mpd_directory* dir = mpd_entity_get_directory(entity);
-          auto item = new TreeItem(
-            true,
-            QString::fromUtf8(mpd_directory_get_path(dir)),
-            mpd_directory_get_last_modified(dir),
-            parent
-          );
-          new_items.append(item);
-        } else if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
-          const struct mpd_song* song = mpd_entity_get_song(entity);
-          auto item = new TreeItem(
-            false,
-            QString::fromUtf8(mpd_song_get_uri(song)),
-            mpd_song_get_last_modified(song),
-            parent
-          );
-          new_items.append(item);
-        }
-        mpd_entity_free(entity);
+      auto songs = client.lsDir(path);
+      for (auto it : songs) {
+        auto item = new TreeItem(
+          it.isDir(),
+          it.path(),
+          it.modified_at(),
+          parent
+        );
+        new_items.append(item);
       }
 
       if (!new_items.isEmpty()) {
@@ -207,7 +186,6 @@ namespace DirectoryUi {
         endInsertRows();
       }
 
-      mpd_response_finish(connection.conn);
       parent->loaded = true;
     }
 
@@ -240,7 +218,7 @@ namespace DirectoryUi {
 
     void Mpd::fetchMore(const QModelIndex &parent) {
       QMutexLocker locker(&loading_mutex);
-      if (!parent.isValid() || !connection.conn) {
+      if (!parent.isValid() || !client.ping()) {
         return;
       }
       TreeItem* item = treeItemFromIndex(parent);

@@ -28,9 +28,11 @@ namespace MpdClient {
     void updateFromMpdPlaylist(const struct mpd_playlist *playlist);
 
     bool isValid() const;
+    bool isDir() const;
     Type type() const;
     QString path() const;
-    QDateTime modified_at() const;
+    time_t modified_at() const;
+    QDateTime modified_at_datetime() const;
 
   private:
     Type _type = ENTITY_UNKNOWN;

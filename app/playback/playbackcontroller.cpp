@@ -10,7 +10,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   _player(stream_buffer_size, outdevid),
   modus_operndi(modus)
 #ifdef ENABLE_MPD_SUPPORT
-  , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_connection)
+  , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
 #endif
 {
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
@@ -33,7 +33,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
       emit trackChangedQuery(path, _current_track.playlist_name());
     });
-    connect(&modus_operndi.mpd_connection, &MpdConnection::mixerChanged, [=]() {
+    connect(&modus_operndi.mpd_client, &MpdClient::Client::mixerChanged, [=]() {
       int volume = player().volume();
       emit volumeChanged(volume);
     });

@@ -7,7 +7,7 @@ namespace DirectoryUi {
     Proxy::Proxy(ModusOperandi &modus, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus) {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
-      mpd = new Mpd(modus.mpd_connection, this);
+      mpd = new Mpd(modus.mpd_client, this);
       connect(mpd, &Mpd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
       connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &DirectoryModel::Mpd::onMpdReady);
       connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &DirectoryModel::Mpd::onMpdLost);

@@ -53,7 +53,7 @@ int ipc_port(Config::Global &global_conf) {
 #include "mpd_client/client.h"
 
 int main(int argc, char *argv[]) {
-  QCoreApplication aa(argc, argv);
+  /*QCoreApplication aa(argc, argv);
   MpdClient::Client cl;
 
   QObject::connect(&cl, &MpdClient::Client::connected, [&](auto url) {
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
   qDebug() << cl.playlists();
 
 
-  return aa.exec();
+  return aa.exec();*/
 
 
   //qputenv("QT_MEDIA_BACKEND", "ffmpeg");

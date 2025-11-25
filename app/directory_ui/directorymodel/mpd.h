@@ -5,8 +5,9 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QRecursiveMutex>
 
-#include "mpdconnection.h"
+#include "mpd_client/client.h"
 #include "mpd/treeitem.h"
 
 namespace DirectoryUi {
@@ -18,7 +19,7 @@ namespace DirectoryUi {
       void directoryLoaded(const QString &path);
 
     public:
-      explicit Mpd(MpdConnection &conn, QObject *parent = nullptr);
+      explicit Mpd(MpdClient::Client &cl, QObject *parent = nullptr);
       ~Mpd();
 
       void loadAsync(const QString &path);
@@ -48,7 +49,7 @@ namespace DirectoryUi {
       TreeItem *treeItemFromIndex(const QModelIndex &index) const;
       TreeItem *createRootItem();
 
-      MpdConnection &connection;
+      MpdClient::Client &client;
       TreeItem *root_item;
 
       int last_sort_column;

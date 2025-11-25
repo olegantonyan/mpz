@@ -36,6 +36,10 @@ namespace MpdClient {
     );
   }
 
+  QUrl Client::currentUrl() const {
+    return conn->currentUrl();
+  }
+
   bool Client::ping() {
     bool result = false;
     QMetaObject::invokeMethod(

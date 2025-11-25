@@ -7,8 +7,8 @@
 
 namespace PlaylistsUi {
   namespace Mpd {
-    Model::Model(Config::Local &conf, MpdConnection &conn, QObject *parent) : PlaylistsUi::Model(conf, parent), connection(conn) {
-      connect(&connection, &MpdConnection::playlistUpdated, this, &Model::loadAsync);
+  Model::Model(Config::Local &conf, MpdClient::Client &cl, QObject *parent) : PlaylistsUi::Model(conf, parent), client(cl) {
+      connect(&client, &MpdClient::Client::playlistUpdated, this, &Model::loadAsync);
     }
 
     void Model::loadAsync() {
@@ -31,28 +31,14 @@ namespace PlaylistsUi {
     }
 
     QList<std::shared_ptr<Playlist::Playlist>> Model::loadMpdPlaylists() {
-      MpdConnectionLocker locker(connection);
       QList<std::shared_ptr<Playlist::Playlist>> result;
-      if (!connection.conn) {
-        return result;
-      }
+      auto plsts = client.playlists();
 
-      if (!mpd_send_list_playlists(connection.conn)) {
-        qWarning() << "mpd_send_list_playlists:" << connection.lastError();
-        return result;
-      }
-
-      struct mpd_playlist *pl;
-      while ((pl = mpd_recv_playlist(connection.conn)) != nullptr) {
+      for (auto it : plsts) {
         auto p = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
-        auto name = mpd_playlist_get_path(pl);
-        if (name) {
-          p->rename(name);
-          result << p;
-        }
-        mpd_playlist_free(pl);
+        p->rename(it.path());
+        result << p;
       }
-      mpd_response_finish(connection.conn);
 
       return result;
     }
@@ -62,7 +48,7 @@ namespace PlaylistsUi {
         return;
       }
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-        auto tracks = Playlist::MpdLoader(connection).playlistTracks(playlist->name());
+        auto tracks = Playlist::MpdLoader(client).playlistTracks(playlist->name());
         playlist->load(tracks);
         emit asyncTracksLoadFinished(playlist);
       });
@@ -151,7 +137,7 @@ namespace PlaylistsUi {
     }
 
     QString Model::currentLibraryPath() const {
-      return connection.currentUrl().toString();
+      return client.currentUrl().toString();
     }
 
     void Model::sortPlaylistsByOrder() {
@@ -174,45 +160,15 @@ namespace PlaylistsUi {
     }
 
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths) {
-      MpdConnectionLocker locker(connection);
-
-      QStringList songs;
       QStringList names;
       for (auto path : filepaths) {
         names << path.path();
-
-        if (!mpd_send_list_all_meta(connection.conn, path.path().toUtf8().constData())) {
-          qWarning() << "mpd_send_list_all_meta: " << connection.lastError();
-          mpd_response_finish(connection.conn);
-          return "";
-        }
-
-        struct mpd_song *song;
-        while ((song = mpd_recv_song(connection.conn)) != nullptr) {
-          const char *uri = mpd_song_get_uri(song);
-          songs << uri;
-          mpd_song_free(song);
-        }
-
-        mpd_response_finish(connection.conn);
       }
-      QString result = playlistUniqueName(names.join(", "));
+      QString playlist_name = playlistUniqueName(names.join(", "));
 
-      mpd_run_clear(connection.conn);
+      client.createPlaylist(names, playlist_name);
 
-      for (auto song : songs) {
-        if (!mpd_run_add(connection.conn, song.toUtf8().constData())) {
-          qWarning() << "mpd_run_add: " << connection.lastError();
-          return "";
-        }
-      }
-
-      if (!mpd_run_save(connection.conn, result.toUtf8().constData())) {
-        qWarning() << "mpd_run_save: " << connection.lastError();
-        return "";
-      }
-
-      return result;
+      return playlist_name;
     }
 
     void Model::remove(const QModelIndex &index) {
@@ -222,11 +178,7 @@ namespace PlaylistsUi {
       }
       order.removeAll(pl->name());
 
-      MpdConnectionLocker locker(connection);
-      if (!mpd_run_rm(connection.conn, pl->name().toUtf8().constData())) {
-        qWarning() << "error deleting mpd playlist:" << connection.lastError();
-        return;
-      }
+      client.removePlaylist(pl->name());
       PlaylistsUi::Model::remove(index);
     }
   }
