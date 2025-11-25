@@ -14,6 +14,8 @@ namespace MpdClient {
     explicit Client(QObject *parent = nullptr);
     ~Client();
 
+    QPair<bool, QString> probe(const QUrl &url);
+
   public slots:
     void openConnection(const QUrl &url);
     void closeConnection();

@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
   return aa.exec();*/
 
 
-  QLoggingCategory::setFilterRules("qt.multimedia=false");
+  //QLoggingCategory::setFilterRules("qt.multimedia=false");
   //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
   RNJesus::seed();

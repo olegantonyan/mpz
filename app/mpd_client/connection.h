@@ -19,7 +19,7 @@ namespace MpdClient {
   class Connection : public QObject {
     Q_OBJECT
   public:
-    explicit Connection(QThread *thread);
+    explicit Connection();
     ~Connection();
 
   public slots:
@@ -54,18 +54,20 @@ namespace MpdClient {
 
   private slots:
     void on_idle_readable();
+    void on_timeout();
 
   private:
-    struct mpd_connection *conn;
-    struct mpd_connection *idle_conn;
-    QSocketNotifier *idle_notifier;
+    struct mpd_connection *conn = nullptr;
+    struct mpd_connection *idle_conn = nullptr;
+    QSocketNotifier *idle_notifier = nullptr;
     QUrl current_connection_url;
-    QTimer conn_timer;
+    QTimer *conn_timer = nullptr;
 
     bool establish_idle(const QUrl &url);
     void destroy();
     void waitConnected();
     QString lastError() const;
+    void initConnTimer();
   };
 }
 

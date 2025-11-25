@@ -84,12 +84,12 @@ void DirectorySettings::on_pushButtonTestMpd_clicked() {
   if (path.isEmpty()) {
     return;
   }
-  /*auto result = modus_operandi.mpd_client.probe(QUrl(path));
+  auto result = modus_operandi.mpd_client.probe(QUrl(path));
   if (result.first) {
     ui->labelMpdResult->setText(QString("%1: %2").arg(tr("Success")).arg(result.second));
   } else {
     ui->labelMpdResult->setText(QString("%1: %2").arg(tr("Failure")).arg(result.second));
-  }*/
+  }
 #endif
 }
 

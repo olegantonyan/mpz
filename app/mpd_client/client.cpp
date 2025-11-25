@@ -5,19 +5,24 @@
 namespace MpdClient {
   Client::Client(QObject *parent) : QObject{parent} {
     thread = new QThread;
-    conn = new Connection(thread);
+    conn = new Connection();
     connect(conn, &Connection::connected, this, &Client::connected);
     connect(conn, &Connection::disconnected, this, &Client::disconnected);
     connect(conn, &Connection::error, this, &Client::error);
     connect(conn, &Connection::idleEvent, this, &Client::on_idleEvent);
+    conn->moveToThread(thread);
     thread->start();
   }
 
   Client::~Client() {
     thread->quit();
     thread->wait();
-    delete conn;
-    delete thread;
+    conn->deleteLater();
+    thread->deleteLater();
+  }
+
+  QPair<bool, QString> Client::probe(const QUrl &url) {
+    return conn->probe(url);
   }
 
   void Client::openConnection(const QUrl &url) {

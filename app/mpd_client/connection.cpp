@@ -5,41 +5,31 @@
 
 class TimerStarter {
 public:
-  explicit TimerStarter(QTimer &tmr) : timer(tmr) {
-    QMetaObject::invokeMethod(&timer, "stop", Qt::QueuedConnection);
+  explicit TimerStarter(QTimer *tmr) : timer(tmr) {
+    timer->stop();
   }
   ~TimerStarter() {
-    QMetaObject::invokeMethod(&timer, "start", Qt::QueuedConnection);
+    timer->start();
   }
 private:
-  QTimer &timer;
+  QTimer *timer;
 };
 
 namespace MpdClient {
-Connection::Connection(QThread *thread) : QObject{nullptr} {
-    moveToThread(thread);
-
-    conn = nullptr;
-    idle_conn = nullptr;
-    idle_notifier = nullptr;
-
-    conn_timer.moveToThread(thread);
-    conn_timer.setInterval(3210);
-    connect(&conn_timer, &QTimer::timeout, [=] {
-      if (currentUrl().isEmpty()) {
-        return;
-      }
-      if (!ping()) {
-        qWarning() << "mpd connection lost with" << currentUrl();
-        emit error(currentUrl());
-        emit disconnected(currentUrl());
-        open(currentUrl());
-      }
-    });
+  Connection::Connection() : QObject{nullptr} {
   }
 
   QString Connection::lastError() const {
     return QString::fromUtf8(mpd_connection_get_error_message(conn));
+  }
+
+  void Connection::initConnTimer() {
+    if (conn_timer) {
+      return;
+    }
+    conn_timer = new QTimer(this);
+    conn_timer->setInterval(3210);
+    connect(conn_timer, &QTimer::timeout, this, &Connection::on_timeout);
   }
 
   QUrl Connection::currentUrl() const {
@@ -367,6 +357,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     }
 
     current_connection_url = url;
+    initConnTimer();
     TimerStarter tmr(conn_timer);
 
     destroy();
@@ -397,7 +388,9 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     destroy();
     auto url = current_connection_url;
     current_connection_url = QUrl();
-    conn_timer.stop();
+    if (conn_timer) {
+      conn_timer->stop();
+    }
     emit disconnected(url);
   }
 
@@ -469,6 +462,18 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     enum mpd_idle event = mpd_recv_idle(idle_conn, false);
     emit idleEvent(event);
     mpd_send_idle(idle_conn);
+  }
+
+  void Connection::on_timeout() {
+    if (currentUrl().isEmpty()) {
+      return;
+    }
+    if (!ping()) {
+      qWarning() << "mpd connection lost with" << currentUrl();
+      emit error(currentUrl());
+      emit disconnected(currentUrl());
+      open(currentUrl());
+    }
   }
 
   void Connection::destroy() {
