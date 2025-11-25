@@ -221,6 +221,17 @@ namespace MpdClient {
     return result;
   }
 
+  Song Client::currentSong() {
+    Song result;
+    QMetaObject::invokeMethod(
+      conn,
+      "currentSong",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(Song, result)
+    );
+    return result;
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();

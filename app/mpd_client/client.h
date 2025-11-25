@@ -14,6 +14,7 @@ namespace MpdClient {
     explicit Client(QObject *parent = nullptr);
     ~Client();
 
+  public slots:
     void openConnection(const QUrl &url);
     void closeConnection();
     QUrl currentUrl() const;
@@ -33,6 +34,7 @@ namespace MpdClient {
     bool stop();
     bool next();
     bool prev();
+    Song currentSong();
 
   signals:
     void connected(const QUrl &url);

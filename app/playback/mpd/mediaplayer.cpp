@@ -34,9 +34,9 @@ namespace Playback {
 
     void MediaPlayer::pause() {
       if (state() == PausedState) {
-        client.unpause();
+        QMetaObject::invokeMethod(&client, "unpause", Qt::QueuedConnection);
       } else {
-        client.pause();
+        QMetaObject::invokeMethod(&client, "pause", Qt::QueuedConnection);
       }
     }
 
@@ -59,15 +59,18 @@ namespace Playback {
         return;
       }
 
-      client.play(current_track.playlist_name(), pos);
-
-      updateStatus();
+      QMetaObject::invokeMethod(
+        &client,
+        "play",
+        Qt::QueuedConnection,
+        Q_ARG(QString, current_track.playlist_name()),
+        Q_ARG(int, pos)
+      );
     }
 
     void MediaPlayer::stop() {
-      client.stop();
+      QMetaObject::invokeMethod(&client, "stop", Qt::QueuedConnection);
       playing_song_id = 0;
-      updateStatus();
     }
 
     void MediaPlayer::setPosition(qint64 position) {
@@ -91,41 +94,21 @@ namespace Playback {
     }
 
     void MediaPlayer::next() {
-      client.next();
-      updateStatus();
+      QMetaObject::invokeMethod(&client, "next", Qt::QueuedConnection);
     }
 
     void MediaPlayer::prev() {
-      client.prev();
-      updateStatus();
-    }
-
-    void MediaPlayer::updateStatus() {
-      //emit stateChanged(new_state);
-    }
-
-    QPair<unsigned int, QString> MediaPlayer::get_current_song() {
-      QPair<unsigned int, QString> result;
-      result.first = 0;
-      result.second = "";
-
-      /*auto *song = mpd_run_current_song(connection.conn);
-      if (song) {
-        result.first = mpd_song_get_id(song);
-        result.second = QString::fromUtf8(mpd_song_get_uri(song));
-        mpd_song_free(song);
-      }*/
-      return result;
+      QMetaObject::invokeMethod(&client, "prev", Qt::QueuedConnection);
     }
 
     void MediaPlayer::on_playerStateChanged() {
       auto st = state();
       if (st == PlayingState) {
-        auto this_song = get_current_song();
-        if (playing_song_id != 0 && this_song.first != playing_song_id) {
-          emit trackChanged(this_song.second);
+        auto this_song = client.currentSong();
+        if (playing_song_id != 0 && this_song.id != playing_song_id) {
+          emit trackChanged(this_song.filepath);
         }
-        playing_song_id = this_song.first;
+        playing_song_id = this_song.id;
       }
       emit stateChanged(st);
     }

@@ -5,8 +5,12 @@
 
 class TimerStarter {
 public:
-  explicit TimerStarter(QTimer &tmr) : timer(tmr) { timer.stop(); }
-  ~TimerStarter() { timer.start(); }
+  explicit TimerStarter(QTimer &tmr) : timer(tmr) {
+    QMetaObject::invokeMethod(&timer, "stop", Qt::QueuedConnection);
+  }
+  ~TimerStarter() {
+    QMetaObject::invokeMethod(&timer, "start", Qt::QueuedConnection);
+  }
 private:
   QTimer &timer;
 };
@@ -215,7 +219,22 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
   bool Connection::createPlaylist(const QStringList &song_paths, const QString &playlist_name) {
     waitConnected();
 
-    if (!mpd_run_clear(conn)) {
+    if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
+      qWarning() << "mpd_run_save: " << lastError();
+      return false;
+    }
+    if (!mpd_run_playlist_clear(conn, playlist_name.toUtf8().constData())) {
+      qWarning() << "mpd_run_playlist_clear: " << lastError();
+      return false;
+    }
+    for (auto path : song_paths) {
+      if (!mpd_run_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
+        qWarning() << "mpd_run_playlist_add: " << lastError();
+        return false;
+      }
+    }
+
+    /*if (!mpd_run_clear(conn)) {
       qWarning() << "mpd_run_clear: " << lastError();
       return false;
     }
@@ -229,7 +248,7 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
       qWarning() << "mpd_run_save: " << lastError();
       return false;
-    }
+    }*/
 
     return true;
   }
@@ -307,6 +326,19 @@ Connection::Connection(QThread *thread) : QObject{nullptr} {
       return false;
     }
     return true;
+  }
+
+  Song Connection::currentSong() {
+    waitConnected();
+
+    Song result;
+    auto *song = mpd_run_current_song(conn);
+    if (song) {
+      result = Song(song);
+      mpd_song_free(song);
+    }
+
+    return result;
   }
 
   void Connection::waitConnected() {

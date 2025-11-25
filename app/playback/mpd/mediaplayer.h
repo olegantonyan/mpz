@@ -31,8 +31,6 @@ namespace Playback {
       void next() override;
       void prev() override;
 
-      void updateStatus();
-
     signals:
       void trackChanged(const QString &path);
 
@@ -40,8 +38,6 @@ namespace Playback {
       MpdClient::Client &client;
       Track current_track;
       unsigned int playing_song_id;
-
-      QPair<unsigned int, QString> get_current_song();
 
     private slots:
       void on_playerStateChanged();
