@@ -103,15 +103,13 @@ namespace Playback {
           emit trackChanged(this_song.filepath);
         }
         last_song = this_song;
+        progress_timer.start();
+        elapsed_clock.restart();
       }
-
-      last_elapsed = status.elapsedMs;
-      elapsed_clock.restart();
       if (st == StoppedState || st == PausedState) {
         progress_timer.stop();
-      } else {
-        progress_timer.start();
       }
+      last_elapsed = status.elapsedMs;
 
       emit stateChanged(st);
       emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
