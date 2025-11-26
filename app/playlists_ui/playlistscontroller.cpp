@@ -73,6 +73,10 @@ namespace PlaylistsUi {
     return nullptr;
   }
 
+  std::shared_ptr<Playlist::Playlist> Controller::currentPlaylist() const {
+    return proxy->activeModel()->itemAt(proxy->activeModel()->currentPlaylistIndex());
+  }
+
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
       eventFilterViewport(event);

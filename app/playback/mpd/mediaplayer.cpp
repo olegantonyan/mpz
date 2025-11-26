@@ -3,8 +3,10 @@
 
 namespace Playback {
   namespace Mpd {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, client(cl), playing_song_id(0) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, client(cl) {
       connect(&client, &MpdClient::Client::playerStateChanged, this, &MediaPlayer::on_playerStateChanged);
+      progress_timer.setInterval(250);
+      connect(&progress_timer, &QTimer::timeout, this, &MediaPlayer::updateProgressNow);
     }
 
     MediaPlayer::State MediaPlayer::state() {
@@ -51,7 +53,6 @@ namespace Playback {
 
     void MediaPlayer::stop() {
       client.stop();
-      playing_song_id = 0;
     }
 
     void MediaPlayer::setPosition(qint64 position) {
@@ -63,12 +64,10 @@ namespace Playback {
 
     void MediaPlayer::setTrack(const Track &track) {
       current_track = track;
-      playing_song_id = 0;
     }
 
     void MediaPlayer::clearTrack() {
       current_track = Track();
-      playing_song_id = 0;
     }
 
     void MediaPlayer::next() {
@@ -100,13 +99,28 @@ namespace Playback {
       auto st = stateByStatus(status);
       if (st == PlayingState) {
         auto this_song = client.currentSong();
-        if (playing_song_id != 0 && this_song.id != playing_song_id) {
+        if (this_song.id != last_song.id && this_song.filepath != last_song.filepath) {
           emit trackChanged(this_song.filepath);
         }
-        playing_song_id = this_song.id;
+        last_song = this_song;
       }
+
+      last_elapsed = status.elapsedMs;
+      elapsed_clock.restart();
+      if (st == StoppedState || st == PausedState) {
+        progress_timer.stop();
+      } else {
+        progress_timer.start();
+      }
+
       emit stateChanged(st);
       emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
+    }
+
+    void MediaPlayer::updateProgressNow() {
+      int extra = elapsed_clock.elapsed();
+      int pos = last_elapsed + extra;
+      emit positionChanged(pos);
     }
   }
 }

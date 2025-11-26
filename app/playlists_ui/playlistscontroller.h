@@ -26,6 +26,7 @@ namespace PlaylistsUi {
     explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent = nullptr);
     std::shared_ptr<Playlist::Playlist> playlistByTrackUid(quint64 track_uid) const;
     std::shared_ptr<Playlist::Playlist> playlistByName(const QString &name) const;
+    std::shared_ptr<Playlist::Playlist> currentPlaylist() const;
 
   public slots:
     void on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);

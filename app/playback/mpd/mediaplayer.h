@@ -6,6 +6,8 @@
 
 #include <QObject>
 #include <QUrl>
+#include <QTimer>
+#include <QElapsedTimer>
 
 namespace Playback {
   namespace Mpd {
@@ -13,9 +15,6 @@ namespace Playback {
       Q_OBJECT
     public:
       explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent = nullptr);
-
-      // MediaPlayer interface
-    public:
       MediaPlayer::State state() override;
       int volume() override;
       qint64 position() override;
@@ -38,12 +37,16 @@ namespace Playback {
     private:
       MpdClient::Client &client;
       Track current_track;
-      unsigned int playing_song_id;
+      MpdClient::Song last_song;
+      QElapsedTimer elapsed_clock;
+      QTimer progress_timer;
+      qint64 last_elapsed = 0;
 
       MediaPlayer::State stateByStatus(const MpdClient::Status &status);
 
     private slots:
       void on_playerStateChanged();
+      void updateProgressNow();
     };
   }
 }

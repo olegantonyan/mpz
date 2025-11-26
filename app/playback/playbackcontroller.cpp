@@ -28,8 +28,8 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     });
 
 #ifdef ENABLE_MPD_SUPPORT
-    connect(&_mpdplayer, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
-    connect(&_mpdplayer, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_mpdplayer, &Mpd::MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(&_mpdplayer, &Mpd::MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
     connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
       emit trackChangedQuery(path, _current_track.playlist_name());
     });
