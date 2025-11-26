@@ -5,6 +5,11 @@
 #include "streammetadata.h"
 #include "config/global.h"
 #include "config/local.h"
+#ifdef ENABLE_MPD_SUPPORT
+  #include "mpd_client/entity.h"
+  #include "mpd_client/song.h"
+  #include "mpd_client/status.h"
+#endif
 
 #include <QApplication>
 #include <QDebug>
@@ -16,6 +21,11 @@ void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
   qRegisterMetaType<StreamMetaData>("StreamMetaData");
   qRegisterMetaType<std::shared_ptr<Playlist::Playlist>>("std::shared_ptr<Playlist::Playlist>");
+#ifdef ENABLE_MPD_SUPPORT
+  qRegisterMetaType<MpdClient::Song>("MpdClient::Song");
+  qRegisterMetaType<MpdClient::Entity>("MpdClient::Entity");
+  qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
+#endif
 }
 
 QStringList args(int argc, char *argv[]) {
@@ -50,31 +60,7 @@ int ipc_port(Config::Global &global_conf) {
   return global_conf.ipcPort();
 }
 
-#include "mpd_client/client.h"
-
 int main(int argc, char *argv[]) {
-  /*QCoreApplication aa(argc, argv);
-  MpdClient::Client cl;
-
-  QObject::connect(&cl, &MpdClient::Client::connected, [&](auto url) {
-    qDebug() << "conencted here" << url;
-    qDebug() << "another ping" << cl.ping();
-  });
-  cl.openConnection(QUrl("mpd://localhost:6600"));
-  qDebug() << cl.ping();
-  qDebug() << cl.status();
-  //qDebug() << cl.lsPlaylistSongs("After Forever");
-  qDebug() << "**********************************";
-  qDebug() << cl.lsDirsSongs(QStringList() << "After Forever" << "Arcturus");
-  qDebug() << "#############################";
-  qDebug() << cl.playlists();
-
-
-  return aa.exec();*/
-
-
-  //QLoggingCategory::setFilterRules("qt.multimedia=false");
-  //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
   RNJesus::seed();
 

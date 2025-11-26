@@ -376,7 +376,7 @@ namespace MpdClient {
     }
 
     struct mpd_status *st = mpd_run_status(conn);
-    if (!status) {
+    if (!st) {
       return false;
     }
     int id = mpd_status_get_song_id(st);
