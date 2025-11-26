@@ -50,6 +50,7 @@ namespace PlaylistsUi {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         auto tracks = Playlist::MpdLoader(client).playlistTracks(playlist->name());
         playlist->load(tracks);
+        creating_playlist_name = "";
         emit asyncTracksLoadFinished(playlist);
       });
     }
@@ -83,7 +84,7 @@ namespace PlaylistsUi {
     QModelIndex Model::currentPlaylistIndex() {
       if (!creating_playlist_name.isEmpty()) {
         auto index = indexByName(creating_playlist_name);
-        creating_playlist_name = "";
+        // creating_playlist_name = "";
         return index;
       }
       if (currentLibraryPath().isEmpty()) {
