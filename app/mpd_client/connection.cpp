@@ -358,6 +358,14 @@ namespace MpdClient {
     return result;
   }
 
+  bool Connection::setVolume(int volume) {
+    if (!mpd_run_set_volume(conn, volume)) {
+      qWarning() << "mpd_run_set_volume:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;

@@ -219,6 +219,15 @@ namespace MpdClient {
     return result;
   }
 
+  void Client::setVolume(int volume) {
+    QMetaObject::invokeMethod(
+      conn,
+      "setVolume",
+      Qt::QueuedConnection,
+      Q_ARG(int, volume)
+    );
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();

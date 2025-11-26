@@ -37,6 +37,7 @@ namespace MpdClient {
     void next();
     void prev();
     Song currentSong();
+    void setVolume(int volume);
 
   signals:
     void connected(const QUrl &url);

@@ -8,19 +8,7 @@ namespace Playback {
     }
 
     MediaPlayer::State MediaPlayer::state() {
-      State new_state = StoppedState;
-      switch (client.status().state) {
-      case MpdClient::Status::State::Play:
-        new_state = PlayingState;
-        break;
-      case MpdClient::Status::State::Pause:
-        new_state = PausedState;
-        break;
-      default:
-        new_state = StoppedState;
-        break;
-      }
-      return new_state;
+      return stateByStatus(client.status());
     }
 
     int MediaPlayer::volume() {
@@ -29,7 +17,7 @@ namespace Playback {
     }
 
     qint64 MediaPlayer::position() {
-      return 0;
+      return client.status().elapsedMs;
     }
 
     void MediaPlayer::pause() {
@@ -70,10 +58,7 @@ namespace Playback {
     }
 
     void MediaPlayer::setVolume(int volume) {
-      //MpdConnectionLocker locker(connection);
-      //if (!mpd_run_set_volume(connection.conn, volume)) {
-      //   qWarning() << "mpd_run_set_volume:" << connection.lastError();
-      //}
+      client.setVolume(volume);
     }
 
     void MediaPlayer::setTrack(const Track &track) {
@@ -94,8 +79,25 @@ namespace Playback {
       client.prev();
     }
 
+    MediaPlayer::State MediaPlayer::stateByStatus(const MpdClient::Status &status) {
+      State new_state = StoppedState;
+      switch (status.state) {
+      case MpdClient::Status::State::Play:
+        new_state = PlayingState;
+        break;
+      case MpdClient::Status::State::Pause:
+        new_state = PausedState;
+        break;
+      default:
+        new_state = StoppedState;
+        break;
+      }
+      return new_state;
+    }
+
     void MediaPlayer::on_playerStateChanged() {
-      auto st = state();
+      auto status = client.status();
+      auto st = stateByStatus(status);
       if (st == PlayingState) {
         auto this_song = client.currentSong();
         if (playing_song_id != 0 && this_song.id != playing_song_id) {
@@ -104,6 +106,7 @@ namespace Playback {
         playing_song_id = this_song.id;
       }
       emit stateChanged(st);
+      emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
     }
   }
 }

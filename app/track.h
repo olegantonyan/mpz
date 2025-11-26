@@ -73,6 +73,8 @@ public:
 
   QString artCover() const;
 
+  void setAudioFormat(quint16 sample_rate, quint8 channels, quint16 bitrate);
+
 private:
   QString filepath;
   QString _artist;

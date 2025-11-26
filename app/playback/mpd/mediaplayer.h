@@ -33,11 +33,14 @@ namespace Playback {
 
     signals:
       void trackChanged(const QString &path);
+      void audioFormatUpdated(quint16 sample_rate, quint8 channels, quint16 bitrate);
 
     private:
       MpdClient::Client &client;
       Track current_track;
       unsigned int playing_song_id;
+
+      MediaPlayer::State stateByStatus(const MpdClient::Status &status);
 
     private slots:
       void on_playerStateChanged();

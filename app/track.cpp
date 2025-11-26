@@ -291,6 +291,12 @@ QString Track::artCover() const {
   return CoverArt::Covers::instance().get(filepath);
 }
 
+void Track::setAudioFormat(quint16 sample_rate, quint8 channels, quint16 bitrate) {
+  _sample_rate = sample_rate;
+  _channels = channels;
+  _bitrate = bitrate;
+}
+
 quint16 Track::sample_rate() const {
   if (isStream()) {
     return streamMeta().samplerate();

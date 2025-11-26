@@ -24,5 +24,4 @@ private:
   QMap<QString, QString> _data;
 };
 
-
 #endif // STREAMMETADATA_H
