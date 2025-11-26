@@ -56,6 +56,7 @@ namespace Playback {
     }
 
     void MediaPlayer::setPosition(qint64 position) {
+      client.setPosition(position / 1000);
     }
 
     void MediaPlayer::setVolume(int volume) {

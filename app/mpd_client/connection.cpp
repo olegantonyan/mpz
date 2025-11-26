@@ -359,8 +359,30 @@ namespace MpdClient {
   }
 
   bool Connection::setVolume(int volume) {
+    if (!conn) {
+      return false;
+    }
+
     if (!mpd_run_set_volume(conn, volume)) {
       qWarning() << "mpd_run_set_volume:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::setPosition(int pos) {
+    if (!conn) {
+      return false;
+    }
+
+    struct mpd_status *st = mpd_run_status(conn);
+    if (!status) {
+      return false;
+    }
+    int id = mpd_status_get_song_id(st);
+    mpd_status_free(st);
+    if (!mpd_run_seek_id(conn, id, pos)) {
+      qWarning() << "mpd_run_seek_id:" << lastError();
       return false;
     }
     return true;

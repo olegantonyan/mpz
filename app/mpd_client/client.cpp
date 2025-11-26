@@ -228,6 +228,15 @@ namespace MpdClient {
     );
   }
 
+  void Client::setPosition(int pos) {
+    QMetaObject::invokeMethod(
+      conn,
+      "setPosition",
+      Qt::QueuedConnection,
+      Q_ARG(int, pos)
+    );
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();
