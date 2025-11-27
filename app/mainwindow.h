@@ -29,6 +29,10 @@
   #include "dbus/mpris.h"
 #endif
 
+#ifdef ENABLE_MPD_SUPPORT
+  #include "playback/mpd/playbackorder.h"
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -44,29 +48,32 @@ public slots:
   void toggleHidden();
 
 private:
-  Ui::MainWindow *ui;
-  DirectoryUi::Controller *library;
-  PlaylistsUi::Controller *playlists;
-  PlaylistUi::Controller *playlist;
-  Playback::Controller *player;
-  Playback::Dispatch *dispatch;
+  Ui::MainWindow *ui = nullptr;
+  DirectoryUi::Controller *library = nullptr;
+  PlaylistsUi::Controller *playlists = nullptr;
+  PlaylistUi::Controller *playlist = nullptr;
+  Playback::Controller *player = nullptr;
+  Playback::Dispatch *dispatch = nullptr;
   Config::Local &local_conf;
   Config::Global &global_conf;
-  BusySpinner *spinner;
-  TrayIcon *trayicon;
-  VolumeControl *volume;
-  MainMenu *main_menu;
-  StatusBarLabel *status_label;
-  QLabel *status_label_right;
+  BusySpinner *spinner = nullptr;
+  TrayIcon *trayicon = nullptr;
+  VolumeControl *volume = nullptr;
+  MainMenu *main_menu = nullptr;
+  StatusBarLabel *status_label = nullptr;
+  QLabel *status_label_right = nullptr;
 #if defined(MPRIS_ENABLE)
-  Mpris *mpris;
+  Mpris *mpris = nullptr;
 #endif
-  Shortcuts *shortcuts;
-  PlaybackLogUi::Controller *playback_log;
-  SortUi::SortMenu *sort_menu;
-  SleepLock *sleep_lock;
-  SlidingBanner *banner;
+  Shortcuts *shortcuts = nullptr;
+  PlaybackLogUi::Controller *playback_log = nullptr;
+  SortUi::SortMenu *sort_menu = nullptr;
+  SleepLock *sleep_lock = nullptr;
+  SlidingBanner *banner = nullptr;
   ModusOperandi modus_operandi;
+#ifdef ENABLE_MPD_SUPPORT
+  Playback::Mpd::PlaybackOrder *mpd_order = nullptr;
+#endif
 
   int streamBuffer();
   void setupUiSettings();
@@ -87,6 +94,10 @@ private:
   void setupSortMenu();
   void setupSleepLock();
   void setupOutputDevice();
+#ifdef ENABLE_MPD_SUPPORT
+  void setupMpdOrder();
+  void onOrderChanged();
+#endif
 
   void preloadPlaylist(const QStringList &args);
 

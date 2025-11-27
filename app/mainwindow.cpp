@@ -92,6 +92,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     raise();
     setFocus();
   });
+
+#ifdef ENABLE_MPD_SUPPORT
+  setupMpdOrder();
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -178,6 +182,9 @@ void MainWindow::setupOrderCombobox() {
       mpris->on_shuffleChanged(order_name == "random");
     }
 #endif
+#ifdef ENABLE_MPD_SUPPORT
+    onOrderChanged();
+#endif
   });
 #if defined(MPRIS_ENABLE)
   if (mpris) {
@@ -209,6 +216,9 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
     if (current_playlist != nullptr) {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
       playlists->on_playlistChanged(current_playlist);
+#ifdef ENABLE_MPD_SUPPORT
+      onOrderChanged();
+#endif
     }
   });
 }
@@ -458,6 +468,28 @@ void MainWindow::setupOutputDevice() {
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
 }
+
+#ifdef ENABLE_MPD_SUPPORT
+void MainWindow::setupMpdOrder() {
+  mpd_order = new Playback::Mpd::PlaybackOrder(global_conf, modus_operandi.mpd_client, playlists, this);
+  connect(player, &Playback::Controller::started, mpd_order, &Playback::Mpd::PlaybackOrder::update);
+}
+
+void MainWindow::onOrderChanged() {
+  if (!mpd_order || !dispatch) {
+    return;
+  }
+  quint64 uid = dispatch->state().playingTrack();
+  if (uid > 0) {
+    QMetaObject::invokeMethod(
+      mpd_order,
+      "updateByTrackUid",
+      Qt::QueuedConnection,
+      Q_ARG(quint64, uid)
+    );
+  }
+}
+#endif
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
   QList<QDir> preload_files;
