@@ -39,6 +39,8 @@ namespace MpdClient {
     Song currentSong();
     void setVolume(int volume);
     void setPosition(int pos);
+    void setRepeat(bool repeat);
+    void setRandom(bool rand);
 
   signals:
     void connected(const QUrl &url);

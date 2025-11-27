@@ -388,6 +388,30 @@ namespace MpdClient {
     return true;
   }
 
+  bool Connection::setRepeat(bool repeat) {
+    if (!conn) {
+      return false;
+    }
+
+    if (!mpd_run_repeat(conn, repeat)) {
+      qWarning() << "mpd_run_repeat:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::setRandom(bool rand) {
+    if (!conn) {
+      return false;
+    }
+
+    if (!mpd_run_random(conn, rand)) {
+      qWarning() << "mpd_run_random:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;

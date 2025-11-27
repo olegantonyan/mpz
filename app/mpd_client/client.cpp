@@ -237,6 +237,24 @@ namespace MpdClient {
     );
   }
 
+  void Client::setRepeat(bool repeat) {
+    QMetaObject::invokeMethod(
+      conn,
+      "setRepeat",
+      Qt::QueuedConnection,
+      Q_ARG(bool, repeat)
+    );
+  }
+
+  void Client::setRandom(bool rand) {
+    QMetaObject::invokeMethod(
+      conn,
+      "setRandom",
+      Qt::QueuedConnection,
+      Q_ARG(bool, rand)
+    );
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();
