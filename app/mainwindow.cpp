@@ -492,6 +492,10 @@ void MainWindow::onOrderChanged() {
 #endif
 
 void MainWindow::preloadPlaylist(const QStringList &args) {
+  if (modus_operandi.get() != ModusOperandi::MODUS_LOCALFS) {
+    return;
+  }
+
   QList<QDir> preload_files;
   for (auto i : args) {
     preload_files << QDir(i);
