@@ -52,6 +52,9 @@ namespace MpdClient {
     bool setRandom(bool rand);
     QVector<Output> outputs();
     bool changeOutputState(int outid, bool state);
+    QVector<Song> lsQueueSongs();
+    bool setPriority(int song_id, int prio);
+    bool resetAllPriorities();
 
   signals:
     void connected(const QUrl &url);

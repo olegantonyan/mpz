@@ -22,6 +22,7 @@ namespace Playback {
 
       client.setRepeat(!norepeat);
       client.setRandom(rng);
+      client.resetAllPriorities(); // in case of playback follows cursor
     }
 
     void PlaybackOrder::onOrderChanged() {
@@ -36,6 +37,20 @@ namespace Playback {
           Q_ARG(quint64, uid)
         );
       }*/
+    }
+
+    void PlaybackOrder::onTrackSelected(const Track &track) {
+      if (global_conf.playbackFollowCursor() && track.isMpd() && dispatch->state().selectedTrack() != dispatch->state().playingTrack()) {
+        auto songs = client.lsQueueSongs();
+        for (auto it : songs) {
+          if (it.filepath == track.path()) {
+            client.resetAllPriorities();
+            client.setPriority(it.id, 255);
+            client.setRandom(true);
+            break;
+          }
+        }
+      }
     }
 
     void PlaybackOrder::onOptionsChanged() {

@@ -31,6 +31,7 @@ namespace MpdClient {
     int duration = -1; // seconds
     int id = -1;
     int pos = -1;      // playlist position
+    int prio = 0; // priority only playback queue
     QString filepath;
 
     QString musicBrainzArtistId;

@@ -32,6 +32,7 @@ namespace MpdClient {
     id = mpd_song_get_id(s);
     pos = mpd_song_get_pos(s);
     filepath = mpd_song_get_uri(s);
+    prio = mpd_song_get_prio(s);
 
     musicBrainzArtistId = getTag(MPD_TAG_MUSICBRAINZ_ARTISTID);
     musicBrainzAlbumId = getTag(MPD_TAG_MUSICBRAINZ_ALBUMID);
@@ -65,6 +66,7 @@ namespace MpdClient {
                   << ", disc=" << s.discNumber
                   << ", duration=" << s.duration << "s"
                   << ", filepath=\"" << s.filepath << "\""
+                  << ", prio=\"" << s.prio << "\""
                   << ", name=\"" << s.name << "\""
                   << ", MBArtistId=\"" << s.musicBrainzArtistId << "\""
                   << ", MBAlbumId=\"" << s.musicBrainzAlbumId << "\""

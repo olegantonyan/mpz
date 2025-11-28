@@ -21,6 +21,7 @@ namespace Playback {
       void updateByTrack(const Track &current_track);
       void updateByTrackUid(quint64 track_uid);
       void onOrderChanged();
+      void onTrackSelected(const Track &track);
 
     signals:
 

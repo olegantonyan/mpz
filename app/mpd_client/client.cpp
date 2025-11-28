@@ -267,6 +267,24 @@ namespace MpdClient {
     return result;
   }
 
+  void Client::setPriority(int song_id, int prio) {
+    QMetaObject::invokeMethod(
+      conn,
+      "setPriority",
+      Qt::QueuedConnection,
+      Q_ARG(int, song_id),
+      Q_ARG(int, prio)
+    );
+  }
+
+  void Client::resetAllPriorities() {
+    QMetaObject::invokeMethod(
+      conn,
+      "resetAllPriorities",
+      Qt::QueuedConnection
+    );
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();
@@ -300,4 +318,17 @@ namespace MpdClient {
     );
     return result;
   }
+
+  QVector<MpdClient::Song> MpdClient::Client::lsQueueSongs() {
+    QVector<MpdClient::Song> result;
+
+    QMetaObject::invokeMethod(
+      conn,
+      "lsQueueSongs",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QVector<MpdClient::Song>, result)
+    );
+    return result;
+  }
+
 }

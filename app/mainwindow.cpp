@@ -297,6 +297,9 @@ void MainWindow::setupPlaybackDispatch() {
   connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
+#ifdef ENABLE_MPD_SUPPORT
+    mpd_order->onTrackSelected(track);
+#endif
   });
 
   connect(player, &Playback::Controller::started, [=](const Track &track) {

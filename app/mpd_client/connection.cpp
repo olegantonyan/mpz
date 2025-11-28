@@ -434,6 +434,9 @@ namespace MpdClient {
 
   bool Connection::changeOutputState(int outid, bool state) {
     bool ok = false;
+    if (!conn) {
+      return ok;
+    }
     if (state) {
       ok = mpd_run_enable_output(conn, outid);
     } else {
@@ -443,6 +446,56 @@ namespace MpdClient {
       qWarning() << "mpd_run_enable_output / mpd_run_disable_output:" << lastError();
     }
     return ok;
+  }
+
+  bool Connection::setPriority(int song_id, int prio) {
+    if (!conn) {
+      return false;
+    }
+
+    if (!mpd_run_prio_id(conn, prio, song_id)) {
+      qWarning() << "mpd_run_prio_pos:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
+  bool Connection::resetAllPriorities() {
+    if (!conn) {
+      return false;
+    }
+
+    struct mpd_status *status = mpd_run_status(conn);
+    if (status != nullptr) {
+      unsigned int queue_len = mpd_status_get_queue_length(status);
+      mpd_status_free(status);
+
+      if (queue_len > 0) {
+        if (!mpd_run_prio_range(conn, 0, 0, queue_len - 1)) {
+          qWarning() << "mpd_run_prio_range:" << lastError();
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  QVector<MpdClient::Song> MpdClient::Connection::lsQueueSongs() {
+    QVector<Song> result;
+    if (!conn) {
+      return result;
+    }
+
+    mpd_send_list_queue_meta(conn);
+
+    struct mpd_song *song;
+    while ((song = mpd_recv_song(conn)) != nullptr) {
+      result << Song(song);
+      mpd_song_free(song);
+    }
+    mpd_response_finish(conn);
+
+    return result;
   }
 
   void Connection::waitConnected() {
