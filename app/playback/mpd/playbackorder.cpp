@@ -3,6 +3,7 @@
 namespace Playback {
   namespace Mpd {
   PlaybackOrder::PlaybackOrder(Config::Global &global_c, MpdClient::Client &cl, PlaylistsUi::Controller *playlists_ui, Dispatch *disptch, QObject *parent) : QObject{parent}, global_conf(global_c), client(cl), playlists(playlists_ui), dispatch(disptch) {
+      connect(&client, &MpdClient::Client::optionsChanged, this, &PlaybackOrder::onOptionsChanged);
     }
 
     void PlaybackOrder::updateByTrack(const Track &current_track) {
@@ -35,6 +36,10 @@ namespace Playback {
           Q_ARG(quint64, uid)
         );
       }*/
+    }
+
+    void PlaybackOrder::onOptionsChanged() {
+      // auto status = client.status();
     }
   }
 }

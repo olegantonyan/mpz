@@ -24,6 +24,9 @@ namespace Playback {
 
     signals:
 
+    private slots:
+      void onOptionsChanged();
+
     private:
       Config::Global &global_conf;
       MpdClient::Client &client;

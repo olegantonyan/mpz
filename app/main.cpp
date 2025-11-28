@@ -9,6 +9,7 @@
   #include "mpd_client/entity.h"
   #include "mpd_client/song.h"
   #include "mpd_client/status.h"
+  #include "mpd_client/output.h"
 #endif
 
 #include <QApplication>
@@ -25,6 +26,7 @@ void registerMetaTypes() {
   qRegisterMetaType<MpdClient::Song>("MpdClient::Song");
   qRegisterMetaType<MpdClient::Entity>("MpdClient::Entity");
   qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
+  qRegisterMetaType<MpdClient::Output>("MpdClient::Output");
 #endif
 }
 

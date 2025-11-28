@@ -255,6 +255,18 @@ namespace MpdClient {
     );
   }
 
+  QVector<Output> Client::outputs() {
+    QVector<MpdClient::Output> result;
+
+    QMetaObject::invokeMethod(
+      conn,
+      "outputs",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QVector<MpdClient::Output>, result)
+    );
+    return result;
+  }
+
   void Client::on_idleEvent(mpd_idle event) {
     if (event & MPD_IDLE_DATABASE) {
       emit databaseUpdated();
@@ -267,6 +279,12 @@ namespace MpdClient {
     }
     if (event & MPD_IDLE_MIXER) {
       emit mixerChanged();
+    }
+    if (event & MPD_IDLE_OPTIONS) {
+      emit optionsChanged();
+    }
+    if (event & MPD_IDLE_OUTPUT) {
+      emit audioOutputChanged();
     }
   }
 

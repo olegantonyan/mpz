@@ -41,6 +41,7 @@ namespace MpdClient {
     void setPosition(int pos);
     void setRepeat(bool repeat);
     void setRandom(bool rand);
+    QVector<Output> outputs();
 
   signals:
     void connected(const QUrl &url);
@@ -51,6 +52,8 @@ namespace MpdClient {
     void playlistUpdated();
     void playerStateChanged();
     void mixerChanged();
+    void optionsChanged();
+    void audioOutputChanged();
 
   private:
     QThread *thread;

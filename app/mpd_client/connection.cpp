@@ -412,6 +412,26 @@ namespace MpdClient {
     return true;
   }
 
+  QVector<Output> Connection::outputs() {
+    QVector<Output> result;
+    if (!conn) {
+      return result;
+    }
+
+    if (!mpd_send_outputs(conn)) {
+      qWarning() << "mpd_send_outputs:" << lastError();
+      return result;
+    }
+
+    struct mpd_output *output;
+    while ((output = mpd_recv_output(conn)) != nullptr) {
+      result.append(Output(output));
+      mpd_output_free(output);
+    }
+    mpd_response_finish(conn);
+    return result;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;

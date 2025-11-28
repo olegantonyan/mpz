@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "status.h"
 #include "song.h"
+#include "output.h"
 
 #include <QObject>
 #include <QSocketNotifier>
@@ -49,6 +50,7 @@ namespace MpdClient {
     bool setPosition(int pos);
     bool setRepeat(bool repeat);
     bool setRandom(bool rand);
+    QVector<Output> outputs();
 
   signals:
     void connected(const QUrl &url);
