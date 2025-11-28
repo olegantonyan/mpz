@@ -55,6 +55,7 @@ namespace MpdClient {
     QVector<Song> lsQueueSongs();
     bool setPriority(int song_id, int prio);
     bool resetAllPriorities();
+    bool updateDb();
 
   signals:
     void connected(const QUrl &url);

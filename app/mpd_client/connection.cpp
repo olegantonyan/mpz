@@ -498,6 +498,17 @@ namespace MpdClient {
     return result;
   }
 
+  bool Connection::updateDb() {
+    if (!conn) {
+      return false;
+    }
+    if (!mpd_run_update(conn, nullptr)) {
+      qWarning() << "mpd_run_update:" << lastError();
+      return false;
+    }
+    return true;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;
@@ -662,4 +673,5 @@ namespace MpdClient {
   Connection::~Connection() {
     close();
   }
+
 }

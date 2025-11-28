@@ -40,7 +40,7 @@ namespace Playback {
       MpdClient::Song last_song;
       QElapsedTimer elapsed_clock;
       QTimer progress_timer;
-      qint64 last_elapsed = 0;
+      MpdClient::Status last_status;
 
       MediaPlayer::State stateByStatus(const MpdClient::Status &status);
 

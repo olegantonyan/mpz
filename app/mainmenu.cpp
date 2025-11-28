@@ -8,7 +8,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c) : QObject(btn), button(btn), global_conf(global_c), local_conf(local_c) {
+MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c, ModusOperandi &modus) : QObject(btn), button(btn), global_conf(global_c), local_conf(local_c), modus_operandi(modus) {
   connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
 }
 
@@ -29,6 +29,7 @@ void MainMenu::on_open() {
   QAction shortcuts(tr("Keyboard shortcuts"));
   QAction saves(tr("Save settings"));
   QAction confdir(tr("Open config directory"));
+  QAction mpdupdate(tr("mpd update"));
 
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
@@ -53,11 +54,21 @@ void MainMenu::on_open() {
   connect(&confdir, &QAction::triggered, [=]() {
     QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
   });
+#ifdef ENABLE_MPD_SUPPORT
+  connect(&mpdupdate, &QAction::triggered, [=]() {
+    modus_operandi.mpd_client.updateDb();
+  });
+#endif
 
   menu.addAction(&trayicon);
   menu.addAction(&minimize_to_tray);
   menu.addAction(&saves);
   menu.addAction(&confdir);
+#ifdef ENABLE_MPD_SUPPORT
+  if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+    menu.addAction(&mpdupdate);
+  }
+#endif
   menu.addSeparator();
   menu.addAction(&lpog);
   menu.addAction(&about);

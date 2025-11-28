@@ -99,26 +99,31 @@ namespace Playback {
       auto status = client.status();
       auto st = stateByStatus(status);
       if (st == PlayingState) {
-        auto this_song = client.currentSong();
-        if (this_song.id != last_song.id && this_song.filepath != last_song.filepath) {
-          emit trackChanged(this_song.filepath);
+        if (status.state == last_status.state && status.songId == last_status.songId && status.elapsedMs != last_status.elapsedMs) {
+          // seeked
+        } else {
+          auto this_song = client.currentSong();
+          if (this_song.id != last_song.id && this_song.filepath != last_song.filepath) {
+            emit trackChanged(this_song.filepath);
+          }
+          last_song = this_song;
+          progress_timer.start();
+          elapsed_clock.restart();
+          emit stateChanged(st);
         }
-        last_song = this_song;
-        progress_timer.start();
-        elapsed_clock.restart();
-      }
-      if (st == StoppedState || st == PausedState) {
+      } else  {
         progress_timer.stop();
+        emit stateChanged(st);
       }
-      last_elapsed = status.elapsedMs;
 
-      emit stateChanged(st);
       emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
+
+      last_status = status;
     }
 
     void MediaPlayer::updateProgressNow() {
       int extra = elapsed_clock.elapsed();
-      int pos = last_elapsed + extra;
+      int pos = last_status.elapsedMs + extra;
       emit positionChanged(pos);
     }
   }

@@ -22,6 +22,7 @@ namespace Playback {
 
       client.setRepeat(!norepeat);
       client.setRandom(rng);
+      // qDebug() << "resetAllPriorities";
       client.resetAllPriorities(); // in case of playback follows cursor
     }
 
@@ -44,6 +45,7 @@ namespace Playback {
         auto songs = client.lsQueueSongs();
         for (auto it : songs) {
           if (it.filepath == track.path()) {
+            // qDebug() << "set next" << track.path();
             client.resetAllPriorities();
             client.setPriority(it.id, 255);
             client.setRandom(true);

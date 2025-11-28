@@ -331,4 +331,12 @@ namespace MpdClient {
     return result;
   }
 
+  void Client::updateDb() {
+    QMetaObject::invokeMethod(
+      conn,
+      "updateDb",
+      Qt::QueuedConnection
+    );
+  }
+
 }
