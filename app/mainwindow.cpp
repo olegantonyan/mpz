@@ -464,6 +464,10 @@ void MainWindow::setupOutputDevice() {
     QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
     device_menu.exec(pos);
   });
+  connect(&modus_operandi, &ModusOperandi::changed, [=](auto mode) {
+    ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
+  });
+  ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
