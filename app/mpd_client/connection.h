@@ -51,6 +51,7 @@ namespace MpdClient {
     bool setRepeat(bool repeat);
     bool setRandom(bool rand);
     QVector<Output> outputs();
+    bool changeOutputState(int outid, bool state);
 
   signals:
     void connected(const QUrl &url);

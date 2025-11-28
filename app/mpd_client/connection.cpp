@@ -432,6 +432,19 @@ namespace MpdClient {
     return result;
   }
 
+  bool Connection::changeOutputState(int outid, bool state) {
+    bool ok = false;
+    if (state) {
+      ok = mpd_run_enable_output(conn, outid);
+    } else {
+      ok = mpd_run_disable_output(conn, outid);
+    }
+    if (!ok) {
+      qWarning() << "mpd_run_enable_output / mpd_run_disable_output:" << lastError();
+    }
+    return ok;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;
