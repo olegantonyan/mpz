@@ -2,10 +2,10 @@
 
 namespace Playback {
   namespace Mpd {
-    PlaybackOrder::PlaybackOrder(Config::Global &global_c, MpdClient::Client &cl, PlaylistsUi::Controller *playlists_ui, QObject *parent) : QObject{parent}, global_conf(global_c), client(cl), playlists(playlists_ui) {
+  PlaybackOrder::PlaybackOrder(Config::Global &global_c, MpdClient::Client &cl, PlaylistsUi::Controller *playlists_ui, Dispatch *disptch, QObject *parent) : QObject{parent}, global_conf(global_c), client(cl), playlists(playlists_ui), dispatch(disptch) {
     }
 
-    void PlaybackOrder::update(const Track &current_track) {
+    void PlaybackOrder::updateByTrack(const Track &current_track) {
       updateByTrackUid(current_track.uid());
     }
 
@@ -21,6 +21,20 @@ namespace Playback {
 
       client.setRepeat(!norepeat);
       client.setRandom(rng);
+    }
+
+    void PlaybackOrder::onOrderChanged() {
+      // mpd does not have separate per playlist setting
+      // load these only when track starts
+      /*quint64 uid = dispatch->state().playingTrack();
+      if (uid > 0) {
+        QMetaObject::invokeMethod(
+          this,
+          "updateByTrackUid",
+          Qt::QueuedConnection,
+          Q_ARG(quint64, uid)
+        );
+      }*/
     }
   }
 }

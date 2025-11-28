@@ -6,6 +6,7 @@
 #include "playlists_ui/playlistscontroller.h"
 #include "mpd_client/client.h"
 #include "config/global.h"
+#include "playback/dispatch.h"
 
 #include <QObject>
 
@@ -14,11 +15,12 @@ namespace Playback {
     class PlaybackOrder : public QObject  {
       Q_OBJECT
     public:
-      explicit PlaybackOrder(Config::Global &global_c, MpdClient::Client &cl, PlaylistsUi::Controller *playlists_ui, QObject *parent = nullptr);
+      explicit PlaybackOrder(Config::Global &global_c, MpdClient::Client &cl, PlaylistsUi::Controller *playlists_ui, Playback::Dispatch *disptch, QObject *parent = nullptr);
 
     public slots:
-      void update(const Track &current_track);
+      void updateByTrack(const Track &current_track);
       void updateByTrackUid(quint64 track_uid);
+      void onOrderChanged();
 
     signals:
 
@@ -26,6 +28,7 @@ namespace Playback {
       Config::Global &global_conf;
       MpdClient::Client &client;
       PlaylistsUi::Controller *playlists;
+      Playback::Dispatch *dispatch;
     };
   }
 }

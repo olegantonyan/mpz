@@ -96,7 +96,6 @@ private:
   void setupOutputDevice();
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();
-  void onOrderChanged();
 #endif
 
   void preloadPlaylist(const QStringList &args);

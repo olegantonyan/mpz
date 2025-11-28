@@ -183,7 +183,7 @@ void MainWindow::setupOrderCombobox() {
     }
 #endif
 #ifdef ENABLE_MPD_SUPPORT
-    onOrderChanged();
+    mpd_order->onOrderChanged();
 #endif
   });
 #if defined(MPRIS_ENABLE)
@@ -217,7 +217,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
       playlists->on_playlistChanged(current_playlist);
 #ifdef ENABLE_MPD_SUPPORT
-      onOrderChanged();
+      mpd_order->onOrderChanged();
 #endif
     }
   });
@@ -471,23 +471,8 @@ void MainWindow::setupOutputDevice() {
 
 #ifdef ENABLE_MPD_SUPPORT
 void MainWindow::setupMpdOrder() {
-  mpd_order = new Playback::Mpd::PlaybackOrder(global_conf, modus_operandi.mpd_client, playlists, this);
-  connect(player, &Playback::Controller::started, mpd_order, &Playback::Mpd::PlaybackOrder::update);
-}
-
-void MainWindow::onOrderChanged() {
-  if (!mpd_order || !dispatch) {
-    return;
-  }
-  quint64 uid = dispatch->state().playingTrack();
-  if (uid > 0) {
-    QMetaObject::invokeMethod(
-      mpd_order,
-      "updateByTrackUid",
-      Qt::QueuedConnection,
-      Q_ARG(quint64, uid)
-    );
-  }
+  mpd_order = new Playback::Mpd::PlaybackOrder(global_conf, modus_operandi.mpd_client, playlists, dispatch, this);
+  connect(player, &Playback::Controller::started, mpd_order, &Playback::Mpd::PlaybackOrder::updateByTrack);
 }
 #endif
 
