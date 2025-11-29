@@ -5,7 +5,11 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QRecursiveMutex>
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 14, 0))
+  #include <QMutex>
+#else
+  #include <QRecursiveMutex>
+#endif
 
 #include "mpd_client/client.h"
 #include "mpd/treeitem.h"
@@ -55,7 +59,11 @@ namespace DirectoryUi {
       int last_sort_column;
       Qt::SortOrder last_sort_order;
       QString last_filter_term;
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 14, 0))
+      mutable QMutex loading_mutex{QMutex::Recursive};
+#else
       mutable QRecursiveMutex loading_mutex;
+#endif
     };
   }
 }
