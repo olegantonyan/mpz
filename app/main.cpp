@@ -32,6 +32,9 @@ void registerMetaTypes() {
   qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
   qRegisterMetaType<MpdClient::Output>("MpdClient::Output");
   qRegisterMetaType<mpd_idle>("mpd_idle");
+  qRegisterMetaType<QVector<MpdClient::Entity>>("QVector<MpdClient::Entity");
+  qRegisterMetaType<QVector<MpdClient::Output>>("QVector<MpdClient::Output>");
+  qRegisterMetaType<QVector<MpdClient::Song>>("QVector<MpdClient::Song>");
 #endif
 }
 

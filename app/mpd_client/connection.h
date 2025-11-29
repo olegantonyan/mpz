@@ -30,13 +30,13 @@ namespace MpdClient {
     bool ping();
     QUrl currentUrl() const;
 
-    QVector<Entity> lsDir(const QString &path);
-    Status status();
-    QVector<Song> lsPlaylistSongs(const QString &playlist_name);
-    QVector<Song> lsDirsSongs(const QStringList &paths);
+    QVector<MpdClient::Entity> lsDir(const QString &path);
+    MpdClient::Status status();
+    QVector<MpdClient::Song> lsPlaylistSongs(const QString &playlist_name);
+    QVector<MpdClient::Song> lsDirsSongs(const QStringList &paths);
     bool appendSongsToPlaylist(const QStringList &paths, const QString &playlist_name);
     bool removeSongsFromPlaylist(const QVector<int> &indecies, const QString &playlist_name);
-    QVector<Entity> playlists();
+    QVector<MpdClient::Entity> playlists();
     bool removePlaylist(const QString &playlist_name);
     bool createPlaylist(const QStringList &song_paths, const QString &playlist_name);
     bool play(const QString &playlist_name, int position);
@@ -50,9 +50,9 @@ namespace MpdClient {
     bool setPosition(int pos);
     bool setRepeat(bool repeat);
     bool setRandom(bool rand);
-    QVector<Output> outputs();
+    QVector<MpdClient::Output> outputs();
     bool changeOutputState(int outid, bool state);
-    QVector<Song> lsQueueSongs();
+    QVector<MpdClient::Song> lsQueueSongs();
     bool setPriority(int song_id, int prio);
     bool resetAllPriorities();
     bool updateDb();
@@ -81,5 +81,9 @@ namespace MpdClient {
     void initConnTimer();
   };
 }
+
+Q_DECLARE_METATYPE(QVector<MpdClient::Entity>)
+Q_DECLARE_METATYPE(QVector<MpdClient::Output>)
+Q_DECLARE_METATYPE(QVector<MpdClient::Song>)
 
 #endif // MPD_CLIENT_CONNECTION_H

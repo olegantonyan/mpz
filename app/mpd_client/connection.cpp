@@ -61,7 +61,7 @@ namespace MpdClient {
     return result;
   }
 
-  Status Connection::status() {
+  MpdClient::Status Connection::status() {
     Status result;
 
     if (!conn) {
@@ -186,7 +186,7 @@ namespace MpdClient {
     return true;
   }
 
-  QVector<Entity> Connection::playlists() {
+  QVector<MpdClient::Entity> Connection::playlists() {
     QVector<Entity> result;
     if (!conn) {
       return result;

@@ -69,7 +69,7 @@ namespace MpdClient {
     return result;
   }
 
-  QVector<Song> Client::lsPlaylistSongs(const QString &playlist_name) {
+  QVector<MpdClient::Song> Client::lsPlaylistSongs(const QString &playlist_name) {
     QVector<MpdClient::Song> result;
 
     QMetaObject::invokeMethod(
@@ -82,7 +82,7 @@ namespace MpdClient {
     return result;
   }
 
-  QVector<Song> Client::lsDirsSongs(const QStringList &paths) {
+  QVector<MpdClient::Song> Client::lsDirsSongs(const QStringList &paths) {
     QVector<MpdClient::Song> result;
 
     QMetaObject::invokeMethod(
@@ -121,7 +121,7 @@ namespace MpdClient {
     return result;
   }
 
-  QVector<Entity> Client::playlists() {
+  QVector<MpdClient::Entity> Client::playlists() {
     QVector<MpdClient::Entity> result;
 
     QMetaObject::invokeMethod(
@@ -255,7 +255,7 @@ namespace MpdClient {
     );
   }
 
-  QVector<Output> Client::outputs() {
+  QVector<MpdClient::Output> Client::outputs() {
     QVector<MpdClient::Output> result;
 
     QMetaObject::invokeMethod(

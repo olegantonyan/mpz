@@ -48,7 +48,7 @@ namespace DirectoryUi {
     }
 
     void Mpd::onMpdReady() {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {;
         onDatabaseUpdated();
         emit directoryLoaded(client.currentUrl().toString());
       });
