@@ -18,6 +18,7 @@ namespace Playlist {
 
   private:
     Track buildTrack(const MpdClient::Song &song, const QString &playlist_name);
+    int extractYear(const QString& date);
 
     MpdClient::Client &client;
   };

@@ -1,6 +1,8 @@
 #include "mpdloader.h"
 
 #include <QDebug>
+#include <QDate>
+#include <QRegularExpression>
 
 namespace Playlist {
 MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
@@ -29,6 +31,7 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
   }
 
   Track MpdLoader::buildTrack(const MpdClient::Song &song, const QString& playlist_name) {
+    qDebug() << song.date;
     Track track(
       song.filepath,
       0,
@@ -36,7 +39,7 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
       song.album,
       song.title,
       song.trackNumber,
-      song.date.toInt(),
+      extractYear(song.date),
       song.duration * 1000,
       0,
       0,
@@ -46,5 +49,26 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
     track.setPlaylistName(playlist_name);
     track.setMpd(true);
     return track;
+  }
+
+  int MpdLoader::extractYear(const QString &date) {
+    bool ok = false;
+    int toint = date.toInt(&ok);
+    if (ok) {
+      return toint;
+    }
+
+    auto dt = QDate::fromString(date, Qt::ISODate);
+    if (dt.isValid()) {
+      return dt.year();
+    }
+
+    QRegularExpression re(R"((18|19|20)\d{2})");
+    QRegularExpressionMatch match = re.match(date);
+    if (match.hasMatch()) {
+      return match.captured(0).toInt();
+    }
+
+    return 0;
   }
 }
