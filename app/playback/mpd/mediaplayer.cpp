@@ -5,8 +5,9 @@ namespace Playback {
   namespace Mpd {
   MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, client(cl) {
       connect(&client, &MpdClient::Client::playerStateChanged, this, &MediaPlayer::on_playerStateChanged);
-      progress_timer.setInterval(250);
+      progress_timer.setInterval(500);
       connect(&progress_timer, &QTimer::timeout, this, &MediaPlayer::updateProgressNow);
+      connect(&client, &MpdClient::Client::disconnected, &progress_timer, &QTimer::stop);
     }
 
     MediaPlayer::State MediaPlayer::state() {
@@ -110,13 +111,12 @@ namespace Playback {
           progress_timer.start();
           elapsed_clock.restart();
           emit stateChanged(st);
+          emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
         }
       } else  {
         progress_timer.stop();
         emit stateChanged(st);
       }
-
-      emit audioFormatUpdated(status.audioFormat.sampleRate, status.audioFormat.channels, status.audioFormat.bits);
 
       last_status = status;
     }
