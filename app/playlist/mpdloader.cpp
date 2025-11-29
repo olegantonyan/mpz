@@ -31,7 +31,6 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
   }
 
   Track MpdLoader::buildTrack(const MpdClient::Song &song, const QString& playlist_name) {
-    qDebug() << song.date;
     Track track(
       song.filepath,
       0,
