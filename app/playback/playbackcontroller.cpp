@@ -250,6 +250,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   void Controller::setOutputDevice(QByteArray deviceid) {
     player().setOutputDevice(deviceid);
   }
+#endif
 
   void Controller::setCurrentTrack(const Track &track) {
     _current_track = track;
@@ -260,5 +261,4 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     player().setTrack(track);
     emit started(track);
   }
-#endif
 }

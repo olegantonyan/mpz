@@ -17,16 +17,21 @@
 #include <QTranslator>
 #include <QLocale>
 #include <iostream>
+#include <QPersistentModelIndex>
+#include <QAbstractItemModel>
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
   qRegisterMetaType<StreamMetaData>("StreamMetaData");
   qRegisterMetaType<std::shared_ptr<Playlist::Playlist>>("std::shared_ptr<Playlist::Playlist>");
+  qRegisterMetaType<QList<QPersistentModelIndex>>("QList<QPersistentModelIndex>");
+  qRegisterMetaType<QAbstractItemModel::LayoutChangeHint>("QAbstractItemModel::LayoutChangeHint");
 #ifdef ENABLE_MPD_SUPPORT
   qRegisterMetaType<MpdClient::Song>("MpdClient::Song");
   qRegisterMetaType<MpdClient::Entity>("MpdClient::Entity");
   qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
   qRegisterMetaType<MpdClient::Output>("MpdClient::Output");
+  qRegisterMetaType<mpd_idle>("mpd_idle");
 #endif
 }
 
