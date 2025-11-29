@@ -169,7 +169,7 @@ namespace PlaylistsUi {
       }
       auto songs = client.lsDirsSongs(names);
       QString playlist_name = playlistUniqueName(names.join(", "));
-      playlist_name.replace("/", " -- "); // mpd does not support slashes in playlist name
+      playlist_name.replace("/", " ∕ "); // mpd does not support slashes in playlist name, replace with U+2215 (DIVISION SLASH)
 
       QStringList songs_paths;
       for (auto it : songs) {
