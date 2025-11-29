@@ -225,16 +225,16 @@ namespace MpdClient {
     }
 
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_save: " << lastError();
+      qWarning() << "mpd_run_save: " << playlist_name << lastError();
       return false;
     }
     if (!mpd_run_playlist_clear(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_playlist_clear: " << lastError();
+      qWarning() << "mpd_run_playlist_clear: " << playlist_name << lastError();
       return false;
     }
     for (auto path : song_paths) {
       if (!mpd_run_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
-        qWarning() << "mpd_run_playlist_add: " << lastError();
+        qWarning() << "mpd_run_playlist_add: " << path << lastError();
         return false;
       }
     }

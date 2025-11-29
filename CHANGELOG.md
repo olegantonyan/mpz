@@ -1,10 +1,8 @@
-## [1.1.4] - 
+## [2.0.0] - 
 
 ### Added
 
-### Fixed
-
-### Misc
+- Experimental mpd (https://musicpd.org) client mode. MPD server can be added as a library
 
 ## [1.1.3] - 2025-10-08
 
