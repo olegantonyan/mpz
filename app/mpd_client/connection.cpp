@@ -575,7 +575,7 @@ namespace MpdClient {
   QPair<bool, QString> Connection::probe(const QUrl &url) {
     QPair<bool, QString> result(true, "");
 
-    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
+    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 3000);
     if (!probed_conn) {
       result.first = false;
       result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
