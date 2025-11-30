@@ -6,6 +6,8 @@
 #include <QString>
 #include <QTemporaryFile>
 #include <QHash>
+#include <QByteArray>
+#include <stdint.h>
 
 namespace CoverArt {
   struct Picture {
