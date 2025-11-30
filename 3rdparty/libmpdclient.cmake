@@ -18,10 +18,8 @@ check_symbol_exists(strndup "string.h" HAVE_STRNDUP)
 check_function_exists(setlocale HAVE_SETLOCALE)
 check_function_exists(uselocale HAVE_USELOCALE)
 check_symbol_exists(getaddrinfo "netdb.h" HAVE_GETADDRINFO)
-
 set(CONFIG_H_FILE ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated)
-
 file(WRITE ${CONFIG_H_FILE} "
 #pragma once
 #define DEFAULT_HOST \"localhost\"
@@ -50,6 +48,7 @@ configure_file(${LIBMPDCLIENT_DIR}/include/mpd/version.h.in ${CMAKE_CURRENT_BINA
 
 # sources
 file(GLOB_RECURSE MPDCLIENT_SOURCES ${LIBMPDCLIENT_DIR}/src/*.c)
+list(REMOVE_ITEM MPDCLIENT_SOURCES "${LIBMPDCLIENT_DIR}/src/example.c")
 file(GLOB_RECURSE MPDCLIENT_HEADERS ${LIBMPDCLIENT_DIR}/include/*.h)
 
 add_library(mpdclient STATIC
@@ -58,7 +57,7 @@ add_library(mpdclient STATIC
   ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/mpd/version.h
   ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h
 )
-target_compile_definitions(mpdclient PRIVATE _GNU_SOURCE ENABLE_TCP=1)
+target_compile_definitions(mpdclient PRIVATE ENABLE_TCP=1)
 # target_compile_definitions(mpdclient PRIVATE _GNU_SOURCE _POSIX_C_SOURCE=200112L)
 
 target_include_directories(mpdclient PUBLIC
