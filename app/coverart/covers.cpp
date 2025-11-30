@@ -8,15 +8,21 @@
 #include <QBuffer>
 
 namespace CoverArt {
-  Covers &Covers::instance() {
-    static Covers *self = nullptr;
-    if (nullptr == self) {
-      self = new Covers();
+  static Covers *self = nullptr;
+
+  Covers &Covers::instance(ModusOperandi &modus) {
+    if (self == nullptr) {
+      self = new Covers(modus);
     }
     return *self;
   }
 
-  Covers::Covers() {
+  Covers &Covers::instance() {
+    Q_ASSERT(self);
+    return *self;
+  }
+
+  Covers::Covers(ModusOperandi &modus) : modus_operandi(modus), mpd_covers(modus.mpd_client) {
   }
 
   QString Covers::get(const QString &filepath) {
@@ -29,15 +35,26 @@ namespace CoverArt {
       return cache.value(key);
     }
 
-    auto found = findCoverLocally(key);
-    if (found.isEmpty()) {
-      auto img = embedded_covers.get(filepath);
-      if (!img.isEmpty()) {
-        return img;
+    QString found;
+    if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+#ifdef ENABLE_MPD_SUPPORT
+      found = mpd_covers.get(filepath);
+      if (!found.isEmpty()) {
+        cache.insert(key, found);
       }
-    } else {
-      cache.insert(key, found);
+#endif
+    } else if (modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
+      found = findCoverLocally(key);
+      if (found.isEmpty()) {
+        auto img = embedded_covers.get(filepath);
+        if (!img.isEmpty()) {
+          return img;
+        }
+      } else {
+        cache.insert(key, found);
+      }
     }
+
     return found;
   }
 

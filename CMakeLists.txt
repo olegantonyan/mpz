@@ -114,6 +114,7 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/mpd_client/status.cpp)
   list(APPEND PROJECT_SOURCES app/mpd_client/song.cpp)
   list(APPEND PROJECT_SOURCES app/mpd_client/output.cpp)
+  list(APPEND PROJECT_SOURCES app/coverart/mpd.cpp)
 endif()
 
 if (ENABLE_DBUS)

@@ -511,6 +511,16 @@ namespace MpdClient {
     return true;
   }
 
+  QByteArray Connection::albumArt(const QString &filepath) {
+    QByteArray result;
+    if (!conn) {
+      return result;
+    }
+
+    // TODO: implement
+    return result;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;

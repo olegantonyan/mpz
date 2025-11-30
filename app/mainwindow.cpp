@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
+#include "coverart/covers.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -25,6 +26,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   ui->setupUi(this);
   ui->verticalLayout->insertWidget(1, banner);
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
+
+  CoverArt::Covers::instance(modus_operandi);
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 

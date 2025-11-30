@@ -339,4 +339,17 @@ namespace MpdClient {
     );
   }
 
+  QByteArray MpdClient::Client::albumArt(const QString &filepath) {
+    QByteArray result;
+
+    QMetaObject::invokeMethod(
+      conn,
+      "albumArt",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QByteArray, result),
+      Q_ARG(QString, filepath)
+    );
+    return result;
+  }
+
 }

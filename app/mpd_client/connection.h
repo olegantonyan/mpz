@@ -56,6 +56,7 @@ namespace MpdClient {
     bool setPriority(int song_id, int prio);
     bool resetAllPriorities();
     bool updateDb();
+    QByteArray albumArt(const QString& filepath);
 
   signals:
     void connected(const QUrl &url);

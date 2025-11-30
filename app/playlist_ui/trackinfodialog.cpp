@@ -60,9 +60,15 @@ void TrackInfoDialog::setup_table(const Track &track) {
     add_table_row(tr("Duration"), track.formattedDuration());
   }
   add_table_row(tr("Format"), track.format());
-  add_table_row(tr("Bitrate"), QString::number(track.bitrate()));
-  add_table_row(tr("Sample rate"), QString::number(track.sample_rate()));
-  add_table_row(tr("Channels"), QString::number(track.channels()));
+  if (track.bitrate() > 0) {
+    add_table_row(tr("Bitrate"), QString::number(track.bitrate()));
+  }
+  if (track.sample_rate() > 0) {
+    add_table_row(tr("Sample rate"), QString::number(track.sample_rate()));
+  }
+  if (track.channels() > 0) {
+    add_table_row(tr("Channels"), QString::number(track.channels()));
+  }
   if (track.isStream()) {
     add_table_row(tr("Stream url"), track.url().toString());
   }
