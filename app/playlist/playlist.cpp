@@ -39,6 +39,7 @@ namespace Playlist {
   void Playlist::load(const QVector<Track> &tracks) {
     tracks_list.clear();
     tracks_list.append(tracks);
+    emit loadedOrAppended();
   }
 
   void Playlist::append(const QVector<Track> &tracks, bool with_sort) {
@@ -47,6 +48,7 @@ namespace Playlist {
     } else {
       tracks_list.append(tracks);
     }
+    emit loadedOrAppended();
   }
 
   quint64 Playlist::uid() const {

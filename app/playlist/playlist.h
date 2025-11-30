@@ -47,6 +47,9 @@ namespace Playlist {
 
     void reload();
 
+  signals:
+    void loadedOrAppended();
+
   private:
     QVector<Track> sort(QVector<Track> list, const Sorter &sorter = Sorter());
 
