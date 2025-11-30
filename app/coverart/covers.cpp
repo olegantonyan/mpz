@@ -22,7 +22,12 @@ namespace CoverArt {
     return *self;
   }
 
-  Covers::Covers(ModusOperandi &modus) : modus_operandi(modus), mpd_covers(modus.mpd_client) {
+  Covers::Covers(ModusOperandi &modus) :
+    modus_operandi(modus),
+#ifdef ENABLE_MPD_SUPPORT
+    mpd_covers(modus.mpd_client)
+#endif
+  {
   }
 
   QString Covers::get(const QString &filepath) {

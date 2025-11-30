@@ -517,7 +517,25 @@ namespace MpdClient {
       return result;
     }
 
-    // TODO: implement
+    static const size_t BUF_SIZE = 1024 * 1024 * 128;
+    char buffer[BUF_SIZE];
+    int offset = 0;
+
+    while (true) {
+      int n = mpd_run_albumart(conn, filepath.toUtf8().constData(), offset, buffer, BUF_SIZE);
+      if (n < 0) {
+        qWarning() << "mpd_run_albumart:" << lastError();
+        mpd_connection_clear_error(conn);
+        return result;
+      }
+      if (n == 0) {
+        break;
+      }
+
+      result.append(buffer, n);
+      offset += n;
+    }
+
     return result;
   }
 

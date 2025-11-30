@@ -27,8 +27,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   ui->verticalLayout->insertWidget(1, banner);
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
 
-  CoverArt::Covers::instance(modus_operandi);
-
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
   library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, modus_operandi, this);
@@ -99,6 +97,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef ENABLE_MPD_SUPPORT
   setupMpdOrder();
 #endif
+  CoverArt::Covers::instance(modus_operandi);
 }
 
 MainWindow::~MainWindow() {

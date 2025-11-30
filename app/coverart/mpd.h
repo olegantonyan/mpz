@@ -4,6 +4,8 @@
 #include "mpd_client/client.h"
 
 #include <QString>
+#include <QTemporaryFile>
+#include <QHash>
 
 namespace CoverArt {
   class Mpd {
@@ -14,8 +16,11 @@ namespace CoverArt {
 
   private:
     QString temp_dir;
-
     MpdClient::Client &client;
+    QHash <QByteArray, std::shared_ptr<QTemporaryFile>> files_cache;
+
+    std::shared_ptr<QTemporaryFile> create_tempfile();
+    QByteArray image_hash(const QByteArray &ba) const;
   };
 }
 
