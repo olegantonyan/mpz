@@ -52,6 +52,8 @@ namespace Config {
     QStringList mprisBlacklist() const;
     bool savemMrisBlacklist(const QStringList &arg);
 
+    bool mpdStopPlayerOnClose() const;
+
   private:
     Config::Storage storage;
   };
