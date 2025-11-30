@@ -67,3 +67,6 @@ target_include_directories(mpdclient PUBLIC
 
 find_package(Threads REQUIRED)
 target_link_libraries(mpdclient PUBLIC Threads::Threads)
+if(WIN32)
+  target_link_libraries(mpdclient PRIVATE ws2_32)
+endif()
