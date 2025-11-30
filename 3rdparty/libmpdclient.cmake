@@ -3,33 +3,47 @@ message(STATUS "using vendored libmpdclient from ${LIBMPDCLIENT_DIR}")
 
 set(MPDCLIENT_VERSION "2.23")
 # Generate config.h
-include(CheckIncludeFile)
 include(CheckSymbolExists)
+include(CheckFunctionExists)
+include(CheckIncludeFile)
 check_include_file("sys/socket.h"     HAVE_SYS_SOCKET_H)
 check_include_file("netinet/in.h"     HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h"      HAVE_ARPA_INET_H)
 check_include_file("unistd.h"         HAVE_UNISTD_H)
 check_include_file("stdlib.h"         HAVE_STDLIB_H)
 check_include_file("string.h"         HAVE_STRING_H)
-check_symbol_exists(strndup "string.h" HAVE_STRNDUP)
+check_include_file("locale.h"         HAVE_LOCALE_H)
 check_include_file("netdb.h"          HAVE_NETDB_H)
+check_symbol_exists(strndup "string.h" HAVE_STRNDUP)
+check_function_exists(setlocale HAVE_SETLOCALE)
+check_function_exists(uselocale HAVE_USELOCALE)
 check_symbol_exists(getaddrinfo "netdb.h" HAVE_GETADDRINFO)
-set(CONFIG_H_CONTENT
-"#pragma once
-#cmakedefine01 HAVE_SYS_SOCKET_H
-#cmakedefine01 HAVE_NETINET_IN_H
-#cmakedefine01 HAVE_ARPA_INET_H
-#cmakedefine01 HAVE_UNISTD_H
-#cmakedefine01 HAVE_STDLIB_H
-#cmakedefine01 HAVE_STRING_H
-#cmakedefine01 HAVE_STRNDUP
-#cmakedefine01 HAVE_NETDB_H
-#cmakedefine01 HAVE_GETADDRINFO
+
+set(CONFIG_H_FILE ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated)
+
+file(WRITE ${CONFIG_H_FILE} "
+#pragma once
 #define DEFAULT_HOST \"localhost\"
 #define DEFAULT_PORT 6600
+#define DEFAULT_SOCKET \"/run/mpd/socket\"
+#define PACKAGE \"libmpdclient\"
 ")
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h.in "${CONFIG_H_CONTENT}")
-configure_file(${CMAKE_CURRENT_BINARY_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h)
+if(HAVE_GETADDRINFO)
+  file(APPEND ${CONFIG_H_FILE} "#define HAVE_GETADDRINFO\n")
+endif()
+if(HAVE_SETLOCALE)
+  file(APPEND ${CONFIG_H_FILE} "#define HAVE_SETLOCALE\n#include <locale.h>\n")
+endif()
+if(HAVE_STRNDUP)
+  file(APPEND ${CONFIG_H_FILE} "#define HAVE_STRNDUP\n#include <string.h>\n")
+endif()
+if(HAVE_USELOCALE)
+  file(APPEND ${CONFIG_H_FILE} "#define HAVE_USELOCALE\n#include <locale.h>\n")
+endif()
+if(NOT MSVC)
+  file(APPEND ${CONFIG_H_FILE} "#ifndef _GNU_SOURCE\n#define _GNU_SOURCE\n#endif")
+endif()
 
 # version.h
 configure_file(${LIBMPDCLIENT_DIR}/include/mpd/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/mpd/version.h @ONLY)
