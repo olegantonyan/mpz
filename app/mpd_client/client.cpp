@@ -352,4 +352,17 @@ namespace MpdClient {
     return result;
   }
 
+  QByteArray MpdClient::Client::readPicture(const QString &filepath) {
+    QByteArray result;
+
+    QMetaObject::invokeMethod(
+      conn,
+      "readPicture",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QByteArray, result),
+      Q_ARG(QString, filepath)
+    );
+    return result;
+  }
+
 }

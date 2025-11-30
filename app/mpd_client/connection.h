@@ -57,6 +57,7 @@ namespace MpdClient {
     bool resetAllPriorities();
     bool updateDb();
     QByteArray albumArt(const QString& filepath);
+    QByteArray readPicture(const QString& filepath);
 
   signals:
     void connected(const QUrl &url);
