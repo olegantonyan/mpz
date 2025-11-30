@@ -165,6 +165,10 @@ NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpe
 ### mpd impedance mismatch
 When used as [mpd](https://musicpd.org) client, there is fundamental difference that can lead to some weird behavior. By design mpz does not have explicit playback queue - the playlist itself is a queue. In mpd, there's explicit playback queue and playlists are merely list of tracks that can be loaded into queue to play. 
 
-To make them work together and fit into mpz's UX, a number of workarounds implemented. If mpz is the only client used with the mpd server, then everything should be ok. If other clients only play/pause/change volume and do not modify mpd's playback queue - also ok. However, if other clients modify the playback queue, mpz cannot pick it up, and the next time you play a song from mpz's playlist, the queue will be overwritten. Other edge cases and glitches possible too.
+Known issues:
+- when other client modify playback queue, mpz cannot pick up these changes;
+- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from last selected playlist, i.e. loaded upon start;
+
+Other edge cases possible too.
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)
