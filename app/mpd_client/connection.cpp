@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QEventLoop>
 
+#define MPD_TIMEOUT 3000
+
 class TimerStarter {
 public:
   explicit TimerStarter(QTimer *tmr) : timer(tmr) {
@@ -31,7 +33,7 @@ namespace MpdClient {
       return;
     }
     conn_timer = new QTimer(this);
-    conn_timer->setInterval(3210);
+    conn_timer->setInterval(MPD_TIMEOUT + 500);
     connect(conn_timer, &QTimer::timeout, this, &Connection::on_timeout);
   }
 
@@ -539,7 +541,7 @@ namespace MpdClient {
     TimerStarter tmr(conn_timer);
 
     destroy();
-    auto new_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
+    auto new_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), MPD_TIMEOUT);
     if (!new_conn) {
       qWarning() << "error allocation mpd connection";
       emit error(url);
@@ -575,7 +577,7 @@ namespace MpdClient {
   QPair<bool, QString> Connection::probe(const QUrl &url) {
     QPair<bool, QString> result(true, "");
 
-    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 3000);
+    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), MPD_TIMEOUT);
     if (!probed_conn) {
       result.first = false;
       result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
