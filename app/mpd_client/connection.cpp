@@ -518,7 +518,7 @@ namespace MpdClient {
     }
 
     static const size_t BUF_SIZE = 1024 * 1024 * 128;
-    char buffer[BUF_SIZE];
+    static char buffer[BUF_SIZE];
     int offset = 0;
 
     while (true) {
@@ -526,6 +526,7 @@ namespace MpdClient {
       if (n < 0) {
         qWarning() << "mpd_run_albumart:" << lastError();
         mpd_connection_clear_error(conn);
+        result.clear();
         return result;
       }
       if (n == 0) {

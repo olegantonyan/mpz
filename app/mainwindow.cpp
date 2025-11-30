@@ -144,7 +144,9 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  player->stop();
+  if (modus_operandi.get() != ModusOperandi::MODUS_MPD) {
+    player->stop();
+  }
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();

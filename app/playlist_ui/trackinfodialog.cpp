@@ -23,6 +23,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   if (!cover_art_path.isEmpty()) {
     ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
   }
+  ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
