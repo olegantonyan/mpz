@@ -42,7 +42,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       emit trackChanged(_current_track);
     });
     connect(&_mpdplayer, &Mpd::MediaPlayer::durationChanged, [=](quint64 ms) {
-      _current_track.setDuration(ms);
+      if (_current_track.duration() != ms && ms > 0) {
+        _current_track.setDuration(ms);
+        _controls.seekbar->setMaximum(ms / 1000);
+      }
     });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
