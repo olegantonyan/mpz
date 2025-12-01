@@ -41,6 +41,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       _current_track.setAudioFormat(sample_rate, channels, bitrate);
       emit trackChanged(_current_track);
     });
+    connect(&_mpdplayer, &Mpd::MediaPlayer::durationChanged, [=](quint64 ms) {
+      _current_track.setDuration(ms);
+    });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 

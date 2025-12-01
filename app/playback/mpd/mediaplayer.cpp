@@ -140,6 +140,7 @@ namespace Playback {
       int extra = elapsed_clock.elapsed();
       int pos = last_status.elapsedMs + extra;
       emit positionChanged(pos);
+      emit durationChanged(last_status.totalTime * 1000);
     }
   }
 }

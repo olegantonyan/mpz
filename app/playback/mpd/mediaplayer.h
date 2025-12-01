@@ -33,6 +33,7 @@ namespace Playback {
     signals:
       void trackChanged(const QString &path);
       void audioFormatUpdated(quint16 sample_rate, quint8 channels, quint16 bitrate);
+      void durationChanged(quint64 ms);
 
     private:
       MpdClient::Client &client;
