@@ -1,5 +1,8 @@
 #include "directorysettings.h"
 #include "ui_directorysettings.h"
+#ifdef ENABLE_MPD_SUPPORT
+  #include "addmpddialog.h"
+#endif
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -11,11 +14,6 @@ DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &mo
 
   model.setStringList(paths);
   ui->listView->setModel(&model);
-#ifndef ENABLE_MPD_SUPPORT
-  ui->pushButtonAddMpd->hide();
-#endif
-  connect(ui->listView, &QListView::clicked, this, &DirectorySettings::on_itemSelected);
-  ui->pushButtonTestMpd->hide();
 }
 
 DirectorySettings::~DirectorySettings() {
@@ -34,20 +32,17 @@ void DirectorySettings::on_pushButtonAddFolder_clicked() {
 }
 
 void DirectorySettings::on_pushButtonAddMpd_clicked() {
-#ifndef ENABLE_MPD_SUPPORT
-  return;
-#endif
-  bool ok = false;
-  QString text = QInputDialog::getText(nullptr, tr("Enter MPD host:port"), tr("Enter MPD host:port"), QLineEdit::Normal, "localhost:6600", &ok);
+#ifdef ENABLE_MPD_SUPPORT
+  DirectoryUi::AddMpdDialog dlg(modus_operandi.mpd_client);
+  if (dlg.exec() == QDialog::Accepted) {
+    QString url = dlg.url();
+    QString password = dlg.password();
 
-  if (ok && !text.isEmpty()) {
-    if (!text.startsWith("mpd://")) {
-      text.prepend("mpd://");
-    }
     auto existing = model.stringList();
-    existing.append(text);
+    existing.append(url);
     model.setStringList(existing);
   }
+#endif
 }
 
 
@@ -59,37 +54,4 @@ void DirectorySettings::on_pushButtonRemove_clicked() {
   model.removeRows(current_index.row(), 1);
 }
 
-void DirectorySettings::on_itemSelected(const QModelIndex &index) {
-  auto text = index.data().toString();
-
-  if (text.startsWith("mpd://")) {
-    ui->pushButtonTestMpd->show();
-  } else {
-    ui->pushButtonTestMpd->hide();
-  }
-  ui->labelMpdResult->clear();
-}
-
-
-void DirectorySettings::on_pushButtonTestMpd_clicked() {
-#ifdef ENABLE_MPD_SUPPORT
-  //ui->labelMpdResult->setPixmap(QApplication::style()->standardPixmap(QStyle::SP_DialogApplyButton));
-  //QApplication::style()->standardPixmap(QStyle::SP_MessageBoxCritical)
-
-  QModelIndex index = ui->listView->currentIndex();
-  if (!index.isValid()) {
-    return;
-  }
-  QString path = index.data().toString();
-  if (path.isEmpty()) {
-    return;
-  }
-  auto result = modus_operandi.mpd_client.probe(QUrl(path));
-  if (result.first) {
-    ui->labelMpdResult->setText(QString("%1: %2").arg(tr("Success")).arg(result.second));
-  } else {
-    ui->labelMpdResult->setText(QString("%1: %2").arg(tr("Failure")).arg(result.second));
-  }
-#endif
-}
 

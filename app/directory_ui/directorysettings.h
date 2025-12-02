@@ -24,9 +24,6 @@ private slots:
   void on_pushButtonAddFolder_clicked();
   void on_pushButtonAddMpd_clicked();
   void on_pushButtonRemove_clicked();
-  void on_itemSelected(const QModelIndex &index);
-
-  void on_pushButtonTestMpd_clicked();
 
 private:
   Ui::DirectorySettings *ui;
