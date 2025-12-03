@@ -1,4 +1,5 @@
 #include "mpdloader.h"
+#include "playlist.h"
 
 #include <QDebug>
 #include <QDate>
@@ -28,6 +29,16 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
       result << buildTrack(it, playlist_name);
     }
     return result;
+  }
+
+  QVector<Track> MpdLoader::builTracksFromSongsSorted(const QVector<MpdClient::Song> &songs, const QString &playlist_name) {
+    QVector<Track> tracks;
+    for (auto it : songs) {
+      tracks << buildTrack(it, playlist_name);
+    }
+    Playlist pl;
+    pl.append(tracks, true);
+    return pl.tracks();
   }
 
   Track MpdLoader::buildTrack(const MpdClient::Song &song, const QString& playlist_name) {

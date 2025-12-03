@@ -115,8 +115,6 @@ namespace PlaylistsUi {
       Q_ASSERT(filepaths.size() > 0);
       Q_UNUSED(libraryDir);
 
-      qDebug() << filepaths << libraryDir;
-
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         creating_playlist_name = createPlaylistFromDirs(filepaths);
         order << creating_playlist_name;
@@ -171,10 +169,12 @@ namespace PlaylistsUi {
       QString playlist_name = playlistUniqueName(names.join(", "));
       playlist_name.replace("/", " ∕ "); // mpd does not support slashes in playlist name, replace with U+2215 (DIVISION SLASH)
 
+      auto optimistic_tracks = Playlist::MpdLoader(client).builTracksFromSongsSorted(songs, playlist_name);
       QStringList songs_paths;
-      for (auto it : songs) {
-        songs_paths << it.filepath;
+      for (auto it : optimistic_tracks) {
+        songs_paths << it.path();
       }
+
       client.createPlaylist(songs_paths, playlist_name);
 
       return playlist_name;
