@@ -11,6 +11,14 @@ namespace PlaylistsUi {
       connect(&client, &MpdClient::Client::playlistUpdated, this, &Model::loadAsync);
     }
 
+  QVariant Model::data(const QModelIndex &index, int role) const {
+    auto pl = list.at(index.row());
+    if (pl && pl->name() == highlight_name) {
+      highlight_uid = pl->uid();
+    }
+    return PlaylistsUi::Model::data(index, role);
+  }
+
     void Model::loadAsync() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
         QMutexLocker locker(&loading_mutex);
@@ -53,6 +61,16 @@ namespace PlaylistsUi {
         creating_playlist_name = "";
         emit asyncTracksLoadFinished(playlist);
       });
+    }
+
+    void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
+      if (playlist == nullptr) {
+        highlight_name.clear();
+        emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
+      } else {
+        highlight_name = playlist->name();
+        emit dataChanged(itemIndex(playlist), itemIndex(playlist));
+      }
     }
 
     bool Model::persist() {

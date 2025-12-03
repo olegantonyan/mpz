@@ -29,7 +29,7 @@ namespace PlaylistsUi {
     QModelIndex itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const;
     virtual bool persist();
     QList<std::shared_ptr<Playlist::Playlist>> itemList() const;
-    void higlight(std::shared_ptr<Playlist::Playlist> playlist);
+    virtual void higlight(std::shared_ptr<Playlist::Playlist> playlist);
     virtual QModelIndex currentPlaylistIndex();
     virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
     virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
@@ -49,7 +49,7 @@ namespace PlaylistsUi {
     QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
 
-    quint64 highlight_uid;
+    mutable quint64 highlight_uid;
   };
 }
 

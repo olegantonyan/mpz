@@ -18,6 +18,7 @@ namespace PlaylistsUi {
 
     public:
       explicit Model(Config::Local &conf, MpdClient::Client &cl, QObject *parent = nullptr);
+      QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
       bool persist() override;
       void remove(const QModelIndex &index) override;
@@ -25,6 +26,7 @@ namespace PlaylistsUi {
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
       void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
+      void higlight(std::shared_ptr<Playlist::Playlist> playlist) override;
 
     public slots:
       void loadAsync() override;
@@ -35,6 +37,7 @@ namespace PlaylistsUi {
       QString creating_playlist_name;
       QList<QString> order;
       QMutex loading_mutex;
+      QString highlight_name;
 
       QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
       QString createPlaylistFromDirs(const QList<QDir> &filepaths);
