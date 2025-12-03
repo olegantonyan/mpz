@@ -168,4 +168,9 @@ namespace PlaylistUi {
       emit appendToPlaylistAsyncFinished(playlist());
     });
   }
+
+  void Model::sortBy(const QString &criteria) {
+    playlist()->sortBy(criteria);
+    reload();
+  }
 }

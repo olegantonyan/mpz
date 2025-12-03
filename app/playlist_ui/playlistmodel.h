@@ -41,6 +41,8 @@ namespace PlaylistUi {
 
     virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
 
+    virtual void sortBy(const QString &criteria);
+
   signals:
     void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
 

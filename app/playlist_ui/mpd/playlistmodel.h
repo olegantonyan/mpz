@@ -23,6 +23,7 @@ namespace PlaylistUi {
 
       void reload() override;
       void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
+      void sortBy(const QString &criteria) override;
 
     public slots:
       void onMpdLost();

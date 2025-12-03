@@ -125,8 +125,7 @@ namespace PlaylistUi {
 
   void Controller::sortBy(const QString &criteria) {
     if (proxy->activeModel()->playlist() != nullptr) {
-      proxy->activeModel()->playlist()->sortBy(criteria);
-      proxy->activeModel()->reload();
+      proxy->activeModel()->sortBy(criteria);
       emit changed(proxy->activeModel()->playlist());
     }
   }

@@ -33,6 +33,17 @@ namespace PlaylistUi {
       });
     }
 
+    void Model::sortBy(const QString &criteria) {
+      playlist()->sortBy(criteria);
+      client.removePlaylist(playlist()->name());
+      QStringList songs_paths;
+      for (auto it : playlist()->tracks()) {
+        songs_paths << it.path();
+      }
+      client.createPlaylist(songs_paths, playlist()->name());
+      reload();
+    }
+
     void Model::onMpdLost() {
       setPlaylist(nullptr);
     }
