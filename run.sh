@@ -3,9 +3,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-BUILD_DIR=build
+PRESET=release-qt6
+BUILD_DIR=build/$PRESET
 
-cmake -S . -B $BUILD_DIR -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
-cmake --build $BUILD_DIR -j
+cmake --preset $PRESET
+cmake --build $BUILD_DIR
 
 exec ./$BUILD_DIR/mpz "$@"
