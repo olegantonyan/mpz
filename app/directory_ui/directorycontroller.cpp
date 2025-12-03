@@ -15,9 +15,10 @@
 #include <QTimer>
 #include <QtGlobal>
 #include <QFileInfo>
+#include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
@@ -45,7 +46,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
       libswitch->addItem(QDir::homePath());
     } else {
       for (auto i : local_conf.libraryPaths()) {
-        libswitch->addItem(i);
+        libswitch->addItem(libraryPathMasked(i), i);
       }
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
       libswitch->setCurrentIndex(current_index);
@@ -142,7 +143,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
         local_conf.sync();
         libswitch->clear();
         for (auto i : local_conf.libraryPaths()) {
-          libswitch->addItem(i);
+          libswitch->addItem(libraryPathMasked(i), i);
         }
         if (libswitch->count() > 0) {
           model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
@@ -150,6 +151,15 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
         }
       }
     }
+  }
+
+  QString Controller::libraryPathMasked(const QString &libraryPath) const {
+    QUrl url(libraryPath);
+    if (url.password().isEmpty()) {
+      return libraryPath;
+    }
+    url.setPassword("***");
+    return url.toString();
   }
 
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {

@@ -45,6 +45,7 @@ namespace DirectoryUi {
     ModusOperandi &modus_operandi;
 
     void settingsDialog(QComboBox *libswitch);
+    QString libraryPathMasked(const QString &libraryPath) const;
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

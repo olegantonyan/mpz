@@ -609,6 +609,14 @@ namespace MpdClient {
       emit error(url);
       return false;
     }
+    if (!url.password().isEmpty()) {
+      if (!mpd_run_password(new_conn, url.password().toUtf8().constData())) {
+        qWarning() << "password auth error:" << QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+        mpd_connection_free(new_conn);
+        emit error(url);
+        return false;
+      }
+    }
     if (!establish_idle(url)) {
       mpd_connection_free(new_conn);
       emit error(url);
@@ -645,6 +653,15 @@ namespace MpdClient {
       mpd_connection_free(probed_conn);
       return result;
     }
+    if (!url.password().isEmpty()) {
+      if (!mpd_run_password(probed_conn, url.password().toUtf8().constData())) {
+        result.first = false;
+        result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+        mpd_connection_free(probed_conn);
+        return result;
+      }
+    }
+
     const unsigned int *ver = mpd_connection_get_server_version(probed_conn);
     auto version = QString("protocol version %1.%2.%3").arg(ver[0]).arg(ver[1]).arg(ver[2]);
 
@@ -685,6 +702,13 @@ namespace MpdClient {
     if (mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
       qWarning() << "error establishing idle connection" << mpd_connection_get_error_message(idle_conn);
       return false;
+    }
+    if (!url.password().isEmpty()) {
+      if (!mpd_run_password(idle_conn, url.password().toUtf8().constData())) {
+        qWarning() << "password auth error idle:" << QString::fromUtf8(mpd_connection_get_error_message(idle_conn));
+        mpd_connection_free(idle_conn);
+        return false;
+      }
     }
     mpd_send_idle(idle_conn);
 

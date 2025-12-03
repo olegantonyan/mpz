@@ -8,6 +8,7 @@
 #include <QInputDialog>
 #include <QDebug>
 #include <QApplication>
+#include <QUrl>
 
 DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus) {
   ui->setupUi(this);
@@ -35,9 +36,7 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 #ifdef ENABLE_MPD_SUPPORT
   DirectoryUi::AddMpdDialog dlg(modus_operandi.mpd_client);
   if (dlg.exec() == QDialog::Accepted) {
-    QString url = dlg.url();
-    QString password = dlg.password();
-
+    auto url = dlg.url();
     auto existing = model.stringList();
     existing.append(url);
     model.setStringList(existing);

@@ -16,7 +16,6 @@ namespace DirectoryUi {
     explicit AddMpdDialog(MpdClient::Client &cl, QWidget *parent = nullptr);
 
     QString url() const;
-    QString password() const;
 
   private:
     MpdClient::Client &client;
@@ -24,6 +23,8 @@ namespace DirectoryUi {
     QLineEdit *password_lineedit;
     QPushButton *test_button;
     QLabel *test_label;
+
+    QString password() const;
 
   private slots:
     void onTestConnection();

@@ -51,7 +51,12 @@ namespace DirectoryUi {
         text.prepend("mpd://");
       }
     }
-    return text;
+    QUrl url(text);
+    if (!password().isEmpty()) {
+      url.setUserName("");
+      url.setPassword(password());
+    }
+    return url.toString();
   }
 
   QString AddMpdDialog::password() const {
@@ -59,7 +64,6 @@ namespace DirectoryUi {
   }
 
   void AddMpdDialog::onTestConnection() {
-    qDebug() << QUrl(url());
     auto result = client.probe(QUrl(url()));
     if (result.first) {
       test_label->setText(QString("%1: %2").arg(tr("Success")).arg(result.second));
