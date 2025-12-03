@@ -27,6 +27,7 @@ namespace PlaylistsUi {
     std::shared_ptr<Playlist::Playlist> playlistByTrackUid(quint64 track_uid) const;
     std::shared_ptr<Playlist::Playlist> playlistByName(const QString &name) const;
     std::shared_ptr<Playlist::Playlist> currentPlaylist() const;
+    int playlistsCount() const;
 
   public slots:
     void on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
@@ -40,6 +41,7 @@ namespace PlaylistsUi {
     void loaded(const std::shared_ptr<Playlist::Playlist> item);
     void emptied();
     void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
+    void asyncLoadFinished();
 
   private slots:
     void on_itemActivated(const QModelIndex &index);

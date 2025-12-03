@@ -20,16 +20,21 @@ namespace PlaylistsUi {
   }
 
     void Model::loadAsync() {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
-        QMutexLocker locker(&loading_mutex);
-        beginResetModel();
-        list = loadMpdPlaylists();
-        loadPlaylistsOrder();
-        sortPlaylistsByOrder();
-        endResetModel();
-        emit asyncLoadFinished();
-        persist();
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() {
+        auto loadedList = loadMpdPlaylists();
+        QMetaObject::invokeMethod(this, [this, loadedList]() { applyAsyncLoadedList(loadedList); }, Qt::QueuedConnection);
       });
+    }
+
+    void Model::applyAsyncLoadedList(const QList<std::shared_ptr<Playlist::Playlist> > &loadedList) {
+      QMutexLocker locker(&loading_mutex);
+      beginResetModel();
+      list = loadedList;
+      loadPlaylistsOrder();
+      sortPlaylistsByOrder();
+      endResetModel();
+      emit asyncLoadFinished();
+      persist();
     }
 
     void Model::onMpdLost() {

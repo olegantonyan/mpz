@@ -103,6 +103,19 @@ namespace Playback {
   }
 
   void Dispatch::on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint) {
+    if (playlists->playlistsCount() == 0) {
+      // on initial load there might no playlists yet
+      QEventLoop loop;
+      QTimer timer;
+      auto conn_loop = connect(playlists, &PlaylistsUi::Controller::asyncLoadFinished, &loop, &QEventLoop::quit);
+      auto conn_tmr = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+      timer.setSingleShot(true);
+      timer.start(666);
+      loop.exec();
+      disconnect(conn_loop);
+      disconnect(conn_tmr);
+    }
+
     auto current_playlist = playlists->playlistByName(playlist_name_hint);
     if (!current_playlist) {
       current_playlist = playlists->currentPlaylist();

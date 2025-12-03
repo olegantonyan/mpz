@@ -43,6 +43,8 @@ namespace PlaylistsUi {
     connect(view, &QListView::customContextMenuRequested, context_menu, &PlaylistsContextMenu::show);
 
     connect(context_menu, &PlaylistsContextMenu::playlistChanged, this, &Controller::selected);
+
+    connect(proxy, &PlaylistsUi::ProxyFilterModel::asyncLoadFinished, this, &PlaylistsUi::Controller::asyncLoadFinished);
   }
 
   void Controller::load() {
@@ -75,6 +77,10 @@ namespace PlaylistsUi {
 
   std::shared_ptr<Playlist::Playlist> Controller::currentPlaylist() const {
     return proxy->activeModel()->itemAt(proxy->activeModel()->currentPlaylistIndex());
+  }
+
+  int Controller::playlistsCount() const {
+    return proxy->activeModel()->listSize();
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

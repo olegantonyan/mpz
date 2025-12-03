@@ -46,6 +46,8 @@ namespace PlaylistsUi {
       QString currentLibraryPath() const;
       void sortPlaylistsByOrder();
       void loadPlaylistsOrder();
+
+      void applyAsyncLoadedList(const QList<std::shared_ptr<Playlist::Playlist>> &loadedList);
     };
   }
 }
