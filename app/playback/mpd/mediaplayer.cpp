@@ -48,7 +48,7 @@ namespace Playback {
 
     void MediaPlayer::play() {
       if (state() == PausedState) {
-        pause();
+        client.unpause();
         return;
       }
       if (current_track.playlist_name().isEmpty()) {
