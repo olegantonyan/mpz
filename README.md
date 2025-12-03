@@ -168,7 +168,6 @@ When used as [mpd](https://musicpd.org) client, there is fundamental difference 
 Known issues:
 - when other client modify playback queue, mpz cannot pick up these changes;
 - upon start, if mpd is already playing a song, mpz can recognize it only if this song is from last selected playlist, i.e. loaded upon start;
-
-Other edge cases possible too.
+- "playback follows cursor" cannot foll into different playlist;
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)
