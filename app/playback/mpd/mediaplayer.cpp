@@ -47,6 +47,10 @@ namespace Playback {
     }
 
     void MediaPlayer::play() {
+      if (!track_changed && state() == PausedState) {
+        client.unpause();
+        return;
+      }
       if (current_track.playlist_name().isEmpty()) {
         return;
       }
@@ -65,6 +69,7 @@ namespace Playback {
         return;
       }
       client.play(current_track.playlist_name(), pos);
+      track_changed = false;
     }
 
     void MediaPlayer::stop() {
@@ -81,6 +86,7 @@ namespace Playback {
 
     void MediaPlayer::setTrack(const Track &track) {
       current_track = track;
+      track_changed = true;
     }
 
     void MediaPlayer::clearTrack() {

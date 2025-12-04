@@ -42,6 +42,7 @@ namespace Playback {
       QElapsedTimer elapsed_clock;
       QTimer progress_timer;
       MpdClient::Status last_status;
+      bool track_changed = false;
 
       MediaPlayer::State stateByStatus(const MpdClient::Status &status);
 
