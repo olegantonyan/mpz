@@ -70,6 +70,7 @@ namespace PlaylistsUi {
 
     void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
       if (playlist == nullptr) {
+        highlight_uid = 0;
         highlight_name.clear();
         emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
       } else {
