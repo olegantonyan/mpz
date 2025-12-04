@@ -45,7 +45,7 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
     Track track(
       song.filepath,
       0,
-      song.artist,
+      song.artist.isEmpty() ? song.albumArtist : song.artist,
       song.album,
       song.title,
       song.trackNumber,
