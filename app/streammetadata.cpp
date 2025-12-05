@@ -6,6 +6,9 @@
 StreamMetaData::StreamMetaData() {
 }
 
+StreamMetaData::StreamMetaData(const QString &title) : title_explicit(title) {
+}
+
 bool StreamMetaData::isEmpty() const {
   return _data.isEmpty();
 }
@@ -37,6 +40,9 @@ quint16 StreamMetaData::samplerate() const {
 }
 
 QString StreamMetaData::artist() const {
+  if (!title_explicit.isEmpty()) {
+    return title_explicit;
+  }
   QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
   auto stream = _data.value("stream", "");
   auto match = r.match(stream);
@@ -47,6 +53,9 @@ QString StreamMetaData::artist() const {
 }
 
 QString StreamMetaData::title() const {
+  if (!title_explicit.isEmpty()) {
+    return title_explicit;
+  }
   QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
   auto stream = _data.value("stream", "");
   auto match = r.match(stream);

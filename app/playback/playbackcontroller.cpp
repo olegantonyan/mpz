@@ -47,6 +47,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         _controls.seekbar->setMaximum(ms / 1000);
       }
     });
+    connect(&_mpdplayer, &Mpd::MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
+      _current_track.setStreamMeta(meta);
+      emit trackChanged(_current_track);
+    });
 #endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 

@@ -121,6 +121,9 @@ namespace Playback {
       auto status = client.status();
       auto st = stateByStatus(status);
       if (st == PlayingState) {
+        if (current_track.isStream()) {
+          emit streamMetaChanged(StreamMetaData(client.currentSong().title));
+        }
         if (status.state == last_status.state && status.songId == last_status.songId && status.elapsedMs != last_status.elapsedMs) {
           // seeked
         } else {

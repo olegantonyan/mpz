@@ -42,19 +42,25 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
   }
 
   Track MpdLoader::buildTrack(const MpdClient::Song &song, const QString& playlist_name) {
-    Track track(
-      song.filepath,
-      0,
-      song.artist.isEmpty() ? song.albumArtist : song.artist,
-      song.album,
-      song.title,
-      song.trackNumber,
-      extractYear(song.date),
-      song.duration * 1000,
-      0,
-      0,
-      0
-    );
+    Track track;
+
+    if (song.filepath.startsWith("http")) {
+      track = Track(QUrl(song.filepath), song.filepath);
+    } else {
+      track = Track(
+        song.filepath,
+        0,
+        song.artist.isEmpty() ? song.albumArtist : song.artist,
+        song.album,
+        song.title,
+        song.trackNumber,
+        extractYear(song.date),
+        song.duration * 1000,
+        0,
+        0,
+        0
+      );
+    }
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);
     track.setMpd(true);
