@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <memory>
 #include <QAction>
+#include <QStringList>
 
 namespace PlaylistsUi {
   class PlaylistsContextMenu : public QObject {
@@ -26,6 +27,7 @@ namespace PlaylistsUi {
   signals:
     void removed(const QModelIndex &index);
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
+    void loadPlaylistFiles(const QModelIndex &index, const QStringList &filepaths);
 
   private:
     ProxyFilterModel *model;

@@ -50,6 +50,7 @@ namespace PlaylistsUi {
     void load();
     void on_removeItem(const QModelIndex &index);
     void on_itemDoubleClicked(const QModelIndex &index);
+    void on_importPlayistFiles(const QModelIndex &index, const QStringList &filespaths);
 
   private:
     QListView *view;

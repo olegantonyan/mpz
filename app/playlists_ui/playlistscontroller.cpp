@@ -1,6 +1,7 @@
 #include "playlistscontroller.h"
 #include "playlist/playlist.h"
 #include "playlistsmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -43,6 +44,7 @@ namespace PlaylistsUi {
     connect(view, &QListView::customContextMenuRequested, context_menu, &PlaylistsContextMenu::show);
 
     connect(context_menu, &PlaylistsContextMenu::playlistChanged, this, &Controller::selected);
+    connect(context_menu, &PlaylistsContextMenu::loadPlaylistFiles, this, &Controller::on_importPlayistFiles);
 
     connect(proxy, &PlaylistsUi::ProxyFilterModel::asyncLoadFinished, this, &PlaylistsUi::Controller::asyncLoadFinished);
   }
@@ -144,6 +146,27 @@ namespace PlaylistsUi {
     }
     auto item = proxy->itemAt(index);
     emit doubleclicked(item);
+  }
+
+  void Controller::on_importPlayistFiles(const QModelIndex &index, const QStringList &filespaths) {
+    if (proxy->activeModel()->listSize() <= 0 || !index.isValid()) {
+      return;
+    }
+    auto playlist = proxy->itemAt(index);
+
+    QVector<Track> tracks;
+    QStringList paths;
+    for (auto it : filespaths) {
+      Playlist::Loader ldr(it);
+      for (auto track : ldr.tracks()) {
+        if (!paths.contains(track.path())) {
+          tracks.append(track);
+          paths << track.path();
+        }
+      }
+    }
+    proxy->activeModel()->appendTracksToPlaylist(playlist, tracks);
+    on_playlistChanged(playlist);
   }
 
   void Controller::on_start(const Track &t) {

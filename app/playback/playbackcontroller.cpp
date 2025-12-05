@@ -132,8 +132,8 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     setCurrentTrack(track);
 #endif
     player().play();
-    if (track.isStream()) {
-      _controls.seekbar->setMaximum(1);
+    if (track.isStream() || track.duration() == 0) {
+      _controls.seekbar->setMaximum(std::numeric_limits<int>::max());
     } else {
       _controls.seekbar->setMaximum(static_cast<int>(track.duration() / 1000));
     }

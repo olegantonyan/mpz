@@ -79,6 +79,22 @@ namespace PlaylistsUi {
       }
     }
 
+    void Model::appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) {
+      if (!playlist || tracks.isEmpty()) {
+        return;
+      }
+      QStringList paths;
+      for (auto track : tracks) {
+        if (track.isStream()) {
+          paths << track.url().toString();
+        } else {
+          paths << track.path();
+        }
+      }
+      client.appendSongsToPlaylist(paths, playlist->name());
+      PlaylistsUi::Model::appendTracksToPlaylist(playlist, tracks);
+    }
+
     bool Model::persist() {
       auto map = local_conf.mpdPlaylistsOrder();
       auto library_path = currentLibraryPath();

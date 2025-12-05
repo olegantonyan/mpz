@@ -27,6 +27,7 @@ namespace PlaylistsUi {
       void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
       void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
       void higlight(std::shared_ptr<Playlist::Playlist> playlist) override;
+      void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) override;
 
     public slots:
       void loadAsync() override;

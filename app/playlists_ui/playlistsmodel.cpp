@@ -24,6 +24,14 @@ namespace PlaylistsUi {
     emit asyncTracksLoadFinished(playlist);
   }
 
+  void Model::appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) {
+    if (!playlist || tracks.isEmpty()) {
+      return;
+    }
+    playlist->append(tracks, false);
+    emit asyncTracksLoadFinished(playlist);
+  }
+
   void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist == nullptr) {
       highlight_uid = 0;

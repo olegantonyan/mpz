@@ -27,6 +27,7 @@ namespace PlaylistsUi {
     QAction remove(tr("Remove"));
     QAction rename(tr("Rename"));
     QAction savem3u(tr("Save as m3u"));
+    QAction loadm3u(tr("Load m3u"));
     QAction reload(tr("Reload from filesystem"));
     QAction play(tr("Play"));
 
@@ -66,10 +67,16 @@ namespace PlaylistsUi {
       emit view->doubleClicked(index);
     });
 
+    connect(&loadm3u, &QAction::triggered, [&]() {
+      QStringList files = QFileDialog::getOpenFileNames(view, tr("Select playlist files"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "Playlists (*.m3u *.pls)");
+      emit loadPlaylistFiles(index, files);
+    });
+
     menu.addAction(&play);
     menu.addSeparator();
     menu.addAction(&rename);
     menu.addAction(&savem3u);
+    menu.addAction(&loadm3u);
     menu.addAction(&reload);
     menu.addSeparator();
     menu.addAction(&remove);

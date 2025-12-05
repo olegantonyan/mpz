@@ -34,6 +34,7 @@ namespace PlaylistsUi {
     virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
     virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
     virtual void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist);
+    virtual void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks);
 
   public slots:
     virtual void loadAsync();
