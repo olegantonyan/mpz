@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QEventLoop>
 
-#define MPD_TIMEOUT 3000
+#define MPD_TIMEOUT 8000
 
 class TimerStarter {
 public:
