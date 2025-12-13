@@ -1,3 +1,13 @@
+## [2.0.1] - 
+
+### Added
+
+### Fixed
+
+### Misc
+
+- Arch AUR packages build with system-wide libmpdclient
+
 ## [2.0.0] - 2025-12-13
 
 ### Added

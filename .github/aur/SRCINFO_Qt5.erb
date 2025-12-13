@@ -10,7 +10,8 @@ pkgbase = <%= pkgname %>
 	depends = hicolor-icon-theme
   depends = yaml-cpp
   depends = taglib
-  depends = cmake
+	depends = cmake
+	depends = libmpdclient
   provides = mpz
   conflicts = mpz
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>

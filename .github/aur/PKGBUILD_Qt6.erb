@@ -8,7 +8,7 @@ pkgdesc='Music player for the large local collections'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
-depends=('cmake' 'qt6-multimedia' 'hicolor-icon-theme' 'yaml-cpp' 'taglib')
+depends=('cmake' 'qt6-multimedia' 'hicolor-icon-theme' 'yaml-cpp' 'taglib' 'libmpdclient')
 provides=('<%= pkgname %>')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
 sha256sums=('<%= sha256sums %>')
