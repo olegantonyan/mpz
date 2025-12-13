@@ -4,3 +4,5 @@ libs/
 app/
 _site
 .sass-cache
+3rdparty/
+.qtcreator/
