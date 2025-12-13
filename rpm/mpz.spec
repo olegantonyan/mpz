@@ -9,9 +9,9 @@ Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
 %if %{with qt6}
-BuildRequires: gcc make cmake meson qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
 %else
-BuildRequires: gcc make cmake meson libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
 %endif
 
 
@@ -29,9 +29,9 @@ Similar to "album list" in Foobar2000.
 mkdir build
 cd build
 %if %{with qt6}
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
 %else
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DUSE_QT5=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DUSE_QT5=ON ..
 %endif
 make %{?_smp_mflags}
 
