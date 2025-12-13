@@ -11,12 +11,13 @@
 #include <QLineEdit>
 #include <memory>
 #include <QAction>
+#include <QStringList>
 
 namespace PlaylistsUi {
   class PlaylistsContextMenu : public QObject {
     Q_OBJECT
   public:
-    explicit PlaylistsContextMenu(Model *model, ProxyFilterModel *proxy, QListView *view, QLineEdit *seacrh, QObject *parent = nullptr);
+    explicit PlaylistsContextMenu(ProxyFilterModel *model, QListView *view, QLineEdit *seacrh, QObject *parent = nullptr);
 
   public slots:
     void show(const QPoint &pos);
@@ -26,10 +27,10 @@ namespace PlaylistsUi {
   signals:
     void removed(const QModelIndex &index);
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
+    void loadPlaylistFiles(const QModelIndex &index, const QStringList &filepaths);
 
   private:
-    Model *model;
-    ProxyFilterModel *proxy;
+    ProxyFilterModel *model;
     QListView *view;
     QLineEdit *search;
 

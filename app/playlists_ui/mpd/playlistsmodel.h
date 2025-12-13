@@ -1,0 +1,56 @@
+#ifndef PLAYLISTSDATAMODELMPD_H
+#define PLAYLISTSDATAMODELMPD_H
+
+#include "playlist/playlist.h"
+#include "config/local.h"
+#include "playlists_ui/playlistsmodel.h"
+#include "mpd_client/client.h"
+
+#include <QAbstractListModel>
+#include <QList>
+#include <QModelIndex>
+#include <memory>
+
+namespace PlaylistsUi {
+  namespace Mpd {
+    class Model : public PlaylistsUi::Model {
+      Q_OBJECT
+
+    public:
+      explicit Model(Config::Local &conf, MpdClient::Client &cl, QObject *parent = nullptr);
+      QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+      bool persist() override;
+      void remove(const QModelIndex &index) override;
+      QModelIndex currentPlaylistIndex() override;
+      void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
+      void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
+      void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
+      void higlight(std::shared_ptr<Playlist::Playlist> playlist) override;
+      void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) override;
+
+    public slots:
+      void loadAsync() override;
+      void onMpdLost();
+
+    private:
+      MpdClient::Client &client;
+      QString creating_playlist_name;
+      QList<QString> order;
+      QMutex loading_mutex;
+      QString highlight_name;
+
+      QList<std::shared_ptr<Playlist::Playlist>> loadMpdPlaylists();
+      QString createPlaylistFromDirs(const QList<QDir> &filepaths);
+      QModelIndex indexByName(const QString &name) const;
+      QString playlistUniqueName(const QString &name) const;
+      QString currentLibraryPath() const;
+      void sortPlaylistsByOrder();
+      void loadPlaylistsOrder();
+
+      void applyAsyncLoadedList(const QList<std::shared_ptr<Playlist::Playlist>> &loadedList);
+    };
+  }
+}
+
+#endif // PLAYLISTSDATAMODELMPD_H

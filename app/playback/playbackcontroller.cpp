@@ -4,39 +4,21 @@
 #include <QDebug>
 
 namespace Playback {
-  Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), _controls(c), _player(stream_buffer_size, outdevid) {
+Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent) :
+  QObject(parent),
+  _controls(c),
+  _player(stream_buffer_size, outdevid),
+  modus_operndi(modus)
+#ifdef ENABLE_MPD_SUPPORT
+  , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
+#endif
+{
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
-    //connect(&_player, &MediaPlayer::error, this, &Controller::on_error);
-    connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
-    connect(_controls.pause, &QToolButton::clicked, [=]() {
-      if (_player.state() == MediaPlayer::PausedState) {
-        _player.play();
-      } else  {
-        _player.pause();
-      }
-    });
-    connect(_controls.play, &QToolButton::clicked, [=]() {
-      if (_player.state() == MediaPlayer::PausedState) {
-        _player.play();
-      } else  {
-        emit startRequested();
-      }
-    });
-    connect(_controls.prev, &QToolButton::clicked, [=]() {
-      next_after_stop = false;
-      if (_current_track.isValid()) {
-        emit prevRequested();
-      }
-    });
-    connect(_controls.next, &QToolButton::clicked, [=]() {
-      next_after_stop = false;
-      if (_current_track.isValid()) {
-        emit nextRequested();
-      }
-    });
+    connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
+    connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+
     connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
-      //double percents = static_cast<double>(bytes) / static_cast<double>(thresh) * 100.0;
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
@@ -45,8 +27,40 @@ namespace Playback {
       emit trackChanged(_current_track);
     });
 
+#ifdef ENABLE_MPD_SUPPORT
+    connect(&_mpdplayer, &Mpd::MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(&_mpdplayer, &Mpd::MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
+      emit trackChangedQuery(path, _current_track.playlist_name());
+    });
+    connect(&modus_operndi.mpd_client, &MpdClient::Client::mixerChanged, [=]() {
+      int volume = player().volume();
+      emit volumeChanged(volume);
+    });
+    connect(&_mpdplayer, &Mpd::MediaPlayer::audioFormatUpdated, [=](quint16 sample_rate, quint8 channels, quint16 bitrate) {
+      _current_track.setAudioFormat(sample_rate, channels, bitrate);
+      emit trackChanged(_current_track);
+    });
+    connect(&_mpdplayer, &Mpd::MediaPlayer::durationChanged, [=](quint64 ms) {
+      if (_current_track.duration() != ms && ms > 0) {
+        _current_track.setDuration(ms);
+        _controls.seekbar->setMaximum(ms / 1000);
+      }
+    });
+    connect(&_mpdplayer, &Mpd::MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
+      _current_track.setStreamMeta(meta);
+      emit trackChanged(_current_track);
+    });
+#endif
+    connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
+
+    connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
+    connect(_controls.pause, &QToolButton::clicked, this, &Controller::on_controlsPause);
+    connect(_controls.play, &QToolButton::clicked, this, &Controller::on_controlsPlay);
+    connect(_controls.prev, &QToolButton::clicked, this, &Controller::on_controlsPrev);
+    connect(_controls.next, &QToolButton::clicked, this, &Controller::on_controlsNext);
+
     _controls.seekbar->installEventFilter(this);
-    next_after_stop = true;
 
     setup_monotonic_timer();
   }
@@ -63,20 +77,32 @@ namespace Playback {
     });
   }
 
+  MediaPlayer &Controller::player() {
+    switch (modus_operndi.get()) {
+    case ModusOperandi::MODUS_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+      return _mpdplayer;
+#endif
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+      return _player;
+    }
+  }
+
   Controls Controller::controls() const {
     return _controls;
   }
 
-  int Controller::volume() const {
-    return _player.volume();
+  int Controller::volume() {
+    return player().volume();
   }
 
-  bool Controller::isStopped() const {
+  bool Controller::isStopped() {
     return state() == Stopped;
   }
 
-  Controller::State Controller::state() const {
-    switch (_player.state()) {
+  Controller::State Controller::state() {
+    switch (player().state()) {
       case MediaPlayer::StoppedState:
         return Stopped;
       case MediaPlayer::PlayingState:
@@ -87,8 +113,8 @@ namespace Playback {
     return Stopped;
   }
 
-  int Controller::position() const {
-    return static_cast<int>(_player.position() / 1000);
+  int Controller::position() {
+    return static_cast<int>(player().position() / 1000);
   }
 
   const Track &Controller::currentTrack() const {
@@ -96,46 +122,67 @@ namespace Playback {
   }
 
   void Controller::play(const Track &track) {
-    next_after_stop = false;
 #ifdef QT6_STREAM_HACKS
     if (track.isStream()) {
-      _player.stop();
-      _current_track = track;
-      _player.setTrack(track);
+      player().stop();
+      setCurrentTrack(track);
+      player().setTrack(track);
     } else {
-      _player.setTrack(track);
-      _current_track = track;
+      player().setTrack(track);
+      setCurrentTrack(track);
     }
 #else
-    _player.setTrack(track);
-    _current_track = track;
+    player().setTrack(track);
+    setCurrentTrack(track);
 #endif
-    _player.play();
-    if (track.isStream()) {
-      _controls.seekbar->setMaximum(1);
+    player().play();
+    if (track.isStream() || track.duration() == 0) {
+      _controls.seekbar->setMaximum(std::numeric_limits<int>::max());
     } else {
       _controls.seekbar->setMaximum(static_cast<int>(track.duration() / 1000));
     }
   }
 
   void Controller::stop() {
-    next_after_stop = false;
-    _player.stop();
-    emit stopped();
+    player().stop();
+  }
+
+  void Controller::on_controlsPause() {
+    player().pause();
+  }
+
+  void Controller::on_controlsNext() {
+    if (_current_track.isValid()) {
+      player().next();
+    }
+  }
+
+  void Controller::on_controlsPrev() {
+    if (_current_track.isValid()) {
+      player().prev();
+    }
+  }
+
+  void Controller::on_controlsPlay() {
+    if (player().state() == MediaPlayer::PausedState) {
+      player().play();
+    } else  {
+      emit startRequested();
+    }
   }
 
   void Controller::setVolume(int value) {
     value = qMax(qMin(value, 100), 0);
-    _player.setVolume(value);
+    player().setVolume(value);
     emit volumeChanged(value);
   }
 
   void Controller::seek(int seconds) {
-    _player.setPosition(seconds * 1000);
+    player().setPosition(seconds * 1000);
   }
 
   void Controller::on_seek(int position) {
-    if (_player.state() != MediaPlayer::PlayingState)  {
+    if (player().state() != MediaPlayer::PlayingState)  {
       return;
     }
     if (_current_track.isStream()) {
@@ -149,7 +196,7 @@ namespace Playback {
     int seek_value = static_cast<int>(_controls.seekbar->maximum() * fraction);
     _controls.seekbar->setValue(seek_value);
 
-    _player.setPosition(seek_value * 1000);
+    player().setPosition(seek_value * 1000);
     emit seeked(seek_value);
   }
 
@@ -170,16 +217,13 @@ namespace Playback {
     switch (state) {
       case MediaPlayer::StoppedState:
         _controls.seekbar->setValue(0);
-        _player.clearTrack();
+        player().clearTrack();
         _controls.time->clear();
-        _current_track = Track();
-        if (next_after_stop) {
-          emit nextRequested();
-        }
+        setCurrentTrack(Track());
+        emit stopped();
         break;
       case MediaPlayer::PlayingState:
         emit started(_current_track);
-        next_after_stop = true;
         break;
       case MediaPlayer::PausedState:
         emit paused(_current_track);
@@ -187,9 +231,21 @@ namespace Playback {
     }
   }
 
-  void Controller::on_error(const QString &message) {
-    qWarning() << "playback error" << message;
-    emit nextRequested();
+  void Controller::switchTo(ModusOperandi::ActiveMode new_mode) {
+    switch (new_mode) {
+    case ModusOperandi::MODUS_MPD:
+      _player.stop();
+      _player.clearTrack();
+      break;
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+#ifdef ENABLE_MPD_SUPPORT
+      _mpdplayer.stop();
+      _mpdplayer.clearTrack();
+#endif
+      break;
+    }
+
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
@@ -202,7 +258,17 @@ namespace Playback {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   void Controller::setOutputDevice(QByteArray deviceid) {
-    _player.setOutputDevice(deviceid);
+    player().setOutputDevice(deviceid);
   }
 #endif
+
+  void Controller::setCurrentTrack(const Track &track) {
+    _current_track = track;
+  }
+
+  void Controller::trackChangedQueryComplete(const Track &track) {
+    setCurrentTrack(track);
+    player().setTrack(track);
+    emit started(track);
+  }
 }

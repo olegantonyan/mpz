@@ -1,10 +1,38 @@
 #include "playlistsproxyfiltermodel.h"
 
 namespace PlaylistsUi {
-  ProxyFilterModel::ProxyFilterModel(Model *source_model, QObject *parent) : QSortFilterProxyModel(parent) {
-    Q_ASSERT(source_model);
-    setSourceModel(source_model);
+  ProxyFilterModel::ProxyFilterModel(Config::Local &conf, ModusOperandi &modus, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus) {
     setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    localfs = new PlaylistsUi::Model(conf, this);
+    connect(localfs, &Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(localfs, &Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+    connect(localfs, &Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
+#ifdef ENABLE_MPD_SUPPORT
+    mpd = new Mpd::Model(conf, modus.mpd_client, this);
+    connect(mpd, &Mpd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(mpd, &Mpd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+    connect(mpd, &Mpd::Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
+    connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::loadAsync);
+    connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &Mpd::Model::onMpdLost);
+#endif
+    connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
+    switchTo(modus_operandi.get());
+  }
+
+  void ProxyFilterModel::switchTo(ModusOperandi::ActiveMode new_mode) {
+    switch (new_mode) {
+    case ModusOperandi::MODUS_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+      setSourceModel(mpd);
+      break;
+#endif
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+      setSourceModel(localfs);
+      localfs->loadAsync();
+      break;
+    } 
   }
 
   int ProxyFilterModel::rowCount(const QModelIndex &parent) const {
@@ -18,9 +46,33 @@ namespace PlaylistsUi {
       return QSortFilterProxyModel::rowCount(parent);
     }
 #endif
-    if (sourceModel()) {
-      return sourceModel()->rowCount();
+    if (activeModel()) {
+      return activeModel()->rowCount();
     }
     return 0;
+  }
+
+  std::shared_ptr<Playlist::Playlist> ProxyFilterModel::itemAt(const QModelIndex &index) const {
+    return activeModel()->itemAt(mapToSource(index));
+  }
+
+  bool ProxyFilterModel::persist() {
+    return activeModel()->persist();
+  }
+
+  QModelIndex ProxyFilterModel::append(std::shared_ptr<Playlist::Playlist> pl) {
+    return mapFromSource(activeModel()->append(pl));
+  }
+
+  Model *ProxyFilterModel::activeModel() const {
+    switch (modus_operandi.get()) {
+    case ModusOperandi::MODUS_MPD:
+#ifdef ENABLE_MPD_SUPPORT
+      return qobject_cast<Mpd::Model *>(sourceModel());
+#endif
+    case ModusOperandi::MODUS_LOCALFS:
+    default:
+      return qobject_cast<Model *>(sourceModel());
+    }
   }
 }

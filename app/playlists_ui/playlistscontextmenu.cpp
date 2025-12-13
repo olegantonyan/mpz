@@ -11,9 +11,8 @@
 #include <QStandardPaths>
 
 namespace PlaylistsUi {
-  PlaylistsContextMenu::PlaylistsContextMenu(Model *m, ProxyFilterModel *p, QListView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), proxy(p), view(v), search(s) {
+  PlaylistsContextMenu::PlaylistsContextMenu(ProxyFilterModel *m, QListView *v, QLineEdit *s, QObject *parent) : QObject(parent), model(m), view(v), search(s) {
     Q_ASSERT(model);
-    Q_ASSERT(proxy);
     Q_ASSERT(view);
     Q_ASSERT(search);
   }
@@ -28,6 +27,7 @@ namespace PlaylistsUi {
     QAction remove(tr("Remove"));
     QAction rename(tr("Rename"));
     QAction savem3u(tr("Save as m3u"));
+    QAction loadm3u(tr("Load m3u"));
     QAction reload(tr("Reload from filesystem"));
     QAction play(tr("Play"));
 
@@ -67,10 +67,16 @@ namespace PlaylistsUi {
       emit view->doubleClicked(index);
     });
 
+    connect(&loadm3u, &QAction::triggered, [&]() {
+      QStringList files = QFileDialog::getOpenFileNames(view, tr("Select playlist files"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "Playlists (*.m3u *.pls)");
+      emit loadPlaylistFiles(index, files);
+    });
+
     menu.addAction(&play);
     menu.addSeparator();
     menu.addAction(&rename);
     menu.addAction(&savem3u);
+    menu.addAction(&loadm3u);
     menu.addAction(&reload);
     menu.addSeparator();
     menu.addAction(&remove);
@@ -78,7 +84,7 @@ namespace PlaylistsUi {
   }
 
   void PlaylistsContextMenu::on_rename(const QModelIndex &index)  {
-    auto i = model->itemAt(proxy->mapToSource(index));
+    auto i = model->itemAt(index);
     bool ok;
     QString new_name = QInputDialog::getText(view, QString("%1 '%2'").arg(tr("Rename playlist")).arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
     if (ok && !new_name.isEmpty()) {
@@ -88,7 +94,7 @@ namespace PlaylistsUi {
   }
 
   void PlaylistsContextMenu::on_savem3u(const QModelIndex &index) {
-    auto i = model->itemAt(proxy->mapToSource(index));
+    auto i = model->itemAt(index);
     QByteArray m3u = i->toM3U();
     QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
     QFile f(fname);

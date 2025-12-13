@@ -1,5 +1,7 @@
 #include "playlistscontroller.h"
 #include "playlist/playlist.h"
+#include "playlistsmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -10,20 +12,18 @@
 #include <QMouseEvent>
 
 namespace PlaylistsUi {
-  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, QObject *parent) :
+  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
-    local_conf(conf),
     spinner(_spinner) {
 
-    model = new PlaylistsUi::Model(conf, this);
+    proxy = new ProxyFilterModel(conf, modus, this);
     spinner->show();
-    connect(model, &Model::asynLoadFinished, spinner, &BusySpinner::hide);
-    connect(model, &Model::asynLoadFinished, this, &Controller::load);
-    model->loadAsync();
-
-    proxy = new ProxyFilterModel(model, this);
+    connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
+    connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);
+    connect(proxy, &ProxyFilterModel::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
+    connect(proxy, &ProxyFilterModel::asyncTracksLoadFinished, this, &Controller::selected);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     view->setSelectionMode(QAbstractItemView::NoSelection);
@@ -37,29 +37,52 @@ namespace PlaylistsUi {
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
 
-    context_menu = new PlaylistsContextMenu(model, proxy, view, search, this);
+    context_menu = new PlaylistsContextMenu(proxy, view, search, this);
     connect(context_menu, &PlaylistsContextMenu::removed, this, &Controller::on_removeItem);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QListView::customContextMenuRequested, context_menu, &PlaylistsContextMenu::show);
 
     connect(context_menu, &PlaylistsContextMenu::playlistChanged, this, &Controller::selected);
+    connect(context_menu, &PlaylistsContextMenu::loadPlaylistFiles, this, &Controller::on_importPlayistFiles);
+
+    connect(proxy, &PlaylistsUi::ProxyFilterModel::asyncLoadFinished, this, &PlaylistsUi::Controller::asyncLoadFinished);
   }
 
   void Controller::load() {
     view->setModel(proxy);
-    if (model->listSize() > 0) {
-      auto idx = model->buildIndex(qMin(local_conf.currentPlaylist(), model->listSize() - 1));
-      auto item = model->itemAt(idx);
-      view->setCurrentIndex(proxy->mapFromSource(idx));
-      view->selectionModel()->select(idx, {QItemSelectionModel::Select});
-
-      emit selected(item);
+    if (proxy->activeModel()->listSize() > 0) {
+      auto idx = proxy->activeModel()->currentPlaylistIndex();
+      if (idx.isValid()) {
+        auto item = proxy->activeModel()->itemAt(idx);
+        if (item) {
+          view->setCurrentIndex(proxy->mapFromSource(idx));
+          view->selectionModel()->select(idx, {QItemSelectionModel::Select});
+          proxy->activeModel()->asyncTracksLoad(item);
+        }
+      }
     }
   }
 
   std::shared_ptr<Playlist::Playlist> Controller::playlistByTrackUid(quint64 track_uid) const {
-    return model->itemByTrack(track_uid);
+    return proxy->activeModel()->itemByTrack(track_uid);
+  }
+
+  std::shared_ptr<Playlist::Playlist> Controller::playlistByName(const QString &name) const {
+    for (auto it : proxy->activeModel()->itemList()) {
+      if (it->name() == name) {
+        return it;
+      }
+    }
+    return nullptr;
+  }
+
+  std::shared_ptr<Playlist::Playlist> Controller::currentPlaylist() const {
+    return proxy->activeModel()->itemAt(proxy->activeModel()->currentPlaylistIndex());
+  }
+
+  int Controller::playlistsCount() const {
+    return proxy->activeModel()->listSize();
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
@@ -104,46 +127,58 @@ namespace PlaylistsUi {
     }
   }
 
-  void Controller::persist(int current_index) {
-    auto max_index = qMax(model->listSize() - 1, 0);
-    auto save_index = qMin(current_index, max_index);
-    local_conf.saveCurrentPlaylist(save_index);
-  }
-
   void Controller::on_removeItem(const QModelIndex &index) {
-    model->remove(proxy->mapToSource(index));
+    proxy->activeModel()->remove(proxy->mapToSource(index));
     if (view->selectionModel()->selectedIndexes().size() > 0) {
       auto selected_idx = view->selectionModel()->selectedIndexes().first();
-      if (selected_idx == index || model->listSize() == 1) {
-        on_itemActivated(model->buildIndex(0));
+      if (selected_idx == index || proxy->activeModel()->listSize() == 1) {
+        on_itemActivated(proxy->activeModel()->buildIndex(0));
       }
     }
-    if (model->listSize() == 0) {
+    if (proxy->activeModel()->listSize() == 0) {
       emit emptied();
     }
   }
 
   void Controller::on_itemDoubleClicked(const QModelIndex &index) {
-    if (model->listSize() <= 0) {
+    if (proxy->activeModel()->listSize() <= 0) {
       return;
     }
-    auto source_index = proxy->mapToSource(index);
-    auto item = model->itemAt(source_index);
+    auto item = proxy->itemAt(index);
     emit doubleclicked(item);
   }
 
+  void Controller::on_importPlayistFiles(const QModelIndex &index, const QStringList &filespaths) {
+    if (proxy->activeModel()->listSize() <= 0 || !index.isValid()) {
+      return;
+    }
+    auto playlist = proxy->itemAt(index);
+
+    QVector<Track> tracks;
+    QStringList paths;
+    for (auto it : filespaths) {
+      Playlist::Loader ldr(it);
+      for (auto track : ldr.tracks()) {
+        if (!paths.contains(track.path())) {
+          tracks.append(track);
+          paths << track.path();
+        }
+      }
+    }
+    proxy->activeModel()->appendTracksToPlaylist(playlist, tracks);
+    on_playlistChanged(playlist);
+  }
+
   void Controller::on_start(const Track &t) {
-    model->higlight(model->itemByTrack(t.uid()));
+    proxy->activeModel()->higlight(proxy->activeModel()->itemByTrack(t.uid()));
   }
 
   void Controller::on_stop() {
-    model->higlight(nullptr);
+    proxy->activeModel()->higlight(nullptr);
   }
 
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
-    auto pl = new Playlist::Playlist();
-    connect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    pl->loadAsync(filepaths, libraryDir);
+    proxy->activeModel()->createPlaylistAsync(filepaths, libraryDir);
     spinner->show();
   }
 
@@ -152,37 +187,35 @@ namespace PlaylistsUi {
       return;
     }
 
-    on_itemActivated(proxy->mapFromSource(model->itemIndex(playlist)));
+    on_itemActivated(proxy->mapFromSource(proxy->activeModel()->itemIndex(playlist)));
   }
 
   void Controller::on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl) {
     Q_UNUSED(pl)
-    model->persist();
+    proxy->activeModel()->persist();
   }
 
   void Controller::on_itemActivated(const QModelIndex &index) {
-    if (model->listSize() <= 0) {
+    if (proxy->activeModel()->listSize() <= 0) {
       return;
     }
     auto source_index = proxy->mapToSource(index);
-    auto item = model->itemAt(source_index);
-    persist(source_index.row());
+    auto item = proxy->activeModel()->itemAt(source_index);
+    proxy->activeModel()->saveCurrentPlaylistIndex(source_index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
-    emit selected(item);
+    proxy->activeModel()->asyncTracksLoad(item);
   }
 
-  void Controller::on_playlistLoadFinished(Playlist::Playlist *pl) {
-    disconnect(pl, &Playlist::Playlist::loadAsyncFinished, this, &Controller::on_playlistLoadFinished);
-    auto item = std::shared_ptr<Playlist::Playlist>(pl);
-    auto index = proxy->mapFromSource(model->append(item));
+  void Controller::on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl) {
+    auto index = proxy->append(pl);
     view->setCurrentIndex(index);
     view->selectionModel()->clearSelection();
     view->selectionModel()->select(index, {QItemSelectionModel::Select});
     view->scrollToBottom();
-    persist(index.row());
-    emit loaded(item);
-    emit selected(item);
+    proxy->activeModel()->saveCurrentPlaylistIndex(index);
+    emit loaded(pl);
+    emit selected(pl);
     spinner->hide();
   }
 

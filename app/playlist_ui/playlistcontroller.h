@@ -22,7 +22,7 @@ namespace PlaylistUi {
   class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, QObject *parent = nullptr);
+    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
   signals:
     void activated(const Track &track);
@@ -41,7 +41,7 @@ namespace PlaylistUi {
     void sortBy(const QString &criteria);
 
   private slots:
-    void on_appendAsyncFinished(Playlist::Playlist *pl);
+    void on_appendAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
     void on_search(const QString &term);
     void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
     void on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -49,7 +49,6 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     QLineEdit *search;
-    Model *model;
     BusySpinner *spinner;
     Config::Local &local_conf;
     Config::Global &global_conf;
@@ -61,7 +60,7 @@ namespace PlaylistUi {
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
-    
+
     void loadColumnsConfig();
 
   protected:

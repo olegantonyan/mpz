@@ -18,12 +18,14 @@ namespace Playback {
   signals:
     void play(const Track &track);
     void stop();
+    void trackChangedQueryComplete(const Track &track);
 
   public slots:
     void on_nextRequested();
     void on_prevRequested();
     void on_startRequested();
     void on_startFromPlaylistRequested(const std::shared_ptr<Playlist::Playlist> plst);
+    void on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
 
   private:
     Config::Global &global_conf;

@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QHash>
 
 Track::Track() {
   Track("", 0);
@@ -25,10 +26,12 @@ Track::Track() {
   _year = 0;
   _track_number = 0;
   setCue(false);
+  setMpd(false);
 }
 
 Track::Track(const QString &fp, quint32 bgn) {
   _uid = generateUid();
+  setMpd(false);
   _begin = bgn;
 
   filepath = fp;
@@ -52,6 +55,7 @@ Track::Track(const QString &fp,
              quint16 bitrt,
              quint16 samplert) {
   _uid = generateUid();
+
   _begin = bgn;
 
   filepath = fp;
@@ -78,6 +82,7 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   _year = 0;
   _track_number = 0;
 
+  setMpd(false);
   setCue(false);
 
   _uid = generateUid();
@@ -101,10 +106,13 @@ QString Track::formattedTime(quint64 tm) {
 }
 
 bool Track::isValid() const {
-  return uid() != 0 && (QFile::exists(path()) || isStream());
+  return uid() != 0 && (isMpd() || QFile::exists(path()) || isStream());
 }
 
 bool Track::fillAudioProperties() {
+  if (isMpd() || !isValid()) {
+    return false;
+  }
   TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.audioProperties()) {
@@ -119,6 +127,9 @@ bool Track::fillAudioProperties() {
 }
 
 bool Track::fillTags() {
+  if (isMpd() || !isValid()) {
+    return false;
+  }
   TagLib::FileRef f(path().toUtf8().constData());
   if(!f.isNull()) {
     if (f.tag()) {
@@ -136,6 +147,19 @@ bool Track::fillTags() {
 
 bool Track::reload() {
   return fillAudioProperties() && fillTags();
+}
+
+void Track::generateUidByHashing(const QString &prefix) {
+  QByteArray utf8 = (prefix + filepath).toUtf8();
+  _uid = qHashBits(utf8.constData(), utf8.size());
+}
+
+void Track::setPlaylistName(const QString &pln) {
+  _playlist_name = pln;
+}
+
+void Track::setMpd(bool is_mpd) {
+  _mpd = is_mpd;
 }
 
 void Track::setDuration(quint64 dur) {
@@ -228,6 +252,10 @@ QString Track::shortText() const {
   return url().toString();
 }
 
+bool Track::isMpd() const {
+  return _mpd;
+}
+
 quint64 Track::uid() const {
   return _uid;
 }
@@ -261,6 +289,12 @@ const StreamMetaData &Track::streamMeta() const {
 
 QString Track::artCover() const {
   return CoverArt::Covers::instance().get(filepath);
+}
+
+void Track::setAudioFormat(quint16 sample_rate, quint8 channels, quint16 bitrate) {
+  _sample_rate = sample_rate;
+  _channels = channels;
+  _bitrate = bitrate;
 }
 
 quint16 Track::sample_rate() const {
@@ -298,6 +332,10 @@ quint16 Track::track_number() const {
 
 quint32 Track::begin() const {
   return _begin;
+}
+
+QString Track::playlist_name() const {
+  return _playlist_name;
 }
 
 bool Track::isCue() const {

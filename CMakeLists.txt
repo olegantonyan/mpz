@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(mpz VERSION 1.1.4 LANGUAGES CXX)
+project(mpz VERSION 2.0.0 LANGUAGES CXX C)
 ADD_DEFINITIONS(-DVERSION="${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -26,7 +26,6 @@ if (UNIX AND NOT APPLE)
   find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
 endif()
 
-
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
   app/audio_device_ui/devicesmenu.cpp
@@ -43,7 +42,8 @@ set(PROJECT_SOURCES
   app/main.cpp
   app/mainmenu.cpp
   app/mainwindow.cpp
-  app/directory_ui/directorymodel.cpp
+  app/directory_ui/directorymodel/proxy.cpp
+  app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp
   app/playback/mediaplayer.cpp
@@ -84,6 +84,7 @@ set(PROJECT_SOURCES
   app/volumecontrol.cpp
   app/playback/stream.cpp
   app/streammetadata.cpp
+  app/modusoperandi.cpp
   app/about_ui/aboutdialog.ui
   app/directory_ui/directorysettings.ui
   app/feedback_ui/feedbackform.ui
@@ -93,7 +94,29 @@ set(PROJECT_SOURCES
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
   resources.qrc
+  app/slidingbanner.cpp
 )
+
+OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
+
+if (ENABLE_MPD_SUPPORT)
+  ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
+  list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
+  list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
+  list(APPEND PROJECT_SOURCES app/playlist_ui/mpd/playlistmodel.cpp)
+  list(APPEND PROJECT_SOURCES app/playlist/mpdloader.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/mpd/mediaplayer.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/mpd/playbackorder.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/connection.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/client.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/entity.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/status.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/song.cpp)
+  list(APPEND PROJECT_SOURCES app/mpd_client/output.cpp)
+  list(APPEND PROJECT_SOURCES app/coverart/mpd.cpp)
+  list(APPEND PROJECT_SOURCES app/directory_ui/addmpddialog.cpp)
+endif()
 
 if (ENABLE_DBUS)
   ADD_DEFINITIONS(-DMPRIS_ENABLE)
@@ -120,8 +143,14 @@ if (WIN32)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-  message(STATUS "using Qt6")
+  find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
+qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
+
+target_link_libraries(mpz PRIVATE Qt6::Core)
+target_link_libraries(mpz PRIVATE Qt6::Core)
+message(STATUS "using Qt6")
 else()
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
   message(STATUS "using Qt5")
@@ -196,43 +225,9 @@ OPTION(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib")
-  ADD_DEFINITIONS(-DUSE_SYSTEM_TAGLIB)
+  add_definitions(-DUSE_SYSTEM_TAGLIB)
 else()
-  set(utf8cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/utfcpp-4.0.6/source) # dependency required by taglib
-  set(TAGLIB_DIR 3rdparty/taglib-2.1.1)
-  message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
-  ADD_DEFINITIONS(-DTAGLIB_STATIC)
-  set(BUILD_TESTING OFF)
-  add_subdirectory(${TAGLIB_DIR})
-  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-   ${TAGLIB_DIR}
-   ${TAGLIB_DIR}/taglib
-   ${TAGLIB_DIR}/taglib/ape
-   ${TAGLIB_DIR}/taglib/asf
-   ${TAGLIB_DIR}/taglib/dsdiff
-   ${TAGLIB_DIR}/taglib/dsf
-   ${TAGLIB_DIR}/taglib/flac
-   ${TAGLIB_DIR}/taglib/it
-   ${TAGLIB_DIR}/taglib/mod
-   ${TAGLIB_DIR}/taglib/mp4
-   ${TAGLIB_DIR}/taglib/mpeg
-   ${TAGLIB_DIR}/taglib/mpeg/id3v1
-   ${TAGLIB_DIR}/taglib/mpeg/id3v2
-   ${TAGLIB_DIR}/taglib/mpeg/id3v2/frames
-   ${TAGLIB_DIR}/taglib/ogg
-   ${TAGLIB_DIR}/taglib/ogg/flac
-   ${TAGLIB_DIR}/taglib/ogg/opus
-   ${TAGLIB_DIR}/taglib/ogg/speex
-   ${TAGLIB_DIR}/taglib/ogg/vorbis
-   ${TAGLIB_DIR}/taglib/riff
-   ${TAGLIB_DIR}/taglib/riff/aiff
-   ${TAGLIB_DIR}/taglib/riff/wav
-   ${TAGLIB_DIR}/taglib/s3m
-   ${TAGLIB_DIR}/taglib/toolkit
-   ${TAGLIB_DIR}/taglib/trueaudio
-   ${TAGLIB_DIR}/taglib/wavpack
-   ${TAGLIB_DIR}/taglib/xm
-  )
+  include(3rdparty/taglib.cmake)
 endif()
 # ENDOF TAGLIB
 
@@ -250,6 +245,34 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${QTWAITINGSPINNER_DIR}
 target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
+
+# LIBMPDCLIENT
+if (ENABLE_MPD_SUPPORT)
+  OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
+  if (USE_SYSTEM_LIBMPDCLIENT)
+    message(STATUS "using system-wide libmpdclient")
+    find_library(MPDCLIENT_LIB mpdclient REQUIRED)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MPDCLIENT_LIB})
+  else()
+    include(3rdparty/libmpdclient.cmake)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mpdclient)
+
+    # disable meson buuild - pita to deal with it on different distros and windows
+    #add_custom_command(
+     #   OUTPUT ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a
+     #   COMMAND meson setup ${LIBMPDCLIENT_BUILD_DIR} ${LIBMPDCLIENT_DIR} --default-library=static
+     #   COMMAND ninja -C ${LIBMPDCLIENT_BUILD_DIR}
+     #   DEPENDS ${LIBMPDCLIENT_DIR}/meson.build
+     #   COMMENT "Building libmpdclient with Meson"
+    #)
+    #add_custom_target(build_libmpdclient DEPENDS ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+    #add_dependencies(${CMAKE_PROJECT_NAME} build_libmpdclient)
+    #target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_DIR}/include)
+    #target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/include)
+    #target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
+  endif()
+endif()
+# ENDOF LIBMPDCLIENT
 
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY

@@ -3,6 +3,7 @@
 
 #include "config/global.h"
 #include "config/local.h"
+#include "modusoperandi.h"
 
 #include <QObject>
 #include <QToolButton>
@@ -10,7 +11,7 @@
 class MainMenu : public QObject {
   Q_OBJECT
 public:
-  explicit MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c);
+  explicit MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c, ModusOperandi &modus);
 
 signals:
   void exit();
@@ -26,6 +27,7 @@ private:
 
   Config::Global &global_conf;
   Config::Local &local_conf;
+  ModusOperandi &modus_operandi;
 };
 
 #endif // MAINMENU_H

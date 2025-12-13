@@ -1,6 +1,6 @@
 %global __brp_check_rpaths %{nil}
 Name:       mpz
-Version:    1.1.4
+Version:    2.0.0
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
@@ -9,9 +9,9 @@ Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
 %if %{with qt6}
-BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+BuildRequires: gcc make cmake meson qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
 %else
-BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires: gcc make cmake meson libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
 %endif
 
 

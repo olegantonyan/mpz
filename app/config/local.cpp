@@ -93,6 +93,56 @@ namespace Config {
     return storage.set("current_playlist", Config::Value(idx));
   }
 
+  QMap<QString, QString> Local::currentMpdPlaylist() const {
+    auto mv = storage.get("current_mpd_playlist").get<QMap<QString, Config::Value>>();
+    QMap<QString, QString> result;
+
+    for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
+      result[it.key()] = it.value().get<QString>();
+    }
+
+    return result;
+  }
+
+  bool Local::saveCurrentMpdPlaylist(const QMap<QString, QString> &name_for_library_url) {
+    QMap<QString, Config::Value> mv;
+
+    for (auto it = name_for_library_url.constBegin(); it != name_for_library_url.constEnd(); ++it) {
+      mv[it.key()] = Config::Value(it.value());
+    }
+
+    return storage.set("current_mpd_playlist", Config::Value(mv));
+  }
+
+  QMap<QString, QList<QString>> Local::mpdPlaylistsOrder() const {
+    auto mv = storage.get("mpd_playlists_order").get<QMap<QString, Config::Value>>();
+    QMap<QString, QList<QString>> result;
+
+    for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
+      QList<QString> list;
+      auto raw = it.value().get<QList<Config::Value>>();
+      for (auto li : raw) {
+        list << li.get<QString>();
+      }
+      result[it.key()] = list;
+    }
+
+    return result;
+  }
+
+  bool Local::saveMpdPlaylistsOrder(const QMap<QString, QList<QString>> &playlists_for_library_url) {
+    QMap<QString, Config::Value> mv;
+
+    for (auto it = playlists_for_library_url.constBegin(); it != playlists_for_library_url.constEnd(); ++it) {
+      QList<Config::Value> val;
+      for (auto it : it.value()) {
+        val << Config::Value(it);
+      }
+      mv[it.key()] = Config::Value(val);
+    }
+    return storage.set("mpd_playlists_order", Config::Value(mv));
+  }
+
   QStringList Local::libraryPaths() const {
     auto raw = storage.get("library_paths");
     QStringList result;

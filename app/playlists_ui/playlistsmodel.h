@@ -21,29 +21,36 @@ namespace PlaylistsUi {
 
     QModelIndex buildIndex(int row) const;
     QModelIndex append(std::shared_ptr<Playlist::Playlist> item);
-    void remove(const QModelIndex &index);
+    virtual void remove(const QModelIndex &index);
     std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
     std::shared_ptr<Playlist::Playlist> itemBy(quint64 uid) const;
     std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
     int listSize() const;
     QModelIndex itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const;
-
-    bool persist();
-
+    virtual bool persist();
     QList<std::shared_ptr<Playlist::Playlist>> itemList() const;
+    virtual void higlight(std::shared_ptr<Playlist::Playlist> playlist);
+    virtual QModelIndex currentPlaylistIndex();
+    virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
+    virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
+    virtual void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist);
+    virtual void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks);
 
-    void loadAsync();
-
-    void higlight(std::shared_ptr<Playlist::Playlist> playlist);
+  public slots:
+    virtual void loadAsync();
 
   signals:
-    void asynLoadFinished();
+    void asyncLoadFinished();
+    void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
+    void asyncTracksLoadFinished(std::shared_ptr<Playlist::Playlist> playlist);
 
-  private:
+  protected:
+    QString playlistNameBy(const QDir &path, const QString &libraryDir = "");
+
     QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
 
-    quint64 highlight_uid;
+    mutable quint64 highlight_uid;
   };
 }
 

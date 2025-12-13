@@ -1,13 +1,13 @@
 #ifndef PLAYLISTSVIEWMODEL_H
 #define PLAYLISTSVIEWMODEL_H
 
-#include "playlistsmodel.h"
 #include "playlist/playlist.h"
 #include "config/local.h"
 #include "track.h"
 #include "busyspinner.h"
 #include "playlistsproxyfiltermodel.h"
 #include "playlistscontextmenu.h"
+#include "modusoperandi.h"
 
 #include <QObject>
 #include <QListView>
@@ -23,8 +23,11 @@ namespace PlaylistsUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, QObject *parent = nullptr);
+    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent = nullptr);
     std::shared_ptr<Playlist::Playlist> playlistByTrackUid(quint64 track_uid) const;
+    std::shared_ptr<Playlist::Playlist> playlistByName(const QString &name) const;
+    std::shared_ptr<Playlist::Playlist> currentPlaylist() const;
+    int playlistsCount() const;
 
   public slots:
     void on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
@@ -38,25 +41,23 @@ namespace PlaylistsUi {
     void loaded(const std::shared_ptr<Playlist::Playlist> item);
     void emptied();
     void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
+    void asyncLoadFinished();
 
   private slots:
     void on_itemActivated(const QModelIndex &index);
-    void on_playlistLoadFinished(Playlist::Playlist *pl);
+    void on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl);
     void on_search(const QString& term);
     void load();
     void on_removeItem(const QModelIndex &index);
     void on_itemDoubleClicked(const QModelIndex &index);
+    void on_importPlayistFiles(const QModelIndex &index, const QStringList &filespaths);
 
   private:
     QListView *view;
     QLineEdit *search;
-    Model *model;
-    Config::Local &local_conf;
     BusySpinner *spinner;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
-
-    void persist(int current_index);
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);

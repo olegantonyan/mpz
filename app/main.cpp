@@ -5,16 +5,37 @@
 #include "streammetadata.h"
 #include "config/global.h"
 #include "config/local.h"
+#ifdef ENABLE_MPD_SUPPORT
+  #include "mpd_client/entity.h"
+  #include "mpd_client/song.h"
+  #include "mpd_client/status.h"
+  #include "mpd_client/output.h"
+#endif
 
 #include <QApplication>
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
 #include <iostream>
+#include <QPersistentModelIndex>
+#include <QAbstractItemModel>
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
   qRegisterMetaType<StreamMetaData>("StreamMetaData");
+  qRegisterMetaType<std::shared_ptr<Playlist::Playlist>>("std::shared_ptr<Playlist::Playlist>");
+  qRegisterMetaType<QList<QPersistentModelIndex>>("QList<QPersistentModelIndex>");
+  qRegisterMetaType<QAbstractItemModel::LayoutChangeHint>("QAbstractItemModel::LayoutChangeHint");
+#ifdef ENABLE_MPD_SUPPORT
+  qRegisterMetaType<MpdClient::Song>("MpdClient::Song");
+  qRegisterMetaType<MpdClient::Entity>("MpdClient::Entity");
+  qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
+  qRegisterMetaType<MpdClient::Output>("MpdClient::Output");
+  qRegisterMetaType<mpd_idle>("mpd_idle");
+  qRegisterMetaType<QVector<MpdClient::Entity>>("QVector<MpdClient::Entity");
+  qRegisterMetaType<QVector<MpdClient::Output>>("QVector<MpdClient::Output>");
+  qRegisterMetaType<QVector<MpdClient::Song>>("QVector<MpdClient::Song>");
+#endif
 }
 
 QStringList args(int argc, char *argv[]) {
@@ -50,7 +71,6 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
-  //qputenv("QT_MEDIA_BACKEND", "ffmpeg");
   registerMetaTypes();
   RNJesus::seed();
 

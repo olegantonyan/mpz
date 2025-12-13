@@ -27,13 +27,8 @@ namespace Playlist {
     QString rename(const QString &value);
     QVector<Track> tracks() const;
 
-    void load(const QDir &path, const QString &libraryDir = "");
     void load(const QVector<Track> &tracks);
-    void load(const QList<QDir> &dirs, const QString &libraryDir = "");
-    void loadAsync(const QList<QDir> &dirs, const QString &libraryDir = "");
-    void concat(const QDir &path);
-    void concat(const QList<QDir> &dirs);
-    void concatAsync(const QList<QDir> &dirs);
+    void append(const QVector<Track> &tracks, bool with_sort);
 
     quint64 uid() const;
 
@@ -53,12 +48,10 @@ namespace Playlist {
     void reload();
 
   signals:
-    void loadAsyncFinished(Playlist *pl);
-    void concatAsyncFinished(Playlist *pl);
+    void loadedOrAppended();
 
   private:
     QVector<Track> sort(QVector<Track> list, const Sorter &sorter = Sorter());
-    QString nameBy(const QDir &path, const QString &libraryDir = "");
 
     QString playlist_name;
     QVector<Track> tracks_list;

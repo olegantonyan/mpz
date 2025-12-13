@@ -1,23 +1,35 @@
 #include "playlistsmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QtConcurrent>
 #include <QFont>
 
-namespace PlaylistsUi {  
+namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
     list.clear();
   }
 
   void Model::loadAsync() {
-    (void)QtConcurrent::run([=]() {
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      beginResetModel();
       list = local_conf.playlists();
-      beginInsertRows(QModelIndex(), 0, list.size());
-      endInsertRows();
-      emit dataChanged(buildIndex(0), buildIndex(list.size()));
-      emit asynLoadFinished();
+      endResetModel();
+      emit asyncLoadFinished();
       persist();
     });
+  }
+
+  void Model::asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) {
+    emit asyncTracksLoadFinished(playlist);
+  }
+
+  void Model::appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) {
+    if (!playlist || tracks.isEmpty()) {
+      return;
+    }
+    playlist->append(tracks, false);
+    emit asyncTracksLoadFinished(playlist);
   }
 
   void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
@@ -107,11 +119,16 @@ namespace PlaylistsUi {
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
+    QVariant none;
+
     if (!index.isValid()) {
-      return QVariant();
+      return none;
     }
 
     auto pl = list.at(index.row());
+    if (!pl) {
+      return none;
+    }
     if (role == Qt::FontRole && pl->uid() == highlight_uid) {
       QFont font;
       font.setBold(true);
@@ -122,11 +139,11 @@ namespace PlaylistsUi {
       if (list.size() > index.row()) {
         return list.at(index.row())->name();
       } else {
-        return QVariant();
+        return none;
       }
     }
 
-    return QVariant();
+    return none;
   }
 
   bool Model::persist() {
@@ -135,5 +152,42 @@ namespace PlaylistsUi {
 
   QList<std::shared_ptr<Playlist::Playlist> > Model::itemList() const {
     return list;
+  }
+
+  QModelIndex Model::currentPlaylistIndex() {
+    return buildIndex(qMin(local_conf.currentPlaylist(), listSize() - 1));
+  }
+
+  void Model::saveCurrentPlaylistIndex(const QModelIndex &idx) {
+    int current_index = idx.row();
+    auto max_index = qMax(listSize() - 1, 0);
+    auto save_index = qMin(current_index, max_index);
+    local_conf.saveCurrentPlaylist(save_index);
+  }
+
+  void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
+    Q_ASSERT(filepaths.size() > 0);
+
+    auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
+
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      QStringList names;
+      for (auto path : filepaths) {
+        Playlist::Loader loader(path);
+        pl->append(loader.tracks(), !loader.is_playlist_file());
+        names << playlistNameBy(path, libraryDir);
+      }
+      pl->rename(names.join(", "));
+      emit createPlaylistAsyncFinished(pl);
+    });
+  }
+
+  QString Model::playlistNameBy(const QDir &path, const QString &libraryDir) {
+    auto result = path.absolutePath().remove(libraryDir);
+    if (result.startsWith("/")) {
+      return result.remove(0, 1);
+    } else {
+      return result;
+    }
   }
 }

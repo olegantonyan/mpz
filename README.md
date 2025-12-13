@@ -10,11 +10,11 @@ If you like organizing your music in folders, then this player might be for you.
 
 More screenshots here: https://mpz-player.org
 
-## Why?
-
-In about 15 years author couldn't find a suitable player for Linux. Foobar2000 works in Wine, but this solution is not perfect either. This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
+This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
 
 Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is playing music you have on your hard drive), "big" means it's big enough so managing it becomes hard. Radio streaming also supported.
+
+In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode added. You can add mpd server as a library folder. There are limitations and caveats, see below.
 
 ## Features
 
@@ -23,17 +23,8 @@ Why "big local collections"? "Local" opposed to streaming services (which are fi
 - Supports internet radio in `m3u` and `pls` playlists formats;
 - Supports CUE sheets;
 - Supports MPRIS on Linux for remote control (for example, via [KDE Connect](https://kdeconnect.kde.org/));
-- Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation).
-
-## Limitations
-
-- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
-- Lacks some "expected" features like tracks rearranging within playlist;
-- Global hotkeys don't work in Wayland.
-
-Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
-
-NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
+- Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation);
+- [mpd](https://musicpd.org) client mode support (version 2.0.0+).
 
 ## Installation
 
@@ -161,5 +152,22 @@ mpris_blacklist: ["wireplumber"]
 
 This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues MPRIS Pause comamnd. Until they make it configurable, blocking wireplumber is viable workaround if you also find this feature annoying.
 
+## Limitations
+
+- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
+- Lacks some "expected" features like tracks rearranging within playlist;
+- Global hotkeys don't work in Wayland.
+
+Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
+
+NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
+
+### mpd impedance mismatch
+When used as [mpd](https://musicpd.org) client, there is fundamental difference that can lead to some weird behavior. By design mpz does not have explicit playback queue - the playlist itself is a queue. In mpd, there's explicit playback queue and playlists are merely list of tracks that can be loaded into queue to play. 
+
+Known issues:
+- when other client modify playback queue, mpz cannot pick up these changes;
+- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from last selected playlist, i.e. loaded upon start;
+- "playback follows cursor" cannot foll into different playlist;
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)

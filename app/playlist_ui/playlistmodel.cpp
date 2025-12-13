@@ -1,7 +1,9 @@
 #include "playlistmodel.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QFont>
+#include <QtConcurrent>
 
 namespace PlaylistUi {
   Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
@@ -28,8 +30,10 @@ namespace PlaylistUi {
   }
 
   QVariant Model::data(const QModelIndex &index, int role) const {
+    QVariant none;
+
     if (!index.isValid()) {
-      return QVariant();
+      return none;
     }
 
     if (role == Qt::TextAlignmentRole) {
@@ -63,7 +67,7 @@ namespace PlaylistUi {
     if (role == Qt::DisplayRole && index.column() > 0) {
       return columns_config.value(index.column(), t);
     }
-    return QVariant();
+    return none;
   }
 
   void Model::setTracks(const QVector<Track> &t) {
@@ -133,13 +137,40 @@ namespace PlaylistUi {
 
   void Model::remove(const QList<QModelIndex> &items) {
     QList<QModelIndex> sorted = items;
-
     std::sort(sorted.begin(), sorted.end(), [](const QModelIndex &t1, const QModelIndex &t2) -> bool {
       return t1.row() > t2.row();
     });
+    QList<int> indecies;
     for (auto i : sorted) {
-      playlist()->removeTrack(i.row());
+      indecies << i.row();
     }
+    removeTracksFromPlaylist(indecies);
+    reload();
+  }
+
+  void Model::removeTracksFromPlaylist(const QList<int> &indecies) {
+    for (int i : indecies) {
+      playlist()->removeTrack(i);
+    }
+  }
+
+  void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
+    if (!playlist()) {
+      return;
+    }
+
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      for (auto path : filepaths) {
+        Playlist::Loader loader(path);
+        playlist()->append(loader.tracks(), !loader.is_playlist_file());
+      }
+
+      emit appendToPlaylistAsyncFinished(playlist());
+    });
+  }
+
+  void Model::sortBy(const QString &criteria) {
+    playlist()->sortBy(criteria);
     reload();
   }
 }

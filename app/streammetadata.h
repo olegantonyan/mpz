@@ -6,6 +6,7 @@
 class StreamMetaData {
 public:
   explicit StreamMetaData();
+  explicit StreamMetaData(const QString &title);
 
   bool isEmpty() const;
 
@@ -22,7 +23,8 @@ public:
 
 private:
   QMap<QString, QString> _data;
-};
 
+  QString title_explicit;
+};
 
 #endif // STREAMMETADATA_H

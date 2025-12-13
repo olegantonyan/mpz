@@ -1,6 +1,9 @@
 #include "dispatch.h"
 #include "rnjesus.h"
 
+#include <QEventLoop>
+#include <QTimer>
+
 namespace Playback {
   Dispatch::Dispatch(Config::Global &conf, PlaylistsUi::Controller *playlists_ui) :
     QObject(nullptr), global_conf(conf), playlists(playlists_ui) {
@@ -96,6 +99,49 @@ namespace Playback {
     if (plst != nullptr && !plst->tracks().isEmpty()) {
       Track t = plst->tracks().first();
       emit play(t);
+    }
+  }
+
+  void Dispatch::on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint) {
+    if (playlists->playlistsCount() == 0) {
+      // on initial load there might no playlists yet
+      QEventLoop loop;
+      QTimer timer;
+      auto conn_loop = connect(playlists, &PlaylistsUi::Controller::asyncLoadFinished, &loop, &QEventLoop::quit);
+      auto conn_tmr = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+      timer.setSingleShot(true);
+      timer.start(666);
+      loop.exec();
+      disconnect(conn_loop);
+      disconnect(conn_tmr);
+    }
+
+    auto current_playlist = playlists->playlistByName(playlist_name_hint);
+    if (!current_playlist) {
+      current_playlist = playlists->currentPlaylist();
+      if (!current_playlist) {
+        return;
+      }
+    }
+    if (current_playlist->tracks().isEmpty()) {
+      // on initial app open current playlist may not be loaded yet
+      // but mpd is playing
+      // wait a bit for playlist load
+      QEventLoop loop;
+      QTimer timer;
+      auto conn_loop = connect(current_playlist.get(), &Playlist::Playlist::loadedOrAppended, &loop, &QEventLoop::quit);
+      auto conn_tmr = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+      timer.setSingleShot(true);
+      timer.start(666);
+      loop.exec();
+      disconnect(conn_loop);
+      disconnect(conn_tmr);
+    }
+    for (auto it : current_playlist->tracks()) {
+      if (it.path() == track_path) {
+        emit trackChangedQueryComplete(it);
+        break;
+      }
     }
   }
 

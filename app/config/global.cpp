@@ -138,4 +138,9 @@ namespace Config {
     }
     return storage.set("mpris_blacklist", Config::Value(list));
   }
+
+  bool Config::Global::mpdStopPlayerOnClose() const {
+    return storage.get("mpd_stop_player_on_close").get<bool>();
+  }
+
 }

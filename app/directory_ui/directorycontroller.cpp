@@ -1,6 +1,7 @@
 #include "directorycontroller.h"
 #include "directorysettings.h"
 #include "directorysortmenu.h"
+#include "modusoperandi.h"
 
 #include <QAction>
 #include <QDebug>
@@ -14,14 +15,17 @@
 #include <QTimer>
 #include <QtGlobal>
 #include <QFileInfo>
+#include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
     local_conf(local_cfg),
-    libswitch(_libswitch) {
+    libswitch(_libswitch),
+    modus_operandi(modus)
+    {
     Q_ASSERT(search);
     Q_ASSERT(view);
 
@@ -29,40 +33,37 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
 
     restore_scroll_once = true;
 
-    model = new Model(this);
+    model = new DirectoryModel::Proxy(modus_operandi, this);
+    connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, [=] {
+      view->setModel(model);
+      view->setRootIndex(model->rootIndex());
+      view->setHeaderHidden(true);
+      view->setContextMenuPolicy(Qt::CustomContextMenu);
+    });
+
     if (local_conf.libraryPaths().empty()) {
       model->loadAsync(QDir::homePath());
       libswitch->addItem(QDir::homePath());
     } else {
       for (auto i : local_conf.libraryPaths()) {
-        libswitch->addItem(i);
+        libswitch->addItem(libraryPathMasked(i), i);
       }
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
       libswitch->setCurrentIndex(current_index);
-      model->loadAsync(local_conf.libraryPaths().at(current_index));
+      auto current_path = local_conf.libraryPaths().at(current_index);
+      model->loadAsync(current_path);
     }
 
     if (libswitch->count() > 1) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
-        if (idx >= 0) {
-          model->loadAsync(local_conf.libraryPaths()[idx]);
-          local_conf.saveCurrentLibraryPath(idx);
+        auto path = modus_operandi.onLibraryPathChange(idx);
+        if (!path.isEmpty()) {
+          model->switchTo(modus_operandi.get());
+          model->loadAsync(path);
         }
       });
     }
 
-    connect(model, &DirectoryUi::Model::directoryLoaded, [=] {
-      view->setModel(model);
-      view->setRootIndex(model->index(model->rootPath()));
-      view->setHeaderHidden(true);
-      view->setColumnHidden(1, true);
-      view->setColumnHidden(2, true);
-      view->setColumnHidden(3, true);
-      view->setContextMenuPolicy(Qt::CustomContextMenu);
-    });
-
-    model->setNameFilterDisables(false);
-    model->setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
 
     search->setClearButtonEnabled(true);
@@ -85,21 +86,18 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
     connect(view, &QTreeView::doubleClicked, this, &Controller::on_doubleclick);
 
     sort_menu = new DirectoryUi::SortMenu(libsort);
-    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::Model::sortBy);
+    connect(sort_menu, &DirectoryUi::SortMenu::triggered, model, &DirectoryUi::DirectoryModel::Proxy::sortBy);
   }
 
   void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
-      model->setNameFilters(QStringList());
       QTimer::singleShot(20, [=]() {
         if (!view->selectionModel()->selectedRows().isEmpty()) {
           view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
         }
       });
-      return;
     }
-    QString wc = QString("*%1*").arg(term);
-    model->setNameFilters(QStringList() << wc);
+    model->filter(term);
   }
 
   void Controller::on_doubleclick(const QModelIndex &index) {
@@ -137,7 +135,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
   }
 
   void Controller::settingsDialog(QComboBox *libswitch) {
-    DirectorySettings dlg(local_conf.libraryPaths());
+    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi);
     auto old_paths = local_conf.libraryPaths();
     if(dlg.exec() == QDialog::Accepted) {
       if (old_paths != dlg.libraryPaths()) {
@@ -145,7 +143,7 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
         local_conf.sync();
         libswitch->clear();
         for (auto i : local_conf.libraryPaths()) {
-          libswitch->addItem(i);
+          libswitch->addItem(libraryPathMasked(i), i);
         }
         if (libswitch->count() > 0) {
           model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
@@ -153,6 +151,15 @@ Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolB
         }
       }
     }
+  }
+
+  QString Controller::libraryPathMasked(const QString &libraryPath) const {
+    QUrl url(libraryPath);
+    if (url.password().isEmpty()) {
+      return libraryPath;
+    }
+    url.setPassword("***");
+    return url.toString();
   }
 
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {

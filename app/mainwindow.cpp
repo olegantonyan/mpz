@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
+#include "coverart/covers.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -11,19 +12,26 @@
 #include <QHash>
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
-  QMainWindow(parent), ui(new Ui::MainWindow), local_conf(local_c), global_conf(global_c) {
-  trayicon = nullptr;
+  QMainWindow(parent),
+  ui(new Ui::MainWindow),
+  local_conf(local_c),
+  global_conf(global_c),
+  trayicon(nullptr),
+  banner(new SlidingBanner(this)),
+  modus_operandi(local_c, banner)
+  {
 #if defined(MPRIS_ENABLE)
   mpris = nullptr;
 #endif
   ui->setupUi(this);
+  ui->verticalLayout->insertWidget(1, banner);
   setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, this);
-  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, this);
-  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, this);
+  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, modus_operandi, this);
+  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
+  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, modus_operandi, this);
 
   ui->toolButtonLibrarySort->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
 
@@ -40,7 +48,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -85,6 +93,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     raise();
     setFocus();
   });
+
+#ifdef ENABLE_MPD_SUPPORT
+  setupMpdOrder();
+#endif
+  CoverArt::Covers::instance(modus_operandi);
 }
 
 MainWindow::~MainWindow() {
@@ -131,7 +144,9 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  player->stop();
+  if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
+    player->stop();
+  }
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
@@ -171,6 +186,9 @@ void MainWindow::setupOrderCombobox() {
       mpris->on_shuffleChanged(order_name == "random");
     }
 #endif
+#ifdef ENABLE_MPD_SUPPORT
+    mpd_order->onOrderChanged();
+#endif
   });
 #if defined(MPRIS_ENABLE)
   if (mpris) {
@@ -202,6 +220,9 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
     if (current_playlist != nullptr) {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
       playlists->on_playlistChanged(current_playlist);
+#ifdef ENABLE_MPD_SUPPORT
+      mpd_order->onOrderChanged();
+#endif
     }
   });
 }
@@ -245,7 +266,7 @@ void MainWindow::setupVolumeControl() {
 
 void MainWindow::setupMainMenu() {
   ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-  main_menu = new MainMenu(ui->menuButton, global_conf, local_conf);
+  main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
@@ -280,6 +301,9 @@ void MainWindow::setupPlaybackDispatch() {
   connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
+#ifdef ENABLE_MPD_SUPPORT
+    mpd_order->onTrackSelected(track);
+#endif
   });
 
   connect(player, &Playback::Controller::started, [=](const Track &track) {
@@ -294,6 +318,8 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
+  connect(player, &Playback::Controller::trackChangedQuery, dispatch, &Playback::Dispatch::on_trackChangedQuery);
+  connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
   connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
 
@@ -445,12 +471,27 @@ void MainWindow::setupOutputDevice() {
     QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
     device_menu.exec(pos);
   });
+  connect(&modus_operandi, &ModusOperandi::changed, [=](auto mode) {
+    ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
+  });
+  ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
 }
 
+#ifdef ENABLE_MPD_SUPPORT
+void MainWindow::setupMpdOrder() {
+  mpd_order = new Playback::Mpd::PlaybackOrder(global_conf, modus_operandi.mpd_client, playlists, dispatch, this);
+  connect(player, &Playback::Controller::started, mpd_order, &Playback::Mpd::PlaybackOrder::updateByTrack);
+}
+#endif
+
 void MainWindow::preloadPlaylist(const QStringList &args) {
+  if (modus_operandi.get() != ModusOperandi::MODUS_LOCALFS) {
+    return;
+  }
+
   QList<QDir> preload_files;
   for (auto i : args) {
     preload_files << QDir(i);
