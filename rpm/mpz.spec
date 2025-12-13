@@ -6,6 +6,7 @@ Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
 URL:        https://github.com/olegantonyan/%{name}
 Source0:    %{name}-%{version}.tar.gz
+Patch0:     taglib-target-exists-fix.patch
 
 %bcond_with qt6
 %if %{with qt6}
@@ -22,7 +23,7 @@ Similar to "album list" in Foobar2000.
 
 
 %prep
-%setup -q
+%autosetup -p1
 
 
 %build
