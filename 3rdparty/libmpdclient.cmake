@@ -21,11 +21,13 @@ check_symbol_exists(getaddrinfo "netdb.h" HAVE_GETADDRINFO)
 set(CONFIG_H_FILE ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated)
 file(WRITE ${CONFIG_H_FILE} "
-#pragma once
+#ifndef __LIBMPD_CONFIG_H_FILE
+#define __LIBMPD_CONFIG_H_FILE
 #define DEFAULT_HOST \"localhost\"
 #define DEFAULT_PORT 6600
 #define DEFAULT_SOCKET \"/run/mpd/socket\"
 #define PACKAGE \"libmpdclient\"
+#endif
 ")
 if(HAVE_GETADDRINFO)
   file(APPEND ${CONFIG_H_FILE} "#define HAVE_GETADDRINFO\n")
