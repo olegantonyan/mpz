@@ -26,7 +26,7 @@ namespace DirectoryUi {
 
     auto *test_row = new QHBoxLayout;
 
-    test_button = new QPushButton("Test Connection");
+    test_button = new QPushButton(tr("Test connection"));
     test_row->addWidget(test_button);
 
     test_label = new QLabel;
