@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
-set -o errexit
-set -o nounset
-set -o pipefail
+set -euo pipefail
 
-PRESET=release-qt6
-BUILD_DIR=build/$PRESET
+PRESET="${1:-release-qt6}"
 
-cmake --preset $PRESET
-cmake --build $BUILD_DIR
+BUILD_DIR=""
 
-exec ./$BUILD_DIR/mpz "$@"
+while IFS= read -r line; do
+  echo "$line"
+  if [[ "$line" =~ --\ Build\ files\ have\ been\ written\ to:\ (.*) ]]; then
+    BUILD_DIR="${BASH_REMATCH[1]}"
+  fi
+done < <(cmake --preset "$PRESET" 2>&1)
+
+if [ -z "$BUILD_DIR" ]; then
+  echo "Failed to detect build directory from cmake output."
+  exit 1
+fi
+
+cmake --build "$BUILD_DIR"
+
+exec $BUILD_DIR/mpz

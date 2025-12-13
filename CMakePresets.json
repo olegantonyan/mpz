@@ -20,6 +20,7 @@
       }
     },
 
+
     {
       "name": "debug-qt6-syslybs",
       "generator": "Ninja",
@@ -67,6 +68,7 @@
       }
     },
 
+
     {
       "name": "release-qt6-nompd",
       "generator": "Ninja",
@@ -78,6 +80,7 @@
       }
     },
 
+
     {
       "name": "release-qt5-nompd",
       "generator": "Ninja",
@@ -88,7 +91,31 @@
         "USE_QT5": "ON",
         "ENABLE_MPD_SUPPORT": "NO"
       }
-    }
-  ]
+    },
 
+
+    {
+      "name": "debug-qt6-clang",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "release-qt6-clang",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    }
+
+  ]
 }
