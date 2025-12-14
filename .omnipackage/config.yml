@@ -73,6 +73,9 @@ builds:
 - distro: 'opensuse_15.6'
   <<: *opensuse_qt5
 
+- distro: 'opensuse_16.0'
+  <<: *opensuse_qt6
+
 - distro: 'opensuse_tumbleweed'
   CMAKE_EXTRA_CLI: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
   <<: *opensuse_qt6
