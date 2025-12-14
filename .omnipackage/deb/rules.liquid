@@ -14,4 +14,4 @@ export CPPFLAGS={{ CPPFLAGS }}
 	dh $@
 
 override_dh_auto_configure:
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr {{ CMAKE_EXTRA_CLI }}
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 {{ CMAKE_EXTRA_CLI }}

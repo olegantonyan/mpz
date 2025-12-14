@@ -23,7 +23,7 @@ BuildRequires: {{ build_dependencies | join: ' ' }}
 %build
 mkdir _build
 cd _build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr {{ CMAKE_EXTRA_CLI }} ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 {{ CMAKE_EXTRA_CLI }} ..
 make %{?_smp_mflags}
 
 

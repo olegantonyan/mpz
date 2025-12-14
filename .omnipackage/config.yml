@@ -77,7 +77,6 @@ builds:
   <<: *opensuse_qt6
 
 - distro: 'opensuse_tumbleweed'
-  CMAKE_EXTRA_CLI: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
   <<: *opensuse_qt6
 
 - distro: 'debian_10'
@@ -129,7 +128,6 @@ builds:
   <<: *readhat_qt6
 
 - distro: 'fedora_rawhide'
-  CMAKE_EXTRA_CLI: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5'
   <<: *readhat_qt6
 
 - distro: 'almalinux_8'
@@ -149,7 +147,6 @@ builds:
 
 - distro: 'mageia_cauldron'
   <<: *mageia_qt5
-  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5'
 
 - distro: 'mageia_9'
   <<: *mageia_qt5
