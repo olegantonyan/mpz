@@ -20,7 +20,7 @@ namespace PlaylistsUi {
   }
 
     void Model::loadAsync() {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
         auto loadedList = loadMpdPlaylists();
         QMetaObject::invokeMethod(this, [this, loadedList]() { applyAsyncLoadedList(loadedList); }, Qt::QueuedConnection);
       });
@@ -60,7 +60,7 @@ namespace PlaylistsUi {
       if (!playlist) {
         return;
       }
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, playlist]() -> void {
         auto tracks = Playlist::MpdLoader(client).playlistTracks(playlist->name());
         playlist->load(tracks);
         creating_playlist_name = "";
@@ -155,7 +155,7 @@ namespace PlaylistsUi {
       Q_ASSERT(filepaths.size() > 0);
       Q_UNUSED(libraryDir);
 
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir]() -> void {
         creating_playlist_name = createPlaylistFromDirs(filepaths);
         order << creating_playlist_name;
       });

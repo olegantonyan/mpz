@@ -11,7 +11,7 @@ namespace PlaylistsUi {
   }
 
   void Model::loadAsync() {
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
       beginResetModel();
       list = local_conf.playlists();
       endResetModel();
@@ -170,7 +170,7 @@ namespace PlaylistsUi {
 
     auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
 
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir, pl]() -> void {
       QStringList names;
       for (auto path : filepaths) {
         Playlist::Loader loader(path);

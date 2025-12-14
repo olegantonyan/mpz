@@ -25,7 +25,7 @@ namespace PlaylistUi {
         return;
       }
 
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [=]() {
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
         auto tracks = Playlist::MpdLoader(client).dirsTracks(filepaths, playlist()->name());
         playlist()->append(tracks, true);
         appendToPlaylist(tracks, playlist()->name());
