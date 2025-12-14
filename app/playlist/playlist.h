@@ -9,10 +9,10 @@
 #include <QVector>
 #include <QObject>
 #include <QFuture>
+#include <QMutex>
 
 namespace Playlist {
-  class Playlist : public QObject {
-    Q_OBJECT
+  class Playlist {
   public:
     enum PlaylistRandom {
       None = 0,
@@ -47,9 +47,6 @@ namespace Playlist {
 
     void reload();
 
-  signals:
-    void loadedOrAppended();
-
   private:
     QVector<Track> sort(QVector<Track> list, const Sorter &sorter = Sorter());
 
@@ -57,6 +54,7 @@ namespace Playlist {
     QVector<Track> tracks_list;
     quint64 _uid;
     enum PlaylistRandom _random;
+    QMutex mutex;
   };
 }
 

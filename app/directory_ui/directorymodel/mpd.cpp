@@ -48,12 +48,13 @@ namespace DirectoryUi {
     }
 
     void Mpd::onMpdReady() {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
+      QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this]() {
         QMetaObject::invokeMethod(this, [this]() {
           onDatabaseUpdated();
           emit directoryLoaded(client.currentUrl().toString());
         }, Qt::QueuedConnection);
       });
+      Q_UNUSED(future);
     }
 
     void Mpd::onMpdLost() {

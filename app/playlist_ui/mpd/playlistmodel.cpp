@@ -21,15 +21,16 @@ namespace PlaylistUi {
     }
 
     void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
-      if (!playlist()) {
+      auto pl = playlist();
+      if (!pl) {
         return;
       }
 
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
-        auto tracks = Playlist::MpdLoader(client).dirsTracks(filepaths, playlist()->name());
-        playlist()->append(tracks, true);
-        appendToPlaylist(tracks, playlist()->name());
-        emit appendToPlaylistAsyncFinished(playlist());
+      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() {
+        auto tracks = Playlist::MpdLoader(client).dirsTracks(filepaths, pl->name());
+        pl->append(tracks, true);
+        appendToPlaylist(tracks, pl->name());
+        emit appendToPlaylistAsyncFinished(pl);
       });
     }
 

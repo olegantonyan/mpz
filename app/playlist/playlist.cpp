@@ -11,9 +11,10 @@
 #else
   #include <QMutableVectorIterator>
 #endif
+#include <QMutexLocker>
 
 namespace Playlist {
-  Playlist::Playlist() : QObject(nullptr) {
+  Playlist::Playlist() {
     _uid = RNJesus::generate();
     _random = PlaylistRandom::None;
   }
@@ -23,6 +24,7 @@ namespace Playlist {
   }
 
   QString Playlist::rename(const QString &value) {
+    QMutexLocker lock(&mutex);
     const int MAX_NAME_LEN = 69;
     if (value.length() > MAX_NAME_LEN) {
       playlist_name = value.left(MAX_NAME_LEN - 3) + "...";
@@ -37,18 +39,18 @@ namespace Playlist {
   }
 
   void Playlist::load(const QVector<Track> &tracks) {
+    QMutexLocker lock(&mutex);
     tracks_list.clear();
     tracks_list.append(tracks);
-    emit loadedOrAppended();
   }
 
   void Playlist::append(const QVector<Track> &tracks, bool with_sort) {
+    QMutexLocker lock(&mutex);
     if (with_sort) {
       tracks_list.append(sort(tracks));
     } else {
       tracks_list.append(tracks);
     }
-    emit loadedOrAppended();
   }
 
   quint64 Playlist::uid() const {
@@ -85,6 +87,7 @@ namespace Playlist {
   }
 
   void Playlist::removeTrack(int position) {
+    QMutexLocker lock(&mutex);
     tracks_list.remove(position);
   }
 
@@ -93,10 +96,12 @@ namespace Playlist {
   }
 
   void Playlist::setRandom(Playlist::PlaylistRandom arg) {
+    QMutexLocker lock(&mutex);
     _random = arg;
   }
 
   void Playlist::sortBy(const QString &criteria) {
+    QMutexLocker lock(&mutex);
     tracks_list = sort(tracks_list, Sorter(criteria));
   }
 

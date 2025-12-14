@@ -60,12 +60,16 @@ namespace PlaylistsUi {
       if (!playlist) {
         return;
       }
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, playlist]() -> void {
+      QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this, playlist]() {
         auto tracks = Playlist::MpdLoader(client).playlistTracks(playlist->name());
         playlist->load(tracks);
-        creating_playlist_name = "";
-        emit asyncTracksLoadFinished(playlist);
+
+        QMetaObject::invokeMethod(this, [this, playlist]() {
+          creating_playlist_name.clear();
+          emit asyncTracksLoadFinished(playlist);
+        }, Qt::QueuedConnection);
       });
+      Q_UNUSED(future);
     }
 
     void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
@@ -152,13 +156,20 @@ namespace PlaylistsUi {
     }
 
     void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
-      Q_ASSERT(filepaths.size() > 0);
+      Q_ASSERT(!filepaths.isEmpty());
       Q_UNUSED(libraryDir);
 
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir]() -> void {
-        creating_playlist_name = createPlaylistFromDirs(filepaths);
-        order << creating_playlist_name;
+      QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
+        const QString playlistName = createPlaylistFromDirs(filepaths);
+
+        QMetaObject::invokeMethod(this,
+          [this, playlistName]() {
+            creating_playlist_name = playlistName;
+            order << playlistName;
+          },
+          Qt::QueuedConnection);
       });
+      Q_UNUSED(future);
     }
 
     QString Model::playlistUniqueName(const QString &name) const {

@@ -127,15 +127,17 @@ namespace Playback {
       // on initial app open current playlist may not be loaded yet
       // but mpd is playing
       // wait a bit for playlist load
-      QEventLoop loop;
-      QTimer timer;
-      auto conn_loop = connect(current_playlist.get(), &Playlist::Playlist::loadedOrAppended, &loop, &QEventLoop::quit);
-      auto conn_tmr = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-      timer.setSingleShot(true);
-      timer.start(666);
-      loop.exec();
-      disconnect(conn_loop);
-      disconnect(conn_tmr);
+      for (int i = 0; i < 15; i++) {
+        QEventLoop loop;
+        QTimer timer;
+        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        timer.setSingleShot(true);
+        timer.start(50);
+        loop.exec();
+        if (!current_playlist->tracks().isEmpty()) {
+          break;
+        }
+      }
     }
     for (auto it : current_playlist->tracks()) {
       if (it.path() == track_path) {

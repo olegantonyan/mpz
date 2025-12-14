@@ -11,13 +11,19 @@ namespace PlaylistsUi {
   }
 
   void Model::loadAsync() {
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
-      beginResetModel();
-      list = local_conf.playlists();
-      endResetModel();
-      emit asyncLoadFinished();
-      persist();
+    QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this]() {
+      auto newList = local_conf.playlists();
+
+      auto lambda = [this, newList = std::move(newList)]() mutable {
+        beginResetModel();
+        list = std::move(newList);
+        endResetModel();
+        emit asyncLoadFinished();
+        persist();
+      };
+      QTimer::singleShot(0, this, lambda);
     });
+    Q_UNUSED(future);
   }
 
   void Model::asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) {
