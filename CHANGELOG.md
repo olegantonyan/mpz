@@ -1,11 +1,9 @@
-## [2.0.1] - 
-
-### Added
+## [2.0.1] - 2025-12-15
 
 ### Fixed
 
-- fix library switch not working upon first launch
-- fix out ouf bounds crash when current_library is higher than number of library paths
+- library switch not working upon first launch
+- out-of-bounds crash when current_library is higher than number of library paths
 - mpd playlist rename now works
 
 ### Misc
