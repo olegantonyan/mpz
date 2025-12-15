@@ -48,7 +48,7 @@ namespace DirectoryUi {
       for (auto i : local_conf.libraryPaths()) {
         libswitch->addItem(libraryPathMasked(i), i);
       }
-      int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count());
+      int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count() - 1);
       libswitch->setCurrentIndex(current_index);
       auto current_path = local_conf.libraryPaths().at(current_index);
       model->loadAsync(current_path);

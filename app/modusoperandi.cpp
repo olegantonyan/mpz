@@ -7,7 +7,7 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QO
   if (local_config.libraryPaths().empty()) {
     active = MODUS_LOCALFS;
   } else {
-    int current_index = local_config.currentLibraryPath();
+    int current_index = qBound(0, local_config.currentLibraryPath(), local_config.libraryPaths().size() - 1) ;
     auto current_path = local_config.libraryPaths().at(current_index);
     if (current_path.startsWith("mpd://")) {
       active = MODUS_MPD;
