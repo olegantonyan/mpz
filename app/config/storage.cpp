@@ -28,6 +28,10 @@ namespace Config {
   }
 
   QString Storage::configPath() {
+    QString override = qEnvironmentVariable("MPZ_CONFIG_DIR_OVERRIDE");
+    if (!override.isEmpty()) {
+      return override;
+    }
     auto cfg_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
     return QString("%1/mpz").arg(cfg_path);
   }

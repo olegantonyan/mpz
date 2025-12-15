@@ -54,7 +54,7 @@ namespace DirectoryUi {
       model->loadAsync(current_path);
     }
 
-    if (libswitch->count() > 1) {
+    if (libswitch->count() > 0) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
         auto path = modus_operandi.onLibraryPathChange(idx);
         if (!path.isEmpty()) {

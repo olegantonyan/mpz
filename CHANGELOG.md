@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- fix library switch not working upon first launch
+
 ### Misc
 
 - Arch AUR packages build with system-wide libmpdclient
