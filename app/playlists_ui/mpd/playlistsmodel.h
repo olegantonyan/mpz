@@ -32,6 +32,7 @@ namespace PlaylistsUi {
     public slots:
       void loadAsync() override;
       void onMpdLost();
+      void onRename(const QString &old_name, const QString &new_name);
 
     private:
       MpdClient::Client &client;

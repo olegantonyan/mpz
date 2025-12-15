@@ -30,6 +30,9 @@ namespace PlaylistsUi {
     void createPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> playlist);
     void asyncTracksLoadFinished(std::shared_ptr<Playlist::Playlist> playlist);
 
+  public slots:
+    void onRename(const QString &old_name, const QString &new_name);
+
   private slots:
     void switchTo(ModusOperandi::ActiveMode new_mode);
 

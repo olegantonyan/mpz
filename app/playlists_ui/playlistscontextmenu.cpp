@@ -88,9 +88,11 @@ namespace PlaylistsUi {
     bool ok;
     QString new_name = QInputDialog::getText(view, QString("%1 '%2'").arg(tr("Rename playlist")).arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
     if (ok && !new_name.isEmpty()) {
+      QString old_name = i->name();
       i->rename(new_name);
+      model->persist();
+      emit renamed(old_name, new_name);
     }
-    model->persist();
   }
 
   void PlaylistsContextMenu::on_savem3u(const QModelIndex &index) {

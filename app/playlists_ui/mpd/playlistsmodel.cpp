@@ -43,6 +43,10 @@ namespace PlaylistsUi {
       endResetModel();
     }
 
+    void Model::onRename(const QString &old_name, const QString &new_name) {
+      client.renamePlaylist(old_name, new_name);
+    }
+
     QList<std::shared_ptr<Playlist::Playlist>> Model::loadMpdPlaylists() {
       QList<std::shared_ptr<Playlist::Playlist>> result;
       auto plsts = client.playlists();

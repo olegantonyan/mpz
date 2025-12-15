@@ -6,6 +6,7 @@
 
 - fix library switch not working upon first launch
 - fix out ouf bounds crash when current_library is higher than number of library paths
+- mpd playlist rename now works
 
 ### Misc
 

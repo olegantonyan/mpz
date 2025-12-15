@@ -365,4 +365,17 @@ namespace MpdClient {
     return result;
   }
 
+  bool MpdClient::Client::renamePlaylist(const QString &old_name, const QString &new_name) {
+    bool result = false;
+    QMetaObject::invokeMethod(
+      conn,
+      "renamePlaylist",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(bool, result),
+      Q_ARG(QString, old_name),
+      Q_ARG(QString, new_name)
+    );
+    return result;
+  }
+
 }

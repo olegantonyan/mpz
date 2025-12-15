@@ -75,4 +75,12 @@ namespace PlaylistsUi {
       return qobject_cast<Model *>(sourceModel());
     }
   }
+
+  void ProxyFilterModel::onRename(const QString &old_name, const QString &new_name) {
+#ifdef ENABLE_MPD_SUPPORT
+    if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+      mpd->onRename(old_name, new_name);
+    }
+#endif
+  }
 }

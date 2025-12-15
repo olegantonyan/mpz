@@ -58,6 +58,7 @@ namespace MpdClient {
     bool updateDb();
     QByteArray albumArt(const QString& filepath);
     QByteArray readPicture(const QString& filepath);
+    bool renamePlaylist(const QString &old_name, const QString &new_name);
 
   signals:
     void connected(const QUrl &url);

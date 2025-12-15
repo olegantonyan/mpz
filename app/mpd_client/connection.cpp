@@ -567,6 +567,19 @@ namespace MpdClient {
     return result;
   }
 
+  bool Connection::renamePlaylist(const QString &old_name, const QString &new_name) {
+    if (!conn) {
+      return false;
+    }
+
+    if (!mpd_run_rename(conn, old_name.toUtf8().constData(), new_name.toUtf8().constData())) {
+      qWarning() << "mpd_run_rename:" << lastError();
+      return false;
+    }
+
+    return true;
+  }
+
   void Connection::waitConnected() {
     if (!ping()) {
       QEventLoop loop;

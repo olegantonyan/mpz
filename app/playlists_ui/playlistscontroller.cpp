@@ -45,6 +45,7 @@ namespace PlaylistsUi {
 
     connect(context_menu, &PlaylistsContextMenu::playlistChanged, this, &Controller::selected);
     connect(context_menu, &PlaylistsContextMenu::loadPlaylistFiles, this, &Controller::on_importPlayistFiles);
+    connect(context_menu, &PlaylistsContextMenu::renamed, proxy, &ProxyFilterModel::onRename);
 
     connect(proxy, &PlaylistsUi::ProxyFilterModel::asyncLoadFinished, this, &PlaylistsUi::Controller::asyncLoadFinished);
   }
