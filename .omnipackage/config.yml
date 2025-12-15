@@ -127,6 +127,9 @@ builds:
 - distro: 'fedora_42'
   <<: *readhat_qt6
 
+- distro: 'fedora_43'
+  <<: *readhat_qt6
+
 - distro: 'fedora_rawhide'
   <<: *readhat_qt6
 
