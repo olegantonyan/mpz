@@ -23,9 +23,9 @@ namespace CoverArt {
   }
 
   Covers::Covers(ModusOperandi &modus) :
-    modus_operandi(modus),
+    modus_operandi(modus)
 #ifdef ENABLE_MPD_SUPPORT
-    mpd_covers(modus.mpd_client)
+    , mpd_covers(modus.mpd_client)
 #endif
   {
   }
