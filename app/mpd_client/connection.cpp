@@ -617,22 +617,24 @@ namespace MpdClient {
       return false;
     }
     if (mpd_connection_get_error(new_conn) != MPD_ERROR_SUCCESS) {
-      qWarning() << "error connecting to mpd:" << QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+      auto err = QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+      qWarning() << "error connecting to mpd:" << err;
       mpd_connection_free(new_conn);
-      emit error(url);
+      emit error(url, err);
       return false;
     }
     if (!url.password().isEmpty()) {
       if (!mpd_run_password(new_conn, url.password().toUtf8().constData())) {
-        qWarning() << "password auth error:" << QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+        auto err = QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+        qWarning() << "password auth error:" << err;
         mpd_connection_free(new_conn);
-        emit error(url);
+        emit error(url, err);
         return false;
       }
     }
     if (!establish_idle(url)) {
       mpd_connection_free(new_conn);
-      emit error(url);
+      emit error(url, "cannot establish idle connection");
       return false;
     }
     qDebug() << "connected to mpd at" << url;
@@ -743,7 +745,7 @@ namespace MpdClient {
     }
     if (!ping()) {
       qWarning() << "mpd connection lost with" << currentUrl();
-      emit error(currentUrl());
+      emit error(currentUrl(), "mpd connection lost");
       emit disconnected(currentUrl());
       open(currentUrl());
     }

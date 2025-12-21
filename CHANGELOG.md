@@ -2,6 +2,8 @@
 
 ### Added
 
+- show mpd error message in sliding banner
+
 ### Fixed
 
 ### Misc

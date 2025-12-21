@@ -53,7 +53,7 @@ namespace MpdClient {
   signals:
     void connected(const QUrl &url);
     void disconnected(const QUrl &url);
-    void error(const QUrl &url);
+    void error(const QUrl &url, const QString &message = "");
 
     void databaseUpdated();
     void playlistUpdated();

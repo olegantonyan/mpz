@@ -46,7 +46,7 @@ void SlidingBanner::showMessage(const QString &text, BannerType type, int timeou
 void SlidingBanner::expand() {
   animation->stop();
   animation->setStartValue(height());
-  animation->setEndValue(bannerHeight);
+  animation->setEndValue(layout()->sizeHint().height());
   animation->start();
 }
 
