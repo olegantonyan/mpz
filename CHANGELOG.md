@@ -1,4 +1,4 @@
-## [2.0.2] - 
+## [2.0.2] - 2025-12-21
 
 ### Added
 
@@ -7,8 +7,6 @@
 ### Fixed
 
 - CUE no longer stops after current track
-
-### Misc
 
 ## [2.0.1] - 2025-12-15
 
