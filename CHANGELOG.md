@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- CUE no longer stops after current track
+
 ### Misc
 
 ## [2.0.1] - 2025-12-15

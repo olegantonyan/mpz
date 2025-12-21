@@ -58,6 +58,7 @@ namespace Playback {
     Stream stream;
     QByteArray output_device_id;
     bool next_after_stop;
+    bool next_after_stop_cue;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
     QMediaDevices media_devices;

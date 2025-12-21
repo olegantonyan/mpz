@@ -8,7 +8,7 @@
 #include <QTimer>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid), next_after_stop(true) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid), next_after_stop(true), next_after_stop_cue(true) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     connect(&media_devices, &QMediaDevices::audioOutputsChanged, this, &MediaPlayer::onAudioDevicesChanged);
     player.setAudioOutput(&audio_output);
@@ -17,7 +17,8 @@ namespace Playback {
     connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
       if (offset_end > 0 && pos >= offset_end) {
-        stop();
+        player.stop();
+        stream.stop();
       }
     });
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -150,7 +151,10 @@ namespace Playback {
     bool ff = state() == MediaPlayer::StoppedState; // prevent rewing when unpausing
     player.play();
     if (ff && offset_begin > 0) {
+      auto vol = volume();
+      setVolume(0);
       seek_to_offset_begin();
+      setVolume(vol);
     }
     unpause_workaround();
   }
