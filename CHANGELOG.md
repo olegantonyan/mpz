@@ -2,6 +2,8 @@
 
 ### Added
 
+- DeathHandler library that prints stack trace upon crash
+
 ### Fixed
 
 ### Misc

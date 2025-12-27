@@ -274,6 +274,13 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 # ENDOF LIBMPDCLIENT
 
+# DEATHHANDLER
+set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
+add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${DEATHHANDLER_DIR})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE deathhandler)
+# ENDOF DEATHHANDLER
+
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY
 

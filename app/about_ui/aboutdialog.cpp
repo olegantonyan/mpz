@@ -30,6 +30,10 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
+#ifdef ENABLE_MPD_SUPPORT
+  os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");
+#endif
+  os << libraryInfo("DeathHandler", "https://github.com/vmarkovtsev/DeathHandler");
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));

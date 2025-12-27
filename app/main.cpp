@@ -11,6 +11,7 @@
   #include "mpd_client/status.h"
   #include "mpd_client/output.h"
 #endif
+#include "death_handler.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -71,6 +72,7 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
+  Debug::DeathHandler dh;
   registerMetaTypes();
   RNJesus::seed();
 
