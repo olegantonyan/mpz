@@ -2,7 +2,7 @@
 
 ### Added
 
-- DeathHandler library that prints stack trace upon crash
+- DeathHandler library that prints stack trace upon crash (Linux only)
 
 ### Fixed
 
