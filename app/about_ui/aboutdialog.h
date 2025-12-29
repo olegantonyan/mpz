@@ -22,6 +22,8 @@ private slots:
 
   void on_buttonChangelog_clicked() const;
 
+  void on_configfileButton_clicked();
+
 private:
   Ui::AboutDialog *ui;
 

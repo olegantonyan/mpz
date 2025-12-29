@@ -8,12 +8,12 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QDesktopServices>
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
 
   auto url = "https://github.com/olegantonyan/mpz";
-  auto version = qApp->applicationVersion();
 
   ui->infoLabel->setTextFormat(Qt::RichText);
   ui->infoLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -91,3 +91,8 @@ void AboutDialog::on_buttonContact_clicked() const {
 void AboutDialog::on_buttonChangelog_clicked() const {
   AboutDialog::show_changelog();
 }
+
+void AboutDialog::on_configfileButton_clicked() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
+}
+
