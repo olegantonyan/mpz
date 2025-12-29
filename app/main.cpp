@@ -14,6 +14,9 @@
 #ifdef ENABLE_DEATHHANDLER
   #include "death_handler.h"
 #endif
+#ifdef ENABLE_CRASHLOGS
+  #include "crashlogs.h"
+#endif
 
 #include <QApplication>
 #include <QDebug>
@@ -22,6 +25,7 @@
 #include <iostream>
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
+#include <QStandardPaths>
 
 void registerMetaTypes() {
   qRegisterMetaType<Track>("Track");
@@ -76,6 +80,11 @@ int ipc_port(Config::Global &global_conf) {
 int main(int argc, char *argv[]) {
 #ifdef ENABLE_DEATHHANDLER
   Debug::DeathHandler dh;
+#endif
+#ifdef ENABLE_CRASHLOGS
+  glaiel::crashlogs::begin_monitoring();
+  auto cfg_path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+  glaiel::crashlogs::set_crashlog_folder(QString("%1/mpz").arg(cfg_path).toUtf8().toStdString());
 #endif
   registerMetaTypes();
   RNJesus::seed();

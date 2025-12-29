@@ -281,8 +281,18 @@ if(UNIX)
   add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
   target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${DEATHHANDLER_DIR})
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE deathhandler)
+  message(STATUS "using vendored Deathhandler from ${DEATHHANDLER_DIR}")
 endif()
 # ENDOF DEATHHANDLER
+
+# CRASHLOGS
+if(WIN32)
+  ADD_DEFINITIONS(-DENABLE_CRASHLOGS)
+  set(CRASHLOGS_DIR 3rdparty/Crashlogs)
+  add_subdirectory(${CRASHLOGS_DIR})
+  message(STATUS "using vendored Crashlogs from ${CRASHLOGS_DIR}")
+endif()
+# ENDOF CRASHLOGS
 
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPATY
