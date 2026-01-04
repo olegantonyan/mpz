@@ -144,13 +144,9 @@ endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   find_package(Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
-qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-
-target_link_libraries(mpz PRIVATE Qt6::Core)
-target_link_libraries(mpz PRIVATE Qt6::Core)
-message(STATUS "using Qt6")
+  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
+  target_link_libraries(mpz PRIVATE Qt6::Core)
+  message(STATUS "using Qt6")
 else()
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
   message(STATUS "using Qt5")
@@ -167,8 +163,6 @@ endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
-
-add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -195,7 +189,7 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 
 
 
-# 3RDPATY
+# 3RDPARTY
 if(NOT DEFINED _DISABLE_INSTALLATION)
   # This variable is responsible for installation disabling.
   set(_DISABLE_INSTALLATION FALSE)
@@ -216,6 +210,7 @@ if(USE_SYSTEM_YAMLCPP)
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.8.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
+  add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
   add_subdirectory(${YAMLCPP_DIR})
 endif()
 # ENDOF YAML-CPP
@@ -256,20 +251,6 @@ if (ENABLE_MPD_SUPPORT)
   else()
     include(3rdparty/libmpdclient.cmake)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mpdclient)
-
-    # disable meson buuild - pita to deal with it on different distros and windows
-    #add_custom_command(
-     #   OUTPUT ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a
-     #   COMMAND meson setup ${LIBMPDCLIENT_BUILD_DIR} ${LIBMPDCLIENT_DIR} --default-library=static
-     #   COMMAND ninja -C ${LIBMPDCLIENT_BUILD_DIR}
-     #   DEPENDS ${LIBMPDCLIENT_DIR}/meson.build
-     #   COMMENT "Building libmpdclient with Meson"
-    #)
-    #add_custom_target(build_libmpdclient DEPENDS ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
-    #add_dependencies(${CMAKE_PROJECT_NAME} build_libmpdclient)
-    #target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_DIR}/include)
-    #target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/include)
-    #target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${LIBMPDCLIENT_BUILD_DIR}/libmpdclient.a)
   endif()
 endif()
 # ENDOF LIBMPDCLIENT
@@ -286,7 +267,7 @@ endif()
 # ENDOF DEATHHANDLER
 
 set(_DISABLE_INSTALLATION FALSE)
-# ENDOF 3RDPATY
+# ENDOF 3RDPARTY
 
 
 
