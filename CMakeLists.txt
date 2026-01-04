@@ -276,20 +276,14 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
   BUNDLE DESTINATION .
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(FILES mpz.desktop DESTINATION share/applications)
-install(FILES app/resources/icons/512x512/mpz.png DESTINATION share/icons/hicolor/512x512/apps/)
-install(FILES app/resources/icons/256x256/mpz.png DESTINATION share/icons/hicolor/256x256/apps/)
-install(FILES app/resources/icons/192x192/mpz.png DESTINATION share/icons/hicolor/192x192/apps/)
-install(FILES app/resources/icons/128x128/mpz.png DESTINATION share/icons/hicolor/128x128/apps/)
-install(FILES app/resources/icons/96x96/mpz.png DESTINATION share/icons/hicolor/96x96/apps/)
-install(FILES app/resources/icons/72x72/mpz.png DESTINATION share/icons/hicolor/72x72/apps/)
-install(FILES app/resources/icons/64x64/mpz.png DESTINATION share/icons/hicolor/64x64/apps/)
-install(FILES app/resources/icons/48x48/mpz.png DESTINATION share/icons/hicolor/48x48/apps/)
-install(FILES app/resources/icons/32x32/mpz.png DESTINATION share/icons/hicolor/32x32/apps/)
-install(FILES app/resources/icons/24x24/mpz.png DESTINATION share/icons/hicolor/24x24/apps/)
-install(FILES app/resources/icons/22x22/mpz.png DESTINATION share/icons/hicolor/22x22/apps/)
-install(FILES app/resources/icons/16x16/mpz.png DESTINATION share/icons/hicolor/16x16/apps/)
-install(FILES license.txt DESTINATION share/licenses/${CMAKE_PROJECT_NAME})
+install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
+file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
+foreach(icon IN LISTS ICON_FILES)
+  get_filename_component(size_dir "${icon}" DIRECTORY)
+  get_filename_component(size_dir "${size_dir}" NAME)
+  install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps)
+endforeach()
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
