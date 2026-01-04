@@ -189,7 +189,7 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 
 
 # 3RDPARTY
-include(3rdparty/disable_installation.cmake)
+include(disable_installation.cmake)
 set(_DISABLE_INSTALLATION TRUE)
 
 # YAML-CPP
