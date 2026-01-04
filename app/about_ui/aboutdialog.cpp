@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QDesktopServices>
+#include <QUrl>
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
