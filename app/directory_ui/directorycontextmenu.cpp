@@ -54,7 +54,9 @@ namespace DirectoryUi {
 
     menu.addAction(&create_playlist);
     menu.addAction(&append_to_playlist);
-    menu.addAction(&open_in_filemanager);
+    if (model->modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
+      menu.addAction(&open_in_filemanager);
+    }
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 }

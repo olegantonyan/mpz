@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- hide "show in file manager" menu items in mpd mode
+
 ### Misc
 
 ## [2.0.2] - 2025-12-21

@@ -20,6 +20,8 @@ namespace PlaylistUi {
 
     Model *activeModel() const;
 
+    ModusOperandi &modus_operandi;
+
   signals:
     void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
 
@@ -38,7 +40,6 @@ namespace PlaylistUi {
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::Model *mpd;
 #endif
-    ModusOperandi &modus_operandi;
     QString filter_term;
   };
 }

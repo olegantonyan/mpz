@@ -56,7 +56,9 @@ namespace PlaylistUi {
 
     menu.addAction(&info);
     menu.addAction(&copy_name);
-    menu.addAction(&show_in_filemanager);
+    if (proxy->modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
+      menu.addAction(&show_in_filemanager);
+    }
     menu.addSeparator();
     menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));

@@ -26,6 +26,8 @@ namespace DirectoryUi {
       QString filePath(const QModelIndex &index) const;
       void filter(const QString &filter);
 
+      ModusOperandi &modus_operandi;
+
     signals:
       void directoryLoaded(const QString &path);
 
@@ -34,7 +36,6 @@ namespace DirectoryUi {
       void switchTo(ModusOperandi::ActiveMode new_mode);
 
     private:
-      ModusOperandi &modus_operandi;
       Localfs *localfs;
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
