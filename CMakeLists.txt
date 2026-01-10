@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
 project(mpz VERSION 2.0.3 LANGUAGES CXX C)
-ADD_DEFINITIONS(-DVERSION="${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -106,10 +105,10 @@ set(PROJECT_SOURCES
   app/slidingbanner.cpp
 )
 
-OPTION(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
+option(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
 
 if (ENABLE_MPD_SUPPORT)
-  ADD_DEFINITIONS(-DENABLE_MPD_SUPPORT)
+  add_definitions(-DENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
   list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
@@ -128,7 +127,7 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 
 if (ENABLE_DBUS)
-  ADD_DEFINITIONS(-DMPRIS_ENABLE)
+  add_definitions(-DMPRIS_ENABLE)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml dbus/mpris.h Mpris)
@@ -167,6 +166,8 @@ endforeach()
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
@@ -174,11 +175,11 @@ if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
 endif()
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+  ${BUNDLE_ID_OPTION}
+  MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+  MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+  MACOSX_BUNDLE TRUE
+  WIN32_EXECUTABLE TRUE
 )
 
 
@@ -197,7 +198,7 @@ include(disable_installation.cmake)
 set(_DISABLE_INSTALLATION TRUE)
 
 # YAML-CPP
-OPTION(USE_SYSTEM_YAMLCPP "Use Yaml-cpp provided by the OS" OFF)
+option(USE_SYSTEM_YAMLCPP "Use Yaml-cpp provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
 if(USE_SYSTEM_YAMLCPP)
   message(STATUS "using system-wide yaml-cpp")
@@ -210,7 +211,7 @@ endif()
 # ENDOF YAML-CPP
 
 # TAGLIB
-OPTION(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
+option(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib")
@@ -237,7 +238,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 
 # LIBMPDCLIENT
 if (ENABLE_MPD_SUPPORT)
-  OPTION(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
+  option(USE_SYSTEM_LIBMPDCLIENT "Use libmpdclient provided by the OS" OFF)
   if (USE_SYSTEM_LIBMPDCLIENT)
     message(STATUS "using system-wide libmpdclient")
     find_library(MPDCLIENT_LIB mpdclient REQUIRED)
@@ -251,7 +252,7 @@ endif()
 
 # DEATHHANDLER
 if(UNIX)
-  ADD_DEFINITIONS(-DENABLE_DEATHHANDLER)
+  add_definitions(-DENABLE_DEATHHANDLER)
   set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
   add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
   target_link_libraries(deathhandler PRIVATE dl)
