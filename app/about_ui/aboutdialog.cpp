@@ -37,7 +37,6 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
 #ifdef ENABLE_DEATHHANDLER
   os << libraryInfo("DeathHandler", "https://github.com/vmarkovtsev/DeathHandler");
 #endif
-  os << libraryInfo("utfcpp", "https://github.com/nemtrif/utfcpp");
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));

@@ -1,4 +1,3 @@
-set(utf8cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/utfcpp-4.0.9/source) # dependency required by taglib
 set(TAGLIB_DIR 3rdparty/taglib-2.1.1)
 message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
 add_subdirectory(${TAGLIB_DIR})
