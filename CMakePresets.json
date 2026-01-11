@@ -2,120 +2,67 @@
   "version": 6,
   "configurePresets": [
     {
-      "name": "debug-qt6",
+      "name": "base",
+      "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+      }
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "release-qt6",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
+      "name": "release",
+      "hidden": true,
+      "inherits": "base",
       "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
-
-
     {
-      "name": "debug-qt6-syslybs",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
+      "name": "qt5",
+      "hidden": true,
       "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Debug",
+        "USE_QT5": "ON"
+      }
+    },
+    {
+      "name": "syslibs",
+      "hidden": true,
+      "cacheVariables": {
         "USE_SYSTEM_TAGLIB": "ON",
         "USE_SYSTEM_YAMLCPP": "ON",
         "USE_SYSTEM_LIBMPDCLIENT": "ON"
       }
     },
     {
-      "name": "release-qt6-syslybs",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
+      "name": "clang",
+      "hidden": true,
       "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Release",
-        "USE_SYSTEM_TAGLIB": "ON",
-        "USE_SYSTEM_YAMLCPP": "ON",
-        "USE_SYSTEM_LIBMPDCLIENT": "ON"
-      }
-    },
-
-
-    {
-      "name": "debug-qt5",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Debug",
-        "USE_QT5": "ON"
-      }
-    },
-    {
-      "name": "release-qt5",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Release",
-        "USE_QT5": "ON"
-      }
-    },
-
-
-    {
-      "name": "release-qt6-nompd",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Release",
-        "ENABLE_MPD_SUPPORT": "NO"
-      }
-    },
-
-
-    {
-      "name": "release-qt5-nompd",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Release",
-        "USE_QT5": "ON",
-        "ENABLE_MPD_SUPPORT": "NO"
-      }
-    },
-
-
-    {
-      "name": "debug-qt6-clang",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++"
       }
     },
-    {
-      "name": "release-qt6-clang",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_COMPILER": "clang++"
-      }
-    }
+
+
+    { "name": "debug-qt6", "inherits": ["debug"] },
+    { "name": "release-qt6", "inherits": ["release"] },
+
+    { "name": "debug-qt5", "inherits": ["debug", "qt5"] },
+    { "name": "release-qt5", "inherits": ["release", "qt5"] },
+
+    { "name": "debug-qt6-syslibs", "inherits": ["debug", "syslibs"] },
+    { "name": "release-qt6-syslibs", "inherits": ["release", "syslibs"] },
+
+    { "name": "debug-qt6-clang", "inherits": ["debug", "clang"] },
+    { "name": "release-qt6-clang", "inherits": ["release", "clang"] }
 
   ]
 }
