@@ -1,0 +1,15 @@
+name: OmniPackage build agent
+
+on:
+  workflow_dispatch:
+  # push:
+  #  branches: [ main ]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: omnipackage/omnipackage-agent-ruby/.github/actions/build@master
+        env:
+          APIKEY: ${{ secrets.OMNIPACKAGE_AGENT_APIKEY }}
