@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: omnipackage/omnipackage-agent-ruby/.github/actions/build@master
+      - uses: omnipackage/omnipackage-agent-ruby/.github/action@master
         env:
           APIKEY: ${{ secrets.OMNIPACKAGE_AGENT_APIKEY }}
