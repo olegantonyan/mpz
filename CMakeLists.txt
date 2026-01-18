@@ -36,7 +36,6 @@ endif()
 
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
-  app/audio_device_ui/devicesmenu.cpp
   app/busyspinner.cpp
   app/config/global.cpp
   app/config/local.cpp
@@ -151,12 +150,13 @@ if (WIN32)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  find_package(Qt6 REQUIRED COMPONENTS Core)
-  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
   message(STATUS "using Qt6")
+  list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
 else()
-  add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
   message(STATUS "using Qt5")
+  add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
 endif()
 
 foreach(_qt_comp IN LISTS QT_COMPONENTS)

@@ -464,7 +464,7 @@ void MainWindow::setupSleepLock() {
 }
 
 void MainWindow::setupOutputDevice() {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#ifdef ENABLE_DEVICES_MENU
   connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
     AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
     connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);

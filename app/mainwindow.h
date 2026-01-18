@@ -18,7 +18,9 @@
 #include "sort_ui/sortmenu.h"
 #include "ipc/instance.h"
 #include "sleeplock.h"
-#include "audio_device_ui/devicesmenu.h"
+#ifdef ENABLE_DEVICES_MENU
+  #include "audio_device_ui/devicesmenu.h"
+#endif
 #include "modusoperandi.h"
 #include "slidingbanner.h"
 

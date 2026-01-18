@@ -1,12 +1,9 @@
 #ifndef DEVICESMENU_H
 #define DEVICESMENU_H
 
-#include <QObject>
-
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-
 #include "config/local.h"
 
+#include <QObject>
 #include <QToolButton>
 #include <QAction>
 #include <QMenu>
@@ -42,7 +39,5 @@ namespace AudioDeviceUi {
   static QHash<QByteArray, QString> devices_id_description_cache;
 
 } // namespace AudioDeviceUi
-
-#endif
 
 #endif // DEVICESMENU_H

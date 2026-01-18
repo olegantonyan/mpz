@@ -1,7 +1,5 @@
 #include "audio_device_ui/devicesmenu.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-
 #include <QMediaDevices>
 #include <QAudioDevice>
 
@@ -104,5 +102,3 @@ namespace AudioDeviceUi {
     return local_conf.outputDeviceId();
   }
 } // namespace AudioDeviceUi
-
-#endif
