@@ -50,7 +50,7 @@ namespace Playback {
     virtual void setTrack(const Track &track);
     virtual void clearTrack();
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    virtual void setOutputDevice(QByteArray deviceid);
+    void setOutputDevice(QByteArray deviceid);
 #endif
 
   private:
