@@ -17,8 +17,7 @@
 #include <QHash>
 
 namespace AudioDeviceUi {
-  class DevicesMenu : public QMenu
-  {
+  class DevicesMenu : public QMenu {
     Q_OBJECT
 
   public:
