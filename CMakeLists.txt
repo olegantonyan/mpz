@@ -107,7 +107,6 @@ set(PROJECT_SOURCES
 option(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
 
 if (ENABLE_MPD_SUPPORT)
-  add_definitions(-DENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
   list(APPEND PROJECT_SOURCES app/playlists_ui/mpd/playlistsmodel.cpp)
@@ -126,7 +125,6 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 
 if (ENABLE_DBUS)
-  add_definitions(-DMPRIS_ENABLE)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml dbus/mpris.h Mpris)
@@ -142,9 +140,7 @@ if (WIN32)
   if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
     set(CMAKE_RC_COMPILER_INIT windres)
     set(CMAKE_RC_FLAGS "--input-format=rc --output-format=coff")
-    set(CMAKE_RC_COMPILE_OBJECT
-        "<CMAKE_RC_COMPILER> --input-format=rc --output-format=coff -i <SOURCE> -o <OBJECT>"
-    )
+    set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> --input-format=rc --output-format=coff -i <SOURCE> -o <OBJECT>")
   endif()
   list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
 endif()
@@ -167,6 +163,13 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
+if (ENABLE_DBUS)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
+endif()
+if (ENABLE_MPD_SUPPORT)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
+endif()
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -215,7 +218,7 @@ option(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib")
-  add_definitions(-DUSE_SYSTEM_TAGLIB)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE USE_SYSTEM_TAGLIB)
 else()
   include(3rdparty/taglib.cmake)
 endif()
@@ -252,7 +255,7 @@ endif()
 
 # DEATHHANDLER
 if(UNIX)
-  add_definitions(-DENABLE_DEATHHANDLER)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEATHHANDLER)
   set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
   add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
   target_link_libraries(deathhandler PRIVATE dl)
