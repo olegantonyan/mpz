@@ -105,7 +105,6 @@ set(PROJECT_SOURCES
 )
 
 option(ENABLE_MPD_SUPPORT "Enable MPD support via libmpdclient" ON)
-
 if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd.cpp)
   list(APPEND PROJECT_SOURCES app/directory_ui/directorymodel/mpd/treeitem.cpp)
