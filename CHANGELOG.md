@@ -3,6 +3,7 @@
 ### Added
 
 - DeathHandler library that prints stack trace upon crash (Linux only)
+- Track info dialog shows file path with mpd server url for mpd tracks
 
 ### Fixed
 

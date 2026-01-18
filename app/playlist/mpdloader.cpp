@@ -6,7 +6,7 @@
 #include <QRegularExpression>
 
 namespace Playlist {
-MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
+  MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
   }
 
   QVector<Track> MpdLoader::playlistTracks(const QString& playlist_name) {
@@ -63,7 +63,7 @@ MpdLoader::MpdLoader(MpdClient::Client &cl) : client(cl) {
     }
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);
-    track.setMpd(true);
+    track.setMpd(client.currentUrl());
     return track;
   }
 

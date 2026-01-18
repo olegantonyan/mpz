@@ -34,7 +34,7 @@ public:
   void setCue(bool is_cue = true);
   void generateUidByHashing(const QString &prefix);
   void setPlaylistName(const QString &pln);
-  void setMpd(bool is_mpd);
+  void setMpd(const QUrl &mpd_server_url);
 
   QString path() const;
   QUrl url() const;
@@ -57,6 +57,7 @@ public:
   QString formattedAudioInfo() const;
   QString shortText() const;
   bool isMpd() const;
+  QUrl mpd_server_url() const;
 
   quint64 uid() const;
 
@@ -94,7 +95,7 @@ private:
   quint64 _uid;
 
   bool _cue;
-  bool _mpd;
+  QUrl _mpd_server_url;
 
   StreamMetaData _stream_meta;
 

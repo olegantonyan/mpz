@@ -74,7 +74,15 @@ void TrackInfoDialog::setup_table(const Track &track) {
     add_table_row(tr("Stream url"), track.url().toString());
   }
   if (!track.path().isEmpty()) {
-    add_table_row(tr("File path"), track.path());
+    if (track.isMpd()) {
+      auto url = track.mpd_server_url();
+      if (!url.password().isEmpty()) {
+        url.setPassword("***");
+      }
+      add_table_row(tr("File path"), url.toString() + "/" + track.path());
+    } else {
+      add_table_row(tr("File path"), track.path());
+    }
   }
   if (track.isCue()) {
     add_table_row(tr("CUE start at"), Track::formattedTime(track.begin()));

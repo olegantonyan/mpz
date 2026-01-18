@@ -26,12 +26,10 @@ Track::Track() {
   _year = 0;
   _track_number = 0;
   setCue(false);
-  setMpd(false);
 }
 
 Track::Track(const QString &fp, quint32 bgn) {
   _uid = generateUid();
-  setMpd(false);
   _begin = bgn;
 
   filepath = fp;
@@ -82,7 +80,6 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   _year = 0;
   _track_number = 0;
 
-  setMpd(false);
   setCue(false);
 
   _uid = generateUid();
@@ -158,8 +155,8 @@ void Track::setPlaylistName(const QString &pln) {
   _playlist_name = pln;
 }
 
-void Track::setMpd(bool is_mpd) {
-  _mpd = is_mpd;
+void Track::setMpd(const QUrl &mpd_server_url) {
+  _mpd_server_url = mpd_server_url;
 }
 
 void Track::setDuration(quint64 dur) {
@@ -253,7 +250,11 @@ QString Track::shortText() const {
 }
 
 bool Track::isMpd() const {
-  return _mpd;
+  return !mpd_server_url().isEmpty();
+}
+
+QUrl Track::mpd_server_url() const {
+  return _mpd_server_url;
 }
 
 quint64 Track::uid() const {
