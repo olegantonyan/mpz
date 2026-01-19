@@ -27,11 +27,9 @@ option(USE_QT5 "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
   find_package(Qt5 REQUIRED COMPONENTS ${QT_COMPONENTS})
   set(QT_VERSION_MAJOR ${Qt5Core_VERSION_MAJOR})
-  set(QT_VERSION ${Qt5Core_VERSION})
 else()
   find_package(Qt6 REQUIRED COMPONENTS ${QT_COMPONENTS})
   set(QT_VERSION_MAJOR ${Qt6Core_VERSION_MAJOR})
-  set(QT_VERSION ${Qt6Core_VERSION})
 endif()
 
 set(PROJECT_SOURCES
@@ -169,13 +167,7 @@ if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
 endif()
 
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
-endif()
+set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
   ${BUNDLE_ID_OPTION}
   MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
