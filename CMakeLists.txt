@@ -284,7 +284,7 @@ endif()
 # ENDOF LIBMPDCLIENT
 
 # DEATHHANDLER
-if(UNIX)
+if (UNIX AND (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64|arm64|x86|x86_64|amd64|i[3-6]86)$"))
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEATHHANDLER)
   set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
   add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
