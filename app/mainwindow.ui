@@ -122,7 +122,7 @@
       <item>
        <widget class="QToolButton" name="toolButtonOutputDevice">
         <property name="text">
-         <string>Output</string>
+         <string>🎧 Output</string>
         </property>
        </widget>
       </item>

@@ -5,36 +5,42 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="14"/>
-        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="101"/>
+        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="121"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="29"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="68"/>
-        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="103"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="75"/>
+        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="123"/>
         <source>Changelog</source>
         <translation>Ћенџлог</translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="36"/>
-        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="104"/>
+        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="124"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="43"/>
-        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="105"/>
+        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="125"/>
         <source>Contact with developer</source>
         <translation>Контактирајте програмера</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="33"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="88"/>
+        <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_aboutdialog.h" line="129"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="40"/>
         <source>Using opensource libraries</source>
         <translation>Коришћење библиотека отвореног кода</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="37"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Config files path: </source>
         <translation>Путања конфигурационих датотека: </translation>
     </message>
@@ -42,7 +48,7 @@
 <context>
     <name>AudioDeviceUi::DevicesMenu</name>
     <message>
-        <location filename="../../audio_device_ui/devicesmenu.cpp" line="13"/>
+        <location filename="../../audio_device_ui/devicesmenu.cpp" line="11"/>
         <source>Default</source>
         <translation>Подразумевано</translation>
     </message>
@@ -470,10 +476,14 @@
         <translation>Гласноћа</translation>
     </message>
     <message>
+        <source>Output</source>
+        <translation type="vanished">Аудиоизлаз</translation>
+    </message>
+    <message>
         <location filename="../../mainwindow.ui" line="125"/>
         <location filename="../../../build/Qt6-Debug/mpz_autogen/include/ui_mainwindow.h" line="311"/>
-        <source>Output</source>
-        <translation>Аудиоизлаз</translation>
+        <source>🎧 Output</source>
+        <translation type="unfinished">🎧 Аудиоизлаз</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="132"/>
@@ -583,13 +593,13 @@
         <translation>(користите глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="347"/>
-        <location filename="../../mainwindow.cpp" line="351"/>
+        <location filename="../../mainwindow.cpp" line="350"/>
+        <location filename="../../mainwindow.cpp" line="354"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="353"/>
+        <location filename="../../mainwindow.cpp" line="356"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
@@ -597,12 +607,12 @@
 <context>
     <name>ModusOperandi</name>
     <message>
-        <location filename="../../modusoperandi.cpp" line="25"/>
+        <location filename="../../modusoperandi.cpp" line="26"/>
         <source>mpd connection error</source>
         <translation>грешка mpd везе</translation>
     </message>
     <message>
-        <location filename="../../modusoperandi.cpp" line="28"/>
+        <location filename="../../modusoperandi.cpp" line="29"/>
         <source>mpd connected</source>
         <translation>мпд повезан</translation>
     </message>
@@ -690,7 +700,7 @@
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="29"/>
-        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="99"/>
+        <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="101"/>
         <source>Save as m3u</source>
         <translation>Сачувај као m3u</translation>
     </message>
@@ -1050,32 +1060,33 @@
         <translation>URL стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="77"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="84"/>
         <source>File path</source>
         <translation>Путања до датотеке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="80"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="88"/>
         <source>CUE start at</source>
         <translation>CUE почиње у</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="102"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="110"/>
         <source>Copy</source>
         <translation>Копирај</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="106"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="114"/>
         <source>Search on web</source>
         <translation>Претражите на вебу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="134"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="142"/>
         <source>Copy to clipboard</source>
         <translation>Копирај у међуспремник</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="142"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="150"/>
         <source>Open in external viewer</source>
         <translation>Отвори у спољном прегледнику</translation>
     </message>
