@@ -6,6 +6,8 @@
 
 ### Misc
 
+- update vendored yaml-cpp to 0.9.0
+
 ## [2.0.3] - 2026-01-18
 
 ### Added
