@@ -199,7 +199,7 @@ if(USE_SYSTEM_YAMLCPP)
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.9.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
-  add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
+  # add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
   add_subdirectory(${YAMLCPP_DIR})
 endif()
 # ENDOF YAML-CPP

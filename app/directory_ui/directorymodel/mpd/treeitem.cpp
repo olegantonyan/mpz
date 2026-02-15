@@ -4,7 +4,7 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    TreeItem::TreeItem(bool is_dir, const QString& pth, time_t last_mod, TreeItem *parent_item) : last_modified(last_mod), is_directory(is_dir), parent(parent_item), visible(true) {
+    TreeItem::TreeItem(bool is_dir, const QString& pth, time_t last_mod, TreeItem *parent_item) : is_directory(is_dir), last_modified(last_mod), parent(parent_item), visible(true) {
       loaded = false;
       set_path_with_name(pth);
     }
