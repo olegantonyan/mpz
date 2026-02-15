@@ -53,8 +53,8 @@ namespace DirectoryUi {
       TreeItem *treeItemFromIndex(const QModelIndex &index) const;
       TreeItem *createRootItem();
 
-      MpdClient::Client &client;
       TreeItem *root_item;
+      MpdClient::Client &client;
 
       int last_sort_column;
       Qt::SortOrder last_sort_order;

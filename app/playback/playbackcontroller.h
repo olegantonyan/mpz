@@ -68,12 +68,12 @@ namespace Playback {
 
     Playback::Controls _controls;
     MediaPlayer _player;
+    ModusOperandi &modus_operndi;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::MediaPlayer _mpdplayer;
 #endif
     Track _current_track;
     QTimer monotonic_timer;
-    ModusOperandi &modus_operndi;
 
   private slots:
     void on_controlsPause();
