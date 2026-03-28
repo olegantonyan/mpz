@@ -23,4 +23,4 @@ jobs:
           version: master
           cache: false
 
-      - run: omnipackage release --fail-fast .
+      - run: omnipackage release .
