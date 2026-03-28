@@ -12,13 +12,26 @@ common: &common
   description: "Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to \"album list\" in Foobar2000."
 
 repositories:
-  - name: CloudFlare R2 repositories
+  - name: "Cloudflare R2 next"
     provider: s3
     gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
     <<: *common
     s3:
       bucket: repositories
-      path_in_bucket: 'mpz'
+      path_in_bucket: 'mpz/next'
+      bucket_public_url: 'https://repositories.omnipackage.org'
+      endpoint: '${CLOUDFLARE_R2_ENDPOINT}'
+      access_key_id: '${CLOUDFLARE_R2_ACCESS_KEY_ID}'
+      secret_access_key: '${CLOUDFLARE_R2_SECRET_ACCESS_KEY}'
+      region: auto
+      force_path_style: true
+  - name: "Cloudflare R2 stable"
+    provider: s3
+    gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
+    <<: *common
+    s3:
+      bucket: repositories
+      path_in_bucket: 'mpz/stable'
       bucket_public_url: 'https://repositories.omnipackage.org'
       endpoint: '${CLOUDFLARE_R2_ENDPOINT}'
       access_key_id: '${CLOUDFLARE_R2_ACCESS_KEY_ID}'
