@@ -15,5 +15,7 @@ jobs:
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
 
       - uses: omnipackage/omnipackage-rs/.github/actions/setup@master
+        with:
+          version: master
 
       - run: omnipackage release --fail-fast .
