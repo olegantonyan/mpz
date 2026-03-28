@@ -5,9 +5,13 @@ on:
   # push:
   #  branches: [ main ]
 
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    concurrency:
+      group: omnipackage
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v4
