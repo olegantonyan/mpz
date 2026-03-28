@@ -16,6 +16,7 @@ repositories:
     provider: s3
     gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
     <<: *common
+    description: "!!! UNSTABLE builds from master branch"
     s3:
       bucket: repositories
       path_in_bucket: 'mpz/next'
