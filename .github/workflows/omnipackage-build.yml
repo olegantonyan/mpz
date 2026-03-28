@@ -1,4 +1,4 @@
-name: OmniPackage build agent
+name: OmniPackage build and publish
 
 on:
   workflow_dispatch:
@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: omnipackage/omnipackage-agent-ruby/.github/action@master
-        env:
-          APIKEY: ${{ secrets.OMNIPACKAGE_AGENT_APIKEY }}
+      - uses: actions/checkout@v4
+
+      - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
+
+      - uses: omnipackage/omnipackage-rs/.github/actions/setup@master
+
+      - run: omnipackage release --fail-fast .
