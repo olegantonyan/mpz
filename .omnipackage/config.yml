@@ -11,6 +11,21 @@ common: &common
   summary: Music player for the large local collections
   description: "Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to \"album list\" in Foobar2000."
 
+repositories:
+  - name: CloudFlare R2 repositories
+    provider: s3
+    gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
+    <<: *common
+    s3:
+      bucket: repositories
+      path_in_bucket: 'mpz'
+      bucket_public_url: 'https://repositories.omnipackage.org'
+      endpoint: '${CLOUDFLARE_R2_ENDPOINT}'
+      access_key_id: '${CLOUDFLARE_R2_ACCESS_KEY_ID}'
+      secret_access_key: '${CLOUDFLARE_R2_SECRET_ACCESS_KEY}'
+      region: auto
+      force_path_style: true
+
 rpm: &rpm
   <<: *common
   rpm:
@@ -79,11 +94,11 @@ builds:
 - distro: 'opensuse_tumbleweed'
   <<: *opensuse_qt6
 
-- distro: 'debian_10'
-  <<: *debian_qt5
-  before_build_script: '.omnipackage/debian10_before_build.sh'
-  LDFLAGS: '-static-libstdc++ -static-libgcc'
-  CPPFLAGS: '-static-libstdc++ -static-libgcc'
+#- distro: 'debian_10'
+#  <<: *debian_qt5
+#  before_build_script: '.omnipackage/debian10_before_build.sh'
+#  LDFLAGS: '-static-libstdc++ -static-libgcc'
+#  CPPFLAGS: '-static-libstdc++ -static-libgcc'
 
 - distro: 'debian_11'
   <<: *debian_qt5
