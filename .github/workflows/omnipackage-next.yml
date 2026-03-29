@@ -1,4 +1,4 @@
-name: OmniPackage master aka next
+name: OmniPackage next
 
 on:
   workflow_dispatch:

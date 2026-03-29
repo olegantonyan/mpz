@@ -1,12 +1,7 @@
-name: OmniPackage publish (reusable)
+name: OmniPackage (reusable)
 
 on:
   workflow_call:
-    inputs:
-      repository:
-        required: true
-        type: string
-  workflow_dispatch:
     inputs:
       repository:
         required: true
