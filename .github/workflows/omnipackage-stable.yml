@@ -1,13 +1,13 @@
-name: OmniPackage master aka next
+name: OmniPackage stable
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
+  release:
+    types: [published]
 
 jobs:
   publish:
     uses: ./.github/workflows/_omnipackage.yml
     with:
-      repository: "Cloudflare R2 next"
+      repository: "Cloudflare R2 stable"
     secrets: inherit
