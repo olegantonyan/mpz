@@ -141,6 +141,12 @@ builds:
 - distro: 'ubuntu_25.04'
   <<: *debian_qt6
 
+- distro: 'ubuntu_25.10'
+  <<: *debian_qt6
+
+- distro: 'ubuntu_26.04'
+  <<: *debian_qt6
+
 - distro: 'fedora_38'
   <<: *readhat_qt5
 
@@ -157,6 +163,9 @@ builds:
   <<: *readhat_qt6
 
 - distro: 'fedora_43'
+  <<: *readhat_qt6
+
+- distro: 'fedora_44'
   <<: *readhat_qt6
 
 - distro: 'fedora_rawhide'
