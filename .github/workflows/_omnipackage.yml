@@ -6,9 +6,11 @@ on:
       repository:
         required: true
         type: string
-    secrets:
-      OMNIPACKAGE_MPZ_DOTENV:
+  workflow_dispatch:
+    inputs:
+      repository:
         required: true
+        type: string
 
 jobs:
   run:

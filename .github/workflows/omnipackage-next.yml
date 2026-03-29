@@ -1,7 +1,6 @@
 name: OmniPackage master aka next
 
 on:
-  workflow_dispatch:
   push:
     branches: [master]
 
@@ -10,4 +9,3 @@ jobs:
     uses: ./.github/workflows/_omnipackage.yml
     with:
       repository: "Cloudflare R2 next"
-    secrets: inherit
