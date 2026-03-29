@@ -1,6 +1,7 @@
 name: OmniPackage master aka next
 
 on:
+  workflow_dispatch:
   push:
     branches: [master]
 
