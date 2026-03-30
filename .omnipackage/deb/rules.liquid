@@ -3,13 +3,6 @@
 # Be carefull, this is a Makefile, so the indents are tabs and not spaces!
 # -*- makefile -*-
 
-{% if LDFLAGS %}
-export LDFLAGS={{ LDFLAGS }}
-{% endif %}
-{% if CPPFLAGS %}
-export CPPFLAGS={{ CPPFLAGS }}
-{% endif %}
-
 %:
 	dh $@
 
