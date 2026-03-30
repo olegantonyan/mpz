@@ -6,7 +6,7 @@ on:
     types: [published]
 
 jobs:
-  release:
+  run:
     uses: ./.github/workflows/_omnipackage.yml
     secrets: inherit
     with:
