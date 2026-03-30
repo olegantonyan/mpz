@@ -1,4 +1,4 @@
-name: OmniPackage stable
+name: Release packages - stable
 
 on:
   workflow_dispatch:
@@ -6,7 +6,8 @@ on:
     types: [published]
 
 jobs:
-  publish:
+  release:
     uses: ./.github/workflows/_omnipackage.yml
+    secrets: inherit
     with:
       repository: "Cloudflare R2 stable"

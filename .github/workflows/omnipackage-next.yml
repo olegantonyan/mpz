@@ -1,4 +1,4 @@
-name: OmniPackage next
+name: Release packages - next
 
 on:
   workflow_dispatch:
@@ -6,7 +6,8 @@ on:
     branches: [master]
 
 jobs:
-  publish:
+  release:
     uses: ./.github/workflows/_omnipackage.yml
+    secrets: inherit
     with:
       repository: "Cloudflare R2 next"
