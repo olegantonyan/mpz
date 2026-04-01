@@ -10,4 +10,4 @@ jobs:
     uses: ./.github/workflows/_omnipackage.yml
     secrets: inherit
     with:
-      repository: "Cloudflare R2 next"
+      repository: "Linux packages - next"
