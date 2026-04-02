@@ -1,8 +1,14 @@
-extract_version:
-  provider: 'file'
-  file:
-    file: 'CMakeLists.txt'
-    regex: 'project\(mpz VERSION (.+) LANGUAGES'
+version_extractors:
+  - name: git
+    provider: "shell"
+    shell:
+      command: printf '2~master.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S')
+
+  - name: stable
+    provider: 'file'
+    file:
+      file: 'CMakeLists.txt'
+      regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
 common: &common
   package_name: mpz

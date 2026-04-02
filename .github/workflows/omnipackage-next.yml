@@ -11,3 +11,4 @@ jobs:
     secrets: inherit
     with:
       repository: "Linux packages - next"
+      version_extractor: "git"
