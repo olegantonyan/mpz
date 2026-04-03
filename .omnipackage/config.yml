@@ -2,7 +2,7 @@ version_extractors:
   - name: git
     provider: "shell"
     shell:
-      command: printf '2.99~master.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S')
+      command: printf '2.99~next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S')
 
   - name: stable
     provider: 'file'
