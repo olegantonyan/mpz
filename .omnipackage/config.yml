@@ -72,6 +72,10 @@ mageia_qt5: &mageia_qt5
   CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
   <<: *rpm
 
+mageia_qt6: &mageia_qt6
+  build_dependencies: [gcc, make, cmake, qtbase6-common-devel lib64qt6core-devel lib64qt6gui-devel lib64qt6widgets-devel lib64qt6concurrent-devel, lib64qt6multimedia-devel]
+  <<: *rpm
+
 
 readhat_qt5: &readhat_qt5
   build_dependencies: [gcc, make, cmake, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
@@ -185,8 +189,8 @@ builds:
 - distro: 'rockylinux_9'
   <<: *readhat_qt5
 
-- distro: 'mageia_cauldron'
-  <<: *mageia_qt5
-
 - distro: 'mageia_9'
-  <<: *mageia_qt5
+  <<: *mageia_qt6
+
+- distro: 'mageia_cauldron'
+  <<: *mageia_qt6
