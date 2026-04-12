@@ -3,7 +3,7 @@ name: Image cache refresh
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 1 * *'
+    - cron: '44 6 1 * *'
 
 permissions:
   packages: write
