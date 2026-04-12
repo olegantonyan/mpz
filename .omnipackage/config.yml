@@ -16,7 +16,7 @@ image_caches:
     image_tag: mpz-latest
     registry:
       url: ghcr.io
-      namespace: olegantonyan
+      namespace: '${GITHUB_REGISTRY_NAMESPACE}'
       username: '${GITHUB_REGISTRY_USERNAME}'
       password: '${GITHUB_REGISTRY_PASSWORD}'
 
