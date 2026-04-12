@@ -17,7 +17,7 @@ image_caches:
     registry:
       url: ghcr.io
       namespace: olegantonyan
-      username: '${GITHUB_REGISTRY_PASSWORD}'
+      username: '${GITHUB_REGISTRY_USERNAME}'
       password: '${GITHUB_REGISTRY_PASSWORD}'
 
 common: &common
