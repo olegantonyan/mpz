@@ -45,5 +45,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install omnipackage
       - uses: actions/checkout@v6
-      - run: echo "${{ secrets.OMNIPACKAGE_DOTENV }}" > .env
+      - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
       - run:  omnipackage image-cache refresh . --image-cache "${{ inputs.image_cache }}" --distros "${{ matrix.distro }}"
