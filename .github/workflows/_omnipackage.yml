@@ -52,9 +52,6 @@ jobs:
       - uses: actions/checkout@v6
 
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-      - run: |
-          echo "GITHUB_REGISTRY_USERNAME=${{ github.actor }}" >> .env
-          echo "GITHUB_REGISTRY_PASSWORD=${{ secrets.GITHUB_TOKEN }}" >> .env
 
       - name: Release packages for ${{ matrix.distro }}
         run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache "${{ inputs.image_cache }}"
