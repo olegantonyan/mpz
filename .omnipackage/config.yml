@@ -10,6 +10,16 @@ version_extractors:
       file: 'CMakeLists.txt'
       regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
+image_caches:
+  - name: github
+    provider: registry
+    image_tag: mpz-latest
+    registry:
+      url: ghcr.io
+      namespace: olegantonyan
+      username: '${GITHUB_REGISTRY_PASSWORD}'
+      password: '${GITHUB_REGISTRY_PASSWORD}'
+
 common: &common
   package_name: mpz
   maintainer: 'Oleg Antonyan <oleg.b.antonyan@gmail.com>'

@@ -1,16 +1,15 @@
+name: Image cache refresh
+
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
-      repository:
-        required: true
-        type: string
-      version_extractor:
-        required: true
-        type: string
       image_cache:
-        required: false
+        required: true
         type: string
         default: github
+
+permissions:
+  packages: write
 
 jobs:
   list-distros:
@@ -31,30 +30,23 @@ jobs:
         id: get-distros
         run: echo "distros=$(omnipackage info --list-distros . --format json)" >> "$GITHUB_OUTPUT"
 
-  release:
-    needs: [list-distros]
-    runs-on: ubuntu-24.04
-    concurrency:
-      group: omnipackage-${{ inputs.repository }}-${{ matrix.distro }}
-      cancel-in-progress: false
+  image_cache:
+    needs: [bootstrap-binary, list-distros]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         distro: ${{ fromJson(needs.list-distros.outputs.distros) }}
     steps:
-      - name: Install omnipackage
-        run: |
-          echo 'deb https://repositories.omnipackage.org/omnipackage-rs/master/ubuntu_24.04 stable/' | sudo tee /etc/apt/sources.list.d/omnipackage_omnipackage.list
-          curl -fsSL https://repositories.omnipackage.org/omnipackage-rs/master/ubuntu_24.04/stable/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/omnipackage_omnipackage.gpg > /dev/null
-          sudo apt-get update
-          sudo apt-get install omnipackage
-
       - uses: actions/checkout@v6
-
-      - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq podman gpg
+      - uses: actions/download-artifact@v8
+        with:
+          name: omnipackage-binary
+          path: /usr/local/bin
+      - run: chmod +x /usr/local/bin/omnipackage
+      - run: echo "${{ secrets.OMNIPACKAGE_DOTENV }}" > .env
       - run: |
           echo "GITHUB_REGISTRY_USERNAME=${{ github.actor }}" >> .env
           echo "GITHUB_REGISTRY_PASSWORD=${{ secrets.GITHUB_TOKEN }}" >> .env
-
-      - name: Release packages for ${{ matrix.distro }}
-        run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache "${{ inputs.image_cache }}"
+      - run:  omnipackage image-cache refresh . --image-cache "${{ inputs.image_cache }}" --distros "${{ matrix.distro }}"
