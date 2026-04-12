@@ -2,11 +2,8 @@ name: Image cache refresh
 
 on:
   workflow_dispatch:
-    inputs:
-      image_cache:
-        required: true
-        type: string
-        default: github
+  schedule:
+    - cron: '0 6 1 * *'
 
 permissions:
   packages: write
@@ -46,4 +43,4 @@ jobs:
           sudo apt-get install omnipackage
       - uses: actions/checkout@v6
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-      - run:  omnipackage prime . --image-cache "${{ inputs.image_cache }}" --distros "${{ matrix.distro }}"
+      - run:  omnipackage prime . --image-cache github --distros "${{ matrix.distro }}"
