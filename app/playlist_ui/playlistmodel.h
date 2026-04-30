@@ -55,9 +55,9 @@ namespace PlaylistUi {
 
     std::shared_ptr<Playlist::Playlist> _playlist;
     QVector<Track> tracks;
-    quint64 highlight_uid;
+    quint64 highlight_uid = 0;
     QStyle *style;
-    enum HighlightState highlight_state;
+    enum HighlightState highlight_state = None;
     const ColumnsConfig &columns_config;
   };
 }

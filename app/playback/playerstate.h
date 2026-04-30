@@ -20,9 +20,9 @@ namespace Playback {
     void resetFolowedCursor();
 
   private:
-    quint64 playing_track_uid;
-    quint64 selected_track_uid;
-    bool followed_cursor;
+    quint64 playing_track_uid = 0;
+    quint64 selected_track_uid = 0;
+    bool followed_cursor = false;
   };
 }
 
