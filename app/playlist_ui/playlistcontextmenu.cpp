@@ -97,7 +97,11 @@ namespace PlaylistUi {
   }
 
   void PlaylistContextMenu::on_trackInfo() {
-    auto selection = view->selectionModel()->selectedRows().first();
+    auto rows = view->selectionModel()->selectedRows();
+    if (rows.isEmpty()) {
+      return;
+    }
+    auto selection = rows.first();
     if (selection.isValid()) {
       auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
       TrackInfoDialog *dlg = new TrackInfoDialog(track);
