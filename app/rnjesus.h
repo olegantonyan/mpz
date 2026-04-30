@@ -10,7 +10,7 @@
 class RNJesus {
 public:
   static void seed();
-  static quint64 generate(int max);
+  static quint64 generate(int size);
   static quint64 generate();
 };
 

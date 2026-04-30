@@ -14,12 +14,14 @@ void RNJesus::seed() {
 #endif
 }
 
-quint64 RNJesus::generate(int max) {
+quint64 RNJesus::generate(int size) {
+  if (size <= 0) {
+    return 0;
+  }
 #ifdef USE_QRANDOMGENERATOR
-  return QRandomGenerator::global()->bounded(max);
+  return QRandomGenerator::global()->bounded(size);
 #else
-  int min = 0;
-  return qrand() % ((max + 1) - min) + min;
+  return qrand() % size;
 #endif
 }
 

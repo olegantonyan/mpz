@@ -17,8 +17,8 @@
 #include <QHash>
 
 Track::Track() {
-  Track("", 0);
   _uid = 0;
+  _begin = 0;
   _duration = 0;
   _channels = 0;
   _bitrate = 0;

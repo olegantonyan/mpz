@@ -28,19 +28,22 @@ namespace Playback {
 
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
-    if (current_playlist == nullptr) {
+    if (current_playlist == nullptr || current_playlist->tracks().isEmpty()) {
       return;
     }
 
-    if (selected_playlist->random() == Playlist::Playlist::Random || global_conf.playbackOrder() == "random") {
-      int rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
-      if (rngjesus == current_playlist->trackIndex(current_track_uid)) {
+    bool is_random = (selected_playlist != nullptr && selected_playlist->random() == Playlist::Playlist::Random) ||
+                     global_conf.playbackOrder() == "random";
+    if (is_random) {
+      int playlist_size = current_playlist->tracks().size();
+      int rngjesus = RNJesus::generate(playlist_size);
+      if (playlist_size > 1 && rngjesus == current_playlist->trackIndex(current_track_uid)) {
         // once again, but only once, you lucky bastard
-        rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
+        rngjesus = RNJesus::generate(playlist_size);
       }
       Track t = current_playlist->tracks().at(rngjesus);
-      if (random_trail.exists(t.uid())) {
-        rngjesus = RNJesus::generate(current_playlist->tracks().size() - 1);
+      if (playlist_size > 1 && random_trail.exists(t.uid())) {
+        rngjesus = RNJesus::generate(playlist_size);
         t = current_playlist->tracks().at(rngjesus);
       }
 
@@ -52,7 +55,9 @@ namespace Playback {
     int current = current_playlist->trackIndex(current_track_uid);
     auto next = current + 1;
     if (next > current_playlist->tracks().size() - 1) {
-      if (selected_playlist->random() == Playlist::Playlist::SequentialNoLoop || global_conf.playbackOrder() == "sequential (no loop)") {
+      bool no_loop = (selected_playlist != nullptr && selected_playlist->random() == Playlist::Playlist::SequentialNoLoop) ||
+                     global_conf.playbackOrder() == "sequential (no loop)";
+      if (no_loop) {
         emit stop();
         return;
       }
@@ -67,7 +72,7 @@ namespace Playback {
   void Dispatch::on_prevRequested() {
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
-    if (current_playlist == nullptr) {
+    if (current_playlist == nullptr || current_playlist->tracks().isEmpty()) {
       return;
     }
 
@@ -77,9 +82,12 @@ namespace Playback {
         prev_uid = random_trail.prev();
       }
       if (prev_uid != 0) {
-        Track t = current_playlist->tracks().at(current_playlist->trackIndex(prev_uid));
-        emit play(t);
-        return;
+        int prev_index = current_playlist->trackIndex(prev_uid);
+        if (prev_index >= 0) {
+          Track t = current_playlist->tracks().at(prev_index);
+          emit play(t);
+          return;
+        }
       }
     }
 
