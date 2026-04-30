@@ -54,7 +54,7 @@ namespace Playlist {
     QVector<Track> tracks_list;
     quint64 _uid;
     enum PlaylistRandom _random;
-    QMutex mutex;
+    mutable QMutex mutex;
   };
 }
 

@@ -105,6 +105,9 @@ namespace IPC {
 
   void Instance::on_server_connection() {
     QTcpSocket *socket = server.nextPendingConnection();
+    if (!socket) {
+      return;
+    }
     QTimer timer;
     QEventLoop loop;
 

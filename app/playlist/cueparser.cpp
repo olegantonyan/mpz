@@ -229,8 +229,12 @@ namespace Playlist {
       //qDebug() << entry.index << begin_by_index(entry.index) << entry.title << entry.artist << entry.album;
 
       bool fuck;
+      qint64 entry_begin = begin_by_index(entry.index);
+      if (entry_begin < 0) {
+        entry_begin = 0;
+      }
       Track track(entry.file,
-                  begin_by_index(entry.index),
+                  static_cast<quint64>(entry_begin),
                   entry.artist.isEmpty() ? entry.album_artist : entry.artist,
                   entry.album,
                   entry.title,
@@ -244,16 +248,15 @@ namespace Playlist {
       track.setCue();
       if (i < entries.length() - 1) {
         CueEntry next_enrty = entries.at(qMin(i + 1, entries.length() - 1));
-        qint64 duration = begin_by_index(next_enrty.index) - begin_by_index(entry.index);
+        qint64 next_begin = begin_by_index(next_enrty.index);
+        qint64 duration = (next_begin < 0) ? -1 : (next_begin - entry_begin);
         if (duration < 0) {
-          qint64 duration = track.duration() - begin_by_index(entry.index); // last track for this file - got duration from audio properties
-          track.setDuration(duration);
-        } else {
-          track.setDuration(duration);
+          duration = static_cast<qint64>(track.duration()) - entry_begin; // last track for this file - got duration from audio properties
         }
+        track.setDuration(duration < 0 ? 0 : static_cast<quint64>(duration));
       } else {
-        qint64 duration = track.duration() - begin_by_index(entry.index); // got duration from audio properties
-        track.setDuration(duration);
+        qint64 duration = static_cast<qint64>(track.duration()) - entry_begin; // got duration from audio properties
+        track.setDuration(duration < 0 ? 0 : static_cast<quint64>(duration));
       }
 
       //qDebug() << track.track_number() << track.title() << track.artist();

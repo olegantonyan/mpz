@@ -20,6 +20,7 @@ namespace Playlist {
   }
 
   QString Playlist::name() const {
+    QMutexLocker lock(&mutex);
     return playlist_name;
   }
 
@@ -35,6 +36,7 @@ namespace Playlist {
   }
 
   QVector<Track> Playlist::tracks() const {
+    QMutexLocker lock(&mutex);
     return tracks_list;
   }
 
@@ -62,8 +64,9 @@ namespace Playlist {
   }
 
   int Playlist::trackIndex(quint64 track_uid) const {
-    for (int i = 0; i < tracks().size(); i++) {
-      if (tracks().at(i).uid() == track_uid) {
+    const QVector<Track> snapshot = tracks();
+    for (int i = 0; i < snapshot.size(); i++) {
+      if (snapshot.at(i).uid() == track_uid) {
         return i;
       }
     }
@@ -71,7 +74,8 @@ namespace Playlist {
   }
 
   Track Playlist::trackBy(quint64 uid) const {
-    for (auto i : tracks()) {
+    const QVector<Track> snapshot = tracks();
+    for (const auto &i : snapshot) {
       if (i.uid() == uid) {
         return i;
       }
@@ -92,6 +96,7 @@ namespace Playlist {
   }
 
   Playlist::PlaylistRandom Playlist::random() const {
+    QMutexLocker lock(&mutex);
     return _random;
   }
 
@@ -118,6 +123,7 @@ namespace Playlist {
   }
 
   void Playlist::reload() {
+    QMutexLocker lock(&mutex);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QMutableListIterator<Track> mit(tracks_list);
 #else

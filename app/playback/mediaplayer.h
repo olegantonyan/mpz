@@ -67,10 +67,10 @@ namespace Playback {
     bool suppress_emit_playing_state;
     bool start_stream();
 #endif
-    bool unpause_workaround_needed_on_playing_state_change;
+    bool unpause_workaround_needed_on_playing_state_change = false;
 
-    quint64 offset_begin;
-    quint64 offset_end;
+    quint64 offset_begin = 0;
+    quint64 offset_end = 0;
     void seek_to_offset_begin();
     void unpause_workaround();
     void emitStateChanged(MediaPlayer::State state);

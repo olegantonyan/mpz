@@ -324,7 +324,9 @@ namespace MpdClient {
   }
 
   bool Connection::next() {
-
+    if (!conn) {
+      return false;
+    }
 
     if (!mpd_run_next(conn)) {
       qWarning() << "mpd_run_next:" << lastError();
@@ -659,7 +661,7 @@ namespace MpdClient {
     auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), MPD_TIMEOUT);
     if (!probed_conn) {
       result.first = false;
-      result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+      result.second = "out of memory allocating mpd connection";
       return result;
     }
     if (mpd_connection_get_error(probed_conn) != MPD_ERROR_SUCCESS) {
@@ -716,12 +718,15 @@ namespace MpdClient {
     }
     if (mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
       qWarning() << "error establishing idle connection" << mpd_connection_get_error_message(idle_conn);
+      mpd_connection_free(idle_conn);
+      idle_conn = nullptr;
       return false;
     }
     if (!url.password().isEmpty()) {
       if (!mpd_run_password(idle_conn, url.password().toUtf8().constData())) {
         qWarning() << "password auth error idle:" << QString::fromUtf8(mpd_connection_get_error_message(idle_conn));
         mpd_connection_free(idle_conn);
+        idle_conn = nullptr;
         return false;
       }
     }

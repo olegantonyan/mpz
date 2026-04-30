@@ -71,13 +71,17 @@ namespace PlaylistUi {
   }
 
   void Model::setTracks(const QVector<Track> &t) {
-    beginRemoveRows(QModelIndex(), 0, tracks.size());
-    tracks.clear();
-    endRemoveRows();
+    if (!tracks.isEmpty()) {
+      beginRemoveRows(QModelIndex(), 0, tracks.size() - 1);
+      tracks.clear();
+      endRemoveRows();
+    }
 
-    beginInsertRows(QModelIndex(), 0, t.size());
-    tracks = t;
-    endInsertRows();
+    if (!t.isEmpty()) {
+      beginInsertRows(QModelIndex(), 0, t.size() - 1);
+      tracks = t;
+      endInsertRows();
+    }
 
     /*QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(tracks.size(), columnCount());
@@ -96,8 +100,8 @@ namespace PlaylistUi {
   }
 
   Track Model::itemAt(const QModelIndex &index) const {
-    if (index.row() > tracks.size() - 1) {
-      throw "index out of bounds";
+    if (index.row() < 0 || index.row() >= tracks.size()) {
+      return Track();
     }
     return tracks.at(index.row());
   }
