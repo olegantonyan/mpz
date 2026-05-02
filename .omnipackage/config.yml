@@ -5,9 +5,9 @@ version_extractors:
       command: printf '2.99~next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S')
 
   - name: stable
-    provider: 'file'
+    provider: "file"
     file:
-      file: 'CMakeLists.txt'
+      file: "CMakeLists.txt"
       regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
 image_caches:
@@ -16,16 +16,16 @@ image_caches:
     image_tag: mpz-latest
     registry:
       url: ghcr.io
-      namespace: '${GITHUB_REGISTRY_NAMESPACE}'
-      username: '${GITHUB_REGISTRY_USERNAME}'
-      password: '${GITHUB_REGISTRY_PASSWORD}'
+      namespace: "${GITHUB_REGISTRY_NAMESPACE}"
+      username: "${GITHUB_REGISTRY_USERNAME}"
+      password: "${GITHUB_REGISTRY_PASSWORD}"
 
 common: &common
   package_name: mpz
-  maintainer: 'Oleg Antonyan <oleg.b.antonyan@gmail.com>'
+  maintainer: "Oleg Antonyan <oleg.b.antonyan@gmail.com>"
   homepage: https://mpz-player.org/
   summary: Music player for the large local collections
-  description: "Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to \"album list\" in Foobar2000."
+  description: 'Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to "album list" in Foobar2000.'
 
 repositories:
   - name: "Linux packages - next"
@@ -35,15 +35,15 @@ repositories:
     description: "Builds from master branch aka next"
     s3:
       bucket: repositories
-      path_in_bucket: 'mpz/next'
-      bucket_public_url: 'https://repositories.omnipackage.org'
-      endpoint: '${CLOUDFLARE_R2_ENDPOINT}'
-      access_key_id: '${CLOUDFLARE_R2_ACCESS_KEY_ID}'
-      secret_access_key: '${CLOUDFLARE_R2_SECRET_ACCESS_KEY}'
+      path_in_bucket: "mpz/next"
+      bucket_public_url: "https://repositories.omnipackage.org"
+      endpoint: "${CLOUDFLARE_R2_ENDPOINT}"
+      access_key_id: "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+      secret_access_key: "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
       region: auto
       force_path_style: true
-      cloudflare_zone_id: '${CLOUDFLARE_ZONE_ID}'
-      cloudflare_api_token: '${CLOUDFLARE_API_TOKEN}'
+      cloudflare_zone_id: "${CLOUDFLARE_ZONE_ID}"
+      cloudflare_api_token: "${CLOUDFLARE_API_TOKEN}"
 
   - name: "Linux packages - stable"
     provider: s3
@@ -51,161 +51,157 @@ repositories:
     <<: *common
     s3:
       bucket: repositories
-      path_in_bucket: 'mpz/stable'
-      bucket_public_url: 'https://repositories.omnipackage.org'
-      endpoint: '${CLOUDFLARE_R2_ENDPOINT}'
-      access_key_id: '${CLOUDFLARE_R2_ACCESS_KEY_ID}'
-      secret_access_key: '${CLOUDFLARE_R2_SECRET_ACCESS_KEY}'
+      path_in_bucket: "mpz/stable"
+      bucket_public_url: "https://repositories.omnipackage.org"
+      endpoint: "${CLOUDFLARE_R2_ENDPOINT}"
+      access_key_id: "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+      secret_access_key: "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
       region: auto
       force_path_style: true
-      cloudflare_zone_id: '${CLOUDFLARE_ZONE_ID}'
-      cloudflare_api_token: '${CLOUDFLARE_API_TOKEN}'
+      cloudflare_zone_id: "${CLOUDFLARE_ZONE_ID}"
+      cloudflare_api_token: "${CLOUDFLARE_API_TOKEN}"
 
 rpm: &rpm
   <<: *common
   rpm:
-    spec_template: '.omnipackage/mpz.spec.liquid'
+    spec_template: ".omnipackage/mpz.spec.liquid"
 
 deb: &deb
   <<: *common
   deb:
-    debian_templates: '.omnipackage/deb'
-
+    debian_templates: ".omnipackage/deb"
 
 opensuse_qt5: &opensuse_qt5
   build_dependencies: [gcc, make, cmake, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel]
-  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
+  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 opensuse_qt6: &opensuse_qt6
   build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
   <<: *rpm
 
-
 mageia_qt5: &mageia_qt5
-  build_dependencies: [gcc, make, cmake, qtbase5-common-devel lib64qt5core-devel lib64qt5gui-devel lib64qt5widgets-devel lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
+  build_dependencies:
+    [gcc, make, cmake, qtbase5-common-devel, lib64qt5core-devel, lib64qt5gui-devel, lib64qt5widgets-devel, lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
+  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 mageia_qt6: &mageia_qt6
-  build_dependencies: [gcc, make, cmake, qtbase6-common-devel lib64qt6core-devel lib64qt6gui-devel lib64qt6widgets-devel lib64qt6concurrent-devel, lib64qt6multimedia-devel]
+  build_dependencies: [gcc, make, cmake, qtbase6-common-devel, lib64qt6core-devel, lib64qt6gui-devel, lib64qt6widgets-devel, lib64qt6concurrent-devel, lib64qt6multimedia-devel]
   <<: *rpm
-
 
 readhat_qt5: &readhat_qt5
   build_dependencies: [gcc, make, cmake, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
-  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
+  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 readhat_qt6: &readhat_qt6
   build_dependencies: [gcc, make, cmake, qt6-qtbase-devel, qt6-qtmultimedia-devel]
   <<: *rpm
 
-
 debian_qt5: &debian_qt5
   build_dependencies: [gcc, make, cmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev]
   runtime_dependencies: [libqt5multimedia5-plugins]
-  CMAKE_EXTRA_CLI: '-DUSE_QT5=ON'
+  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *deb
 
 debian_qt6: &debian_qt6
   build_dependencies: [gcc, make, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev]
   <<: *deb
 
-
 builds:
-- distro: 'opensuse_15.3'
-  <<: *opensuse_qt5
+  - distro: "opensuse_15.3"
+    <<: *opensuse_qt5
 
-- distro: 'opensuse_15.4'
-  <<: *opensuse_qt5
+  - distro: "opensuse_15.4"
+    <<: *opensuse_qt5
 
-- distro: 'opensuse_15.5'
-  <<: *opensuse_qt5
+  - distro: "opensuse_15.5"
+    <<: *opensuse_qt5
 
-- distro: 'opensuse_15.6'
-  <<: *opensuse_qt5
+  - distro: "opensuse_15.6"
+    <<: *opensuse_qt5
 
-- distro: 'opensuse_16.0'
-  <<: *opensuse_qt6
+  - distro: "opensuse_16.0"
+    <<: *opensuse_qt6
 
-- distro: 'opensuse_tumbleweed'
-  <<: *opensuse_qt6
+  - distro: "opensuse_tumbleweed"
+    <<: *opensuse_qt6
 
-- distro: 'debian_11'
-  <<: *debian_qt5
+  - distro: "debian_11"
+    <<: *debian_qt5
 
-- distro: 'debian_12'
-  <<: *debian_qt5
+  - distro: "debian_12"
+    <<: *debian_qt5
 
-- distro: 'debian_13'
-  <<: *debian_qt6
+  - distro: "debian_13"
+    <<: *debian_qt6
 
-- distro: 'debian_testing'
-  <<: *debian_qt6
+  - distro: "debian_testing"
+    <<: *debian_qt6
 
-- distro: 'debian_unstable'
-  <<: *debian_qt6
+  - distro: "debian_unstable"
+    <<: *debian_qt6
 
-- distro: 'ubuntu_20.04'
-  <<: *debian_qt5
+  - distro: "ubuntu_20.04"
+    <<: *debian_qt5
 
-- distro: 'ubuntu_22.04'
-  <<: *debian_qt5
+  - distro: "ubuntu_22.04"
+    <<: *debian_qt5
 
-- distro: 'ubuntu_24.04'
-  <<: *debian_qt6
+  - distro: "ubuntu_24.04"
+    <<: *debian_qt6
 
-- distro: 'ubuntu_25.04'
-  <<: *debian_qt6
+  - distro: "ubuntu_25.04"
+    <<: *debian_qt6
 
-- distro: 'ubuntu_25.10'
-  <<: *debian_qt6
+  - distro: "ubuntu_25.10"
+    <<: *debian_qt6
 
-- distro: 'ubuntu_26.04'
-  <<: *debian_qt6
+  - distro: "ubuntu_26.04"
+    <<: *debian_qt6
 
-- distro: 'fedora_38'
-  <<: *readhat_qt5
+  - distro: "fedora_38"
+    <<: *readhat_qt5
 
-- distro: 'fedora_39'
-  <<: *readhat_qt5
+  - distro: "fedora_39"
+    <<: *readhat_qt5
 
-- distro: 'fedora_40'
-  <<: *readhat_qt6
+  - distro: "fedora_40"
+    <<: *readhat_qt6
 
-- distro: 'fedora_41'
-  <<: *readhat_qt6
+  - distro: "fedora_41"
+    <<: *readhat_qt6
 
-- distro: 'fedora_42'
-  <<: *readhat_qt6
+  - distro: "fedora_42"
+    <<: *readhat_qt6
 
-- distro: 'fedora_43'
-  <<: *readhat_qt6
+  - distro: "fedora_43"
+    <<: *readhat_qt6
 
-- distro: 'fedora_44'
-  <<: *readhat_qt6
+  - distro: "fedora_44"
+    <<: *readhat_qt6
 
-- distro: 'fedora_rawhide'
-  <<: *readhat_qt6
+  - distro: "fedora_rawhide"
+    <<: *readhat_qt6
 
-- distro: 'almalinux_8'
-  <<: *readhat_qt5
+  - distro: "almalinux_8"
+    <<: *readhat_qt5
 
-- distro: 'almalinux_9'
-  <<: *readhat_qt5
+  - distro: "almalinux_9"
+    <<: *readhat_qt5
 
-- distro: 'almalinux_10'
-  <<: *readhat_qt6
+  - distro: "almalinux_10"
+    <<: *readhat_qt6
 
-- distro: 'rockylinux_8'
-  <<: *readhat_qt5
+  - distro: "rockylinux_8"
+    <<: *readhat_qt5
 
-- distro: 'rockylinux_9'
-  <<: *readhat_qt5
+  - distro: "rockylinux_9"
+    <<: *readhat_qt5
 
-- distro: 'mageia_9'
-  <<: *mageia_qt6
+  - distro: "mageia_9"
+    <<: *mageia_qt6
 
-- distro: 'mageia_cauldron'
-  <<: *mageia_qt6
+  - distro: "mageia_cauldron"
+    <<: *mageia_qt6
