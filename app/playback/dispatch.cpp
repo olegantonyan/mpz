@@ -13,13 +13,25 @@ namespace Playback {
     return player_state;
   }
 
+  bool Dispatch::isRandomMode(const std::shared_ptr<Playlist::Playlist> &plst) const {
+    if (plst != nullptr && plst->random() == Playlist::Playlist::Random) {
+      return true;
+    }
+    return global_conf.playbackOrder() == "random";
+  }
+
+  void Dispatch::playTrack(const Track &t) {
+    random_trail.add(t.uid());
+    emit play(t);
+  }
+
   void Dispatch::on_nextRequested() {
     auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
     if (global_conf.playbackFollowCursor()) {
       if (selected_playlist != nullptr) {
         auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
         if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
-          emit play(selected_track);
+          playTrack(selected_track);
           return;
         }
       }
@@ -32,23 +44,32 @@ namespace Playback {
       return;
     }
 
-    bool is_random = (selected_playlist != nullptr && selected_playlist->random() == Playlist::Playlist::Random) ||
-                     global_conf.playbackOrder() == "random";
-    if (is_random) {
+    if (isRandomMode(selected_playlist)) {
       int playlist_size = current_playlist->tracks().size();
-      int rngjesus = RNJesus::generate(playlist_size);
-      if (playlist_size > 1 && rngjesus == current_playlist->trackIndex(current_track_uid)) {
-        // once again, but only once, you lucky bastard
-        rngjesus = RNJesus::generate(playlist_size);
+      int current_idx = current_playlist->trackIndex(current_track_uid);
+      int avoid_window = qMin(playlist_size - 1, 16);
+      int chosen = -1;
+      const int attempts = qMin(playlist_size * 4, 64);
+      for (int i = 0; i < attempts; i++) {
+        int candidate = RNJesus::generate(playlist_size);
+        if (playlist_size > 1 && candidate == current_idx) {
+          continue;
+        }
+        Track t = current_playlist->tracks().at(candidate);
+        if (random_trail.recentlyPlayed(t.uid(), avoid_window)) {
+          continue;
+        }
+        chosen = candidate;
+        break;
       }
-      Track t = current_playlist->tracks().at(rngjesus);
-      if (playlist_size > 1 && random_trail.exists(t.uid())) {
-        rngjesus = RNJesus::generate(playlist_size);
-        t = current_playlist->tracks().at(rngjesus);
+      if (chosen < 0) {
+        chosen = RNJesus::generate(playlist_size);
+        if (playlist_size > 1 && chosen == current_idx) {
+          chosen = (chosen + 1) % playlist_size;
+        }
       }
-
-      emit play(t);
-      random_trail.add(t.uid());
+      Track t = current_playlist->tracks().at(chosen);
+      playTrack(t);
       return;
     }
 
@@ -62,10 +83,10 @@ namespace Playback {
         return;
       }
       Track t = current_playlist->tracks().at(0);
-      emit play(t);
+      playTrack(t);
     } else {
       Track t = current_playlist->tracks().at(next);
-      emit play(t);
+      playTrack(t);
     }
   }
 
@@ -76,15 +97,18 @@ namespace Playback {
       return;
     }
 
-    if (global_conf.playbackOrder() == "random") {
-      auto prev_uid = random_trail.prev();
-      if (prev_uid == current_track_uid) {
-        prev_uid = random_trail.prev();
-      }
+    auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
+    if (isRandomMode(selected_playlist)) {
+      auto prev_uid = random_trail.goPrev();
       if (prev_uid != 0) {
-        int prev_index = current_playlist->trackIndex(prev_uid);
+        auto prev_playlist = playlists->playlistByTrackUid(prev_uid);
+        if (prev_playlist == nullptr) {
+          prev_playlist = current_playlist;
+        }
+        int prev_index = prev_playlist->trackIndex(prev_uid);
         if (prev_index >= 0) {
-          Track t = current_playlist->tracks().at(prev_index);
+          Track t = prev_playlist->tracks().at(prev_index);
+          // Navigate without re-adding: goPrev already moved the cursor.
           emit play(t);
           return;
         }
@@ -96,17 +120,17 @@ namespace Playback {
     if (prev < 0) {
       auto max = current_playlist->tracks().size() - 1;
       Track t = current_playlist->tracks().at(max);
-      emit play(t);
+      playTrack(t);
     } else {
       Track t = current_playlist->tracks().at(prev);
-      emit play(t);
+      playTrack(t);
     }
   }
 
   void Dispatch::on_startFromPlaylistRequested(const std::shared_ptr<Playlist::Playlist> plst) {
     if (plst != nullptr && !plst->tracks().isEmpty()) {
       Track t = plst->tracks().first();
-      emit play(t);
+      playTrack(t);
     }
   }
 
@@ -149,6 +173,7 @@ namespace Playback {
     }
     for (auto it : current_playlist->tracks()) {
       if (it.path() == track_path) {
+        random_trail.add(it.uid());
         emit trackChangedQueryComplete(it);
         break;
       }
@@ -160,7 +185,7 @@ namespace Playback {
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
     if (selected_playlist != nullptr) {
       Track t = selected_playlist->trackBy(selected_track_uid);
-      emit play(t);
+      playTrack(t);
     }
   }
 }

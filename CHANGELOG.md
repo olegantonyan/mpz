@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- fix previous track in randon mode (now it's actual previously played track)
+
 ### Misc
 
 - update vendored yaml-cpp to 0.9.0

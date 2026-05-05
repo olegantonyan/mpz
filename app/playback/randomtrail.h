@@ -1,7 +1,7 @@
 #ifndef RANDOMTRAIL_H
 #define RANDOMTRAIL_H
 
-#include <QStack>
+#include <QVector>
 
 namespace Playback {
   class RandomTrail {
@@ -11,11 +11,12 @@ namespace Playback {
     void clear();
 
     void add(quint64 track_uid);
-    bool exists(quint64 track_uid) const;
-    quint64 prev();
+    bool recentlyPlayed(quint64 track_uid, int window) const;
+    quint64 goPrev();
 
   private:
-    QStack<quint64> trail;
+    QVector<quint64> trail;
+    int cursor;
     int max_length;
   };
 }

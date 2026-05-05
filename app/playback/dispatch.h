@@ -28,6 +28,9 @@ namespace Playback {
     void on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
 
   private:
+    bool isRandomMode(const std::shared_ptr<Playlist::Playlist> &plst) const;
+    void playTrack(const Track &t);
+
     Config::Global &global_conf;
     PlayerState player_state;
     PlaylistsUi::Controller *playlists;

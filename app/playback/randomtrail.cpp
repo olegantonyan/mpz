@@ -1,33 +1,54 @@
 #include "randomtrail.h"
 
-#include <QDebug>
-
 namespace Playback {
-  RandomTrail::RandomTrail(int max_size) : max_length(max_size) {
+  RandomTrail::RandomTrail(int max_size) : cursor(-1), max_length(max_size) {
   }
 
-  void RandomTrail::clear(){
+  void RandomTrail::clear() {
     trail.clear();
+    cursor = -1;
   }
 
   void RandomTrail::add(quint64 track_uid) {
-    if (trail.size() >= max_length) {
-      clear();
+    if (cursor >= 0 && cursor < trail.size() && trail.at(cursor) == track_uid) {
+      return;
     }
-    //qDebug() << "push" << track_uid;
-    trail.push(track_uid);
+    if (cursor + 1 < trail.size() && trail.at(cursor + 1) == track_uid) {
+      cursor++;
+      return;
+    }
+    if (cursor + 1 < trail.size()) {
+      trail.resize(cursor + 1);
+    }
+    trail.append(track_uid);
+    cursor = trail.size() - 1;
+    while (trail.size() > max_length) {
+      trail.removeFirst();
+      cursor--;
+    }
   }
 
-  bool RandomTrail::exists(quint64 track_uid) const {
-    return trail.contains(track_uid);
+  bool RandomTrail::recentlyPlayed(quint64 track_uid, int window) const {
+    if (window <= 0 || cursor < 0) {
+      return false;
+    }
+    int from = cursor - window + 1;
+    if (from < 0) {
+      from = 0;
+    }
+    for (int i = from; i <= cursor && i < trail.size(); i++) {
+      if (trail.at(i) == track_uid) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  quint64 RandomTrail::prev() {
-    if (trail.size() == 0) {
+  quint64 RandomTrail::goPrev() {
+    if (cursor <= 0) {
       return 0;
     }
-    auto track_uid = trail.pop();
-    //qDebug() << "pop" << track_uid;
-    return track_uid;
+    cursor--;
+    return trail.at(cursor);
   }
 }
