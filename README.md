@@ -9,15 +9,15 @@ If you like organizing your music in folders, then this player might be for you.
 
 More screenshots here: https://mpz-player.org
 
-This player is an attempt to create the "perfect" player for the author. It doesn't have anything "breakthrough", it just gets the job done. The main feature is 3-columns UI and the way you manage playlists. Chose library folders, middle-click on a folder and a playlist will be created from this folder.
+This player is an attempt to create the "perfect" player for the author. It doesn't try to be groundbreaking — it just gets the job done. The main feature is the 3-column UI and the way you manage playlists. Choose library folders, middle-click on a folder, and a playlist will be created from it.
 
-Why "big local collections"? "Local" opposed to streaming services (which are fine, but this player's goal is playing music you have on your hard drive), "big" means it's big enough so managing it becomes hard. Radio streaming also supported.
+Why "big local collections"? "Local" as opposed to streaming services (which are fine, but this player's goal is playing music you have on your hard drive); "big" means the collection is large enough that managing it becomes hard. Internet radio streaming is also supported.
 
-In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode added. You can add mpd server as a library folder. There are limitations and caveats, see below.
+In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was added. You can add an mpd server as a library folder. There are limitations and caveats, see below.
 
 ## Features
 
-- 3-columns UI which allows you to quickly create playlists from folders and switch between playlists;
+- 3-column UI which allows you to quickly create playlists from folders and switch between playlists;
 - Built with C++/Qt - fast and responsive native UI;
 - Supports internet radio in `m3u` and `pls` playlists formats;
 - Supports CUE sheets;
@@ -65,7 +65,7 @@ mkdir build
 cd build
 cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release .. # for Qt5 add -DUSE_QT5=ON
 make -j`nproc`
-# now you now use mpz binary directly
+# now you can use mpz binary directly
 # optionally, install to /usr/local:
 sudo make install
 ```
@@ -80,7 +80,7 @@ mkdir build
 cd build
 cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON ..
 make -j`nproc`
-# now you now use mpz binary directly
+# now you can use mpz binary directly
 # optionally, install to /usr/local:
 sudo make install
 ```
@@ -102,11 +102,11 @@ Some config options can be changed only by editing config files:
 - `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 
-If you messed up any of the config opions you can remove it completly (or even remove the whole file) and it will reset to default.
+If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
 
 #### Columns config
 
-You can change th default columns in the playlist view via `columns_config` option in `global.yml` file.
+You can change the default columns in the playlist view via `columns_config` option in `global.yml` file.
 
 This config option does not (yet) have UI to change it so you have to edit config file. The defaults are:
 
@@ -136,11 +136,11 @@ columns_config:
 
 Available fields: artist, album, title, year, length, path, url, sample_rate, bitrate, channels, track_number, format, filename.
 
-Availble alignments: left, right.
+Available alignments: left, right.
 
-The sum of `width_percent` of all columns must add up to 100 or below. Sometimes it has to be below 100 to get rid of horizontal scroll, this may happen due to padding and few extra pixels in you desktop theme.
+The sum of `width_percent` of all columns must add up to 100 or below. Sometimes it has to be below 100 to get rid of horizontal scroll; this may happen due to padding and a few extra pixels in your desktop theme.
 
-`stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how looks on your desktop.
+`stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how it looks on your desktop.
 
 #### Block certain MPRIS senders
 
@@ -149,7 +149,7 @@ You can ignore MPRIS commands from certain senders, for example, in `global.yml`
 mpris_blacklist: ["wireplumber"]
 ```
 
-This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues MPRIS Pause comamnd. Until they make it configurable, blocking wireplumber is viable workaround if you also find this feature annoying.
+This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues an MPRIS Pause command. Until they make it configurable, blocking wireplumber is a viable workaround if you also find this feature annoying.
 
 ## Limitations
 
@@ -162,11 +162,11 @@ Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enabl
 NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
 
 ### mpd impedance mismatch
-When used as [mpd](https://musicpd.org) client, there is fundamental difference that can lead to some weird behavior. By design mpz does not have explicit playback queue - the playlist itself is a queue. In mpd, there's explicit playback queue and playlists are merely list of tracks that can be loaded into queue to play. 
+When used as an [mpd](https://musicpd.org) client, there is a fundamental difference that can lead to some weird behavior. By design mpz does not have an explicit playback queue - the playlist itself is the queue. In mpd, there's an explicit playback queue and playlists are merely lists of tracks that can be loaded into the queue to play.
 
 Known issues:
-- when other client modify playback queue, mpz cannot pick up these changes;
-- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from last selected playlist, i.e. loaded upon start;
-- "playback follows cursor" cannot follow into different playlist;
+- when another client modifies the playback queue, mpz cannot pick up these changes;
+- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from the last selected playlist, i.e. the one loaded at startup;
+- "playback follows cursor" cannot follow into a different playlist;
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)
