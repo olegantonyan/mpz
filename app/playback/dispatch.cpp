@@ -173,7 +173,6 @@ namespace Playback {
     }
     for (auto it : current_playlist->tracks()) {
       if (it.path() == track_path) {
-        random_trail.add(it.uid());
         emit trackChangedQueryComplete(it);
         break;
       }
