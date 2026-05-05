@@ -211,7 +211,7 @@ if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib")
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE USE_SYSTEM_TAGLIB)
 else()
-  set(TAGLIB_DIR 3rdparty/taglib-2.1.1)
+  set(TAGLIB_DIR 3rdparty/taglib-2.2.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
   target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE

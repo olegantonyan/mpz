@@ -9,6 +9,7 @@
 ### Misc
 
 - update vendored yaml-cpp to 0.9.0
+- update vendored taglib to 2.2.1
 
 ## [2.0.3] - 2026-01-18
 
