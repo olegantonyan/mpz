@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.16)
 
 project(mpz VERSION 2.0.4 LANGUAGES CXX C)
 
@@ -123,7 +123,7 @@ endif()
 
 if (ENABLE_DBUS)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
-  if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+  if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.xml dbus/mpris.h Mpris)
     qt_add_dbus_adaptor(PROJECT_SOURCES app/dbus/org.mpris.MediaPlayer2.Player.xml dbus/mpris.h Mpris)
   else()
@@ -142,7 +142,7 @@ if (WIN32)
   list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
 endif()
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
@@ -193,14 +193,20 @@ set(_DISABLE_INSTALLATION TRUE)
 
 # YAML-CPP
 option(USE_SYSTEM_YAMLCPP "Use Yaml-cpp provided by the OS" OFF)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
 if(USE_SYSTEM_YAMLCPP)
-  message(STATUS "using system-wide yaml-cpp")
+  find_package(yaml-cpp REQUIRED)
+  message(STATUS "using system-wide yaml-cpp ${yaml-cpp_VERSION}")
+  if(TARGET yaml-cpp::yaml-cpp)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp::yaml-cpp)
+  else()
+    # yaml-cpp < 0.8 only exports the un-namespaced target
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
+  endif()
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.9.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
-  # add_definitions(-include stdint.h) # Fedora Rawhide broken without this headder (3rdparty/yaml-cpp-0.8.0/src/emitterutils.cpp:221:11: error: uint16_t was not declared in this scope)
   add_subdirectory(${YAMLCPP_DIR})
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp::yaml-cpp)
 endif()
 # ENDOF YAML-CPP
 
@@ -262,7 +268,7 @@ message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
 # QTWAITINGSPINNER
 set(QTWAITINGSPINNER_DIR 3rdparty/qtwaitingspinner)
 add_library(qtwaitingspinner ${QTWAITINGSPINNER_DIR}/waitingspinnerwidget.cpp)
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${QTWAITINGSPINNER_DIR})
+target_include_directories(qtwaitingspinner PUBLIC ${QTWAITINGSPINNER_DIR})
 target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
 # ENDOF QTWAITINGSPINNER
