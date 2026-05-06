@@ -206,43 +206,49 @@ endif()
 
 # TAGLIB
 option(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 if (USE_SYSTEM_TAGLIB)
-  message(STATUS "using system-wide taglib")
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE USE_SYSTEM_TAGLIB)
+  find_package(TagLib 1.12 REQUIRED)
+  message(STATUS "using system-wide taglib ${TagLib_VERSION}")
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
 else()
   set(TAGLIB_DIR 3rdparty/taglib-2.2.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
-  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-   ${TAGLIB_DIR}
-   ${TAGLIB_DIR}/taglib
-   ${TAGLIB_DIR}/taglib/ape
-   ${TAGLIB_DIR}/taglib/asf
-   ${TAGLIB_DIR}/taglib/dsdiff
-   ${TAGLIB_DIR}/taglib/dsf
-   ${TAGLIB_DIR}/taglib/flac
-   ${TAGLIB_DIR}/taglib/it
-   ${TAGLIB_DIR}/taglib/mod
-   ${TAGLIB_DIR}/taglib/mp4
-   ${TAGLIB_DIR}/taglib/mpeg
-   ${TAGLIB_DIR}/taglib/mpeg/id3v1
-   ${TAGLIB_DIR}/taglib/mpeg/id3v2
-   ${TAGLIB_DIR}/taglib/mpeg/id3v2/frames
-   ${TAGLIB_DIR}/taglib/ogg
-   ${TAGLIB_DIR}/taglib/ogg/flac
-   ${TAGLIB_DIR}/taglib/ogg/opus
-   ${TAGLIB_DIR}/taglib/ogg/speex
-   ${TAGLIB_DIR}/taglib/ogg/vorbis
-   ${TAGLIB_DIR}/taglib/riff
-   ${TAGLIB_DIR}/taglib/riff/aiff
-   ${TAGLIB_DIR}/taglib/riff/wav
-   ${TAGLIB_DIR}/taglib/s3m
-   ${TAGLIB_DIR}/taglib/toolkit
-   ${TAGLIB_DIR}/taglib/trueaudio
-   ${TAGLIB_DIR}/taglib/wavpack
-   ${TAGLIB_DIR}/taglib/xm
+
+  # Upstream taglib only sets INSTALL_INTERFACE include dirs, so nothing
+  # propagates to add_subdirectory consumers. Attach BUILD_INTERFACE dirs to
+  # the `tag` target so consumers see the same flat header layout that the
+  # system package exposes via /usr/include/taglib.
+  set(_taglib_root ${CMAKE_CURRENT_SOURCE_DIR}/${TAGLIB_DIR})
+  target_include_directories(tag INTERFACE
+    $<BUILD_INTERFACE:${_taglib_root}/taglib>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ape>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/asf>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/dsdiff>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/dsf>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/flac>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/it>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mod>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mp4>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v1>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v2>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v2/frames>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ogg>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ogg/flac>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ogg/opus>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ogg/speex>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/ogg/vorbis>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/riff>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/aiff>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/wav>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/s3m>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/toolkit>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/trueaudio>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/wavpack>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/xm>
   )
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 endif()
 # ENDOF TAGLIB
 

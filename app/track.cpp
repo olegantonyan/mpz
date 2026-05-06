@@ -2,13 +2,8 @@
 #include "rnjesus.h"
 #include "coverart/covers.h"
 
-#ifdef USE_SYSTEM_TAGLIB
-  #include "taglib/fileref.h"
-  #include "taglib/tag.h"
-#else
-  #include "fileref.h"
-  #include "tag.h"
-#endif
+#include "fileref.h"
+#include "tag.h"
 
 #include <QDateTime>
 #include <QDebug>
