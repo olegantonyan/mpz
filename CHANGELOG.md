@@ -2,6 +2,8 @@
 
 ### Added
 
+- lyrics in track info dialog from embedded tag, sidecar and https://lrclib.net
+
 ### Fixed
 
 - fix previous track in randon mode (now it's actual previously played track)

@@ -40,6 +40,8 @@ set(PROJECT_SOURCES
   app/config/storage.cpp
   app/config/value.cpp
   app/coverart/embedded.cpp
+  app/lyrics/lrclibclient.cpp
+  app/lyrics/lrcparser.cpp
   app/directory_ui/directorycontroller.cpp
   app/directory_ui/directorysettings.cpp
   app/feedback_ui/feedbackform.cpp

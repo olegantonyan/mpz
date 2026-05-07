@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1107</width>
-    <height>528</height>
+    <width>1240</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,8 +15,20 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="QSplitter" name="metadataSplitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
       <widget class="QTableView" name="tableView">
        <attribute name="horizontalHeaderVisible">
         <bool>false</bool>
@@ -25,15 +37,73 @@
         <bool>false</bool>
        </attribute>
       </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="labelCoverArt">
        <property name="text">
         <string/>
        </property>
       </widget>
-     </item>
-    </layout>
+     </widget>
+     <widget class="QWidget" name="lyricsWidget" native="true">
+      <layout class="QVBoxLayout" name="lyricsLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="lyricsHeaderLayout">
+         <item>
+          <widget class="QLabel" name="labelLyricsTitle">
+           <property name="text">
+            <string>Lyrics</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font-weight: bold;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelLyricsSource">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: gray;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="lyricsHeaderSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="plainTextLyrics">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QToolButton" name="toolButtonOpenFileManager">

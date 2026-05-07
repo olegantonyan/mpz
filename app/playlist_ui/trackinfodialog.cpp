@@ -1,11 +1,22 @@
 #include "trackinfodialog.h"
 #include "ui_trackinfodialog.h"
 
+#include "config/global.h"
+#include "lyrics/lrclibclient.h"
+#include "lyrics/lrcparser.h"
+
+#include <fileref.h>
+#include <tag.h>
+#include <tpropertymap.h>
+
 #include <QMenu>
 #include <QClipboard>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QFile>
+#include <QFileInfo>
 #include <QPixmap>
+#include <QPointer>
 
 TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
   ui->setupUi(this);
@@ -18,6 +29,9 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   setup_context_menu();
   setup_table(track);
   setup_cover_art(track);
+  setup_lyrics(track);
+  ui->splitter->setSizes({920, 300});
+  ui->metadataSplitter->setSizes({600, 320});
   track_dir = track.dir();
   cover_art_path = track.artCover();
   if (!cover_art_path.isEmpty()) {
@@ -137,6 +151,109 @@ void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
   QDesktopServices::openUrl(QUrl::fromLocalFile(track_dir));
 }
 
+void TrackInfoDialog::setup_lyrics(const Track &track) {
+  if (track.isStream()) {
+    ui->lyricsWidget->setVisible(false);
+    return;
+  }
+
+  Config::Global global;
+  const auto providers = global.lyricsProviders();
+
+  for (const auto &name : providers) {
+    QString text;
+    QString source;
+    if (name == "embedded") {
+      text = fetch_embedded_lyrics(track);
+    } else if (name == "sidecar") {
+      text = fetch_sidecar_lyrics(track);
+    } else {
+      continue;
+    }
+    if (!text.isEmpty()) {
+      render_lyrics(name, text);
+      return;
+    }
+  }
+
+  if (providers.contains("lrclib") && !track.artist().isEmpty() && !track.title().isEmpty()) {
+    render_lyrics_state(tr("Searching lyrics..."));
+    auto *client = new Lyrics::LrcLibClient(this);
+    QPointer<TrackInfoDialog> guard(this);
+    connect(client, &Lyrics::LrcLibClient::found, this, [guard, client](const QString &lyrics) {
+      if (guard) {
+        guard->render_lyrics(guard->tr("LRCLIB"), lyrics);
+      }
+      client->deleteLater();
+    });
+    connect(client, &Lyrics::LrcLibClient::notFound, this, [guard, client]() {
+      if (guard) {
+        guard->render_lyrics_state(guard->tr("No lyrics found."));
+      }
+      client->deleteLater();
+    });
+    connect(client, &Lyrics::LrcLibClient::failed, this, [guard, client](const QString &msg) {
+      if (guard) {
+        qWarning() << "lrclib error:" << msg;
+        guard->render_lyrics_state(guard->tr("No lyrics found."));
+      }
+      client->deleteLater();
+    });
+    client->fetch(track.artist(), track.title(), track.album(), static_cast<int>(track.duration() / 1000));
+    return;
+  }
+
+  render_lyrics_state(tr("No lyrics found."));
+}
+
+QString TrackInfoDialog::fetch_embedded_lyrics(const Track &track) const {
+  if (track.isMpd() || track.isCue() || track.path().isEmpty() || !QFile::exists(track.path())) {
+    return QString();
+  }
+  TagLib::FileRef f(track.path().toUtf8().constData());
+  if (f.isNull() || !f.tag()) {
+    return QString();
+  }
+  auto props = f.tag()->properties();
+  auto it = props.find("LYRICS");
+  if (it == props.end() || it->second.isEmpty()) {
+    return QString();
+  }
+  return QString::fromUtf8(it->second.front().toCString(true));
+}
+
+QString TrackInfoDialog::fetch_sidecar_lyrics(const Track &track) const {
+  if (track.isMpd() || track.path().isEmpty()) {
+    return QString();
+  }
+  QFileInfo fi(track.path());
+  for (const QString &ext : { QStringLiteral("lrc"), QStringLiteral("txt") }) {
+    QString candidate = fi.path() + "/" + fi.completeBaseName() + "." + ext;
+    if (!QFile::exists(candidate)) {
+      continue;
+    }
+    QFile f(candidate);
+    if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      return QString::fromUtf8(f.readAll());
+    }
+  }
+  return QString();
+}
+
+void TrackInfoDialog::render_lyrics(const QString &source, const QString &raw) {
+  ui->labelLyricsSource->setText(QString("(%1)").arg(source));
+  const QString text = Lyrics::LrcParser::looksLikeLrc(raw)
+                         ? Lyrics::LrcParser::stripTimestamps(raw)
+                         : raw.trimmed();
+  ui->plainTextLyrics->setPlainText(text);
+}
+
+void TrackInfoDialog::render_lyrics_state(const QString &message) {
+  ui->labelLyricsSource->setText(QString());
+  ui->plainTextLyrics->clear();
+  ui->plainTextLyrics->setPlaceholderText(message);
+}
+
 void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &pos) {
   QMenu menu;
   QAction copy(tr("Copy to clipboard"));
@@ -158,4 +275,3 @@ void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &
   menu.addAction(&show_in_filemanager);
   menu.exec(ui->labelCoverArt->mapToGlobal(pos));
 }
-

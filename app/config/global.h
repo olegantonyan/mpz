@@ -54,6 +54,8 @@ namespace Config {
 
     bool mpdStopPlayerOnClose() const;
 
+    QStringList lyricsProviders() const;
+
   private:
     Config::Storage storage;
   };

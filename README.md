@@ -142,6 +142,21 @@ The sum of `width_percent` of all columns must add up to 100 or below. Sometimes
 
 `stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how it looks on your desktop.
 
+#### Lyrics
+
+The track info dialog (right-click a track → "Track info") shows lyrics next to the metadata. Three providers are available, tried in order until one returns lyrics:
+
+1. `embedded` - lyrics stored in tags (ID3v2 USLT, Vorbis Comment LYRICS, MP4 ©lyr, APE LYRICS);
+2. `sidecar` - a `<filename>.lrc` or `<filename>.txt` file next to the audio file. LRC timestamps are stripped for plain-text rendering;
+3. `lrclib` - online lookup via [LRCLIB](https://lrclib.net) (open, no API key required).
+
+The default order is `[embedded, sidecar, lrclib]`. To override (for example, to disable online lookup, or change the order), add a `lyrics:` block to `global.yml`:
+
+```
+lyrics:
+  providers: [embedded, sidecar]
+```
+
 #### Block certain MPRIS senders
 
 You can ignore MPRIS commands from certain senders, for example, in `global.yml` file:

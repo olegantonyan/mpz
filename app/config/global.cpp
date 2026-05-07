@@ -143,4 +143,25 @@ namespace Config {
     return storage.get("mpd_stop_player_on_close").get<bool>();
   }
 
+  QStringList Global::lyricsProviders() const {
+    const QStringList defaults = { "embedded", "sidecar", "lrclib" };
+    auto raw = storage.get("lyrics");
+    if (raw.type() != Config::Value::Map) {
+      return defaults;
+    }
+    auto map = raw.get<QMap<QString, Config::Value>>();
+    if (!map.contains("providers")) {
+      return defaults;
+    }
+    auto list = map.value("providers");
+    if (list.type() != Config::Value::List || list.listType() != Config::Value::String) {
+      return defaults;
+    }
+    QStringList result;
+    for (auto i : list.get<QList<Config::Value>>()) {
+      result << i.get<QString>();
+    }
+    return result.isEmpty() ? defaults : result;
+  }
+
 }
