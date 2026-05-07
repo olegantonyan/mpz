@@ -7,6 +7,7 @@
 ### Fixed
 
 - fix previous track in randon mode (now it's actual previously played track)
+- CUE parsing is now more robust and handles partially broken CUEs
 
 ### Misc
 

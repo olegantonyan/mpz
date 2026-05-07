@@ -1,82 +1,48 @@
-/* This file is part of Clementine.
-   Copyright 2010, David Sansome <me@davidsansome.com>
-   Clementine is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-   Clementine is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-   You should have received a copy of the GNU General Public License
-   along with Clementine.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #ifndef CUEPARSER_H
 #define CUEPARSER_H
 
 #include "track.h"
 
-#include <QDebug>
-#include <QDir>
+#include <QString>
 #include <QStringList>
-#include <QUrl>
 #include <QVector>
 
-// This parser will try to detect the real encoding of a .cue file but there's
-// a great chance it will fail so it's probably best to assume that the parser
-// is UTF compatible only.
 namespace Playlist {
+  // Parses .cue sheets into a list of virtual Tracks.
+  //
+  // Robust against:
+  //   - quoted/unquoted/whitespace-separated values
+  //   - ';' comment lines
+  //   - UTF-8/UTF-16 BOMs
+  //   - Windows-style backslashes in FILE paths on Unix
+  //   - case-different filenames on case-sensitive filesystems
+  //   - non-AUDIO tracks (BINARY/MODE1/etc. are skipped)
+  //   - missing INDEX 01 (falls back to INDEX 00)
+  //   - multi-FILE cues, per-track cues, and cues with no tracks
   class CueParser {
   public:
-    explicit CueParser(const QString &path);
+    explicit CueParser(const QString& path);
 
     QVector<Track> tracks_list() const;
 
   private:
-    QString path;
-
-    QStringList split_cue_line(const QString& line) const;
-    qint64 begin_by_index(const QString& index) const;
-
-    // A single TRACK entry in .cue file.
-    class CueEntry {
-    public:
-      QString file;
-
-      QString index;
-
+    struct Entry {
+      QString file;        // resolved absolute path of audio file
+      int track_no = 0;    // value from `TRACK NN`
+      qint64 index00_ms = -1;
+      qint64 index01_ms = -1;
       QString title;
       QString artist;
-      QString album_artist;
-      QString album;
-
       QString composer;
-      QString album_composer;
-
-      QString genre;
-      QString date;
-      QString disc;
-
-      CueEntry(QString& file, QString& index, QString& title, QString& artist,
-               QString& album_artist, QString& album, QString& composer,
-               QString& album_composer, QString& genre, QString& date, QString& disc) {
-        this->file = file;
-        this->index = index;
-        this->title = title;
-        this->artist = artist;
-        this->album_artist = album_artist;
-        this->album = album;
-        this->composer = composer;
-        this->album_composer = album_composer;
-        this->genre = genre;
-        this->date = date;
-        this->disc = disc;
-      }
     };
+
+    QString path_;
+
+    static QStringList tokenize(const QString& line);
+    static qint64 parse_index_position(const QString& mss_ff);
+    static QString resolve_audio_file(const QString& cue_dir, const QString& referenced);
+    static quint16 parse_year(const QString& s);
   };
 }
 
-
-
-#endif  // CUEPARSER_H
+#endif // CUEPARSER_H
