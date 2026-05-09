@@ -1,4 +1,6 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
+[![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html)
 
 # Music player for big local collections
 
@@ -26,9 +28,18 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Installation
 
-#### openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia
+#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
 
-Use Open Build Service repositories: https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz
+**New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds from master](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
+
+<details>
+<summary>Already using the old Open Build Service repositories?</summary>
+
+The previous [Open Build Service repositories](https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz) still exist and existing installations will keep working, but existing users are also encouraged to switch — future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).
+
+Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built against Qt5, even on releases that ship a recent enough Qt6 — making OBS produce working `.deb` packages with Qt6 turned out to be very painful. The omnipackage builds use Qt6 where the distro supports it.
+
+</details>
 
 #### Arch
 
