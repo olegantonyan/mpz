@@ -1,0 +1,30 @@
+# mpz
+
+> Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux and Windows.
+
+mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar.
+
+## Documentation
+
+- [README](https://github.com/olegantonyan/mpz#readme): Project README — features, installation, configuration, lyrics, MPRIS, limitations
+- [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md): Version history
+- [mpd impedance mismatch](https://github.com/olegantonyan/mpz#mpd-impedance-mismatch): Caveats of mpz's mpd client mode
+
+## Install
+
+- [omnipackage stable repositories](https://repositories.omnipackage.org/mpz/stable/install.html): Recommended Linux install for openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
+- [omnipackage unstable repositories](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master branch
+- [AUR (Qt6)](https://aur.archlinux.org/packages/mpz/): Arch Linux package built against Qt6
+- [AUR (Qt5)](https://aur.archlinux.org/packages/mpz-qt5): Arch Linux package built against Qt5
+- [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries; tagged source archives
+
+## Source and feedback
+
+- [Repository](https://github.com/olegantonyan/mpz): Source code on GitHub
+- [Issues](https://github.com/olegantonyan/mpz/issues): Bug reports and feature requests
+- [Author](https://github.com/olegantonyan): Oleg Antonyan
+
+## Optional
+
+- [Screenshots](https://mpz-player.org): Landing page with screenshots across desktops (KDE Breeze Dark/Light, Windows 10, Ubuntu)
+- [License](https://www.gnu.org/licenses/gpl-3.0.html): GNU General Public License v3

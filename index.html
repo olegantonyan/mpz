@@ -3,23 +3,128 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>mpz - music player</title>
-  <meta name="description" content="Music player for big local collections">
+  <title>mpz — music player for big local collections</title>
+  <meta name="description" content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows.">
+  <meta name="author" content="Oleg Antonyan">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#363636">
 
-  <meta property="og:title" content="mpz - music player for big local collections">
+  <link rel="canonical" href="https://mpz-player.org/">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta property="og:title" content="mpz — music player for big local collections">
+  <meta property="og:description" content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mpz-player.org/">
+  <meta property="og:site_name" content="mpz">
+  <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://mpz-player.org/images/breeze-dark.png">
+  <meta property="og:image:alt" content="mpz music player main window with the KDE Breeze Dark theme: directory tree, playlists, and tracks">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="mpz — music player for big local collections">
+  <meta name="twitter:description" content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows.">
+  <meta name="twitter:image" content="https://mpz-player.org/images/breeze-dark.png">
 
   <meta name="keywords" content="music player, audio player, linux audio player, linux music player, foobar2000 linux, cross platform music player, folder player, c++ music player, qt audio player">
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" integrity="sha384-DCY3M8xLkMu6c9IKcKbe+jHKMjelnwC0p+SBaxfHxoBYZWdJF2X400UdBCgATtAB" crossorigin="anonymous">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "mpz",
+    "operatingSystem": "Linux, Windows",
+    "applicationCategory": "MultimediaApplication",
+    "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE support, MPRIS, mpd client mode.",
+    "url": "https://mpz-player.org/",
+    "downloadUrl": "https://github.com/olegantonyan/mpz/releases",
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "author": {
+      "@type": "Person",
+      "name": "Oleg Antonyan",
+      "url": "https://github.com/olegantonyan"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "mpz",
+    "url": "https://mpz-player.org/",
+    "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE support, MPRIS, mpd client mode."
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is mpz?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "mpz is a free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What platforms does mpz support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Linux and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is mpz free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. mpz is free and open-source software, licensed under the GNU GPL v3."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does mpz support streaming services?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services are not."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does mpz support CUE sheets?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, CUE sheets are supported."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can mpz act as an mpd client?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the README for details."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
+  <header>
   <section class="hero is-dark is-bold is-small">
     <div class="hero-body">
       <div class="container">
@@ -27,7 +132,7 @@
         <div class="columns">
           <div class="column is-1">
             <figure class="image is-64x64">
-              <img src="/images/mpz.png">
+              <img src="/images/mpz.png" alt="mpz logo">
             </figure>
           </div>
 
@@ -42,8 +147,8 @@
 
           <div class="column is-1 has-text-right">
             <figure class="image is-64x64">
-              <a href="https://github.com/olegantonyan/mpz" target="_blank">
-                <img src="/images/GitHub-Mark-64px.png">
+              <a href="https://github.com/olegantonyan/mpz" target="_blank" rel="noopener noreferrer">
+                <img src="/images/GitHub-Mark-64px.png" alt="View mpz on GitHub">
               </a>
             </figure>
           </div>
@@ -51,24 +156,25 @@
       </div>
     </div>
   </section>
+  </header>
 
-
+  <main>
   <section class="section">
     <div class="container">
-      <h1 class="title">Directory tree is your music library</h1>
+      <h2 class="title">Directory tree is your music library</h2>
       <div class="content">
         Features a 3-column UI: directory tree (aka library), playlists and tracks from the selected playlist. Middle-click on a folder or track in the directory view and it will become a playlist, and its content will be loaded into the tracks view. Create multiple playlists from folders in your library and switch between them quickly. Similar to "Album list" in Foobar2000.
       </div>
 
       <figure class="image is-16by9 mb-6">
-        <img src="/images/mpz-workflow.apng">
+        <img src="/images/mpz-workflow.apng" alt="Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it; switching between playlists in the playlists column">
       </figure>
 
       <div class="columns">
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/breeze-dark.png">
-              <img src="/images/small/breeze-dark.png">
+              <img src="/images/small/breeze-dark.png" alt="mpz on KDE Plasma with the Breeze Dark theme">
             </a>
           </figure>
           <h3>KDE Breeze Dark desktop theme</h3>
@@ -76,7 +182,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/windows10.png">
-              <img src="/images/small/windows10.png">
+              <img src="/images/small/windows10.png" alt="mpz running on Windows 10">
             </a>
           </figure>
           <h3>Windows 10</h3>
@@ -84,7 +190,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/breeze-light.png">
-              <img src="/images/small/breeze-light.png">
+              <img src="/images/small/breeze-light.png" alt="mpz on KDE Plasma with the Breeze Light theme">
             </a>
           </figure>
           <h3>KDE Breeze Light desktop theme</h3>
@@ -92,7 +198,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/ubuntu.png">
-              <img src="/images/small/ubuntu.png">
+              <img src="/images/small/ubuntu.png" alt="mpz running on Ubuntu">
             </a>
           </figure>
           <h3>Ubuntu</h3>
@@ -105,7 +211,7 @@
 
     <div class="container">
 
-      <h1 class="title">Native C++/Qt - fast and responsive UI</h1>
+      <h2 class="title">Native C++/Qt — fast and responsive UI</h2>
       <div class="columns">
         <div class="column">
           <div class="content">
@@ -115,19 +221,19 @@
 
         <div class="column is-1">
           <figure class="image is-64x64">
-            <img src="/images/no-electron.png">
+            <img src="/images/no-electron.png" alt="Not built with Electron — native code badge">
           </figure>
         </div>
       </div>
 
-      <h1 class="title">mpd client mode</h1>
+      <h2 class="title">mpd client mode</h2>
       <div class="content">
-        Supports <a href="https://musicpd.org/" target="_blank">mpd</a>. You can add an mpd server as a library. This is an experimental feature. There is an mpz-mpd impedance mismatch — see more in the <a href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch" target="_blank">README</a>.
+        Supports <a href="https://musicpd.org/" target="_blank" rel="noopener noreferrer">mpd</a>. You can add an mpd server as a library. This is an experimental feature. There is an mpz-mpd impedance mismatch — see more in the <a href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch" target="_blank" rel="noopener noreferrer">README</a>.
       </div>
 
-      <h1 class="title">Radio streams, hotkeys, playback log and more</h1>
+      <h2 class="title">Radio streams, hotkeys, playback log and more</h2>
       <div class="content">
-        Supports radio streams in pls and m3u playlists. Supports CUE. Has a playback log which is helpful for radio streams — never miss a track you liked. Supports MPRIS on Linux for remote playback control, for example via <a href="https://kdeconnect.kde.org/" target="_blank">KDE Connect</a>.
+        Supports radio streams in pls and m3u playlists. Supports CUE. Has a playback log which is helpful for radio streams — never miss a track you liked. Supports MPRIS on Linux for remote playback control, for example via <a href="https://kdeconnect.kde.org/" target="_blank" rel="noopener noreferrer">KDE Connect</a>.
         Got feedback? Feature request? Found a bug? Use the built-in feedback form.
       </div>
 
@@ -135,7 +241,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/feedback-form.png">
-              <img src="/images/small/feedback-form.png">
+              <img src="/images/small/feedback-form.png" alt="The built-in feedback form dialog">
             </a>
           </figure>
           <h3>Feedback form</h3>
@@ -143,7 +249,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/about.png">
-              <img src="/images/small/about.png">
+              <img src="/images/small/about.png" alt="The mpz About window showing version and credits">
             </a>
           </figure>
           <h3>About window</h3>
@@ -151,7 +257,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/library-config.png">
-              <img src="/images/small/library-config.png">
+              <img src="/images/small/library-config.png" alt="Dialog for configuring library folders">
             </a>
           </figure>
           <h3>Library folders configuration</h3>
@@ -159,55 +265,79 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/playback-log.png">
-              <img src="/images/small/playback-log.png">
+              <img src="/images/small/playback-log.png" alt="Playback log showing recently played tracks — useful when listening to internet radio streams">
             </a>
           </figure>
           <h3>Playback log</h3>
         </div>
       </div>
 
-      <h1 class="title">Install</h1>
+      <h2 class="title">Install</h2>
       <div class="content">
         <table class="table is-fullwidth">
           <tbody>
             <tr>
               <th scope="row" style="white-space: nowrap;">openSUSE, Debian,<br>Fedora, Ubuntu,<br>RedHat, Mageia</th>
               <td>
-                Install from the omnipackage repositories: <a href="https://repositories.omnipackage.org/mpz/stable/install.html" target="_blank">stable releases</a> (recommended) or <a href="https://repositories.omnipackage.org/mpz/next/install.html" target="_blank">unstable builds from master</a>. These are the primary repositories going forward; both new and existing users are encouraged to use them.
+                Install from the omnipackage repositories: <a href="https://repositories.omnipackage.org/mpz/stable/install.html" target="_blank" rel="noopener noreferrer">stable releases</a> (recommended) or <a href="https://repositories.omnipackage.org/mpz/next/install.html" target="_blank" rel="noopener noreferrer">unstable builds from master</a>. These are the primary repositories going forward; both new and existing users are encouraged to use them.
                 <details style="margin-top: 0.75em;">
                   <summary>Already using the old Open Build Service repositories?</summary>
-                  <p>The previous <a href="https://software.opensuse.org/download.html?project=home%3Aoleg_antonyan&package=mpz" target="_blank">Open Build Service repositories</a> still exist and existing installations will keep working, but existing users are also encouraged to switch — future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).</p>
+                  <p>The previous <a href="https://software.opensuse.org/download.html?project=home%3Aoleg_antonyan&package=mpz" target="_blank" rel="noopener noreferrer">Open Build Service repositories</a> still exist and existing installations will keep working, but existing users are also encouraged to switch — future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).</p>
                   <p>Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built against Qt5, even on releases that ship a recent enough Qt6 — making OBS produce working <code>.deb</code> packages with Qt6 turned out to be very painful. The omnipackage builds use Qt6 where the distro supports it.</p>
                 </details>
               </td>
             </tr>
             <tr>
               <th scope="row">Arch</th>
-              <td>Build the <a href="https://aur.archlinux.org/packages/mpz/" target="_blank">AUR package with Qt6</a> or the <a href="https://aur.archlinux.org/packages/mpz-qt5" target="_blank">Qt5 variant</a>.</td>
+              <td>Build the <a href="https://aur.archlinux.org/packages/mpz/" target="_blank" rel="noopener noreferrer">AUR package with Qt6</a> or the <a href="https://aur.archlinux.org/packages/mpz-qt5" target="_blank" rel="noopener noreferrer">Qt5 variant</a>.</td>
             </tr>
             <tr>
               <th scope="row">Windows</th>
-              <td>Grab the latest binaries from the <a href="https://github.com/olegantonyan/mpz/releases" target="_blank">GitHub releases page</a>.</td>
+              <td>Grab the latest binaries from the <a href="https://github.com/olegantonyan/mpz/releases" target="_blank" rel="noopener noreferrer">GitHub releases page</a>.</td>
             </tr>
             <tr>
               <th scope="row">From source</th>
-              <td>Follow the <a href="https://github.com/olegantonyan/mpz/" target="_blank">README</a>.</td>
+              <td>Follow the <a href="https://github.com/olegantonyan/mpz/" target="_blank" rel="noopener noreferrer">README</a>.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h1 class="title">Not an attempt to clone Foobar2000</h1>
+      <h2 class="title">Not an attempt to clone Foobar2000</h2>
       <div class="content">
-        Inspired by Foobar2000 and especially its "Album list" feature, mpz is not meant to be yet another cross-platform Foobar clone. It's simply not feasible, and not needed by the author. Instead, mpz has all the features the author has been using for many years (quite literally the same unchanged Foobar2000 config since 2005 or so). You may find it useful too, or hate it for the lack of expected features. The author would love to hear from you — just use the built-in feedback form or <a href="https://github.com/olegantonyan/mpz/issues" target="_blank">GitHub issues</a>.
+        Inspired by Foobar2000 and especially its "Album list" feature, mpz is not meant to be yet another cross-platform Foobar clone. It's simply not feasible, and not needed by the author. Instead, mpz has all the features the author has been using for many years (quite literally the same unchanged Foobar2000 config since 2005 or so). You may find it useful too, or hate it for the lack of expected features. The author would love to hear from you — just use the built-in feedback form or <a href="https://github.com/olegantonyan/mpz/issues" target="_blank" rel="noopener noreferrer">GitHub issues</a>.
       </div>
+
+      <details class="mt-6 has-text-grey">
+        <summary class="is-size-7">Frequently asked questions</summary>
+        <div class="content is-small mt-3">
+          <p><strong>What is mpz?</strong><br>
+          mpz is a free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.</p>
+
+          <p><strong>What platforms does mpz support?</strong><br>
+          Linux and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler.</p>
+
+          <p><strong>Is mpz free?</strong><br>
+          Yes. mpz is free and open-source software, licensed under the GNU GPL v3.</p>
+
+          <p><strong>Does mpz support streaming services?</strong><br>
+          No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services are not.</p>
+
+          <p><strong>Does mpz support CUE sheets?</strong><br>
+          Yes, CUE sheets are supported.</p>
+
+          <p><strong>Can mpz act as an mpd client?</strong><br>
+          Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the <a href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch" target="_blank" rel="noopener noreferrer">README</a> for details.</p>
+        </div>
+      </details>
     </div>
   </section>
+  </main>
 
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        Made with ❤ by <a href="https://github.com/olegantonyan" target="_blank">Oleg Antonyan</a>
+        Made with ❤ by <a href="https://github.com/olegantonyan" target="_blank" rel="noopener noreferrer">Oleg Antonyan</a>
       </p>
     </div>
   </footer>
