@@ -4,5 +4,6 @@
         <file>CHANGELOG.md</file>
         <file>app/resources/icons/64x64/mpz.png</file>
         <file>app/resources/translations/sr.qm</file>
-    </qresource>
+        <file>app/resources/translations/ja.qm</file>
+   </qresource>
 </RCC>
