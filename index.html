@@ -287,14 +287,8 @@
 
       <h2 class="title">Lyrics, tags, and audio formats</h2>
       <div class="content">
-        <p>The Track Info dialog (right-click a track → <em>Track info</em>) shows lyrics next to the metadata. Three providers are tried in order until one returns lyrics:</p>
-        <ul>
-          <li><strong>Embedded</strong> — lyrics stored in tags (ID3v2 USLT, Vorbis Comment <code>LYRICS</code>, MP4 <code>©lyr</code>, APE <code>LYRICS</code>);</li>
-          <li><strong>Sidecar</strong> — a <code>&lt;filename&gt;.lrc</code> or <code>&lt;filename&gt;.txt</code> file next to the audio (LRC timestamps are stripped for plain-text rendering);</li>
-          <li><strong><a href="https://lrclib.net" target="_blank" rel="noopener noreferrer">LRCLIB</a></strong> — online lookup, open and no API key required.</li>
-        </ul>
-        <p>The provider order is configurable, including disabling online lookup entirely.</p>
-        <p>Tag reading is powered by <a href="https://taglib.org/" target="_blank" rel="noopener noreferrer">TagLib</a>, supporting ID3v2, Vorbis Comment, MP4, and APE. Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — play through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on Windows). The exact format coverage matches whatever your installed backend supports.</p>
+        <p>Lyrics are supported — embedded in tags, in <code>.lrc</code>/<code>.txt</code> sidecar files, or fetched online from <a href="https://lrclib.net" target="_blank" rel="noopener noreferrer">LRCLIB</a> — and shown in the Track Info dialog.</p>
+        <p>Tag reading is powered by <a href="https://taglib.org/" target="_blank" rel="noopener noreferrer">TagLib</a> (ID3v2, Vorbis Comment, MP4, APE). Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — play through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on Windows).</p>
       </div>
 
       <h2 class="title">Install</h2>
