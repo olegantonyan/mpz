@@ -183,7 +183,12 @@
 
       <h1 class="title">Install</h1>
       <div class="content">
-        <p>openSUSE, Debian, Fedora, Ubuntu, CentOS, Mageia - use binaries from <a href="https://software.opensuse.org/download.html?project=home%3Aoleg_antonyan&package=mpz" target="_blank">Open Build Service repository</a>.</p>
+        <p>openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia - install from the omnipackage repositories: <a href="https://repositories.omnipackage.org/mpz/stable/install.html" target="_blank">stable releases</a> (recommended) or <a href="https://repositories.omnipackage.org/mpz/next/install.html" target="_blank">unstable builds from master</a>. These are the primary repositories going forward; both new and existing users are encouraged to use them.</p>
+        <details style="margin-bottom: 1em;">
+          <summary>Already using the old Open Build Service repositories?</summary>
+          <p>The previous <a href="https://software.opensuse.org/download.html?project=home%3Aoleg_antonyan&package=mpz" target="_blank">Open Build Service repositories</a> still exist and existing installations will keep working, but existing users are also encouraged to switch — future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).</p>
+          <p>Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built against Qt5, even on releases that ship a recent enough Qt6 — making OBS produce working <code>.deb</code> packages with Qt6 turned out to be very painful. The omnipackage builds use Qt6 where the distro supports it.</p>
+        </details>
         <p>Arch - build <a href="https://aur.archlinux.org/packages/mpz/" target="_blank">AUR package with Qt6</a> or <a href="https://aur.archlinux.org/packages/mpz-qt5" target="_blank">Qt5</a>.
         <p>Windows - grab latests binaries from <a href="https://github.com/olegantonyan/mpz/releases" target="_blank">GitHub realeases page</a>.
         <p>From sources - follow <a href="https://github.com/olegantonyan/mpz/" target="_blank">README</a>.

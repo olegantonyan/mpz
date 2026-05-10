@@ -6,3 +6,4 @@ _site
 .sass-cache
 3rdparty/
 .qtcreator/
+.env
