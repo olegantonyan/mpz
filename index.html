@@ -33,6 +33,7 @@
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" as="image" href="/images/mpz-workflow.apng" fetchpriority="high">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" integrity="sha384-DCY3M8xLkMu6c9IKcKbe+jHKMjelnwC0p+SBaxfHxoBYZWdJF2X400UdBCgATtAB" crossorigin="anonymous">
 
   <script type="application/ld+json">
@@ -42,9 +43,25 @@
     "name": "mpz",
     "operatingSystem": "Linux, Windows",
     "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "AudioPlayer",
+    "softwareVersion": "2.0.4",
+    "softwareRequirements": "Linux or Windows; Qt 6 (Qt 5 supported via AUR package)",
     "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE support, MPRIS, mpd client mode.",
     "url": "https://mpz-player.org/",
     "downloadUrl": "https://github.com/olegantonyan/mpz/releases",
+    "screenshot": "https://mpz-player.org/images/breeze-dark.png",
+    "featureList": [
+      "Folder-based library — no global indexing step",
+      "3-column UI: directory tree, playlists, tracks",
+      "Middle-click a folder to create a playlist from it",
+      "CUE sheet support",
+      "MPRIS integration on Linux",
+      "Experimental mpd client mode",
+      "m3u and pls playlist formats including internet radio streams",
+      "Native C++/Qt 6 — no Electron",
+      "Follows your desktop theme",
+      "Cross-platform: Linux and Windows"
+    ],
     "license": "https://www.gnu.org/licenses/gpl-3.0.html",
     "author": {
       "@type": "Person",
@@ -137,7 +154,7 @@
         <div class="columns is-vcentered">
           <div class="column is-narrow">
             <figure class="image is-64x64">
-              <img src="/images/mpz.png" alt="mpz logo">
+              <img src="/images/mpz.png" alt="mpz logo" width="64" height="64">
             </figure>
           </div>
 
@@ -148,7 +165,7 @@
 
           <div class="column is-narrow">
             <a class="button is-light" href="https://github.com/olegantonyan/mpz" target="_blank" rel="noopener noreferrer">
-              <span class="icon"><img src="/images/GitHub-Mark-64px.png" alt="" style="width: 1em; height: 1em;"></span>
+              <span class="icon"><img src="/images/GitHub-Mark-64px.png" alt="" width="64" height="64" style="width: 1em; height: 1em;"></span>
               <span>View on GitHub</span>
             </a>
           </div>
@@ -180,14 +197,14 @@
       </div>
 
       <figure class="image is-16by9 mb-6">
-        <img src="/images/mpz-workflow.apng" alt="Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it; switching between playlists in the playlists column">
+        <img src="/images/mpz-workflow.apng" alt="Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it; switching between playlists in the playlists column" width="1400" height="826" fetchpriority="high">
       </figure>
 
       <div class="columns">
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/breeze-dark.png">
-              <img src="/images/small/breeze-dark.png" alt="mpz on KDE Plasma with the Breeze Dark theme">
+              <img src="/images/small/breeze-dark.png" alt="mpz on KDE Plasma with the Breeze Dark theme" width="512" height="285" loading="lazy">
             </a>
           </figure>
           <h3>KDE Breeze Dark desktop theme</h3>
@@ -195,7 +212,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/windows10.png">
-              <img src="/images/small/windows10.png" alt="mpz running on Windows 10">
+              <img src="/images/small/windows10.png" alt="mpz running on Windows 10" width="512" height="292" loading="lazy">
             </a>
           </figure>
           <h3>Windows 10</h3>
@@ -203,7 +220,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/breeze-light.png">
-              <img src="/images/small/breeze-light.png" alt="mpz on KDE Plasma with the Breeze Light theme">
+              <img src="/images/small/breeze-light.png" alt="mpz on KDE Plasma with the Breeze Light theme" width="512" height="285" loading="lazy">
             </a>
           </figure>
           <h3>KDE Breeze Light desktop theme</h3>
@@ -211,7 +228,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/ubuntu.png">
-              <img src="/images/small/ubuntu.png" alt="mpz running on Ubuntu">
+              <img src="/images/small/ubuntu.png" alt="mpz running on Ubuntu" width="512" height="292" loading="lazy">
             </a>
           </figure>
           <h3>Ubuntu</h3>
@@ -234,7 +251,7 @@
 
         <div class="column is-1">
           <figure class="image is-64x64">
-            <img src="/images/no-electron.png" alt="Not built with Electron — native code badge">
+            <img src="/images/no-electron.png" alt="Not built with Electron — native code badge" width="64" height="64" loading="lazy">
           </figure>
         </div>
       </div>
@@ -254,7 +271,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/feedback-form.png">
-              <img src="/images/small/feedback-form.png" alt="The built-in feedback form dialog">
+              <img src="/images/small/feedback-form.png" alt="The built-in feedback form dialog" width="512" height="288" loading="lazy">
             </a>
           </figure>
           <h3>Feedback form</h3>
@@ -262,7 +279,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/about.png">
-              <img src="/images/small/about.png" alt="The mpz About window showing version and credits">
+              <img src="/images/small/about.png" alt="The mpz About window showing version and credits" width="512" height="288" loading="lazy">
             </a>
           </figure>
           <h3>About window</h3>
@@ -270,7 +287,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/library-config.png">
-              <img src="/images/small/library-config.png" alt="Dialog for configuring library folders">
+              <img src="/images/small/library-config.png" alt="Dialog for configuring library folders" width="512" height="288" loading="lazy">
             </a>
           </figure>
           <h3>Library folders configuration</h3>
@@ -278,7 +295,7 @@
         <div class="column">
           <figure class="image is-16by9">
             <a href="/images/playback-log.png">
-              <img src="/images/small/playback-log.png" alt="Playback log showing recently played tracks — useful when listening to internet radio streams">
+              <img src="/images/small/playback-log.png" alt="Playback log showing recently played tracks — useful when listening to internet radio streams" width="512" height="288" loading="lazy">
             </a>
           </figure>
           <h3>Playback log</h3>
