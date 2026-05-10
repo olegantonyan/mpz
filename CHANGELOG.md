@@ -2,6 +2,8 @@
 
 ### Added
 
+- Japanese language tanslations (@coolvitto)
+
 ### Fixed
 
 ### Misc
