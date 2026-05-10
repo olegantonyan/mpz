@@ -16,7 +16,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_aboutdialog.h" line="123"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_aboutdialog.h" line="123"/>
         <source>Changelog</source>
-        <translation>Ћенџлог</translation>
+        <translation>Списак измена</translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="36"/>
@@ -116,7 +116,7 @@
     <message>
         <location filename="../../directory_ui/addmpddialog.cpp" line="29"/>
         <source>Test connection</source>
-        <translation>Тестирање везе</translation>
+        <translation>Провери везу</translation>
     </message>
     <message>
         <location filename="../../directory_ui/addmpddialog.cpp" line="69"/>
@@ -144,7 +144,7 @@
     <message>
         <location filename="../../directory_ui/directorycontextmenu.cpp" line="34"/>
         <source>Append to current playlist</source>
-        <translation>Додај тренутној плејлисти</translation>
+        <translation>Додај у тренутну плејлисту</translation>
     </message>
     <message>
         <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
@@ -181,7 +181,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_feedbackform.h" line="104"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_feedbackform.h" line="104"/>
         <source>(optional )Your name / contact if you&apos;d like to hear back</source>
-        <translation>(опционо) Ваше име/контакт ако желите да се јавите</translation>
+        <translation>(опционо) Ваше име/контакт ако желите да добијете одговор</translation>
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="46"/>
@@ -380,12 +380,12 @@
     <message>
         <location filename="../../mainmenu.cpp" line="17"/>
         <source>Tray icon</source>
-        <translation>Икона у траци</translation>
+        <translation>Икона у системској траци</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="20"/>
         <source>Minimize to tray</source>
-        <translation>Минимизирајте у послужавник</translation>
+        <translation>Умањи у системску траку</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="25"/>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../../mainmenu.cpp" line="27"/>
         <source>Quit</source>
-        <translation>Одустати</translation>
+        <translation>Изађи</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="28"/>
@@ -435,7 +435,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="283"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="283"/>
         <source>MainWindow</source>
-        <translation>МаинВиндов</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
@@ -456,7 +456,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="291"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="291"/>
         <source>Play</source>
-        <translation>Играј</translation>
+        <translation>Пусти</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="44"/>
@@ -491,7 +491,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="306"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="306"/>
         <source>Sort</source>
-        <translation>Врста</translation>
+        <translation>Сортирање</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="112"/>
@@ -544,7 +544,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="323"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="323"/>
         <source>Filter library</source>
-        <translation>Библиотека филтера</translation>
+        <translation>Филтер библиотеке</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="193"/>
@@ -558,7 +558,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="325"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="325"/>
         <source>Filter tracks</source>
-        <translation>Филтрирајте трагове</translation>
+        <translation>Филтер нумера</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="223"/>
@@ -579,7 +579,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="330"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="330"/>
         <source>Order:</source>
-        <translation>Наручите:</translation>
+        <translation>Редослед:</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="240"/>
@@ -600,7 +600,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_mainwindow.h" line="335"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_mainwindow.h" line="335"/>
         <source>playlist</source>
-        <translation>плаилист</translation>
+        <translation>плејлиста</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="261"/>
@@ -630,7 +630,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="201"/>
         <source>(use global)</source>
-        <translation>(користите глобално)</translation>
+        <translation>(користи глобално)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="350"/>
@@ -654,7 +654,7 @@
     <message>
         <location filename="../../modusoperandi.cpp" line="29"/>
         <source>mpd connected</source>
-        <translation>мпд повезан</translation>
+        <translation>mpd повезан</translation>
     </message>
 </context>
 <context>
@@ -677,12 +677,12 @@
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="47"/>
         <source>Total time played</source>
-        <translation>Укупно одиграно време</translation>
+        <translation>Укупно време репродукције</translation>
     </message>
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="51"/>
         <source>This session time played</source>
-        <translation>Ово време сесије је одиграно</translation>
+        <translation>Време репродукције у овој сесији</translation>
     </message>
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="69"/>
@@ -759,7 +759,7 @@
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="32"/>
         <source>Play</source>
-        <translation>Играј</translation>
+        <translation>Пусти</translation>
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="52"/>
@@ -769,7 +769,7 @@
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="71"/>
         <source>Select playlist files</source>
-        <translation>Изаберите датотеке са плејлисте</translation>
+        <translation>Изаберите датотеке плејлиста</translation>
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="89"/>
@@ -795,7 +795,7 @@
     <message>
         <location filename="../../shortcuts.cpp" line="35"/>
         <source>Play</source>
-        <translation>Играј</translation>
+        <translation>Пусти</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="36"/>
@@ -875,7 +875,7 @@
     <message>
         <location filename="../../shortcuts.cpp" line="51"/>
         <source>Quit</source>
-        <translation>Одустати</translation>
+        <translation>Изађи</translation>
     </message>
 </context>
 <context>
@@ -908,7 +908,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_sortingpresets.h" line="136"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_sortingpresets.h" line="137"/>
         <source>Sorting presets</source>
-        <translation>Сортирање унапред подешених поставки</translation>
+        <translation>Унапред подешене поставке сортирања</translation>
     </message>
     <message>
         <location filename="../../sort_ui/sortingpresets.ui" line="22"/>
@@ -982,7 +982,7 @@
     <message>
         <location filename="../../statusbarlabel.cpp" line="24"/>
         <source>Playing</source>
-        <translation>Играње</translation>
+        <translation>Репродукција</translation>
     </message>
     <message>
         <location filename="../../statusbarlabel.cpp" line="31"/>
@@ -1054,7 +1054,7 @@
         <location filename="../../../build/release-qt5/mpz_autogen/include/ui_trackinfodialog.h" line="126"/>
         <location filename="../../../build/release-qt6-syslibs/mpz_autogen/include/ui_trackinfodialog.h" line="120"/>
         <source>Lyrics</source>
-        <translation>Текст песама</translation>
+        <translation>Текст песме</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.ui" line="111"/>
@@ -1101,7 +1101,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="79"/>
         <source>Bitrate</source>
-        <translation>Битрате</translation>
+        <translation>Битрејт</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
@@ -1142,7 +1142,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="180"/>
         <source>Searching lyrics...</source>
-        <translation>Претрага текстова песама...</translation>
+        <translation>Претрага текста песме...</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
@@ -1171,12 +1171,12 @@
     <message>
         <location filename="../../trayicon.cpp" line="12"/>
         <source>Quit</source>
-        <translation>Одустати</translation>
+        <translation>Изађи</translation>
     </message>
     <message>
         <location filename="../../trayicon.cpp" line="14"/>
         <source>Play</source>
-        <translation>Играј</translation>
+        <translation>Пусти</translation>
     </message>
     <message>
         <location filename="../../trayicon.cpp" line="16"/>
@@ -1201,7 +1201,7 @@
     <message>
         <location filename="../../trayicon.cpp" line="65"/>
         <source>Playing</source>
-        <translation>Играње</translation>
+        <translation>Репродукција</translation>
     </message>
     <message>
         <location filename="../../trayicon.cpp" line="85"/>
