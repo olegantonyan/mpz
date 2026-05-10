@@ -1,0 +1,237 @@
+/* mpz landing — minimal stylesheet, replaces Bulma. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface-2: #fafafa;
+  --text: #2b2b2b;
+  --text-muted: #6b6b6b;
+  --border: #dcdcdc;
+  --link: #1f6feb;
+  --link-hover: #1158c7;
+  --code-bg: #f0f0f0;
+  --hero-bg: #2b2b2b;
+  --hero-text: #f5f5f5;
+  --button-bg: #f5f5f5;
+  --button-bg-hover: #e8e8e8;
+  --button-text: #2b2b2b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --surface: #232323;
+    --surface-2: #2b2b2b;
+    --text: #e6e6e6;
+    --text-muted: #a0a0a0;
+    --border: #3a3a3a;
+    --link: #6ea8fe;
+    --link-hover: #9bc1ff;
+    --code-bg: #2b2b2b;
+    --hero-bg: #111111;
+    --hero-text: #f5f5f5;
+    --button-bg: #2f2f2f;
+    --button-bg-hover: #3a3a3a;
+    --button-text: #e6e6e6;
+  }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+code {
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+/* Layout */
+.container {
+  max-width: 1152px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.section { padding: 3rem 0; }
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-block: 0.75rem;
+}
+.column { flex: 1 1 0; min-width: 0; }
+.column.is-narrow { flex: 0 0 auto; }
+.column.is-1 { flex: 0 0 8.333%; max-width: 8.333%; }
+.columns.is-vcentered { align-items: center; }
+
+@media (max-width: 768px) {
+  .columns { flex-direction: column; gap: 1rem; }
+  .column, .column.is-1, .column.is-narrow { flex: 1 1 auto; max-width: 100%; }
+  .section { padding: 2rem 0; }
+  .container { padding-inline: 1rem; }
+}
+
+/* Hero */
+.hero {
+  background: var(--hero-bg);
+  color: var(--hero-text);
+}
+.hero a { color: var(--hero-text); }
+.hero-body { padding: 2rem 1.5rem; }
+.hero.is-small .hero-body { padding: 1.5rem 1.5rem; }
+.hero .title, .hero .subtitle { color: var(--hero-text); margin: 0; }
+.hero .subtitle { color: rgba(245, 245, 245, 0.85); font-weight: 400; }
+
+/* Typography */
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+  color: var(--text);
+}
+.hero .title { font-size: 2.25rem; }
+
+.subtitle {
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0.25rem 0 1rem 0;
+  color: var(--text-muted);
+}
+
+h3 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
+
+.content { line-height: 1.55; }
+.content p { margin: 0 0 0.85em 0; }
+.content p:last-child { margin-bottom: 0; }
+.content ul, .content ol { margin: 0 0 0.85em 1.5em; padding: 0; }
+.content li { margin-bottom: 0.25em; }
+.content table { margin-bottom: 1em; }
+.content.is-small { font-size: 0.9rem; }
+
+.has-text-centered { text-align: center; }
+.has-text-grey { color: var(--text-muted); }
+.is-size-7 { font-size: 0.85rem; }
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.5em 1em;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.2;
+}
+.button:hover { background: var(--button-bg-hover); text-decoration: none; }
+.button.is-light { background: #f5f5f5; color: #2b2b2b; border-color: #dcdcdc; }
+.button.is-light:hover { background: #e8e8e8; }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+}
+.icon img { width: 1em; height: 1em; display: inline-block; }
+
+/* Image / figure */
+.image {
+  display: block;
+  position: relative;
+  margin: 0;
+}
+.image.is-64x64 { width: 64px; height: 64px; }
+.image.is-64x64 img { width: 64px; height: 64px; }
+.image.is-16by9 {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--surface);
+}
+.image.is-16by9 > a,
+.image.is-16by9 > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.image.is-16by9 img { object-fit: cover; }
+
+/* Tables */
+.table {
+  border-collapse: collapse;
+  width: auto;
+}
+.table.is-fullwidth { width: 100%; }
+.table th, .table td {
+  border: 1px solid var(--border);
+  padding: 0.55em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+.table th { background: var(--surface); font-weight: 600; }
+
+/* Footer */
+.footer {
+  background: var(--surface);
+  padding: 2rem 1.5rem;
+  margin-top: 2rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+.footer .content { color: inherit; }
+
+/* Spacing utilities (only the ones used) */
+.mt-3 { margin-top: 0.75rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.pt-4 { padding-top: 1rem; }
+.pb-2 { padding-bottom: 0.5rem; }
+
+/* Header (semantic; hero handles its own background) */
+header { display: block; }
+main { display: block; }
+
+/* Badge row: normalize heights so mixed shields.io styles align cleanly */
+section.pt-4 .has-text-centered a {
+  display: inline-block;
+  margin: 0.15rem 0.2rem;
+  vertical-align: middle;
+  line-height: 0;
+}
+section.pt-4 .has-text-centered img {
+  height: 20px;
+  width: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Details/summary tweak so the FAQ block reads cleanly */
+details > summary { cursor: pointer; }
