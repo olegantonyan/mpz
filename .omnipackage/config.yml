@@ -208,6 +208,7 @@ builds:
 
 ignore_source_files:
   - .git
+  - .env
   - .DS_Store
   - "*.log"
   - /build
