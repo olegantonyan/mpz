@@ -5,7 +5,7 @@
         <title>mpz — music player for big local collections</title>
         <meta
             name="description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,7 +28,7 @@
         />
         <meta
             property="og:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -53,7 +53,7 @@
         />
         <meta
             name="twitter:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE support, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
         />
         <meta
             name="twitter:image"
@@ -84,7 +84,7 @@
                 "applicationSubCategory": "AudioPlayer",
                 "softwareVersion": "2.0.4",
                 "softwareRequirements": "Linux or Windows; Qt 6 (Qt 5 supported via AUR package)",
-                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE support, MPRIS, mpd client mode.",
+                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
                 "downloadUrl": "https://mpz-player.org/#install",
                 "screenshot": "https://mpz-player.org/images/breeze-dark.png",
@@ -96,7 +96,11 @@
                     "MPRIS integration on Linux",
                     "Experimental mpd client mode",
                     "m3u and pls playlist formats including internet radio streams",
-                    "Native C++/Qt 6 — no Electron",
+                    "Lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB",
+                    "Tag reading via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
+                    "Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — via system codecs",
+                    "Playback log of recently played tracks",
+                    "Native C++/Qt 6",
                     "Follows your desktop theme",
                     "Cross-platform: Linux and Windows"
                 ],
@@ -120,7 +124,7 @@
                 "@type": "WebSite",
                 "name": "mpz",
                 "url": "https://mpz-player.org/",
-                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE support, MPRIS, mpd client mode."
+                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode."
             }
         </script>
 
@@ -175,6 +179,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the README for details."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz support lyrics?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog."
                         }
                     }
                 ]
@@ -815,6 +827,19 @@
                                     >README</a
                                 >
                                 for details.
+                            </p>
+
+                            <p>
+                                <strong>Does mpz support lyrics?</strong><br />
+                                Yes. Lyrics can be embedded in tags, loaded
+                                from <code>.lrc</code> or <code>.txt</code>
+                                sidecar files, or fetched online from
+                                <a
+                                    href="https://lrclib.net"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >LRCLIB</a
+                                >. They are shown in the Track Info dialog.
                             </p>
                         </div>
                     </details>
