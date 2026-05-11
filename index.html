@@ -380,25 +380,19 @@
                     <div class="content">
                         <p>
                             If you organize your music in folders rather than
-                            letting an app index a "library", mpz is for you.
-                            It's a free, open-source, native C++ / Qt 6 music
-                            player for large local collections — a
-                            Foobar2000-style folder workflow for Linux and
-                            Windows (no macOS package yet — I don't own Apple
-                            hardware; volunteers welcome). The focus is simple:
-                            play music from your local files. No library
-                            indexing step — just folders, and playlists you
-                            build from them by middle-clicking.
+                            letting an app index a "library", mpz is for you. A
+                            free, open-source, native C++ / Qt 6 music player
+                            for large local collections on Linux and Windows
+                            (no macOS package yet — I don't own Apple hardware;
+                            volunteers welcome). No library indexing step —
+                            just folders, and playlists you build from them by
+                            middle-clicking.
                         </p>
                         <p>
-                            The 3-column UI shows the directory tree (aka
-                            library), the list of playlists, and tracks from the
-                            selected playlist. Middle-click on a folder in the
-                            directory view and it becomes a playlist; its
-                            contents load into the tracks view. Create multiple
-                            playlists from folders in your library and switch
-                            between them quickly. Similar to "Album list" in
-                            Foobar2000.
+                            The 3-column UI shows the directory tree, the list
+                            of playlists, and tracks from the selected
+                            playlist. Middle-click a folder and it becomes a
+                            playlist; switch between playlists quickly.
                         </p>
                     </div>
 
@@ -514,27 +508,54 @@
                     </div>
 
                     <h2 class="title">
-                        Radio streams, hotkeys, playback log and more
+                        Radio streams, lyrics, tags, and more
                     </h2>
                     <div class="content">
-                        Internet radio streams in <code>m3u</code> and
-                        <code>pls</code> formats. CUE sheets supported. A
-                        playback log keeps history of what played — handy when
-                        you hear something you like on a radio stream. MPRIS on
-                        Linux for remote playback control, for example via
-                        <a
-                            href="https://kdeconnect.kde.org/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >KDE Connect</a
-                        >. Got feedback? Feature request? Found a bug? Use the
-                        built-in feedback form, or open a
-                        <a
-                            href="https://github.com/olegantonyan/mpz/issues"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >GitHub issue</a
-                        >.
+                        <p>
+                            Internet radio streams in <code>m3u</code> and
+                            <code>pls</code> formats. CUE sheets supported. A
+                            playback log keeps history of what played — handy
+                            when you hear something you like on a radio stream.
+                            MPRIS on Linux for remote playback control, for
+                            example via
+                            <a
+                                href="https://kdeconnect.kde.org/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >KDE Connect</a
+                            >. Got feedback? Feature request? Found a bug? Use
+                            the built-in feedback form, or open a
+                            <a
+                                href="https://github.com/olegantonyan/mpz/issues"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub issue</a
+                            >.
+                        </p>
+                        <p>
+                            Lyrics — embedded in tags, in
+                            <code>.lrc</code>/<code>.txt</code> sidecar files,
+                            or fetched online from
+                            <a
+                                href="https://lrclib.net"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >LRCLIB</a
+                            >
+                            — are shown in the Track Info dialog. Tag reading
+                            via
+                            <a
+                                href="https://taglib.org/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >TagLib</a
+                            >
+                            (ID3v2, Vorbis Comment, MP4, APE). Common audio
+                            formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV —
+                            through your system's codecs (QtMultimedia with the
+                            GStreamer or ffmpeg backend on Linux, native
+                            backends on Windows).
+                        </p>
                     </div>
 
                     <div class="columns">
@@ -594,36 +615,6 @@
                             </figure>
                             <h3>Playback log</h3>
                         </div>
-                    </div>
-
-                    <h2 class="title">Lyrics, tags, and audio formats</h2>
-                    <div class="content">
-                        <p>
-                            Lyrics are supported — embedded in tags, in
-                            <code>.lrc</code>/<code>.txt</code> sidecar files,
-                            or fetched online from
-                            <a
-                                href="https://lrclib.net"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >LRCLIB</a
-                            >
-                            — and shown in the Track Info dialog.
-                        </p>
-                        <p>
-                            Tag reading is powered by
-                            <a
-                                href="https://taglib.org/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >TagLib</a
-                            >
-                            (ID3v2, Vorbis Comment, MP4, APE). Common audio
-                            formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV —
-                            play through your system's codecs (QtMultimedia with
-                            the GStreamer or ffmpeg backend on Linux, native
-                            backends on Windows).
-                        </p>
                     </div>
 
                     <h2 id="install" class="title">Install</h2>

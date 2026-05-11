@@ -70,7 +70,14 @@ code {
   padding-inline: 1.5rem;
 }
 
-.section { padding: 3rem 0; }
+.section { padding: 4.5rem 0; }
+
+/* Space between sub-sections (h2.title) inside a single .section */
+.section .title + .content,
+.section .title + .columns { margin-top: 0; }
+.section .container > .title:not(:first-child),
+.section .container > .columns + .title,
+.section .container > .content + .title { margin-top: 3rem; }
 
 .columns {
   display: flex;
@@ -86,7 +93,10 @@ code {
 @media (max-width: 768px) {
   .columns { flex-direction: column; gap: 1rem; }
   .column, .column.is-1, .column.is-narrow { flex: 1 1 auto; max-width: 100%; }
-  .section { padding: 2rem 0; }
+  .section { padding: 3rem 0; }
+  .section .container > .title:not(:first-child),
+  .section .container > .columns + .title,
+  .section .container > .content + .title { margin-top: 2rem; }
   .container { padding-inline: 1rem; }
 }
 
