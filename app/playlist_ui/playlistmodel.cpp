@@ -212,7 +212,7 @@ namespace PlaylistUi {
     if (unique.isEmpty()) {
       return nullptr;
     }
-    QList<int> rows(unique.begin(), unique.end());
+    QList<int> rows = unique.values();
     std::sort(rows.begin(), rows.end());
 
     auto *data = new QMimeData;
