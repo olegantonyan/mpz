@@ -4,6 +4,13 @@
 #include <QDebug>
 #include <QFont>
 #include <QtConcurrent>
+#include <QMimeData>
+#include <QDataStream>
+#include <QSet>
+
+namespace {
+  const QString playlistTracksMime = QStringLiteral("application/x-mpz-playlist-tracks");
+}
 
 namespace PlaylistUi {
   Model::Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent) : QAbstractTableModel(parent), highlight_uid(0), style(stl), columns_config(col_cfg) {
@@ -177,5 +184,120 @@ namespace PlaylistUi {
   void Model::sortBy(const QString &criteria) {
     playlist()->sortBy(criteria);
     reload();
+  }
+
+  Qt::ItemFlags Model::flags(const QModelIndex &index) const {
+    auto defaults = QAbstractTableModel::flags(index);
+    if (index.isValid()) {
+      return defaults | Qt::ItemIsDragEnabled;
+    }
+    return defaults | Qt::ItemIsDropEnabled;
+  }
+
+  Qt::DropActions Model::supportedDropActions() const {
+    return Qt::MoveAction;
+  }
+
+  QStringList Model::mimeTypes() const {
+    return {playlistTracksMime};
+  }
+
+  QMimeData *Model::mimeData(const QModelIndexList &indexes) const {
+    QSet<int> unique;
+    for (const auto &idx : indexes) {
+      if (idx.isValid()) {
+        unique.insert(idx.row());
+      }
+    }
+    if (unique.isEmpty()) {
+      return nullptr;
+    }
+    QList<int> rows(unique.begin(), unique.end());
+    std::sort(rows.begin(), rows.end());
+
+    auto *data = new QMimeData;
+    QByteArray bytes;
+    QDataStream stream(&bytes, QIODevice::WriteOnly);
+    stream << static_cast<qint32>(rows.size());
+    for (int r : rows) {
+      stream << static_cast<qint32>(r);
+    }
+    data->setData(playlistTracksMime, bytes);
+    return data;
+  }
+
+  bool Model::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+    Q_UNUSED(column)
+    if (action != Qt::MoveAction || !data || !data->hasFormat(playlistTracksMime) || !playlist()) {
+      return false;
+    }
+
+    QByteArray bytes = data->data(playlistTracksMime);
+    QDataStream stream(&bytes, QIODevice::ReadOnly);
+    qint32 count = 0;
+    stream >> count;
+    QList<int> srcRows;
+    srcRows.reserve(count);
+    for (qint32 i = 0; i < count; i++) {
+      qint32 r = -1;
+      stream >> r;
+      if (r >= 0 && r < tracks.size()) {
+        srcRows.append(r);
+      }
+    }
+    if (srcRows.isEmpty()) {
+      return false;
+    }
+    std::sort(srcRows.begin(), srcRows.end());
+
+    int dst = row;
+    if (dst < 0) {
+      dst = parent.isValid() ? parent.row() : tracks.size();
+    }
+    dst = qBound(0, dst, tracks.size());
+
+    int below = 0;
+    for (int r : srcRows) {
+      if (r < dst) below++;
+    }
+    int adjustedDst = dst - below;
+
+    QVector<Track> moved;
+    moved.reserve(srcRows.size());
+    for (int r : srcRows) {
+      moved.append(tracks.at(r));
+    }
+
+    auto applyMove = [this, &moved, adjustedDst](int i) {
+      const quint64 uid = moved.at(i).uid();
+      int cur = -1;
+      for (int j = 0; j < tracks.size(); j++) {
+        if (tracks.at(j).uid() == uid) {
+          cur = j;
+          break;
+        }
+      }
+      if (cur < 0) {
+        return;
+      }
+      int target = adjustedDst + i;
+      if (cur == target) {
+        return;
+      }
+      int qtTarget = target > cur ? target + 1 : target;
+      beginMoveRows(QModelIndex(), cur, cur, QModelIndex(), qtTarget);
+      tracks.move(cur, target);
+      endMoveRows();
+    };
+
+    for (int i = below - 1; i >= 0; i--) {
+      applyMove(i);
+    }
+    for (int i = below; i < moved.size(); i++) {
+      applyMove(i);
+    }
+
+    playlist()->load(tracks);
+    return false;
   }
 }

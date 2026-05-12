@@ -21,6 +21,12 @@ namespace PlaylistUi {
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    view->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    view->setDragEnabled(true);
+    view->setAcceptDrops(true);
+    view->setDropIndicatorShown(true);
+    view->setDragDropMode(QAbstractItemView::InternalMove);
+    view->setDefaultDropAction(Qt::MoveAction);
     view->setShowGrid(false);
     //view->setFocusPolicy(Qt::NoFocus);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -67,6 +73,17 @@ namespace PlaylistUi {
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
 
     connect(proxy, &ProxyFilterModel::appendToPlaylistAsyncFinished, this, &Controller::on_appendAsyncFinished);
+
+    connect(proxy, &ProxyFilterModel::tracksReordered, this, [this]() {
+      if (persist_pending) {
+        return;
+      }
+      persist_pending = true;
+      QTimer::singleShot(0, this, [this]() {
+        persist_pending = false;
+        emit changed(proxy->activeModel()->playlist());
+      });
+    });
   }
 
   void PlaylistUi::Controller::loadColumnsConfig() {
@@ -186,11 +203,23 @@ namespace PlaylistUi {
       if (me->button() == Qt::BackButton) {
         search->clear();
       }
+      if (me->button() == Qt::LeftButton) {
+        auto idx = view->indexAt(me->pos());
+        view->setDragEnabled(idx.isValid() && view->selectionModel()->isSelected(idx));
+      }
+    }
+
+    if (event->type() == QEvent::MouseButtonRelease) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::LeftButton) {
+        view->setDragEnabled(true);
+      }
     }
   }
 
   void Controller::on_search(const QString &term) {
     proxy->filter(term);
+    view->setDragDropMode(term.isEmpty() ? QAbstractItemView::InternalMove : QAbstractItemView::NoDragDrop);
     if (term.isEmpty()) {
       QTimer::singleShot(20, this, [=]() {
         if (!view->selectionModel()->selectedRows().isEmpty()) {

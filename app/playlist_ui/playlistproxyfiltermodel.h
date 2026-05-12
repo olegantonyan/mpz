@@ -24,6 +24,7 @@ namespace PlaylistUi {
 
   signals:
     void appendToPlaylistAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
+    void tracksReordered();
 
   public slots:
     void filter(const QString &term);

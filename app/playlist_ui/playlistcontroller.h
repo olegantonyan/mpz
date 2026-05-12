@@ -53,6 +53,7 @@ namespace PlaylistUi {
     Config::Local &local_conf;
     Config::Global &global_conf;
     bool restore_scroll_once;
+    bool persist_pending = false;
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
