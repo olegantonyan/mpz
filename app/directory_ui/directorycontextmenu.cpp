@@ -35,17 +35,17 @@ namespace DirectoryUi {
     QAction open_in_filemanager(tr("Open in file manager"));
     open_in_filemanager.setIcon(view->style()->standardIcon(QStyle::SP_DirLinkIcon));
 
-    connect(&create_playlist, &QAction::triggered, [&]() {
+    connect(&create_playlist, &QAction::triggered, this, [&]() {
       emit createNewPlaylist(selected_dirs);
     });
-    connect(&append_to_playlist, &QAction::triggered, [&]() {
+    connect(&append_to_playlist, &QAction::triggered, this, [&]() {
       emit appendToCurrentPlaylist(selected_dirs);
     });
     connect(&open_in_filemanager, &QAction::triggered, [&]() {
       QDesktopServices::openUrl(QUrl::fromLocalFile(filepath.absolutePath()));
     });
     if (!search->text().isEmpty()) {
-      connect(&clear_filter, &QAction::triggered, [&]() {
+      connect(&clear_filter, &QAction::triggered, this, [&]() {
         search->clear();
       });
       menu.addAction(&clear_filter);

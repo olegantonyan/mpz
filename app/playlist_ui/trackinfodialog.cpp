@@ -116,17 +116,17 @@ void TrackInfoDialog::add_table_row(const QString &title, const QString &content
 void TrackInfoDialog::setup_context_menu() {
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  connect(ui->tableView, &QTableView::customContextMenuRequested, [=](const QPoint &pos) {
+  connect(ui->tableView, &QTableView::customContextMenuRequested, this, [=](const QPoint &pos) {
     if(!ui->tableView->indexAt(pos).isValid()) {
       return;
     }
     QMenu menu;
     QAction copy(tr("Copy"));
-    connect(&copy, &QAction::triggered, [=]() {
+    connect(&copy, &QAction::triggered, this, [=]() {
       on_copy(pos);
     });
     QAction search(tr("Search on web"));
-    connect(&search, &QAction::triggered, [=]() {
+    connect(&search, &QAction::triggered, this, [=]() {
       on_search(pos);
     });
     menu.addAction(&copy);
@@ -256,7 +256,7 @@ void TrackInfoDialog::render_lyrics_state(const QString &message) {
 void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &pos) {
   QMenu menu;
   QAction copy(tr("Copy to clipboard"));
-  connect(&copy, &QAction::triggered, [=]() {
+  connect(&copy, &QAction::triggered, this, [=]() {
     QPixmap pixmap(cover_art_path);
     if (!pixmap.isNull()) {
       QApplication::clipboard()->setPixmap(pixmap);
@@ -265,7 +265,7 @@ void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &
 
   QAction show_in_filemanager(tr("Open in external viewer"));
   show_in_filemanager.setIcon(ui->labelCoverArt->style()->standardIcon(QStyle::SP_DirLinkIcon));
-  connect(&show_in_filemanager, &QAction::triggered, [=]() {
+  connect(&show_in_filemanager, &QAction::triggered, this, [=]() {
     if (!cover_art_path.isEmpty()) {
       QDesktopServices::openUrl(QUrl::fromLocalFile(cover_art_path));
     }

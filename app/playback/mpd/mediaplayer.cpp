@@ -8,7 +8,7 @@ namespace Playback {
       progress_timer.setInterval(500);
       connect(&progress_timer, &QTimer::timeout, this, &MediaPlayer::updateProgressNow);
       connect(&client, &MpdClient::Client::disconnected, &progress_timer, &QTimer::stop);
-      connect(&client, &MpdClient::Client::connected, [=] {
+      connect(&client, &MpdClient::Client::connected, this, [=] {
         auto status = client.status();
         auto st = stateByStatus(status);
         if (st != StoppedState) {

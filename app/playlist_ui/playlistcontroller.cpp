@@ -44,7 +44,7 @@ namespace PlaylistUi {
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
 
-    connect(view, &QTableView::activated, [=](const QModelIndex &index) {
+    connect(view, &QTableView::activated, this, [=](const QModelIndex &index) {
       emit activated(proxy->activeModel()->itemAt(proxy->mapToSource(index)));
     });
 
@@ -54,7 +54,7 @@ namespace PlaylistUi {
     connect(search, &QLineEdit::textChanged, this, &Controller::on_search);
     search->setClearButtonEnabled(true);
 
-    connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
+    connect(view->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int val) {
       if (proxy->activeModel()->playlist() != nullptr) {
         scroll_positions[proxy->activeModel()->playlist()->uid()] = val;
       }
@@ -85,7 +85,7 @@ namespace PlaylistUi {
     proxy->activeModel()->setPlaylist(pi);
 
     if (scroll_positions.contains(pi->uid())) {
-      QTimer::singleShot(20, [=]() { // hack: https://stackoverflow.com/questions/50989433/qtableviewscrollto-immediately-after-model-reset-and-after-some-delay
+      QTimer::singleShot(20, this, [=]() { // hack: https://stackoverflow.com/questions/50989433/qtableviewscrollto-immediately-after-model-reset-and-after-some-delay
         view->verticalScrollBar()->setValue(scroll_positions[pi->uid()]);
       });
     }
@@ -192,7 +192,7 @@ namespace PlaylistUi {
   void Controller::on_search(const QString &term) {
     proxy->filter(term);
     if (term.isEmpty()) {
-      QTimer::singleShot(20, [=]() {
+      QTimer::singleShot(20, this, [=]() {
         if (!view->selectionModel()->selectedRows().isEmpty()) {
           view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
         }

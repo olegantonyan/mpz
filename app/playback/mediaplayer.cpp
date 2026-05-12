@@ -14,7 +14,7 @@ namespace Playback {
     player.setAudioOutput(&audio_output);
     setOutputDevice(output_device_id);
 #endif
-    connect(&player, &QMediaPlayer::positionChanged, [=](quint64 pos) {
+    connect(&player, &QMediaPlayer::positionChanged, this, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
       if (offset_end > 0 && pos >= offset_end) {
         player.stop();
@@ -22,7 +22,7 @@ namespace Playback {
       }
     });
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    connect(&player, &QMediaPlayer::playbackStateChanged, [=](QMediaPlayer::PlaybackState state) {
+    connect(&player, &QMediaPlayer::playbackStateChanged, this, [=](QMediaPlayer::PlaybackState state) {
 #else
     connect(&player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State state) {
 #endif
@@ -53,7 +53,7 @@ namespace Playback {
       }
     });
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    connect(&player, &QMediaPlayer::errorOccurred, [=](QMediaPlayer::Error err) {
+    connect(&player, &QMediaPlayer::errorOccurred, this, [=](QMediaPlayer::Error err) {
 #else
     connect(&player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), [=](QMediaPlayer::Error err) {
 #endif

@@ -10,7 +10,7 @@ namespace DirectoryUi {
 
   void SortMenu::on_open() {
     QMenu menu;
-    connect(&menu, &QMenu::triggered, [=](QAction *action) {
+    connect(&menu, &QMenu::triggered, this, [=](QAction *action) {
       emit triggered(action->data().toString());
     });
 

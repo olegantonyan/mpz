@@ -18,11 +18,11 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
     connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
 
-    connect(&_player, &MediaPlayer::streamBufferfillChanged, [=](quint32 bytes, quint32 thresh) {
+    connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
-    connect(&_player, &MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
+    connect(&_player, &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
     });
@@ -30,26 +30,26 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #ifdef ENABLE_MPD_SUPPORT
     connect(&_mpdplayer, &Mpd::MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_mpdplayer, &Mpd::MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
-    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, [=](auto path) {
+    connect(&_mpdplayer, &Mpd::MediaPlayer::trackChanged, this, [=](auto path) {
       emit trackChangedQuery(path, _current_track.playlist_name());
     });
-    connect(&modus_operndi.mpd_client, &MpdClient::Client::mixerChanged, [this]() {
+    connect(&modus_operndi.mpd_client, &MpdClient::Client::mixerChanged, this, [this]() {
       if (modus_operndi.get() == ModusOperandi::MODUS_MPD) {
         int volume = _mpdplayer.volume();
         emit volumeChanged(volume);
       }
     });
-    connect(&_mpdplayer, &Mpd::MediaPlayer::audioFormatUpdated, [=](quint32 sample_rate, quint8 channels, quint16 bitrate) {
+    connect(&_mpdplayer, &Mpd::MediaPlayer::audioFormatUpdated, this, [=](quint32 sample_rate, quint8 channels, quint16 bitrate) {
       _current_track.setAudioFormat(sample_rate, channels, bitrate);
       emit trackChanged(_current_track);
     });
-    connect(&_mpdplayer, &Mpd::MediaPlayer::durationChanged, [=](quint64 ms) {
+    connect(&_mpdplayer, &Mpd::MediaPlayer::durationChanged, this, [=](quint64 ms) {
       if (_current_track.duration() != ms && ms > 0) {
         _current_track.setDuration(ms);
         _controls.seekbar->setMaximum(ms / 1000);
       }
     });
-    connect(&_mpdplayer, &Mpd::MediaPlayer::streamMetaChanged, [=](const StreamMetaData &meta) {
+    connect(&_mpdplayer, &Mpd::MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
     });
@@ -72,7 +72,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     monotonic_timer.setInterval(1000);
     monotonic_timer.start();
     monotonic_timer.setTimerType(Qt::PreciseTimer);
-    connect(&monotonic_timer, &QTimer::timeout, [=]() {
+    connect(&monotonic_timer, &QTimer::timeout, this, [=]() {
       if (state() == Controller::Playing) {
         emit monotonicPlaybackTimerIncrement(1);
       }

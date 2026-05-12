@@ -114,7 +114,7 @@ namespace IPC {
     timer.setSingleShot(true);
     timer.setInterval(timeout_ms);
     timer.start();
-    auto conn_read = connect(socket, &QTcpSocket::readyRead, [&]() {
+    auto conn_read = connect(socket, &QTcpSocket::readyRead, this, [&]() {
       socket->write(process_received(socket->readAll()));
       socket->waitForBytesWritten(timeout_ms);
       socket->flush();

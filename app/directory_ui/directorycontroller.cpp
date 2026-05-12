@@ -34,7 +34,7 @@ namespace DirectoryUi {
     restore_scroll_once = true;
 
     model = new DirectoryModel::Proxy(modus_operandi, this);
-    connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, [=] {
+    connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, this, [=] {
       view->setModel(model);
       view->setRootIndex(model->rootIndex());
       view->setHeaderHidden(true);
@@ -55,7 +55,7 @@ namespace DirectoryUi {
     }
 
     if (libswitch->count() > 0) {
-      connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
+      connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
         auto path = modus_operandi.onLibraryPathChange(idx);
         if (!path.isEmpty()) {
           model->switchTo(modus_operandi.get());
@@ -75,11 +75,11 @@ namespace DirectoryUi {
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
 
-    connect(view->verticalScrollBar(), &QScrollBar::valueChanged, [=](int val) {
+    connect(view->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int val) {
       local_conf.saveLibraryViewScrollPosition(val);
     });
 
-    connect(libcfg, &QToolButton::clicked, [=]() {
+    connect(libcfg, &QToolButton::clicked, this, [=]() {
       settingsDialog(_libswitch);
     });
 
@@ -91,7 +91,7 @@ namespace DirectoryUi {
 
   void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
-      QTimer::singleShot(20, [=]() {
+      QTimer::singleShot(20, this, [=]() {
         if (!view->selectionModel()->selectedRows().isEmpty()) {
           view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
         }

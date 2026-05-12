@@ -183,15 +183,15 @@ namespace Playback {
     sock.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), this, [&](QAbstractSocket::SocketError code) {
 #else
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, [&](QAbstractSocket::SocketError code) {
 #endif
       qWarning() << "stream network error" << code << sock.errorString();
       emit error(sock.errorString());
     });
 
-    auto conn_read = connect(&sock, &QTcpSocket::readyRead, [&]() {
+    auto conn_read = connect(&sock, &QTcpSocket::readyRead, this, [&]() {
       // assuming headers will be received all in first chunk upon readyRead
       // this may not be true. probably need a proper fix here
       auto data = sock.readAll();
@@ -219,7 +219,7 @@ namespace Playback {
     timer.setSingleShot(true);
     timer.setInterval(_timeout_ms);
     timer.start();
-    connect(&timer, &QTimer::timeout, [&]() {
+    connect(&timer, &QTimer::timeout, this, [&]() {
       emit stopping();
       qWarning() << "stream timeout";
       emit error("timeout");

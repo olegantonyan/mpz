@@ -87,7 +87,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   preloadPlaylist(args);
 
-  connect(instance, &IPC::Instance::load_files_received, [=](const QStringList &lst) {
+  connect(instance, &IPC::Instance::load_files_received, this, [=](const QStringList &lst) {
     preloadPlaylist(lst);
     show();
     raise();
@@ -127,7 +127,7 @@ void MainWindow::setupUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   restoreState(local_conf.windowState());
 
-  connect(ui->splitter, &QSplitter::splitterMoved, [=](int pos, int index) {
+  connect(ui->splitter, &QSplitter::splitterMoved, this, [=](int pos, int index) {
     Q_UNUSED(pos)
     Q_UNUSED(index)
     QList<int> list;
@@ -177,7 +177,7 @@ void MainWindow::setupOrderCombobox() {
 
   ui->orderComboBox->setCurrentIndex(combobox_item_position.value(global_conf.playbackOrder(), 0));
 
-  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {
+  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
     QString order_name = combobox_item_position.key(idx, "sequential");
     global_conf.savePlaybackOrder(order_name);
     global_conf.sync();
@@ -202,7 +202,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem(tr("random"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential (no loop)"));
-  connect(playlists, &PlaylistsUi::Controller::selected, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
+  connect(playlists, &PlaylistsUi::Controller::selected, this, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {
         ui->perPlaylistOrdercomboBox->setCurrentIndex(1);
@@ -215,7 +215,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
       }
     }
   });
-  connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), [=](int idx) {
+  connect(ui->perPlaylistOrdercomboBox, QOverload<int>::of(&QComboBox::activated), this, [=](int idx) {
     auto current_playlist = playlists->playlistByTrackUid(dispatch->state().selectedTrack());
     if (current_playlist != nullptr) {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
@@ -231,7 +231,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
 void MainWindow::setupMpris() {
   mpris = new Mpris(player, global_conf, this);
   connect(mpris, &Mpris::quit, this, &QMainWindow::close);
-  connect(mpris, &Mpris::shuffleChanged, [=](bool val) {
+  connect(mpris, &Mpris::shuffleChanged, this, [=](bool val) {
     ui->orderComboBox->setCurrentIndex(val ? 1 : 0);
     global_conf.savePlaybackOrder(val ? "random" : "sequential");
     global_conf.sync();
@@ -242,7 +242,7 @@ void MainWindow::setupMpris() {
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
-  connect(ui->followCursorCheckBox, &QCheckBox::checkStateChanged, [=](Qt::CheckState state) {
+  connect(ui->followCursorCheckBox, &QCheckBox::checkStateChanged, this, [=](Qt::CheckState state) {
 #else
   connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, [=](int state) {
 #endif
@@ -254,7 +254,7 @@ void MainWindow::setupFollowCursorCheckbox() {
 void MainWindow::setupVolumeControl() {
   volume = new VolumeControl(ui->toolButtonVolume, player->volume(), this);
 
-  connect(volume, &VolumeControl::changed, [=](int value) {
+  connect(volume, &VolumeControl::changed, this, [=](int value) {
     player->setVolume(value);
     volume->setValue(value);
     if (value > 0) {
@@ -301,7 +301,7 @@ void MainWindow::setupTrayIcon() {
 void MainWindow::setupPlaybackDispatch() {
   dispatch = new Playback::Dispatch(global_conf, playlists);
 
-  connect(playlist, &PlaylistUi::Controller::selected, [=](const Track &track) {
+  connect(playlist, &PlaylistUi::Controller::selected, this, [=](const Track &track) {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
 #ifdef ENABLE_MPD_SUPPORT
@@ -309,12 +309,12 @@ void MainWindow::setupPlaybackDispatch() {
 #endif
   });
 
-  connect(player, &Playback::Controller::started, [=](const Track &track) {
+  connect(player, &Playback::Controller::started, this, [=](const Track &track) {
     dispatch->state().setPlaying(track.uid());
     dispatch->state().setFollowedCursor();
   });
 
-  connect(player, &Playback::Controller::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, this, [=]() {
     dispatch->state().resetPlaying();
   });
 
@@ -338,7 +338,7 @@ void MainWindow::setupStatusBar() {
   connect(player, &Playback::Controller::streamFill, status_label, &StatusBarLabel::on_streamBufferFill);
   connect(player, &Playback::Controller::progress, status_label, &StatusBarLabel::on_progress);
 
-  connect(status_label, &StatusBarLabel::doubleclicked, [=]() {
+  connect(status_label, &StatusBarLabel::doubleclicked, this, [=]() {
     auto current_track_uid = dispatch->state().playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist != nullptr) {
@@ -349,7 +349,7 @@ void MainWindow::setupStatusBar() {
 
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
-  connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, [=](quint32 t) {
+  connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
     if (t == 0) {
       status_label_right->setText(tr("Nothing selected"));
     } else {
@@ -362,26 +362,26 @@ void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this);
 
   connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
-  connect(shortcuts, &Shortcuts::focusLibrary, [=]() {
+  connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {
     ui->treeView->setFocus(Qt::ShortcutFocusReason);
   });
-  connect(shortcuts, &Shortcuts::focusPlaylists, [=]() {
+  connect(shortcuts, &Shortcuts::focusPlaylists, this, [=]() {
     ui->listView->setFocus(Qt::ShortcutFocusReason);
   });
-  connect(shortcuts, &Shortcuts::focusPlaylist, [=]() {
+  connect(shortcuts, &Shortcuts::focusPlaylist, this, [=]() {
     ui->tableView->setFocus(Qt::ShortcutFocusReason);
   });
-  connect(shortcuts, &Shortcuts::focusFilterLibrary, [=]() {
+  connect(shortcuts, &Shortcuts::focusFilterLibrary, this, [=]() {
     ui->treeViewSearch->setFocus(Qt::ShortcutFocusReason);
   });
-  connect(shortcuts, &Shortcuts::focusFilterPlaylists, [=]() {
+  connect(shortcuts, &Shortcuts::focusFilterPlaylists, this, [=]() {
     ui->listViewSearch->setFocus(Qt::ShortcutFocusReason);
   });
-  connect(shortcuts, &Shortcuts::focusFilterPlaylist, [=]() {
+  connect(shortcuts, &Shortcuts::focusFilterPlaylist, this, [=]() {
     ui->tableViewSearch->setFocus(Qt::ShortcutFocusReason);
   });
 
-  connect(shortcuts, &Shortcuts::play, [&]() {
+  connect(shortcuts, &Shortcuts::play, this, [&]() {
     if (player->isStopped()) {
       player->controls().play->click();
     }
@@ -408,10 +408,10 @@ void MainWindow::setupShortcuts() {
 
 void MainWindow::setupWindowTitle() {
   setWindowTitle(qApp->applicationDisplayName());
-  connect(player, &Playback::Controller::started, [=](const Track &track) {
+  connect(player, &Playback::Controller::started, this, [=](const Track &track) {
     setWindowTitle("[" + track.shortText() + "] " + qApp->applicationDisplayName());
   });
-  connect(player, &Playback::Controller::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, this, [=]() {
     setWindowTitle(qApp->applicationDisplayName());
   });
 }
@@ -422,7 +422,7 @@ void MainWindow::setupPlaybackLog() {
   connect(player, &Playback::Controller::started, playback_log, &PlaybackLogUi::Controller::append);
   connect(player, &Playback::Controller::trackChanged, playback_log, &PlaybackLogUi::Controller::append);
 
-  connect(playback_log, &PlaybackLogUi::Controller::jumpToTrack, [=](quint64 track_uid) {
+  connect(playback_log, &PlaybackLogUi::Controller::jumpToTrack, this, [=](quint64 track_uid) {
     auto plst = playlists->playlistByTrackUid(track_uid);
     if (plst != nullptr) {
       playlists->on_jumpTo(plst);
@@ -450,22 +450,22 @@ void MainWindow::setupSleepLock() {
   }
 
   sleep_lock = new SleepLock(this);
-  connect(player, &Playback::Controller::started, [=](Track _track) {
+  connect(player, &Playback::Controller::started, this, [=](Track _track) {
     Q_UNUSED(_track);
     sleep_lock->activate(true);
   });
-  connect(player, &Playback::Controller::paused, [=](Track _track) {
+  connect(player, &Playback::Controller::paused, this, [=](Track _track) {
     Q_UNUSED(_track);
     sleep_lock->activate(false);
   });
-  connect(player, &Playback::Controller::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, this, [=]() {
     sleep_lock->activate(false);
   });
 }
 
 void MainWindow::setupOutputDevice() {
 #ifdef ENABLE_DEVICES_MENU
-  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, [=]() {
+  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
     AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
     connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
     int menu_width = device_menu.sizeHint().width();
@@ -474,7 +474,7 @@ void MainWindow::setupOutputDevice() {
     QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
     device_menu.exec(pos);
   });
-  connect(&modus_operandi, &ModusOperandi::changed, [=](auto mode) {
+  connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
   });
   ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
@@ -505,7 +505,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 
   QEventLoop loop;
   std::shared_ptr<Playlist::Playlist> pl;
-  auto conn = connect(playlists, &PlaylistsUi::Controller::loaded, [&](const std::shared_ptr<Playlist::Playlist> item) {
+  auto conn = connect(playlists, &PlaylistsUi::Controller::loaded, this, [&](const std::shared_ptr<Playlist::Playlist> item) {
     pl = item;
     loop.quit();
   });

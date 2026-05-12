@@ -61,22 +61,22 @@ void PlaybackLogDialog::on_search(const QPoint &pos) {
 void PlaybackLogDialog::setup_context_menu() {
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  connect(ui->tableView, &QTableView::customContextMenuRequested, [=](const QPoint &pos) {
+  connect(ui->tableView, &QTableView::customContextMenuRequested, this, [=](const QPoint &pos) {
     if(!ui->tableView->indexAt(pos).isValid()) {
       return;
     }
     QMenu menu;
     QAction copy(tr("Copy"));
-    connect(&copy, &QAction::triggered, [=]() {
+    connect(&copy, &QAction::triggered, this, [=]() {
       on_copy(pos);
     });
     QAction jump_to(tr("Jump to"));
-    connect(&jump_to, &QAction::triggered, [=]() {
+    connect(&jump_to, &QAction::triggered, this, [=]() {
       auto index = ui->tableView->indexAt(pos);
       on_jumpTo(index);
     });
     QAction search(tr("Search on web"));
-    connect(&search, &QAction::triggered, [=]() {
+    connect(&search, &QAction::triggered, this, [=]() {
       on_search(pos);
     });
 

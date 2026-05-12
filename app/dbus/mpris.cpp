@@ -26,31 +26,31 @@ Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QOb
   connect(this, &Mpris::next, player->controls().next, &QToolButton::click);
   connect(this, &Mpris::prev, player->controls().prev, &QToolButton::click);
 
-  connect(player, &Playback::Controller::started, [=](const Track &t) {
+  connect(player, &Playback::Controller::started, this, [=](const Track &t) {
     Q_UNUSED(t)
     notify("PlaybackStatus", "Playing");
     notify("Metadata", Metadata());
   });
-  connect(player, &Playback::Controller::paused, [=](const Track &t) {
+  connect(player, &Playback::Controller::paused, this, [=](const Track &t) {
     Q_UNUSED(t)
     notify("PlaybackStatus", "Paused");
     notify("Metadata", Metadata());
   });
-  connect(player, &Playback::Controller::stopped, [=]() {
+  connect(player, &Playback::Controller::stopped, this, [=]() {
     notify("PlaybackStatus", "Stopped");
     notify("Metadata", Metadata());
   });
-  connect(player, &Playback::Controller::trackChanged, [=](const Track &t) {
+  connect(player, &Playback::Controller::trackChanged, this, [=](const Track &t) {
     Q_UNUSED(t)
     notify("Metadata", Metadata());
   });
 
-  connect(player, &Playback::Controller::volumeChanged, [=](int val) {
+  connect(player, &Playback::Controller::volumeChanged, this, [=](int val) {
     Q_UNUSED(val)
     notify("Volume", QString("%1").arg(Volume()));
   });
 
-  connect(player, &Playback::Controller::seeked, [&](int val) {
+  connect(player, &Playback::Controller::seeked, this, [&](int val) {
     emit Seeked(val * 1000000);
   });
 

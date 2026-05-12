@@ -72,7 +72,7 @@ namespace SortUi {
   void SortMenu::showEditPresetsDialog() {
     SortingPresetsDialog *dlg = new SortingPresetsDialog(global_conf.sortPresets());
     dlg->setModal(false);
-    connect(dlg, &SortingPresetsDialog::finished, [=](int result) {
+    connect(dlg, &SortingPresetsDialog::finished, this, [=](int result) {
       if (result == QDialog::Accepted) {
         auto presets = dlg->currentPresets();
         global_conf.saveSortPresets(presets);

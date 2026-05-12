@@ -31,7 +31,7 @@ namespace PlaylistsUi {
     QAction reload(tr("Reload from filesystem"));
     QAction play(tr("Play"));
 
-    connect(&reload, &QAction::triggered, [&]() {
+    connect(&reload, &QAction::triggered, this, [&]() {
       on_reload(index);
     });
     reload.setIcon(view->style()->standardIcon(QStyle::SP_BrowserReload));
@@ -41,33 +41,33 @@ namespace PlaylistsUi {
     //rename.setIcon(view->style()->standardIcon(QStyle::SP_FileIcon));
     play.setIcon(view->style()->standardIcon(QStyle::SP_MediaPlay));
 
-    connect(&remove, &QAction::triggered, [&]() {
+    connect(&remove, &QAction::triggered, this, [&]() {
       emit removed(index);
     });
 
-    connect(&rename, &QAction::triggered, [&]() {
+    connect(&rename, &QAction::triggered, this, [&]() {
       on_rename(index);
     });
 
     QAction clear_filter(tr("Clear filter"));
     clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
     if (!search->text().isEmpty()) {
-       connect(&clear_filter, &QAction::triggered, [=]() {
+       connect(&clear_filter, &QAction::triggered, this, [=]() {
          search->clear();
        });
        menu.addAction(&clear_filter);
        menu.addSeparator();
     }
 
-    connect(&savem3u, &QAction::triggered, [&]() {
+    connect(&savem3u, &QAction::triggered, this, [&]() {
       on_savem3u(index);
     });
 
-    connect(&play, &QAction::triggered, [&]() {
+    connect(&play, &QAction::triggered, this, [&]() {
       emit view->doubleClicked(index);
     });
 
-    connect(&loadm3u, &QAction::triggered, [&]() {
+    connect(&loadm3u, &QAction::triggered, this, [&]() {
       QStringList files = QFileDialog::getOpenFileNames(view, tr("Select playlist files"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "Playlists (*.m3u *.pls)");
       emit loadPlaylistFiles(index, files);
     });

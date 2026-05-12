@@ -41,7 +41,7 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   menu->addAction(quit);
   trayicon->setContextMenu(menu);
   trayicon->show();
-  connect(trayicon, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason) {
+  connect(trayicon, &QSystemTrayIcon::activated, this, [=](QSystemTrayIcon::ActivationReason reason) {
     if (global_conf.minimizeToTray()) {
       emit clicked();
     } else if (reason == QSystemTrayIcon::Trigger) {

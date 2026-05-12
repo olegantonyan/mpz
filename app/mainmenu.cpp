@@ -36,18 +36,18 @@ void MainMenu::on_open() {
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
-  connect(&trayicon, &QAction::triggered, [=](bool checked) {
+  connect(&trayicon, &QAction::triggered, this, [=](bool checked) {
     global_conf.saveTrayIconEnabled(checked);
     emit toggleTrayIcon();
   });
-  connect(&minimize_to_tray, &QAction::triggered, [=](bool checked) {
+  connect(&minimize_to_tray, &QAction::triggered, this, [=](bool checked) {
     global_conf.saveMinimizeToTray(checked);
   });
   connect(&feedback, &QAction::triggered, [=]() {
     FeedbackForm().exec();
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
-  connect(&saves, &QAction::triggered, [=]() {
+  connect(&saves, &QAction::triggered, this, [=]() {
     global_conf.sync();
     local_conf.sync();
   });
@@ -55,7 +55,7 @@ void MainMenu::on_open() {
     QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
   });
 #ifdef ENABLE_MPD_SUPPORT
-  connect(&mpdupdate, &QAction::triggered, [=]() {
+  connect(&mpdupdate, &QAction::triggered, this, [=]() {
     modus_operandi.mpd_client.updateDb();
   });
 #endif

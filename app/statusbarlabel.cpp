@@ -54,7 +54,7 @@ void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {
 void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   QMenu menu;
   QAction copy_name(tr("Copy"));
-  connect(&copy_name, &QAction::triggered, [=]() {
+  connect(&copy_name, &QAction::triggered, this, [=]() {
      qApp->clipboard()->setText(trackTitle());
   });
   QAction show_log(tr("Show playback log"));
@@ -62,7 +62,7 @@ void StatusBarLabel::on_contextMenu(const QPoint &pos) {
   QAction jump_to(tr("Jump to playing track"));
   connect(&jump_to, &QAction::triggered, this, &StatusBarLabel::doubleclicked);
   QAction search(tr("Search on web"));
-  connect(&search, &QAction::triggered, [=]() {
+  connect(&search, &QAction::triggered, this, [=]() {
     auto term = QString("https://duckduckgo.com/?q=%1").arg(QString(QUrl::toPercentEncoding(trackTitle())));
     QDesktopServices::openUrl(QUrl(term));
   });

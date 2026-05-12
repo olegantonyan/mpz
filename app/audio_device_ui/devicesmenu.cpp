@@ -11,7 +11,7 @@ namespace AudioDeviceUi {
     QString default_text(tr("Default"));
     action_default->setText(default_text);
     action_default->setCheckable(true);
-    connect(action_default, &QAction::triggered, [=](bool checked) {
+    connect(action_default, &QAction::triggered, this, [=](bool checked) {
       if (checked) {
         on_selected(QByteArray());
       }
@@ -39,7 +39,7 @@ namespace AudioDeviceUi {
       action->setText(text);
       action->setCheckable(true);
       action->setData(device.id());
-      connect(action, &QAction::triggered, [=](bool checked) {
+      connect(action, &QAction::triggered, this, [=](bool checked) {
         if (checked) {
           on_selected(action->data().toByteArray());
         }

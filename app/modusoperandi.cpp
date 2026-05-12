@@ -21,14 +21,14 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QO
   connect(&mpd_client, &MpdClient::Client::error, this, &ModusOperandi::mpdLost);
   connect(&mpd_client, &MpdClient::Client::disconnected, this, &ModusOperandi::mpdLost);
 
-  connect(&mpd_client, &MpdClient::Client::error, [=](const QUrl &url, const QString &message) {
+  connect(&mpd_client, &MpdClient::Client::error, this, [=](const QUrl &url, const QString &message) {
     Q_UNUSED(url);
     banner->showMessage(tr("mpd connection error") + "\n" + message, SlidingBanner::BannerType::Error);
   });
-  connect(&mpd_client, &MpdClient::Client::connected, [=] {
+  connect(&mpd_client, &MpdClient::Client::connected, this, [=] {
     banner->showMessage(tr("mpd connected"), SlidingBanner::BannerType::Success, 3456);
   });
-  connect(this, &ModusOperandi::changed, [=](auto mode) {
+  connect(this, &ModusOperandi::changed, this, [=](auto mode) {
     if (mode == ModusOperandi::ActiveMode::MODUS_LOCALFS) {
       banner->collapse();
     }
