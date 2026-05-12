@@ -48,7 +48,7 @@ namespace Config {
 
     QList<std::shared_ptr<Playlist::Playlist> > result;
     auto list = raw.get<QList<Config::Value> >();
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       auto map = i.get<QMap<QString, Config::Value>>();
       QString name = map.value("name").get<QString>();
       std::shared_ptr<Playlist::Playlist> playlist(new Playlist::Playlist());
@@ -58,7 +58,7 @@ namespace Config {
       playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(order));
 
       QVector<Track> tracks;
-      for (auto t : map.value("tracks").get<QList<Config::Value> >()) {
+      for (const auto &t : map.value("tracks").get<QList<Config::Value> >()) {
         tracks << deserializeTrack(t.get<QMap<QString, Config::Value>>());
       }
       playlist->load(tracks);
@@ -69,12 +69,12 @@ namespace Config {
 
   bool Local::savePlaylists(QList<std::shared_ptr<Playlist::Playlist> > &list) {
     QList<Config::Value> plist;
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       QMap<QString, Config::Value> mp;
       mp.insert("name", Config::Value(i->name()));
 
       QList<Config::Value> tl;
-      for (auto j : i->tracks()) {
+      for (const auto &j : i->tracks()) {
         tl << serializeTrack(j);
       }
       mp.insert("tracks", tl);
@@ -121,7 +121,7 @@ namespace Config {
     for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
       QList<QString> list;
       auto raw = it.value().get<QList<Config::Value>>();
-      for (auto li : raw) {
+      for (const auto &li : std::as_const(raw)) {
         list << li.get<QString>();
       }
       result[it.key()] = list;
@@ -135,7 +135,7 @@ namespace Config {
 
     for (auto it = playlists_for_library_url.constBegin(); it != playlists_for_library_url.constEnd(); ++it) {
       QList<Config::Value> val;
-      for (auto it : it.value()) {
+      for (const auto &it : it.value()) {
         val << Config::Value(it);
       }
       mv[it.key()] = Config::Value(val);
@@ -150,7 +150,7 @@ namespace Config {
       return result;
     }
     auto list = raw.get<QList<Config::Value> >();
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       result << i.get<QString>();
     }
     return result;
@@ -158,7 +158,7 @@ namespace Config {
 
   bool Local::saveLibraryPaths(const QStringList &arg) {
     QList<Config::Value> list;
-    for (auto i : arg) {
+    for (const auto &i : std::as_const(arg)) {
       list << Config::Value(i);
     }
     return storage.set("library_paths", Config::Value(list));

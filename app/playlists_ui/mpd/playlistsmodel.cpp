@@ -51,7 +51,7 @@ namespace PlaylistsUi {
       QList<std::shared_ptr<Playlist::Playlist>> result;
       auto plsts = client.playlists();
 
-      for (auto it : plsts) {
+      for (const auto &it : std::as_const(plsts)) {
         auto p = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
         p->rename(it.path());
         result << p;
@@ -92,7 +92,7 @@ namespace PlaylistsUi {
         return;
       }
       QStringList paths;
-      for (auto track : tracks) {
+      for (const auto &track : std::as_const(tracks)) {
         if (track.isStream()) {
           paths << track.url().toString();
         } else {
@@ -110,7 +110,7 @@ namespace PlaylistsUi {
         return false;
       }
       QList<QString> names;
-      for (auto it : list) {
+      for (const auto &it : std::as_const(list)) {
         if (it) {
           names << it->name();
         }
@@ -181,7 +181,7 @@ namespace PlaylistsUi {
       if (indexByName(result).isValid()) {
         QString base_name = result;
         QStringList existing;
-        for (auto pl : list) {
+        for (const auto &pl : std::as_const(list)) {
           existing << pl->name();
         }
         int suffix = 1;
@@ -217,7 +217,7 @@ namespace PlaylistsUi {
 
     QString Model::createPlaylistFromDirs(const QList<QDir> &filepaths) {
       QStringList names;
-      for (auto path : filepaths) {
+      for (const auto &path : std::as_const(filepaths)) {
         names << path.path();
       }
       auto songs = client.lsDirsSongs(names);
@@ -226,7 +226,7 @@ namespace PlaylistsUi {
 
       auto optimistic_tracks = Playlist::MpdLoader(client).builTracksFromSongsSorted(songs, playlist_name);
       QStringList songs_paths;
-      for (auto it : optimistic_tracks) {
+      for (const auto &it : std::as_const(optimistic_tracks)) {
         songs_paths << it.path();
       }
 

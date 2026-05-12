@@ -70,7 +70,7 @@ namespace PlaylistsUi {
   }
 
   std::shared_ptr<Playlist::Playlist> Controller::playlistByName(const QString &name) const {
-    for (auto it : proxy->activeModel()->itemList()) {
+    for (const auto &it : proxy->activeModel()->itemList()) {
       if (it->name() == name) {
         return it;
       }
@@ -99,7 +99,7 @@ namespace PlaylistsUi {
     if (event->type() == QEvent::KeyPress) {
       QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
       if (keyevent->key() == Qt::Key_Delete) {
-        for (auto i : view->selectionModel()->selectedIndexes()) {
+        for (const auto &i : view->selectionModel()->selectedIndexes()) {
           on_removeItem(i);
         }
       } else if (keyevent->key() == Qt::Key_F2) {
@@ -157,9 +157,9 @@ namespace PlaylistsUi {
 
     QVector<Track> tracks;
     QStringList paths;
-    for (auto it : filespaths) {
+    for (const auto &it : std::as_const(filespaths)) {
       Playlist::Loader ldr(it);
-      for (auto track : ldr.tracks()) {
+      for (const auto &track : ldr.tracks()) {
         if (!paths.contains(track.path())) {
           tracks.append(track);
           paths << track.path();

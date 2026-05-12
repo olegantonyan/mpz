@@ -84,7 +84,7 @@ namespace PlaylistsUi {
   }
 
   std::shared_ptr<Playlist::Playlist> Model::itemBy(quint64 uid) const {
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       if (i->uid() == uid) {
         return i;
       }
@@ -93,7 +93,7 @@ namespace PlaylistsUi {
   }
 
   std::shared_ptr<Playlist::Playlist> Model::itemByTrack(quint64 track_uid) const {
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       if (i->hasTrack(track_uid)) {
         return i;
       }
@@ -178,7 +178,7 @@ namespace PlaylistsUi {
 
     (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir, pl]() -> void {
       QStringList names;
-      for (auto path : filepaths) {
+      for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);
         pl->append(loader.tracks(), !loader.is_playlist_file());
         names << playlistNameBy(path, libraryDir);

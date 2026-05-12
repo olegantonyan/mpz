@@ -20,7 +20,7 @@ namespace DirectoryUi {
       return;
     }
     QList<QDir> selected_dirs;
-    for (auto i : view->selectionModel()->selectedRows()) {
+    for (const auto &i : view->selectionModel()->selectedRows()) {
       selected_dirs << QDir(model->filePath(i));
     }
 

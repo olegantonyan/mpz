@@ -111,7 +111,7 @@ namespace MpdClient {
       return result;
     }
 
-    for (auto path : paths) {
+    for (const auto &path : std::as_const(paths)) {
       if (!mpd_send_list_all_meta(conn, path.toUtf8().constData())) {
         qWarning() << "mpd_send_list_all_meta: " << lastError();
         mpd_response_finish(conn);
@@ -141,7 +141,7 @@ namespace MpdClient {
     }
 
     bool ok = true;
-    for (auto path : paths) {
+    for (const auto &path : std::as_const(paths)) {
       if (!mpd_send_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
         qWarning() << "mpd_send_playlist_add: " << lastError();
         ok = false;
@@ -236,7 +236,7 @@ namespace MpdClient {
       qWarning() << "mpd_run_playlist_clear: " << playlist_name << lastError();
       return false;
     }
-    for (auto path : song_paths) {
+    for (const auto &path : std::as_const(song_paths)) {
       if (!mpd_run_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
         qWarning() << "mpd_run_playlist_add: " << path << lastError();
         return false;
@@ -248,7 +248,7 @@ namespace MpdClient {
       return false;
     }
 
-    for (auto path : song_paths) {
+    for (const auto &path : std::as_const(song_paths)) {
       if (!mpd_run_add(conn, path.toUtf8().constData())) {
         qWarning() << "mpd_run_add: " << lastError();
         return false;

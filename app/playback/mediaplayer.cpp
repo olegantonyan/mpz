@@ -258,7 +258,7 @@ namespace Playback {
       audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     } else {
       auto devices = QMediaDevices::audioOutputs();
-      for (auto device : devices) {
+      for (const auto &device : std::as_const(devices)) {
         if (device.id() == deviceid) {
           audio_output.setDevice(device);
           break;
@@ -269,7 +269,7 @@ namespace Playback {
 
   void MediaPlayer::onAudioDevicesChanged() {
     auto devices = QMediaDevices::audioOutputs();
-    for (auto device : devices) {
+    for (const auto &device : std::as_const(devices)) {
       if (device.id() == output_device_id) {
         // hack to force device change if it was disconnected
         // desperation delay because sometimes it switches to default and keep playing through it

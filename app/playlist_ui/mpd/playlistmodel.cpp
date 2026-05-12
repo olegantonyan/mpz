@@ -38,7 +38,7 @@ namespace PlaylistUi {
       playlist()->sortBy(criteria);
       client.removePlaylist(playlist()->name());
       QStringList songs_paths;
-      for (auto it : playlist()->tracks()) {
+      for (const auto &it : playlist()->tracks()) {
         songs_paths << it.path();
       }
       client.createPlaylist(songs_paths, playlist()->name());
@@ -51,7 +51,7 @@ namespace PlaylistUi {
 
     bool Model::appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name) {
       QStringList paths;
-      for (auto track : tracks) {
+      for (const auto &track : std::as_const(tracks)) {
         paths << track.path();
       }
       return client.appendSongsToPlaylist(paths, playlist_name);;

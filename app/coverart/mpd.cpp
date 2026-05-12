@@ -92,7 +92,7 @@ namespace CoverArt {
     if (result.isEmpty()) {
       auto pics = parsePictures(client.readPicture(filepath));
       if (!pics.isEmpty()) {
-        for (auto it : pics) {
+        for (const auto &it : std::as_const(pics)) {
           if (it.isFrontCover()) {
             result = it.data;
             break;

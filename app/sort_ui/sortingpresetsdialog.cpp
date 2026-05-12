@@ -72,7 +72,7 @@ void SortingPresetsDialog::refreshModel() {
 
 QStringList SortingPresetsDialog::itemList(const QList<SortingPreset> &presets) const {
   QStringList list;
-  for (auto i : presets) {
+  for (const auto &i : std::as_const(presets)) {
     if (i.first.isEmpty() || i.first == i.second) {
       list << i.second;
     } else {

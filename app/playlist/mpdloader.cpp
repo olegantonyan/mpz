@@ -12,7 +12,7 @@ namespace Playlist {
   QVector<Track> MpdLoader::playlistTracks(const QString& playlist_name) {
     QVector<Track> result;
     auto songs = client.lsPlaylistSongs(playlist_name);
-    for (auto it : songs) {
+    for (const auto &it : std::as_const(songs)) {
       result << buildTrack(it, playlist_name);
     }
     return result;
@@ -21,11 +21,11 @@ namespace Playlist {
   QVector<Track> MpdLoader::dirsTracks(const QList<QDir> &filepaths, const QString &playlist_name) {
     QVector<Track> result;
     QStringList paths;
-    for (auto it : filepaths) {
+    for (const auto &it : std::as_const(filepaths)) {
       paths << it.path();
     }
     auto songs = client.lsDirsSongs(paths);
-    for (auto it : songs) {
+    for (const auto &it : std::as_const(songs)) {
       result << buildTrack(it, playlist_name);
     }
     return result;
@@ -33,7 +33,7 @@ namespace Playlist {
 
   QVector<Track> MpdLoader::builTracksFromSongsSorted(const QVector<MpdClient::Song> &songs, const QString &playlist_name) {
     QVector<Track> tracks;
-    for (auto it : songs) {
+    for (const auto &it : std::as_const(songs)) {
       tracks << buildTrack(it, playlist_name);
     }
     Playlist pl;

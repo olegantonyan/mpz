@@ -145,7 +145,7 @@ namespace PlaylistUi {
       return t1.row() > t2.row();
     });
     QList<int> indecies;
-    for (auto i : sorted) {
+    for (const auto &i : std::as_const(sorted)) {
       indecies << i.row();
     }
     removeTracksFromPlaylist(indecies);
@@ -165,7 +165,7 @@ namespace PlaylistUi {
     }
 
     (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() -> void {
-      for (auto path : filepaths) {
+      for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);
         pl->append(loader.tracks(), !loader.is_playlist_file());
       }

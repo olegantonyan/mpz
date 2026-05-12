@@ -42,7 +42,7 @@ namespace SortUi {
     }
 
     QList<QAction *> actions;
-    for (auto i : global_conf.sortPresets()) {
+    for (const auto &i : global_conf.sortPresets()) {
       QAction *action = new QAction(i.first.isEmpty() ? i.second : i.first, &menu);
       action->setData(i.second);
       menu.addAction(action);

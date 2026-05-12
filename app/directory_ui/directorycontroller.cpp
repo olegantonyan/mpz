@@ -45,7 +45,7 @@ namespace DirectoryUi {
       model->loadAsync(QDir::homePath());
       libswitch->addItem(QDir::homePath());
     } else {
-      for (auto i : local_conf.libraryPaths()) {
+      for (const auto &i : local_conf.libraryPaths()) {
         libswitch->addItem(libraryPathMasked(i), i);
       }
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count() - 1);
@@ -142,7 +142,7 @@ namespace DirectoryUi {
         local_conf.saveLibraryPaths(dlg.libraryPaths());
         local_conf.sync();
         libswitch->clear();
-        for (auto i : local_conf.libraryPaths()) {
+        for (const auto &i : local_conf.libraryPaths()) {
           libswitch->addItem(libraryPathMasked(i), i);
         }
         if (libswitch->count() > 0) {

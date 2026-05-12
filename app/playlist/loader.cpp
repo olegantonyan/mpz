@@ -26,7 +26,7 @@ namespace Playlist {
   }
 
   bool Loader::is_supported_file(const QString &name) {
-    for (auto i : Loader::supportedFileFormats()) {
+    for (const auto &i : Loader::supportedFileFormats()) {
       if (name.endsWith(i, Qt::CaseInsensitive)) {
         return true;
       }
@@ -105,7 +105,7 @@ namespace Playlist {
   }
 
   bool Loader::is_playlist_file() const {
-    for (auto i : Loader::supportedPlaylistFileFormats()) {
+    for (const auto &i : Loader::supportedPlaylistFileFormats()) {
       if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
         return true;
       }
@@ -115,7 +115,7 @@ namespace Playlist {
 
   QStringList Loader::files_filter() const {
     QStringList filter;
-    for (auto i : Loader::supportedFileFormats()) {
+    for (const auto &i : Loader::supportedFileFormats()) {
       filter << QString("*.") + i;
     }
     return filter;

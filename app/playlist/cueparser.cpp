@@ -42,7 +42,7 @@ namespace Playlist {
     QString decode_cp1251(const QByteArray& bytes) {
       QString out;
       out.reserve(bytes.size());
-      for (auto b : bytes) {
+      for (const auto &b : std::as_const(bytes)) {
         const unsigned char c = static_cast<unsigned char>(b);
         if (c < 0x80) {
           out.append(QChar(c));

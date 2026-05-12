@@ -66,7 +66,7 @@ namespace PlaylistUi {
 
   void PlaylistContextMenu::on_remove() {
     QList <QModelIndex> lst;
-    for (auto i : view->selectionModel()->selectedRows()) {
+    for (const auto &i : view->selectionModel()->selectedRows()) {
       lst << proxy->mapToSource(i);
     }
     proxy->activeModel()->remove(lst);
@@ -79,7 +79,7 @@ namespace PlaylistUi {
 
   void PlaylistContextMenu::on_copyName() {
     QStringList str;
-    for (auto i : view->selectionModel()->selectedRows()) {
+    for (const auto &i : view->selectionModel()->selectedRows()) {
       str << proxy->activeModel()->itemAt(proxy->mapToSource(i)).formattedTitle();
     }
     qApp->clipboard()->setText(str.join('\n'));
@@ -87,7 +87,7 @@ namespace PlaylistUi {
 
   void PlaylistContextMenu::on_showInFilemanager() {
     QStringList str;
-    for (auto i : view->selectionModel()->selectedRows()) {
+    for (const auto &i : view->selectionModel()->selectedRows()) {
       auto dir = proxy->activeModel()->itemAt(proxy->mapToSource(i)).dir();
       if (!str.contains(dir)) {
         str << dir;

@@ -64,7 +64,7 @@ namespace Config {
         return QString("<Value string %1>").arg(get<QString>());
       case Config::Value::Type::Map: {
         QStringList sl;
-        for (auto i : get<QMap<QString, Value>>().toStdMap()) {
+        for (const auto &i : get<QMap<QString, Value>>().toStdMap()) {
           QString key = i.first;
           Value val = i.second;
           sl << QString("%1:%2").arg(key, val.toString());
@@ -73,7 +73,7 @@ namespace Config {
       }
       case Config::Value::Type::List: {
         QStringList sl;
-        for (auto i : get<QList<Value>>()) {
+        for (const auto &i : get<QList<Value>>()) {
           sl << i.toString();
         }
 

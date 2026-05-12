@@ -43,7 +43,7 @@ namespace Playback {
     void PlaybackOrder::onTrackSelected(const Track &track) {
       if (global_conf.playbackFollowCursor() && track.isMpd() && dispatch->state().selectedTrack() != dispatch->state().playingTrack()) {
         auto songs = client.lsQueueSongs();
-        for (auto it : songs) {
+        for (const auto &it : std::as_const(songs)) {
           if (it.filepath == track.path()) {
             // qDebug() << "set next" << track.path();
             client.resetAllPriorities();

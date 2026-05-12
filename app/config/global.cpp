@@ -59,7 +59,7 @@ namespace Config {
     }
 
     auto list = raw.get<QList<Config::Value> >();
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       auto map = i.get<QMap<QString, Config::Value>>();
       QString name = map.value("name").get<QString>();
       QString value = map.value("value").get<QString>();
@@ -72,7 +72,7 @@ namespace Config {
 
   bool Global::saveSortPresets(const QList<SortingPreset> &arg) {
     QList<Config::Value> result;
-    for (auto i : arg) {
+    for (const auto &i : std::as_const(arg)) {
       QMap<QString, Config::Value> mp;
       mp.insert("name", Config::Value(i.first));
       mp.insert("value", Config::Value(i.second));
@@ -125,7 +125,7 @@ namespace Config {
       return result;
     }
     auto list = raw.get<QList<Config::Value> >();
-    for (auto i : list) {
+    for (const auto &i : std::as_const(list)) {
       result << i.get<QString>();
     }
     return result;
@@ -133,7 +133,7 @@ namespace Config {
 
   bool Global::savemMrisBlacklist(const QStringList &arg) {
     QList<Config::Value> list;
-    for (auto i : arg) {
+    for (const auto &i : std::as_const(arg)) {
       list << Config::Value(i);
     }
     return storage.set("mpris_blacklist", Config::Value(list));
@@ -158,7 +158,7 @@ namespace Config {
       return defaults;
     }
     QStringList result;
-    for (auto i : list.get<QList<Config::Value>>()) {
+    for (const auto &i : list.get<QList<Config::Value>>()) {
       result << i.get<QString>();
     }
     return result.isEmpty() ? defaults : result;

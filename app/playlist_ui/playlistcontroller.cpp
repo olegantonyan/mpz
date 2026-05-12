@@ -213,7 +213,7 @@ namespace PlaylistUi {
     Q_UNUSED(selected)
 
     quint32 selection_time = 0;
-    for (auto i: view->selectionModel()->selectedRows()) {
+    for (const auto &i : view->selectionModel()->selectedRows()) {
       auto source_index = proxy->mapToSource(i);
       if (i.isValid() && source_index.isValid() && source_index.row() < proxy->activeModel()->rowCount()) {
         selection_time += proxy->activeModel()->itemAt(source_index).duration();

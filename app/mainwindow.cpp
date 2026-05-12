@@ -496,7 +496,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   }
 
   QList<QDir> preload_files;
-  for (auto i : args) {
+  for (const auto &i : std::as_const(args)) {
     preload_files << QDir(i);
   }
   if (preload_files.isEmpty()) {

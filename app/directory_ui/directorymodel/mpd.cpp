@@ -67,7 +67,7 @@ namespace DirectoryUi {
     void Mpd::filter(const QString &term) {
       QMutexLocker locker(&loading_mutex);
       beginResetModel();
-      for (auto i : root_item->children) {
+      for (const auto &i : root_item->children) {
         i->update_visibility(term);
       }
       endResetModel();
@@ -166,7 +166,7 @@ namespace DirectoryUi {
 
       QVector<TreeItem*> new_items;
       auto songs = client.lsDir(path);
-      for (auto it : songs) {
+      for (const auto &it : std::as_const(songs)) {
         auto item = new TreeItem(
           it.isDir(),
           it.path(),

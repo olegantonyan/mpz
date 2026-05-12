@@ -35,7 +35,7 @@ namespace PlaylistUi {
     QVector<QString> fields;
     QVector<Qt::Alignment> aligns;
 
-    for (auto i : v.get<QList<Config::Value>>()) {
+    for (const auto &i : v.get<QList<Config::Value>>()) {
       auto map = i.get<QMap<QString, Config::Value>>();
 
       widths << map["width_percent"].get<int>() / 100.0;
@@ -127,28 +127,28 @@ namespace PlaylistUi {
 
   void ColumnsConfig::setWidths(const QVector<double> &arr) {
     widths.clear();
-    for (auto i : arr) {
+    for (const auto &i : std::as_const(arr)) {
       widths.append(i);
     }
   }
 
   void ColumnsConfig::setStretches(const QVector<bool> &arr) {
     stretches.clear();
-    for (auto i : arr) {
+    for (const auto &i : std::as_const(arr)) {
       stretches.append(i);
     }
   }
 
   void ColumnsConfig::setFields(const QVector<QString> &arr) {
     fields.clear();
-    for (auto i : arr) {
+    for (const auto &i : std::as_const(arr)) {
       fields.append(i);
     }
   }
 
   void ColumnsConfig::setAligns(const QVector<Qt::Alignment> &arr) {
     aligns.clear();
-    for (auto i : arr) {
+    for (const auto &i : std::as_const(arr)) {
       aligns.append(i);
     }
   }

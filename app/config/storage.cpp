@@ -61,7 +61,7 @@ namespace Config {
 
   QByteArray Storage::getByteArray(const QString &key, bool *ok) const {
     QByteArray result;
-    for (auto i : getIntList(key, ok)) {
+    for (const auto &i : getIntList(key, ok)) {
       result.append(static_cast<char>(i));
     }
     return result;
@@ -69,7 +69,7 @@ namespace Config {
 
   bool Storage::set(const QString &key, const QByteArray &value) {
     QList<int> intlist;
-    for (auto i : value) {
+    for (const auto &i : std::as_const(value)) {
       intlist << i;
     }
     return set(key, intlist);
@@ -82,7 +82,7 @@ namespace Config {
     }
     auto i = value.get<QList<Config::Value>>();
     QList<int> result;
-    for (auto j : i) {
+    for (const auto &j : std::as_const(i)) {
       result << j.get<int>();
     }
     return result;
@@ -90,7 +90,7 @@ namespace Config {
 
   bool Storage::set(const QString &key, const QList<int> &value) {
     QList<Config::Value> vl;
-    for (auto i : value) {
+    for (const auto &i : std::as_const(value)) {
       vl.append(Config::Value(i));
     }
     auto i = Config::Value(vl);
@@ -133,7 +133,7 @@ namespace Config {
     }
     YAML::Node config = YAML::Load(file.readAll().toStdString());
 
-    for (auto i : parse(config).toStdMap()) {
+    for (const auto &i : parse(config).toStdMap()) {
       data.insert(i.first, i.second);
     }
 
@@ -209,7 +209,7 @@ namespace Config {
 
     YAML::Node result;
 
-    for(auto i : dt.toStdMap()) {
+    for (const auto &i : dt.toStdMap()) {
       std::string key = i.first.toStdString();
       Config::Value value = i.second;
 
@@ -226,17 +226,17 @@ namespace Config {
         case Config::Value::Type::List:
           if (value.listType() == Config::Value::Type::Integer) {
             result[key] = std::vector<int>();
-            for (auto i : value.get<QList<Config::Value>>()) {
+            for (const auto &i : value.get<QList<Config::Value>>()) {
               result[key].push_back(i.get<int>());
             }
           } else if (value.listType() == Config::Value::Type::String) {
             result[key] = std::vector<std::string>();
-            for (auto i : value.get<QList<Config::Value>>()) {
+            for (const auto &i : value.get<QList<Config::Value>>()) {
               result[key].push_back(i.get<QString>().toStdString());
             }
           } else if (value.listType() == Config::Value::Type::Map) {
             result[key] = std::vector< std::map<std::string, YAML::Node> >();
-            for (auto i : value.get<QList<Config::Value>>()) {
+            for (const auto &i : value.get<QList<Config::Value>>()) {
               result[key].push_back(serialize(i.get<QMap<QString, Config::Value>>()));
             }
           }

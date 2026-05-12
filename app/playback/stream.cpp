@@ -121,7 +121,7 @@ namespace Playback {
     QMap<QString, QString> result;
     rawheaders.removeAt(0); // status line. don't care
     rawheaders.removeAll({}); // empty and null
-    for (auto i : rawheaders) {
+    for (const auto &i : std::as_const(rawheaders)) {
       auto key = i.section(':', 0, 0);
       auto value = i.section(':', 1);
       result.insert(key, value);

@@ -84,7 +84,7 @@ namespace IPC {
     if (json_body.isObject()) {
       if (json_body.object()["load_files"].isArray()) {
         QStringList lst;
-        for (auto i : json_body.object()["load_files"].toArray()) {
+        for (const auto &i : json_body.object()["load_files"].toArray()) {
           lst.append(i.toString());
         }
         emit load_files_received(lst);

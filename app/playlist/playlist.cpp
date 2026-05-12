@@ -112,7 +112,7 @@ namespace Playlist {
 
   QByteArray Playlist::toM3U() const {
     QStringList result;
-    for (auto i : tracks()) {
+    for (const auto &i : tracks()) {
       if (i.isStream()) {
         result << i.url().toString();
       } else {

@@ -322,7 +322,7 @@ bool Mpris::isBlacklistedSender() {
     QFile cmd_line(QString("/proc/%1/cmdline").arg(pid_reply.value()));
     if (cmd_line.open(QIODevice::ReadOnly)) {
       auto line = QString::fromUtf8(cmd_line.readAll());
-      for (auto item : balcklist) {
+      for (const auto &item : std::as_const(balcklist)) {
         if (line.contains(item)) {
           qDebug() << "MPRIS: ignoring blacklisted sender " << line << sender;
           return true;

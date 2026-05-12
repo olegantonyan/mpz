@@ -2,7 +2,7 @@
 
 namespace Playlist {
   Sorter::Sorter(const QString &c) {
-    for (auto i : c.split("/")) {
+    for (const auto &i : c.split("/")) {
       if (!i.isEmpty()) {
         criteria << i.simplified().toUpper();
       }
@@ -15,7 +15,7 @@ namespace Playlist {
   }
 
   bool Sorter::condition(const Track &t1, const Track &t2) const {
-    for (auto i : criteria) {
+    for (const auto &i : std::as_const(criteria)) {
       int cmp = compare(t1, t2, i);
       if (cmp > 0) {
         return true;

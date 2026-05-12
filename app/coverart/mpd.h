@@ -19,7 +19,7 @@ namespace CoverArt {
     uint32_t depth = 0;
     uint32_t colors = 0;
     QByteArray data;
-    bool isFrontCover() { return type == 3; }
+    bool isFrontCover() const { return type == 3; }
   };
 
   class Mpd {
