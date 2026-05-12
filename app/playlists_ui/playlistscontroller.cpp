@@ -26,7 +26,12 @@ namespace PlaylistsUi {
     connect(proxy, &ProxyFilterModel::asyncTracksLoadFinished, this, &Controller::selected);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
-    view->setSelectionMode(QAbstractItemView::NoSelection);
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    view->setDragEnabled(true);
+    view->setAcceptDrops(true);
+    view->setDropIndicatorShown(true);
+    view->setDragDropMode(QAbstractItemView::InternalMove);
+    view->setDefaultDropAction(Qt::MoveAction);
 
     connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
     connect(view, &QListView::doubleClicked, this, &Controller::on_itemDoubleClicked);
@@ -229,6 +234,8 @@ namespace PlaylistsUi {
     proxy->setFilterRegExp(regex);
 #endif
     proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    view->setDragDropMode(term.isEmpty() ? QAbstractItemView::InternalMove : QAbstractItemView::NoDragDrop);
 
     /*QTimer::singleShot(20, [=]() {
       if (!view->selectionModel()->selectedRows().isEmpty()) {

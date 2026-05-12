@@ -179,7 +179,6 @@ This will ignore commands issued by Wireplumber. Starting with version around 0.
 ## Limitations
 
 - Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
-- Lacks some "expected" features like tracks rearranging within playlist;
 - Global hotkeys don't work in Wayland.
 
 Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.

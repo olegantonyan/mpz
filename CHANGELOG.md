@@ -3,6 +3,7 @@
 ### Added
 
 - Japanese language tanslations (@coolvitto)
+- playlists drag-n-drop rearrangement
 
 ### Fixed
 

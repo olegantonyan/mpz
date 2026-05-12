@@ -4,6 +4,12 @@
 #include <QDebug>
 #include <QtConcurrent>
 #include <QFont>
+#include <QMimeData>
+#include <QDataStream>
+
+namespace {
+  const QString playlistRowMime = QStringLiteral("application/x-mpz-playlist-row");
+}
 
 namespace PlaylistsUi {
   Model::Model(Config::Local &conf, QObject *parent) : QAbstractListModel(parent), local_conf(conf) {
@@ -154,6 +160,66 @@ namespace PlaylistsUi {
 
   bool Model::persist() {
     return local_conf.savePlaylists(list);
+  }
+
+  Qt::ItemFlags Model::flags(const QModelIndex &index) const {
+    auto defaults = QAbstractListModel::flags(index);
+    if (index.isValid()) {
+      return defaults | Qt::ItemIsDragEnabled;
+    }
+    return defaults | Qt::ItemIsDropEnabled;
+  }
+
+  Qt::DropActions Model::supportedDropActions() const {
+    return Qt::MoveAction;
+  }
+
+  QStringList Model::mimeTypes() const {
+    return {playlistRowMime};
+  }
+
+  QMimeData *Model::mimeData(const QModelIndexList &indexes) const {
+    if (indexes.isEmpty() || !indexes.first().isValid()) {
+      return nullptr;
+    }
+    auto *data = new QMimeData;
+    QByteArray bytes;
+    QDataStream stream(&bytes, QIODevice::WriteOnly);
+    stream << indexes.first().row();
+    data->setData(playlistRowMime, bytes);
+    return data;
+  }
+
+  bool Model::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+    Q_UNUSED(column)
+    if (action != Qt::MoveAction || !data || !data->hasFormat(playlistRowMime)) {
+      return false;
+    }
+
+    int src = -1;
+    QByteArray bytes = data->data(playlistRowMime);
+    QDataStream stream(&bytes, QIODevice::ReadOnly);
+    stream >> src;
+    if (src < 0 || src >= list.size()) {
+      return false;
+    }
+
+    int dst = row;
+    if (dst < 0) {
+      dst = parent.isValid() ? parent.row() : list.size();
+    }
+    if (dst < 0 || dst > list.size()) {
+      return false;
+    }
+    if (dst == src || dst == src + 1) {
+      return false;
+    }
+
+    beginMoveRows(QModelIndex(), src, src, QModelIndex(), dst);
+    list.move(src, dst > src ? dst - 1 : dst);
+    endMoveRows();
+    persist();
+    return false;
   }
 
   QList<std::shared_ptr<Playlist::Playlist> > Model::itemList() const {
