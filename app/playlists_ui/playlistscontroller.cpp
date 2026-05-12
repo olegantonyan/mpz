@@ -33,7 +33,6 @@ namespace PlaylistsUi {
     view->setDragDropMode(QAbstractItemView::InternalMove);
     view->setDefaultDropAction(Qt::MoveAction);
 
-    connect(view, &QListView::clicked, this, &Controller::on_itemActivated);
     connect(view, &QListView::doubleClicked, this, &Controller::on_itemDoubleClicked);
 
     view->viewport()->installEventFilter(this);
@@ -119,6 +118,16 @@ namespace PlaylistsUi {
   }
 
   void Controller::eventFilterViewport(QEvent *event) {
+    if (event->type() == QEvent::MouseButtonPress) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::LeftButton) {
+        auto index = view->indexAt(me->pos());
+        if (index.isValid()) {
+          on_itemActivated(index);
+        }
+      }
+    }
+
     if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MiddleButton) {

@@ -1,9 +1,9 @@
-## [2.0.5] -
+## [2.1.0] -
 
 ### Added
 
 - Japanese language tanslations (@coolvitto)
-- playlists drag-n-drop rearrangement
+- drag-n-drop rearrangement in playlists and playlist views
 
 ### Fixed
 
