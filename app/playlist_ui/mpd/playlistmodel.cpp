@@ -36,13 +36,26 @@ namespace PlaylistUi {
 
     void Model::sortBy(const QString &criteria) {
       playlist()->sortBy(criteria);
+      replacePlaylistOnServer();
+      reload();
+    }
+
+    bool Model::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+      bool result = PlaylistUi::Model::dropMimeData(data, action, row, column, parent);
+      replacePlaylistOnServer();
+      return result;
+    }
+
+    void Model::replacePlaylistOnServer() {
+      if (!playlist()) {
+        return;
+      }
       client.removePlaylist(playlist()->name());
       QStringList songs_paths;
       for (const auto &it : playlist()->tracks()) {
         songs_paths << it.path();
       }
       client.createPlaylist(songs_paths, playlist()->name());
-      reload();
     }
 
     void Model::onMpdLost() {

@@ -24,6 +24,7 @@ namespace PlaylistUi {
       void reload() override;
       void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
       void sortBy(const QString &criteria) override;
+      bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     public slots:
       void onMpdLost();
@@ -35,6 +36,7 @@ namespace PlaylistUi {
       MpdClient::Client &client;
 
       bool appendToPlaylist(const QVector<Track> &tracks, const QString &playlist_name);
+      void replacePlaylistOnServer();
     };
   }
 }
