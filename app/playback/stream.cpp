@@ -178,33 +178,37 @@ namespace Playback {
     QEventLoop loop;
     QTcpSocket sock;
     QMap<QString, QString> headers;
+    QByteArray header_buf;
     QTimer timer;
 
     sock.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), this, [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), &sock, [&](QAbstractSocket::SocketError code) {
 #else
-    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, [&](QAbstractSocket::SocketError code) {
+    auto conn_error = connect(&sock, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), &sock, [&](QAbstractSocket::SocketError code) {
 #endif
       qWarning() << "stream network error" << code << sock.errorString();
       emit error(sock.errorString());
     });
 
-    auto conn_read = connect(&sock, &QTcpSocket::readyRead, this, [&]() {
-      // assuming headers will be received all in first chunk upon readyRead
-      // this may not be true. probably need a proper fix here
+    auto conn_read = connect(&sock, &QTcpSocket::readyRead, &sock, [&]() {
       auto data = sock.readAll();
       if (!headers.isEmpty()) {
         append(data);
       } else {
-        const QString HEADERS_TERMINATOR("\r\n\r\n");
-        const QString string(data);
-        if (string.contains(HEADERS_TERMINATOR)) {
-          int idx = string.indexOf(HEADERS_TERMINATOR) + HEADERS_TERMINATOR.length();
-          headers = parseHeaders(string.left(idx).split("\r\n"));
+        // HTTP headers may arrive split across multiple readyRead calls.
+        // Accumulate into header_buf until we see the \r\n\r\n terminator.
+        header_buf.append(data);
+        const QByteArray HEADERS_TERMINATOR("\r\n\r\n");
+        int term_idx = header_buf.indexOf(HEADERS_TERMINATOR);
+        if (term_idx >= 0) {
+          int body_idx = term_idx + HEADERS_TERMINATOR.size();
+          headers = parseHeaders(QString::fromLatin1(header_buf.left(body_idx)).split("\r\n"));
           extract_icy_metaint(headers);
-          append(data.mid(idx));
+          QByteArray body = header_buf.mid(body_idx);
+          header_buf.clear();
+          append(body);
         }
       }
       timer.stop();
@@ -219,7 +223,7 @@ namespace Playback {
     timer.setSingleShot(true);
     timer.setInterval(_timeout_ms);
     timer.start();
-    connect(&timer, &QTimer::timeout, this, [&]() {
+    connect(&timer, &QTimer::timeout, &timer, [&]() {
       emit stopping();
       qWarning() << "stream timeout";
       emit error("timeout");
