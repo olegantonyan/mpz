@@ -20,7 +20,7 @@ public:
                  quint64 duration,
                  quint8 channels,
                  quint16 bitrate,
-                 quint16 samplerate);
+                 quint32 samplerate);
   explicit Track(const QUrl &stream_url, const QString &filepath_reference);
 
   static QString formattedTime(quint64 tm);
@@ -43,7 +43,7 @@ public:
   QString title() const;
   quint16 year() const;
   quint32 duration() const;
-  quint16 sample_rate() const;
+  quint32 sample_rate() const;
   quint8 channels() const;
   quint16 bitrate() const;
   QString format() const;
@@ -74,7 +74,7 @@ public:
 
   QString artCover() const;
 
-  void setAudioFormat(quint16 sample_rate, quint8 channels, quint16 bitrate);
+  void setAudioFormat(quint32 sample_rate, quint8 channels, quint16 bitrate);
 
 private:
   QString filepath;
@@ -83,7 +83,7 @@ private:
   QString _title;
   quint16 _year;
   quint64 _duration;
-  quint16 _sample_rate;
+  quint32 _sample_rate;
   quint8 _channels;
   quint16 _bitrate;
   QString _format;

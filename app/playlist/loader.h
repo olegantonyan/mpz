@@ -13,6 +13,7 @@ namespace Playlist {
   class Loader {
   public:
     explicit Loader(const QDir &path);
+    virtual ~Loader() = default;
 
     static QStringList supportedFileFormats();
     static QStringList supportedPlaylistFileFormats();

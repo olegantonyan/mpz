@@ -4,14 +4,14 @@
 #include <QStringList>
 
 namespace Lyrics {
-  static const QRegularExpression timestamp_re(QStringLiteral("\\[\\d{1,3}:\\d{1,2}(?:[.:]\\d{1,3})?\\]"));
-  static const QRegularExpression metadata_re(QStringLiteral("^\\[[a-zA-Z]{2,}:[^\\]]*\\]\\s*$"));
-
   bool LrcParser::looksLikeLrc(const QString &raw) {
+    static const QRegularExpression timestamp_re(QStringLiteral("\\[\\d{1,3}:\\d{1,2}(?:[.:]\\d{1,3})?\\]"));
     return timestamp_re.match(raw).hasMatch();
   }
 
   QString LrcParser::stripTimestamps(const QString &raw) {
+    static const QRegularExpression timestamp_re(QStringLiteral("\\[\\d{1,3}:\\d{1,2}(?:[.:]\\d{1,3})?\\]"));
+    static const QRegularExpression metadata_re(QStringLiteral("^\\[[a-zA-Z]{2,}:[^\\]]*\\]\\s*$"));
     QStringList out;
     const auto lines = raw.split('\n');
     for (const auto &line : lines) {

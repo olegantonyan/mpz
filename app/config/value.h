@@ -41,8 +41,8 @@ namespace Config {
 
   private:
     QVariant value;
-    Type value_type;
-    Type list_elements_type;
+    Type value_type = Null;
+    Type list_elements_type = Null;
   };
 }
 

@@ -30,20 +30,20 @@ quint16 StreamMetaData::bitrate() const {
   return static_cast<quint16>(i);
 }
 
-quint16 StreamMetaData::samplerate() const {
+quint32 StreamMetaData::samplerate() const {
   bool ok = false;
   auto i = _data.value("icy-sr", "0").toUInt(&ok);
   if (!ok) {
     return 0;
   }
-  return static_cast<quint16>(i);
+  return i;
 }
 
 QString StreamMetaData::artist() const {
   if (!title_explicit.isEmpty()) {
     return title_explicit;
   }
-  QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
+  static const QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
   auto stream = _data.value("stream", "");
   auto match = r.match(stream);
   if (match.hasMatch()) {
@@ -56,7 +56,7 @@ QString StreamMetaData::title() const {
   if (!title_explicit.isEmpty()) {
     return title_explicit;
   }
-  QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
+  static const QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
   auto stream = _data.value("stream", "");
   auto match = r.match(stream);
   if (match.hasMatch()) {

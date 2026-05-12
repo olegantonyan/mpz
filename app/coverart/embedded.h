@@ -14,6 +14,9 @@ namespace CoverArt {
     Embedded();
     ~Embedded();
 
+    Embedded(const Embedded &) = delete;
+    Embedded &operator=(const Embedded &) = delete;
+
     QString get(const QString &filepath);
 
   private:

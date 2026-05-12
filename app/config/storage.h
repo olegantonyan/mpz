@@ -19,6 +19,9 @@ namespace Config {
     explicit Storage(const QString &filename);
     ~Storage();
 
+    Storage(const Storage &) = delete;
+    Storage &operator=(const Storage &) = delete;
+
     static QString configPath();
 
     Config::Value get(const QString &key, bool *ok = nullptr) const;

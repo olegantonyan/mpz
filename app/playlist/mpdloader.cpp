@@ -79,7 +79,7 @@ namespace Playlist {
       return dt.year();
     }
 
-    QRegularExpression re(R"((18|19|20)\d{2})");
+    static const QRegularExpression re(R"((18|19|20)\d{2})");
     QRegularExpressionMatch match = re.match(date);
     if (match.hasMatch()) {
       return match.captured(0).toInt();

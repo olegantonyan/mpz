@@ -10,13 +10,13 @@ namespace Playback {
   public:
     explicit Controls();
 
-    QToolButton *stop;
-    QToolButton *play;
-    QToolButton *pause;
-    QToolButton *prev;
-    QToolButton *next;
-    QProgressBar *seekbar;
-    QLabel *time;
+    QToolButton *stop = nullptr;
+    QToolButton *play = nullptr;
+    QToolButton *pause = nullptr;
+    QToolButton *prev = nullptr;
+    QToolButton *next = nullptr;
+    QProgressBar *seekbar = nullptr;
+    QLabel *time = nullptr;
   };
 }
 

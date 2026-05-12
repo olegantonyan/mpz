@@ -247,7 +247,7 @@ namespace Config {
             trackDuration(static_cast<quint64>(r["duration"].get<int>())),
             static_cast<quint8>(r["channels"].get<int>()),
             static_cast<quint16>(r["bitrate"].get<int>()),
-            static_cast<quint16>(r["samplerate"].get<int>())
+            static_cast<quint32>(r["samplerate"].get<int>())
           );
       t.setCue(cue);
       return t;

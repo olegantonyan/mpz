@@ -254,7 +254,7 @@ namespace Playlist {
       return 0;
     }
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QRegularExpression re(QStringLiteral("\\d{4}"));
+    static const QRegularExpression re(QStringLiteral("\\d{4}"));
     auto m = re.match(s);
     return m.hasMatch() ? m.captured(0).toUShort() : 0;
 #else

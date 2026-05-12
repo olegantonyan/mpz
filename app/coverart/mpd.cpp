@@ -130,9 +130,6 @@ namespace CoverArt {
     while (cursor + 4 <= end) {
       const char *ptr = cursor;
 
-      // Check we can read type
-      if (ptr + 4 > end) break;
-
       // Attempt to parse FLAC METADATA_BLOCK_PICTURE
       Picture pic;
       pic.type = read_u32_be(ptr); ptr += 4;

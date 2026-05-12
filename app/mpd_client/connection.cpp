@@ -13,6 +13,8 @@ public:
   ~TimerStarter() {
     timer->start();
   }
+  TimerStarter(const TimerStarter &) = delete;
+  TimerStarter &operator=(const TimerStarter &) = delete;
 private:
   QTimer *timer;
 };

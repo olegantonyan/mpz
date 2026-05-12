@@ -166,7 +166,7 @@ void Mpris::SetVolume(double value) {
 }
 
 qlonglong Mpris::Position() const {
-  return player->position() * 1000000;
+  return static_cast<qlonglong>(player->position()) * 1000000;
 }
 
 bool Mpris::CanGoNext() const {

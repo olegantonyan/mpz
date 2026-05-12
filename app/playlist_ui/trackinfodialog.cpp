@@ -162,7 +162,6 @@ void TrackInfoDialog::setup_lyrics(const Track &track) {
 
   for (const auto &name : providers) {
     QString text;
-    QString source;
     if (name == "embedded") {
       text = fetch_embedded_lyrics(track);
     } else if (name == "sidecar") {

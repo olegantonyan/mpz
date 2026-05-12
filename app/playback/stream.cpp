@@ -9,6 +9,8 @@ namespace Playback {
   Stream::Stream(quint32 threshold_bytes, quint16 threshold_multiplier, QObject *parent) :
     QIODevice(parent),
     _total_bytes_received(0),
+    _icy_metaint(0),
+    _next_meta_pos(0),
     _threshold_bytes(threshold_bytes),
     _max_bytes(threshold_bytes * threshold_multiplier) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
@@ -223,7 +225,7 @@ namespace Playback {
       emit error("timeout");
     });
 
-    sock.connectToHost(url().host(), static_cast<quint16>(url().port()));
+    sock.connectToHost(url().host(), static_cast<quint16>(url().port(80)));
     sock.waitForConnected();
     sock.write(buildRequest().toLatin1());
 

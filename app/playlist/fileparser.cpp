@@ -27,7 +27,7 @@ namespace Playlist {
         result = line;
       } else if (fi.isRelative()) {
         auto full_path = QDir(current_dir()).filePath(line);
-        if (QFileInfo(full_path).exists()) {
+        if (QFileInfo::exists(full_path)) {
           result = full_path;
         }
       }

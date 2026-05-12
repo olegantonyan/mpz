@@ -14,7 +14,7 @@ public:
   void clear();
 
   quint16 bitrate() const;
-  quint16 samplerate() const;
+  quint32 samplerate() const;
 
   QString artist() const;
   QString title() const;

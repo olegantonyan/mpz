@@ -46,7 +46,7 @@ Track::Track(const QString &fp,
              quint64 dur,
              quint8 chans,
              quint16 bitrt,
-             quint16 samplert) {
+             quint32 samplert) {
   _uid = generateUid();
 
   _begin = bgn;
@@ -68,6 +68,7 @@ Track::Track(const QString &fp,
 }
 
 Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
+  _begin = 0;
   _duration = 0;
   _channels = 0;
   _bitrate = 0;
@@ -111,7 +112,7 @@ bool Track::fillAudioProperties() {
       _duration = static_cast<quint64>(f.audioProperties()->lengthInMilliseconds());
       _channels = static_cast<quint8>(f.audioProperties()->channels());
       _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
-      _sample_rate = static_cast<quint16>(f.audioProperties()->sampleRate());
+      _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
       return true;
     }
   }
@@ -287,13 +288,13 @@ QString Track::artCover() const {
   return CoverArt::Covers::instance().get(filepath);
 }
 
-void Track::setAudioFormat(quint16 sample_rate, quint8 channels, quint16 bitrate) {
+void Track::setAudioFormat(quint32 sample_rate, quint8 channels, quint16 bitrate) {
   _sample_rate = sample_rate;
   _channels = channels;
   _bitrate = bitrate;
 }
 
-quint16 Track::sample_rate() const {
+quint32 Track::sample_rate() const {
   if (isStream()) {
     return streamMeta().samplerate();
   }

@@ -39,7 +39,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         emit volumeChanged(volume);
       }
     });
-    connect(&_mpdplayer, &Mpd::MediaPlayer::audioFormatUpdated, [=](quint16 sample_rate, quint8 channels, quint16 bitrate) {
+    connect(&_mpdplayer, &Mpd::MediaPlayer::audioFormatUpdated, [=](quint32 sample_rate, quint8 channels, quint16 bitrate) {
       _current_track.setAudioFormat(sample_rate, channels, bitrate);
       emit trackChanged(_current_track);
     });

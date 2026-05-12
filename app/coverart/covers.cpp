@@ -72,10 +72,9 @@ namespace CoverArt {
 
     QString result;
     QDirIterator it(dir, nmask, QDir::Files, QDirIterator::NoIteratorFlags);
-    int index = 0;
     while (it.hasNext()) {
       auto current_file = it.next();
-      if (index == 0) {
+      if (result.isEmpty()) {
         result = current_file; // fallback to first image file found in the dir
       }
 
