@@ -217,6 +217,30 @@ h3 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
   border-top: 1px solid var(--border);
 }
 .footer .content { color: inherit; }
+.footer-tagline {
+  text-align: center;
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+  color: var(--text-muted);
+}
+.footer-columns { margin-block: 0; }
+.footer-heading {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.6rem;
+  color: var(--text);
+}
+.footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.footer-list a { color: inherit; }
+.footer-list a:hover { color: var(--text); }
 
 /* Spacing utilities (only the ones used) */
 .mt-3 { margin-top: 0.75rem; }

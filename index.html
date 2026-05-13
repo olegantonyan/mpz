@@ -763,7 +763,7 @@
                         >.
                     </div>
 
-                    <details class="mt-6 has-text-grey">
+                    <details id="faq" class="mt-6 has-text-grey">
                         <summary class="is-size-7">
                             Frequently asked questions
                         </summary>
@@ -846,17 +846,99 @@
         </main>
 
         <footer class="footer">
-            <div class="content has-text-centered">
-                <p>
-                    Made with ❤ by
-                    <a
-                        href="https://github.com/olegantonyan"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >Oleg Antonyan</a
-                    >
+            <div class="container">
+                <p class="footer-tagline">
+                    mpz — free, open-source music player for big local
+                    collections. Native C++/Qt for Linux and Windows.
                 </p>
+
+                <div class="columns footer-columns">
+                    <div class="column">
+                        <h2 class="footer-heading">Project</h2>
+                        <ul class="footer-list">
+                            <li>
+                                <a
+                                    href="https://github.com/olegantonyan/mpz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Source on GitHub</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Changelog</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="column">
+                        <h2 class="footer-heading">Help</h2>
+                        <ul class="footer-list">
+                            <li><a href="#faq">FAQ</a></li>
+                            <li>
+                                <a
+                                    href="https://github.com/olegantonyan/mpz/issues"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Issues &amp; feedback</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/olegantonyan/mpz#readme"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >README</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="column">
+                        <h2 class="footer-heading">About</h2>
+                        <ul class="footer-list">
+                            <li>
+                                By
+                                <a
+                                    href="https://github.com/olegantonyan"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Oleg Antonyan</a
+                                >
+                            </li>
+                            <li>
+                                Licensed under
+                                <a
+                                    href="https://github.com/olegantonyan/mpz/blob/master/license.txt"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >GPL-3.0</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </footer>
+
+        <script>
+            (function () {
+                function openHashTargetDetails() {
+                    var hash = window.location.hash;
+                    if (!hash || hash.length < 2) return;
+                    var el = document.getElementById(hash.slice(1));
+                    if (el && el.tagName === "DETAILS") {
+                        el.open = true;
+                        el.scrollIntoView();
+                    }
+                }
+                window.addEventListener("hashchange", openHashTargetDetails);
+                openHashTargetDetails();
+            })();
+        </script>
     </body>
 </html>
