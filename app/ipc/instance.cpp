@@ -1,5 +1,7 @@
 #include "instance.h"
 
+#include <memory>
+
 #include <QEventLoop>
 #include <QTimer>
 #include <QJsonDocument>
