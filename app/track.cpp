@@ -265,12 +265,16 @@ quint64 Track::uid() const {
 }
 
 QString Track::dir() const {
-  return QFileInfo(path()).absoluteDir().canonicalPath();
+  if (!_dir_cached) {
+    _dir_cache = QFileInfo(path()).absoluteDir().canonicalPath();
+    _dir_cached = true;
+  }
+  return _dir_cache;
 }
 
 QString Track::formattedTitle() const {
   if (year() == 0) {
-    return QString("%1 - %2 - %4").arg(artist()).arg(album()).arg(title());
+    return QString("%1 - %2 - %3").arg(artist()).arg(album()).arg(title());
   }
   return QString("%1 - %2 (%3) - %4").arg(artist()).arg(album()).arg(year()).arg(title());
 }
@@ -327,7 +331,11 @@ QString Track::format() const {
 }
 
 QString Track::filename() const {
-  return QFileInfo(path()).fileName();
+  if (!_filename_cached) {
+    _filename_cache = QFileInfo(path()).fileName();
+    _filename_cached = true;
+  }
+  return _filename_cache;
 }
 
 quint16 Track::track_number() const {

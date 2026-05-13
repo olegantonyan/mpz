@@ -48,7 +48,7 @@ namespace Playback {
     QUrl _url;
     const quint32 _threshold_bytes;
     const quint32 _max_bytes;
-    QMutex _mutex;
+    mutable QMutex _mutex;
     QFuture<void> _future;
     int _icy_metaint;
     qint64 _next_meta_pos;

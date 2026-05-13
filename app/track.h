@@ -99,6 +99,11 @@ private:
 
   StreamMetaData _stream_meta;
 
+  mutable QString _dir_cache;
+  mutable bool _dir_cached = false;
+  mutable QString _filename_cache;
+  mutable bool _filename_cached = false;
+
   quint64 generateUid() const;
   QString detectFormat() const;
 };

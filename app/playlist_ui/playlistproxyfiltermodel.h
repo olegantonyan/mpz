@@ -16,8 +16,6 @@ namespace PlaylistUi {
   public:
     explicit ProxyFilterModel(QStyle *stl, const ColumnsConfig &col_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-
     Model *activeModel() const;
 
     ModusOperandi &modus_operandi;

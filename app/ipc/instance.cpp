@@ -1,5 +1,7 @@
 #include "instance.h"
 
+#include <memory>
+
 #include <QEventLoop>
 #include <QTimer>
 #include <QJsonDocument>
@@ -10,6 +12,7 @@
 namespace IPC {
   static const auto STATUS_LINE_RESPONSE_OK = "HTTP/1.1 257 R U OK\r\n\r\n";
   static const auto STATUS_LINE_REQUEST = "POST / HTTP/1.1\r\n\r\n";
+  static const qint64 MAX_PAYLOAD_BYTES = 64 * 1024;
 
   Instance::Instance(int prt, int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
     connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
@@ -110,12 +113,23 @@ namespace IPC {
     }
     QTimer timer;
     QEventLoop loop;
+    auto buffer = std::make_shared<QByteArray>();
 
     timer.setSingleShot(true);
     timer.setInterval(timeout_ms);
     timer.start();
-    auto conn_read = connect(socket, &QTcpSocket::readyRead, this, [&]() {
-      socket->write(process_received(socket->readAll()));
+    auto conn_read = connect(socket, &QTcpSocket::readyRead, this, [&, buffer]() {
+      buffer->append(socket->readAll());
+      if (buffer->size() > MAX_PAYLOAD_BYTES) {
+        qWarning() << "ipc payload exceeds" << MAX_PAYLOAD_BYTES << "bytes, dropping";
+        socket->abort();
+        loop.quit();
+        return;
+      }
+      if (!buffer->contains("\r\n\r\n")) {
+        return;
+      }
+      socket->write(process_received(*buffer));
       socket->waitForBytesWritten(timeout_ms);
       socket->flush();
       socket->disconnectFromHost();

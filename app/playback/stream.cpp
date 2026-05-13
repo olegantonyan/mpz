@@ -4,6 +4,7 @@
 #include <QtConcurrent>
 #include <QTimer>
 #include <QTcpSocket>
+#include <QMutexLocker>
 
 namespace Playback {
   Stream::Stream(quint32 threshold_bytes, quint16 threshold_multiplier, QObject *parent) :
@@ -51,6 +52,7 @@ namespace Playback {
   }
 
   void Stream::setUrl(const QUrl &url) {
+    QMutexLocker lock(&_mutex);
     _url = url;
     if (!_url.isEmpty() && _url.port() < 0) {
       if (_url.scheme() == "https") {
@@ -63,6 +65,7 @@ namespace Playback {
   }
 
   QUrl Stream::url() const {
+    QMutexLocker lock(&_mutex);
     return _url;
   }
 
@@ -241,7 +244,10 @@ namespace Playback {
     disconnect(conn_error);
     sock.close();
     clear();
-    _url.clear();
+    {
+      QMutexLocker lock(&_mutex);
+      _url.clear();
+    }
 
     emit stopped();
 

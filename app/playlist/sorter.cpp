@@ -65,12 +65,7 @@ namespace Playlist {
   }
 
   int Sorter::compare_album(const Track &t1, const Track &t2) const {
-    if (t1.album() < t2.album()) {
-      return 1;
-    } else if (t1.album() > t2.album()) {
-      return -1;
-    }
-    return 0;
+    return -QString::localeAwareCompare(t1.album(), t2.album());
   }
 
   int Sorter::compare_track_number(const Track &t1, const Track &t2) const {
@@ -83,38 +78,18 @@ namespace Playlist {
   }
 
   int Sorter::compare_filename(const Track &t1, const Track &t2) const {
-    if (t1.filename() < t2.filename()) {
-      return 1;
-    } else if (t1.filename() > t2.filename()) {
-      return -1;
-    }
-    return 0;
+    return -QString::localeAwareCompare(t1.filename(), t2.filename());
   }
 
   int Sorter::compare_title(const Track &t1, const Track &t2) const {
-    if (t1.title() < t2.title()) {
-      return 1;
-    } else if (t1.title() > t2.title()) {
-      return -1;
-    }
-    return 0;
+    return -QString::localeAwareCompare(t1.title(), t2.title());
   }
 
   int Sorter::compare_artist(const Track &t1, const Track &t2) const {
-    if (t1.artist() < t2.artist()) {
-      return 1;
-    } else if (t1.artist() > t2.artist()) {
-      return -1;
-    }
-    return 0;
+    return -QString::localeAwareCompare(t1.artist(), t2.artist());
   }
 
   int Sorter::compare_dir(const Track &t1, const Track &t2) const {
-    if (t1.dir() < t2.dir()) {
-      return 1;
-    } else if (t1.dir() > t2.dir()) {
-      return -1;
-    }
-    return 0;
+    return -QString::localeAwareCompare(t1.dir(), t2.dir());
   }
 }

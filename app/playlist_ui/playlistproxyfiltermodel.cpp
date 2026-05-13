@@ -36,14 +36,6 @@ namespace PlaylistUi {
     }
   }
 
-  int ProxyFilterModel::rowCount(const QModelIndex &parent) const {
-    Q_UNUSED(parent)
-    if (activeModel()) {
-      return activeModel()->rowCount();
-    }
-    return 0;
-  }
-
   Model *ProxyFilterModel::activeModel() const {
     return qobject_cast<Model *>(sourceModel());
   }

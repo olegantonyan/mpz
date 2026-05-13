@@ -50,7 +50,7 @@ namespace Config {
     int playlistRowHeight() const;
 
     QStringList mprisBlacklist() const;
-    bool savemMrisBlacklist(const QStringList &arg);
+    bool saveMprisBlacklist(const QStringList &arg);
 
     bool mpdStopPlayerOnClose() const;
 
