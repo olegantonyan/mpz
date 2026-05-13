@@ -29,9 +29,9 @@ Similar to "album list" in Foobar2000.
 mkdir build
 cd build
 %if %{with qt6}
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="" ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
 %else
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="" -DUSE_QT5=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DUSE_QT5=ON ..
 %endif
 make %{?_smp_mflags}
 
@@ -39,10 +39,6 @@ make %{?_smp_mflags}
 %install
 cd build
 make install
-
-
-%check
-%{_builddir}/%{name}-%{version}/scripts/upload-symbols.sh %{buildroot} || true
 
 
 %files

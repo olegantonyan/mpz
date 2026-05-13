@@ -306,9 +306,12 @@ endif()
 # SENTRY
 set(SENTRY_DSN "" CACHE STRING "Sentry DSN (empty disables crash reporting)")
 if(NOT SENTRY_DSN STREQUAL "")
-  include(GNUInstallDirs)
   set(SENTRY_NATIVE_DIR 3rdparty/sentry-native-0.14.0)
-  set(SENTRY_BACKEND crashpad CACHE STRING "" FORCE)
+  # inproc backend: in-process signal handler, no external crashpad_handler
+  # binary, no mini_chromium dependency. Trade-off vs crashpad: no register
+  # dumps and less robustness against heap-corrupted crashes — acceptable for
+  # a desktop app and avoids the crashpad-on-MinGW build pain on Windows.
+  set(SENTRY_BACKEND inproc CACHE STRING "" FORCE)
   set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
   set(SENTRY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
   set(SENTRY_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -317,18 +320,7 @@ if(NOT SENTRY_DSN STREQUAL "")
   add_subdirectory(${SENTRY_NATIVE_DIR})
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/sentry_init.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sentry::sentry)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    SENTRY_DSN_STRING="${SENTRY_DSN}"
-    MPZ_CRASHPAD_HANDLER_BUILD_PATH="$<TARGET_FILE:crashpad_handler>")
-  # crashpad_handler must ship alongside the binary; sentry_init resolves it via
-  # applicationDirPath/../libexec/mpz (Linux) or applicationDirPath (Windows).
-  if(WIN32)
-    install(PROGRAMS $<TARGET_FILE:crashpad_handler>
-            DESTINATION ${CMAKE_INSTALL_BINDIR})
-  else()
-    install(PROGRAMS $<TARGET_FILE:crashpad_handler>
-            DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/${CMAKE_PROJECT_NAME})
-  endif()
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE SENTRY_DSN_STRING="${SENTRY_DSN}")
 else()
   message(STATUS "SENTRY_DSN unset — building without crash reporting")
 endif()

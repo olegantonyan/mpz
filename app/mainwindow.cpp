@@ -407,6 +407,9 @@ void MainWindow::setupShortcuts() {
 }
 
 void MainWindow::setupWindowTitle() {
+  // TEMP: sentry stacktrace test — remove before merge
+  volatile int *crash = nullptr;
+  *crash = 42;
   setWindowTitle(qApp->applicationDisplayName());
   connect(player, &Playback::Controller::started, this, [=](const Track &track) {
     setWindowTitle("[" + track.shortText() + "] " + qApp->applicationDisplayName());

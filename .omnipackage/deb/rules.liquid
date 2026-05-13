@@ -6,10 +6,11 @@
 %:
 	dh $@
 
-# SENTRY_DSN is public (clients embed it). Set to the project DSN from sentry.io
-# to enable crash reporting; empty disables it at compile time.
+# SENTRY_DSN is public (clients embed it) and is forwarded from the host .env
+# via the `secrets:` block in .omnipackage/config.yml. Empty value disables
+# crash reporting at compile time, so source builds without the secret still work.
 override_dh_auto_configure:
-	cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="" {{ CMAKE_EXTRA_CLI }}
+	cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }}
 
 # Upload debug symbols to Sentry after dh_strip splits DWARF into
 # debian/mpz-dbgsym/usr/lib/debug/. Silent no-op when SENTRY_AUTH_TOKEN is unset.
