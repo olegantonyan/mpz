@@ -14,6 +14,9 @@
 #ifdef ENABLE_DEATHHANDLER
   #include "death_handler.h"
 #endif
+#ifdef SENTRY_DSN_STRING
+  #include "sentry_init.h"
+#endif
 
 #include <QApplication>
 #include <QDebug>
@@ -85,6 +88,10 @@ int main(int argc, char *argv[]) {
   a.setApplicationVersion(VERSION);
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
 
+#ifdef SENTRY_DSN_STRING
+  mpz::sentry::init(SENTRY_DSN_STRING, VERSION);
+#endif
+
   auto arguments = args(argc, argv);
   if (arguments.size() == 1 && arguments.first() == "--version") {
     std::cout << a.applicationVersion().toStdString() << std::endl;
@@ -110,5 +117,9 @@ int main(int argc, char *argv[]) {
   MainWindow w(arguments, &instance, local_conf, global_conf);
 
   w.show();
-  return a.exec();
+  const int rc = a.exec();
+#ifdef SENTRY_DSN_STRING
+  mpz::sentry::shutdown();
+#endif
+  return rc;
 }
