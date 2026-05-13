@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.0 LANGUAGES CXX C)
+project(mpz VERSION 2.0.7 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -222,7 +222,7 @@ if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib ${TagLib_VERSION}")
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
 else()
-  set(TAGLIB_DIR 3rdparty/taglib-2.2.1)
+  set(TAGLIB_DIR 3rdparty/taglib-2.3)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
 

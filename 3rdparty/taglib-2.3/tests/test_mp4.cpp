@@ -1,0 +1,1790 @@
+/***************************************************************************
+    copyright           : (C) 2008 by Lukas Lalinsky
+    email               : lukas@oxygene.sk
+ ***************************************************************************/
+
+/***************************************************************************
+ *   This library is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Lesser General Public License version   *
+ *   2.1 as published by the Free Software Foundation.                     *
+ *                                                                         *
+ *   This library is distributed in the hope that it will be useful, but   *
+ *   WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU     *
+ *   Lesser General Public License for more details.                       *
+ *                                                                         *
+ *   You should have received a copy of the GNU Lesser General Public      *
+ *   License along with this library; if not, write to the Free Software   *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA         *
+ *   02110-1301  USA                                                       *
+ *                                                                         *
+ *   Alternatively, this file is available under the Mozilla Public        *
+ *   License Version 1.1.  You may obtain a copy of the License at         *
+ *   http://www.mozilla.org/MPL/                                           *
+ ***************************************************************************/
+
+#include <string>
+#include <cstdio>
+
+#include "tbytevectorlist.h"
+#include "tbytevectorstream.h"
+#include "tpropertymap.h"
+#include "tag.h"
+#include "mp4tag.h"
+#include "mp4atom.h"
+#include "mp4file.h"
+#include "mp4itemfactory.h"
+#include "mp4chapterholder.h"
+#include "plainfile.h"
+#include <cppunit/extensions/HelperMacros.h>
+#include "utils.h"
+
+using namespace std;
+using namespace TagLib;
+
+namespace
+{
+
+  class CustomItemFactory : public MP4::ItemFactory {
+  public:
+    CustomItemFactory(const CustomItemFactory &) = delete;
+    CustomItemFactory &operator=(const CustomItemFactory &) = delete;
+    static CustomItemFactory *instance() { return &factory; }
+  protected:
+    CustomItemFactory() = default;
+    ~CustomItemFactory() = default;
+    NameHandlerMap nameHandlerMap() const override
+    {
+      return MP4::ItemFactory::nameHandlerMap()
+        .insert("tsti", ItemHandlerType::Int)
+        .insert("tstt", ItemHandlerType::Text);
+    }
+
+    Map<ByteVector, String> namePropertyMap() const override
+    {
+      return MP4::ItemFactory::namePropertyMap()
+        .insert("tsti", "TESTINTEGER");
+    }
+  private:
+    static CustomItemFactory factory;
+  };
+
+  CustomItemFactory CustomItemFactory::factory;
+
+  class MockChapterList : public MP4::ChapterHolder {
+  public:
+    static const MP4::ChapterList mockChapters;
+
+    bool read(TagLib::File *)
+    {
+      chapterList = mockChapters;
+      ++readCount;
+      return true;
+    }
+
+    bool write(TagLib::File *)
+    {
+      ++writeCount;
+      return true;
+    }
+
+    int readCount = 0;
+    int writeCount = 0;
+  };
+
+  const MP4::ChapterList MockChapterList::mockChapters = {
+    MP4::Chapter("Mock", 123)
+  };
+
+  class MockChapterFile : public PlainFile {
+  public:
+    explicit MockChapterFile(FileName name) : PlainFile(name)
+    {
+    }
+
+    MP4::ChapterList chapters()
+    {
+      return getChaptersLazy(chapterList, this);
+    }
+
+    void setChapters(const MP4::ChapterList& chapters)
+    {
+      setChaptersLazy(chapterList, chapters);
+    }
+
+    bool save() override
+    {
+      return MP4::saveChaptersIfModified(chapterList, this);
+    }
+
+    std::unique_ptr<MockChapterList> chapterList;
+  };
+
+}  // namespace
+
+class TestMP4 : public CppUnit::TestFixture
+{
+  CPPUNIT_TEST_SUITE(TestMP4);
+  CPPUNIT_TEST(testPropertiesAAC);
+  CPPUNIT_TEST(testPropertiesAACWithoutBitrate);
+  CPPUNIT_TEST(testPropertiesALAC);
+  CPPUNIT_TEST(testPropertiesALACWithoutBitrate);
+  CPPUNIT_TEST(testPropertiesAACWithoutLength);
+  CPPUNIT_TEST(testPropertiesM4V);
+  CPPUNIT_TEST(testFreeForm);
+  CPPUNIT_TEST(testCheckValid);
+  CPPUNIT_TEST(testHasTag);
+  CPPUNIT_TEST(testIsEmpty);
+  CPPUNIT_TEST(testUpdateStco);
+  CPPUNIT_TEST(testSaveExisingWhenIlstIsLast);
+  CPPUNIT_TEST(test64BitAtom);
+  CPPUNIT_TEST(testGnre);
+  CPPUNIT_TEST(testCovrRead);
+  CPPUNIT_TEST(testCovrWrite);
+  CPPUNIT_TEST(testCovrRead2);
+  CPPUNIT_TEST(testProperties);
+  CPPUNIT_TEST(testPropertiesAllSupported);
+  CPPUNIT_TEST(testPropertiesMovement);
+  CPPUNIT_TEST(testFuzzedFile);
+  CPPUNIT_TEST(testRepeatedSave);
+  CPPUNIT_TEST(testWithZeroLengthAtom);
+  CPPUNIT_TEST(testEmptyValuesRemoveItems);
+  CPPUNIT_TEST(testRemoveMetadata);
+  CPPUNIT_TEST(testNonFullMetaAtom);
+  CPPUNIT_TEST(testItemFactory);
+  CPPUNIT_TEST(testNonPrintableAtom);
+  CPPUNIT_TEST(testChapterListWrite);
+  CPPUNIT_TEST(testChapterListRemove);
+  CPPUNIT_TEST(testChapterListWithExistingTags);
+  CPPUNIT_TEST(testChapterListReadEmpty);
+  CPPUNIT_TEST(testQTChapterListWrite);
+  CPPUNIT_TEST(testQTChapterListRemove);
+  CPPUNIT_TEST(testQTChapterListWithExistingTags);
+  CPPUNIT_TEST(testQTChapterListReadEmpty);
+  CPPUNIT_TEST(testQTChapterListOverwrite);
+  CPPUNIT_TEST(testQTChapterListTimestampPrecision);
+  CPPUNIT_TEST(testQTChapterListNonZeroFirstChapter);
+  CPPUNIT_TEST(testQTChapterListNoOrphanedMdat);
+  CPPUNIT_TEST(testQTChapterListSharedMdatPreservesAudio);
+  CPPUNIT_TEST(testQTChapterListUnicodeTitles);
+  CPPUNIT_TEST(testChapterListUnicodeTitles);
+  CPPUNIT_TEST(testQTChapterListEmptyTitleStripped);
+  CPPUNIT_TEST(testQTChapterListSingleEmptyTitleNotStripped);
+  CPPUNIT_TEST(testNeroAndQTChaptersAreIndependent);
+  CPPUNIT_TEST(testNeroChaptersAloneWhenNoQT);
+  CPPUNIT_TEST(testLazyReadingAndWritingChapters);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+  void testPropertiesAAC()
+  {
+    MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(3708, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::AAC, f.audioProperties()->codec());
+  }
+
+  void testPropertiesAACWithoutBitrate()
+  {
+    ByteVector aacData = PlainFile(TEST_FILE_PATH_C("has-tags.m4a")).readAll();
+    CPPUNIT_ASSERT_GREATER(1960U, aacData.size());
+    CPPUNIT_ASSERT_EQUAL(ByteVector("mp4a"), aacData.mid(1890, 4));
+    // Set the bitrate to zero
+    for (int offset = 1956; offset < 1960; ++offset) {
+      aacData[offset] = 0;
+    }
+    ByteVectorStream aacStream(aacData);
+    MP4::File f(&aacStream);
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(3708, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::AAC, f.audioProperties()->codec());
+  }
+
+  void testPropertiesALAC()
+  {
+    MP4::File f(TEST_FILE_PATH_C("empty_alac.m4a"));
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(3705, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::ALAC, f.audioProperties()->codec());
+  }
+
+  void testPropertiesALACWithoutBitrate()
+  {
+    ByteVector alacData = PlainFile(TEST_FILE_PATH_C("empty_alac.m4a")).readAll();
+    CPPUNIT_ASSERT_GREATER(474U, alacData.size());
+    CPPUNIT_ASSERT_EQUAL(ByteVector("alac"), alacData.mid(446, 4));
+    // Set the bitrate to zero
+    for (int offset = 470; offset < 474; ++offset) {
+      alacData[offset] = 0;
+    }
+    ByteVectorStream alacStream(alacData);
+    MP4::File f(&alacStream);
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(3705, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::ALAC, f.audioProperties()->codec());
+  }
+
+  void testPropertiesAACWithoutLength()
+  {
+    ByteVector m4aData = PlainFile(TEST_FILE_PATH_C("no-tags.m4a")).readAll();
+    CPPUNIT_ASSERT_EQUAL(2898U, m4aData.size());
+    CPPUNIT_ASSERT_EQUAL(ByteVector("mdhd"), m4aData.mid(1749, 4));
+    // Set the length to zero
+    for (int offset = 1769; offset < 1773; ++offset) {
+      m4aData[offset] = 0;
+    }
+    ByteVectorStream m4aStream(m4aData);
+    MP4::File f(&m4aStream);
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(3707, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(3, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::AAC, f.audioProperties()->codec());
+  }
+
+  void testPropertiesM4V()
+  {
+    MP4::File f(TEST_FILE_PATH_C("blank_video.m4v"));
+    CPPUNIT_ASSERT(f.audioProperties());
+    CPPUNIT_ASSERT_EQUAL(0, f.audioProperties()->lengthInSeconds());
+    CPPUNIT_ASSERT_EQUAL(975, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(96, f.audioProperties()->bitrate());
+    CPPUNIT_ASSERT_EQUAL(2, f.audioProperties()->channels());
+    CPPUNIT_ASSERT_EQUAL(44100, f.audioProperties()->sampleRate());
+    CPPUNIT_ASSERT_EQUAL(16, f.audioProperties()->bitsPerSample());
+    CPPUNIT_ASSERT_EQUAL(false, f.audioProperties()->isEncrypted());
+    CPPUNIT_ASSERT_EQUAL(MP4::Properties::AAC, f.audioProperties()->codec());
+  }
+
+  void testCheckValid()
+  {
+    MP4::File f(TEST_FILE_PATH_C("empty.aiff"));
+    CPPUNIT_ASSERT(!f.isValid());
+  }
+
+  void testHasTag()
+  {
+    {
+      MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+    }
+
+    ScopedFileCopy copy("no-tags", ".m4a");
+
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(!f.hasMP4Tag());
+      f.tag()->setTitle("TITLE");
+      f.save();
+    }
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+    }
+  }
+
+  void testIsEmpty()
+  {
+    MP4::Tag t1;
+    CPPUNIT_ASSERT(t1.isEmpty());
+    t1.setArtist("Foo");
+    CPPUNIT_ASSERT(!t1.isEmpty());
+
+    MP4::Tag t2;
+    t2.setItem("foo", "bar");
+    CPPUNIT_ASSERT(!t2.isEmpty());
+  }
+
+  void testUpdateStco()
+  {
+    ScopedFileCopy copy("no-tags", ".3g2");
+    string filename = copy.fileName();
+
+    ByteVectorList data1;
+
+    {
+      MP4::File f(filename.c_str());
+      f.tag()->setArtist(ByteVector(3000, 'x'));
+
+      MP4::Atoms a(&f);
+      MP4::Atom *stco = a.find("moov")->findall("stco", true)[0];
+      f.seek(stco->offset() + 12);
+      ByteVector data = f.readBlock(stco->length() - 12);
+      unsigned int count = data.mid(0, 4).toUInt();
+      int pos = 4;
+      while (count--) {
+        unsigned int offset = data.mid(pos, 4).toUInt();
+        f.seek(offset);
+        data1.append(f.readBlock(20));
+        pos += 4;
+      }
+
+      f.save();
+    }
+
+    {
+      MP4::File f(filename.c_str());
+
+      MP4::Atoms a(&f);
+      MP4::Atom *stco = a.find("moov")->findall("stco", true)[0];
+      f.seek(stco->offset() + 12);
+      ByteVector data = f.readBlock(stco->length() - 12);
+      unsigned int count = data.mid(0, 4).toUInt();
+      int pos = 4, i = 0;
+      while (count--) {
+        unsigned int offset = data.mid(pos, 4).toUInt();
+        f.seek(offset);
+        CPPUNIT_ASSERT_EQUAL(data1[i], f.readBlock(20));
+        pos += 4;
+        i++;
+      }
+    }
+  }
+
+  void testFreeForm()
+  {
+    ScopedFileCopy copy("has-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.tag()->contains("----:com.apple.iTunes:iTunNORM"));
+      f.tag()->setItem("----:org.kde.TagLib:Foo", StringList("Bar"));
+      f.save();
+    }
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.tag()->contains("----:org.kde.TagLib:Foo"));
+      CPPUNIT_ASSERT_EQUAL(String("Bar"),
+                           f.tag()->item("----:org.kde.TagLib:Foo").toStringList().front());
+      f.save();
+    }
+  }
+
+  void testSaveExisingWhenIlstIsLast()
+  {
+    ScopedFileCopy copy("ilst-is-last", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT_EQUAL(String("82,164"),
+        f.tag()->item("----:com.apple.iTunes:replaygain_track_minmax").toStringList().front());
+      CPPUNIT_ASSERT_EQUAL(String("Pearl Jam"), f.tag()->artist());
+      f.tag()->setComment("foo");
+      f.save();
+    }
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT_EQUAL(String("82,164"),
+                           f.tag()->item("----:com.apple.iTunes:replaygain_track_minmax").toStringList().front());
+      CPPUNIT_ASSERT_EQUAL(String("Pearl Jam"), f.tag()->artist());
+      CPPUNIT_ASSERT_EQUAL(String("foo"), f.tag()->comment());
+    }
+  }
+
+  void test64BitAtom()
+  {
+    ScopedFileCopy copy("64bit", ".mp4");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, f.tag()->itemMap()["cpil"].toBool());
+
+      MP4::Atoms atoms(&f);
+      MP4::Atom *moov = atoms.atoms()[0];
+      CPPUNIT_ASSERT_EQUAL(static_cast<offset_t>(77), moov->length());
+
+      f.tag()->setItem("pgap", true);
+      f.save();
+    }
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, f.tag()->item("cpil").toBool());
+      CPPUNIT_ASSERT_EQUAL(true, f.tag()->item("pgap").toBool());
+
+      MP4::Atoms atoms(&f);
+      MP4::Atom *moov = atoms.atoms()[0];
+      // original size + 'pgap' size + padding
+      CPPUNIT_ASSERT_EQUAL(static_cast<offset_t>(77 + 25 + 974), moov->length());
+    }
+  }
+
+  void testGnre()
+  {
+    MP4::File f(TEST_FILE_PATH_C("gnre.m4a"));
+    CPPUNIT_ASSERT_EQUAL(TagLib::String("Ska"), f.tag()->genre());
+  }
+
+  void testCovrRead()
+  {
+    MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+    CPPUNIT_ASSERT(f.tag()->contains("covr"));
+    MP4::CoverArtList l = f.tag()->item("covr").toCoverArtList();
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(2), l.size());
+    CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::PNG, l[0].format());
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(79), l[0].data().size());
+    CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::JPEG, l[1].format());
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(287), l[1].data().size());
+  }
+
+  void testCovrWrite()
+  {
+    ScopedFileCopy copy("has-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.tag()->contains("covr"));
+      MP4::CoverArtList l = f.tag()->item("covr").toCoverArtList();
+      l.append(MP4::CoverArt(MP4::CoverArt::PNG, "foo"));
+      f.tag()->setItem("covr", l);
+      f.save();
+    }
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.tag()->contains("covr"));
+      MP4::CoverArtList l = f.tag()->item("covr").toCoverArtList();
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(3), l.size());
+      CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::PNG, l[0].format());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(79), l[0].data().size());
+      CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::JPEG, l[1].format());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(287), l[1].data().size());
+      CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::PNG, l[2].format());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(3), l[2].data().size());
+    }
+  }
+
+  void testCovrRead2()
+  {
+    MP4::File f(TEST_FILE_PATH_C("covr-junk.m4a"));
+    CPPUNIT_ASSERT(f.tag()->contains("covr"));
+    MP4::CoverArtList l = f.tag()->item("covr").toCoverArtList();
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(2), l.size());
+    CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::PNG, l[0].format());
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(79), l[0].data().size());
+    CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::JPEG, l[1].format());
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(287), l[1].data().size());
+  }
+
+  void testProperties()
+  {
+    MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+
+    PropertyMap tags = f.properties();
+
+    CPPUNIT_ASSERT_EQUAL(StringList("Test Artist"), tags["ARTIST"]);
+
+    tags["TRACKNUMBER"] = StringList("2/4");
+    tags["DISCNUMBER"] = StringList("3/5");
+    tags["BPM"] = StringList("123");
+    tags["ARTIST"] = StringList("Foo Bar");
+    tags["COMPILATION"] = StringList("1");
+    tags["REMIXEDBY"] = StringList("Remixed by");
+    f.setProperties(tags);
+
+    tags = f.properties();
+
+    CPPUNIT_ASSERT(f.tag()->contains("trkn"));
+    CPPUNIT_ASSERT_EQUAL(2, f.tag()->item("trkn").toIntPair().first);
+    CPPUNIT_ASSERT_EQUAL(4, f.tag()->item("trkn").toIntPair().second);
+    CPPUNIT_ASSERT_EQUAL(StringList("2/4"), tags["TRACKNUMBER"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("disk"));
+    CPPUNIT_ASSERT_EQUAL(3, f.tag()->item("disk").toIntPair().first);
+    CPPUNIT_ASSERT_EQUAL(5, f.tag()->item("disk").toIntPair().second);
+    CPPUNIT_ASSERT_EQUAL(StringList("3/5"), tags["DISCNUMBER"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("tmpo"));
+    CPPUNIT_ASSERT_EQUAL(123, f.tag()->item("tmpo").toInt());
+    CPPUNIT_ASSERT_EQUAL(StringList("123"), tags["BPM"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("\251ART"));
+    CPPUNIT_ASSERT_EQUAL(StringList("Foo Bar"), f.tag()->item("\251ART").toStringList());
+    CPPUNIT_ASSERT_EQUAL(StringList("Foo Bar"), tags["ARTIST"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("cpil"));
+    CPPUNIT_ASSERT_EQUAL(true, f.tag()->item("cpil").toBool());
+    CPPUNIT_ASSERT_EQUAL(StringList("1"), tags["COMPILATION"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("----:com.apple.iTunes:REMIXEDBY"));
+    CPPUNIT_ASSERT_EQUAL(StringList("Remixed by"),
+      f.tag()->item("----:com.apple.iTunes:REMIXEDBY").toStringList());
+    CPPUNIT_ASSERT_EQUAL(StringList("Remixed by"), tags["REMIXEDBY"]);
+
+    tags["COMPILATION"] = StringList("0");
+    f.setProperties(tags);
+
+    tags = f.properties();
+
+    CPPUNIT_ASSERT(f.tag()->contains("cpil"));
+    CPPUNIT_ASSERT_EQUAL(false, f.tag()->item("cpil").toBool());
+    CPPUNIT_ASSERT_EQUAL(StringList("0"), tags["COMPILATION"]);
+
+    // Empty properties do not result in access violations
+    // when converting integers
+    tags["TRACKNUMBER"] = StringList();
+    tags["DISCNUMBER"] = StringList();
+    tags["BPM"] = StringList();
+    tags["COMPILATION"] = StringList();
+    f.setProperties(tags);
+  }
+
+  void testPropertiesAllSupported()
+  {
+    PropertyMap tags;
+    tags["ALBUM"] = StringList("Album");
+    tags["ALBUMARTIST"] = StringList("Album Artist");
+    tags["ALBUMARTISTSORT"] = StringList("Album Artist Sort");
+    tags["ALBUMSORT"] = StringList("Album Sort");
+    tags["ARTIST"] = StringList("Artist");
+    tags["ARTISTS"] = StringList("Artists");
+    tags["ARTISTSORT"] = StringList("Artist Sort");
+    tags["ASIN"] = StringList("ASIN");
+    tags["BARCODE"] = StringList("Barcode");
+    tags["BPM"] = StringList("123");
+    tags["CATALOGNUMBER"] = StringList("Catalog Number");
+    tags["COMMENT"] = StringList("Comment");
+    tags["COMPILATION"] = StringList("1");
+    tags["COMPOSER"] = StringList("Composer");
+    tags["COMPOSERSORT"] = StringList("Composer Sort");
+    tags["CONDUCTOR"] = StringList("Conductor");
+    tags["COPYRIGHT"] = StringList("2021 Copyright");
+    tags["DATE"] = StringList("2021-01-03 12:29:23");
+    tags["DISCNUMBER"] = StringList("3/5");
+    tags["DISCSUBTITLE"] = StringList("Disc Subtitle");
+    tags["DJMIXER"] = StringList("DJ Mixer");
+    tags["ENCODEDBY"] = StringList("Encoded by");
+    tags["ENCODING"] = StringList("Encoding");
+    tags["ENGINEER"] = StringList("Engineer");
+    tags["GAPLESSPLAYBACK"] = StringList("1");
+    tags["GENRE"] = StringList("Genre");
+    tags["GROUPING"] = StringList("Grouping");
+    tags["ISRC"] = StringList("UKAAA0500001");
+    tags["LABEL"] = StringList("Label");
+    tags["LANGUAGE"] = StringList("eng");
+    tags["LICENSE"] = StringList("License");
+    tags["LYRICIST"] = StringList("Lyricist");
+    tags["LYRICS"] = StringList("Lyrics");
+    tags["MEDIA"] = StringList("Media");
+    tags["MIXER"] = StringList("Mixer");
+    tags["MOOD"] = StringList("Mood");
+    tags["MOVEMENTCOUNT"] = StringList("3");
+    tags["MOVEMENTNAME"] = StringList("Movement Name");
+    tags["MOVEMENTNUMBER"] = StringList("2");
+    tags["MUSICBRAINZ_ALBUMARTISTID"] = StringList("MusicBrainz_AlbumartistID");
+    tags["MUSICBRAINZ_ALBUMID"] = StringList("MusicBrainz_AlbumID");
+    tags["MUSICBRAINZ_ARTISTID"] = StringList("MusicBrainz_ArtistID");
+    tags["MUSICBRAINZ_RELEASEGROUPID"] = StringList("MusicBrainz_ReleasegroupID");
+    tags["MUSICBRAINZ_RELEASETRACKID"] = StringList("MusicBrainz_ReleasetrackID");
+    tags["MUSICBRAINZ_TRACKID"] = StringList("MusicBrainz_TrackID");
+    tags["MUSICBRAINZ_WORKID"] = StringList("MusicBrainz_WorkID");
+    tags["ORIGINALDATE"] = StringList("2021-01-03 13:52:19");
+    tags["OWNER"] = StringList("Owner");
+    tags["PODCAST"] = StringList("1");
+    tags["PODCASTCATEGORY"] = StringList("Podcast Category");
+    tags["PODCASTDESC"] = StringList("Podcast Description");
+    tags["PODCASTID"] = StringList("Podcast ID");
+    tags["PODCASTURL"] = StringList("Podcast URL");
+    tags["PRODUCER"] = StringList("Producer");
+    tags["RELEASECOUNTRY"] = StringList("Release Country");
+    tags["RELEASESTATUS"] = StringList("Release Status");
+    tags["RELEASETYPE"] = StringList("Release Type");
+    tags["REMIXER"] = StringList("Remixer");
+    tags["SCRIPT"] = StringList("Script");
+    tags["SHOWSORT"] = StringList("Show Sort");
+    tags["SHOWWORKMOVEMENT"] = StringList("1");
+    tags["SUBTITLE"] = StringList("Subtitle");
+    tags["TITLE"] = StringList("Title");
+    tags["TITLESORT"] = StringList("Title Sort");
+    tags["TRACKNUMBER"] = StringList("2/4");
+    tags["TVEPISODE"] = StringList("3");
+    tags["TVEPISODEID"] = StringList("TV Episode ID");
+    tags["TVNETWORK"] = StringList("TV Network");
+    tags["TVSEASON"] = StringList("2");
+    tags["TVSHOW"] = StringList("TV Show");
+    tags["WORK"] = StringList("Work");
+
+    ScopedFileCopy copy("no-tags", ".m4a");
+    {
+      MP4::File f(copy.fileName().c_str());
+      PropertyMap properties = f.properties();
+      CPPUNIT_ASSERT(properties.isEmpty());
+      f.setProperties(tags);
+      f.save();
+    }
+    {
+      const MP4::File f(copy.fileName().c_str());
+      PropertyMap properties = f.properties();
+      if (tags != properties) {
+        CPPUNIT_ASSERT_EQUAL(tags.toString(), properties.toString());
+      }
+      CPPUNIT_ASSERT(tags == properties);
+    }
+  }
+
+  void testPropertiesMovement()
+  {
+    MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+
+    PropertyMap tags = f.properties();
+
+    tags["WORK"] = StringList("Foo");
+    tags["MOVEMENTNAME"] = StringList("Bar");
+    tags["MOVEMENTNUMBER"] = StringList("2");
+    tags["MOVEMENTCOUNT"] = StringList("3");
+    tags["SHOWWORKMOVEMENT"] = StringList("1");
+    f.setProperties(tags);
+
+    tags = f.properties();
+
+    CPPUNIT_ASSERT(f.tag()->contains("\251wrk"));
+    CPPUNIT_ASSERT_EQUAL(StringList("Foo"), f.tag()->item("\251wrk").toStringList());
+    CPPUNIT_ASSERT_EQUAL(StringList("Foo"), tags["WORK"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("\251mvn"));
+    CPPUNIT_ASSERT_EQUAL(StringList("Bar"), f.tag()->item("\251mvn").toStringList());
+    CPPUNIT_ASSERT_EQUAL(StringList("Bar"), tags["MOVEMENTNAME"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("\251mvi"));
+    CPPUNIT_ASSERT_EQUAL(2, f.tag()->item("\251mvi").toInt());
+    CPPUNIT_ASSERT_EQUAL(StringList("2"), tags["MOVEMENTNUMBER"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("\251mvc"));
+    CPPUNIT_ASSERT_EQUAL(3, f.tag()->item("\251mvc").toInt());
+    CPPUNIT_ASSERT_EQUAL(StringList("3"), tags["MOVEMENTCOUNT"]);
+
+    CPPUNIT_ASSERT(f.tag()->contains("shwm"));
+    CPPUNIT_ASSERT_EQUAL(true, f.tag()->item("shwm").toBool());
+    CPPUNIT_ASSERT_EQUAL(StringList("1"), tags["SHOWWORKMOVEMENT"]);
+
+    tags["SHOWWORKMOVEMENT"] = StringList("0");
+    f.setProperties(tags);
+
+    tags = f.properties();
+
+    CPPUNIT_ASSERT(f.tag()->contains("shwm"));
+    CPPUNIT_ASSERT_EQUAL(false, f.tag()->item("shwm").toBool());
+    CPPUNIT_ASSERT_EQUAL(StringList("0"), tags["SHOWWORKMOVEMENT"]);
+
+    tags["WORK"] = StringList();
+    tags["MOVEMENTNAME"] = StringList();
+    tags["MOVEMENTNUMBER"] = StringList();
+    tags["MOVEMENTCOUNT"] = StringList();
+    tags["SHOWWORKMOVEMENT"] = StringList();
+    f.setProperties(tags);
+  }
+
+  void testFuzzedFile()
+  {
+    MP4::File f(TEST_FILE_PATH_C("infloop.m4a"));
+    CPPUNIT_ASSERT(f.isValid());
+  }
+
+  void testRepeatedSave()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+
+    MP4::File f(copy.fileName().c_str());
+    f.tag()->setTitle("0123456789");
+    f.save();
+    f.save();
+    CPPUNIT_ASSERT_EQUAL(static_cast<offset_t>(2862), f.find("0123456789"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<offset_t>(-1), f.find("0123456789", 2863));
+  }
+
+  void testWithZeroLengthAtom()
+  {
+    MP4::File f(TEST_FILE_PATH_C("zero-length-mdat.m4a"));
+    CPPUNIT_ASSERT(f.isValid());
+    CPPUNIT_ASSERT_EQUAL(1115, f.audioProperties()->lengthInMilliseconds());
+    CPPUNIT_ASSERT_EQUAL(22050, f.audioProperties()->sampleRate());
+  }
+
+  void testEmptyValuesRemoveItems()
+  {
+    const MP4::File f(TEST_FILE_PATH_C("has-tags.m4a"));
+    MP4::Tag *tag = f.tag();
+    const String testTitle("Title");
+    const String testArtist("Artist");
+    const String testAlbum("Album");
+    const String testComment("Comment");
+    const String testGenre("Genre");
+    const String nullString;
+    constexpr unsigned int testYear = 2020;
+    constexpr unsigned int testTrack = 1;
+    constexpr unsigned int zeroUInt = 0;
+
+    tag->setTitle(testTitle);
+    CPPUNIT_ASSERT_EQUAL(testTitle, tag->title());
+    CPPUNIT_ASSERT(tag->contains("\251nam"));
+    tag->setArtist(testArtist);
+    CPPUNIT_ASSERT_EQUAL(testArtist, tag->artist());
+    CPPUNIT_ASSERT(tag->contains("\251ART"));
+    tag->setAlbum(testAlbum);
+    CPPUNIT_ASSERT_EQUAL(testAlbum, tag->album());
+    CPPUNIT_ASSERT(tag->contains("\251alb"));
+    tag->setComment(testComment);
+    CPPUNIT_ASSERT_EQUAL(testComment, tag->comment());
+    CPPUNIT_ASSERT(tag->contains("\251cmt"));
+    tag->setGenre(testGenre);
+    CPPUNIT_ASSERT_EQUAL(testGenre, tag->genre());
+    CPPUNIT_ASSERT(tag->contains("\251gen"));
+    tag->setYear(testYear);
+    CPPUNIT_ASSERT_EQUAL(testYear, tag->year());
+    CPPUNIT_ASSERT(tag->contains("\251day"));
+    tag->setTrack(testTrack);
+    CPPUNIT_ASSERT_EQUAL(testTrack, tag->track());
+    CPPUNIT_ASSERT(tag->contains("trkn"));
+
+    tag->setTitle(nullString);
+    CPPUNIT_ASSERT_EQUAL(nullString, tag->title());
+    CPPUNIT_ASSERT(!tag->contains("\251nam"));
+    tag->setArtist(nullString);
+    CPPUNIT_ASSERT_EQUAL(nullString, tag->artist());
+    CPPUNIT_ASSERT(!tag->contains("\251ART"));
+    tag->setAlbum(nullString);
+    CPPUNIT_ASSERT_EQUAL(nullString, tag->album());
+    CPPUNIT_ASSERT(!tag->contains("\251alb"));
+    tag->setComment(nullString);
+    CPPUNIT_ASSERT_EQUAL(nullString, tag->comment());
+    CPPUNIT_ASSERT(!tag->contains("\251cmt"));
+    tag->setGenre(nullString);
+    CPPUNIT_ASSERT_EQUAL(nullString, tag->genre());
+    CPPUNIT_ASSERT(!tag->contains("\251gen"));
+    tag->setYear(zeroUInt);
+    CPPUNIT_ASSERT_EQUAL(zeroUInt, tag->year());
+    CPPUNIT_ASSERT(!tag->contains("\251day"));
+    tag->setTrack(zeroUInt);
+    CPPUNIT_ASSERT_EQUAL(zeroUInt, tag->track());
+    CPPUNIT_ASSERT(!tag->contains("trkn"));
+  }
+
+  void testRemoveMetadata()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(!f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      CPPUNIT_ASSERT(tag->isEmpty());
+      tag->setTitle("TITLE");
+      f.save();
+    }
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+      CPPUNIT_ASSERT(!f.tag()->isEmpty());
+      f.strip();
+    }
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(!f.hasMP4Tag());
+      CPPUNIT_ASSERT(f.tag()->isEmpty());
+      CPPUNIT_ASSERT(fileEqual(
+        copy.fileName(),
+        testFilePath("no-tags.m4a")));
+    }
+  }
+
+  void testNonFullMetaAtom()
+  {
+    {
+      MP4::File f(TEST_FILE_PATH_C("non-full-meta.m4a"));
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+
+      CPPUNIT_ASSERT(f.tag()->contains("covr"));
+      MP4::CoverArtList l = f.tag()->item("covr").toCoverArtList();
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(2), l.size());
+      CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::PNG, l[0].format());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(79), l[0].data().size());
+      CPPUNIT_ASSERT_EQUAL(MP4::CoverArt::JPEG, l[1].format());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(287), l[1].data().size());
+
+      PropertyMap properties = f.properties();
+      CPPUNIT_ASSERT_EQUAL(StringList("Test Artist!!!!"), properties["ARTIST"]);
+      CPPUNIT_ASSERT_EQUAL(StringList("FAAC 1.24"), properties["ENCODING"]);
+    }
+  }
+
+  void testItemFactory()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(!f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      tag->setItem("tsti", MP4::Item(123));
+      tag->setItem("tstt", MP4::Item(StringList("Test text")));
+      f.save();
+    }
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      // Without a custom item factory, only custom text atoms with four
+      // letter names are possible.
+      MP4::Item item = tag->item("tsti");
+      CPPUNIT_ASSERT(!item.isValid());
+      CPPUNIT_ASSERT(item.toInt() != 123);
+      item = tag->item("tstt");
+      CPPUNIT_ASSERT(item.isValid());
+      CPPUNIT_ASSERT_EQUAL(StringList("Test text"), item.toStringList());
+      f.strip();
+    }
+    {
+      MP4::File f(copy.fileName().c_str(),
+                  true, MP4::Properties::Average, CustomItemFactory::instance());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(!f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      tag->setItem("tsti", MP4::Item(123));
+      tag->setItem("tstt", MP4::Item(StringList("Test text")));
+      tag->setItem("trkn", MP4::Item(2, 10));
+      tag->setItem("rate", MP4::Item(80));
+      tag->setItem("plID", MP4::Item(1540934238LL));
+      tag->setItem("rtng", MP4::Item(static_cast<unsigned char>(2)));
+      f.save();
+    }
+    {
+      MP4::File f(copy.fileName().c_str(),
+                  true, MP4::Properties::Average, CustomItemFactory::instance());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      MP4::Item item = tag->item("tsti");
+      CPPUNIT_ASSERT(item.isValid());
+      CPPUNIT_ASSERT_EQUAL(123, item.toInt());
+      item = tag->item("tstt");
+      CPPUNIT_ASSERT(item.isValid());
+      CPPUNIT_ASSERT_EQUAL(StringList("Test text"), item.toStringList());
+      item = tag->item("trkn");
+      CPPUNIT_ASSERT(item.isValid());
+      CPPUNIT_ASSERT_EQUAL(2, item.toIntPair().first);
+      CPPUNIT_ASSERT_EQUAL(10, item.toIntPair().second);
+      CPPUNIT_ASSERT_EQUAL(80, tag->item("rate").toInt());
+      CPPUNIT_ASSERT_EQUAL(1540934238LL, tag->item("plID").toLongLong());
+      CPPUNIT_ASSERT_EQUAL(static_cast<unsigned char>(2), tag->item("rtng").toByte());
+      PropertyMap properties = tag->properties();
+      CPPUNIT_ASSERT_EQUAL(StringList("123"), properties.value("TESTINTEGER"));
+      CPPUNIT_ASSERT_EQUAL(StringList("2/10"), properties.value("TRACKNUMBER"));
+      properties["TESTINTEGER"] = StringList("456");
+      tag->setProperties(properties);
+      f.save();
+    }
+    {
+      MP4::File f(copy.fileName().c_str(),
+                  true, MP4::Properties::Average, CustomItemFactory::instance());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT(f.hasMP4Tag());
+      MP4::Tag *tag = f.tag();
+      MP4::Item item = tag->item("tsti");
+      CPPUNIT_ASSERT(item.isValid());
+      CPPUNIT_ASSERT_EQUAL(456, item.toInt());
+      PropertyMap properties = tag->properties();
+      CPPUNIT_ASSERT_EQUAL(StringList("456"), properties.value("TESTINTEGER"));
+    }
+  }
+
+  void testNonPrintableAtom()
+  {
+    ScopedFileCopy copy("nonprintable-atom-type", ".m4a");
+    {
+      MP4::File f(copy.fileName().c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT_EQUAL(1, f.audioProperties()->channels());
+      CPPUNIT_ASSERT_EQUAL(32000, f.audioProperties()->sampleRate());
+      f.tag()->setTitle("TITLE");
+      f.save();
+    }
+    {
+        MP4::File f(copy.fileName().c_str());
+        CPPUNIT_ASSERT(f.isValid());
+        CPPUNIT_ASSERT(f.hasMP4Tag());
+        CPPUNIT_ASSERT_EQUAL(String("TITLE"), f.tag()->title());
+    }
+  }
+
+  void testChapterListWrite()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // File should have no chapters initially
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT(chapters.isEmpty());
+    }
+
+    // Write chapters
+    {
+      MP4::File f(filename.c_str());
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter("Introduction", 0),
+        MP4::Chapter("Main Content", 30000LL),
+        MP4::Chapter("Conclusion", 60000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Read back and verify
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(0LL, chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Introduction"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(30000LL, chapters[1].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Main Content"), chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(60000LL, chapters[2].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Conclusion"), chapters[2].title());
+
+      // Overwrite with different chapters
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter("Part One", 0)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify overwrite
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(1U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(String("Part One"), chapters[0].title());
+    }
+  }
+
+  void testChapterListRemove()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write chapters
+    {
+      MP4::File f(filename.c_str());
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter("Chapter 1", 0)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify written
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(1U, chapters.size());
+
+      // Remove chapters
+      f.setNeroChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify removed
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT(chapters.isEmpty());
+
+      // Remove from file with no chapters should also succeed
+      f.setNeroChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+  }
+
+  void testChapterListWithExistingTags()
+  {
+    ScopedFileCopy copy("has-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // File has existing tags -- verify they survive chapter operations
+    String originalArtist;
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      originalArtist = f.tag()->artist();
+      CPPUNIT_ASSERT(!originalArtist.isEmpty());
+
+      // Write chapters
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter("Intro", 0),
+        MP4::Chapter("Verse", 10000LL)});
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify chapters are written AND existing tags are preserved
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(String("Intro"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("Verse"), chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(originalArtist, f.tag()->artist());
+
+      // Remove chapters and verify tags still survive
+      f.setNeroChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT_EQUAL(originalArtist, f.tag()->artist());
+      CPPUNIT_ASSERT(f.neroChapters().isEmpty());
+    }
+  }
+
+  void testChapterListReadEmpty()
+  {
+    // Reading from a file with no chpl atom should return empty list
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.neroChapters().isEmpty());
+    }
+  }
+
+  void testQTChapterListWrite()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // File should have no QT chapters initially
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT(chapters.isEmpty());
+    }
+
+    // Write chapters (times in 100-nanosecond units)
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Intro", 0),
+        MP4::Chapter("Verse", 15000LL),
+        MP4::Chapter("Outro", 30000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Read back and verify
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(0LL, chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Intro"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(15000LL, chapters[1].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Verse"), chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(30000LL, chapters[2].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Outro"), chapters[2].title());
+    }
+  }
+
+  void testQTChapterListRemove()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write chapters first
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Chapter 1", 0),
+        MP4::Chapter("Chapter 2", 10000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify written
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+
+      // Remove chapters
+      f.setQtChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify removed
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT(chapters.isEmpty());
+
+      // Remove from file with no chapters should also succeed
+      f.setQtChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+  }
+
+  void testQTChapterListWithExistingTags()
+  {
+    ScopedFileCopy copy("has-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // File has existing tags -- verify they survive chapter operations
+    String originalArtist;
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      originalArtist = f.tag()->artist();
+      CPPUNIT_ASSERT(!originalArtist.isEmpty());
+
+      // Write chapters
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Intro", 0),
+        MP4::Chapter("Verse", 10000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify chapters are written AND existing tags are preserved
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(String("Intro"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("Verse"), chapters[1].title());
+
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT_EQUAL(originalArtist, f.tag()->artist());
+
+      // Remove chapters and verify tags still survive
+      f.setQtChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.isValid());
+      CPPUNIT_ASSERT_EQUAL(originalArtist, f.tag()->artist());
+      CPPUNIT_ASSERT(f.qtChapters().isEmpty());
+    }
+  }
+
+  void testQTChapterListReadEmpty()
+  {
+    // Reading from a file with no chapter track should return empty list
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.qtChapters().isEmpty());
+    }
+  }
+
+  void testQTChapterListOverwrite()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write initial chapters
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Old1", 0),
+        MP4::Chapter("Old2", 5000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify initial
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+    }
+
+    // Overwrite with different chapters
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("New1", 0),
+        MP4::Chapter("New2", 10000LL),
+        MP4::Chapter("New3", 20000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify overwrite
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(String("New1"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("New2"), chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(String("New3"), chapters[2].title());
+    }
+  }
+
+  void testQTChapterListTimestampPrecision()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write chapters at precise times
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Start", 0),
+        MP4::Chapter("Precise", 1500LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Read back and verify timestamps
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(0LL, chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(1500LL, chapters[1].startTime());
+    }
+  }
+
+  void testQTChapterListNonZeroFirstChapter()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write chapters where first chapter is NOT at time 0
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("One", 10000LL),
+        MP4::Chapter("Two", 20000LL),
+        MP4::Chapter("Three", 30000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Read back -- dummy chapter at time 0 should be stripped
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(10000LL, chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(20000LL, chapters[1].startTime());
+      CPPUNIT_ASSERT_EQUAL(30000LL, chapters[2].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("One"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("Two"), chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(String("Three"), chapters[2].title());
+    }
+  }
+
+  // Regression test for the orphaned-mdat bug reported in PR #1325 by ufleisch.
+  // Each add/remove cycle must leave the file's mdat count unchanged.  Before
+  // the fix, the chapter mdat appended by write() was never removed, so three
+  // cycles produced originalCount + 3 mdat atoms.
+  void testQTChapterListNoOrphanedMdat()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Count top-level mdat atoms using TagLib's own atom parser.
+    auto countMdatTagLib = [&]() -> int {
+      PlainFile pf(filename.c_str());
+      MP4::Atoms atoms(&pf);
+      int count = 0;
+      for(const auto *atom : atoms.atoms())
+        if(atom->name() == "mdat")
+          ++count;
+      return count;
+    };
+
+    const int baseMdatTagLib = countMdatTagLib();
+
+    // Three add/remove cycles (the scenario ufleisch demonstrated).
+    for(int cycle = 0; cycle < 3; ++cycle) {
+      {
+        MP4::File f(filename.c_str());
+        f.setQtChapters(MP4::ChapterList{
+          MP4::Chapter("Chapter 1", 0),
+          MP4::Chapter("Chapter 2", 10000LL)
+        });
+        CPPUNIT_ASSERT(f.save());
+      }
+      {
+        MP4::File f(filename.c_str());
+        f.setQtChapters(MP4::ChapterList());
+        CPPUNIT_ASSERT(f.save());
+      }
+    }
+
+    // No orphaned mdat atoms should remain.
+    CPPUNIT_ASSERT_EQUAL(baseMdatTagLib, countMdatTagLib());
+  }
+
+  // Regression test for the data-loss bug reported in PR #1343 by ufleisch.
+  // Audiobook-style files co-locate chapter text samples inside the main
+  // audio mdat.  In that case the chapter track's stco[0] does NOT mark a
+  // dedicated chapter mdat -- it points into the shared audio mdat, and
+  // naively deleting "the mdat at stco[0] - 8" destroys the audio payload.
+  //
+  // Simulate that layout by writing a chapter track, then rewriting its
+  // stco[0] to point at the start of the primary audio mdat.  Removing the
+  // chapter track must leave the audio mdat fully intact.
+  void testQTChapterListSharedMdatPreservesAudio()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    struct MdatInfo { offset_t offset; offset_t length; };
+    auto findFirstMdat = [&]() -> MdatInfo {
+      PlainFile pf(filename.c_str());
+      MP4::Atoms atoms(&pf);
+      for(const auto *atom : atoms.atoms())
+        if(atom->name() == "mdat")
+          return {atom->offset(), atom->length()};
+      return {-1, 0};
+    };
+
+    const MdatInfo audioMdat = findFirstMdat();
+    CPPUNIT_ASSERT(audioMdat.offset >= 0);
+    CPPUNIT_ASSERT(audioMdat.length > 16);
+
+    // Capture the audio mdat bytes so we can confirm byte-for-byte preservation.
+    ByteVector originalAudioMdat;
+    {
+      PlainFile pf(filename.c_str());
+      pf.seek(audioMdat.offset);
+      originalAudioMdat = pf.readBlock(audioMdat.length);
+    }
+
+    // Add a chapter track.  write() appends its own mdat for the chapter text
+    // at EOF; we'll relocate stco[0] below to simulate the shared-mdat case.
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("Chapter 1", 0),
+        MP4::Chapter("Chapter 2", 1000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Rewrite the chapter track's stco[0] to point inside the audio mdat's
+    // data, so findMdatContaining() will identify the audio mdat as the
+    // candidate target.  Choosing audioMdat.offset + 8 (the data start) is
+    // the worst case: without the shared-mdat guard, the old code would
+    // treat the audio mdat header as the chapter mdat header and wipe it.
+    {
+      PlainFile pf(filename.c_str());
+      MP4::Atoms atoms(&pf);
+      const MP4::Atom *moov = atoms.find("moov");
+      CPPUNIT_ASSERT(moov);
+      const MP4::AtomList traks = moov->findall("trak");
+      CPPUNIT_ASSERT(traks.size() >= 2);
+      // The chapter trak is the most recently added -- find the one whose
+      // hdlr handler_type is "text".
+      MP4::Atom *chapterTrak = nullptr;
+      for(auto *t : traks) {
+        MP4::Atom *hdlr = t->find("mdia", "hdlr");
+        if(!hdlr) continue;
+        pf.seek(hdlr->offset());
+        if(ByteVector d = pf.readBlock(hdlr->length()); d.containsAt("text", 16)) {
+          chapterTrak = t;
+          break;
+        }
+      }
+      CPPUNIT_ASSERT(chapterTrak);
+      MP4::Atom *stco = chapterTrak->find("mdia", "minf", "stbl", "stco");
+      CPPUNIT_ASSERT(stco);
+      // stco payload: full-box header(4) + entry_count(4) + offsets[]
+      pf.seek(stco->offset() + 16);
+      pf.writeBlock(ByteVector::fromUInt(
+        static_cast<unsigned int>(audioMdat.offset + 8)));
+    }
+
+    // Trigger the chapter-removal path with the crafted stco[0].
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // The audio mdat must survive with its contents byte-identical.
+    const MdatInfo afterMdat = findFirstMdat();
+    CPPUNIT_ASSERT(afterMdat.offset >= 0);
+    CPPUNIT_ASSERT_EQUAL(audioMdat.length, afterMdat.length);
+    {
+      PlainFile pf(filename.c_str());
+      pf.seek(afterMdat.offset);
+      const ByteVector afterBytes = pf.readBlock(afterMdat.length);
+      CPPUNIT_ASSERT(afterBytes == originalAudioMdat);
+    }
+  }
+
+  // Unicode titles (CJK, Latin with diacritics, Cyrillic) survive the
+  // write -> save -> open -> read round-trip through the QT chapter track.
+  // This exercises the text-sample serialisation in mp4qtchapterlist.cpp.
+  void testQTChapterListUnicodeTitles()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // UTF-8: 日本語, Über, Привет
+    const String japanese("\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e", String::UTF8);
+    const String german("\xc3\x9c" "ber", String::UTF8);
+    const String russian("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82", String::UTF8);
+
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter(japanese, 0),
+        MP4::Chapter(german,   15000LL),
+        MP4::Chapter(russian,  30000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(japanese, chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(german,   chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(russian,  chapters[2].title());
+    }
+  }
+
+  // Unicode titles survive the write -> save -> open -> read round-trip
+  // through the Nero chpl atom, which uses a different serialisation path
+  // (length-prefixed UTF-8 inside udta/chpl).
+  void testChapterListUnicodeTitles()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // UTF-8: 日本語, Über, Привет
+    const String japanese("\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e", String::UTF8);
+    const String german("\xc3\x9c" "ber", String::UTF8);
+    const String russian("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82", String::UTF8);
+
+    {
+      MP4::File f(filename.c_str());
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter(japanese, 0),
+        MP4::Chapter(german,   15000LL),
+        MP4::Chapter(russian,  30000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(3U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(japanese, chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(german,   chapters[1].title());
+      CPPUNIT_ASSERT_EQUAL(russian,  chapters[2].title());
+    }
+  }
+
+  // When a multi-chapter list begins with an empty-titled chapter at time 0,
+  // that entry matches the QT dummy-marker pattern and must be stripped on
+  // read-back.  This test documents the stripping behaviour so a regression
+  // is immediately detectable.
+  void testQTChapterListEmptyTitleStripped()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      // First entry has an empty title at t=0.  write() sees the list already
+      // starts at t=0 so no dummy is prepended; the empty entry is written
+      // as-is.  read() must strip it because size > 1 && startTime()==0 &&
+      // title().isEmpty().
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("",           0),
+        MP4::Chapter("Chapter 1", 5000LL),
+        MP4::Chapter("Chapter 2", 10000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      // The empty t=0 entry is stripped; only the two real chapters remain.
+      CPPUNIT_ASSERT_EQUAL(2U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(5000LL,            chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Chapter 1"), chapters[0].title());
+      CPPUNIT_ASSERT_EQUAL(10000LL,           chapters[1].startTime());
+      CPPUNIT_ASSERT_EQUAL(String("Chapter 2"), chapters[1].title());
+    }
+  }
+
+  // A single chapter with an empty title at time 0 must NOT be stripped.
+  // The stripping rule applies only when size > 1 -- a file with exactly one
+  // chapter is valid and its t=0 marker is not a dummy.
+  void testQTChapterListSingleEmptyTitleNotStripped()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    {
+      MP4::File f(filename.c_str());
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("", 0)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    {
+      MP4::File f(filename.c_str());
+      MP4::ChapterList chapters = f.qtChapters();
+      CPPUNIT_ASSERT_EQUAL(1U, chapters.size());
+      CPPUNIT_ASSERT_EQUAL(0LL,        chapters[0].startTime());
+      CPPUNIT_ASSERT_EQUAL(String(""), chapters[0].title());
+    }
+  }
+
+  // Both Nero (chpl) and QT chapter tracks can coexist in the same file.
+  // Writing one format must not disturb the other, and removing one must
+  // leave the other intact -- this validates the saveChaptersIfModified lazy
+  // save contract in mp4file.cpp.
+  void testNeroAndQTChaptersAreIndependent()
+  {
+    ScopedFileCopy copy("no-tags", ".m4a");
+    string filename = copy.fileName();
+
+    // Write both formats in a single save.
+    {
+      MP4::File f(filename.c_str());
+      f.setNeroChapters(MP4::ChapterList{
+        MP4::Chapter("Nero 1", 0),
+        MP4::Chapter("Nero 2", 10000LL)
+      });
+      f.setQtChapters(MP4::ChapterList{
+        MP4::Chapter("QT 1", 0),
+        MP4::Chapter("QT 2", 20000LL)
+      });
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // Verify both are present and distinct.
+    {
+      MP4::File f(filename.c_str());
+      const MP4::ChapterList nero = f.neroChapters();
+      const MP4::ChapterList qt   = f.qtChapters();
+
+      CPPUNIT_ASSERT_EQUAL(2U, nero.size());
+      CPPUNIT_ASSERT_EQUAL(String("Nero 1"), nero[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("Nero 2"), nero[1].title());
+
+      CPPUNIT_ASSERT_EQUAL(2U, qt.size());
+      CPPUNIT_ASSERT_EQUAL(String("QT 1"), qt[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("QT 2"), qt[1].title());
+
+      // Remove only the QT track.
+      f.setQtChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.save());
+    }
+
+    // QT removed; Nero chapters must be fully intact.
+    {
+      MP4::File f(filename.c_str());
+      CPPUNIT_ASSERT(f.qtChapters().isEmpty());
+
+      const MP4::ChapterList nero = f.neroChapters();
+      CPPUNIT_ASSERT_EQUAL(2U, nero.size());
+      CPPUNIT_ASSERT_EQUAL(String("Nero 1"), nero[0].title());
+      CPPUNIT_ASSERT_EQUAL(String("Nero 2"), nero[1].title());
+    }
+  }
+
+  // Writing only Nero chapters must not accidentally create a QT chapter track,
+  // and writing only QT chapters must not accidentally create a Nero chpl atom.
+  void testNeroChaptersAloneWhenNoQT()
+  {
+    // Nero only -- QT track must remain absent.
+    {
+      ScopedFileCopy copy("no-tags", ".m4a");
+      string filename = copy.fileName();
+
+      {
+        MP4::File f(filename.c_str());
+        f.setNeroChapters(MP4::ChapterList{
+          MP4::Chapter("Nero Only", 0)
+        });
+        CPPUNIT_ASSERT(f.save());
+      }
+
+      {
+        MP4::File f(filename.c_str());
+        CPPUNIT_ASSERT_EQUAL(1U, f.neroChapters().size());
+        CPPUNIT_ASSERT(f.qtChapters().isEmpty());
+      }
+    }
+
+    // QT only -- Nero chpl atom must remain absent.
+    {
+      ScopedFileCopy copy("no-tags", ".m4a");
+      string filename = copy.fileName();
+
+      {
+        MP4::File f(filename.c_str());
+        f.setQtChapters(MP4::ChapterList{
+          MP4::Chapter("QT Only", 0)
+        });
+        CPPUNIT_ASSERT(f.save());
+      }
+
+      {
+        MP4::File f(filename.c_str());
+        CPPUNIT_ASSERT_EQUAL(1U, f.qtChapters().size());
+        CPPUNIT_ASSERT(f.neroChapters().isEmpty());
+      }
+    }
+  }
+
+  void testLazyReadingAndWritingChapters()
+  {
+    // No reads or writes if chapters are not used
+    {
+      MockChapterFile f(TEST_FILE_PATH_C("no-tags.m4a"));
+      f.save();
+      CPPUNIT_ASSERT(!f.chapterList);
+    }
+    // Do not read if already read, do not write if not modified
+    {
+      MockChapterFile f(TEST_FILE_PATH_C("no-tags.m4a"));
+      auto chapters = f.chapters();
+      CPPUNIT_ASSERT(chapters == MockChapterList::mockChapters);
+      CPPUNIT_ASSERT(f.chapterList);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      chapters = f.chapters();
+      CPPUNIT_ASSERT(chapters == MockChapterList::mockChapters);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      f.save();
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      CPPUNIT_ASSERT_EQUAL(0, f.chapterList->writeCount);
+    }
+    // Do not write if not modified
+    {
+      MockChapterFile f(TEST_FILE_PATH_C("no-tags.m4a"));
+      auto chapters = f.chapters();
+      CPPUNIT_ASSERT(chapters == MockChapterList::mockChapters);
+      CPPUNIT_ASSERT(f.chapterList);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      f.setChapters(MockChapterList::mockChapters);
+      f.save();
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      CPPUNIT_ASSERT_EQUAL(0, f.chapterList->writeCount);
+    }
+    // Write if set without being read before
+    {
+      MockChapterFile f(TEST_FILE_PATH_C("no-tags.m4a"));
+      f.setChapters(MP4::ChapterList());
+      f.save();
+      CPPUNIT_ASSERT(f.chapterList);
+      CPPUNIT_ASSERT_EQUAL(0, f.chapterList->readCount);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->writeCount);
+    }
+    // Do write if modified
+    {
+      MockChapterFile f(TEST_FILE_PATH_C("no-tags.m4a"));
+      CPPUNIT_ASSERT(f.chapters() == MockChapterList::mockChapters);
+      CPPUNIT_ASSERT(f.chapterList);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      const auto chapters1 = MP4::ChapterList({
+        MP4::Chapter("Chapter 1", 0),
+      });
+      f.setChapters(chapters1);
+      CPPUNIT_ASSERT(f.chapters() == chapters1);
+      f.save();
+      CPPUNIT_ASSERT(f.chapters() == chapters1);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->readCount);
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->writeCount);
+      f.setChapters(chapters1);
+      f.save();
+      CPPUNIT_ASSERT_EQUAL(1, f.chapterList->writeCount);
+      auto chapters2 = MP4::ChapterList({
+        MP4::Chapter("Chapter 1", 0),
+        MP4::Chapter("Chapter 2", 1),
+      });
+      f.setChapters(chapters2);
+      CPPUNIT_ASSERT(f.chapters() == chapters2);
+      f.save();
+      CPPUNIT_ASSERT(f.chapters() == chapters2);
+      CPPUNIT_ASSERT_EQUAL(2, f.chapterList->writeCount);
+      chapters2 = MP4::ChapterList({
+        MP4::Chapter("Chapter 1", 0),
+        MP4::Chapter("Chapter 2", 2),
+      });
+      f.setChapters(chapters2);
+      f.save();
+      CPPUNIT_ASSERT_EQUAL(3, f.chapterList->writeCount);
+      f.setChapters(chapters2);
+      CPPUNIT_ASSERT(f.chapters() == chapters2);
+      f.save();
+      CPPUNIT_ASSERT(f.chapters() == chapters2);
+      CPPUNIT_ASSERT_EQUAL(3, f.chapterList->writeCount);
+      const auto chapters3 = MP4::ChapterList({
+        MP4::Chapter("Chapter 1", 0),
+        MP4::Chapter("Chapter 3", 2),
+      });
+      f.setChapters(chapters3);
+      CPPUNIT_ASSERT(f.chapters() == chapters3);
+      f.save();
+      CPPUNIT_ASSERT(f.chapters() == chapters3);
+      CPPUNIT_ASSERT_EQUAL(4, f.chapterList->writeCount);
+      f.setChapters(MP4::ChapterList());
+      CPPUNIT_ASSERT(f.chapters().isEmpty());
+      f.save();
+      CPPUNIT_ASSERT(f.chapters().isEmpty());
+      CPPUNIT_ASSERT_EQUAL(5, f.chapterList->writeCount);
+    }
+  }
+
+};
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestMP4);
