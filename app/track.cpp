@@ -4,6 +4,7 @@
 
 #include "fileref.h"
 #include "tag.h"
+#include "tpropertymap.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -128,6 +129,12 @@ bool Track::fillTags() {
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
       _artist = QString(tag->artist().toCString(true));
+      if (_artist.isEmpty()) {
+        const TagLib::StringList aa = tag->properties().value("ALBUMARTIST");
+        if (!aa.isEmpty()) {
+          _artist = QString(aa.front().toCString(true));
+        }
+      }
       _album = QString(tag->album().toCString(true));
       _title = QString(tag->title().toCString(true));
       _year = static_cast<quint16>(tag->year());

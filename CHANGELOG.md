@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- use album artist when artist tag is missing
+
 ### Misc
 
 ## [2.0.6] - 2026-05-13
