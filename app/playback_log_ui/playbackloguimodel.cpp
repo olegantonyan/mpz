@@ -66,11 +66,12 @@ namespace PlaybackLogUi {
 
   void Model::append(const Item &item) {
     if (items.size() >= max_size) {
-      beginRemoveRows(QModelIndex(), 0, 0);
+      const int last = items.size() - 1;
+      beginRemoveRows(QModelIndex(), last, last);
       items.pop_back();
       endRemoveRows();
     }
-    beginInsertRows(QModelIndex(), items.size(), items.size());
+    beginInsertRows(QModelIndex(), 0, 0);
     items.push_front(item);
     endInsertRows();
 

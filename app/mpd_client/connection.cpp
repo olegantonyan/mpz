@@ -515,6 +515,8 @@ namespace MpdClient {
     return true;
   }
 
+  static const int MAX_COVER_BYTES = 32 * 1024 * 1024;
+
   QByteArray Connection::albumArt(const QString &filepath) {
     QByteArray result;
     if (!conn) {
@@ -538,6 +540,11 @@ namespace MpdClient {
 
       result.append(buffer, n);
       offset += n;
+      if (result.size() > MAX_COVER_BYTES) {
+        qWarning() << "albumArt exceeded" << MAX_COVER_BYTES << "bytes, aborting";
+        result.clear();
+        return result;
+      }
     }
 
     return result;
@@ -566,6 +573,11 @@ namespace MpdClient {
 
       result.append(buffer, n);
       offset += n;
+      if (result.size() > MAX_COVER_BYTES) {
+        qWarning() << "readPicture exceeded" << MAX_COVER_BYTES << "bytes, aborting";
+        result.clear();
+        return result;
+      }
     }
 
     return result;

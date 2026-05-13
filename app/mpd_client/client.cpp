@@ -43,7 +43,14 @@ namespace MpdClient {
   }
 
   QUrl Client::currentUrl() const {
-    return conn->currentUrl();
+    QUrl result;
+    QMetaObject::invokeMethod(
+      conn,
+      "currentUrl",
+      QThread::currentThread() == thread ? Qt::DirectConnection : Qt::BlockingQueuedConnection,
+      Q_RETURN_ARG(QUrl, result)
+    );
+    return result;
   }
 
   bool Client::ping() {
