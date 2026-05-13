@@ -34,9 +34,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
 #ifdef ENABLE_MPD_SUPPORT
   os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");
 #endif
-#ifdef ENABLE_DEATHHANDLER
-  os << libraryInfo("DeathHandler", "https://github.com/vmarkovtsev/DeathHandler");
-#endif
+  os << libraryInfo("cpptrace", "https://github.com/jeremy-rifkin/cpptrace");
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));
@@ -96,4 +94,3 @@ void AboutDialog::on_buttonChangelog_clicked() const {
 void AboutDialog::on_configfileButton_clicked() {
   QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
 }
-

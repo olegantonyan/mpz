@@ -102,6 +102,9 @@ private:
 
   void preloadPlaylist(const QStringList &args);
 
+  // TEMP: DeathHandler stack-trace test — remove before merge.
+  void triggerTestCrash();
+
 protected:
   void closeEvent(QCloseEvent *event) override;
   void changeEvent(QEvent *) override;

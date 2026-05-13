@@ -329,7 +329,14 @@ void MainWindow::setupPlaybackDispatch() {
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }
 
+// TEMP: DeathHandler stack-trace test — remove before merge.
+void MainWindow::triggerTestCrash() {
+  volatile int *p = nullptr;
+  *p = 42;
+}
+
 void MainWindow::setupStatusBar() {
+  triggerTestCrash();
   status_label = new StatusBarLabel(this);
   ui->statusbar->addWidget(status_label);
   connect(player, &Playback::Controller::started, status_label, &StatusBarLabel::on_playerStarted);
