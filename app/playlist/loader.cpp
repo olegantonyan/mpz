@@ -17,12 +17,21 @@ namespace Playlist {
   Loader::Loader(const QDir &p) : path(p) {
   }
 
-  QStringList Loader::supportedFileFormats() {
-    return QStringList() << "mp3" << "flac" << "ogg" << "m4a" << "mp4" << "wav" << "wma" << "aac" << "ape" << "cue" << "opus" << "dsf";
+  const QStringList &Loader::supportedFileFormats() {
+    static const QStringList formats = {
+      QStringLiteral("mp3"), QStringLiteral("flac"), QStringLiteral("ogg"),
+      QStringLiteral("m4a"), QStringLiteral("mp4"), QStringLiteral("wav"),
+      QStringLiteral("wma"), QStringLiteral("aac"), QStringLiteral("ape"),
+      QStringLiteral("cue"), QStringLiteral("opus"), QStringLiteral("dsf")
+    };
+    return formats;
   }
 
-  QStringList Loader::supportedPlaylistFileFormats() {
-    return QStringList() << "m3u" << "m3u8" << "pls";
+  const QStringList &Loader::supportedPlaylistFileFormats() {
+    static const QStringList formats = {
+      QStringLiteral("m3u"), QStringLiteral("m3u8"), QStringLiteral("pls")
+    };
+    return formats;
   }
 
   bool Loader::is_supported_file(const QString &name) {

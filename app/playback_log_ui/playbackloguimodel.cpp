@@ -34,7 +34,7 @@ namespace PlaybackLogUi {
     if (role == Qt::DisplayRole) {
       switch (index.column()) {
         case 0:
-          return item.time.toString("HH:mm:ss");
+          return item.time.toLocalTime().toString("HH:mm:ss");
         case 1:
           return item.text;
         default:

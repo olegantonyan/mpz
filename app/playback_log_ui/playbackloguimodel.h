@@ -14,7 +14,7 @@ namespace PlaybackLogUi {
     explicit Item(quint64 track_uid, const QString &text) {
       this->track_uid = track_uid;
       this->text = text;
-      this->time = QDateTime::currentDateTime();
+      this->time = QDateTime::currentDateTimeUtc();
     }
     QString text;
     quint64 track_uid;

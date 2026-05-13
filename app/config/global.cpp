@@ -131,7 +131,7 @@ namespace Config {
     return result;
   }
 
-  bool Global::savemMrisBlacklist(const QStringList &arg) {
+  bool Global::saveMprisBlacklist(const QStringList &arg) {
     QList<Config::Value> list;
     for (const auto &i : std::as_const(arg)) {
       list << Config::Value(i);

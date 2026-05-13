@@ -55,19 +55,29 @@ namespace CoverArt {
   }
 
   QString Mpd::get(const QString &filepath) {
-    auto binary = fetch(filepath);
-    auto hashed = image_hash(binary);
-
-    if (binary.isEmpty()) {
-      files_cache.insert(hashed, nullptr);
+    auto it = filepath_cache.constFind(filepath);
+    if (it != filepath_cache.constEnd()) {
+      if (it->isEmpty()) {
+        return "";
+      }
+      auto file_it = files_cache.constFind(*it);
+      if (file_it != files_cache.constEnd() && *file_it) {
+        return (*file_it)->fileName();
+      }
     }
 
-    if (files_cache.contains(hashed)) {
-      if (files_cache.value(hashed) == nullptr) {
-        return "";
-      } else {
-        return files_cache.value(hashed)->fileName();
-      }
+    auto binary = fetch(filepath);
+    if (binary.isEmpty()) {
+      filepath_cache.insert(filepath, QByteArray());
+      return "";
+    }
+
+    auto hashed = image_hash(binary);
+    filepath_cache.insert(filepath, hashed);
+
+    auto file_it = files_cache.constFind(hashed);
+    if (file_it != files_cache.constEnd() && *file_it) {
+      return (*file_it)->fileName();
     }
 
     auto tmpfile = create_tempfile();

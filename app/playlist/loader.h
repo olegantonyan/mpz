@@ -15,8 +15,8 @@ namespace Playlist {
     explicit Loader(const QDir &path);
     virtual ~Loader() = default;
 
-    static QStringList supportedFileFormats();
-    static QStringList supportedPlaylistFileFormats();
+    static const QStringList &supportedFileFormats();
+    static const QStringList &supportedPlaylistFileFormats();
     static bool is_supported_file(const QString &name);
 
     virtual QVector<Track> tracks() const;
