@@ -87,6 +87,7 @@ set(PROJECT_SOURCES
   app/statusbarlabel.cpp
   app/sysinfo.cpp
   app/track.cpp
+  app/reveal_in_filemanager.cpp
   app/trayicon.cpp
   app/volumecontrol.cpp
   app/playback/stream.cpp
@@ -167,6 +168,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)

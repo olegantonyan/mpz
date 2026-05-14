@@ -27,7 +27,7 @@ private:
   Ui::TrackInfoDialog *ui;
 
   QStandardItemModel model;
-  QString track_dir;
+  QString track_path;
   QString cover_art_path;
 
   void setup_table(const Track &track);
