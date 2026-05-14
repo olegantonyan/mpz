@@ -1,0 +1,5 @@
+Making patch:
+diff -Naru CMakeLists.txt CMakeListsUpdated.txt > patches/CMakeLists.patch
+
+Applying:
+patch < patches/CMakeLists.patch

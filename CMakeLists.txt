@@ -308,6 +308,15 @@ if(UNIX AND NOT APPLE)
   set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
   set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
   set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+elseif(MINGW)
+  # Vendor libdwarf-lite locally; tell cpptrace to skip its FetchContent for
+  # zstd (find_package fails silently → no zstd available → libdwarf's
+  # ENABLE_DECOMPRESSION auto-disables → no zstd dep). Trade-off: libdwarf
+  # can't read zstd-compressed DWARF, which gcc/clang/MinGW don't emit by
+  # default (plain or zlib-compressed are the norm).
+  set(CPPTRACE_USE_EXTERNAL_ZSTD ON CACHE BOOL "" FORCE)
+  set(FETCHCONTENT_SOURCE_DIR_LIBDWARF "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libdwarf-lite-2.1.0" CACHE PATH "" FORCE)
+  set(ENABLE_DECOMPRESSION OFF CACHE BOOL "" FORCE)
 endif()
 add_subdirectory(${CPPTRACE_DIR})
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
