@@ -292,16 +292,25 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 # ENDOF LIBMPDCLIENT
 
-# DEATHHANDLER
-if (UNIX AND (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64|arm64|x86|x86_64|amd64|i[3-6]86)$"))
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEATHHANDLER)
-  set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
-  add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
-  target_link_libraries(deathhandler PRIVATE dl)
-  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${DEATHHANDLER_DIR})
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE deathhandler)
+# CPPTRACE
+# Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives
+# demangled function names from STRIPPED release binaries (no DWARF shipped).
+# Skipped on Windows: PE has no .dynsym equivalent for executables, so the
+# same trick can't work there without shipping DWARF or PDBs.
+if(UNIX AND NOT APPLE)
+  set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
+  set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
+  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
+  set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
+  set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+  add_subdirectory(${CPPTRACE_DIR})
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
+  target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
 endif()
-# ENDOF DEATHHANDLER
+# ENDOF CPPTRACE
 
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPARTY
