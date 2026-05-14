@@ -40,7 +40,6 @@ set(PROJECT_SOURCES
   app/config/storage.cpp
   app/config/value.cpp
   app/coverart/embedded.cpp
-  app/crash_handler.cpp
   app/lyrics/lrclibclient.cpp
   app/lyrics/lrcparser.cpp
   app/directory_ui/directorycontroller.cpp
@@ -294,36 +293,21 @@ endif()
 # ENDOF LIBMPDCLIENT
 
 # CPPTRACE
-# Stack-trace library used by app/crash_handler.cpp for SIGSEGV/etc handlers.
-# Symbol resolution backend differs per platform:
-#  - Linux/ELF: libdl + dladdr; combined with -rdynamic this returns demangled
-#    function names from STRIPPED release binaries (no DWARF shipped).
-#  - Windows/MinGW: cpptrace autoconfig picks libdwarf+dbghelp. Stripped PE
-#    binaries lose all names — keep DWARF embedded (don't strip) for usable
-#    traces, since PE has no .dynsym equivalent for executables.
-set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
-set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+# Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives
+# demangled function names from STRIPPED release binaries (no DWARF shipped).
+# Skipped on Windows: PE has no .dynsym equivalent for executables, so the
+# same trick can't work there without shipping DWARF or PDBs.
 if(UNIX AND NOT APPLE)
+  set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
+  set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
   set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
   set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
   set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
   set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
-elseif(MINGW)
-  # Vendor libdwarf-lite locally; tell cpptrace to skip its FetchContent for
-  # zstd (find_package fails silently → no zstd available → libdwarf's
-  # ENABLE_DECOMPRESSION auto-disables → no zstd dep). Trade-off: libdwarf
-  # can't read zstd-compressed DWARF, which gcc/clang/MinGW don't emit by
-  # default (plain or zlib-compressed are the norm).
-  set(CPPTRACE_USE_EXTERNAL_ZSTD ON CACHE BOOL "" FORCE)
-  set(FETCHCONTENT_SOURCE_DIR_LIBDWARF "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libdwarf-lite-2.1.0" CACHE PATH "" FORCE)
-  set(ENABLE_DECOMPRESSION OFF CACHE BOOL "" FORCE)
-endif()
-add_subdirectory(${CPPTRACE_DIR})
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
-
-# Linux only: -rdynamic exports all global symbols into .dynsym so dladdr()
-# resolves them in stripped binaries. No-op on PE.
-if(UNIX AND NOT APPLE)
+  add_subdirectory(${CPPTRACE_DIR})
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
   target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
 endif()
 # ENDOF CPPTRACE

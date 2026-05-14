@@ -34,7 +34,9 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
 #ifdef ENABLE_MPD_SUPPORT
   os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");
 #endif
+#ifdef ENABLE_CRASH_HANDLER
   os << libraryInfo("cpptrace", "https://github.com/jeremy-rifkin/cpptrace");
+#endif
   ui->opensourceLabel->setText(tr("Using opensource libraries") + QString(":<br /> %1").arg(os.join("<br />")));
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));

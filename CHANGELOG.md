@@ -8,6 +8,8 @@
 
 ### Misc
 
+- replaced DeathHandler with cpptrace which is able to print meaningful stacktrace without debug symbols
+
 ## [2.0.6] - 2026-05-13
 
 ### Added

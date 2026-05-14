@@ -11,7 +11,9 @@
   #include "mpd_client/status.h"
   #include "mpd_client/output.h"
 #endif
-#include "crash_handler.h"
+#ifdef ENABLE_CRASH_HANDLER
+  #include "crash_handler.h"
+#endif
 
 #include <QApplication>
 #include <QDebug>
@@ -72,7 +74,9 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
+#ifdef ENABLE_CRASH_HANDLER
   mpz::install_crash_handler();
+#endif
   registerMetaTypes();
   RNJesus::seed();
 
