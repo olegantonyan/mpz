@@ -162,6 +162,10 @@ foreach(_qt_comp IN LISTS QT_COMPONENTS)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${_qt_comp})
 endforeach()
 
+if (WIN32)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+endif()
+
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
