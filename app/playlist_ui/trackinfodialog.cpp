@@ -4,6 +4,7 @@
 #include "config/global.h"
 #include "lyrics/lrclibclient.h"
 #include "lyrics/lrcparser.h"
+#include "reveal_in_filemanager.h"
 
 #include <fileref.h>
 #include <tag.h>
@@ -32,7 +33,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
   setup_lyrics(track);
   ui->splitter->setSizes({920, 300});
   ui->metadataSplitter->setSizes({600, 320});
-  track_dir = track.dir();
+  track_path = track.path();
   cover_art_path = track.artCover();
   if (!cover_art_path.isEmpty()) {
     ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -148,7 +149,7 @@ void TrackInfoDialog::setup_cover_art(const Track &track) {
 }
 
 void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(track_dir));
+  revealInFileManager({ track_path });
 }
 
 void TrackInfoDialog::setup_lyrics(const Track &track) {
