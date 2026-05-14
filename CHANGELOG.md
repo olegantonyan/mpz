@@ -2,6 +2,8 @@
 
 ### Added
 
+- when showing track in file manager make it selected there (works on multiselection too)
+
 ### Fixed
 
 - use album artist when artist tag is missing
