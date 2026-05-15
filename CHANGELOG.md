@@ -7,6 +7,7 @@
 ### Fixed
 
 - use album artist when artist tag is missing
+- load m3u in playlists now correclty works on radio streams
 
 ### Misc
 
