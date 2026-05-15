@@ -1,0 +1,67 @@
+# mpz
+
+> Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux and Windows.
+
+This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information so a single fetch is enough to answer common questions about mpz.
+
+## Overview
+
+mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar — mpz keeps only the features the author has been using daily for many years, with no plugin system or extensive customization layer.
+
+Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open source under GPL-3.0. Cross-platform: Linux and Windows. No macOS package yet (the author does not own Apple hardware; volunteer maintainers welcome).
+
+## Features
+
+- Folder-based library — no global indexing step
+- 3-column UI: directory tree, playlists, tracks
+- Middle-click a folder to create a playlist from it
+- CUE sheet support
+- MPRIS integration on Linux (remote control via e.g. KDE Connect)
+- Experimental mpd (Music Player Daemon) client mode — add an mpd server as a library folder
+- m3u and pls playlist formats, including internet radio streams
+- Lyrics from embedded tags, `.lrc`/`.txt` sidecar files, or fetched online from LRCLIB; shown in the Track Info dialog
+- Tag reading via TagLib (ID3v2, Vorbis Comment, MP4, APE)
+- Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on Windows)
+- Playback log of recently played tracks (useful for radio streams)
+- Built-in feedback form, or open a GitHub issue
+- Native C++/Qt 6 (Qt 5 supported via AUR package)
+- Follows your desktop theme
+
+## Install
+
+- openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia: install from the omnipackage stable repositories (recommended) at <https://repositories.omnipackage.org/mpz/stable/install.html>, or the unstable repositories for builds from master at <https://repositories.omnipackage.org/mpz/next/install.html>. The previous Open Build Service repositories still exist and existing installations keep working, but both new and existing users are encouraged to switch to omnipackage. Note: OBS builds on Debian/Ubuntu were always Qt5; omnipackage builds use Qt6 where the distro supports it.
+- Arch Linux: AUR package against Qt6 at <https://aur.archlinux.org/packages/mpz/> or Qt5 variant at <https://aur.archlinux.org/packages/mpz-qt5>.
+- Windows: download the latest installer or portable binaries from <https://github.com/olegantonyan/mpz/releases>.
+- From source: clone <https://github.com/olegantonyan/mpz> and follow the README. Works on any platform with Qt and a C++ compiler.
+
+## mpd client mode
+
+mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). You add an mpd server as a library folder, then browse and play remote music as if it were local. This is an experimental feature added in version 2.0.0, and there are caveats — see the "mpd impedance mismatch" section of the README at <https://github.com/olegantonyan/mpz#mpd-impedance-mismatch>. In short: mpd's library model and mpz's folder-as-playlist model don't map perfectly onto each other, so a few interactions behave differently than they do with local folders.
+
+## FAQ
+
+**What is mpz?** A free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.
+
+**What platforms does mpz support?** Linux and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler. No macOS package yet.
+
+**Is mpz free?** Yes. Free and open-source under the GNU GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.html>).
+
+**Does mpz support streaming services?** No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services (Spotify, Apple Music, etc.) are not.
+
+**Does mpz support CUE sheets?** Yes.
+
+**Can mpz act as an mpd client?** Yes, since version 2.0.0, as an experimental feature. You can add an mpd server as a library folder. See the mpd impedance mismatch note in the README for caveats.
+
+**Does mpz support lyrics?** Yes. Lyrics can be embedded in tags, loaded from `.lrc` or `.txt` sidecar files, or fetched online from LRCLIB (<https://lrclib.net>). They are shown in the Track Info dialog.
+
+**Why is it called "mpz"?** The "z" reflects a no-nonsense approach — no clutter, no distractions.
+
+## Links
+
+- Landing page: <https://mpz-player.org/>
+- Source on GitHub: <https://github.com/olegantonyan/mpz>
+- README: <https://github.com/olegantonyan/mpz#readme>
+- Changelog: <https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md>
+- Issues and feedback: <https://github.com/olegantonyan/mpz/issues>
+- Author: Oleg Antonyan, <https://github.com/olegantonyan>
+- License: GPL-3.0, <https://www.gnu.org/licenses/gpl-3.0.html>

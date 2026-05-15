@@ -4,6 +4,10 @@
 
 mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar.
 
+## Full content
+
+- [llms-full.txt](https://mpz-player.org/llms-full.txt): Self-contained version of this page with the full feature list, install instructions, and FAQ inlined — single fetch, no link-following required
+
 ## Documentation
 
 - [README](https://github.com/olegantonyan/mpz#readme): Project README — features, installation, configuration, lyrics, MPRIS, limitations

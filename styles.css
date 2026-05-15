@@ -213,12 +213,23 @@ h3 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
   background: var(--surface);
 }
 .image.is-16by9 > a,
-.image.is-16by9 > img {
+.image.is-16by9 > img,
+.image.is-16by9 > video,
+.image.is-16by9 > picture,
+.image.is-16by9 > picture > img {
   display: block;
   width: 100%;
   height: 100%;
 }
-.image.is-16by9 img { object-fit: cover; }
+.image.is-16by9 img,
+.image.is-16by9 video { object-fit: cover; }
+
+/* Motion / reduced-motion swap for the hero demonstration */
+.reduced-motion-only { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .motion-only { display: none; }
+  .reduced-motion-only { display: block; }
+}
 
 /* Tables */
 .table {

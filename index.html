@@ -66,10 +66,12 @@
 
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="preconnect" href="https://img.shields.io" />
+        <link rel="preconnect" href="https://repositories.omnipackage.org" />
         <link
             rel="preload"
             as="image"
-            href="/images/mpz-workflow.apng"
+            href="/images/mpz-workflow-poster.webp"
             fetchpriority="high"
         />
         <link rel="stylesheet" href="/styles.css" />
@@ -90,7 +92,6 @@
                 "operatingSystem": "Linux, Windows",
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
-                "softwareVersion": "2.0.4",
                 "softwareRequirements": "Linux or Windows; Qt 6 (Qt 5 supported via AUR package)",
                 "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
@@ -196,6 +197,41 @@
                             "@type": "Answer",
                             "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog."
                         }
+                    }
+                ]
+            }
+        </script>
+
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "HowTo",
+                "name": "Install mpz",
+                "description": "Install the mpz music player on Linux or Windows.",
+                "step": [
+                    {
+                        "@type": "HowToStep",
+                        "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia",
+                        "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
+                        "text": "Install from the omnipackage stable repositories (recommended), or use the unstable repositories for builds from master."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Arch Linux",
+                        "url": "https://aur.archlinux.org/packages/mpz/",
+                        "text": "Build the AUR package against Qt6, or the Qt5 variant (mpz-qt5)."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Windows",
+                        "url": "https://github.com/olegantonyan/mpz/releases",
+                        "text": "Download the latest installer or portable binaries from the GitHub releases page."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "From source",
+                        "url": "https://github.com/olegantonyan/mpz/",
+                        "text": "Clone the repository and follow the README to build with Qt and a C++ compiler on any supported platform."
                     }
                 ]
             }
@@ -463,12 +499,33 @@
                     </div>
 
                     <figure class="image is-16by9 mb-6">
+                        <video
+                            class="motion-only"
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            preload="auto"
+                            poster="/images/mpz-workflow-poster.webp"
+                            width="1200"
+                            height="708"
+                            aria-label="Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it; switching between playlists in the playlists column"
+                        >
+                            <source
+                                src="/images/mpz-workflow.webm"
+                                type="video/webm"
+                            />
+                            <source
+                                src="/images/mpz-workflow.mp4"
+                                type="video/mp4"
+                            />
+                        </video>
                         <img
-                            src="/images/mpz-workflow.apng"
-                            alt="Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it; switching between playlists in the playlists column"
-                            width="1400"
-                            height="826"
-                            fetchpriority="high"
+                            class="reduced-motion-only"
+                            src="/images/mpz-workflow-poster.webp"
+                            alt="mpz main window: directory tree (left), playlists (middle), and tracks of the selected playlist (right)"
+                            width="1200"
+                            height="708"
                         />
                     </figure>
 
@@ -476,13 +533,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/breeze-dark.png">
-                                    <img
-                                        src="/images/small/breeze-dark.png"
-                                        alt="mpz on KDE Plasma with the Breeze Dark theme"
-                                        width="512"
-                                        height="285"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/breeze-dark.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/breeze-dark.png"
+                                            alt="mpz on KDE Plasma with the Breeze Dark theme"
+                                            width="512"
+                                            height="285"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>KDE Breeze Dark desktop theme</h3>
@@ -490,13 +553,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/windows10.png">
-                                    <img
-                                        src="/images/small/windows10.png"
-                                        alt="mpz running on Windows 10"
-                                        width="512"
-                                        height="292"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/windows10.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/windows10.png"
+                                            alt="mpz running on Windows 10"
+                                            width="512"
+                                            height="292"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>Windows 10</h3>
@@ -504,13 +573,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/breeze-light.png">
-                                    <img
-                                        src="/images/small/breeze-light.png"
-                                        alt="mpz on KDE Plasma with the Breeze Light theme"
-                                        width="512"
-                                        height="285"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/breeze-light.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/breeze-light.png"
+                                            alt="mpz on KDE Plasma with the Breeze Light theme"
+                                            width="512"
+                                            height="285"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>KDE Breeze Light desktop theme</h3>
@@ -518,13 +593,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/ubuntu.png">
-                                    <img
-                                        src="/images/small/ubuntu.png"
-                                        alt="mpz running on Ubuntu"
-                                        width="512"
-                                        height="292"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/ubuntu.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/ubuntu.png"
+                                            alt="mpz running on Ubuntu"
+                                            width="512"
+                                            height="292"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>Ubuntu</h3>
@@ -626,13 +707,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/feedback-form.png">
-                                    <img
-                                        src="/images/small/feedback-form.png"
-                                        alt="The built-in feedback form dialog"
-                                        width="512"
-                                        height="288"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/feedback-form.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/feedback-form.png"
+                                            alt="The built-in feedback form dialog"
+                                            width="512"
+                                            height="288"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>Feedback form</h3>
@@ -640,13 +727,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/about.png">
-                                    <img
-                                        src="/images/small/about.png"
-                                        alt="The mpz About window showing version and credits"
-                                        width="512"
-                                        height="288"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/about.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/about.png"
+                                            alt="The mpz About window showing version and credits"
+                                            width="512"
+                                            height="288"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>About window</h3>
@@ -654,13 +747,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/library-config.png">
-                                    <img
-                                        src="/images/small/library-config.png"
-                                        alt="Dialog for configuring library folders"
-                                        width="512"
-                                        height="288"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/library-config.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/library-config.png"
+                                            alt="Dialog for configuring library folders"
+                                            width="512"
+                                            height="288"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>Library folders configuration</h3>
@@ -668,13 +767,19 @@
                         <div class="column">
                             <figure class="image is-16by9">
                                 <a href="/images/playback-log.png">
-                                    <img
-                                        src="/images/small/playback-log.png"
-                                        alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
-                                        width="512"
-                                        height="288"
-                                        loading="lazy"
-                                    />
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/playback-log.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/playback-log.png"
+                                            alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
+                                            width="512"
+                                            height="288"
+                                            loading="lazy"
+                                        />
+                                    </picture>
                                 </a>
                             </figure>
                             <h3>Playback log</h3>
