@@ -46,13 +46,17 @@ private:
 };
 
 void TestCueParser::init() {
-  // QTemporaryDir is a member and constructed once per test object, so files
-  // accumulate across slots without this reset. resolve_audio_file's stem
-  // fallback iterates the dir in QDir's default IgnoreCase sort — leftover
-  // entries that case-collide with a newly created fixture can be returned
-  // first, flipping the resolved path between runs.
-  tempDir = QTemporaryDir{};
+  // tempDir is a member constructed once per test object, so files accumulate
+  // across slots without this reset. resolve_audio_file's stem fallback walks
+  // the dir in QDir's default IgnoreCase sort — leftover entries that
+  // case-collide with a newly created fixture can be returned first, flipping
+  // the resolved path between runs. Qt5 has no move-assignment for
+  // QTemporaryDir, so wipe the contents instead of reassigning.
   QVERIFY(tempDir.isValid());
+  QDir d(tempDir.path());
+  for (const QString& f : d.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
+    QVERIFY(d.remove(f));
+  }
 }
 
 void TestCueParser::singleFileMultipleTracks() {
