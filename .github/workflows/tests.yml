@@ -16,10 +16,10 @@ jobs:
       matrix:
         include:
           - qt: Qt6
-            preset: debug-qt6-tests
+            workflow: tests-qt6
             packages: qt6-tools-dev qt6-base-dev qt6-multimedia-dev
           - qt: Qt5
-            preset: debug-qt5-tests
+            workflow: tests-qt5
             packages: qtbase5-dev-tools qtchooser qtbase5-dev qtmultimedia5-dev libqt5x11extras5-dev
 
     env:
@@ -33,11 +33,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cmake ninja-build ${{ matrix.packages }}
 
-      - name: Configure
-        run: cmake --preset ${{ matrix.preset }}
-
-      - name: Build test targets
-        run: cmake --build build/${{ matrix.preset }} --target build_tests
-
-      - name: Run ctest
-        run: ctest --test-dir build/${{ matrix.preset }} --output-on-failure
+      - name: Configure, build and test
+        run: cmake --workflow ${{ matrix.workflow }}

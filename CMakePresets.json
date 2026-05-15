@@ -67,5 +67,39 @@
     { "name": "debug-qt6-tests", "inherits": ["debug"], "cacheVariables": { "BUILD_TESTING": "ON" } },
     { "name": "debug-qt5-tests", "inherits": ["debug", "qt5"], "cacheVariables": { "BUILD_TESTING": "ON" } }
 
+  ],
+  "buildPresets": [
+    { "name": "debug-qt6-tests", "configurePreset": "debug-qt6-tests", "targets": "build_tests" },
+    { "name": "debug-qt5-tests", "configurePreset": "debug-qt5-tests", "targets": "build_tests" }
+  ],
+  "testPresets": [
+    {
+      "name": "debug-qt6-tests",
+      "configurePreset": "debug-qt6-tests",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "debug-qt5-tests",
+      "configurePreset": "debug-qt5-tests",
+      "output": { "outputOnFailure": true }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "tests-qt6",
+      "steps": [
+        { "type": "configure", "name": "debug-qt6-tests" },
+        { "type": "build",     "name": "debug-qt6-tests" },
+        { "type": "test",      "name": "debug-qt6-tests" }
+      ]
+    },
+    {
+      "name": "tests-qt5",
+      "steps": [
+        { "type": "configure", "name": "debug-qt5-tests" },
+        { "type": "build",     "name": "debug-qt5-tests" },
+        { "type": "test",      "name": "debug-qt5-tests" }
+      ]
+    }
   ]
 }
