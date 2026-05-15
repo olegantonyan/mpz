@@ -39,6 +39,43 @@
   }
 }
 
+/* Manual override — wins over prefers-color-scheme */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface-2: #fafafa;
+  --text: #2b2b2b;
+  --text-muted: #6b6b6b;
+  --border: #dcdcdc;
+  --link: #1f6feb;
+  --link-hover: #1158c7;
+  --code-bg: #f0f0f0;
+  --hero-bg: #2b2b2b;
+  --hero-text: #f5f5f5;
+  --button-bg: #f5f5f5;
+  --button-bg-hover: #e8e8e8;
+  --button-text: #2b2b2b;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1a1a1a;
+  --surface: #232323;
+  --surface-2: #2b2b2b;
+  --text: #e6e6e6;
+  --text-muted: #a0a0a0;
+  --border: #3a3a3a;
+  --link: #6ea8fe;
+  --link-hover: #9bc1ff;
+  --code-bg: #2b2b2b;
+  --hero-bg: #111111;
+  --hero-text: #f5f5f5;
+  --button-bg: #2f2f2f;
+  --button-bg-hover: #3a3a3a;
+  --button-text: #e6e6e6;
+}
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -160,17 +197,6 @@ h3 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
   line-height: 1.2;
 }
 .button:hover { background: var(--button-bg-hover); text-decoration: none; }
-.button.is-light { background: #f5f5f5; color: #2b2b2b; border-color: #dcdcdc; }
-.button.is-light:hover { background: #e8e8e8; }
-
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.5em;
-  height: 1.5em;
-}
-.icon img { width: 1em; height: 1em; display: inline-block; }
 
 /* Image / figure */
 .image {
@@ -269,3 +295,21 @@ section.pt-4 .has-text-centered img {
 
 /* Details/summary tweak so the FAQ block reads cleanly */
 details > summary { cursor: pointer; }
+
+/* Theme toggle: ghost button, only the active icon is visible */
+#theme-toggle {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--hero-text);
+  padding: 0.35em 0.5em;
+  opacity: 0.75;
+}
+#theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  opacity: 1;
+}
+#theme-toggle [data-icon] { display: none; }
+#theme-toggle[data-state="system"] [data-icon="system"],
+#theme-toggle[data-state="light"]  [data-icon="light"],
+#theme-toggle[data-state="dark"]   [data-icon="dark"] { display: inline-block; }
