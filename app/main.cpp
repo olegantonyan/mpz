@@ -82,8 +82,14 @@ int main(int argc, char *argv[]) {
 
   QApplication a(argc, argv);
   a.setApplicationName("mpz");
-  a.setApplicationVersion(VERSION);
-  a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
+  QString version = VERSION;
+#ifdef PACKAGE_VERSION
+  if (QStringLiteral(PACKAGE_VERSION) != version) {
+    version = QString("%1 [%2]").arg(version, PACKAGE_VERSION);
+  }
+#endif
+  a.setApplicationVersion(version);
+  a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
 
   auto arguments = args(argc, argv);
   if (arguments.size() == 1 && arguments.first() == "--version") {

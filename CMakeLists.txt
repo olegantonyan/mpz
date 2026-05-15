@@ -32,6 +32,8 @@ else()
   set(QT_VERSION_MAJOR ${Qt6Core_VERSION_MAJOR})
 endif()
 
+set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
+
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
   app/busyspinner.cpp
@@ -186,6 +188,10 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
   MACOSX_BUNDLE TRUE
   WIN32_EXECUTABLE TRUE
 )
+
+if(PACKAGE_VERSION)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PACKAGE_VERSION="${PACKAGE_VERSION}")
+endif()
 
 
 
