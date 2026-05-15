@@ -8,7 +8,7 @@ on:
 
 jobs:
   unit:
-    name: unit tests (${{ matrix.qt }}, Ubuntu 24.04)
+    name: unit tests ${{ matrix.qt }}
     runs-on: ubuntu-24.04
 
     strategy:
