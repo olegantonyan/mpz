@@ -46,7 +46,12 @@ private:
 };
 
 void TestCueParser::init() {
-  tempDir.setAutoRemove(true);
+  // QTemporaryDir is a member and constructed once per test object, so files
+  // accumulate across slots without this reset. resolve_audio_file's stem
+  // fallback iterates the dir in QDir's default IgnoreCase sort — leftover
+  // entries that case-collide with a newly created fixture can be returned
+  // first, flipping the resolved path between runs.
+  tempDir = QTemporaryDir{};
   QVERIFY(tempDir.isValid());
 }
 
