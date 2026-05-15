@@ -23,6 +23,8 @@ else()
   message(STATUS "DBus support OFF")
 endif()
 
+option(BUILD_TESTING "Build unit tests" OFF)
+
 option(USE_QT5 "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
   find_package(Qt5 REQUIRED COMPONENTS ${QT_COMPONENTS})
@@ -356,4 +358,9 @@ endforeach()
 
 if(QT_VERSION_MAJOR EQUAL 6)
   qt_finalize_executable(${CMAKE_PROJECT_NAME})
+endif()
+
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
 endif()

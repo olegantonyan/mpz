@@ -62,7 +62,10 @@
     { "name": "release-qt6-syslibs", "inherits": ["release", "syslibs"] },
 
     { "name": "debug-qt6-clang", "inherits": ["debug", "clang"] },
-    { "name": "release-qt6-clang", "inherits": ["release", "clang"] }
+    { "name": "release-qt6-clang", "inherits": ["release", "clang"] },
+
+    { "name": "debug-qt6-tests", "inherits": ["debug"], "cacheVariables": { "BUILD_TESTING": "ON" } },
+    { "name": "debug-qt5-tests", "inherits": ["debug", "qt5"], "cacheVariables": { "BUILD_TESTING": "ON" } }
 
   ]
 }
