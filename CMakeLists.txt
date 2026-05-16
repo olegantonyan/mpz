@@ -52,6 +52,7 @@ set(PROJECT_SOURCES
   app/ipc/instance.cpp
   app/main.cpp
   app/mainmenu.cpp
+  app/mpzapplication.cpp
   app/mainwindow.cpp
   app/directory_ui/directorymodel/proxy.cpp
   app/directory_ui/directorymodel/localfs.cpp
@@ -168,6 +169,10 @@ endforeach()
 
 if (WIN32)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+endif()
+
+if (APPLE)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "-framework IOKit")
 endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)

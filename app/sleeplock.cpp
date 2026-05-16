@@ -51,6 +51,19 @@ void SleepLock::activate(bool state) {
   } else {
     SetThreadExecutionState(ES_CONTINUOUS);
   }
+#elif defined(Q_OS_MACOS)
+  if (state) {
+    if (sleep_assertion == kIOPMNullAssertionID) {
+      CFStringRef reason = CFSTR("mpz is playing music");
+      IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleSystemSleep,
+                                  kIOPMAssertionLevelOn, reason, &sleep_assertion);
+    }
+  } else {
+    if (sleep_assertion != kIOPMNullAssertionID) {
+      IOPMAssertionRelease(sleep_assertion);
+      sleep_assertion = kIOPMNullAssertionID;
+    }
+  }
 #else
   Q_UNUSED(state)
 #endif
