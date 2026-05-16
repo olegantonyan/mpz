@@ -38,6 +38,7 @@ jobs:
         run: |
           PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
 
       - name: Build portable + installer
         env:
@@ -50,12 +51,12 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
           archive: false
 
       - uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-installer.exe
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
           archive: false
 
   qt5:
@@ -82,6 +83,7 @@ jobs:
         run: |
           PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
 
       - name: Build portable
         env:
@@ -93,7 +95,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win32-qt5-portable.zip
           archive: false
 
   release-upload:

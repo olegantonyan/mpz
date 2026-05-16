@@ -12,7 +12,8 @@ cp -R $SRC_DIR/win/installer .
 mkdir installer/packages/mpz/data
 
 ARTIFACT_PATH=installer/packages/mpz/data/
-ARTIFACT_NAME=mpz-$VERSION-win64-qt6-installer.exe
+SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win64-qt6-installer.exe
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
