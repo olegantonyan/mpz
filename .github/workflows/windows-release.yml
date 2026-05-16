@@ -2,6 +2,7 @@ name: Windows release
 
 on:
   workflow_dispatch:
+  pull_request:
   # TODO once the build is proven green on a branch, add:
   #   release:
   #     types: [published]
