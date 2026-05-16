@@ -2,9 +2,11 @@ name: macOS build
 
 on:
   push:
-    branches: [master, macos-build]
+    branches: [master]
   workflow_dispatch:
   pull_request:
+  release:
+    types: [published]
 
 defaults:
   run:
