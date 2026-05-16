@@ -11,8 +11,8 @@
   #include "mpd_client/status.h"
   #include "mpd_client/output.h"
 #endif
-#ifdef ENABLE_DEATHHANDLER
-  #include "death_handler.h"
+#ifdef ENABLE_CRASH_HANDLER
+  #include "crash_handler.h"
 #endif
 #ifdef SENTRY_DSN_STRING
   #include "sentry_init.h"
@@ -77,16 +77,22 @@ int ipc_port(Config::Global &global_conf) {
 }
 
 int main(int argc, char *argv[]) {
-#ifdef ENABLE_DEATHHANDLER
-  Debug::DeathHandler dh;
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::install_crash_handler();
 #endif
   registerMetaTypes();
   RNJesus::seed();
 
   QApplication a(argc, argv);
   a.setApplicationName("mpz");
-  a.setApplicationVersion(VERSION);
-  a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName()).arg(a.applicationVersion()));
+  QString version = VERSION;
+#ifdef PACKAGE_VERSION
+  if (QStringLiteral(PACKAGE_VERSION) != version) {
+    version = QString("%1 [%2]").arg(version, PACKAGE_VERSION);
+  }
+#endif
+  a.setApplicationVersion(version);
+  a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
 
 #ifdef SENTRY_DSN_STRING
   mpz::sentry::init(SENTRY_DSN_STRING, VERSION);

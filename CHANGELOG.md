@@ -2,11 +2,16 @@
 
 ### Added
 
+- when showing track in file manager make it selected there (works on multiselection too)
+
 ### Fixed
 
 - use album artist when artist tag is missing
+- load m3u in playlists now correclty works on radio streams
 
 ### Misc
+
+- replaced DeathHandler with cpptrace which is able to print meaningful stacktrace without debug symbols
 
 ## [2.0.6] - 2026-05-13
 

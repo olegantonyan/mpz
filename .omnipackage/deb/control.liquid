@@ -7,6 +7,6 @@ Standards-Version: 3.9.4
 Homepage: {{ homepage }}
 
 Package: {{ package_name }}
-Architecture: amd64
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, {{ runtime_dependencies | join: ', ' }}
 Description: {{ description }}

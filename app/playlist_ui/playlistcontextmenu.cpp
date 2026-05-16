@@ -1,12 +1,11 @@
 #include "playlistcontextmenu.h"
 #include "trackinfodialog.h"
+#include "reveal_in_filemanager.h"
 
 #include <QMenu>
 #include <QAction>
-#include <QDesktopServices>
 #include <QClipboard>
 #include <QApplication>
-#include <QUrl>
 
 namespace PlaylistUi {
   PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), proxy(p), view(v), search(s) {
@@ -86,14 +85,11 @@ namespace PlaylistUi {
   }
 
   void PlaylistContextMenu::on_showInFilemanager() {
-    QStringList str;
+    QStringList paths;
     for (const auto &i : view->selectionModel()->selectedRows()) {
-      auto dir = proxy->activeModel()->itemAt(proxy->mapToSource(i)).dir();
-      if (!str.contains(dir)) {
-        str << dir;
-        QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
-      }
+      paths << proxy->activeModel()->itemAt(proxy->mapToSource(i)).path();
     }
+    revealInFileManager(paths);
   }
 
   void PlaylistContextMenu::on_trackInfo() {

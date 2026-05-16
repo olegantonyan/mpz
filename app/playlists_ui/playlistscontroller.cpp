@@ -170,13 +170,14 @@ namespace PlaylistsUi {
     auto playlist = proxy->itemAt(index);
 
     QVector<Track> tracks;
-    QStringList paths;
+    QStringList keys;
     for (const auto &it : std::as_const(filespaths)) {
       Playlist::Loader ldr(it);
       for (const auto &track : ldr.tracks()) {
-        if (!paths.contains(track.path())) {
+        const auto key = track.url().toString();
+        if (!keys.contains(key)) {
           tracks.append(track);
-          paths << track.path();
+          keys << key;
         }
       }
     }

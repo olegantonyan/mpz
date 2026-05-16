@@ -23,6 +23,8 @@ else()
   message(STATUS "DBus support OFF")
 endif()
 
+option(BUILD_TESTING "Build unit tests" OFF)
+
 option(USE_QT5 "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
   find_package(Qt5 REQUIRED COMPONENTS ${QT_COMPONENTS})
@@ -31,6 +33,8 @@ else()
   find_package(Qt6 REQUIRED COMPONENTS ${QT_COMPONENTS})
   set(QT_VERSION_MAJOR ${Qt6Core_VERSION_MAJOR})
 endif()
+
+set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 
 set(PROJECT_SOURCES
   app/about_ui/aboutdialog.cpp
@@ -87,6 +91,7 @@ set(PROJECT_SOURCES
   app/statusbarlabel.cpp
   app/sysinfo.cpp
   app/track.cpp
+  app/reveal_in_filemanager.cpp
   app/trayicon.cpp
   app/volumecontrol.cpp
   app/playback/stream.cpp
@@ -161,12 +166,17 @@ foreach(_qt_comp IN LISTS QT_COMPONENTS)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${_qt_comp})
 endforeach()
 
+if (WIN32)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+endif()
+
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
@@ -180,6 +190,10 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
   MACOSX_BUNDLE TRUE
   WIN32_EXECUTABLE TRUE
 )
+
+if(PACKAGE_VERSION)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PACKAGE_VERSION="${PACKAGE_VERSION}")
+endif()
 
 
 
@@ -292,16 +306,25 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 # ENDOF LIBMPDCLIENT
 
-# DEATHHANDLER
-if (UNIX AND (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64|arm64|x86|x86_64|amd64|i[3-6]86)$"))
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEATHHANDLER)
-  set(DEATHHANDLER_DIR 3rdparty/DeathHandler)
-  add_library(deathhandler ${DEATHHANDLER_DIR}/death_handler.cc)
-  target_link_libraries(deathhandler PRIVATE dl)
-  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${DEATHHANDLER_DIR})
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE deathhandler)
+# CPPTRACE
+# Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives
+# demangled function names from STRIPPED release binaries (no DWARF shipped).
+# Skipped on Windows: PE has no .dynsym equivalent for executables, so the
+# same trick can't work there without shipping DWARF or PDBs.
+if(UNIX AND NOT APPLE)
+  set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
+  set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
+  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
+  set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
+  set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+  add_subdirectory(${CPPTRACE_DIR})
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
+  target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
 endif()
-# ENDOF DEATHHANDLER
+# ENDOF CPPTRACE
 
 # SENTRY
 set(SENTRY_DSN "" CACHE STRING "Sentry DSN (empty disables crash reporting)")
@@ -358,4 +381,9 @@ endforeach()
 
 if(QT_VERSION_MAJOR EQUAL 6)
   qt_finalize_executable(${CMAKE_PROJECT_NAME})
+endif()
+
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
 endif()

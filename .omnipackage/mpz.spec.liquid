@@ -20,10 +20,7 @@ BuildRequires: {{ build_dependencies | join: ' ' }}
 %build
 mkdir _build
 cd _build
-# SENTRY_DSN is public (clients embed it) and comes from the host .env via the
-# `secrets:` block in .omnipackage/config.yml. Empty value disables crash
-# reporting at compile time, so source builds without the secret still work.
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }} ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }} ..
 make %{?_smp_mflags}
 
 

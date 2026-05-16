@@ -1,0 +1,118 @@
+name: Windows release
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  pull_request:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  qt6:
+    name: Qt6 64-bit (portable + installer)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install dependencies
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.3
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          modules: 'qtmultimedia'
+          tools: 'tools_mingw1310 tools_ifw tools_ninja tools_cmake'
+
+      - name: Extract version
+        id: ver
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: github.event_name != 'release'
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
+
+      - name: Build portable + installer
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+        run: |
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./win/portable_win64_qt6_host.sh
+          ./win/installer_win64_qt6_host.sh
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
+          archive: false
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
+          archive: false
+
+  qt5:
+    name: Qt5 32-bit portable
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install dependencies
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.15.2
+          host: windows
+          target: desktop
+          arch: win32_mingw81
+          tools: 'tools_mingw,qt.tools.win32_mingw810 tools_ninja tools_cmake'
+
+      - name: Extract version
+        id: ver
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: github.event_name != 'release'
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
+
+      - name: Build portable
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+        run: |
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./win/portable_win32_qt5_host.sh
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win32-qt5-portable.zip
+          archive: false
+
+  release-upload:
+    name: Attach artifacts to GitHub release
+    needs: [qt6, qt5]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber

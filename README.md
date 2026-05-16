@@ -1,4 +1,5 @@
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![GPLv3 License](https://img.shields.io/badge/license-GPL--3.0-blue)](https://github.com/olegantonyan/mpz/blob/master/license.txt)
+[![tests](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml/badge.svg)](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml)
 [![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
 [![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html)
 

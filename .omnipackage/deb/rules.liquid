@@ -6,14 +6,12 @@
 %:
 	dh $@
 
-# SENTRY_DSN is public (clients embed it) and is forwarded from the host .env
-# via the `secrets:` block in .omnipackage/config.yml. Empty value disables
-# crash reporting at compile time, so source builds without the secret still work.
+# Use dh_auto_configure (not bare `cmake`) so debhelper builds out-of-source
+# in obj-$(DEB_HOST_MULTIARCH)/. cpptrace's PreventInSourceBuilds guard fires
+# otherwise. -DCMAKE_INSTALL_PREFIX=/usr is set automatically by debhelper.
 override_dh_auto_configure:
-	cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }}
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }}
 
-# Upload debug symbols to Sentry after dh_strip splits DWARF into
-# debian/mpz-dbgsym/usr/lib/debug/. Silent no-op when SENTRY_AUTH_TOKEN is unset.
 override_dh_strip:
 	dh_strip --automatic-dbgsym
 	./scripts/upload-symbols.sh debian/ || true
