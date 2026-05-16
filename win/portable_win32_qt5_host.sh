@@ -32,7 +32,12 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 echo -e "output dir:\t$OUTPUT_DIR"
 
-cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON $SRC_DIR && ninja
+EXTRA_CMAKE_ARGS=""
+if [ -n "${PACKAGE_VERSION:-}" ]; then
+    EXTRA_CMAKE_ARGS="-DPACKAGE_VERSION=$PACKAGE_VERSION"
+fi
+
+cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
 windeployqt.exe ./mpz.exe --dir $ARTIFACT_NAME
 cp ./mpz.exe $ARTIFACT_NAME
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"

@@ -33,6 +33,12 @@ jobs:
         id: ver
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: github.event_name != 'release'
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+
       - name: Build portable + installer
         env:
           QTDIR: ${{ env.QT_ROOT_DIR }}
@@ -70,6 +76,12 @@ jobs:
       - name: Extract version
         id: ver
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: github.event_name != 'release'
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
 
       - name: Build portable
         env:

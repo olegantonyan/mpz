@@ -15,7 +15,12 @@ echo -e "source dir:\t$SRC_DIR"
 echo -e "build dir:\t$TMP_DIR"
 echo -e "output dir:\t$OUTPUT_DIR"
 
-cmake -DCMAKE_BUILD_TYPE=Release -GNinja $SRC_DIR && ninja
+EXTRA_CMAKE_ARGS=""
+if [ -n "${PACKAGE_VERSION:-}" ]; then
+    EXTRA_CMAKE_ARGS="-DPACKAGE_VERSION=$PACKAGE_VERSION"
+fi
+
+cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
 windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release
 cp ./mpz.exe $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME
