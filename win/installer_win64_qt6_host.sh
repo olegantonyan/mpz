@@ -4,6 +4,7 @@ source `dirname $0`/_env.sh
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(`dirname $0`/_extract_version.sh)
+OUTPUT_DIR=${MPZ_OUTPUT_DIR:-$HOME/Desktop}
 TMP_DIR=$(mktemp -d -t mpz-build-win64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
@@ -33,6 +34,6 @@ cat ./config/config.xml
 cat ./packages/mpz/meta/package.xml
 
 binarycreator.exe --offline-only -c config/config.xml -p packages $ARTIFACT_NAME
-cp ./$ARTIFACT_NAME $HOME/Desktop
+cp "./$ARTIFACT_NAME" "$OUTPUT_DIR/"
 
 

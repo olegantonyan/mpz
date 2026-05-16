@@ -31,49 +31,25 @@ jobs:
 
       - name: Extract version
         id: ver
-        run: |
-          V=$(grep -E 'project\(mpz VERSION' CMakeLists.txt | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
-          echo "version=$V" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
-      - name: Configure & build
+      - name: Build portable + installer
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
         run: |
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
-          ninja
-
-      - name: Package portable
-        run: |
-          V=${{ steps.ver.outputs.version }}
-          DIR=mpz-$V-win64-qt6-portable
-          mkdir "$DIR"
-          windeployqt6.exe build/mpz.exe --dir "$DIR" --compiler-runtime --release
-          cp build/mpz.exe "$DIR/"
-          cp -R "$QT_ROOT_DIR/plugins/multimedia" "$DIR/"
-          7z a "$DIR.zip" "$DIR"
-
-      - name: Package installer
-        run: |
-          V=${{ steps.ver.outputs.version }}
-          OUT=mpz-$V-win64-qt6-installer.exe
-          cp -R win/installer staging
-          mkdir -p staging/packages/mpz/data
-          windeployqt6.exe build/mpz.exe --dir staging/packages/mpz/data --compiler-runtime --release
-          cp build/mpz.exe staging/packages/mpz/data/
-          cp -R "$QT_ROOT_DIR/plugins/multimedia" staging/packages/mpz/data/
-          cp license.txt staging/packages/mpz/meta/
-          sed -Ei "s|<Version>(.*)</Version>|<Version>$V</Version>|g" staging/config/config.xml
-          sed -Ei "s|<Version>(.*)</Version>|<Version>$V</Version>|g" staging/packages/mpz/meta/package.xml
-          sed -Ei "s|<ReleaseDate>(.*)</ReleaseDate>|<ReleaseDate>$(date +%Y-%m-%d)</ReleaseDate>|g" staging/packages/mpz/meta/package.xml
-          (cd staging && binarycreator.exe --offline-only -c config/config.xml -p packages "../$OUT")
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./win/portable_win64_qt6_host.sh
+          ./win/installer_win64_qt6_host.sh
 
       - uses: actions/upload-artifact@v7
         with:
-          path: mpz-${{ steps.ver.outputs.version }}-win64-qt6-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-portable.zip
           archive: false
 
       - uses: actions/upload-artifact@v7
         with:
-          path: mpz-${{ steps.ver.outputs.version }}-win64-qt6-installer.exe
+          path: dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-installer.exe
           archive: false
 
   qt5:
@@ -93,28 +69,19 @@ jobs:
 
       - name: Extract version
         id: ver
-        run: |
-          V=$(grep -E 'project\(mpz VERSION' CMakeLists.txt | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
-          echo "version=$V" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
-      - name: Configure & build (USE_QT5)
+      - name: Build portable
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
         run: |
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DUSE_QT5=ON -GNinja ..
-          ninja
-
-      - name: Package portable
-        run: |
-          V=${{ steps.ver.outputs.version }}
-          DIR=mpz-$V-win32-qt5-portable
-          mkdir "$DIR"
-          windeployqt.exe build/mpz.exe --dir "$DIR"
-          cp build/mpz.exe "$DIR/"
-          7z a "$DIR.zip" "$DIR"
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./win/portable_win32_qt5_host.sh
 
       - uses: actions/upload-artifact@v7
         with:
-          path: mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip
           archive: false
 
 # Deferred until the build jobs are green on a branch:
