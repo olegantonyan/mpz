@@ -3,10 +3,8 @@ name: Windows release
 on:
   workflow_dispatch:
   pull_request:
-  # TODO once the build is proven green on a branch, add:
-  #   release:
-  #     types: [published]
-  # and re-enable the release-upload job below.
+  release:
+    types: [published]
 
 defaults:
   run:
@@ -84,23 +82,21 @@ jobs:
           path: dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip
           archive: false
 
-# Deferred until the build jobs are green on a branch:
-#
-#   release-upload:
-#     needs: [qt6, qt5]
-#     if: github.event_name == 'release'
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: write
-#     steps:
-#       - uses: actions/download-artifact@v7
-#         with:
-#           path: dist
-#           merge-multiple: true
-#       - name: Attach to GitHub release
-#         env:
-#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         run: |
-#           gh release upload "${{ github.event.release.tag_name }}" \
-#             dist/*.zip dist/*.exe \
-#             --repo "${{ github.repository }}" --clobber
+  release-upload:
+    name: Attach artifacts to GitHub release
+    needs: [qt6, qt5]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
