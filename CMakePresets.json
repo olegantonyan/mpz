@@ -55,6 +55,15 @@
     { "name": "debug-qt6", "inherits": ["debug"] },
     { "name": "release-qt6", "inherits": ["release"] },
 
+    {
+      "name": "release-macos-qt6",
+      "inherits": ["release"],
+      "cacheVariables": {
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0",
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    },
+
     { "name": "debug-qt5", "inherits": ["debug", "qt5"] },
     { "name": "release-qt5", "inherits": ["release", "qt5"] },
 
