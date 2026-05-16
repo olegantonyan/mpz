@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: unit tests ${{ matrix.qt }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - qt: Qt6
+            workflow: tests-qt6
+            packages: qt6-tools-dev qt6-base-dev qt6-multimedia-dev
+          - qt: Qt5
+            workflow: tests-qt5
+            packages: qtbase5-dev-tools qtchooser qtbase5-dev qtmultimedia5-dev libqt5x11extras5-dev
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build ${{ matrix.packages }}
+
+      - name: Configure, build and test
+        run: cmake --workflow ${{ matrix.workflow }}
