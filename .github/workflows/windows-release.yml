@@ -1,0 +1,136 @@
+name: Windows release
+
+on:
+  workflow_dispatch:
+  # TODO once the build is proven green on a branch, add:
+  #   release:
+  #     types: [published]
+  # and re-enable the release-upload job below.
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  qt6:
+    name: Qt6 64-bit (portable + installer)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt 6.11.1 + MinGW 13.1 + IFW + Ninja
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.11.1
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          modules: 'qtmultimedia'
+          tools: 'tools_mingw1310 tools_ifw tools_ninja tools_cmake'
+
+      - name: Extract version
+        id: ver
+        run: |
+          V=$(grep -E 'project\(mpz VERSION' CMakeLists.txt | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Configure & build
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
+          ninja
+
+      - name: Package portable
+        run: |
+          V=${{ steps.ver.outputs.version }}
+          DIR=mpz-$V-win64-qt6-portable
+          mkdir "$DIR"
+          windeployqt6.exe build/mpz.exe --dir "$DIR" --compiler-runtime --release
+          cp build/mpz.exe "$DIR/"
+          cp -R "$QT_ROOT_DIR/plugins/multimedia" "$DIR/"
+          7z a "$DIR.zip" "$DIR"
+
+      - name: Package installer
+        run: |
+          V=${{ steps.ver.outputs.version }}
+          OUT=mpz-$V-win64-qt6-installer.exe
+          cp -R win/installer staging
+          mkdir -p staging/packages/mpz/data
+          windeployqt6.exe build/mpz.exe --dir staging/packages/mpz/data --compiler-runtime --release
+          cp build/mpz.exe staging/packages/mpz/data/
+          cp -R "$QT_ROOT_DIR/plugins/multimedia" staging/packages/mpz/data/
+          cp license.txt staging/packages/mpz/meta/
+          sed -Ei "s|<Version>(.*)</Version>|<Version>$V</Version>|g" staging/config/config.xml
+          sed -Ei "s|<Version>(.*)</Version>|<Version>$V</Version>|g" staging/packages/mpz/meta/package.xml
+          sed -Ei "s|<ReleaseDate>(.*)</ReleaseDate>|<ReleaseDate>$(date +%Y-%m-%d)</ReleaseDate>|g" staging/packages/mpz/meta/package.xml
+          (cd staging && binarycreator.exe --offline-only -c config/config.xml -p packages "../$OUT")
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-qt6
+          path: |
+            mpz-*-win64-qt6-portable.zip
+            mpz-*-win64-qt6-installer.exe
+
+  qt5:
+    name: Qt5 32-bit portable
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt 5.15.2 + MinGW 8.1 32-bit
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.15.2
+          host: windows
+          target: desktop
+          arch: win32_mingw81
+          modules: 'qtmultimedia'
+          tools: 'tools_mingw,qt.tools.win32_mingw810 tools_ninja tools_cmake'
+
+      - name: Extract version
+        id: ver
+        run: |
+          V=$(grep -E 'project\(mpz VERSION' CMakeLists.txt | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Configure & build (USE_QT5)
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DUSE_QT5=ON -GNinja ..
+          ninja
+
+      - name: Package portable
+        run: |
+          V=${{ steps.ver.outputs.version }}
+          DIR=mpz-$V-win32-qt5-portable
+          mkdir "$DIR"
+          windeployqt.exe build/mpz.exe --dir "$DIR"
+          cp build/mpz.exe "$DIR/"
+          7z a "$DIR.zip" "$DIR"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-qt5
+          path: mpz-*-win32-qt5-portable.zip
+
+# Deferred until the build jobs are green on a branch:
+#
+#   release-upload:
+#     needs: [qt6, qt5]
+#     if: github.event_name == 'release'
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write
+#     steps:
+#       - uses: actions/download-artifact@v4
+#         with:
+#           path: dist
+#           merge-multiple: true
+#       - name: Attach to GitHub release
+#         env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           gh release upload "${{ github.event.release.tag_name }}" \
+#             dist/*.zip dist/*.exe \
+#             --repo "${{ github.repository }}" --clobber
