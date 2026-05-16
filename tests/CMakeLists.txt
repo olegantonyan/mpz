@@ -112,6 +112,18 @@ mpz_add_test(tst_cueparser tst_cueparser.cpp
 target_link_libraries(tst_cueparser PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
 
+# Real-world cue fixtures live under tests/fixtures/cue/. The path is injected
+# at build time so the test executable can find them regardless of CWD.
+mpz_add_test(tst_cueparser_fixtures tst_cueparser_fixtures.cpp
+  ${APP}/playlist/cueparser.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_cueparser_fixtures PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+target_compile_definitions(tst_cueparser_fixtures PRIVATE
+  CUE_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/cue")
+
 mpz_add_test(tst_loader tst_loader.cpp
   ${APP}/playlist/loader.cpp
   ${APP}/playlist/fileparser.cpp
