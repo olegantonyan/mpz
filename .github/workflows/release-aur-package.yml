@@ -3,7 +3,7 @@ name: Release AUR package
 on:
   workflow_dispatch:
   release:
-    types: [published, created, edited, prereleased, deleted, unpublished]
+    types: [published]
 
 jobs:
   release_aur_package:
@@ -11,14 +11,14 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.1
+        ruby-version: 4.0
 
     - name: Run release script
       env:
