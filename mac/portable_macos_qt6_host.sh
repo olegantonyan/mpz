@@ -10,7 +10,7 @@ TMP_DIR=$(mktemp -d -t mpz-build-macos-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd "$TMP_DIR"
 
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-macos-arm64-qt6
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-macos-universal-qt6
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -24,7 +24,7 @@ fi
 
 cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
-      -DCMAKE_OSX_ARCHITECTURES=arm64 \
+      -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
       -GNinja \
       "${EXTRA_CMAKE_ARGS[@]}" \
       "$SRC_DIR"
