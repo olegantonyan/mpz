@@ -1,4 +1,4 @@
-name: Windows release
+name: Release Windows
 
 on:
   push:
@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   qt6:
-    name: Qt6 64-bit (portable + installer)
+    name: Qt6 64-bit
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
@@ -60,7 +60,7 @@ jobs:
           archive: false
 
   qt5:
-    name: Qt5 32-bit portable
+    name: Qt5 32-bit
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
