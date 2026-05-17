@@ -31,7 +31,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 #### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
 
-**New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds from master](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
+**New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
 
 <details>
 <summary>Already using the old Open Build Service repositories?</summary>
