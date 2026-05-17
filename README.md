@@ -31,7 +31,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 #### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
 
-**New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds from master](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
+**New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
 
 <details>
 <summary>Already using the old Open Build Service repositories?</summary>
@@ -70,32 +70,16 @@ Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, lib
 Packages' names may differ in different distros.
 
 ```
-git clone git@github.com:olegantonyan/mpz.git
-cd mpz
-mkdir build
-cd build
-cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release .. # for Qt5 add -DUSE_QT5=ON
-make -j`nproc`
-# now you can use mpz binary directly
+cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+# now you can use build/mpz binary directly
 # optionally, install to /usr/local:
-sudo make install
+sudo cmake --install build
 ```
 
-You can also link against shared libraries Taglib, yaml-cpp, or libmpdclient installed on your OS instead of using vendored statically compiled versions.
-To do this you have to add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON` to cmake cli.
+To build Qt5 version add `-DUSE_QT5=ON` to cmake cli.
 
-```
-git clone git@github.com:olegantonyan/mpz.git
-cd mpz
-mkdir build
-cd build
-cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON ..
-make -j`nproc`
-# now you can use mpz binary directly
-# optionally, install to /usr/local:
-sudo make install
-```
-
+You can also link against shared libraries Taglib, yaml-cpp, or libmpdclient installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON` to cmake cli.
 
 ## Configuration
 
