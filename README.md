@@ -64,6 +64,18 @@ makepkg -si
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
+#### macOS (experimental)
+
+Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
+
+The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz.app` to `/Applications`, remove the quarantine flag from a terminal:
+
+```
+xattr -dr com.apple.quarantine /Applications/mpz.app
+```
+
+The app will then launch normally.
+
 #### From sources
 
 Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 on openSUSE).
