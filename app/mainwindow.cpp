@@ -11,6 +11,15 @@
 #include <QTableWidgetItem>
 #include <QHash>
 
+#ifdef Q_OS_MACOS
+  #include "about_ui/aboutdialog.h"
+  #include "feedback_ui/feedbackform.h"
+  #include "config/storage.h"
+  #include <QMenuBar>
+  #include <QDesktopServices>
+  #include <QUrl>
+#endif
+
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -75,6 +84,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
+#ifdef Q_OS_MACOS
+  setupMacMenuBar();
+#endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -517,3 +529,81 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   }
   disconnect(conn);
 }
+
+#ifdef Q_OS_MACOS
+void MainWindow::setupMacMenuBar() {
+  auto *bar = menuBar();
+
+  auto *app_menu = bar->addMenu(tr("mpz"));
+
+  auto *about = app_menu->addAction(tr("About mpz"));
+  about->setMenuRole(QAction::AboutRole);
+  connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
+
+  auto *prefs = app_menu->addAction(tr("Settings…"));
+  prefs->setMenuRole(QAction::PreferencesRole);
+  prefs->setShortcut(QKeySequence::Preferences);
+  connect(prefs, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
+  });
+
+  auto *quit = app_menu->addAction(tr("Quit mpz"));
+  quit->setMenuRole(QAction::QuitRole);
+  quit->setShortcut(QKeySequence::Quit);
+  connect(quit, &QAction::triggered, this, &QMainWindow::close);
+
+  auto *playback = bar->addMenu(tr("Playback"));
+
+  auto *play_pause = playback->addAction(tr("Play / Pause"));
+  play_pause->setShortcut(Qt::Key_Space);
+  connect(play_pause, &QAction::triggered, this, [=]() {
+    if (player->state() == Playback::Controller::Playing) {
+      player->controls().pause->click();
+    } else {
+      player->controls().play->click();
+    }
+  });
+
+  auto *stop_action = playback->addAction(tr("Stop"));
+  connect(stop_action, &QAction::triggered, this, [=]() { player->controls().stop->click(); });
+
+  playback->addSeparator();
+
+  auto *next_action = playback->addAction(tr("Next Track"));
+  next_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right));
+  connect(next_action, &QAction::triggered, this, [=]() { player->controls().next->click(); });
+
+  auto *prev_action = playback->addAction(tr("Previous Track"));
+  prev_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left));
+  connect(prev_action, &QAction::triggered, this, [=]() { player->controls().prev->click(); });
+
+  playback->addSeparator();
+
+  auto *vol_up = playback->addAction(tr("Volume Up"));
+  vol_up->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Up));
+  connect(vol_up, &QAction::triggered, this, [=]() {
+    player->setVolume(qMin(100, player->volume() + 5));
+  });
+
+  auto *vol_down = playback->addAction(tr("Volume Down"));
+  vol_down->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Down));
+  connect(vol_down, &QAction::triggered, this, [=]() {
+    player->setVolume(qMax(0, player->volume() - 5));
+  });
+
+  auto *help = bar->addMenu(tr("Help"));
+
+  auto *website = help->addAction(tr("mpz Website"));
+  connect(website, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
+  });
+
+  auto *feedback = help->addAction(tr("Send Feedback…"));
+  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
+
+  auto *bug_report = help->addAction(tr("Report a Bug…"));
+  connect(bug_report, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz/issues"));
+  });
+}
+#endif

@@ -91,6 +91,9 @@ private:
 #endif
   void setupShortcuts();
   void setupMainMenu();
+#ifdef Q_OS_MACOS
+  void setupMacMenuBar();
+#endif
   void setupWindowTitle();
   void setupPlaybackLog();
   void setupSortMenu();
