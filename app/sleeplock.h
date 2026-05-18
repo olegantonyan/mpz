@@ -4,6 +4,10 @@
 #include <QObject>
 #include <QProcess>
 
+#ifdef Q_OS_MACOS
+  #include <IOKit/pwr_mgt/IOPMLib.h>
+#endif
+
 class SleepLock : public QObject {
   Q_OBJECT
 public:
@@ -14,6 +18,9 @@ public slots:
 
 private:
   QProcess proc;
+#ifdef Q_OS_MACOS
+  IOPMAssertionID sleep_assertion = kIOPMNullAssertionID;
+#endif
 };
 
 #endif // SHUTDOWNLOCK_H

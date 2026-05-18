@@ -3,6 +3,7 @@
 ### Added
 
 - when showing track in file manager make it selected there (works on multiselection too)
+- experimental build for macOS
 
 ### Fixed
 

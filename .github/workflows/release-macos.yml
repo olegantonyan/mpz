@@ -1,0 +1,94 @@
+name: Release macOS [EXPERIMENTAL]
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  pull_request:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  qt6:
+    name: Qt6 arm64+x86_64 universal
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Qt6
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.3
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: 'qtmultimedia'
+          tools: 'tools_ninja tools_cmake'
+
+      - name: Extract version
+        id: ver
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: github.event_name != 'release'
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
+
+      - name: Build
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+        run: |
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./mac/portable_macos_qt6_host.sh
+
+      - name: Inspect bundle
+        run: |
+          APP="$MPZ_OUTPUT_DIR"/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.app
+          echo "--- bundle tree ---"
+          find "$APP" -maxdepth 3 -print
+          echo "--- Info.plist ---"
+          plutil -p "$APP/Contents/Info.plist"
+          echo "--- arch slices (executable) ---"
+          lipo -info "$APP/Contents/MacOS/mpz"
+          echo "--- arch slices (Qt frameworks) ---"
+          find "$APP/Contents/Frameworks" -name '*.framework' -maxdepth 2 -print | while read fw; do
+            bin="$fw/Versions/A/$(basename "$fw" .framework)"
+            [ -f "$bin" ] && lipo -info "$bin"
+          done | head -20
+          echo "--- linked libs (non-system) ---"
+          otool -L "$APP/Contents/MacOS/mpz" | grep -vE '^\s*(/System/|/usr/lib/)' || true
+          echo "--- codesign verify ---"
+          codesign --verify --deep --strict --verbose=2 "$APP" || true
+        env:
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.dmg
+          archive: false
+
+  release-upload:
+    name: Attach artifacts to GitHub release
+    needs: [qt6]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
