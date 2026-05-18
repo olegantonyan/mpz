@@ -1,4 +1,4 @@
-name: Release macOS [EXPERIMENTAL]
+name: Release macOS dmg
 
 on:
   push:

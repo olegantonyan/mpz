@@ -1,4 +1,4 @@
-name: Release packages - next
+name: Release Linux packages - next
 
 on:
   workflow_dispatch:

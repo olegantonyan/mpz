@@ -1,4 +1,4 @@
-name: Release packages - stable
+name: Release Linux packages - stable
 
 on:
   workflow_dispatch:
