@@ -25,6 +25,8 @@ jobs:
   qt6:
     name: Qt6 arm64+x86_64 universal
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
@@ -78,26 +80,16 @@ jobs:
         env:
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
 
-      - uses: actions/upload-artifact@v7
+      - name: Upload as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
         with:
           path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.dmg
           archive: false
 
-  release-upload:
-    name: Attach artifacts to GitHub release
-    needs: [qt6]
-    if: github.event_name == 'release' || github.event.inputs.release_tag != ''
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v7
-        with:
-          path: dist
-          merge-multiple: true
-
-      - name: Upload to release
+      - name: Upload to GitHub release
+        if: env.RELEASE_TAG != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" dist/* --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-macos-universal-qt6.dmg" --repo "${{ github.repository }}" --clobber

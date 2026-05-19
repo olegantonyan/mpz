@@ -4,6 +4,12 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing release tag to upload artifacts to (leave empty for a normal CI build)'
+        required: false
+        type: string
+        default: ''
   pull_request:
   release:
     types: [published]
@@ -12,10 +18,15 @@ defaults:
   run:
     shell: bash
 
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
+
 jobs:
   qt6:
     name: Qt6 64-bit
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
@@ -34,7 +45,7 @@ jobs:
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
-        if: github.event_name != 'release'
+        if: env.RELEASE_TAG == ''
         run: |
           PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
@@ -49,19 +60,27 @@ jobs:
           ./win/portable_win64_qt6_host.sh
           ./win/installer_win64_qt6_host.sh
 
-      - uses: actions/upload-artifact@v7
+      - name: Upload as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
+          path: |
+            dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
+            dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
           archive: false
 
-      - uses: actions/upload-artifact@v7
-        with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
-          archive: false
+      - name: Upload to GitHub release
+        if: env.RELEASE_TAG != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-portable.zip" "dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-installer.exe" --repo "${{ github.repository }}" --clobber
 
   qt5:
     name: Qt5 32-bit
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
@@ -79,7 +98,7 @@ jobs:
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
-        if: github.event_name != 'release'
+        if: env.RELEASE_TAG == ''
         run: |
           PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
@@ -93,26 +112,16 @@ jobs:
           mkdir -p "$MPZ_OUTPUT_DIR"
           ./win/portable_win32_qt5_host.sh
 
-      - uses: actions/upload-artifact@v7
+      - name: Upload as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
         with:
           path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win32-qt5-portable.zip
           archive: false
 
-  release-upload:
-    name: Attach artifacts to GitHub release
-    needs: [qt6, qt5]
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v7
-        with:
-          path: dist
-          merge-multiple: true
-
-      - name: Upload to release
+      - name: Upload to GitHub release
+        if: env.RELEASE_TAG != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip" --repo "${{ github.repository }}" --clobber
