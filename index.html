@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>mpz — music player for big local collections</title>
+        <title>mpz — music player for large local collections</title>
         <meta
             name="description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -31,11 +31,11 @@
 
         <meta
             property="og:title"
-            content="mpz — music player for big local collections"
+            content="mpz — music player for large local collections"
         />
         <meta
             property="og:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -56,11 +56,11 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta
             name="twitter:title"
-            content="mpz — music player for big local collections"
+            content="mpz — music player for large local collections"
         />
         <meta
             name="twitter:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta
             name="twitter:image"
@@ -99,8 +99,8 @@
                 "operatingSystem": "Linux, macOS, Windows",
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
-                "softwareRequirements": "Linux, macOS, or Windows; Qt 6 (Qt 5 supported via AUR package)",
-                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
+                "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
+                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
                 "downloadUrl": "https://mpz-player.org/#install",
                 "screenshot": "https://mpz-player.org/images/breeze-dark.png",
@@ -129,7 +129,9 @@
                 "offers": {
                     "@type": "Offer",
                     "price": "0",
-                    "priceCurrency": "USD"
+                    "priceCurrency": "USD",
+                    "availability": "https://schema.org/InStock",
+                    "url": "https://mpz-player.org/#install"
                 }
             }
         </script>
@@ -140,7 +142,7 @@
                 "@type": "WebSite",
                 "name": "mpz",
                 "url": "https://mpz-player.org/",
-                "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode."
+                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode."
             }
         </script>
 
@@ -162,7 +164,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On macOS and Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. On macOS (experimental), download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper requires removing the quarantine flag with xattr -dr com.apple.quarantine /Applications/mpz.app on first launch. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -194,7 +196,7 @@
                         "name": "Can mpz act as an mpd client?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the README for details."
+                            "text": "Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the mpd impedance mismatch section of the README for details."
                         }
                     },
                     {
@@ -203,6 +205,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Why is it called mpz?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The \"z\" reflects a no-nonsense approach — no clutter, no distractions."
                         }
                     }
                 ]
@@ -218,30 +228,35 @@
                 "step": [
                     {
                         "@type": "HowToStep",
+                        "position": 1,
                         "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia",
                         "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
                         "text": "Install from the omnipackage stable repositories (recommended), or use the unstable repositories for builds from master."
                     },
                     {
                         "@type": "HowToStep",
+                        "position": 2,
                         "name": "Arch Linux",
                         "url": "https://aur.archlinux.org/packages/mpz/",
                         "text": "Build the AUR package against Qt6, or the Qt5 variant (mpz-qt5)."
                     },
                     {
                         "@type": "HowToStep",
+                        "position": 3,
                         "name": "Windows",
                         "url": "https://github.com/olegantonyan/mpz/releases",
                         "text": "Download the latest installer or portable binaries from the GitHub releases page."
                     },
                     {
                         "@type": "HowToStep",
+                        "position": 4,
                         "name": "macOS (experimental)",
                         "url": "https://github.com/olegantonyan/mpz/releases",
                         "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch — after dragging mpz.app to /Applications, run: xattr -dr com.apple.quarantine /Applications/mpz.app"
                     },
                     {
                         "@type": "HowToStep",
+                        "position": 5,
                         "name": "From source",
                         "url": "https://github.com/olegantonyan/mpz/",
                         "text": "Clone the repository and follow the README to build with Qt and a C++ compiler on any supported platform."
@@ -367,6 +382,7 @@
                                         alt="mpz logo"
                                         width="64"
                                         height="64"
+                                        decoding="async"
                                     />
                                 </figure>
                             </div>
@@ -374,7 +390,7 @@
                             <div class="column">
                                 <h1 class="title">mpz</h1>
                                 <h2 class="subtitle">
-                                    Music player for big local collections
+                                    Music player for large local collections
                                 </h2>
                             </div>
 
@@ -519,7 +535,7 @@
                         <p>
                             If you organize your music in folders rather than
                             letting an app index a "library", mpz is for you. A
-                            free, open-source, native C++ / Qt 6 music player
+                            free, open-source, native C++/Qt 6 music player
                             for large local collections on Linux, macOS, and
                             Windows. No library indexing step — just folders,
                             and playlists you build from them by
@@ -540,7 +556,7 @@
                             loop
                             muted
                             playsinline
-                            preload="auto"
+                            preload="metadata"
                             poster="/images/mpz-workflow-poster.webp"
                             width="1200"
                             height="708"
@@ -587,26 +603,6 @@
                         </div>
                         <div class="column">
                             <figure class="image is-16by9">
-                                <a href="/images/windows10.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/windows10.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/windows10.png"
-                                            alt="mpz running on Windows 10"
-                                            width="512"
-                                            height="292"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
-                            </figure>
-                            <h3>Windows 10</h3>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-16by9">
                                 <a href="/images/breeze-light.png">
                                     <picture>
                                         <source
@@ -647,6 +643,26 @@
                         </div>
                         <div class="column">
                             <figure class="image is-16by9">
+                                <a href="/images/windows10.png">
+                                    <picture>
+                                        <source
+                                            srcset="/images/small/windows10.webp"
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src="/images/small/windows10.png"
+                                            alt="mpz running on Windows 10"
+                                            width="512"
+                                            height="292"
+                                            loading="lazy"
+                                        />
+                                    </picture>
+                                </a>
+                            </figure>
+                            <h3>Windows 10</h3>
+                        </div>
+                        <div class="column">
+                            <figure class="image is-16by9">
                                 <a href="/images/macos.png">
                                     <picture>
                                         <source
@@ -666,11 +682,7 @@
                             <h3>macOS</h3>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            <section class="section">
-                <div class="container">
                     <h2 id="qt" class="title">
                         Native C++/Qt — fast and responsive UI
                     </h2>
@@ -700,7 +712,7 @@
                         (Music Player Daemon). You can add an mpd server as a
                         library folder, browsing and playing remote music as if
                         it were local. This is an experimental feature, and
-                        there is an mpz-mpd impedance mismatch — see more in the
+                        there is an mpd impedance mismatch — see more in the
                         <a
                             href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch"
                             target="_blank"
@@ -912,7 +924,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Arch</th>
+                                    <th scope="row">Arch Linux</th>
                                     <td>
                                         Build the
                                         <a
@@ -933,7 +945,7 @@
                                 <tr>
                                     <th scope="row">Windows</th>
                                     <td>
-                                        Grab the latest binaries from the
+                                        Download the latest binaries from the
                                         <a
                                             href="https://github.com/olegantonyan/mpz/releases"
                                             target="_blank"
@@ -943,9 +955,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">macOS<br />(experimental)</th>
+                                    <th scope="row">macOS <small>(experimental)</small></th>
                                     <td>
-                                        Grab the
+                                        Download the
                                         <code>.dmg</code> from the
                                         <a
                                             href="https://github.com/olegantonyan/mpz/releases"
@@ -1004,14 +1016,14 @@
                     <h2 id="philosophy" class="title">Not an attempt to clone Foobar2000</h2>
                     <div class="content">
                         Inspired by Foobar2000 and especially its "Album list"
-                        feature, mpz isn't trying to be yet another
-                        cross-platform Foobar clone — that's not feasible and
-                        not the goal. Instead, mpz has all the features I've
-                        been using for many years (quite literally the same
-                        unchanged Foobar2000 config since 2005 or so). You may
-                        find it useful too, or it may not fit your taste.
-                        Either way, I'd love to hear from you — use
-                        the built-in feedback form or
+                        feature, mpz isn't trying to be a cross-platform
+                        Foobar2000 clone — that's not feasible, and not the
+                        goal. Instead, mpz has all the features I've been using
+                        for many years (quite literally the same unchanged
+                        Foobar2000 config since 2005 or so). You may find it
+                        useful too, or it may not fit your taste. Either way,
+                        I'd love to hear from you — use the built-in feedback
+                        form or
                         <a
                             href="https://github.com/olegantonyan/mpz/issues"
                             target="_blank"
@@ -1102,6 +1114,12 @@
                                     >LRCLIB</a
                                 >. They are shown in the Track Info dialog.
                             </p>
+
+                            <p>
+                                <strong>Why is it called mpz?</strong><br />
+                                The "z" reflects a no-nonsense approach — no
+                                clutter, no distractions.
+                            </p>
                         </div>
                     </details>
                 </div>
@@ -1111,7 +1129,7 @@
         <footer class="footer">
             <div class="container">
                 <p class="footer-tagline">
-                    mpz — free, open-source music player for big local
+                    mpz — free, open-source music player for large local
                     collections. Native C++/Qt for Linux, macOS, and Windows.
                 </p>
 

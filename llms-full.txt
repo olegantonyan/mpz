@@ -1,6 +1,6 @@
 # mpz
 
-> Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information so a single fetch is enough to answer common questions about mpz.
 
@@ -22,9 +22,9 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Lyrics from embedded tags, `.lrc`/`.txt` sidecar files, or fetched online from LRCLIB; shown in the Track Info dialog
 - Tag reading via TagLib (ID3v2, Vorbis Comment, MP4, APE)
 - Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows)
-- Playback log of recently played tracks (useful for radio streams)
+- Playback log of recently played tracks — useful for identifying tracks heard on internet radio streams
 - Built-in feedback form, or open a GitHub issue
-- Native C++/Qt 6 (Qt 5 supported via AUR package)
+- Native C++/Qt 6 (Qt 5 builds also available — AUR `mpz-qt5` on Arch, and omnipackage builds for older Debian/Ubuntu/etc.)
 - Follows your desktop theme
 
 ## Install

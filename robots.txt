@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://mpz-player.org/sitemap.xml
+
+# LLM-targeted content: /llms.txt and /llms-full.txt

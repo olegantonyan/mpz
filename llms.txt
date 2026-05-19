@@ -1,6 +1,6 @@
 # mpz
 
-> Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
 
 mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar.
 
@@ -30,5 +30,5 @@ mpz treats your folder structure as the library — there is no global indexing 
 
 ## Optional
 
-- [Screenshots](https://mpz-player.org): Landing page with screenshots across desktops (KDE Breeze Dark/Light, Windows 10, Ubuntu, macOS)
+- [Screenshots](https://mpz-player.org/#library): Landing page section with screenshots across desktops (KDE Breeze Dark/Light, Ubuntu, Windows 10, macOS)
 - [License](https://www.gnu.org/licenses/gpl-3.0.html): GNU General Public License v3
