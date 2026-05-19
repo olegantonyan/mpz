@@ -197,7 +197,7 @@ namespace Playback {
     player_state.resetPlaying();
   }
 
-  void Dispatch::on_playlistContentChanged(const std::shared_ptr<Playlist::Playlist>) {
+  void Dispatch::on_playlistContentChanged() {
     const quint64 uid = player_state.playingTrack();
     if (uid == 0) {
       return;
@@ -209,5 +209,6 @@ namespace Playback {
       return;
     }
     emit stop();
+    emit unloadPlaylistView();
   }
 }

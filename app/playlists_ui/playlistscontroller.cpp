@@ -144,6 +144,7 @@ namespace PlaylistsUi {
 
   void Controller::on_removeItem(const QModelIndex &index) {
     proxy->activeModel()->remove(proxy->mapToSource(index));
+    emit removed();
     if (view->selectionModel()->selectedIndexes().size() > 0) {
       auto selected_idx = view->selectionModel()->selectedIndexes().first();
       if (selected_idx == index || proxy->activeModel()->listSize() == 1) {

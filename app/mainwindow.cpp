@@ -324,6 +324,7 @@ void MainWindow::setupPlaybackDispatch() {
   connect(player, &Playback::Controller::started, dispatch, &Playback::Dispatch::on_started);
   connect(player, &Playback::Controller::stopped, dispatch, &Playback::Dispatch::on_stopped);
   connect(playlist, &PlaylistUi::Controller::changed, dispatch, &Playback::Dispatch::on_playlistContentChanged);
+  connect(playlists, &PlaylistsUi::Controller::removed, dispatch, &Playback::Dispatch::on_playlistContentChanged);
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
@@ -332,6 +333,7 @@ void MainWindow::setupPlaybackDispatch() {
   connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
   connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
+  connect(dispatch, &Playback::Dispatch::unloadPlaylistView, playlist, &PlaylistUi::Controller::on_unload);
 
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }
