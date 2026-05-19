@@ -26,7 +26,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
       -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
       -GNinja \
-      "${EXTRA_CMAKE_ARGS[@]}" \
+      ${EXTRA_CMAKE_ARGS[@]+"${EXTRA_CMAKE_ARGS[@]}"} \
       "$SRC_DIR"
 ninja
 

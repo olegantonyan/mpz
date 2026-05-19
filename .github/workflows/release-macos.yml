@@ -4,6 +4,12 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing release tag to upload the DMG to (leave empty for a normal CI build)'
+        required: false
+        type: string
+        default: ''
   pull_request:
   release:
     types: [published]
@@ -11,6 +17,9 @@ on:
 defaults:
   run:
     shell: bash
+
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
 
 jobs:
   qt6:
@@ -34,7 +43,7 @@ jobs:
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
-        if: github.event_name != 'release'
+        if: env.RELEASE_TAG == ''
         run: |
           PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
@@ -77,7 +86,7 @@ jobs:
   release-upload:
     name: Attach artifacts to GitHub release
     needs: [qt6]
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' || github.event.inputs.release_tag != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -91,4 +100,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" dist/* --repo "${{ github.repository }}" --clobber
