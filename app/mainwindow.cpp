@@ -321,14 +321,9 @@ void MainWindow::setupPlaybackDispatch() {
 #endif
   });
 
-  connect(player, &Playback::Controller::started, this, [=](const Track &track) {
-    dispatch->state().setPlaying(track.uid());
-    dispatch->state().setFollowedCursor();
-  });
-
-  connect(player, &Playback::Controller::stopped, this, [=]() {
-    dispatch->state().resetPlaying();
-  });
+  connect(player, &Playback::Controller::started, dispatch, &Playback::Dispatch::on_started);
+  connect(player, &Playback::Controller::stopped, dispatch, &Playback::Dispatch::on_stopped);
+  connect(playlist, &PlaylistUi::Controller::changed, dispatch, &Playback::Dispatch::on_playlistContentChanged);
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);

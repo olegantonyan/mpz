@@ -26,6 +26,9 @@ namespace Playback {
     void on_startRequested();
     void on_startFromPlaylistRequested(const std::shared_ptr<Playlist::Playlist> plst);
     void on_trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
+    void on_started(const Track &t);
+    void on_stopped();
+    void on_playlistContentChanged(const std::shared_ptr<Playlist::Playlist> pl);
 
   private:
     bool isRandomMode(const std::shared_ptr<Playlist::Playlist> &plst) const;

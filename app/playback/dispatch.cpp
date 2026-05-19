@@ -187,4 +187,27 @@ namespace Playback {
       playTrack(t);
     }
   }
+
+  void Dispatch::on_started(const Track &t) {
+    player_state.setPlaying(t.uid());
+    player_state.setFollowedCursor();
+  }
+
+  void Dispatch::on_stopped() {
+    player_state.resetPlaying();
+  }
+
+  void Dispatch::on_playlistContentChanged(const std::shared_ptr<Playlist::Playlist>) {
+    const quint64 uid = player_state.playingTrack();
+    if (uid == 0) {
+      return;
+    }
+    if (playlists->playlistByTrackUid(uid) != nullptr) {
+      return;
+    }
+    if (!global_conf.stopWhenTrackRemoved()) {
+      return;
+    }
+    emit stop();
+  }
 }
