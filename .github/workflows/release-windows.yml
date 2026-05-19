@@ -60,13 +60,18 @@ jobs:
           ./win/portable_win64_qt6_host.sh
           ./win/installer_win64_qt6_host.sh
 
-      - name: Upload as workflow artifact (non-release builds)
+      - name: Upload portable as workflow artifact (non-release builds)
         if: env.RELEASE_TAG == ''
         uses: actions/upload-artifact@v7
         with:
-          path: |
-            dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
-            dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
+          archive: false
+
+      - name: Upload installer as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
           archive: false
 
       - name: Upload to GitHub release
