@@ -5,7 +5,7 @@
         <title>mpz — music player for big local collections</title>
         <meta
             name="description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -35,7 +35,7 @@
         />
         <meta
             property="og:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -60,7 +60,7 @@
         />
         <meta
             name="twitter:description"
-            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux and Windows."
+            content="Open source, native C++/Qt music player for large local collections. 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode. Linux, macOS, and Windows."
         />
         <meta
             name="twitter:image"
@@ -96,10 +96,10 @@
                 "@context": "https://schema.org",
                 "@type": "SoftwareApplication",
                 "name": "mpz",
-                "operatingSystem": "Linux, Windows",
+                "operatingSystem": "Linux, macOS, Windows",
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
-                "softwareRequirements": "Linux or Windows; Qt 6 (Qt 5 supported via AUR package)",
+                "softwareRequirements": "Linux, macOS, or Windows; Qt 6 (Qt 5 supported via AUR package)",
                 "description": "Music player for big local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
                 "downloadUrl": "https://mpz-player.org/#install",
@@ -118,7 +118,7 @@
                     "Playback log of recently played tracks",
                     "Native C++/Qt 6",
                     "Follows your desktop theme",
-                    "Cross-platform: Linux and Windows"
+                    "Cross-platform: Linux, macOS, and Windows"
                 ],
                 "license": "https://www.gnu.org/licenses/gpl-3.0.html",
                 "author": {
@@ -162,7 +162,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On macOS and Windows, download a release from GitHub. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -214,7 +214,7 @@
                 "@context": "https://schema.org",
                 "@type": "HowTo",
                 "name": "Install mpz",
-                "description": "Install the mpz music player on Linux or Windows.",
+                "description": "Install the mpz music player on Linux, macOS, or Windows.",
                 "step": [
                     {
                         "@type": "HowToStep",
@@ -233,6 +233,12 @@
                         "name": "Windows",
                         "url": "https://github.com/olegantonyan/mpz/releases",
                         "text": "Download the latest installer or portable binaries from the GitHub releases page."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "macOS (experimental)",
+                        "url": "https://github.com/olegantonyan/mpz/releases",
+                        "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch — after dragging mpz.app to /Applications, run: xattr -dr com.apple.quarantine /Applications/mpz.app"
                     },
                     {
                         "@type": "HowToStep",
@@ -514,10 +520,9 @@
                             If you organize your music in folders rather than
                             letting an app index a "library", mpz is for you. A
                             free, open-source, native C++ / Qt 6 music player
-                            for large local collections on Linux and Windows (no
-                            macOS package yet — I don't own Apple hardware;
-                            volunteers welcome). No library indexing step — just
-                            folders, and playlists you build from them by
+                            for large local collections on Linux, macOS, and
+                            Windows. No library indexing step — just folders,
+                            and playlists you build from them by
                             middle-clicking.
                         </p>
                         <p>
@@ -729,7 +734,7 @@
                             formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV —
                             through your system's codecs (QtMultimedia with the
                             GStreamer or ffmpeg backend on Linux, native
-                            backends on Windows).
+                            backends on macOS and Windows).
                         </p>
                     </div>
 
@@ -918,6 +923,49 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th scope="row">macOS<br />(experimental)</th>
+                                    <td>
+                                        Grab the
+                                        <code>.dmg</code> from the
+                                        <a
+                                            href="https://github.com/olegantonyan/mpz/releases"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            >GitHub releases page</a
+                                        >. Universal binary for Apple Silicon
+                                        and Intel Macs (macOS 11 Big Sur or
+                                        later).
+                                        <details style="margin-top: 0.75em">
+                                            <summary>
+                                                Gatekeeper blocks the app on
+                                                first launch
+                                            </summary>
+                                            <p>
+                                                The build is not signed with an
+                                                Apple Developer ID, so macOS
+                                                Gatekeeper blocks it on first
+                                                launch. After dragging
+                                                <code>mpz.app</code> to
+                                                <code>/Applications</code>,
+                                                remove the quarantine flag from
+                                                a terminal:
+                                            </p>
+                                            <pre><code>xattr -dr com.apple.quarantine /Applications/mpz.app</code></pre>
+                                            <p>
+                                                The app will then launch
+                                                normally. See the
+                                                <a
+                                                    href="https://github.com/olegantonyan/mpz#macos-experimental"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >README</a
+                                                >
+                                                for details.
+                                            </p>
+                                        </details>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th scope="row">From source</th>
                                     <td>
                                         Follow the
@@ -969,12 +1017,18 @@
                             <p>
                                 <strong>What platforms does mpz support?</strong
                                 ><br />
-                                Linux and Windows. On Linux, install from the
-                                omnipackage repositories (openSUSE, Debian,
-                                Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch).
-                                On Windows, download a release from GitHub.
-                                Building from source is supported on any
-                                platform with Qt and a C++ compiler.
+                                Linux, macOS, and Windows. On Linux, install
+                                from the omnipackage repositories (openSUSE,
+                                Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR
+                                (Arch). On Windows, download a release from
+                                GitHub. On macOS (experimental), download the
+                                <code>.dmg</code> from GitHub releases — the
+                                build is unsigned, so Gatekeeper requires
+                                removing the quarantine flag with
+                                <code>xattr -dr com.apple.quarantine /Applications/mpz.app</code>
+                                on first launch. Building from source is
+                                supported on any platform with Qt and a C++
+                                compiler.
                             </p>
 
                             <p>
@@ -1038,7 +1092,7 @@
             <div class="container">
                 <p class="footer-tagline">
                     mpz — free, open-source music player for big local
-                    collections. Native C++/Qt for Linux and Windows.
+                    collections. Native C++/Qt for Linux, macOS, and Windows.
                 </p>
 
                 <div class="columns footer-columns">
