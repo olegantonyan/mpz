@@ -4,6 +4,7 @@
 
 - when showing track in file manager make it selected there (works on multiselection too)
 - experimental build for macOS
+- `stop_when_track_removed` global config option
 
 ### Fixed
 
