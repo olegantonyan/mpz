@@ -30,5 +30,5 @@ mpz treats your folder structure as the library — there is no global indexing 
 
 ## Optional
 
-- [Screenshots](https://mpz-player.org): Landing page with screenshots across desktops (KDE Breeze Dark/Light, Windows 10, Ubuntu)
+- [Screenshots](https://mpz-player.org): Landing page with screenshots across desktops (KDE Breeze Dark/Light, Windows 10, Ubuntu, macOS)
 - [License](https://www.gnu.org/licenses/gpl-3.0.html): GNU General Public License v3
