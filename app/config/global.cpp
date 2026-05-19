@@ -114,6 +114,10 @@ namespace Config {
     return storage.get("inhibit_sleep_while_playing").get<bool>();
   }
 
+  bool Global::stopWhenTrackRemoved() const {
+    return storage.get("stop_when_track_removed").get<bool>();
+  }
+
   int Global::playlistRowHeight() const {
     return storage.get("playlist_row_height").get<int>();
   }

@@ -108,6 +108,7 @@ Some config options can be changed only by editing config files:
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
+- `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
 

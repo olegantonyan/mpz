@@ -47,6 +47,8 @@ namespace Config {
 
     bool inhibitSleepWhilePlaying() const;
 
+    bool stopWhenTrackRemoved() const;
+
     int playlistRowHeight() const;
 
     QStringList mprisBlacklist() const;
