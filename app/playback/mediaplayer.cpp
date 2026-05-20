@@ -15,7 +15,10 @@ namespace Playback {
     setOutputDevice(output_device_id);
 #endif
     connect(&player, &QMediaPlayer::positionChanged, this, [=](quint64 pos) {
-      emit positionChanged(pos - offset_begin);
+      // pos can lag behind offset_begin briefly after a CUE setSource while
+      // seek_to_offset_begin is still resolving; clamp to avoid unsigned
+      // underflow that would publish a near-ULLONG_MAX duration to the UI.
+      emit positionChanged(pos > offset_begin ? pos - offset_begin : 0);
       if (offset_end > 0 && pos >= offset_end) {
         // Soft CUE boundary: let the underlying file keep playing. If the
         // upcoming setTrack() points at the same file (sequential/random
@@ -105,7 +108,9 @@ namespace Playback {
   }
 
   qint64 MediaPlayer::position() {
-    return player.position() - offset_begin;
+    const qint64 pos = player.position();
+    const qint64 begin = static_cast<qint64>(offset_begin);
+    return pos > begin ? pos - begin : 0;
   }
 
   void MediaPlayer::pause() {
