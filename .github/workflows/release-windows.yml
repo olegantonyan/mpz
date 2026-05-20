@@ -10,7 +10,6 @@ on:
         required: false
         type: string
         default: ''
-  pull_request:
   release:
     types: [published]
 
