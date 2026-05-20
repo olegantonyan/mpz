@@ -7,6 +7,8 @@
 
 ### Fixed
 
+- total and session playback time counter now works again
+
 ### Misc
 
 - minimize to tray option is now close to tray as more portable and reliable alternative
