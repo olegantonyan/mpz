@@ -14,6 +14,11 @@ QStringList MpzApplication::drainPendingFiles() {
 }
 
 bool MpzApplication::event(QEvent *event) {
+#ifdef Q_OS_MACOS
+  if (event->type() == QEvent::ApplicationActivate) {
+    emit activated();
+  }
+#endif
   if (event->type() == QEvent::FileOpen) {
     auto *foe = static_cast<QFileOpenEvent *>(event);
     QString path = foe->file();

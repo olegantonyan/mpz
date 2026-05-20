@@ -133,7 +133,7 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_tray_icon->setChecked(global_conf.trayIconEnabled());
   iv->addWidget(check_tray_icon);
 
-  check_minimize_to_tray = new QCheckBox(tr("Minimize to tray instead of taskbar"));
+  check_minimize_to_tray = new QCheckBox(tr("Close to tray instead of quitting"));
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());
   iv->addWidget(check_minimize_to_tray);
 

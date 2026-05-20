@@ -48,6 +48,10 @@ public:
 
 public slots:
   void toggleHidden();
+  void requestQuit();
+#ifdef Q_OS_MACOS
+  void onAppActivated();
+#endif
 
 private:
   Ui::MainWindow *ui = nullptr;
@@ -76,6 +80,7 @@ private:
 #ifdef ENABLE_MPD_SUPPORT
   Playback::Mpd::PlaybackOrder *mpd_order = nullptr;
 #endif
+  bool quitting = false;
 
   int streamBuffer();
   void setupUiSettings();
@@ -107,6 +112,5 @@ private:
 
 protected:
   void closeEvent(QCloseEvent *event) override;
-  void changeEvent(QEvent *) override;
 };
 #endif // MAINWINDOW_H

@@ -188,161 +188,124 @@
 <context>
     <name>HotTestWidget</name>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="14"/>
         <source>HotTestWidget</source>
-        <translation>HotTestウィジェット</translation>
+        <translation type="vanished">HotTestウィジェット</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="24"/>
         <source>Playground</source>
-        <translation>プレイグラウンド</translation>
+        <translation type="vanished">プレイグラウンド</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="30"/>
         <source>Hotkey &amp;1:</source>
-        <translation>ホットキー &amp;1 :</translation>
+        <translation type="vanished">ホットキー &amp;1 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="37"/>
         <source>Hotkey &amp;2:</source>
-        <translation>ホットキー &amp;2 :</translation>
+        <translation type="vanished">ホットキー &amp;2 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="157"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="291"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="425"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="439"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="599"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1028"/>
         <source>Count:</source>
-        <translation>カウント :</translation>
+        <translation type="vanished">カウント :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="281"/>
         <source>Hotkey &amp;3:</source>
-        <translation>ホットキー &amp;3 :</translation>
+        <translation type="vanished">ホットキー &amp;3 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="305"/>
         <source>Hotkey &amp;4:</source>
-        <translation>ホットキー &amp;4 :</translation>
+        <translation type="vanished">ホットキー &amp;4 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="566"/>
         <source>Hotkey &amp;5:</source>
-        <translation>ホットキー &amp;5 :</translation>
+        <translation type="vanished">ホットキー &amp;5 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="766"/>
         <source>Testings</source>
-        <translation>テスト</translation>
+        <translation type="vanished">テスト</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="772"/>
         <source>&lt;b&gt;Testing:&lt;/b&gt; Please press the combinations listed below to check whether they work properly or not. Everytime a shortcut is triggered, the checkbox will toggle it&apos;s value. Set the test active to begin.</source>
-        <translation>&lt;b&gt;テスト:&lt;/b&gt; 以下の組み合わせを押して正常に動作するか確認してください。ショートカットがトリガーされるたびにチェックボックスの値が切り替わります。開始するにはテストをアクティブに設定してください。</translation>
+        <translation type="vanished">&lt;b&gt;テスト:&lt;/b&gt; 以下の組み合わせを押して正常に動作するか確認してください。ショートカットがトリガーされるたびにチェックボックスの値が切り替わります。開始するにはテストをアクティブに設定してください。</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="782"/>
         <source>Test Active:</source>
-        <translation>テストアクティブ :</translation>
+        <translation type="vanished">テストアクティブ :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="794"/>
         <source>Hotkey: F</source>
-        <translation>ホットキー : F</translation>
+        <translation type="vanished">ホットキー : F</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="804"/>
         <source>Hotkey: ctrl+alt+meta+F12</source>
-        <translation>ホットキー : ctrl+alt+meta+F12</translation>
+        <translation type="vanished">ホットキー : ctrl+alt+meta+F12</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="814"/>
         <source>Hotkey: ctrl+shift+cancel</source>
-        <translation>ホットキー : ctrl+shift+cancel</translation>
+        <translation type="vanished">ホットキー : ctrl+shift+cancel</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="824"/>
         <source>Hotkey: meta+del</source>
-        <translation>ホットキー : meta+del</translation>
+        <translation type="vanished">ホットキー : meta+del</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="834"/>
         <source>Hotkey: numlock</source>
-        <translation>ホットキー : numlock</translation>
+        <translation type="vanished">ホットキー : numlock</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="844"/>
         <source>Hotkey: ctrl+5</source>
-        <translation>ホットキー : ctrl+5</translation>
+        <translation type="vanished">ホットキー : ctrl+5</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="854"/>
         <source>Hotkey: shift+Tab</source>
-        <translation>ホットキー : shift+Tab</translation>
+        <translation type="vanished">ホットキー : shift+Tab</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="864"/>
         <source>Hotkey: shift+,</source>
-        <translation>ホットキー : shift+,</translation>
+        <translation type="vanished">ホットキー : shift+,</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="874"/>
         <source>Hotkey: shift+;</source>
-        <translation>ホットキー : shift+;</translation>
+        <translation type="vanished">ホットキー : shift+;</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="884"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="894"/>
         <source>Hotkey: shift+alt+K</source>
-        <translation>ホットキー : shift+alt+K</translation>
+        <translation type="vanished">ホットキー : shift+alt+K</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="921"/>
         <source>Threading</source>
-        <translation>スレッド</translation>
+        <translation type="vanished">スレッド</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="930"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This test was designed to try out multi-threaded shortcuts. The QHotkey class is completly &lt;span style=&quot; font-weight:600;&quot;&gt;threadsafe&lt;/span&gt;, but this test can help to see if it acutally works (It does).&lt;/p&gt;&lt;p&gt;If activated, &lt;span style=&quot; font-style:italic;&quot;&gt;Hotkey 4 and Hotkey 5 &lt;/span&gt;of the Playground will each run on their own thread. This means:&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Mainthread:&lt;/span&gt; Hotkey 1, 2, 3&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Second thread:&lt;/span&gt; Hotkey 4&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Third thread:&lt;/span&gt; Hotkey 5&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; The two hotkeys will be moved to the threads. For simplicity-reasons, you can&apos;t move them back in this test (But its possible, just not done here). Restart the test to get them back.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;このテストはマルチスレッドショートカットを試すために設計されています。QHotkeyクラスは完全に&lt;span style=&quot; font-weight:600;&quot;&gt;スレッドセーフ&lt;/span&gt;ですが、このテストで実際に動作するか確認できます(動作します)。&lt;/p&gt;&lt;p&gt;有効にすると、プレイグラウンドの&lt;span style=&quot; font-style:italic;&quot;&gt;ホットキー4とホットキー5&lt;/span&gt;はそれぞれ独自のスレッドで実行されます。つまり:&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;メインスレッド:&lt;/span&gt; ホットキー1, 2, 3&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;第二スレッド:&lt;/span&gt; ホットキー4&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;第三スレッド:&lt;/span&gt; ホットキー5&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;注:&lt;/span&gt; 2つのホットキーはスレッドに移動されます。簡単のため、このテストでは元に戻せません(ただし可能ですが、ここでは実装されていません)。戻すにはテストを再起動してください。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;このテストはマルチスレッドショートカットを試すために設計されています。QHotkeyクラスは完全に&lt;span style=&quot; font-weight:600;&quot;&gt;スレッドセーフ&lt;/span&gt;ですが、このテストで実際に動作するか確認できます(動作します)。&lt;/p&gt;&lt;p&gt;有効にすると、プレイグラウンドの&lt;span style=&quot; font-style:italic;&quot;&gt;ホットキー4とホットキー5&lt;/span&gt;はそれぞれ独自のスレッドで実行されます。つまり:&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;メインスレッド:&lt;/span&gt; ホットキー1, 2, 3&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;第二スレッド:&lt;/span&gt; ホットキー4&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;第三スレッド:&lt;/span&gt; ホットキー5&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;注:&lt;/span&gt; 2つのホットキーはスレッドに移動されます。簡単のため、このテストでは元に戻せません(ただし可能ですが、ここでは実装されていません)。戻すにはテストを再起動してください。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="949"/>
         <source>Enable Threaded Hotkeys</source>
-        <translation>スレッド化ホットキーを有効化</translation>
+        <translation type="vanished">スレッド化ホットキーを有効化</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="970"/>
         <source>Native Shortcut</source>
-        <translation>ネイティブショートカット</translation>
+        <translation type="vanished">ネイティブショートカット</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="976"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QHotkey allows you to set native shortcuts explicitly. These, of course, only work on the platform they were choosen for. All platform use special constants for their key codes and modifiers, which makes it pretty simple to use them from code. If you want to test them out here, google for the tables.&lt;/p&gt;&lt;p&gt;In most cases, you will not need to specify native shortcuts directly. However, as explaind on previos tabs, some shotcuts may not be creatable from Qt&apos;s key (e.g. Numblock numbers). In that case, you can set the directly.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Example: Ctrl+A&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Windows:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0041&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0002&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;X11:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0026&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0004&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;OsX:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0000&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0100&lt;/span&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QHotkeyではネイティブショートカットを明示的に設定できます。これらはもちろん、選択されたプラットフォームでのみ動作します。各プラットフォームはキーコードと修飾子に特別な定数を使用するため、コードから簡単に使用できます。ここでテストする場合は、テーブルをググってください。&lt;/p&gt;&lt;p&gt;ほとんどの場合、ネイティブショートカットを直接指定する必要はありません。ただし、以前のタブで説明したように、Qtのキーでは作成できないショートカットもあります(例: テンキーの数字)。その場合は直接設定できます。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;例: Ctrl+A&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Windows:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0041&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0002&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;X11:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0026&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0004&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;OsX:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0000&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0100&lt;/span&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QHotkeyではネイティブショートカットを明示的に設定できます。これらはもちろん、選択されたプラットフォームでのみ動作します。各プラットフォームはキーコードと修飾子に特別な定数を使用するため、コードから簡単に使用できます。ここでテストする場合は、テーブルをググってください。&lt;/p&gt;&lt;p&gt;ほとんどの場合、ネイティブショートカットを直接指定する必要はありません。ただし、以前のタブで説明したように、Qtのキーでは作成できないショートカットもあります(例: テンキーの数字)。その場合は直接設定できます。&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;例: Ctrl+A&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Windows:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0041&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0002&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;X11:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0026&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0004&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;OsX:&lt;/span&gt; キー: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0000&lt;/span&gt;, 修飾子: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0100&lt;/span&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="988"/>
         <source>Key:</source>
-        <translation>キー :</translation>
+        <translation type="vanished">キー :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="995"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1015"/>
         <source>0x</source>
-        <translation>0x</translation>
+        <translation type="vanished">0x</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1008"/>
         <source>Modifiers:</source>
-        <translation>修飾子 :</translation>
+        <translation type="vanished">修飾子 :</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1145"/>
         <source>Registered:</source>
-        <translation>登録済み :</translation>
+        <translation type="vanished">登録済み :</translation>
     </message>
 </context>
 <context>
@@ -408,7 +371,7 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
-        <location filename="../../mainwindow.cpp" line="566"/>
+        <location filename="../../mainwindow.cpp" line="584"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
@@ -532,106 +495,106 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="181"/>
-        <location filename="../../mainwindow.cpp" line="215"/>
+        <location filename="../../mainwindow.cpp" line="198"/>
+        <location filename="../../mainwindow.cpp" line="232"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="182"/>
-        <location filename="../../mainwindow.cpp" line="214"/>
+        <location filename="../../mainwindow.cpp" line="199"/>
+        <location filename="../../mainwindow.cpp" line="231"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="183"/>
-        <location filename="../../mainwindow.cpp" line="216"/>
+        <location filename="../../mainwindow.cpp" line="200"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
         <source>sequential (no loop)</source>
         <translation>順次(繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="213"/>
+        <location filename="../../mainwindow.cpp" line="230"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="359"/>
-        <location filename="../../mainwindow.cpp" line="363"/>
+        <location filename="../../mainwindow.cpp" line="377"/>
+        <location filename="../../mainwindow.cpp" line="381"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="365"/>
+        <location filename="../../mainwindow.cpp" line="383"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="534"/>
+        <location filename="../../mainwindow.cpp" line="552"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="536"/>
+        <location filename="../../mainwindow.cpp" line="554"/>
         <source>About mpz</source>
         <translation>mpz について</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="540"/>
+        <location filename="../../mainwindow.cpp" line="558"/>
         <source>Settings…</source>
         <translation>設定…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="549"/>
+        <location filename="../../mainwindow.cpp" line="567"/>
         <source>Quit mpz</source>
         <translation>mpz を終了</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="554"/>
+        <location filename="../../mainwindow.cpp" line="572"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="556"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
         <source>Play / Pause</source>
         <translation>再生 / 一時停止</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="571"/>
+        <location filename="../../mainwindow.cpp" line="589"/>
         <source>Next Track</source>
         <translation>次のトラック</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="575"/>
+        <location filename="../../mainwindow.cpp" line="593"/>
         <source>Previous Track</source>
         <translation>前のトラック</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="581"/>
+        <location filename="../../mainwindow.cpp" line="599"/>
         <source>Volume Up</source>
         <translation>音量を上げる</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="587"/>
+        <location filename="../../mainwindow.cpp" line="605"/>
         <source>Volume Down</source>
         <translation>音量を下げる</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="593"/>
+        <location filename="../../mainwindow.cpp" line="611"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="595"/>
+        <location filename="../../mainwindow.cpp" line="613"/>
         <source>mpz Website</source>
         <translation>mpz ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="600"/>
+        <location filename="../../mainwindow.cpp" line="618"/>
         <source>Send Feedback…</source>
         <translation>フィードバックを送る…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="603"/>
+        <location filename="../../mainwindow.cpp" line="621"/>
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>
@@ -768,14 +731,12 @@
 <context>
     <name>QHotkey</name>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/QHotkey/qhotkey.cpp" line="294"/>
         <source>Failed to register %1. Error: %2</source>
-        <translation>%1 の登録に失敗しました。エラー : %2</translation>
+        <translation type="vanished">%1 の登録に失敗しました。エラー : %2</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/QHotkey/qhotkey.cpp" line="314"/>
         <source>Failed to unregister %1. Error: %2</source>
-        <translation>%1 の登録解除に失敗しました。エラー : %2</translation>
+        <translation type="vanished">%1 の登録解除に失敗しました。エラー : %2</translation>
     </message>
 </context>
 <context>
@@ -846,9 +807,13 @@
         <translation>システムトレイアイコンを表示</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="136"/>
         <source>Minimize to tray instead of taskbar</source>
-        <translation>タスクバーではなくトレイに最小化</translation>
+        <translation type="vanished">タスクバーではなくトレイに最小化</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="136"/>
+        <source>Close to tray instead of quitting</source>
+        <translation>終了せずにトレイに格納</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="142"/>

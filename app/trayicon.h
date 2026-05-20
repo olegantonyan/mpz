@@ -21,6 +21,7 @@ signals:
   void nextTriggered();
   void prevTriggered();
   void pauseTriggered();
+  void quitTriggered();
 
   void clicked();
 

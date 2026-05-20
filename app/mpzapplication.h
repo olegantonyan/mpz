@@ -13,6 +13,7 @@ public:
 
 signals:
   void filesOpened(const QStringList &files);
+  void activated();
 
 protected:
   bool event(QEvent *event) override;

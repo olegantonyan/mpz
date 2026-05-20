@@ -28,7 +28,7 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   connect(stop, &QAction::triggered, this, &TrayIcon::stopTriggered);
   connect(next, &QAction::triggered, this, &TrayIcon::nextTriggered);
   connect(prev, &QAction::triggered, this, &TrayIcon::prevTriggered);
-  connect(quit, &QAction::triggered, parent, &QMainWindow::close);
+  connect(quit, &QAction::triggered, this, &TrayIcon::quitTriggered);
 
   menu->addAction(now_playing);
   menu->addSeparator();
