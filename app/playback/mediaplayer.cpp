@@ -17,8 +17,17 @@ namespace Playback {
     connect(&player, &QMediaPlayer::positionChanged, this, [=](quint64 pos) {
       emit positionChanged(pos - offset_begin);
       if (offset_end > 0 && pos >= offset_end) {
-        player.stop();
-        stream.stop();
+        // Soft CUE boundary: let the underlying file keep playing. If the
+        // upcoming setTrack() points at the same file (sequential/random
+        // same-file CUE) we'll skip setSource entirely; otherwise setSource
+        // will halt playback as usual. next_after_stop is cleared so any
+        // implicit StoppedState that setSource emits doesn't re-fire
+        // nextRequested.
+        offset_begin = offset_end;
+        offset_end = 0;
+        next_after_stop = false;
+        emit positionChanged(0);
+        emit nextRequested();
       }
     });
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -140,6 +149,23 @@ namespace Playback {
   }
 
   void MediaPlayer::play() {
+    if (synthetic_playing_on_play) {
+      synthetic_playing_on_play = false;
+      next_after_stop = false;
+      if (state() == MediaPlayer::PausedState) {
+        // Paused mid-CUE then user picked a same-file track: actually resume.
+        // QMediaPlayer will emit PlayingState; the normal handler emits
+        // stateChanged(PlayingState).
+        player.play();
+        unpause_workaround();
+      } else {
+        // Already playing through a soft CUE boundary. QMediaPlayer wouldn't
+        // emit a state transition, so synthesise the per-track PlayingState
+        // event so downstream emits started(_current_track).
+        emitStateChanged(MediaPlayer::PlayingState);
+      }
+      return;
+    }
     next_after_stop = false;
 #ifndef QT6_STREAM_HACKS
     if (!stream.isRunning() && stream.isValidUrl()) {
@@ -161,6 +187,7 @@ namespace Playback {
 
   void MediaPlayer::stop() {
     next_after_stop = false;
+    synthetic_playing_on_play = false;
     player.stop();
     stream.stop();
   }
@@ -190,10 +217,33 @@ namespace Playback {
   }
 
   void MediaPlayer::setTrack(const Track &track) {
+    // Same-file CUE continuation: skip the expensive setSource/stream.stop
+    // cycle. Works for sequential autoplay (player is already at the right
+    // region) and for random/manual jumps inside the same file (cheap
+    // in-file seek).
+    const bool same_file_cue =
+        track.isCue()
+        && !track.isStream()
+        && !current_source_url.isEmpty()
+        && track.url() == current_source_url
+        && state() != MediaPlayer::StoppedState;
+
+    if (same_file_cue) {
+      offset_begin = track.begin();
+      offset_end = offset_begin + track.duration();
+      const quint64 pos = player.position();
+      if (pos < offset_begin || pos >= offset_end) {
+        player.setPosition(offset_begin);
+      }
+      synthetic_playing_on_play = true;
+      return;
+    }
+
     offset_begin = 0;
     offset_end = 0;
     stream.stop();
     if (track.isStream()) {
+      current_source_url = QUrl();
       stream.setUrl(track.url());
       unpause_workaround_needed_on_playing_state_change = false;
 #ifdef QT6_STREAM_HACKS
@@ -216,6 +266,7 @@ namespace Playback {
 #else
       player.setMedia(track.url());
 #endif
+      current_source_url = track.url();
       if (track.isCue()) {
         offset_begin = track.begin();
         offset_end = offset_begin + track.duration();
@@ -250,6 +301,8 @@ namespace Playback {
 #endif
     offset_begin = 0;
     offset_end = 0;
+    current_source_url = QUrl();
+    synthetic_playing_on_play = false;
   }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

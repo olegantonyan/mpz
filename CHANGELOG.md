@@ -2,6 +2,8 @@
 
 ### Added
 
+- CUE continious playback if next track is on the same file sequntially
+
 ### Fixed
 
 ### Misc
