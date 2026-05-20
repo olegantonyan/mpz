@@ -14,7 +14,7 @@ MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &lo
 void MainMenu::on_open() {
   QMenu menu;
 
-  QAction settings(tr("Settings..."));
+  QAction settings(tr("Settings…"));
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));

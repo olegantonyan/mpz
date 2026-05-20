@@ -44,13 +44,6 @@ namespace {
   };
 
   const QStringList kLyricsProviders = {"embedded", "sidecar", "lrclib"};
-
-  QString lyricsProviderLabel(const QString &id) {
-    if (id == "embedded") return QObject::tr("Embedded (tags)");
-    if (id == "sidecar")  return QObject::tr("Sidecar (.lrc, .txt)");
-    if (id == "lrclib")   return QObject::tr("LRCLIB (online)");
-    return id;
-  }
 }
 
 SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) :
@@ -444,7 +437,12 @@ void SettingsDialog::populateLyrics() {
     if (!all.contains(p)) all << p;
   }
   for (const auto &p : all) {
-    auto *item = new QListWidgetItem(lyricsProviderLabel(p));
+    QString label;
+    if      (p == "embedded") label = tr("Embedded (tags)");
+    else if (p == "sidecar")  label = tr("Sidecar (.lrc, .txt)");
+    else if (p == "lrclib")   label = tr("LRCLIB (online)");
+    else                      label = p;
+    auto *item = new QListWidgetItem(label);
     item->setData(Qt::UserRole, p);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable |
                    Qt::ItemIsEnabled | Qt::ItemIsDragEnabled);
