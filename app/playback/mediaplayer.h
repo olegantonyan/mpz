@@ -71,6 +71,8 @@ namespace Playback {
 
     quint64 offset_begin = 0;
     quint64 offset_end = 0;
+    QUrl current_source_url;
+    bool synthetic_playing_on_play = false;
     void seek_to_offset_begin();
     void unpause_workaround();
     void emitStateChanged(MediaPlayer::State state);
