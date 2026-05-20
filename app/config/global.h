@@ -34,29 +34,37 @@ namespace Config {
     bool saveSortPresets(const QList<SortingPreset> &arg);
 
     QString language() const;
+    void saveLanguage(const QString &arg);
 
     int ipcPort() const;
     bool saveIpcPort(int arg);
 
     bool singleInstance() const;
+    void saveSingleInstance(bool arg);
 
     int playbackLogSize() const;
+    void savePlaybackLogSize(int arg);
 
     PlaylistUi::ColumnsConfig columnsConfig() const;
     bool saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg);
 
     bool inhibitSleepWhilePlaying() const;
+    void saveInhibitSleepWhilePlaying(bool arg);
 
     bool stopWhenTrackRemoved() const;
+    void saveStopWhenTrackRemoved(bool arg);
 
     int playlistRowHeight() const;
+    void savePlaylistRowHeight(int arg);
 
     QStringList mprisBlacklist() const;
     bool saveMprisBlacklist(const QStringList &arg);
 
     bool mpdStopPlayerOnClose() const;
+    void saveMpdStopPlayerOnClose(bool arg);
 
     QStringList lyricsProviders() const;
+    bool saveLyricsProviders(const QStringList &arg);
 
   private:
     Config::Storage storage;

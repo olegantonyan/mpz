@@ -85,6 +85,10 @@ namespace Config {
     return storage.get("language").get<QString>();
   }
 
+  void Global::saveLanguage(const QString &arg) {
+    storage.set("language", Config::Value(arg));
+  }
+
   int Global::ipcPort() const {
     return storage.get("single_instance_ipc_port").get<int>();
   }
@@ -97,8 +101,16 @@ namespace Config {
     return storage.get("single_instance").get<bool>();
   }
 
+  void Global::saveSingleInstance(bool arg) {
+    storage.set("single_instance", Config::Value(arg));
+  }
+
   int Global::playbackLogSize() const {
     return storage.get("playback_log_size").get<int>();
+  }
+
+  void Global::savePlaybackLogSize(int arg) {
+    storage.set("playback_log_size", Config::Value(arg));
   }
 
   PlaylistUi::ColumnsConfig Global::columnsConfig() const {
@@ -114,12 +126,24 @@ namespace Config {
     return storage.get("inhibit_sleep_while_playing").get<bool>();
   }
 
+  void Global::saveInhibitSleepWhilePlaying(bool arg) {
+    storage.set("inhibit_sleep_while_playing", Config::Value(arg));
+  }
+
   bool Global::stopWhenTrackRemoved() const {
     return storage.get("stop_when_track_removed").get<bool>();
   }
 
+  void Global::saveStopWhenTrackRemoved(bool arg) {
+    storage.set("stop_when_track_removed", Config::Value(arg));
+  }
+
   int Global::playlistRowHeight() const {
     return storage.get("playlist_row_height").get<int>();
+  }
+
+  void Global::savePlaylistRowHeight(int arg) {
+    storage.set("playlist_row_height", Config::Value(arg));
   }
 
   QStringList Global::mprisBlacklist() const {
@@ -147,6 +171,10 @@ namespace Config {
     return storage.get("mpd_stop_player_on_close").get<bool>();
   }
 
+  void Global::saveMpdStopPlayerOnClose(bool arg) {
+    storage.set("mpd_stop_player_on_close", Config::Value(arg));
+  }
+
   QStringList Global::lyricsProviders() const {
     const QStringList defaults = { "embedded", "sidecar", "lrclib" };
     auto raw = storage.get("lyrics");
@@ -166,6 +194,16 @@ namespace Config {
       result << i.get<QString>();
     }
     return result.isEmpty() ? defaults : result;
+  }
+
+  bool Global::saveLyricsProviders(const QStringList &arg) {
+    QList<Config::Value> list;
+    for (const auto &i : std::as_const(arg)) {
+      list << Config::Value(i);
+    }
+    QMap<QString, Config::Value> map;
+    map.insert("providers", Config::Value(list));
+    return storage.set("lyrics", Config::Value(map));
   }
 
 }

@@ -186,214 +186,55 @@
     </message>
 </context>
 <context>
-    <name>HotTestWidget</name>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="14"/>
-        <source>HotTestWidget</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="24"/>
-        <source>Playground</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="30"/>
-        <source>Hotkey &amp;1:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="37"/>
-        <source>Hotkey &amp;2:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="157"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="291"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="425"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="439"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="599"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1028"/>
-        <source>Count:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="281"/>
-        <source>Hotkey &amp;3:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="305"/>
-        <source>Hotkey &amp;4:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="566"/>
-        <source>Hotkey &amp;5:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="766"/>
-        <source>Testings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="772"/>
-        <source>&lt;b&gt;Testing:&lt;/b&gt; Please press the combinations listed below to check whether they work properly or not. Everytime a shortcut is triggered, the checkbox will toggle it&apos;s value. Set the test active to begin.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="782"/>
-        <source>Test Active:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="794"/>
-        <source>Hotkey: F</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="804"/>
-        <source>Hotkey: ctrl+alt+meta+F12</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="814"/>
-        <source>Hotkey: ctrl+shift+cancel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="824"/>
-        <source>Hotkey: meta+del</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="834"/>
-        <source>Hotkey: numlock</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="844"/>
-        <source>Hotkey: ctrl+5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="854"/>
-        <source>Hotkey: shift+Tab</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="864"/>
-        <source>Hotkey: shift+,</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="874"/>
-        <source>Hotkey: shift+;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="884"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="894"/>
-        <source>Hotkey: shift+alt+K</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="921"/>
-        <source>Threading</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="930"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This test was designed to try out multi-threaded shortcuts. The QHotkey class is completly &lt;span style=&quot; font-weight:600;&quot;&gt;threadsafe&lt;/span&gt;, but this test can help to see if it acutally works (It does).&lt;/p&gt;&lt;p&gt;If activated, &lt;span style=&quot; font-style:italic;&quot;&gt;Hotkey 4 and Hotkey 5 &lt;/span&gt;of the Playground will each run on their own thread. This means:&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Mainthread:&lt;/span&gt; Hotkey 1, 2, 3&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Second thread:&lt;/span&gt; Hotkey 4&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Third thread:&lt;/span&gt; Hotkey 5&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; The two hotkeys will be moved to the threads. For simplicity-reasons, you can&apos;t move them back in this test (But its possible, just not done here). Restart the test to get them back.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="949"/>
-        <source>Enable Threaded Hotkeys</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="970"/>
-        <source>Native Shortcut</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="976"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QHotkey allows you to set native shortcuts explicitly. These, of course, only work on the platform they were choosen for. All platform use special constants for their key codes and modifiers, which makes it pretty simple to use them from code. If you want to test them out here, google for the tables.&lt;/p&gt;&lt;p&gt;In most cases, you will not need to specify native shortcuts directly. However, as explaind on previos tabs, some shotcuts may not be creatable from Qt&apos;s key (e.g. Numblock numbers). In that case, you can set the directly.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Example: Ctrl+A&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Windows:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0041&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0002&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;X11:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0026&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0004&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;OsX:&lt;/span&gt; Key: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0000&lt;/span&gt;, Modifier: &lt;span style=&quot; font-style:italic;&quot;&gt;0x0100&lt;/span&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="988"/>
-        <source>Key:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="995"/>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1015"/>
-        <source>0x</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1008"/>
-        <source>Modifiers:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/HotkeyTest/hottestwidget.ui" line="1145"/>
-        <source>Registered:</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>MainMenu</name>
     <message>
-        <location filename="../../mainmenu.cpp" line="17"/>
         <source>Tray icon</source>
-        <translation>Значок в трее</translation>
+        <translation type="vanished">Значок в трее</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="20"/>
         <source>Minimize to tray</source>
-        <translation>Сворачивать в трей</translation>
+        <translation type="vanished">Сворачивать в трей</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="25"/>
+        <location filename="../../mainmenu.cpp" line="17"/>
+        <source>Settings…</source>
+        <translation>Настройки…</translation>
+    </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="18"/>
         <source>Playback log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="26"/>
+        <location filename="../../mainmenu.cpp" line="19"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="27"/>
+        <location filename="../../mainmenu.cpp" line="20"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="28"/>
+        <location filename="../../mainmenu.cpp" line="21"/>
         <source>Got feedback?</source>
         <translation>Связаться с автором?</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="29"/>
+        <location filename="../../mainmenu.cpp" line="22"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="30"/>
         <source>Save settings</source>
-        <translation>Сохранить настройки</translation>
+        <translation type="vanished">Сохранить настройки</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="31"/>
         <source>Open config directory</source>
-        <translation>Открыть папку с конфигами</translation>
+        <translation type="vanished">Открыть папку с конфигами</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="32"/>
+        <location filename="../../mainmenu.cpp" line="23"/>
         <source>mpd update</source>
         <translation>mpd update</translation>
     </message>
@@ -407,7 +248,7 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
-        <location filename="../../mainwindow.cpp" line="567"/>
+        <location filename="../../mainwindow.cpp" line="584"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
@@ -531,106 +372,106 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="181"/>
-        <location filename="../../mainwindow.cpp" line="215"/>
+        <location filename="../../mainwindow.cpp" line="198"/>
+        <location filename="../../mainwindow.cpp" line="232"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="182"/>
-        <location filename="../../mainwindow.cpp" line="214"/>
+        <location filename="../../mainwindow.cpp" line="199"/>
+        <location filename="../../mainwindow.cpp" line="231"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="183"/>
-        <location filename="../../mainwindow.cpp" line="216"/>
+        <location filename="../../mainwindow.cpp" line="200"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="213"/>
+        <location filename="../../mainwindow.cpp" line="230"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="362"/>
-        <location filename="../../mainwindow.cpp" line="366"/>
+        <location filename="../../mainwindow.cpp" line="377"/>
+        <location filename="../../mainwindow.cpp" line="381"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="368"/>
+        <location filename="../../mainwindow.cpp" line="383"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="537"/>
+        <location filename="../../mainwindow.cpp" line="552"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="539"/>
+        <location filename="../../mainwindow.cpp" line="554"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="543"/>
+        <location filename="../../mainwindow.cpp" line="558"/>
         <source>Settings…</source>
         <translation>Настройки…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="550"/>
+        <location filename="../../mainwindow.cpp" line="567"/>
         <source>Quit mpz</source>
         <translation>Выйти из mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="555"/>
+        <location filename="../../mainwindow.cpp" line="572"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="557"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
         <source>Play / Pause</source>
         <translation>Воспроизведение / Пауза</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="572"/>
+        <location filename="../../mainwindow.cpp" line="589"/>
         <source>Next Track</source>
         <translation>Следующий трек</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="576"/>
+        <location filename="../../mainwindow.cpp" line="593"/>
         <source>Previous Track</source>
         <translation>Предыдущий трек</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="582"/>
+        <location filename="../../mainwindow.cpp" line="599"/>
         <source>Volume Up</source>
         <translation>Увеличить громкость</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="588"/>
+        <location filename="../../mainwindow.cpp" line="605"/>
         <source>Volume Down</source>
         <translation>Уменьшить громкость</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="594"/>
+        <location filename="../../mainwindow.cpp" line="611"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="596"/>
+        <location filename="../../mainwindow.cpp" line="613"/>
         <source>mpz Website</source>
         <translation>Сайт mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="601"/>
+        <location filename="../../mainwindow.cpp" line="618"/>
         <source>Send Feedback…</source>
         <translation>Отправить отзыв…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="604"/>
+        <location filename="../../mainwindow.cpp" line="621"/>
         <source>Report a Bug…</source>
         <translation>Сообщить об ошибке…</translation>
     </message>
@@ -765,16 +606,231 @@
     </message>
 </context>
 <context>
-    <name>QHotkey</name>
+    <name>SettingsDialog</name>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/QHotkey/qhotkey.cpp" line="294"/>
-        <source>Failed to register %1. Error: %2</source>
-        <translation></translation>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="52"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../../3rdparty/QHotkey-1.5.0/QHotkey/qhotkey.cpp" line="314"/>
-        <source>Failed to unregister %1. Error: %2</source>
-        <translation></translation>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="56"/>
+        <source>General</source>
+        <translation>Основные</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="57"/>
+        <source>Lyrics</source>
+        <translation>Текст песни</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
+        <source>Advanced</source>
+        <translation>Дополнительно</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
+        <source>Some settings take effect after restart.</source>
+        <translation>Некоторые настройки применятся после перезапуска.</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="67"/>
+        <source>Open config directory</source>
+        <translation>Открыть папку с конфигами</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="101"/>
+        <source>Playback</source>
+        <translation>Воспроизведение</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="105"/>
+        <source>Stop playback when current track or playlist is removed</source>
+        <translation>Останавливать воспроизведение при удалении трека или плейлиста</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="109"/>
+        <source>Prevent system sleep while playing</source>
+        <translation>Не давать системе уснуть во время воспроизведения</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="115"/>
+        <source>KiB</source>
+        <translation>КиБ</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="121"/>
+        <source>Stream buffer size:</source>
+        <translation>Размер буфера потока:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="129"/>
+        <source>Interface</source>
+        <translation>Интерфейс</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>
+        <source>Show system tray icon</source>
+        <translation>Показывать значок в трее</translation>
+    </message>
+    <message>
+        <source>Minimize to tray instead of taskbar</source>
+        <translation type="vanished">Сворачивать в трей вместо панели задач</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="136"/>
+        <source>Close to tray instead of quitting</source>
+        <translation>Скрывать в трей вместо выхода</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="142"/>
+        <source>px</source>
+        <translation>px</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="143"/>
+        <source>theme default</source>
+        <translation>по теме</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="146"/>
+        <source>Playlist row height:</source>
+        <translation>Высота строки плейлиста:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="153"/>
+        <source>Language:</source>
+        <translation>Язык:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="155"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="306"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="319"/>
+        <source>(requires restart)</source>
+        <translation>(требует перезапуск)</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="164"/>
+        <source>Playlist columns</source>
+        <translation>Столбцы плейлиста</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="169"/>
+        <source>Field</source>
+        <translation>Поле</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="169"/>
+        <source>Width %</source>
+        <translation>Ширина %</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="169"/>
+        <source>Alignment</source>
+        <translation>Выравнивание</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="169"/>
+        <source>Stretch</source>
+        <translation>Растягивать</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="183"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="345"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="184"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="346"/>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="185"/>
+        <source>Move up</source>
+        <translation>Вверх</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="186"/>
+        <source>Move down</source>
+        <translation>Вниз</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="215"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
+        <source>Left</source>
+        <translation>По левому</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="417"/>
+        <source>Right</source>
+        <translation>По правому</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="287"/>
+        <source>Provider order (drag to reorder, uncheck to disable):</source>
+        <translation>Порядок источников (перетащите для изменения, снимите галочку для отключения):</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="303"/>
+        <source>Single instance mode</source>
+        <translation>Один экземпляр приложения</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="314"/>
+        <source>IPC port:</source>
+        <translation>IPC порт:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="327"/>
+        <source>Playback log size:</source>
+        <translation>Размер лога воспроизведения:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="330"/>
+        <source>entries</source>
+        <translation>записей</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="338"/>
+        <source>MPRIS blacklist</source>
+        <translation>Чёрный список MPRIS</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="341"/>
+        <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
+        <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="355"/>
+        <source>Add MPRIS sender</source>
+        <translation>Добавить отправителя MPRIS</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="356"/>
+        <source>Sender name:</source>
+        <translation>Имя отправителя:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="367"/>
+        <source>Stop MPD playback when closing mpz</source>
+        <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="441"/>
+        <source>Embedded (tags)</source>
+        <translation>Встроенные (теги)</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="442"/>
+        <source>Sidecar (.lrc, .txt)</source>
+        <translation>Внешние файлы (.lrc, .txt)</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="443"/>
+        <source>LRCLIB (online)</source>
+        <translation>LRCLIB (онлайн)</translation>
     </message>
 </context>
 <context>

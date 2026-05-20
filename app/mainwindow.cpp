@@ -14,7 +14,7 @@
 #ifdef Q_OS_MACOS
   #include "about_ui/aboutdialog.h"
   #include "feedback_ui/feedbackform.h"
-  #include "config/storage.h"
+  #include "settings_ui/settingsdialog.h"
   #include <QMenuBar>
   #include <QDesktopServices>
   #include <QUrl>
@@ -101,9 +101,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   connect(instance, &IPC::Instance::load_files_received, this, [=](const QStringList &lst) {
     preloadPlaylist(lst);
+    setWindowState(windowState() & ~Qt::WindowMinimized);
     show();
     raise();
-    setFocus();
+    activateWindow();
   });
 
 #ifdef ENABLE_MPD_SUPPORT
@@ -118,9 +119,10 @@ MainWindow::~MainWindow() {
 
 void MainWindow::toggleHidden() {
   if (isHidden()) {
+    setWindowState(windowState() & ~Qt::WindowMinimized);
     show();
     raise();
-    setFocus();
+    activateWindow();
   } else {
     hide();
   }
@@ -156,6 +158,11 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (!quitting && trayicon != nullptr && global_conf.trayIconEnabled() && global_conf.minimizeToTray()) {
+    hide();
+    event->ignore();
+    return;
+  }
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
@@ -170,12 +177,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   qApp->closeAllWindows();
 }
 
-void MainWindow::changeEvent(QEvent *event) {
-  if(global_conf.minimizeToTray() && event->type() == QEvent::WindowStateChange && isMinimized()) {
-    hide();
-  }
-  QMainWindow::changeEvent(event);
+void MainWindow::requestQuit() {
+  quitting = true;
+  close();
 }
+
+#ifdef Q_OS_MACOS
+void MainWindow::onAppActivated() {
+  // Dock click while window is hidden: restore it. Also fires on Cmd-Tab — harmless because the window is then already visible.
+  if (isHidden()) {
+    setWindowState(windowState() & ~Qt::WindowMinimized);
+    show();
+    raise();
+    activateWindow();
+  }
+}
+#endif
 
 void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem(tr("sequential"));
@@ -242,7 +259,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
 #if defined(MPRIS_ENABLE)
 void MainWindow::setupMpris() {
   mpris = new Mpris(player, global_conf, this);
-  connect(mpris, &Mpris::quit, this, &QMainWindow::close);
+  connect(mpris, &Mpris::quit, this, &MainWindow::requestQuit);
   connect(mpris, &Mpris::shuffleChanged, this, [=](bool val) {
     ui->orderComboBox->setCurrentIndex(val ? 1 : 0);
     global_conf.savePlaybackOrder(val ? "random" : "sequential");
@@ -282,7 +299,7 @@ void MainWindow::setupMainMenu() {
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
-  connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
+  connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
 
@@ -308,6 +325,7 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
+  connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
 }
 
 void MainWindow::setupPlaybackDispatch() {
@@ -370,7 +388,7 @@ void MainWindow::setupStatusBar() {
 void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this);
 
-  connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
+  connect(shortcuts, &Shortcuts::quit, this, &MainWindow::requestQuit);
   connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {
     ui->treeView->setFocus(Qt::ShortcutFocusReason);
   });
@@ -540,14 +558,16 @@ void MainWindow::setupMacMenuBar() {
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
   prefs->setShortcut(QKeySequence::Preferences);
-  connect(prefs, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
+  connect(prefs, &QAction::triggered, this, [this]() {
+    SettingsDialog dlg(global_conf, local_conf, this);
+    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+    dlg.exec();
   });
 
   auto *quit = app_menu->addAction(tr("Quit mpz"));
   quit->setMenuRole(QAction::QuitRole);
   quit->setShortcut(QKeySequence::Quit);
-  connect(quit, &QAction::triggered, this, &QMainWindow::close);
+  connect(quit, &QAction::triggered, this, &MainWindow::requestQuit);
 
   auto *playback = bar->addMenu(tr("Playback"));
 

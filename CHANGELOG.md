@@ -3,10 +3,15 @@
 ### Added
 
 - CUE continious playback if next track is on the same file sequntially
+- settings UI dialog
 
 ### Fixed
 
+- total and session playback time counter now works again
+
 ### Misc
+
+- minimize to tray option is now close to tray as more portable and reliable alternative
 
 ## [2.0.7] - 2026-05-19
 

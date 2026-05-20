@@ -121,6 +121,9 @@ int main(int argc, char *argv[]) {
 
   MainWindow w(arguments, &instance, local_conf, global_conf);
   QObject::connect(&a, &MpzApplication::filesOpened, &instance, &IPC::Instance::load_files_received);
+#ifdef Q_OS_MACOS
+  QObject::connect(&a, &MpzApplication::activated, &w, &MainWindow::onAppActivated);
+#endif
 
   w.show();
   return a.exec();
