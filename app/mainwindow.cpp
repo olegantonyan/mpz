@@ -14,7 +14,7 @@
 #ifdef Q_OS_MACOS
   #include "about_ui/aboutdialog.h"
   #include "feedback_ui/feedbackform.h"
-  #include "config/storage.h"
+  #include "settings_ui/settingsdialog.h"
   #include <QMenuBar>
   #include <QDesktopServices>
   #include <QUrl>
@@ -540,8 +540,10 @@ void MainWindow::setupMacMenuBar() {
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
   prefs->setShortcut(QKeySequence::Preferences);
-  connect(prefs, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
+  connect(prefs, &QAction::triggered, this, [this]() {
+    SettingsDialog dlg(global_conf, local_conf, this);
+    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+    dlg.exec();
   });
 
   auto *quit = app_menu->addAction(tr("Quit mpz"));

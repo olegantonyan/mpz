@@ -87,6 +87,7 @@ set(PROJECT_SOURCES
   app/shortcuts.cpp
   app/shortcuts_ui/shortcutsdialog.cpp
   app/sleeplock.cpp
+  app/settings_ui/settingsdialog.cpp
   app/sort_ui/sortingpresetsdialog.cpp
   app/sort_ui/sortmenu.cpp
   app/statusbarlabel.cpp

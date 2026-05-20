@@ -3,6 +3,7 @@
 ### Added
 
 - CUE continious playback if next track is on the same file sequntially
+- settings UI dialog
 
 ### Fixed
 

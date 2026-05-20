@@ -1,12 +1,11 @@
 #include "mainmenu.h"
 #include "about_ui/aboutdialog.h"
 #include "feedback_ui/feedbackform.h"
+#include "settings_ui/settingsdialog.h"
 
 #include <QDebug>
 #include <QMenu>
 #include <QAction>
-#include <QDesktopServices>
-#include <QUrl>
 
 MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c, ModusOperandi &modus) : QObject(btn), button(btn), global_conf(global_c), local_conf(local_c), modus_operandi(modus) {
   connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
@@ -14,56 +13,36 @@ MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &lo
 
 void MainMenu::on_open() {
   QMenu menu;
-  QAction trayicon(tr("Tray icon"));
-  trayicon.setCheckable(true);
-  trayicon.setChecked(global_conf.trayIconEnabled());
-  QAction minimize_to_tray(tr("Minimize to tray"));
-  minimize_to_tray.setCheckable(true);
-  minimize_to_tray.setEnabled(trayicon.isChecked());
-  minimize_to_tray.setChecked(global_conf.minimizeToTray());
 
+  QAction settings(tr("Settings..."));
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
   QAction feedback(tr("Got feedback?"));
   QAction shortcuts(tr("Keyboard shortcuts"));
-  QAction saves(tr("Save settings"));
-  QAction confdir(tr("Open config directory"));
   QAction mpdupdate(tr("mpd update"));
 
+  connect(&settings, &QAction::triggered, this, [this]() {
+    SettingsDialog dlg(global_conf, local_conf, button->parentWidget());
+    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainMenu::toggleTrayIcon);
+    dlg.exec();
+  });
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog().exec();
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
-  connect(&trayicon, &QAction::triggered, this, [=](bool checked) {
-    global_conf.saveTrayIconEnabled(checked);
-    emit toggleTrayIcon();
-  });
-  connect(&minimize_to_tray, &QAction::triggered, this, [=](bool checked) {
-    global_conf.saveMinimizeToTray(checked);
-  });
   connect(&feedback, &QAction::triggered, [=]() {
     FeedbackForm().exec();
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
-  connect(&saves, &QAction::triggered, this, [=]() {
-    global_conf.sync();
-    local_conf.sync();
-  });
-  connect(&confdir, &QAction::triggered, [=]() {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
-  });
 #ifdef ENABLE_MPD_SUPPORT
   connect(&mpdupdate, &QAction::triggered, this, [=]() {
     modus_operandi.mpd_client.updateDb();
   });
 #endif
 
-  menu.addAction(&trayicon);
-  menu.addAction(&minimize_to_tray);
-  menu.addAction(&saves);
-  menu.addAction(&confdir);
+  menu.addAction(&settings);
 #ifdef ENABLE_MPD_SUPPORT
   if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
     menu.addAction(&mpdupdate);
