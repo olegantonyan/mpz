@@ -209,6 +209,9 @@ builds:
   - distro: "rockylinux_9"
     <<: *readhat_qt5
 
+  - distro: "rockylinux_10"
+    <<: *readhat_qt6
+
   - distro: "mageia_9"
     <<: *mageia_qt6
 
