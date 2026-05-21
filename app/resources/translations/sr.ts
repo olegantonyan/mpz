@@ -216,7 +216,7 @@
     <message>
         <location filename="../../mainmenu.cpp" line="23"/>
         <source>mpd update</source>
-        <translation>mpd update</translation>
+        <translation>Ажурирај mpd базу</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
         <location filename="../../mainwindow.ui" line="23"/>
         <location filename="../../mainwindow.cpp" line="584"/>
         <source>Stop</source>
-        <translation>Зауставити</translation>
+        <translation>Заустави</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="30"/>
@@ -553,7 +553,7 @@
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="30"/>
         <source>Load m3u</source>
-        <translation></translation>
+        <translation>Учитај m3u</translation>
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="31"/>
@@ -806,7 +806,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
         <source>Add MPRIS sender</source>
-        <translation>Додај MPRIS пошиљалац</translation>
+        <translation>Додај MPRIS пошиљаоца</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="369"/>
@@ -844,7 +844,7 @@
     <message>
         <location filename="../../shortcuts.cpp" line="36"/>
         <source>Stop</source>
-        <translation>Зауставити</translation>
+        <translation>Заустави</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="37"/>
@@ -969,7 +969,7 @@
     <message>
         <location filename="../../sort_ui/sortingpresets.ui" line="52"/>
         <source>Add</source>
-        <translation>Додати</translation>
+        <translation>Додај</translation>
     </message>
     <message>
         <location filename="../../sort_ui/sortingpresets.ui" line="66"/>
@@ -1006,7 +1006,7 @@
         <location filename="../../statusbarlabel.cpp" line="18"/>
         <location filename="../../statusbarlabel.cpp" line="38"/>
         <source>Stopped</source>
-        <translation>Заустављен</translation>
+        <translation>Заустављено</translation>
     </message>
     <message>
         <location filename="../../statusbarlabel.cpp" line="24"/>
@@ -1089,7 +1089,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="63"/>
         <source>Artist</source>
-        <translation>Уметник</translation>
+        <translation>Извођач</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="66"/>
@@ -1189,7 +1189,7 @@
         <location filename="../../trayicon.cpp" line="9"/>
         <location filename="../../trayicon.cpp" line="81"/>
         <source>Stopped</source>
-        <translation>Заустављен</translation>
+        <translation>Заустављено</translation>
     </message>
     <message>
         <location filename="../../trayicon.cpp" line="12"/>
@@ -1209,7 +1209,7 @@
     <message>
         <location filename="../../trayicon.cpp" line="18"/>
         <source>Stop</source>
-        <translation>Зауставити</translation>
+        <translation>Заустави</translation>
     </message>
     <message>
         <location filename="../../trayicon.cpp" line="20"/>

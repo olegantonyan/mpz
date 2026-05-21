@@ -37,7 +37,7 @@
     <message>
         <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Config files path: </source>
-        <translation>Расположение кофигурационных файлов: </translation>
+        <translation>Расположение конфигурационных файлов: </translation>
     </message>
 </context>
 <context>
@@ -153,7 +153,7 @@
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="30"/>
         <source>(optional )Your name / contact if you&apos;d like to hear back</source>
-        <translation>(по желанию) Имя / контакт если хотите чтобы быть в курсе работы по вашему сообщению</translation>
+        <translation>(по желанию) Имя / контакт, если хотите быть в курсе работы по вашему сообщению</translation>
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="46"/>
@@ -178,7 +178,7 @@
     <message>
         <location filename="../../feedback_ui/feedbackform.cpp" line="68"/>
         <source>Error occured, please try again</source>
-        <translation>Произошла ошибка, пожалуйста повторите</translation>
+        <translation>Произошла ошибка, пожалуйста, повторите</translation>
     </message>
 </context>
 <context>
@@ -335,7 +335,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="247"/>
         <source>Default playback order</source>
-        <translation>Порядок воспроизедения по умолчанию</translation>
+        <translation>Порядок воспроизведения по умолчанию</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="254"/>
@@ -486,7 +486,7 @@
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="51"/>
         <source>This session time played</source>
-        <translation>Время воспроизвдения в этой сессии</translation>
+        <translation>Время воспроизведения в этой сессии</translation>
     </message>
     <message>
         <location filename="../../playback_log_ui/playbacklogdialog.cpp" line="69"/>
@@ -1150,12 +1150,12 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="180"/>
         <source>Searching lyrics...</source>
-        <translation>Поиск текста...</translation>
+        <translation>Поиск текста песни...</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
         <source>No lyrics found.</source>
-        <translation>Текст не найден.</translation>
+        <translation>Текст песни не найден.</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="259"/>
