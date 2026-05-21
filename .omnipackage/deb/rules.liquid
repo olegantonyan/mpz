@@ -10,4 +10,8 @@
 # in obj-$(DEB_HOST_MULTIARCH)/. cpptrace's PreventInSourceBuilds guard fires
 # otherwise. -DCMAKE_INSTALL_PREFIX=/usr is set automatically by debhelper.
 override_dh_auto_configure:
-	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} {{ CMAKE_EXTRA_CLI }}
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }}
+
+override_dh_strip:
+	dh_strip --automatic-dbgsym
+	./scripts/upload-symbols.sh debian/ || true

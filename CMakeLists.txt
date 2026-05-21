@@ -368,6 +368,29 @@ if(UNIX AND NOT APPLE)
 endif()
 # ENDOF CPPTRACE
 
+# SENTRY
+set(SENTRY_DSN "" CACHE STRING "Sentry DSN (empty disables crash reporting)")
+if(NOT SENTRY_DSN STREQUAL "")
+  set(SENTRY_NATIVE_DIR 3rdparty/sentry-native-0.14.0)
+  # inproc backend: in-process signal handler, no external crashpad_handler
+  # binary, no mini_chromium dependency. Trade-off vs crashpad: no register
+  # dumps and less robustness against heap-corrupted crashes — acceptable for
+  # a desktop app and avoids the crashpad-on-MinGW build pain on Windows.
+  set(SENTRY_BACKEND inproc CACHE STRING "" FORCE)
+  set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+  set(SENTRY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(SENTRY_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+  set(SENTRY_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+  message(STATUS "using vendored sentry-native from ${SENTRY_NATIVE_DIR}")
+  add_subdirectory(${SENTRY_NATIVE_DIR})
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/sentry_init.cpp)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sentry::sentry)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE SENTRY_DSN_STRING="${SENTRY_DSN}")
+else()
+  message(STATUS "SENTRY_DSN unset — building without crash reporting")
+endif()
+# ENDOF SENTRY
+
 set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPARTY
 

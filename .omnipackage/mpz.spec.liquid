@@ -9,9 +9,6 @@ Vendor:     OmniPackage
 
 BuildRequires: {{ build_dependencies | join: ' ' }}
 
-%define debug_package %{nil}
-%define _build_id_links none
-
 %description
 {{ description }}
 
@@ -23,7 +20,7 @@ BuildRequires: {{ build_dependencies | join: ' ' }}
 %build
 mkdir _build
 cd _build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} {{ CMAKE_EXTRA_CLI }} ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" {{ CMAKE_EXTRA_CLI }} ..
 make %{?_smp_mflags}
 
 
@@ -31,6 +28,13 @@ make %{?_smp_mflags}
 %install
 cd _build
 make install
+
+
+%check
+# Upload debug symbols to Sentry. Runs after __debug_install_post has split DWARF
+# into %{buildroot}/usr/lib/debug/.build-id/. Silent no-op when SENTRY_AUTH_TOKEN
+# is unset, so distro maintainer builds and forks aren't affected.
+%{_builddir}/%{name}-%{version}/scripts/upload-symbols.sh %{buildroot} || true
 
 
 %files
