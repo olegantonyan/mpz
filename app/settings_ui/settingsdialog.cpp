@@ -57,9 +57,6 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
   tabs->addTab(buildLyricsTab(),   tr("Lyrics"));
   tabs->addTab(buildAdvancedTab(), tr("Advanced"));
 
-  auto *note = new QLabel(tr("Some settings take effect after restart."), this);
-  note->setStyleSheet("color: gray;");
-
   button_box = new QDialogButtonBox(
     QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel,
     this);
@@ -71,7 +68,6 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
 
   auto *root = new QVBoxLayout(this);
   root->addWidget(tabs);
-  root->addWidget(note);
   root->addWidget(button_box);
 
   populateLanguages();
@@ -184,12 +180,17 @@ QWidget *SettingsDialog::buildGeneralTab() {
   auto *btn_rem = new QPushButton(tr("Remove"));
   auto *btn_up  = new QPushButton(tr("Move up"));
   auto *btn_dn  = new QPushButton(tr("Move down"));
+  auto *btn_reset_cols = new QPushButton(tr("Restore defaults"));
   col_btns->addWidget(btn_add);
   col_btns->addWidget(btn_rem);
   col_btns->addWidget(btn_up);
   col_btns->addWidget(btn_dn);
   col_btns->addStretch();
+  col_btns->addWidget(btn_reset_cols);
   cv->addLayout(col_btns);
+  auto *cols_hint = new QLabel(tr("(requires restart)"));
+  cols_hint->setStyleSheet("color: gray;");
+  cv->addWidget(cols_hint);
 
   auto add_column_row = [this](const QString &field, int width_pct,
                                const QString &align, bool stretch) {
@@ -273,6 +274,18 @@ QWidget *SettingsDialog::buildGeneralTab() {
   };
   connect(btn_up, &QPushButton::clicked, this, [move_row]() { move_row(-1); });
   connect(btn_dn, &QPushButton::clicked, this, [move_row]() { move_row(+1); });
+  connect(btn_reset_cols, &QPushButton::clicked, this, [this, add_column_row]() {
+    table_columns->setRowCount(0);
+    PlaylistUi::ColumnsConfig defaults;
+    for (int i = 1; i <= defaults.count(); ++i) {
+      const bool right = (defaults.align(i) & Qt::AlignRight) == Qt::AlignRight;
+      add_column_row(defaults.field(i),
+                     static_cast<int>(defaults.width(i) * 100),
+                     right ? "right" : "left",
+                     defaults.stretch(i));
+    }
+    fitColumnsTableHeight();
+  });
 
   vbox->addWidget(gb_cols);
   vbox->addStretch();
