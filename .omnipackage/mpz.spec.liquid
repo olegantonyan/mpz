@@ -21,16 +21,13 @@ BuildRequires: {{ build_dependencies | join: ' ' }}
 
 
 %build
-mkdir _build
-cd _build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} {{ CMAKE_EXTRA_CLI }} ..
-make %{?_smp_mflags}
+cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPACKAGE_VERSION={{ version }} {{ CMAKE_EXTRA_CLI }} ..
+cmake --build _build --parallel
 
 
 
 %install
-cd _build
-make install
+cmake --install _build
 
 
 %files

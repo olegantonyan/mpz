@@ -99,7 +99,7 @@ The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/
 - `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
 - `global.yml` - for portable settings that make sense to share between computers.
 
-Some config options can be changed only by editing config files:
+Starting from version 2.0.8 there is settings dialog where all these options can be changed via GUI.
 
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` player will prevent your OS from automatic sleep while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
@@ -114,9 +114,7 @@ If you messed up any of the config options you can remove it completely (or even
 
 #### Columns config
 
-You can change the default columns in the playlist view via `columns_config` option in `global.yml` file.
-
-This config option does not (yet) have UI to change it so you have to edit config file. The defaults are:
+You can change the default columns in the playlist view via `columns_config` option in `global.yml` file. The defaults are:
 
 ```
 columns_config:
