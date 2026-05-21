@@ -507,29 +507,34 @@
 <context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="16"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="17"/>
         <source>Remove</source>
         <translation>Уклони</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="20"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="21"/>
         <source>Show in file manager</source>
         <translation>Прикажи у менаџеру датотека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="24"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="25"/>
         <source>Copy name</source>
         <translation>Копирај име</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="28"/>
         <source>Clear filter</source>
         <translation>Обриши филтер</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="31"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="32"/>
         <source>Track info</source>
         <translation>Информације о нумери</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="36"/>
+        <source>Edit tags…</source>
+        <translation>Уреди ознаке…</translation>
     </message>
 </context>
 <context>
@@ -1067,6 +1072,85 @@
         <location filename="../../statusbarlabel.cpp" line="91"/>
         <source>bytes</source>
         <translation>бајтова</translation>
+    </message>
+</context>
+<context>
+    <name>TagEditorDialog</name>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="14"/>
+        <source>Edit tags</source>
+        <translation>Уређивање ознака</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
+        <source>Artist</source>
+        <translation>Извођач</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="39"/>
+        <source>Album</source>
+        <translation>Албум</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="49"/>
+        <source>Title</source>
+        <translation>Наслов</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="59"/>
+        <source>Year</source>
+        <translation>Година</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="69"/>
+        <source>Track number</source>
+        <translation>Број нумере</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="79"/>
+        <source>Genre</source>
+        <translation>Жанр</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="89"/>
+        <source>Comment</source>
+        <translation>Коментар</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="84"/>
+        <source>Editing %n track(s)</source>
+        <translation>
+            <numerusform>Уређивање %n нумере</numerusform>
+            <numerusform>Уређивање %n нумере</numerusform>
+            <numerusform>Уређивање %n нумера</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="112"/>
+        <source>&lt;multiple values&gt;</source>
+        <translation>&lt;више вредности&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="127"/>
+        <source>Could not open file</source>
+        <translation>Није могуће отворити фајл</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="157"/>
+        <source>TagLib refused to save (file not writable?)</source>
+        <translation>TagLib је одбио да сачува (фајл није уписив?)</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="185"/>
+        <source>Save failed</source>
+        <translation>Чување није успело</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="186"/>
+        <source>Could not write tags for the following files:
+%1</source>
+        <translation>Није могуће уписати ознаке у следеће фајлове:
+%1</translation>
     </message>
 </context>
 <context>

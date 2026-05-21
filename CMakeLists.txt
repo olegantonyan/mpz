@@ -77,6 +77,7 @@ set(PROJECT_SOURCES
   app/playlist_ui/playlistproxyfiltermodel.cpp
   app/playlist_ui/playlistcontextmenu.cpp
   app/playlist_ui/trackinfodialog.cpp
+  app/playlist_ui/tageditordialog.cpp
   app/playlists_ui/playlistscontextmenu.cpp
   app/directory_ui/directorycontextmenu.cpp
   app/directory_ui/directorysortmenu.cpp
@@ -105,6 +106,7 @@ set(PROJECT_SOURCES
   app/mainwindow.ui
   app/playback_log_ui/playbacklogdialog.ui
   app/playlist_ui/trackinfodialog.ui
+  app/playlist_ui/tageditordialog.ui
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
   resources.qrc
