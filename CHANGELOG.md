@@ -4,6 +4,7 @@
 
 - CUE continious playback if next track is on the same file sequntially
 - settings UI dialog
+- better MPD server errors display
 
 ### Fixed
 

@@ -74,10 +74,6 @@
         <translation>Додај mpd</translation>
     </message>
     <message>
-        <source>Add</source>
-        <translation type="vanished">Додати</translation>
-    </message>
-    <message>
         <location filename="../../directory_ui/directorysettings.ui" line="41"/>
         <source>Remove</source>
         <translation>Уклони</translation>
@@ -188,14 +184,6 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <source>Tray icon</source>
-        <translation type="vanished">Икона у системској траци</translation>
-    </message>
-    <message>
-        <source>Minimize to tray</source>
-        <translation type="vanished">Умањи у системску траку</translation>
-    </message>
-    <message>
         <location filename="../../mainmenu.cpp" line="17"/>
         <source>Settings…</source>
         <translation>Подешавања…</translation>
@@ -224,14 +212,6 @@
         <location filename="../../mainmenu.cpp" line="22"/>
         <source>Keyboard shortcuts</source>
         <translation>Пречице на тастатури</translation>
-    </message>
-    <message>
-        <source>Save settings</source>
-        <translation type="vanished">Сачувај подешавања</translation>
-    </message>
-    <message>
-        <source>Open config directory</source>
-        <translation type="vanished">Отворите конфигурациони директоријум</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="23"/>
@@ -291,10 +271,6 @@
         <location filename="../../mainwindow.ui" line="112"/>
         <source>Volume</source>
         <translation>Гласноћа</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation type="vanished">Аудиоизлаз</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="125"/>
@@ -480,8 +456,8 @@
     <name>ModusOperandi</name>
     <message>
         <location filename="../../modusoperandi.cpp" line="26"/>
-        <source>mpd connection error</source>
-        <translation>грешка mpd везе</translation>
+        <source>mpd error</source>
+        <translation>грешка mpd-а</translation>
     </message>
     <message>
         <location filename="../../modusoperandi.cpp" line="29"/>
@@ -606,6 +582,34 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="26"/>
+        <source>timeout: %1</source>
+        <translation>истек времена: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="27"/>
+        <source>host not found: %1</source>
+        <translation>хост није пронађен: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="28"/>
+        <source>connection closed by server: %1</source>
+        <translation>сервер је затворио везу: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="31"/>
+        <source>authentication failed: %1</source>
+        <translation>аутентификација није успела: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="32"/>
+        <source>permission denied: %1</source>
+        <translation>приступ одбијен: %1</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="52"/>
@@ -626,10 +630,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
         <source>Advanced</source>
         <translation>Напредно</translation>
-    </message>
-    <message>
-        <source>Some settings take effect after restart.</source>
-        <translation type="vanished">Нека подешавања ступају на снагу након поновног покретања.</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="64"/>
@@ -670,10 +670,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="128"/>
         <source>Show system tray icon</source>
         <translation>Прикажи икону у системској траци</translation>
-    </message>
-    <message>
-        <source>Minimize to tray instead of taskbar</source>
-        <translation type="vanished">Умањи у системску траку уместо у траку задатака</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>

@@ -59,10 +59,6 @@
 <context>
     <name>DirectorySettings</name>
     <message>
-        <source>Add</source>
-        <translation type="vanished">Добавить</translation>
-    </message>
-    <message>
         <location filename="../../directory_ui/directorysettings.ui" line="27"/>
         <source>Add folder</source>
         <translation>Добавить папку</translation>
@@ -188,14 +184,6 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <source>Tray icon</source>
-        <translation type="vanished">Значок в трее</translation>
-    </message>
-    <message>
-        <source>Minimize to tray</source>
-        <translation type="vanished">Сворачивать в трей</translation>
-    </message>
-    <message>
         <location filename="../../mainmenu.cpp" line="17"/>
         <source>Settings…</source>
         <translation>Настройки…</translation>
@@ -224,14 +212,6 @@
         <location filename="../../mainmenu.cpp" line="22"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
-    </message>
-    <message>
-        <source>Save settings</source>
-        <translation type="vanished">Сохранить настройки</translation>
-    </message>
-    <message>
-        <source>Open config directory</source>
-        <translation type="vanished">Открыть папку с конфигами</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="23"/>
@@ -291,10 +271,6 @@
         <location filename="../../mainwindow.ui" line="102"/>
         <source>Sort</source>
         <translation>Сортировка</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation type="vanished">Аудиовыход</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="125"/>
@@ -480,8 +456,8 @@
     <name>ModusOperandi</name>
     <message>
         <location filename="../../modusoperandi.cpp" line="26"/>
-        <source>mpd connection error</source>
-        <translation>ошибка подключения mpd</translation>
+        <source>mpd error</source>
+        <translation>ошибка mpd</translation>
     </message>
     <message>
         <location filename="../../modusoperandi.cpp" line="29"/>
@@ -606,6 +582,34 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="26"/>
+        <source>timeout: %1</source>
+        <translation>тайм-аут: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="27"/>
+        <source>host not found: %1</source>
+        <translation>хост не найден: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="28"/>
+        <source>connection closed by server: %1</source>
+        <translation>соединение закрыто сервером: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="31"/>
+        <source>authentication failed: %1</source>
+        <translation>ошибка аутентификации: %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="32"/>
+        <source>permission denied: %1</source>
+        <translation>доступ запрещён: %1</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="52"/>
@@ -626,10 +630,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
-    </message>
-    <message>
-        <source>Some settings take effect after restart.</source>
-        <translation type="vanished">Некоторые настройки применятся после перезапуска.</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="64"/>
@@ -670,10 +670,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="128"/>
         <source>Show system tray icon</source>
         <translation>Показывать значок в трее</translation>
-    </message>
-    <message>
-        <source>Minimize to tray instead of taskbar</source>
-        <translation type="vanished">Сворачивать в трей вместо панели задач</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>

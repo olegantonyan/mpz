@@ -2,12 +2,15 @@
 
 #include <QVBoxLayout>
 #include <QEasingCurve>
+#include <QResizeEvent>
 
 SlidingBanner::SlidingBanner(QWidget *parent) : QWidget{parent} {
   setFixedHeight(0);
 
   label = new QLabel(this);
   label->setAlignment(Qt::AlignCenter);
+  label->setWordWrap(true);
+  label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
   auto *layout = new QVBoxLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);
@@ -46,7 +49,7 @@ void SlidingBanner::showMessage(const QString &text, BannerType type, int timeou
 void SlidingBanner::expand() {
   animation->stop();
   animation->setStartValue(height());
-  animation->setEndValue(layout()->sizeHint().height());
+  animation->setEndValue(targetHeight());
   animation->start();
 }
 
@@ -55,4 +58,26 @@ void SlidingBanner::collapse() {
   animation->setStartValue(height());
   animation->setEndValue(0);
   animation->start();
+}
+
+void SlidingBanner::resizeEvent(QResizeEvent *event) {
+  QWidget::resizeEvent(event);
+  if (animation->state() == QAbstractAnimation::Running || maximumHeight() == 0) {
+    return;
+  }
+  int target = targetHeight();
+  if (target != maximumHeight()) {
+    setMaximumHeight(target);
+  }
+}
+
+int SlidingBanner::targetHeight() const {
+  int w = width();
+  if (w > 0) {
+    int h = label->heightForWidth(w);
+    if (h > 0) {
+      return h;
+    }
+  }
+  return layout()->sizeHint().height();
 }

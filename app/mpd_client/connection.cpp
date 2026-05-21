@@ -20,6 +20,22 @@ private:
 };
 
 namespace MpdClient {
+  QString formatMpdError(struct mpd_connection *conn) {
+    const QString msg = QString::fromUtf8(mpd_connection_get_error_message(conn));
+    switch (mpd_connection_get_error(conn)) {
+      case MPD_ERROR_TIMEOUT:  return QObject::tr("timeout: %1").arg(msg);
+      case MPD_ERROR_RESOLVER: return QObject::tr("host not found: %1").arg(msg);
+      case MPD_ERROR_CLOSED:   return QObject::tr("connection closed by server: %1").arg(msg);
+      case MPD_ERROR_SERVER:
+        switch (mpd_connection_get_server_error(conn)) {
+          case MPD_SERVER_ERROR_PASSWORD:   return QObject::tr("authentication failed: %1").arg(msg);
+          case MPD_SERVER_ERROR_PERMISSION: return QObject::tr("permission denied: %1").arg(msg);
+          default: return msg;
+        }
+      default: return msg;
+    }
+  }
+
   Connection::Connection() : QObject{nullptr} {
   }
 
@@ -633,7 +649,7 @@ namespace MpdClient {
       return false;
     }
     if (mpd_connection_get_error(new_conn) != MPD_ERROR_SUCCESS) {
-      auto err = QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+      auto err = formatMpdError(new_conn);
       qWarning() << "error connecting to mpd:" << err;
       mpd_connection_free(new_conn);
       emit error(url, err);
@@ -641,7 +657,7 @@ namespace MpdClient {
     }
     if (!url.password().isEmpty()) {
       if (!mpd_run_password(new_conn, url.password().toUtf8().constData())) {
-        auto err = QString::fromUtf8(mpd_connection_get_error_message(new_conn));
+        auto err = formatMpdError(new_conn);
         qWarning() << "password auth error:" << err;
         mpd_connection_free(new_conn);
         emit error(url, err);
@@ -680,14 +696,14 @@ namespace MpdClient {
     }
     if (mpd_connection_get_error(probed_conn) != MPD_ERROR_SUCCESS) {
       result.first = false;
-      result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+      result.second = formatMpdError(probed_conn);
       mpd_connection_free(probed_conn);
       return result;
     }
     if (!url.password().isEmpty()) {
       if (!mpd_run_password(probed_conn, url.password().toUtf8().constData())) {
         result.first = false;
-        result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+        result.second = formatMpdError(probed_conn);
         mpd_connection_free(probed_conn);
         return result;
       }
@@ -698,7 +714,7 @@ namespace MpdClient {
 
     if (!mpd_send_stats(probed_conn)) {
       result.first = false;
-      result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+      result.second = formatMpdError(probed_conn);
       mpd_connection_free(probed_conn);
       return result;
     }
@@ -706,7 +722,7 @@ namespace MpdClient {
     struct mpd_stats *stats = mpd_recv_stats(probed_conn);
     if (!stats) {
       result.first = false;
-      result.second = QString::fromUtf8(mpd_connection_get_error_message(probed_conn));
+      result.second = formatMpdError(probed_conn);
       mpd_connection_free(probed_conn);
       return result;
     }
@@ -731,14 +747,14 @@ namespace MpdClient {
       return false;
     }
     if (mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
-      qWarning() << "error establishing idle connection" << mpd_connection_get_error_message(idle_conn);
+      qWarning() << "error establishing idle connection" << formatMpdError(idle_conn);
       mpd_connection_free(idle_conn);
       idle_conn = nullptr;
       return false;
     }
     if (!url.password().isEmpty()) {
       if (!mpd_run_password(idle_conn, url.password().toUtf8().constData())) {
-        qWarning() << "password auth error idle:" << QString::fromUtf8(mpd_connection_get_error_message(idle_conn));
+        qWarning() << "password auth error idle:" << formatMpdError(idle_conn);
         mpd_connection_free(idle_conn);
         idle_conn = nullptr;
         return false;

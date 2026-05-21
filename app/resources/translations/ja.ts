@@ -59,10 +59,6 @@
 <context>
     <name>DirectorySettings</name>
     <message>
-        <source>Add</source>
-        <translation type="vanished">追加</translation>
-    </message>
-    <message>
         <location filename="../../directory_ui/directorysettings.ui" line="27"/>
         <source>Add folder</source>
         <translation>フォルダーを追加</translation>
@@ -311,14 +307,6 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <source>Tray icon</source>
-        <translation type="vanished">トレイアイコン</translation>
-    </message>
-    <message>
-        <source>Minimize to tray</source>
-        <translation type="vanished">トレイに最小化</translation>
-    </message>
-    <message>
         <location filename="../../mainmenu.cpp" line="17"/>
         <source>Settings…</source>
         <translation>設定…</translation>
@@ -347,14 +335,6 @@
         <location filename="../../mainmenu.cpp" line="22"/>
         <source>Keyboard shortcuts</source>
         <translation>キーボードショートカット</translation>
-    </message>
-    <message>
-        <source>Save settings</source>
-        <translation type="vanished">設定を保存</translation>
-    </message>
-    <message>
-        <source>Open config directory</source>
-        <translation type="vanished">設定ディレクトリを開く</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="23"/>
@@ -414,10 +394,6 @@
         <location filename="../../mainwindow.ui" line="102"/>
         <source>Sort</source>
         <translation>並び替え</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation type="vanished">出力</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="125"/>
@@ -603,8 +579,8 @@
     <name>ModusOperandi</name>
     <message>
         <location filename="../../modusoperandi.cpp" line="26"/>
-        <source>mpd connection error</source>
-        <translation>mpd接続エラー</translation>
+        <source>mpd error</source>
+        <translation>mpd エラー</translation>
     </message>
     <message>
         <location filename="../../modusoperandi.cpp" line="29"/>
@@ -740,6 +716,34 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="26"/>
+        <source>timeout: %1</source>
+        <translation>タイムアウト : %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="27"/>
+        <source>host not found: %1</source>
+        <translation>ホストが見つかりません : %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="28"/>
+        <source>connection closed by server: %1</source>
+        <translation>サーバーによって接続が切断されました : %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="31"/>
+        <source>authentication failed: %1</source>
+        <translation>認証に失敗しました : %1</translation>
+    </message>
+    <message>
+        <location filename="../../mpd_client/connection.cpp" line="32"/>
+        <source>permission denied: %1</source>
+        <translation>アクセスが拒否されました : %1</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="52"/>
@@ -760,10 +764,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
         <source>Advanced</source>
         <translation>詳細</translation>
-    </message>
-    <message>
-        <source>Some settings take effect after restart.</source>
-        <translation type="vanished">一部の設定は再起動後に有効になります。</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="64"/>
@@ -804,10 +804,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="128"/>
         <source>Show system tray icon</source>
         <translation>システムトレイアイコンを表示</translation>
-    </message>
-    <message>
-        <source>Minimize to tray instead of taskbar</source>
-        <translation type="vanished">タスクバーではなくトレイに最小化</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>
