@@ -25,7 +25,8 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Supports CUE sheets;
 - Supports MPRIS on Linux for remote control (for example, via [KDE Connect](https://kdeconnect.kde.org/));
 - Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation);
-- [mpd](https://musicpd.org) client mode support (version 2.0.0+).
+- [mpd](https://musicpd.org) client mode support (version 2.0.0+);
+- Tags editor.
 
 ## Installation
 

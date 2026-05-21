@@ -1,5 +1,6 @@
 #include "playlistcontextmenu.h"
 #include "trackinfodialog.h"
+#include "tageditordialog.h"
 #include "reveal_in_filemanager.h"
 
 #include <QMenu>
@@ -31,6 +32,10 @@ namespace PlaylistUi {
     info.setText(tr("Track info"));
     connect(&info, &QAction::triggered, this, &PlaylistContextMenu::on_trackInfo);
     info.setIcon(view->style()->standardIcon(QStyle::SP_MessageBoxInformation));
+
+    edit_tags.setText(tr("Edit tags…"));
+    connect(&edit_tags, &QAction::triggered, this, &PlaylistContextMenu::on_editTags);
+    edit_tags.setIcon(view->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
   }
 
   void PlaylistContextMenu::show(const QPoint &pos) {
@@ -57,6 +62,17 @@ namespace PlaylistUi {
     menu.addAction(&copy_name);
     if (proxy->modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
       menu.addAction(&show_in_filemanager);
+      bool any_editable = false;
+      for (const auto &i : view->selectionModel()->selectedRows()) {
+        const auto t = proxy->activeModel()->itemAt(proxy->mapToSource(i));
+        if (!t.isCue() && !t.isMpd() && !t.isStream()) {
+          any_editable = true;
+          break;
+        }
+      }
+      if (any_editable) {
+        menu.addAction(&edit_tags);
+      }
     }
     menu.addSeparator();
     menu.addAction(&remove);
@@ -105,5 +121,26 @@ namespace PlaylistUi {
       connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
       dlg->show();
     }
+  }
+
+  void PlaylistContextMenu::on_editTags() {
+    QVector<Track> editable;
+    for (const auto &i : view->selectionModel()->selectedRows()) {
+      const auto t = proxy->activeModel()->itemAt(proxy->mapToSource(i));
+      if (!t.isCue() && !t.isMpd() && !t.isStream()) {
+        editable << t;
+      }
+    }
+    if (editable.isEmpty()) {
+      return;
+    }
+    auto pl = proxy->activeModel()->playlist();
+    TagEditorDialog *dlg = new TagEditorDialog(editable);
+    dlg->setModal(false);
+    connect(dlg, &TagEditorDialog::finished, dlg, &TagEditorDialog::deleteLater);
+    connect(dlg, &TagEditorDialog::saved, this, [this, pl](const QList<quint64> &uids) {
+      emit tracksChanged(pl, uids);
+    });
+    dlg->show();
   }
 }

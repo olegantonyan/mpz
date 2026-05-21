@@ -507,29 +507,34 @@
 <context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="16"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="17"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="20"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="21"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="24"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="25"/>
         <source>Copy name</source>
         <translation>名前をコピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="28"/>
         <source>Clear filter</source>
         <translation>フィルターをクリア</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="31"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="32"/>
         <source>Track info</source>
         <translation>トラック情報</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="36"/>
+        <source>Edit tags…</source>
+        <translation>タグを編集…</translation>
     </message>
 </context>
 <context>
@@ -1067,6 +1072,83 @@
         <location filename="../../statusbarlabel.cpp" line="91"/>
         <source>bytes</source>
         <translation>バイト</translation>
+    </message>
+</context>
+<context>
+    <name>TagEditorDialog</name>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="14"/>
+        <source>Edit tags</source>
+        <translation>タグを編集</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
+        <source>Artist</source>
+        <translation>アーティスト</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="39"/>
+        <source>Album</source>
+        <translation>アルバム</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="49"/>
+        <source>Title</source>
+        <translation>タイトル</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="59"/>
+        <source>Year</source>
+        <translation>年</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="69"/>
+        <source>Track number</source>
+        <translation>トラック番号</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="79"/>
+        <source>Genre</source>
+        <translation>ジャンル</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="89"/>
+        <source>Comment</source>
+        <translation>コメント</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="84"/>
+        <source>Editing %n track(s)</source>
+        <translation>
+            <numerusform>%n 個のトラックを編集</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="112"/>
+        <source>&lt;multiple values&gt;</source>
+        <translation>&lt;複数の値&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="127"/>
+        <source>Could not open file</source>
+        <translation>ファイルを開けませんでした</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="157"/>
+        <source>TagLib refused to save (file not writable?)</source>
+        <translation>TagLib が保存を拒否しました（ファイルが書き込み不可？）</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="185"/>
+        <source>Save failed</source>
+        <translation>保存に失敗しました</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="186"/>
+        <source>Could not write tags for the following files:
+%1</source>
+        <translation>次のファイルにタグを書き込めませんでした：
+%1</translation>
     </message>
 </context>
 <context>
