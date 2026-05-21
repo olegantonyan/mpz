@@ -83,7 +83,8 @@ Packages' names may differ in different distros.
 
 ```
 cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+cmake --build build --parallel
+
 # now you can use build/mpz binary directly
 # optionally, install to /usr/local:
 sudo cmake --install build
