@@ -30,7 +30,7 @@ namespace Playback {
         offset_end = 0;
         next_after_stop = false;
         emit positionChanged(0);
-        emit nextRequested();
+        QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
       }
     });
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -42,7 +42,9 @@ namespace Playback {
         case QMediaPlayer::StoppedState:
           emit positionChanged(0);
           if (next_after_stop) {
-            emit nextRequested();
+            // Defer one tick so the next setSource/play doesn't re-enter
+            // QMediaPlayer while it's still inside its own EOF emission.
+            QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
           } else {
             emitStateChanged(MediaPlayer::StoppedState);
           }
