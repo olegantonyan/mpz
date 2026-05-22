@@ -135,7 +135,7 @@ namespace PlaylistUi {
       return;
     }
     auto pl = proxy->activeModel()->playlist();
-    TagEditorDialog *dlg = new TagEditorDialog(editable);
+    TagEditorDialog *dlg = new TagEditorDialog(editable, pl);
     dlg->setModal(false);
     connect(dlg, &TagEditorDialog::finished, dlg, &TagEditorDialog::deleteLater);
     connect(dlg, &TagEditorDialog::saved, this, [this, pl](const QList<quint64> &uids) {
