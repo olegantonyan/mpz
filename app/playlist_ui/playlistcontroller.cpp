@@ -68,6 +68,7 @@ namespace PlaylistUi {
 
     context_menu = new PlaylistContextMenu(proxy, view, search, this);
     connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
+    connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(view, &QTableView::customContextMenuRequested, context_menu, &PlaylistContextMenu::show);
@@ -153,6 +154,18 @@ namespace PlaylistUi {
     proxy->activeModel()->reload();
     emit changed(proxy->activeModel()->playlist());
     spinner->hide();
+  }
+
+  void Controller::on_tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids) {
+    if (pl == nullptr || uids.isEmpty()) {
+      return;
+    }
+    for (quint64 uid : uids) {
+      pl->reloadTrack(uid);
+    }
+    if (pl == proxy->activeModel()->playlist()) {
+      proxy->activeModel()->reload();
+    }
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

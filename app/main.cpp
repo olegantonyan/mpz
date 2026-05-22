@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "mpzapplication.h"
 #include "rnjesus.h"
 #include "ipc/instance.h"
 #include "track.h"
@@ -18,7 +19,6 @@
   #include "sentry_init.h"
 #endif
 
-#include <QApplication>
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
@@ -52,7 +52,7 @@ QStringList args(int argc, char *argv[]) {
   return result;
 }
 
-void load_locale(QApplication &a, const QString &conf_language) {
+void load_locale(MpzApplication &a, const QString &conf_language) {
   QString system_language = QLocale::system().name().split("_").first();
   QString lang;
   if (conf_language.isEmpty()) {
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
   registerMetaTypes();
   RNJesus::seed();
 
-  QApplication a(argc, argv);
+  MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
   QString version = VERSION;
 #ifdef PACKAGE_VERSION
@@ -120,7 +120,17 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  // Files opened from Finder before the main window exists arrive as
+  // QFileOpenEvent and queue up inside MpzApplication; merge them into
+  // the initial argument list. Later FileOpen events route through the
+  // same IPC signal as a second-instance file drop.
+  arguments << a.drainPendingFiles();
+
   MainWindow w(arguments, &instance, local_conf, global_conf);
+  QObject::connect(&a, &MpzApplication::filesOpened, &instance, &IPC::Instance::load_files_received);
+#ifdef Q_OS_MACOS
+  QObject::connect(&a, &MpzApplication::activated, &w, &MainWindow::onAppActivated);
+#endif
 
   w.show();
   const int rc = a.exec();

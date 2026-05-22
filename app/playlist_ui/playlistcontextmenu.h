@@ -24,6 +24,7 @@ namespace PlaylistUi {
 
   signals:
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
+    void tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private:
     ProxyFilterModel *proxy;
@@ -35,12 +36,14 @@ namespace PlaylistUi {
     QAction show_in_filemanager;
     QAction copy_name;
     QAction info;
+    QAction edit_tags;
 
   private slots:
     void on_clearFilter();
     void on_copyName();
     void on_showInFilemanager();
     void on_trackInfo();
+    void on_editTags();
   };
 }
 

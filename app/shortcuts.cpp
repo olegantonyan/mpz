@@ -48,7 +48,11 @@ QVector<QPair<QString, QString> > Shortcuts::describe() const {
   r << QPair<QString, QString>(tr("Open sort menu"), _open_sort_menu.key().toString());
   r << QPair<QString, QString>(tr("Open shortcuts dialog"), _open_shortcuts_menu.key().toString());
   r << QPair<QString, QString>(tr("Jump to playing track"), _jump_to_playing_track.key().toString());
+#ifdef Q_OS_MACOS
+  r << QPair<QString, QString>(tr("Quit"), QKeySequence(QKeySequence::Quit).toString(QKeySequence::NativeText));
+#else
   r << QPair<QString, QString>(tr("Quit"), _quit.key().toString());
+#endif
   return r;
 }
 
@@ -72,7 +76,11 @@ void Shortcuts::setupGlobal() {
 }
 
 void Shortcuts::setupLocal() {
+#ifndef Q_OS_MACOS
+  // On macOS the native menu bar owns ⌘Q via QKeySequence::Quit; registering
+  // a QShortcut with the same key fires alongside the menu action and closes twice.
   connect(&_quit, &QShortcut::activated, this, &Shortcuts::quit);
+#endif
   connect(&_focus_library, &QShortcut::activated, this, &Shortcuts::focusLibrary);
   connect(&_focus_playlists, &QShortcut::activated, this, &Shortcuts::focusPlaylists);
   connect(&_focus_playlist, &QShortcut::activated, this, &Shortcuts::focusPlaylist);
@@ -90,7 +98,9 @@ void Shortcuts::setupLocal() {
   connect(&_open_shortcuts_menu, &QShortcut::activated, this, &Shortcuts::openShortcutsMenu);
   connect(&_jump_to_playing_track, &QShortcut::activated, this, &Shortcuts::jumpToPLayingTrack);
 
+#ifndef Q_OS_MACOS
   _quit.setKey(Qt::CTRL | Qt::Key_Q);
+#endif
   _focus_library.setKey(Qt::CTRL | Qt::Key_1);
   _focus_playlists.setKey(Qt::CTRL | Qt::Key_2);
   _focus_playlist.setKey(Qt::CTRL | Qt::Key_3);

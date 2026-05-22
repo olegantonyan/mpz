@@ -25,7 +25,8 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Supports CUE sheets;
 - Supports MPRIS on Linux for remote control (for example, via [KDE Connect](https://kdeconnect.kde.org/));
 - Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation);
-- [mpd](https://musicpd.org) client mode support (version 2.0.0+).
+- [mpd](https://musicpd.org) client mode support (version 2.0.0+);
+- Tags editor.
 
 ## Installation
 
@@ -64,6 +65,18 @@ makepkg -si
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
+#### macOS (experimental)
+
+Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
+
+The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz.app` to `/Applications`, remove the quarantine flag from a terminal:
+
+```
+xattr -dr com.apple.quarantine /Applications/mpz.app
+```
+
+The app will then launch normally.
+
 #### From sources
 
 Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 on openSUSE).
@@ -71,7 +84,8 @@ Packages' names may differ in different distros.
 
 ```
 cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+cmake --build build --parallel
+
 # now you can use build/mpz binary directly
 # optionally, install to /usr/local:
 sudo cmake --install build
@@ -87,7 +101,7 @@ The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/
 - `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
 - `global.yml` - for portable settings that make sense to share between computers.
 
-Some config options can be changed only by editing config files:
+Starting from version 2.0.8 there is settings dialog where all these options can be changed via GUI.
 
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` player will prevent your OS from automatic sleep while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
@@ -96,14 +110,13 @@ Some config options can be changed only by editing config files:
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
+- `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
 
 #### Columns config
 
-You can change the default columns in the playlist view via `columns_config` option in `global.yml` file.
-
-This config option does not (yet) have UI to change it so you have to edit config file. The defaults are:
+You can change the default columns in the playlist view via `columns_config` option in `global.yml` file. The defaults are:
 
 ```
 columns_config:

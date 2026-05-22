@@ -1,8 +1,28 @@
-## [2.0.7] -
+## [2.0.8] -
+
+### Added
+
+- CUE continious playback if next track is on the same file sequntially
+- settings UI dialog
+- better MPD server errors display
+- tags editor dialog
+
+### Fixed
+
+- total and session playback time counter now works again
+- in "sequential (no loop)" mode fixed playback state after the last track finished
+
+### Misc
+
+- minimize to tray option is now close to tray as more portable and reliable alternative
+
+## [2.0.7] - 2026-05-19
 
 ### Added
 
 - when showing track in file manager make it selected there (works on multiselection too)
+- experimental build for macOS
+- `stop_when_track_removed` global config option
 
 ### Fixed
 

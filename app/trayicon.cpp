@@ -28,7 +28,7 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   connect(stop, &QAction::triggered, this, &TrayIcon::stopTriggered);
   connect(next, &QAction::triggered, this, &TrayIcon::nextTriggered);
   connect(prev, &QAction::triggered, this, &TrayIcon::prevTriggered);
-  connect(quit, &QAction::triggered, parent, &QMainWindow::close);
+  connect(quit, &QAction::triggered, this, &TrayIcon::quitTriggered);
 
   menu->addAction(now_playing);
   menu->addSeparator();
@@ -42,11 +42,17 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   trayicon->setContextMenu(menu);
   trayicon->show();
   connect(trayicon, &QSystemTrayIcon::activated, this, [=](QSystemTrayIcon::ActivationReason reason) {
+#ifdef Q_OS_MACOS
+    // setContextMenu() attaches a native NSMenu that AppKit opens on click.
+    // Popping our QMenu on top would stack two menus.
+    Q_UNUSED(reason)
+#else
     if (global_conf.minimizeToTray()) {
       emit clicked();
     } else if (reason == QSystemTrayIcon::Trigger) {
       menu->popup(QCursor::pos());
     }
+#endif
   });
 }
 

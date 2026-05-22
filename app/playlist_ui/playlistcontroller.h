@@ -45,6 +45,7 @@ namespace PlaylistUi {
     void on_search(const QString &term);
     void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
     void on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void on_tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private:
     QTableView *view;

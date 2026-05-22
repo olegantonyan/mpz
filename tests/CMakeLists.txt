@@ -13,9 +13,13 @@ function(mpz_add_test name)
     Qt${QT_VERSION_MAJOR}::Test
     Qt${QT_VERSION_MAJOR}::Core)
   target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/app)
-  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND NOT APPLE)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(${name} PRIVATE -ffunction-sections -fdata-sections)
-    target_link_options(${name} PRIVATE -Wl,--gc-sections)
+    if(APPLE)
+      target_link_options(${name} PRIVATE -Wl,-dead_strip)
+    else()
+      target_link_options(${name} PRIVATE -Wl,--gc-sections)
+    endif()
   endif()
   add_dependencies(build_tests ${name})
   add_test(NAME ${name} COMMAND ${name})
@@ -73,6 +77,20 @@ mpz_add_test(tst_configstorage tst_configstorage.cpp
   ${APP}/config/value.cpp)
 target_link_libraries(tst_configstorage PRIVATE yaml-cpp::yaml-cpp)
 target_compile_definitions(tst_configstorage PRIVATE VERSION="${PROJECT_VERSION}")
+
+# Config::Global wraps Storage; transitively pulls Track/columnsconfig via
+# headers, but --gc-sections drops unreferenced bodies (see tst_track note).
+mpz_add_test(tst_globalconfig tst_globalconfig.cpp
+  ${APP}/config/global.cpp
+  ${APP}/config/storage.cpp
+  ${APP}/config/value.cpp
+  ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_globalconfig PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+target_compile_definitions(tst_globalconfig PRIVATE VERSION="${PROJECT_VERSION}")
 
 # MPD data classes — testable for defaults + nullptr update guard.
 # Constructing real mpd_status/mpd_song/mpd_output structs requires

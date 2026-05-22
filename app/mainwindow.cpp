@@ -11,6 +11,15 @@
 #include <QTableWidgetItem>
 #include <QHash>
 
+#ifdef Q_OS_MACOS
+  #include "about_ui/aboutdialog.h"
+  #include "feedback_ui/feedbackform.h"
+  #include "settings_ui/settingsdialog.h"
+  #include <QMenuBar>
+  #include <QDesktopServices>
+  #include <QUrl>
+#endif
+
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -75,6 +84,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
+#ifdef Q_OS_MACOS
+  setupMacMenuBar();
+#endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -89,9 +101,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   connect(instance, &IPC::Instance::load_files_received, this, [=](const QStringList &lst) {
     preloadPlaylist(lst);
+    setWindowState(windowState() & ~Qt::WindowMinimized);
     show();
     raise();
-    setFocus();
+    activateWindow();
   });
 
 #ifdef ENABLE_MPD_SUPPORT
@@ -106,9 +119,10 @@ MainWindow::~MainWindow() {
 
 void MainWindow::toggleHidden() {
   if (isHidden()) {
+    setWindowState(windowState() & ~Qt::WindowMinimized);
     show();
     raise();
-    setFocus();
+    activateWindow();
   } else {
     hide();
   }
@@ -144,6 +158,11 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+  if (!quitting && trayicon != nullptr && global_conf.trayIconEnabled() && global_conf.minimizeToTray()) {
+    hide();
+    event->ignore();
+    return;
+  }
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
@@ -158,12 +177,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   qApp->closeAllWindows();
 }
 
-void MainWindow::changeEvent(QEvent *event) {
-  if(global_conf.minimizeToTray() && event->type() == QEvent::WindowStateChange && isMinimized()) {
-    hide();
-  }
-  QMainWindow::changeEvent(event);
+void MainWindow::requestQuit() {
+  quitting = true;
+  close();
 }
+
+#ifdef Q_OS_MACOS
+void MainWindow::onAppActivated() {
+  // Dock click while window is hidden: restore it. Also fires on Cmd-Tab — harmless because the window is then already visible.
+  if (isHidden()) {
+    setWindowState(windowState() & ~Qt::WindowMinimized);
+    show();
+    raise();
+    activateWindow();
+  }
+}
+#endif
 
 void MainWindow::setupOrderCombobox() {
   ui->orderComboBox->addItem(tr("sequential"));
@@ -230,7 +259,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
 #if defined(MPRIS_ENABLE)
 void MainWindow::setupMpris() {
   mpris = new Mpris(player, global_conf, this);
-  connect(mpris, &Mpris::quit, this, &QMainWindow::close);
+  connect(mpris, &Mpris::quit, this, &MainWindow::requestQuit);
   connect(mpris, &Mpris::shuffleChanged, this, [=](bool val) {
     ui->orderComboBox->setCurrentIndex(val ? 1 : 0);
     global_conf.savePlaybackOrder(val ? "random" : "sequential");
@@ -270,7 +299,7 @@ void MainWindow::setupMainMenu() {
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
-  connect(main_menu, &MainMenu::exit, this, &MainWindow::close);
+  connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
 
@@ -296,6 +325,7 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
+  connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
 }
 
 void MainWindow::setupPlaybackDispatch() {
@@ -309,14 +339,10 @@ void MainWindow::setupPlaybackDispatch() {
 #endif
   });
 
-  connect(player, &Playback::Controller::started, this, [=](const Track &track) {
-    dispatch->state().setPlaying(track.uid());
-    dispatch->state().setFollowedCursor();
-  });
-
-  connect(player, &Playback::Controller::stopped, this, [=]() {
-    dispatch->state().resetPlaying();
-  });
+  connect(player, &Playback::Controller::started, dispatch, &Playback::Dispatch::on_started);
+  connect(player, &Playback::Controller::stopped, dispatch, &Playback::Dispatch::on_stopped);
+  connect(playlist, &PlaylistUi::Controller::changed, dispatch, &Playback::Dispatch::on_playlistContentChanged);
+  connect(playlists, &PlaylistsUi::Controller::removed, dispatch, &Playback::Dispatch::on_playlistContentChanged);
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
@@ -325,6 +351,7 @@ void MainWindow::setupPlaybackDispatch() {
   connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
   connect(dispatch, &Playback::Dispatch::play, player, &Playback::Controller::play);
   connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
+  connect(dispatch, &Playback::Dispatch::unloadPlaylistView, playlist, &PlaylistUi::Controller::on_unload);
 
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
 }
@@ -361,7 +388,7 @@ void MainWindow::setupStatusBar() {
 void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this);
 
-  connect(shortcuts, &Shortcuts::quit, this, &QMainWindow::close);
+  connect(shortcuts, &Shortcuts::quit, this, &MainWindow::requestQuit);
   connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {
     ui->treeView->setFocus(Qt::ShortcutFocusReason);
   });
@@ -520,3 +547,83 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
   }
   disconnect(conn);
 }
+
+#ifdef Q_OS_MACOS
+void MainWindow::setupMacMenuBar() {
+  auto *bar = menuBar();
+
+  auto *app_menu = bar->addMenu(tr("mpz"));
+
+  auto *about = app_menu->addAction(tr("About mpz"));
+  about->setMenuRole(QAction::AboutRole);
+  connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
+
+  auto *prefs = app_menu->addAction(tr("Settings…"));
+  prefs->setMenuRole(QAction::PreferencesRole);
+  prefs->setShortcut(QKeySequence::Preferences);
+  connect(prefs, &QAction::triggered, this, [this]() {
+    SettingsDialog dlg(global_conf, local_conf, this);
+    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+    dlg.exec();
+  });
+
+  auto *quit = app_menu->addAction(tr("Quit mpz"));
+  quit->setMenuRole(QAction::QuitRole);
+  quit->setShortcut(QKeySequence::Quit);
+  connect(quit, &QAction::triggered, this, &MainWindow::requestQuit);
+
+  auto *playback = bar->addMenu(tr("Playback"));
+
+  auto *play_pause = playback->addAction(tr("Play / Pause"));
+  play_pause->setShortcut(Qt::Key_Space);
+  connect(play_pause, &QAction::triggered, this, [=]() {
+    if (player->state() == Playback::Controller::Playing) {
+      player->controls().pause->click();
+    } else {
+      player->controls().play->click();
+    }
+  });
+
+  auto *stop_action = playback->addAction(tr("Stop"));
+  connect(stop_action, &QAction::triggered, this, [=]() { player->controls().stop->click(); });
+
+  playback->addSeparator();
+
+  auto *next_action = playback->addAction(tr("Next Track"));
+  next_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right));
+  connect(next_action, &QAction::triggered, this, [=]() { player->controls().next->click(); });
+
+  auto *prev_action = playback->addAction(tr("Previous Track"));
+  prev_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left));
+  connect(prev_action, &QAction::triggered, this, [=]() { player->controls().prev->click(); });
+
+  playback->addSeparator();
+
+  auto *vol_up = playback->addAction(tr("Volume Up"));
+  vol_up->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Up));
+  connect(vol_up, &QAction::triggered, this, [=]() {
+    player->setVolume(qMin(100, player->volume() + 5));
+  });
+
+  auto *vol_down = playback->addAction(tr("Volume Down"));
+  vol_down->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Down));
+  connect(vol_down, &QAction::triggered, this, [=]() {
+    player->setVolume(qMax(0, player->volume() - 5));
+  });
+
+  auto *help = bar->addMenu(tr("Help"));
+
+  auto *website = help->addAction(tr("mpz Website"));
+  connect(website, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
+  });
+
+  auto *feedback = help->addAction(tr("Send Feedback…"));
+  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
+
+  auto *bug_report = help->addAction(tr("Report a Bug…"));
+  connect(bug_report, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz/issues"));
+  });
+}
+#endif

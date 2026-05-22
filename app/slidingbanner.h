@@ -18,7 +18,12 @@ public slots:
   void expand();
   void collapse();
 
+protected:
+  void resizeEvent(QResizeEvent *event) override;
+
 private:
+  int targetHeight() const;
+
   QLabel *label;
   QPropertyAnimation *animation;
   const int bannerHeight = 40;

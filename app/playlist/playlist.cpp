@@ -133,4 +133,20 @@ namespace Playlist {
       mit.next().reload();
     }
   }
+
+  void Playlist::reloadTrack(quint64 uid) {
+    QMutexLocker lock(&mutex);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QMutableListIterator<Track> mit(tracks_list);
+#else
+    QMutableVectorIterator<Track> mit(tracks_list);
+#endif
+    while (mit.hasNext()) {
+      auto &t = mit.next();
+      if (t.uid() == uid) {
+        t.reload();
+        return;
+      }
+    }
+  }
 }

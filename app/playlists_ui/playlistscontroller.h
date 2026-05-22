@@ -40,6 +40,7 @@ namespace PlaylistsUi {
     void selected(const std::shared_ptr<Playlist::Playlist> item);
     void loaded(const std::shared_ptr<Playlist::Playlist> item);
     void emptied();
+    void removed();
     void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
     void asyncLoadFinished();
 

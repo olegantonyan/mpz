@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>           <string>en</string>
+  <key>CFBundleExecutable</key>                  <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+  <key>CFBundleIconFile</key>                    <string>${MACOSX_BUNDLE_ICON_FILE}</string>
+  <key>CFBundleIdentifier</key>                  <string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
+  <key>CFBundleInfoDictionaryVersion</key>       <string>6.0</string>
+  <key>CFBundleName</key>                        <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
+  <key>CFBundlePackageType</key>                 <string>APPL</string>
+  <key>CFBundleSignature</key>                   <string>????</string>
+  <key>CFBundleShortVersionString</key>          <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+  <key>CFBundleVersion</key>                     <string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+  <key>LSApplicationCategoryType</key>           <string>public.app-category.music</string>
+  <key>LSMinimumSystemVersion</key>              <string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string>
+  <key>NSHighResolutionCapable</key>             <true/>
+  <key>NSHumanReadableCopyright</key>            <string>Copyright (C) Oleg Antonyan. GPLv3.</string>
+  <key>NSPrincipalClass</key>                    <string>NSApplication</string>
+  <key>NSRequiresAquaSystemAppearance</key>      <false/>
+  <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>                <string>Audio file</string>
+      <key>CFBundleTypeRole</key>                <string>Viewer</string>
+      <key>LSHandlerRank</key>                   <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.audio</string>
+        <string>public.mp3</string>
+        <string>public.mpeg-4-audio</string>
+        <string>public.aac-audio</string>
+        <string>com.microsoft.waveform-audio</string>
+        <string>com.microsoft.windows-media-wma</string>
+        <string>org.xiph.flac</string>
+        <string>org.xiph.ogg-audio</string>
+        <string>org.xiph.opus</string>
+      </array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeName</key>                <string>Playlist</string>
+      <key>CFBundleTypeRole</key>                <string>Viewer</string>
+      <key>LSHandlerRank</key>                   <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.m3u-playlist</string>
+        <string>public.pls-playlist</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>

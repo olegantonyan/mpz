@@ -46,6 +46,7 @@ namespace Playlist {
     QByteArray toM3U() const;
 
     void reload();
+    void reloadTrack(quint64 uid);
 
   private:
     QVector<Track> sort(QVector<Track> list, const Sorter &sorter = Sorter());

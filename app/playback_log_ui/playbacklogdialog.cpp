@@ -44,11 +44,11 @@ void PlaybackLogDialog::on_jumpTo(const QModelIndex &idx) {
 }
 
 void PlaybackLogDialog::on_totalPlayTimeChanged(int value) {
-  ui->labelTotalPlayTime->setText(tr("Total time played") + ": " + Track::formattedTime(value));
+  ui->labelTotalPlayTime->setText(tr("Total time played") + ": " + Track::formattedTime(quint64(value) * 1000));
 }
 
 void PlaybackLogDialog::on_thisSessionPlayTimeChanged(int value) {
-  ui->labelThisSessionPlayTime->setText(tr("This session time played") + ": " + Track::formattedTime(value));
+  ui->labelThisSessionPlayTime->setText(tr("This session time played") + ": " + Track::formattedTime(quint64(value) * 1000));
 }
 
 void PlaybackLogDialog::on_search(const QPoint &pos) {
