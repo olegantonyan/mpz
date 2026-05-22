@@ -193,8 +193,14 @@ namespace Playback {
   void MediaPlayer::stop() {
     next_after_stop = false;
     synthetic_playing_on_play = false;
+    // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed
+    // stop back here; player.stop() is a no-op so synthesise the transition.
+    const bool already_stopped = state() == MediaPlayer::StoppedState;
     player.stop();
     stream.stop();
+    if (already_stopped) {
+      emitStateChanged(MediaPlayer::StoppedState);
+    }
   }
 
   void MediaPlayer::next() {

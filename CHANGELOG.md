@@ -10,6 +10,7 @@
 ### Fixed
 
 - total and session playback time counter now works again
+- in "sequential (no loop)" mode fixed playback state after the last track finished
 
 ### Misc
 
