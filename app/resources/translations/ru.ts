@@ -1125,7 +1125,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
         <source>Auto-save on navigation</source>
-        <translation type="unfinished"></translation>
+        <translation>Автосохранение при переходе</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
@@ -1150,7 +1150,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="167"/>
         <source>Track %1 of %2 — %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Трек %1 из %2 — %3</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="237"/>

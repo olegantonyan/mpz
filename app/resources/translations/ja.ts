@@ -1125,7 +1125,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
         <source>Auto-save on navigation</source>
-        <translation type="unfinished"></translation>
+        <translation>切り替え時に自動保存</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
@@ -1148,7 +1148,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="167"/>
         <source>Track %1 of %2 — %3</source>
-        <translation type="unfinished"></translation>
+        <translation>トラック %1 / %2 — %3</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="237"/>
