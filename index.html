@@ -5,7 +5,7 @@
         <title>mpz — music player for large local collections</title>
         <meta
             name="description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -35,7 +35,7 @@
         />
         <meta
             property="og:description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -60,7 +60,7 @@
         />
         <meta
             name="twitter:description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
         />
         <meta
             name="twitter:image"
@@ -100,7 +100,7 @@
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
-                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode.",
+                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
                 "downloadUrl": "https://mpz-player.org/#install",
                 "screenshot": "https://mpz-player.org/images/breeze-dark.png",
@@ -113,7 +113,7 @@
                     "Experimental mpd client mode",
                     "m3u and pls playlist formats including internet radio streams",
                     "Lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB",
-                    "Tag reading via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
+                    "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
                     "Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — via system codecs",
                     "Playback log of recently played tracks",
                     "Native C++/Qt 6",
@@ -142,7 +142,7 @@
                 "@type": "WebSite",
                 "name": "mpz",
                 "url": "https://mpz-player.org/",
-                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, MPRIS, mpd client mode."
+                "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode."
             }
         </script>
 
@@ -205,6 +205,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can mpz edit tags?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. Since version 2.0.8, mpz includes a built-in tag editor dialog for editing track metadata (title, artist, album, etc.) on common formats supported by TagLib — ID3v2, Vorbis Comment, MP4, and APE."
                         }
                     },
                     {
@@ -755,14 +763,16 @@
                                 >LRCLIB</a
                             >
                             — are shown in the Track Info dialog. Tag reading
-                            via
+                            and editing via
                             <a
                                 href="https://taglib.org/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 >TagLib</a
                             >
-                            (ID3v2, Vorbis Comment, MP4, APE). Common audio
+                            (ID3v2, Vorbis Comment, MP4, APE) — edit track
+                            metadata directly from the built-in tag editor
+                            dialog (since 2.0.8). Common audio
                             formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV —
                             through your system's codecs (QtMultimedia with the
                             GStreamer or ffmpeg backend on Linux, native
@@ -1113,6 +1123,15 @@
                                     rel="noopener noreferrer"
                                     >LRCLIB</a
                                 >. They are shown in the Track Info dialog.
+                            </p>
+
+                            <p>
+                                <strong>Can mpz edit tags?</strong><br />
+                                Yes. Since version 2.0.8, mpz includes a
+                                built-in tag editor dialog for editing track
+                                metadata (title, artist, album, etc.) on common
+                                formats supported by TagLib — ID3v2, Vorbis
+                                Comment, MP4, and APE.
                             </p>
 
                             <p>
