@@ -1,6 +1,6 @@
 %global __brp_check_rpaths %{nil}
 Name:       mpz
-Version:    2.0.8
+Version:    2.0.9
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later

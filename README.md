@@ -97,11 +97,14 @@ You can also link against shared libraries Taglib, yaml-cpp, or libmpdclient ins
 
 ## Configuration
 
+Starting from version 2.0.8 there is settings dialog where all these options can be changed via GUI.
+
+<details>
+<summary>Manual yaml configuration</summary>
+
 The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/$USERNAME/AppData/Local/mpz/mpz`. There are 2 files:
 - `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
 - `global.yml` - for portable settings that make sense to share between computers.
-
-Starting from version 2.0.8 there is settings dialog where all these options can be changed via GUI.
 
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` player will prevent your OS from automatic sleep while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
@@ -173,6 +176,8 @@ mpris_blacklist: ["wireplumber"]
 ```
 
 This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues an MPRIS Pause command. Until they make it configurable, blocking wireplumber is a viable workaround if you also find this feature annoying.
+
+</details>
 
 ## Limitations
 
