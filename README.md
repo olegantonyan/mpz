@@ -69,11 +69,15 @@ Grab installer or portable binary from releases page: https://github.com/olegant
 
 Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
 
-The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz.app` to `/Applications`, remove the quarantine flag from a terminal:
+The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz.app` to `/Applications`, use either method below.
+
+**Terminal:** remove the quarantine flag, then open the app normally:
 
 ```
 xattr -dr com.apple.quarantine /Applications/mpz.app
 ```
+
+**System Settings:** try to open `mpz.app` once and dismiss the warning, then go to *System Settings → Privacy & Security*. Near the bottom you'll see a message that mpz was blocked — click *Open Anyway* and confirm.
 
 The app will then launch normally.
 
