@@ -55,12 +55,6 @@ makepkg -si
 
 For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
-```
-git clone https://aur.archlinux.org/mpz-qt5.git
-cd mpz-qt5
-makepkg -si
-```
-
 #### Windows
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
