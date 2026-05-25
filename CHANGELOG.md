@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- fix macOS bundle name
+
 ### Misc
 
 ## [2.0.8] - 2026-05-23
