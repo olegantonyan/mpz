@@ -11,6 +11,11 @@ cd "$TMP_DIR"
 
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
 ARTIFACT_NAME=mpz-$VERSION$SUFFIX-macos-universal-qt6
+# Name shown in Finder / Applications / "Open With" — this is the on-disk
+# bundle name, which is what macOS displays (CFBundleDisplayName only applies
+# when it matches the filesystem name). Kept separate from the versioned
+# DMG/artifact file name on purpose.
+APP_NAME="mpz music player"
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -45,10 +50,10 @@ fi
 codesign --deep --force --sign - ./mpz.app
 
 mkdir -p "$OUTPUT_DIR"
-rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME.app" "$OUTPUT_DIR/$ARTIFACT_NAME.dmg"
-cp -R ./mpz.app "$OUTPUT_DIR/$ARTIFACT_NAME.app"
+rm -rf "$OUTPUT_DIR/$APP_NAME.app" "$OUTPUT_DIR/$ARTIFACT_NAME.dmg"
+cp -R ./mpz.app "$OUTPUT_DIR/$APP_NAME.app"
 hdiutil create -volname "mpz" \
-               -srcfolder "$OUTPUT_DIR/$ARTIFACT_NAME.app" \
+               -srcfolder "$OUTPUT_DIR/$APP_NAME.app" \
                -ov -format UDZO \
                "$OUTPUT_DIR/$ARTIFACT_NAME.dmg"
 

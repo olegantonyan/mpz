@@ -60,7 +60,7 @@ jobs:
 
       - name: Inspect bundle
         run: |
-          APP="$MPZ_OUTPUT_DIR"/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.app
+          APP="$MPZ_OUTPUT_DIR/mpz music player.app"
           echo "--- bundle tree ---"
           find "$APP" -maxdepth 3 -print
           echo "--- Info.plist ---"
