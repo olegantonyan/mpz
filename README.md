@@ -104,6 +104,8 @@ The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/
 - `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
 - `global.yml` - for portable settings that make sense to share between computers.
 
+The available config options are:
+
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` player will prevent your OS from automatic sleep while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
 - `single_instance` in `global.yml` - when `true` the player will reuse 1 instance, launching another instance with files as command line arguments will send these files to running instance as a new playlist;
