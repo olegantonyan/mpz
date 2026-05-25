@@ -164,7 +164,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. On macOS (experimental), download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper requires removing the quarantine flag with xattr -dr com.apple.quarantine /Applications/mpz.app on first launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. On macOS (experimental), download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine /Applications/mpz.app, or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -260,7 +260,7 @@
                         "position": 4,
                         "name": "macOS (experimental)",
                         "url": "https://github.com/olegantonyan/mpz/releases",
-                        "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch — after dragging mpz.app to /Applications, run: xattr -dr com.apple.quarantine /Applications/mpz.app"
+                        "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch — after dragging mpz.app to /Applications, either run: xattr -dr com.apple.quarantine /Applications/mpz.app, or open System Settings → Privacy & Security and click Open Anyway after the first blocked launch."
                     },
                     {
                         "@type": "HowToStep",
@@ -988,14 +988,32 @@
                                                 Gatekeeper blocks it on first
                                                 launch. After dragging
                                                 <code>mpz.app</code> to
-                                                <code>/Applications</code>,
-                                                remove the quarantine flag from
-                                                a terminal:
+                                                <code>/Applications</code>, use
+                                                either method below.
+                                            </p>
+                                            <p>
+                                                <strong>Terminal:</strong>
+                                                remove the quarantine flag, then
+                                                open the app normally:
                                             </p>
                                             <pre><code>xattr -dr com.apple.quarantine /Applications/mpz.app</code></pre>
                                             <p>
-                                                The app will then launch
-                                                normally. See the
+                                                <strong>System Settings:</strong>
+                                                try to open
+                                                <code>mpz.app</code> once and
+                                                dismiss the warning, then go to
+                                                <em
+                                                    >System Settings → Privacy &
+                                                    Security</em
+                                                >. Near the bottom you'll see a
+                                                message that mpz was blocked —
+                                                click
+                                                <em>Open Anyway</em> and confirm.
+                                                The app launches normally from
+                                                then on.
+                                            </p>
+                                            <p>
+                                                See the
                                                 <a
                                                     href="https://github.com/olegantonyan/mpz#macos-experimental"
                                                     target="_blank"
@@ -1065,10 +1083,13 @@
                                 (Arch). On Windows, download a release from
                                 GitHub. On macOS (experimental), download the
                                 <code>.dmg</code> from GitHub releases — the
-                                build is unsigned, so Gatekeeper requires
-                                removing the quarantine flag with
-                                <code>xattr -dr com.apple.quarantine /Applications/mpz.app</code>
-                                on first launch. Building from source is
+                                build is unsigned, so Gatekeeper blocks it on
+                                first launch — either remove the quarantine flag
+                                with
+                                <code>xattr -dr com.apple.quarantine /Applications/mpz.app</code>,
+                                or click <em>Open Anyway</em> under <em>System
+                                Settings → Privacy & Security</em> after the
+                                first blocked launch. Building from source is
                                 supported on any platform with Qt and a C++
                                 compiler.
                             </p>
