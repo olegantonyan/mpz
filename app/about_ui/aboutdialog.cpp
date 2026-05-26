@@ -27,7 +27,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->copyrightLabel->setTextFormat(Qt::RichText);
   ui->copyrightLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->copyrightLabel->setOpenExternalLinks(true);
-  ui->copyrightLabel->setText(QString("&copy; Oleg Antonyan &middot; "
+  ui->copyrightLabel->setText(QString("&copy; "
                                       "<a href=\"https://github.com/olegantonyan/mpz/blob/master/license.txt\">GPLv3</a>"));
 
   ui->opensourceLabel->setTextFormat(Qt::RichText);
