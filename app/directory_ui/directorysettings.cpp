@@ -127,7 +127,7 @@ void DirectorySettings::moveCurrent(int delta) {
   if (target < 0 || target >= list.size()) {
     return;
   }
-  list.swapItemsAt(row, target);
+  list.move(row, target);
   model.setStringList(list);
   ui->listView->setCurrentIndex(model.index(target));
 }
