@@ -109,7 +109,7 @@ set(PROJECT_SOURCES
   app/playlist_ui/tageditordialog.ui
   app/shortcuts_ui/shortcutsdialog.ui
   app/sort_ui/sortingpresets.ui
-  resources.qrc
+  app/resources.qrc
   app/slidingbanner.cpp
 )
 
