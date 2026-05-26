@@ -33,6 +33,7 @@ repositories:
     gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
     <<: *common
     description: "Builds from master branch aka next"
+    retain_packages: 3
     s3:
       bucket: repositories
       path_in_bucket: "mpz/next"
@@ -49,6 +50,7 @@ repositories:
     provider: s3
     gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
     <<: *common
+    retain_packages: 2
     s3:
       bucket: repositories
       path_in_bucket: "mpz/stable"
