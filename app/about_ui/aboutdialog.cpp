@@ -71,7 +71,11 @@ void AboutDialog::show_changelog() {
 
   QTextBrowser *browser = new QTextBrowser(&dialog);
   browser->setOpenExternalLinks(true);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
   browser->setMarkdown(markdown);
+#else
+  browser->setPlainText(markdown);
+#endif
 
   QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Close, &dialog);
   QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
