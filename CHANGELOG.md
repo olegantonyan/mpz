@@ -1,10 +1,11 @@
-## [2.0.9] - 
+## [2.0.9] - next
 
 ### Added
 
 ### Fixed
 
 - fix macOS bundle name
+- double-click on playlist starts playing this playlist (regression)
 
 ### Misc
 

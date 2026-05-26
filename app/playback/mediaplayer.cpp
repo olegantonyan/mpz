@@ -230,6 +230,11 @@ namespace Playback {
   }
 
   void MediaPlayer::setTrack(const Track &track) {
+    // A source swap is a deliberate action, never a real EOF. Clear the flag
+    // before any setSource so the resulting StoppedState doesn't schedule a
+    // spurious nextRequested (e.g. double-clicking a playlist would otherwise
+    // skip to the 2nd track).
+    next_after_stop = false;
     // Same-file CUE continuation: skip the expensive setSource/stream.stop
     // cycle. Works for sequential autoplay (player is already at the right
     // region) and for random/manual jumps inside the same file (cheap
@@ -307,6 +312,7 @@ namespace Playback {
   }
 #endif
   void MediaPlayer::clearTrack() {
+    next_after_stop = false;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setSource(QUrl(nullptr));
 #else
