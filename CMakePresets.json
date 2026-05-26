@@ -79,7 +79,10 @@
   ],
   "buildPresets": [
     { "name": "debug-qt6-tests", "configurePreset": "debug-qt6-tests", "targets": "build_tests" },
-    { "name": "debug-qt5-tests", "configurePreset": "debug-qt5-tests", "targets": "build_tests" }
+    { "name": "debug-qt5-tests", "configurePreset": "debug-qt5-tests", "targets": "build_tests" },
+
+    { "name": "lupdate",  "configurePreset": "release-qt6", "targets": "lupdate" },
+    { "name": "lrelease", "configurePreset": "release-qt6", "targets": "lrelease" }
   ],
   "testPresets": [
     {
@@ -108,6 +111,20 @@
         { "type": "configure", "name": "debug-qt5-tests" },
         { "type": "build",     "name": "debug-qt5-tests" },
         { "type": "test",      "name": "debug-qt5-tests" }
+      ]
+    },
+    {
+      "name": "lupdate",
+      "steps": [
+        { "type": "configure", "name": "release-qt6" },
+        { "type": "build",     "name": "lupdate" }
+      ]
+    },
+    {
+      "name": "lrelease",
+      "steps": [
+        { "type": "configure", "name": "release-qt6" },
+        { "type": "build",     "name": "lrelease" }
       ]
     }
   ]

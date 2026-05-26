@@ -4,11 +4,6 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="55"/>
-        <source>mpz</source>
-        <translation>mpz</translation>
-    </message>
-    <message>
         <location filename="../../about_ui/aboutdialog.ui" line="69"/>
         <source>Music player for big local collections</source>
         <translation>大規模なローカルコレクション向けの音楽プレーヤー</translation>
@@ -40,21 +35,9 @@
         <translation>システム情報</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
-    </message>
-    <message>
         <location filename="../../about_ui/aboutdialog.ui" line="14"/>
         <source>About mpz</source>
         <translation>mpz について</translation>
-    </message>
-    <message>
-        <source>Using opensource libraries</source>
-        <translation type="vanished">オープンソースライブラリを使用</translation>
-    </message>
-    <message>
-        <source>Config files path: </source>
-        <translation type="vanished">設定ファイルのパス: </translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
@@ -65,11 +48,6 @@
         <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
         <source>Website</source>
         <translation>ウェブサイト</translation>
-    </message>
-    <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
-        <source>GitHub</source>
-        <translation>GitHub</translation>
     </message>
 </context>
 <context>
@@ -427,11 +405,6 @@
         <location filename="../../mainwindow.cpp" line="383"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="552"/>
-        <source>mpz</source>
-        <translation>mpz</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="554"/>
@@ -1167,7 +1140,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
@@ -1178,7 +1151,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
     <message numerus="yes">
         <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
@@ -1304,6 +1277,8 @@
         <translation>歌詞を検索中...</translation>
     </message>
     <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="191"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="198"/>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
         <source>No lyrics found.</source>
         <translation>歌詞が見つかりません。</translation>

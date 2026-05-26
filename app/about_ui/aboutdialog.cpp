@@ -22,7 +22,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->linksLabel->setOpenExternalLinks(true);
   ui->linksLabel->setText(QString("<a href=\"https://mpz-player.org\">%1</a> &middot; "
                                   "<a href=\"https://github.com/olegantonyan/mpz\">%2</a>")
-                          .arg(tr("Website"), tr("GitHub")));
+                          .arg(tr("Website"), QStringLiteral("GitHub")));
 
   ui->copyrightLabel->setTextFormat(Qt::RichText);
   ui->copyrightLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);

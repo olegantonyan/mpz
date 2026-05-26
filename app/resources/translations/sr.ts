@@ -9,11 +9,6 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="55"/>
-        <source>mpz</source>
-        <translation>mpz</translation>
-    </message>
-    <message>
         <location filename="../../about_ui/aboutdialog.ui" line="69"/>
         <source>Music player for big local collections</source>
         <translation>Музички плејер за велике локалне колекције</translation>
@@ -45,14 +40,6 @@
         <translation>Информације о систему</translation>
     </message>
     <message>
-        <source>Using opensource libraries</source>
-        <translation type="vanished">Коришћење библиотека отвореног кода</translation>
-    </message>
-    <message>
-        <source>Config files path: </source>
-        <translation type="vanished">Путања конфигурационих датотека: </translation>
-    </message>
-    <message>
         <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
         <source>Version %1</source>
         <translation>Верзија %1</translation>
@@ -61,11 +48,6 @@
         <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
         <source>Website</source>
         <translation>Веб сајт</translation>
-    </message>
-    <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
-        <source>GitHub</source>
-        <translation>GitHub</translation>
     </message>
 </context>
 <context>
@@ -423,11 +405,6 @@
         <location filename="../../mainwindow.cpp" line="383"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="552"/>
-        <source>mpz</source>
-        <translation>mpz</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="554"/>
@@ -1163,7 +1140,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
-        <translation type="unfinished">Претходна</translation>
+        <translation>Претходна</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
@@ -1174,7 +1151,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
-        <translation type="unfinished">Следећа</translation>
+        <translation>Следећа</translation>
     </message>
     <message numerus="yes">
         <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
@@ -1317,6 +1294,8 @@
         <translation>Претрага текста песме...</translation>
     </message>
     <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="191"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="198"/>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
         <source>No lyrics found.</source>
         <translation>Није пронађен текст песме.</translation>
