@@ -52,7 +52,7 @@
           </font>
          </property>
          <property name="text">
-          <string notr="true">mpz</string>
+          <string>mpz</string>
          </property>
         </widget>
        </item>

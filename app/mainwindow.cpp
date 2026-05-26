@@ -549,7 +549,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 void MainWindow::setupMacMenuBar() {
   auto *bar = menuBar();
 
-  auto *app_menu = bar->addMenu(QStringLiteral("mpz"));
+  auto *app_menu = bar->addMenu(tr("mpz"));
 
   auto *about = app_menu->addAction(tr("About mpz"));
   about->setMenuRole(QAction::AboutRole);

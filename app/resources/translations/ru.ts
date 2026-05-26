@@ -4,6 +4,11 @@
 <context>
     <name>AboutDialog</name>
     <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="55"/>
+        <source>mpz</source>
+        <translation>mpz</translation>
+    </message>
+    <message>
         <location filename="../../about_ui/aboutdialog.ui" line="69"/>
         <source>Music player for big local collections</source>
         <translation>Музыкальный плеер для больших локальных коллекций</translation>
@@ -40,6 +45,14 @@
         <translation>О mpz</translation>
     </message>
     <message>
+        <source>Using opensource libraries</source>
+        <translation type="vanished">Использует опенсорсные библиотеки</translation>
+    </message>
+    <message>
+        <source>Config files path: </source>
+        <translation type="vanished">Расположение конфигурационных файлов: </translation>
+    </message>
+    <message>
         <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
@@ -48,6 +61,11 @@
         <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
+        <source>GitHub</source>
+        <translation>GitHub</translation>
     </message>
 </context>
 <context>
@@ -405,6 +423,11 @@
         <location filename="../../mainwindow.cpp" line="383"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="552"/>
+        <source>mpz</source>
+        <translation>mpz</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="554"/>
@@ -1140,7 +1163,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
-        <translation>Предыдущий</translation>
+        <translation type="unfinished">Предыдущий</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
@@ -1151,7 +1174,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
-        <translation>Следующий</translation>
+        <translation type="unfinished">Следующий</translation>
     </message>
     <message numerus="yes">
         <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
@@ -1279,8 +1302,6 @@
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="191"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="198"/>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>

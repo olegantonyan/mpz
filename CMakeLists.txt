@@ -190,28 +190,6 @@ if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
 endif()
 
-# TRANSLATIONS (Qt Linguist) - on-demand targets.
-# Workflow:
-#   cmake --build <builddir> --target lupdate   # extract strings into the .ts files
-#   ... translate new strings in app/resources/translations/*.ts ...
-#   cmake --build <builddir> --target lrelease  # compile the .ts files into .qm
-# e.g. with a build dir named "build":
-#   cmake --build build --target lupdate
-#   cmake --build build --target lrelease
-# To add a language: add its code to LANGS below, run the lupdate target (it
-# creates the missing .ts), then add a matching <file> for its .qm to
-# app/resources.qrc so it gets embedded.
-set(LANGS ru ja sr)
-set(TS_FILES "")
-foreach(_lang IN LISTS LANGS)
-  list(APPEND TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/translations/${_lang}.ts)
-endforeach()
-find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
-if(TARGET Qt${QT_VERSION_MAJOR}::lupdate)
-  add_custom_target(lupdate COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${CMAKE_CURRENT_SOURCE_DIR}/app -ts ${TS_FILES} VERBATIM)
-  add_custom_target(lrelease COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TS_FILES} VERBATIM)
-endif()
-
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
   ${BUNDLE_ID_OPTION}

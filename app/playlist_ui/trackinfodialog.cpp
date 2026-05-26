@@ -182,20 +182,20 @@ void TrackInfoDialog::setup_lyrics(const Track &track) {
     QPointer<TrackInfoDialog> guard(this);
     connect(client, &Lyrics::LrcLibClient::found, this, [guard, client](const QString &lyrics) {
       if (guard) {
-        guard->render_lyrics(QStringLiteral("LRCLIB"), lyrics);
+        guard->render_lyrics(guard->tr("LRCLIB"), lyrics);
       }
       client->deleteLater();
     });
     connect(client, &Lyrics::LrcLibClient::notFound, this, [guard, client]() {
       if (guard) {
-        guard->render_lyrics_state(TrackInfoDialog::tr("No lyrics found."));
+        guard->render_lyrics_state(guard->tr("No lyrics found."));
       }
       client->deleteLater();
     });
     connect(client, &Lyrics::LrcLibClient::failed, this, [guard, client](const QString &msg) {
       if (guard) {
         qWarning() << "lrclib error:" << msg;
-        guard->render_lyrics_state(TrackInfoDialog::tr("No lyrics found."));
+        guard->render_lyrics_state(guard->tr("No lyrics found."));
       }
       client->deleteLater();
     });
