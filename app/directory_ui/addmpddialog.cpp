@@ -59,6 +59,16 @@ namespace DirectoryUi {
     return url.toString();
   }
 
+  void AddMpdDialog::setUrl(const QString &arg) {
+    QUrl url(arg);
+    QString hostport = url.host();
+    if (url.port() != -1) {
+      hostport += ":" + QString::number(url.port());
+    }
+    host_lineedit->setText(hostport);
+    password_lineedit->setText(url.password());
+  }
+
   QString AddMpdDialog::password() const {
     return password_lineedit->text();
   }

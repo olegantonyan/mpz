@@ -16,6 +16,7 @@ namespace DirectoryUi {
     explicit AddMpdDialog(MpdClient::Client &cl, QWidget *parent = nullptr);
 
     QString url() const;
+    void setUrl(const QString &arg);
 
   private:
     MpdClient::Client &client;

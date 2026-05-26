@@ -2,6 +2,8 @@
 
 ### Added
 
+- ability to sort and edit library folders
+
 ### Fixed
 
 - fix macOS bundle name

@@ -23,9 +23,14 @@ public:
 private slots:
   void on_pushButtonAddFolder_clicked();
   void on_pushButtonAddMpd_clicked();
+  void on_pushButtonEdit_clicked();
   void on_pushButtonRemove_clicked();
+  void on_pushButtonUp_clicked();
+  void on_pushButtonDown_clicked();
 
 private:
+  void moveCurrent(int delta);
+
   Ui::DirectorySettings *ui;
   QStringListModel model;
   ModusOperandi &modus_operandi;

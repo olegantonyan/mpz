@@ -36,9 +36,30 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButtonEdit">
+         <property name="text">
+          <string>Edit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButtonRemove">
          <property name="text">
           <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonUp">
+         <property name="text">
+          <string>Move up</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonDown">
+         <property name="text">
+          <string>Move down</string>
          </property>
         </widget>
        </item>
