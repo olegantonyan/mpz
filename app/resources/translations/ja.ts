@@ -4,25 +4,44 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="29"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="75"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="55"/>
+        <source>mpz</source>
+        <translation>mpz</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="69"/>
+        <source>Music player for big local collections</source>
+        <translation>大規模なローカルコレクション向けの音楽プレーヤー</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="119"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="69"/>
         <source>Changelog</source>
         <translation>更新履歴</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="36"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="126"/>
         <source>About Qt</source>
         <translation>Qt について</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="43"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="133"/>
         <source>Contact with developer</source>
         <translation>開発者への連絡</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="88"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="155"/>
+        <source>Open-source libraries</source>
+        <translation>オープンソースライブラリ</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="174"/>
+        <source>System information</source>
+        <translation>システム情報</translation>
+    </message>
+    <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="vanished">...</translation>
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="14"/>
@@ -30,14 +49,27 @@
         <translation>mpz について</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="40"/>
         <source>Using opensource libraries</source>
-        <translation>オープンソースライブラリを使用</translation>
+        <translation type="vanished">オープンソースライブラリを使用</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Config files path: </source>
-        <translation>設定ファイルのパス: </translation>
+        <translation type="vanished">設定ファイルのパス: </translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
+        <source>Version %1</source>
+        <translation>バージョン %1</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
+        <source>Website</source>
+        <translation>ウェブサイト</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
+        <source>GitHub</source>
+        <translation>GitHub</translation>
     </message>
 </context>
 <context>
@@ -70,8 +102,23 @@
     </message>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="41"/>
+        <source>Edit</source>
+        <translation>編集</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="48"/>
         <source>Remove</source>
         <translation>削除</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="55"/>
+        <source>Move up</source>
+        <translation>上へ</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="62"/>
+        <source>Move down</source>
+        <translation>下へ</translation>
     </message>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="14"/>
@@ -97,12 +144,12 @@
         <translation>接続テスト</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/addmpddialog.cpp" line="69"/>
+        <location filename="../../directory_ui/addmpddialog.cpp" line="79"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/addmpddialog.cpp" line="71"/>
+        <location filename="../../directory_ui/addmpddialog.cpp" line="81"/>
         <source>Failure</source>
         <translation>失敗</translation>
     </message>

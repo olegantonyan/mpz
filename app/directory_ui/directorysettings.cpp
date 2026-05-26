@@ -44,6 +44,8 @@ DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &mo
   ui->listView->setItemDelegate(new PathDelegate(this));
   ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
   connect(ui->listView, &QAbstractItemView::doubleClicked, this, &DirectorySettings::on_pushButtonEdit_clicked);
+  connect(ui->listView->selectionModel(), &QItemSelectionModel::currentChanged, this, [this]() { updateMoveButtons(); });
+  updateMoveButtons();
 }
 
 DirectorySettings::~DirectorySettings() {
@@ -128,6 +130,12 @@ void DirectorySettings::moveCurrent(int delta) {
   list.swapItemsAt(row, target);
   model.setStringList(list);
   ui->listView->setCurrentIndex(model.index(target));
+}
+
+void DirectorySettings::updateMoveButtons() {
+  auto idx = ui->listView->currentIndex();
+  ui->pushButtonUp->setEnabled(idx.isValid() && idx.row() > 0);
+  ui->pushButtonDown->setEnabled(idx.isValid() && idx.row() < model.rowCount() - 1);
 }
 
 void DirectorySettings::on_pushButtonUp_clicked() {

@@ -30,6 +30,7 @@ private slots:
 
 private:
   void moveCurrent(int delta);
+  void updateMoveButtons();
 
   Ui::DirectorySettings *ui;
   QStringListModel model;

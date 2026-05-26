@@ -9,35 +9,63 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="29"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="75"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="55"/>
+        <source>mpz</source>
+        <translation>mpz</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="69"/>
+        <source>Music player for big local collections</source>
+        <translation>Музички плејер за велике локалне колекције</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.ui" line="119"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="69"/>
         <source>Changelog</source>
         <translation>Списак измена</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="36"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="126"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="43"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="133"/>
         <source>Contact with developer</source>
         <translation>Контактирајте програмера</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.ui" line="88"/>
-        <source>...</source>
-        <translation></translation>
+        <location filename="../../about_ui/aboutdialog.ui" line="155"/>
+        <source>Open-source libraries</source>
+        <translation>Библиотеке отвореног кода</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="40"/>
+        <location filename="../../about_ui/aboutdialog.ui" line="174"/>
+        <source>System information</source>
+        <translation>Информације о систему</translation>
+    </message>
+    <message>
         <source>Using opensource libraries</source>
-        <translation>Коришћење библиотека отвореног кода</translation>
+        <translation type="vanished">Коришћење библиотека отвореног кода</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Config files path: </source>
-        <translation>Путања конфигурационих датотека: </translation>
+        <translation type="vanished">Путања конфигурационих датотека: </translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
+        <source>Version %1</source>
+        <translation>Верзија %1</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
+        <source>Website</source>
+        <translation>Веб сајт</translation>
+    </message>
+    <message>
+        <location filename="../../about_ui/aboutdialog.cpp" line="25"/>
+        <source>GitHub</source>
+        <translation>GitHub</translation>
     </message>
 </context>
 <context>
@@ -75,8 +103,23 @@
     </message>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="41"/>
+        <source>Edit</source>
+        <translation>Измени</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="48"/>
         <source>Remove</source>
         <translation>Уклони</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="55"/>
+        <source>Move up</source>
+        <translation>Помери горе</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="62"/>
+        <source>Move down</source>
+        <translation>Помери доле</translation>
     </message>
 </context>
 <context>
@@ -97,12 +140,12 @@
         <translation>Провери везу</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/addmpddialog.cpp" line="69"/>
+        <location filename="../../directory_ui/addmpddialog.cpp" line="79"/>
         <source>Success</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/addmpddialog.cpp" line="71"/>
+        <location filename="../../directory_ui/addmpddialog.cpp" line="81"/>
         <source>Failure</source>
         <translation>Неуспешно</translation>
     </message>
