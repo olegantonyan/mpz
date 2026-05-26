@@ -8,6 +8,8 @@
 
 ### Misc
 
+- improved UI of changelog and about dialogs
+
 ## [2.0.8] - 2026-05-23
 
 ### Added

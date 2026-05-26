@@ -6,8 +6,11 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
-#include <QMessageBox>
 #include <QTextStream>
+#include <QDialog>
+#include <QTextBrowser>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
@@ -58,27 +61,26 @@ void AboutDialog::show_changelog() {
     qWarning() << "error opening changelog resource file";
     return;
   }
-  QStringList lines;
-  int sections = 0;
   QTextStream in(&file);
-  while (!in.atEnd()) {
-    QString line = in.readLine();
-    if (line.startsWith("## ")) {
-      sections++;
-    }
-    if (sections > 3) {
-      break;
-    }
-    lines << line;
-  }
-  lines << "<a href='https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md'>Full changelog</a>";
+  QString markdown = in.readAll();
+  markdown += "\n\n[Full changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)\n";
 
-  QMessageBox msg;
-  msg.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  msg.setTextFormat(Qt::RichText);
-  msg.setWindowTitle(tr("Changelog"));
-  msg.setText(lines.join("<br />"));
-  msg.exec();
+  QDialog dialog;
+  dialog.setWindowTitle(tr("Changelog"));
+  dialog.resize(500, 600);
+
+  QTextBrowser *browser = new QTextBrowser(&dialog);
+  browser->setOpenExternalLinks(true);
+  browser->setMarkdown(markdown);
+
+  QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Close, &dialog);
+  QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+  QVBoxLayout *layout = new QVBoxLayout(&dialog);
+  layout->addWidget(browser);
+  layout->addWidget(buttons);
+
+  dialog.exec();
 }
 
 QString AboutDialog::libraryInfo(const QString &name, const QString &url) const {
