@@ -23,13 +23,15 @@ ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QO
 
   connect(&mpd_client, &MpdClient::Client::error, this, [=](const QUrl &url, const QString &message) {
     Q_UNUSED(url);
-    banner->showMessage(tr("mpd error") + "\n" + message, SlidingBanner::BannerType::Error);
+    if (active == MODUS_MPD) {
+      banner->showMessage(tr("mpd error") + "\n" + message, SlidingBanner::BannerType::Error);
+    }
   });
   connect(&mpd_client, &MpdClient::Client::connected, this, [=] {
     banner->showMessage(tr("mpd connected"), SlidingBanner::BannerType::Success, 3456);
   });
   connect(this, &ModusOperandi::changed, this, [=](auto mode) {
-    if (mode == ModusOperandi::ActiveMode::MODUS_LOCALFS) {
+    if (mode != ModusOperandi::ActiveMode::MODUS_MPD) {
       banner->collapse();
     }
   });
