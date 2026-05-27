@@ -11,10 +11,11 @@
 #include <QTableWidgetItem>
 #include <QHash>
 
+#include "settings_ui/settingsdialog.h"
+
 #ifdef Q_OS_MACOS
   #include "about_ui/aboutdialog.h"
   #include "feedback_ui/feedbackform.h"
-  #include "settings_ui/settingsdialog.h"
   #include <QMenuBar>
   #include <QDesktopServices>
   #include <QUrl>
@@ -84,13 +85,13 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupFollowCursorCheckbox();
   setupVolumeControl();
   setupMainMenu();
+  setupShortcuts();
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
 #endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
-  setupShortcuts();
   setupWindowTitle();
   setupPlaybackLog();
   setupSortMenu();
@@ -431,6 +432,25 @@ void MainWindow::setupShortcuts() {
   connect(main_menu, &MainMenu::openShortcuts, open_dialog);
   connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
   connect(shortcuts, &Shortcuts::jumpToPLayingTrack, status_label, &StatusBarLabel::doubleclicked);
+
+  connect(shortcuts, &Shortcuts::playPause, this, [=]() {
+    if (player->state() == Playback::Controller::Playing) {
+      player->controls().pause->click();
+    } else {
+      player->controls().play->click();
+    }
+  });
+  connect(shortcuts, &Shortcuts::volumeUp, this, [=]() {
+    player->setVolume(qMin(100, player->volume() + 5));
+  });
+  connect(shortcuts, &Shortcuts::volumeDown, this, [=]() {
+    player->setVolume(qMax(0, player->volume() - 5));
+  });
+  connect(shortcuts, &Shortcuts::openSettings, this, [this]() {
+    SettingsDialog dlg(global_conf, local_conf, this);
+    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+    dlg.exec();
+  });
 }
 
 void MainWindow::setupWindowTitle() {
@@ -558,11 +578,7 @@ void MainWindow::setupMacMenuBar() {
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
   prefs->setShortcut(QKeySequence::Preferences);
-  connect(prefs, &QAction::triggered, this, [this]() {
-    SettingsDialog dlg(global_conf, local_conf, this);
-    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
-    dlg.exec();
-  });
+  connect(prefs, &QAction::triggered, shortcuts, &Shortcuts::openSettings);
 
   auto *quit = app_menu->addAction(tr("Quit mpz"));
   quit->setMenuRole(QAction::QuitRole);
@@ -572,41 +588,31 @@ void MainWindow::setupMacMenuBar() {
   auto *playback = bar->addMenu(tr("Playback"));
 
   auto *play_pause = playback->addAction(tr("Play / Pause"));
-  play_pause->setShortcut(Qt::Key_Space);
-  connect(play_pause, &QAction::triggered, this, [=]() {
-    if (player->state() == Playback::Controller::Playing) {
-      player->controls().pause->click();
-    } else {
-      player->controls().play->click();
-    }
-  });
+  play_pause->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::PlayPause));
+  connect(play_pause, &QAction::triggered, shortcuts, &Shortcuts::playPause);
 
   auto *stop_action = playback->addAction(tr("Stop"));
-  connect(stop_action, &QAction::triggered, this, [=]() { player->controls().stop->click(); });
+  connect(stop_action, &QAction::triggered, shortcuts, &Shortcuts::stop);
 
   playback->addSeparator();
 
   auto *next_action = playback->addAction(tr("Next Track"));
-  next_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right));
-  connect(next_action, &QAction::triggered, this, [=]() { player->controls().next->click(); });
+  next_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Next));
+  connect(next_action, &QAction::triggered, shortcuts, &Shortcuts::next);
 
   auto *prev_action = playback->addAction(tr("Previous Track"));
-  prev_action->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left));
-  connect(prev_action, &QAction::triggered, this, [=]() { player->controls().prev->click(); });
+  prev_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Prev));
+  connect(prev_action, &QAction::triggered, shortcuts, &Shortcuts::prev);
 
   playback->addSeparator();
 
   auto *vol_up = playback->addAction(tr("Volume Up"));
-  vol_up->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Up));
-  connect(vol_up, &QAction::triggered, this, [=]() {
-    player->setVolume(qMin(100, player->volume() + 5));
-  });
+  vol_up->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeUp));
+  connect(vol_up, &QAction::triggered, shortcuts, &Shortcuts::volumeUp);
 
   auto *vol_down = playback->addAction(tr("Volume Down"));
-  vol_down->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Down));
-  connect(vol_down, &QAction::triggered, this, [=]() {
-    player->setVolume(qMax(0, player->volume() - 5));
-  });
+  vol_down->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeDown));
+  connect(vol_down, &QAction::triggered, shortcuts, &Shortcuts::volumeDown);
 
   auto *help = bar->addMenu(tr("Help"));
 

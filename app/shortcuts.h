@@ -8,16 +8,57 @@
 #include <QWidget>
 #include <QtGlobal>
 #include <QShortcut>
-#include <QDebug>
+#include <QKeySequence>
 #include <QVector>
 #include <QPair>
+#include <QString>
 
 class Shortcuts : public QObject {
   Q_OBJECT
 public:
+  enum class Action {
+    Quit,
+    FocusLibrary,
+    FocusPlaylists,
+    FocusPlaylist,
+    FocusFilterLibrary,
+    FocusFilterPlaylists,
+    FocusFilterPlaylist,
+    Play,
+    Pause,
+    Stop,
+    Prev,
+    Next,
+    PlayPause,
+    VolumeUp,
+    VolumeDown,
+    Settings,
+    OpenMainMenu,
+    OpenPlaybackLog,
+    OpenSortMenu,
+    OpenShortcutsMenu,
+    JumpToPlayingTrack
+  };
+
+  // Single source of truth for one shortcut: its action, the dialog label
+  // (empty when it should not appear in the shortcuts dialog), the platform-
+  // resolved key sequence, and whether a QShortcut should be registered for it
+  // (false when the macOS native menu bar already owns the key, to avoid
+  // double-firing).
+  struct Spec {
+    Action action;
+    QString description;
+    QKeySequence sequence;
+    bool registerLocal;
+  };
+
   explicit Shortcuts(QWidget *parent);
 
   QVector<QPair<QString, QString>> describe() const;
+
+  // The canonical, platform-resolved key for an action. The macOS menu bar
+  // reads its shortcuts from here so the menu and the dialog never drift.
+  static QKeySequence sequenceFor(Action action);
 
 signals:
   void quit();
@@ -32,6 +73,10 @@ signals:
   void stop();
   void prev();
   void next();
+  void playPause();
+  void volumeUp();
+  void volumeDown();
+  void openSettings();
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();
@@ -39,26 +84,12 @@ signals:
   void jumpToPLayingTrack();
 
 private:
+  static const QVector<Spec> &specs();
   void setupGlobal();
   void setupLocal();
+  void emitFor(Action action);
 
-  QShortcut _quit;
-  QShortcut _focus_library;
-  QShortcut _focus_playlists;
-  QShortcut _focus_playlist;
-  QShortcut _focus_filter_library;
-  QShortcut _focus_filter_playlists;
-  QShortcut _focus_filter_playlist;
-  QShortcut _play;
-  QShortcut _pause;
-  QShortcut _stop;
-  QShortcut _prev;
-  QShortcut _next;
-  QShortcut _open_main_menu;
-  QShortcut _open_playback_log;
-  QShortcut _open_sort_menu;
-  QShortcut _open_shortcuts_menu;
-  QShortcut _jump_to_playing_track;
+  QWidget *_parent;
 
   QHotkey _play_global;
   QHotkey _pause_global;
