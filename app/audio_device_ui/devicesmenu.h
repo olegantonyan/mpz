@@ -25,6 +25,7 @@ namespace AudioDeviceUi {
 
   private:
     Config::Local &local_conf;
+    QActionGroup *action_group = nullptr;
 
     bool isDefaultOutput() const;
     QByteArray currentOutput() const;
@@ -33,6 +34,7 @@ namespace AudioDeviceUi {
     bool saveOutput(QByteArray id);
 
   private slots:
+    void populate();
     void on_selected(QByteArray deviceid);
   };
 

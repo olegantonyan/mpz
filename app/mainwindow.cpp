@@ -86,6 +86,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupVolumeControl();
   setupMainMenu();
   setupShortcuts();
+  setupSortMenu();
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
 #endif
@@ -94,7 +95,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #endif
   setupWindowTitle();
   setupPlaybackLog();
-  setupSortMenu();
   setupSleepLock();
   setupOutputDevice();
 
@@ -613,6 +613,23 @@ void MainWindow::setupMacMenuBar() {
   auto *vol_down = playback->addAction(tr("Volume Down"));
   vol_down->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeDown));
   connect(vol_down, &QAction::triggered, shortcuts, &Shortcuts::volumeDown);
+
+#ifdef ENABLE_DEVICES_MENU
+  playback->addSeparator();
+
+  auto *output = new AudioDeviceUi::DevicesMenu(this, local_conf);
+  output->setTitle(tr("Output Device"));
+  connect(output, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+  playback->addMenu(output);
+  output->menuAction()->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
+  connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
+    output->menuAction()->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
+  });
+#endif
+
+  auto *view = bar->addMenu(tr("View"));
+  auto *sort_submenu = view->addMenu(tr("Sort"));
+  sort_menu->attachToMenu(sort_submenu);
 
   auto *help = bar->addMenu(tr("Help"));
 
