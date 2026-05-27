@@ -5,8 +5,19 @@
 
 namespace AudioDeviceUi {
   DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c) : QMenu(parent), local_conf(local_c) {
+    // Rebuild on every open so hot-plugged devices and the current selection
+    // stay in sync (matters for a persistent submenu; harmless for the
+    // recreated-per-click toolbar popup).
+    connect(this, &QMenu::aboutToShow, this, &DevicesMenu::populate);
+    populate();
+  }
+
+  void DevicesMenu::populate() {
+    clear();
+    delete action_group;
+
     auto devices = QMediaDevices::audioOutputs();
-    auto action_group = new QActionGroup(this);
+    action_group = new QActionGroup(this);
     auto action_default = new QAction(action_group);
     QString default_text(tr("Default"));
     action_default->setText(default_text);

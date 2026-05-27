@@ -27,32 +27,40 @@ namespace SortUi {
     return result;
   }
 
-  void SortMenu::on_open() {
-    QMenu menu;
-    connect(&menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
+  void SortMenu::populate(QMenu *menu) {
+    menu->clear();
 
-
-    QAction defau(tr("Default"));
-    defau.setData(Playlist::Sorter::defaultCriteria());
-    menu.addAction(&defau);
-    menu.addSeparator();
+    QAction *defau = new QAction(tr("Default"), menu);
+    defau->setData(Playlist::Sorter::defaultCriteria());
+    menu->addAction(defau);
+    menu->addSeparator();
 
     if (global_conf.sortPresets().isEmpty()) {
       global_conf.saveSortPresets(SortUi::SortMenu::standardPresets());
     }
 
-    QList<QAction *> actions;
     for (const auto &i : global_conf.sortPresets()) {
-      QAction *action = new QAction(i.first.isEmpty() ? i.second : i.first, &menu);
+      QAction *action = new QAction(i.first.isEmpty() ? i.second : i.first, menu);
       action->setData(i.second);
-      menu.addAction(action);
-      actions << action;
+      menu->addAction(action);
     }
 
-    menu.addSeparator();
-    QAction custom(tr("Edit presets"));
-    custom.setData(EDIT_PRESETS_QACTION_DATA);
-    menu.addAction(&custom);
+    menu->addSeparator();
+    QAction *custom = new QAction(tr("Edit presets"), menu);
+    custom->setData(EDIT_PRESETS_QACTION_DATA);
+    menu->addAction(custom);
+  }
+
+  void SortMenu::attachToMenu(QMenu *menu) {
+    connect(menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
+    connect(menu, &QMenu::aboutToShow, this, [this, menu]() { populate(menu); });
+    populate(menu);
+  }
+
+  void SortMenu::on_open() {
+    QMenu menu;
+    connect(&menu, &QMenu::triggered, this, &SortMenu::on_action_triggered);
+    populate(&menu);
 
     int menu_width = menu.sizeHint().width();
     int x = button->width() - menu_width;
