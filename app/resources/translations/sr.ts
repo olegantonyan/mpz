@@ -271,7 +271,7 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
-        <location filename="../../mainwindow.cpp" line="584"/>
+        <location filename="../../mainwindow.cpp" line="594"/>
         <source>Stop</source>
         <translation>Заустави</translation>
     </message>
@@ -391,106 +391,106 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="198"/>
-        <location filename="../../mainwindow.cpp" line="232"/>
+        <location filename="../../mainwindow.cpp" line="199"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="199"/>
-        <location filename="../../mainwindow.cpp" line="231"/>
+        <location filename="../../mainwindow.cpp" line="200"/>
+        <location filename="../../mainwindow.cpp" line="232"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="200"/>
-        <location filename="../../mainwindow.cpp" line="233"/>
+        <location filename="../../mainwindow.cpp" line="201"/>
+        <location filename="../../mainwindow.cpp" line="234"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="230"/>
+        <location filename="../../mainwindow.cpp" line="231"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="377"/>
-        <location filename="../../mainwindow.cpp" line="381"/>
+        <location filename="../../mainwindow.cpp" line="378"/>
+        <location filename="../../mainwindow.cpp" line="382"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="383"/>
+        <location filename="../../mainwindow.cpp" line="384"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="552"/>
+        <location filename="../../mainwindow.cpp" line="572"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="554"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="558"/>
+        <location filename="../../mainwindow.cpp" line="578"/>
         <source>Settings…</source>
         <translation>Подешавања…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="567"/>
+        <location filename="../../mainwindow.cpp" line="583"/>
         <source>Quit mpz</source>
         <translation>Изађи из mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="572"/>
+        <location filename="../../mainwindow.cpp" line="588"/>
         <source>Playback</source>
         <translation>Репродукција</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="574"/>
+        <location filename="../../mainwindow.cpp" line="590"/>
         <source>Play / Pause</source>
         <translation>Пусти / Пауза</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="589"/>
+        <location filename="../../mainwindow.cpp" line="599"/>
         <source>Next Track</source>
         <translation>Следећа нумера</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="593"/>
+        <location filename="../../mainwindow.cpp" line="603"/>
         <source>Previous Track</source>
         <translation>Претходна нумера</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="599"/>
+        <location filename="../../mainwindow.cpp" line="609"/>
         <source>Volume Up</source>
         <translation>Појачај гласноћу</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="605"/>
+        <location filename="../../mainwindow.cpp" line="613"/>
         <source>Volume Down</source>
         <translation>Утишај гласноћу</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="611"/>
+        <location filename="../../mainwindow.cpp" line="617"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="613"/>
+        <location filename="../../mainwindow.cpp" line="619"/>
         <source>mpz Website</source>
         <translation>mpz веб-сајт</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="618"/>
+        <location filename="../../mainwindow.cpp" line="624"/>
         <source>Send Feedback…</source>
         <translation>Пошаљи повратне информације…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="621"/>
+        <location filename="../../mainwindow.cpp" line="627"/>
         <source>Report a Bug…</source>
         <translation>Пријави грешку…</translation>
     </message>
@@ -885,88 +885,125 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="35"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
         <source>Play</source>
         <translation>Пусти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="53"/>
         <source>Stop</source>
         <translation>Заустави</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="52"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="26"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <source>Play / Pause</source>
+        <translation>Пусти / Пауза</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="30"/>
+        <location filename="../../shortcuts.cpp" line="54"/>
         <source>Next</source>
         <translation>Следећа</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="31"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
         <source>Previous</source>
         <translation>Претходна</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
+        <source>Volume up</source>
+        <translation>Појачај гласноћу</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="33"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
+        <source>Volume down</source>
+        <translation>Утишај гласноћу</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="34"/>
+        <location filename="../../shortcuts.cpp" line="58"/>
+        <source>Settings</source>
+        <translation>Подешавања</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts.cpp" line="35"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Focus on library</source>
         <translation>Фокусирајте се на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Focus on playlists</source>
         <translation>Фокусирајте се на листе песама</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Focus on playlist</source>
         <translation>Фокусирајте се на листу за репродукцију</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Focus on library filter</source>
         <translation>Фокусирајте се на филтер библиотеке</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Focus on playlists filter</source>
         <translation>Фокусирајте се на филтер плејлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="45"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Focus on playlist filter</source>
         <translation>Фокусирајте се на филтер листе песама</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Open main menu</source>
         <translation>Отворите главни мени</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="44"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Open playback log</source>
         <translation>Отворите дневник репродукције</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="45"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Open sort menu</source>
         <translation>Отворите мени за сортирање</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Open shortcuts dialog</source>
         <translation>Отворите дијалог пречица</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Jump to playing track</source>
         <translation>Пређите на нумеру за репродукцију</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="52"/>
-        <location filename="../../shortcuts.cpp" line="54"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Quit</source>
         <translation>Изађи</translation>
     </message>
@@ -1163,7 +1200,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
-        <translation type="unfinished">Претходна</translation>
+        <translation>Претходна</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
@@ -1174,7 +1211,7 @@
         <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
-        <translation type="unfinished">Следећа</translation>
+        <translation>Следећа</translation>
     </message>
     <message numerus="yes">
         <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
