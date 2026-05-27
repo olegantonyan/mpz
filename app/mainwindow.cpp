@@ -423,6 +423,10 @@ void MainWindow::setupShortcuts() {
 
   connect(shortcuts, &Shortcuts::openSortMenu, ui->sortButton, &QToolButton::click);
 
+#ifdef ENABLE_DEVICES_MENU
+  connect(shortcuts, &Shortcuts::openOutputMenu, ui->toolButtonOutputDevice, &QToolButton::click);
+#endif
+
   auto open_dialog = [=] {
     auto dlg = new ShortcutsDialog(shortcuts, this);
     dlg->setModal(false);

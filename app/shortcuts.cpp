@@ -43,6 +43,9 @@ const QVector<Shortcuts::Spec> &Shortcuts::specs() {
     t << Spec{Action::OpenMainMenu, tr("Open main menu"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), true};
     t << Spec{Action::OpenPlaybackLog, tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
     t << Spec{Action::OpenSortMenu, tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
+#ifdef ENABLE_DEVICES_MENU
+    t << Spec{Action::OpenOutputMenu, tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
+#endif
     t << Spec{Action::OpenShortcutsMenu, tr("Open shortcuts dialog"), QKeySequence(Qt::CTRL | Qt::Key_Slash), true};
     t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), true};
     t << Spec{Action::Quit, tr("Quit"), QKeySequence(QKeySequence::Quit), false};
@@ -65,6 +68,9 @@ const QVector<Shortcuts::Spec> &Shortcuts::specs() {
     t << Spec{Action::OpenMainMenu, tr("Open main menu"), QKeySequence(Qt::ALT | Qt::Key_M), true};
     t << Spec{Action::OpenPlaybackLog, tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
     t << Spec{Action::OpenSortMenu, tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
+#ifdef ENABLE_DEVICES_MENU
+    t << Spec{Action::OpenOutputMenu, tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
+#endif
     t << Spec{Action::OpenShortcutsMenu, tr("Open shortcuts dialog"), QKeySequence(Qt::ALT | Qt::Key_S), true};
     t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::ALT | Qt::Key_J), true};
     t << Spec{Action::Quit, tr("Quit"), QKeySequence(Qt::CTRL | Qt::Key_Q), true};
@@ -144,6 +150,7 @@ void Shortcuts::emitFor(Action action) {
     case Action::OpenMainMenu: emit openMainMenu(); break;
     case Action::OpenPlaybackLog: emit openPlabackLog(); break;
     case Action::OpenSortMenu: emit openSortMenu(); break;
+    case Action::OpenOutputMenu: emit openOutputMenu(); break;
     case Action::OpenShortcutsMenu: emit openShortcutsMenu(); break;
     case Action::JumpToPlayingTrack: emit jumpToPLayingTrack(); break;
   }
