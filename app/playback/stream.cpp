@@ -13,7 +13,10 @@ namespace Playback {
     _icy_metaint(0),
     _next_meta_pos(0),
     _threshold_bytes(threshold_bytes),
-    _max_bytes(threshold_bytes * threshold_multiplier) {
+    _max_bytes(threshold_bytes * threshold_multiplier),
+    _chunked(false),
+    _chunk_state(ChunkState::Size),
+    _chunk_remaining(0) {
     open(QIODevice::ReadOnly | QIODevice::Unbuffered);
     _timeout_ms = 30000;
   }
@@ -105,7 +108,10 @@ namespace Playback {
 
   QString Stream::buildRequest() const {
     QStringList headers;
-    headers.append(QString("GET %1 HTTP/1.1").arg(url().path()));
+    // HTTP/1.0: a 1.1 response to an infinite (no Content-Length) stream is framed
+    // with Transfer-Encoding: chunked by proxies like Caddy, which the ffmpeg
+    // backend can't parse. 1.0 forces a raw byte stream instead.
+    headers.append(QString("GET %1 HTTP/1.0").arg(url().path()));
     headers.append(QString("Host: %1:%2").arg(url().host()).arg(url().port()));
     headers.append(QString("User-Agent: %1 %2").arg(qAppName()).arg(qApp->applicationVersion()));
     if (!url().userName().isEmpty() && !url().password().isEmpty()) {
@@ -125,15 +131,76 @@ namespace Playback {
     rawheaders.removeAt(0); // status line. don't care
     rawheaders.removeAll({}); // empty and null
     for (const auto &i : std::as_const(rawheaders)) {
-      auto key = i.section(':', 0, 0);
-      auto value = i.section(':', 1);
+      // HTTP header names are case-insensitive; proxies (Caddy/Go) Title-Case them
+      // (Icy-Metaint, Icy-Br, ...). Normalise to lower case so downstream lookups
+      // here and in StreamMetaData (which reads "icy-br", "content-type", ...) match.
+      auto key = i.section(':', 0, 0).trimmed().toLower();
+      auto value = i.section(':', 1).trimmed();
       result.insert(key, value);
-      if (key.startsWith("icy-", Qt::CaseInsensitive) || key.toLower() == "content-type") {
+      if (key.startsWith("icy-") || key == "content-type") {
         _meta.insert(key, value);
         emit metadataChanged(_meta);
       }
     }
     return result;
+  }
+
+  void Stream::feed(const QByteArray& raw) {
+    append(_chunked ? dechunk(raw) : raw);
+  }
+
+  QByteArray Stream::dechunk(const QByteArray& in) {
+    QByteArray out;
+    int i = 0;
+    const int n = in.size();
+    while (i < n && _chunk_state != ChunkState::Done) {
+      switch (_chunk_state) {
+      case ChunkState::Size: {
+        const char c = in.at(i++);
+        _chunk_size_line.append(c);
+        if (c == '\n') {
+          QByteArray line = _chunk_size_line.trimmed();
+          const int semi = line.indexOf(';'); // drop chunk extensions
+          if (semi >= 0) {
+            line = line.left(semi);
+          }
+          bool ok = false;
+          const qint64 sz = line.toLongLong(&ok, 16);
+          _chunk_size_line.clear();
+          if (!ok) {
+            qWarning() << "stream: malformed chunk size" << line;
+            _chunk_state = ChunkState::Done;
+          } else if (sz == 0) {
+            _chunk_state = ChunkState::Done; // terminating chunk; trailers ignored
+          } else {
+            _chunk_remaining = sz;
+            _chunk_state = ChunkState::Data;
+          }
+        }
+        break;
+      }
+      case ChunkState::Data: {
+        const qint64 take = qMin<qint64>(_chunk_remaining, n - i);
+        out.append(in.constData() + i, static_cast<int>(take));
+        i += static_cast<int>(take);
+        _chunk_remaining -= take;
+        if (_chunk_remaining == 0) {
+          _chunk_state = ChunkState::AfterData;
+        }
+        break;
+      }
+      case ChunkState::AfterData: {
+        // skip the CRLF that terminates the chunk data
+        if (in.at(i++) == '\n') {
+          _chunk_state = ChunkState::Size;
+        }
+        break;
+      }
+      case ChunkState::Done:
+        break;
+      }
+    }
+    return out;
   }
 
   void Stream::append(const QByteArray& a) {
@@ -170,6 +237,10 @@ namespace Playback {
     _icy_metaint = 0;
     _next_meta_pos = 0;
     _meta.clear();
+    _chunked = false;
+    _chunk_state = ChunkState::Size;
+    _chunk_remaining = 0;
+    _chunk_size_line.clear();
     _mutex.unlock();
   }
 
@@ -198,7 +269,7 @@ namespace Playback {
     auto conn_read = connect(&sock, &QTcpSocket::readyRead, &sock, [&]() {
       auto data = sock.readAll();
       if (!headers.isEmpty()) {
-        append(data);
+        feed(data);
       } else {
         // HTTP headers may arrive split across multiple readyRead calls.
         // Accumulate into header_buf until we see the \r\n\r\n terminator.
@@ -209,9 +280,10 @@ namespace Playback {
           int body_idx = term_idx + HEADERS_TERMINATOR.size();
           headers = parseHeaders(QString::fromLatin1(header_buf.left(body_idx)).split("\r\n"));
           extract_icy_metaint(headers);
+          _chunked = headers.value("transfer-encoding").contains("chunked", Qt::CaseInsensitive);
           QByteArray body = header_buf.mid(body_idx);
           header_buf.clear();
-          append(body);
+          feed(body);
         }
       }
       timer.stop();

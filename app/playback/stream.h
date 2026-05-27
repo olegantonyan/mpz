@@ -54,7 +54,16 @@ namespace Playback {
     qint64 _next_meta_pos;
     StreamMetaData _meta;
     int _timeout_ms;
+    // chunked transfer-encoding decode state. HTTP/1.1 proxies in front of the
+    // shoutcast/icecast server (e.g. Caddy) frame the body as chunked; we request
+    // HTTP/1.0 to avoid it, but still decode it here as a safety net.
+    bool _chunked;
+    enum class ChunkState { Size, Data, AfterData, Done } _chunk_state;
+    qint64 _chunk_remaining;
+    QByteArray _chunk_size_line;
 
+    void feed(const QByteArray& raw);
+    QByteArray dechunk(const QByteArray& in);
     void append(const QByteArray& a);
     void clear();
     void thread();

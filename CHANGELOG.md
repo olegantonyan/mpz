@@ -8,6 +8,7 @@
 
 - fix macOS bundle name
 - double-click on playlist starts playing this playlist (regression)
+- fix radio streams with chunked proxied response 
 
 ### Misc
 
