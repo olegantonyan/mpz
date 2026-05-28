@@ -2,6 +2,8 @@
 #include "playlist_ui/columnsconfig.h"
 #include "config/storage.h"
 
+#include <algorithm>
+
 #include <QAbstractButton>
 #include <QCheckBox>
 #include <QComboBox>
@@ -133,13 +135,21 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());
   iv->addWidget(check_minimize_to_tray);
 
+  check_row_height = new QCheckBox(tr("Override theme's playlist row height:"));
   spin_row_height = new QSpinBox;
-  spin_row_height->setRange(0, 100);
+  spin_row_height->setRange(8, 48);
   spin_row_height->setSuffix(" " + tr("px"));
-  spin_row_height->setSpecialValueText(tr("theme default"));
-  spin_row_height->setValue(global_conf.playlistRowHeight());
+
+  const int saved_row_height = global_conf.playlistRowHeight();
+  const bool override_row_height = saved_row_height != 0;
+  check_row_height->setChecked(override_row_height);
+  spin_row_height->setEnabled(override_row_height);
+  spin_row_height->setValue(override_row_height ? std::clamp(saved_row_height, 8, 48) : 24);
+
+  connect(check_row_height, &QCheckBox::toggled, spin_row_height, &QSpinBox::setEnabled);
+
   auto *rh_row = new QHBoxLayout;
-  rh_row->addWidget(new QLabel(tr("Playlist row height:")));
+  rh_row->addWidget(check_row_height);
   rh_row->addWidget(spin_row_height);
   rh_row->addStretch();
   iv->addLayout(rh_row);
@@ -539,7 +549,8 @@ void SettingsDialog::apply() {
   // Interface
   global_conf.saveTrayIconEnabled(check_tray_icon->isChecked());
   global_conf.saveMinimizeToTray(check_minimize_to_tray->isChecked());
-  global_conf.savePlaylistRowHeight(spin_row_height->value());
+  global_conf.savePlaylistRowHeight(
+      check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());
 
   // Columns

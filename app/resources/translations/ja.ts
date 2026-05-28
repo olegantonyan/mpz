@@ -513,12 +513,12 @@
 <context>
     <name>ModusOperandi</name>
     <message>
-        <location filename="../../modusoperandi.cpp" line="26"/>
+        <location filename="../../modusoperandi.cpp" line="27"/>
         <source>mpd error</source>
         <translation>mpd エラー</translation>
     </message>
     <message>
-        <location filename="../../modusoperandi.cpp" line="29"/>
+        <location filename="../../modusoperandi.cpp" line="31"/>
         <source>mpd connected</source>
         <translation>mpd 接続済み</translation>
     </message>
@@ -675,224 +675,227 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="52"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="54"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="56"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="57"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="59"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
         <source>Advanced</source>
         <translation>詳細</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="64"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="66"/>
         <source>Open config directory</source>
         <translation>設定ディレクトリを開く</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="97"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="99"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="101"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="103"/>
         <source>Stop playback when current track or playlist is removed</source>
         <translation>現在のトラックまたはプレイリストが削除されたら再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="105"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="107"/>
         <source>Prevent system sleep while playing</source>
         <translation>再生中はシステムのスリープを抑制</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="111"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="113"/>
         <source>KiB</source>
         <translation>KiB</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="117"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="119"/>
         <source>Stream buffer size:</source>
         <translation>ストリームバッファサイズ:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="125"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="127"/>
         <source>Interface</source>
         <translation>インターフェイス</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="128"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="130"/>
         <source>Show system tray icon</source>
         <translation>システムトレイアイコンを表示</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="134"/>
         <source>Close to tray instead of quitting</source>
         <translation>終了せずにトレイに格納</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
+        <source>Override theme&apos;s playlist row height:</source>
+        <translation>テーマのプレイリストの行の高さを上書き:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="141"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="139"/>
         <source>theme default</source>
-        <translation>テーマのデフォルト</translation>
+        <translation type="vanished">テーマのデフォルト</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="142"/>
         <source>Playlist row height:</source>
-        <translation>プレイリストの行の高さ:</translation>
+        <translation type="vanished">プレイリストの行の高さ:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="149"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="159"/>
         <source>Language:</source>
         <translation>言語:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="151"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="319"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="332"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="161"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="329"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="342"/>
         <source>(requires restart)</source>
         <translation>(再起動が必要)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="160"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="170"/>
         <source>Playlist columns</source>
         <translation>プレイリストの列</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="165"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
         <source>Field</source>
         <translation>フィールド</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="165"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
         <source>Width %</source>
         <translation>幅 %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="165"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
         <source>Alignment</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="165"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
         <source>Stretch</source>
         <translation>伸縮</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="179"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="358"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="189"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="180"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="359"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="190"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="369"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="181"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
         <source>Move up</source>
         <translation>上へ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="192"/>
         <source>Move down</source>
         <translation>下へ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="183"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="193"/>
         <source>Restore defaults</source>
         <translation>デフォルトに戻す</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="429"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="226"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="217"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="430"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="227"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="440"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="300"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="310"/>
         <source>Provider order (drag to reorder, uncheck to disable):</source>
         <translation>プロバイダの順序 (ドラッグで並べ替え、チェックを外して無効化):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="316"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="326"/>
         <source>Single instance mode</source>
         <translation>シングルインスタンスモード</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="327"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="337"/>
         <source>IPC port:</source>
         <translation>IPC ポート:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="340"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="350"/>
         <source>Playback log size:</source>
         <translation>再生ログのサイズ:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="343"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="353"/>
         <source>entries</source>
         <translation>件</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="351"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="361"/>
         <source>MPRIS blacklist</source>
         <translation>MPRIS ブラックリスト</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="354"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="364"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>MPRIS の送信者名を無視 (例: &quot;wireplumber&quot;):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="378"/>
         <source>Add MPRIS sender</source>
         <translation>MPRIS 送信者を追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="369"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
         <source>Sender name:</source>
         <translation>送信者名:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="380"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="390"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>mpz 終了時に MPD の再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="454"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
         <source>Embedded (tags)</source>
         <translation>埋め込み (タグ)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="455"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
         <source>Sidecar (.lrc, .txt)</source>
         <translation>外部ファイル (.lrc, .txt)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="456"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
         <source>LRCLIB (online)</source>
         <translation>LRCLIB (オンライン)</translation>
     </message>
