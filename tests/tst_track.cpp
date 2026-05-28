@@ -97,14 +97,13 @@ void TestTrack::formattedTimeHours() {
 }
 
 void TestTrack::formattedTimeDays() {
-  // The day-bucket branch is the only thing we can lock down here: the
-  // implementation has a known unit bug in the recursive call (it passes
-  // seconds back through a function that expects ms), so the tail of the
-  // string isn't meaningful. Just confirm the day prefix appears.
   const quint64 twentyFiveHoursMs = 25ULL * 3600ULL * 1000ULL;
-  const QString out = Track::formattedTime(twentyFiveHoursMs);
-  QVERIFY2(out.startsWith(QStringLiteral("1d")),
-           qPrintable(QStringLiteral("expected day prefix, got: ") + out));
+  QCOMPARE(Track::formattedTime(twentyFiveHoursMs), QStringLiteral("1d  1:00:00"));
+
+  // 217 days + 4h 26m 40s — the value-shape that exposed the original
+  // recursive-call unit bug (seconds passed where ms were expected).
+  const quint64 bigMs = (217ULL * 86400ULL + 4ULL * 3600ULL + 26ULL * 60ULL + 40ULL) * 1000ULL;
+  QCOMPARE(Track::formattedTime(bigMs), QStringLiteral("217d  4:26:40"));
 }
 
 void TestTrack::formattedTimeRoundsDownToSeconds() {

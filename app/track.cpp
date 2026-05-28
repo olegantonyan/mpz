@@ -94,7 +94,7 @@ QString Track::formattedTime(quint64 tm) {
     return QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
   } else if (hours >= 24) {
     quint32 days = hours / 24;
-    return QString("%1d %2").arg(days).arg(formattedTime(tm - days * 86400));
+    return QString("%1d %2").arg(days).arg(formattedTime((tm - days * 86400) * 1000));
   }
   return QString("%1:%2:%3").arg(hours, 2, 10).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
 }

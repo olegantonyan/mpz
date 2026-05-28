@@ -69,14 +69,14 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Playback::Controller::setup_monotonic_timer() {
     monotonic_timer.setSingleShot(false);
-    monotonic_timer.setInterval(1000);
-    monotonic_timer.start();
     monotonic_timer.setTimerType(Qt::PreciseTimer);
-    connect(&monotonic_timer, &QTimer::timeout, this, [=]() {
+    monotonic_timer.setInterval(1000);
+    connect(&monotonic_timer, &QTimer::timeout, this, [this]() {
       if (state() == Controller::Playing) {
         emit monotonicPlaybackTimerIncrement(1);
       }
     });
+    monotonic_timer.start();
   }
 
   MediaPlayer &Controller::player() {
