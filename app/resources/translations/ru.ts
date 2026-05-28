@@ -478,7 +478,17 @@
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="638"/>
+        <location filename="../../mainwindow.cpp" line="640"/>
+        <source>Playback Log</source>
+        <translation>Лог воспроизведения</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="644"/>
+        <source>Keyboard Shortcuts</source>
+        <translation>Клавиатурные сочетания</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="648"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>

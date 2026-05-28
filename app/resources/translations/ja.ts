@@ -478,7 +478,17 @@
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="638"/>
+        <location filename="../../mainwindow.cpp" line="640"/>
+        <source>Playback Log</source>
+        <translation>再生ログ</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="644"/>
+        <source>Keyboard Shortcuts</source>
+        <translation>キーボードショートカット</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="648"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>

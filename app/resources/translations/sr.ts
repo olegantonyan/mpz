@@ -478,7 +478,17 @@
         <translation>Приказ</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="638"/>
+        <location filename="../../mainwindow.cpp" line="640"/>
+        <source>Playback Log</source>
+        <translation>Дневник репродукције</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="644"/>
+        <source>Keyboard Shortcuts</source>
+        <translation>Пречице на тастатури</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="648"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>

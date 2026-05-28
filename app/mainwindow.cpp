@@ -635,6 +635,16 @@ void MainWindow::setupMacMenuBar() {
   auto *sort_submenu = view->addMenu(tr("Sort"));
   sort_menu->attachToMenu(sort_submenu);
 
+  view->addSeparator();
+
+  auto *playback_log_action = view->addAction(tr("Playback Log"));
+  playback_log_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenPlaybackLog));
+  connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
+
+  auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
+  shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
+  connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
+
   auto *help = bar->addMenu(tr("Help"));
 
   auto *website = help->addAction(tr("mpz Website"));
