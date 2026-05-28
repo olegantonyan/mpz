@@ -2,17 +2,19 @@
 
 ### Added
 
-- ability to sort and edit library folders
+- ability to sort and edit library folders (including mpd)
 
 ### Fixed
 
 - fix macOS bundle name
 - double-click on playlist starts playing this playlist (regression)
 - fix radio streams with chunked proxied response 
+- total playback time fixed
 
 ### Misc
 
-- improved UI of changelog and about dialogs
+- improved UI of changelog, about and settings dialogs
+- improved macOS menu bar
 
 ## [2.0.8] - 2026-05-23
 
