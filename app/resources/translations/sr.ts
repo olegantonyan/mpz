@@ -45,14 +45,6 @@
         <translation>Информације о систему</translation>
     </message>
     <message>
-        <source>Using opensource libraries</source>
-        <translation type="vanished">Коришћење библиотека отвореног кода</translation>
-    </message>
-    <message>
-        <source>Config files path: </source>
-        <translation type="vanished">Путања конфигурационих датотека: </translation>
-    </message>
-    <message>
         <location filename="../../about_ui/aboutdialog.cpp" line="18"/>
         <source>Version %1</source>
         <translation>Верзија %1</translation>
@@ -746,152 +738,164 @@
         <translation>px</translation>
     </message>
     <message>
-        <source>theme default</source>
-        <translation type="vanished">подразумевано теме</translation>
-    </message>
-    <message>
-        <source>Playlist row height:</source>
-        <translation type="vanished">Висина реда плејлисте:</translation>
-    </message>
-    <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="159"/>
         <source>Language:</source>
         <translation>Језик:</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="161"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="329"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="342"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="227"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="355"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
         <source>(requires restart)</source>
         <translation>(захтева поновно покретање)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="170"/>
+        <source>Library</source>
+        <translation>Библиотека</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="174"/>
+        <source>All levels (default)</source>
+        <translation>Сви нивои (подразумевано)</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <source>Top level only</source>
+        <translation>Само највиши ниво</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="188"/>
+        <source>Filter scope:</source>
+        <translation>Опсег филтера:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="196"/>
         <source>Playlist columns</source>
         <translation>Колоне плејлисте</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
         <source>Field</source>
         <translation>Поље</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
         <source>Width %</source>
         <translation>Ширина %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
         <source>Alignment</source>
         <translation>Поравнање</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
         <source>Stretch</source>
         <translation>Растегни</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="189"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="215"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="394"/>
         <source>Add</source>
         <translation>Додај</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="190"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="369"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="395"/>
         <source>Remove</source>
         <translation>Уклони</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="217"/>
         <source>Move up</source>
         <translation>Помери горе</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="192"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="218"/>
         <source>Move down</source>
         <translation>Помери доле</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="193"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="219"/>
         <source>Restore defaults</source>
         <translation>Врати подразумевано</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="226"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="252"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
         <source>Left</source>
         <translation>Лево</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="227"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="440"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="253"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
         <source>Right</source>
         <translation>Десно</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="310"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="336"/>
         <source>Provider order (drag to reorder, uncheck to disable):</source>
         <translation>Редослед извора (превуците за промену, искључите за онемогућавање):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="326"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="352"/>
         <source>Single instance mode</source>
         <translation>Један примерак апликације</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="337"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="363"/>
         <source>IPC port:</source>
         <translation>IPC порт:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="350"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
         <source>Playback log size:</source>
         <translation>Величина дневника репродукције:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="353"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
         <source>entries</source>
         <translation>ставки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="361"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="387"/>
         <source>MPRIS blacklist</source>
         <translation>Црна листа MPRIS-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="364"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="390"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнориши имена MPRIS пошиљалаца (нпр. „wireplumber“):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="378"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="404"/>
         <source>Add MPRIS sender</source>
         <translation>Додај MPRIS пошиљаоца</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="405"/>
         <source>Sender name:</source>
         <translation>Име пошиљаоца:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="390"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Заустави MPD репродукцију при затварању mpz-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
         <source>Embedded (tags)</source>
         <translation>Уграђени (тагови)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="491"/>
         <source>Sidecar (.lrc, .txt)</source>
         <translation>Спољни фајлови (.lrc, .txt)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
         <source>LRCLIB (online)</source>
         <translation>LRCLIB (на мрежи)</translation>
     </message>
@@ -1374,6 +1378,13 @@
         <translation>Претрага текста песме...</translation>
     </message>
     <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="185"/>
+        <source>LRCLIB</source>
+        <translation>LRCLIB</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="191"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="198"/>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
         <source>No lyrics found.</source>
         <translation>Није пронађен текст песме.</translation>

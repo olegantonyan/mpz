@@ -3,6 +3,7 @@
 
 #include "directorymodel/proxy.h"
 #include "config/local.h"
+#include "config/global.h"
 #include "directorycontextmenu.h"
 #include "directorysortmenu.h"
 #include "modusoperandi.h"
@@ -22,7 +23,7 @@ namespace DirectoryUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent = nullptr);
+    explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
@@ -38,6 +39,7 @@ namespace DirectoryUi {
     DirectoryModel::Proxy *model;
     QLineEdit *search;
     Config::Local &local_conf;
+    Config::Global &global_conf;
     bool restore_scroll_once;
     DirectoryContextMenu *context_menu;
     DirectoryUi::SortMenu *sort_menu;

@@ -4,7 +4,7 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    Proxy::Proxy(ModusOperandi &modus, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus) {
+    Proxy::Proxy(ModusOperandi &modus, Config::Global &global_cfg, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus), global_conf(global_cfg) {
       localfs = new Localfs(this);
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(modus.mpd_client, this);
@@ -93,13 +93,54 @@ namespace DirectoryUi {
         break;
       case ModusOperandi::MODUS_LOCALFS:
       default:
-        if (term.isEmpty()) {
+        if (global_conf.libraryFilterScope() == "top_level_only") {
+          // Top-level-only mode: proxy does the filtering. Clear any legacy name filter
+          // that may have been set in all-levels mode before the user switched.
           localfs->setNameFilters(QStringList());
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+          beginFilterChange();
+          filter_term = term;
+          endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+          filter_term = term;
+          invalidateFilter();
+#endif
         } else {
-          QString wc = QString("*%1*").arg(term);
-          localfs->setNameFilters(QStringList() << wc);
+          // All-levels mode (default; also covers empty/unknown stored value):
+          // QFileSystemModel filters at every level via setNameFilters. Make sure the
+          // proxy-level filter is cleared so it doesn't double up if the user just switched.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+          beginFilterChange();
+          filter_term.clear();
+          endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
+          filter_term.clear();
+          invalidateFilter();
+#endif
+          if (term.isEmpty()) {
+            localfs->setNameFilters(QStringList());
+          } else {
+            localfs->setNameFilters(QStringList() << QString("*%1*").arg(term));
+          }
         }
       }
+    }
+
+    bool Proxy::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const {
+      if (filter_term.isEmpty()) {
+        return true;
+      }
+      // Only LocalFS rows pass through this filter; MPD manages its own visibility in Mpd::filter().
+      if (sourceModel() != localfs) {
+        return true;
+      }
+      // Filter only at the top level (children of rootIndex); deeper rows are always accepted
+      // so that expanding a matched top-level dir shows its full contents.
+      if (source_parent != localfs->rootIndex()) {
+        return true;
+      }
+      const QString name = localfs->fileName(localfs->index(source_row, 0, source_parent));
+      return name.contains(filter_term, Qt::CaseInsensitive);
     }
 
     void Proxy::sortBy(const QString &direction) {

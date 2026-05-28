@@ -66,6 +66,9 @@ namespace Config {
     QStringList lyricsProviders() const;
     bool saveLyricsProviders(const QStringList &arg);
 
+    QString libraryFilterScope() const;
+    void saveLibraryFilterScope(const QString &arg);
+
   private:
     Config::Storage storage;
   };

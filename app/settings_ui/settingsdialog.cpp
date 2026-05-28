@@ -166,6 +166,32 @@ QWidget *SettingsDialog::buildGeneralTab() {
 
   vbox->addWidget(gb_iface);
 
+  // Library
+  auto *gb_library = new QGroupBox(tr("Library"));
+  auto *lv = new QVBoxLayout(gb_library);
+
+  combo_library_filter_scope = new QComboBox;
+  combo_library_filter_scope->addItem(tr("All levels (default)"), "all_levels");
+  combo_library_filter_scope->addItem(tr("Top level only"),       "top_level_only");
+  {
+    const QString current = global_conf.libraryFilterScope();
+    int idx = 0; // fall back to "all_levels" on empty/unknown
+    for (int i = 0; i < combo_library_filter_scope->count(); ++i) {
+      if (combo_library_filter_scope->itemData(i).toString() == current) {
+        idx = i;
+        break;
+      }
+    }
+    combo_library_filter_scope->setCurrentIndex(idx);
+  }
+  auto *lfs_row = new QHBoxLayout;
+  lfs_row->addWidget(new QLabel(tr("Filter scope:")));
+  lfs_row->addWidget(combo_library_filter_scope);
+  lfs_row->addStretch();
+  lv->addLayout(lfs_row);
+
+  vbox->addWidget(gb_library);
+
   // Playlist columns
   auto *gb_cols = new QGroupBox(tr("Playlist columns"));
   auto *cv = new QVBoxLayout(gb_cols);
@@ -552,6 +578,9 @@ void SettingsDialog::apply() {
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());
+
+  // Library
+  global_conf.saveLibraryFilterScope(combo_library_filter_scope->currentData().toString());
 
   // Columns
   global_conf.saveColumnsConfig(collectColumns());

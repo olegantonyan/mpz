@@ -206,4 +206,12 @@ namespace Config {
     return storage.set("lyrics", Config::Value(map));
   }
 
+  QString Global::libraryFilterScope() const {
+    return storage.get("library_filter_scope").get<QString>();
+  }
+
+  void Global::saveLibraryFilterScope(const QString &arg) {
+    storage.set("library_filter_scope", Config::Value(arg));
+  }
+
 }

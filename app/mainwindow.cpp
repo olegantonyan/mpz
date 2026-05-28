@@ -39,7 +39,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
-  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, modus_operandi, this);
+  library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, global_conf, modus_operandi, this);
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, modus_operandi, this);
 

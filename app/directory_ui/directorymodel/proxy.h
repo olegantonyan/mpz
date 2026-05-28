@@ -3,6 +3,7 @@
 
 #include "modusoperandi.h"
 #include "localfs.h"
+#include "config/global.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd.h"
 #endif
@@ -18,7 +19,7 @@ namespace DirectoryUi {
       Q_OBJECT
 
     public:
-      explicit Proxy(ModusOperandi &modus, QObject *parent = nullptr);
+      explicit Proxy(ModusOperandi &modus, Config::Global &global_cfg, QObject *parent = nullptr);
 
       void loadAsync(const QString &path);
 
@@ -35,12 +36,17 @@ namespace DirectoryUi {
       void sortBy(const QString &direction);
       void switchTo(ModusOperandi::ActiveMode new_mode);
 
+    protected:
+      bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+
     private:
       Localfs *localfs;
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
       bool loadAsyncMpdOnce = true;
 #endif
+      Config::Global &global_conf;
+      QString filter_term;
     };
   }
 }

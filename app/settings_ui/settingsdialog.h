@@ -37,6 +37,8 @@ private:
   QSpinBox *spin_row_height = nullptr;
   QComboBox *combo_language = nullptr;
 
+  QComboBox *combo_library_filter_scope = nullptr;
+
   QTableWidget *table_columns = nullptr;
   QListWidget *list_lyrics = nullptr;
 

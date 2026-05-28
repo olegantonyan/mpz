@@ -3,6 +3,7 @@
 ### Added
 
 - ability to sort and edit library folders (including mpd)
+- option to make library filter only top-level folders
 
 ### Fixed
 

@@ -18,11 +18,12 @@
 #include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, ModusOperandi &modus, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
     local_conf(local_cfg),
+    global_conf(global_cfg),
     libswitch(_libswitch),
     modus_operandi(modus)
     {
@@ -33,7 +34,7 @@ namespace DirectoryUi {
 
     restore_scroll_once = true;
 
-    model = new DirectoryModel::Proxy(modus_operandi, this);
+    model = new DirectoryModel::Proxy(modus_operandi, global_conf, this);
     connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, this, [=] {
       view->setModel(model);
       view->setRootIndex(model->rootIndex());
