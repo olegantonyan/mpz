@@ -29,6 +29,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install nasm (assembler for the vendored FFmpeg build)
+        run: brew install nasm
+
       - name: Install Qt6
         uses: jurplel/install-qt-action@v4
         with:
