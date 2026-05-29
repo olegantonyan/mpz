@@ -259,7 +259,8 @@ elseif(WIN32)
     ws2_32 bcrypt
   )
   if(MPZ_FFMPEG_HTTPS)
-    target_link_libraries(ffmpeg_static INTERFACE secur32)  # schannel
+    # schannel TLS: SSPI (secur32) + certificate APIs (crypt32) + CNG keys (ncrypt)
+    target_link_libraries(ffmpeg_static INTERFACE secur32 crypt32 ncrypt)
   endif()
 else()
   find_package(Threads REQUIRED)
