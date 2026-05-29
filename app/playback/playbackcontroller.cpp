@@ -1,5 +1,11 @@
 #include "playbackcontroller.h"
 #include "streammetadata.h"
+#ifdef ENABLE_QTMULTIMEDIA_BACKEND
+  #include "playback/qtmm/mediaplayer.h"
+#endif
+#ifdef ENABLE_FFMPEG_BACKEND
+  #include "playback/native/mediaplayer.h"
+#endif
 
 #include <QDebug>
 
@@ -7,25 +13,43 @@ namespace Playback {
 Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent) :
   QObject(parent),
   _controls(c),
-  _player(stream_buffer_size, outdevid),
   modus_operndi(modus)
 #ifdef ENABLE_MPD_SUPPORT
   , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
 #endif
 {
-    connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
-    connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
-    connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
-    connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+    // Backend selection. The native FFmpeg+miniaudio engine is the default;
+    // set MPZ_AUDIO_BACKEND=qtmm to fall back to QtMultimedia (A/B bug reports,
+    // or if the native engine misbehaves on some platform/format).
+    const QByteArray audio_backend = qgetenv("MPZ_AUDIO_BACKEND");
+#if defined(ENABLE_FFMPEG_BACKEND) && defined(ENABLE_QTMULTIMEDIA_BACKEND)
+    if (audio_backend == "qtmm") {
+      _player = std::make_unique<Qtmm::MediaPlayer>(stream_buffer_size, outdevid);
+    } else {
+      _player = std::make_unique<Native::MediaPlayer>(stream_buffer_size, outdevid);
+    }
+#elif defined(ENABLE_FFMPEG_BACKEND)
+    Q_UNUSED(audio_backend)
+    _player = std::make_unique<Native::MediaPlayer>(stream_buffer_size, outdevid);
+#elif defined(ENABLE_QTMULTIMEDIA_BACKEND)
+    Q_UNUSED(audio_backend)
+    _player = std::make_unique<Qtmm::MediaPlayer>(stream_buffer_size, outdevid);
+#endif
 
-    connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
+    connect(_player.get(), &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(_player.get(), &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(_player.get(), &MediaPlayer::nextRequested, this, &Controller::nextRequested);
+    connect(_player.get(), &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+
+    connect(_player.get(), &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
-    connect(&_player, &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
+    connect(_player.get(), &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
     });
+    connect(_player.get(), &MediaPlayer::audioOutputsChanged, this, &Controller::audioOutputsChanged);
 
 #ifdef ENABLE_MPD_SUPPORT
     connect(&_mpdplayer, &Mpd::MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
@@ -87,7 +111,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #endif
     case ModusOperandi::MODUS_LOCALFS:
     default:
-      return _player;
+      return *_player;
     }
   }
 
@@ -121,6 +145,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   const Track &Controller::currentTrack() const {
     return _current_track;
+  }
+
+  QList<MediaPlayer::AudioDevice> Controller::audioOutputs() {
+    return player().audioOutputs();
   }
 
   void Controller::play(const Track &track) {
@@ -236,8 +264,8 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   void Controller::switchTo(ModusOperandi::ActiveMode new_mode) {
     switch (new_mode) {
     case ModusOperandi::MODUS_MPD:
-      _player.stop();
-      _player.clearTrack();
+      _player->stop();
+      _player->clearTrack();
       break;
     case ModusOperandi::MODUS_LOCALFS:
     default:
@@ -258,11 +286,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     return QObject::eventFilter(obj, event);
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   void Controller::setOutputDevice(QByteArray deviceid) {
     player().setOutputDevice(deviceid);
   }
-#endif
 
   void Controller::setCurrentTrack(const Track &track) {
     _current_track = track;

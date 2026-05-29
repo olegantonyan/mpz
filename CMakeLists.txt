@@ -8,7 +8,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(QT_COMPONENTS Core Gui Widgets Multimedia Concurrent Network)
+option(ENABLE_FFMPEG_BACKEND "Native FFmpeg+miniaudio audio engine (default audio backend)" ON)
+option(ENABLE_QTMULTIMEDIA_BACKEND "Build the QtMultimedia audio backend (fallback)" ON)
+if (NOT ENABLE_FFMPEG_BACKEND AND NOT ENABLE_QTMULTIMEDIA_BACKEND)
+  message(FATAL_ERROR "At least one audio backend must be enabled (ENABLE_FFMPEG_BACKEND and/or ENABLE_QTMULTIMEDIA_BACKEND)")
+endif()
+
+set(QT_COMPONENTS Core Gui Widgets Concurrent Network)
+if (ENABLE_QTMULTIMEDIA_BACKEND)
+  list(APPEND QT_COMPONENTS Multimedia)
+endif()
 
 if(UNIX AND NOT APPLE)
   set(DEFAULT_ENABLE_DBUS ON)
@@ -97,7 +106,6 @@ set(PROJECT_SOURCES
   app/reveal_in_filemanager.cpp
   app/trayicon.cpp
   app/volumecontrol.cpp
-  app/playback/stream.cpp
   app/streammetadata.cpp
   app/modusoperandi.cpp
   app/about_ui/aboutdialog.ui
@@ -132,6 +140,29 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/addmpddialog.cpp)
 endif()
 
+# Local audio backends. The base Playback::MediaPlayer (mediaplayer.cpp) is the
+# abstract interface; concrete backends are added per option. The miniaudio
+# implementation TU is added in the FFMPEG block below.
+if (ENABLE_QTMULTIMEDIA_BACKEND)
+  list(APPEND PROJECT_SOURCES app/playback/qtmm/mediaplayer.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/stream.cpp)
+endif()
+if (ENABLE_FFMPEG_BACKEND)
+  list(APPEND PROJECT_SOURCES app/playback/native/mediaplayer.cpp)
+  list(APPEND PROJECT_SOURCES app/playback/native/engine.cpp)
+endif()
+
+# Output-device menu: available whenever the active backend can enumerate
+# devices - the native engine (any Qt version) or QtMultimedia on Qt6. It now
+# queries the backend through Playback::Controller, so it no longer depends on
+# QMediaDevices directly.
+if (ENABLE_FFMPEG_BACKEND OR (ENABLE_QTMULTIMEDIA_BACKEND AND QT_VERSION_MAJOR GREATER_EQUAL 6))
+  set(ENABLE_DEVICES_MENU ON)
+  list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+else()
+  set(ENABLE_DEVICES_MENU OFF)
+endif()
+
 if (ENABLE_DBUS)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   if(QT_VERSION_MAJOR GREATER_EQUAL 6)
@@ -158,12 +189,14 @@ endif()
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
-  list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
 else()
   message(STATUS "using Qt5")
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
+endif()
+
+if (ENABLE_DEVICES_MENU)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
 endif()
 
 foreach(_qt_comp IN LISTS QT_COMPONENTS)
@@ -349,6 +382,42 @@ if (ENABLE_MPD_SUPPORT)
   endif()
 endif()
 # ENDOF LIBMPDCLIENT
+
+# FFMPEG + MINIAUDIO (native audio backend)
+if (ENABLE_FFMPEG_BACKEND)
+  option(USE_SYSTEM_FFMPEG "Use FFmpeg provided by the OS instead of the vendored static build" OFF)
+  if (USE_SYSTEM_FFMPEG)
+    find_package(PkgConfig REQUIRED)
+    # Floor = FFmpeg 5.1, the first release with the AVChannelLayout /
+    # swr_alloc_set_opts2 API the native engine relies on (libavutil 57.24,
+    # libswresample 4.5). Too-old distro FFmpeg then fails fast with a clear
+    # pkg-config version error instead of a deep compile error in engine.cpp.
+    pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+      libavformat>=59 libavcodec>=59.24 libavutil>=57.24 libswresample>=4.5)
+    message(STATUS "using system-wide FFmpeg (libavformat ${FFMPEG_libavformat_VERSION})")
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE PkgConfig::FFMPEG)
+  else()
+    include(3rdparty/ffmpeg.cmake)
+    message(STATUS "using vendored static FFmpeg ${FFMPEG_VERSION}")
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ffmpeg_static)
+  endif()
+
+  # miniaudio: header-only output backend, compiled in a single C TU.
+  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/playback/native/miniaudio_impl.c)
+  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/miniaudio)
+  if (UNIX AND NOT APPLE)
+    find_package(Threads REQUIRED)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Threads::Threads ${CMAKE_DL_LIBS})
+  elseif (APPLE)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "-framework CoreAudio" "-framework AudioToolbox" "-framework CoreFoundation")
+  endif()
+
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_FFMPEG_BACKEND)
+endif()
+if (ENABLE_QTMULTIMEDIA_BACKEND)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_QTMULTIMEDIA_BACKEND)
+endif()
+# ENDOF FFMPEG + MINIAUDIO
 
 # CPPTRACE
 # Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives

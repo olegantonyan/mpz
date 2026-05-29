@@ -3,7 +3,9 @@
 
 namespace Playback {
   namespace Mpd {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent) : Playback::MediaPlayer{stream_buffer_size, outdevid, parent}, client(cl) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, MpdClient::Client &cl, QObject *parent) : Playback::MediaPlayer{parent}, client(cl) {
+      Q_UNUSED(stream_buffer_size)
+      Q_UNUSED(outdevid)
       connect(&client, &MpdClient::Client::playerStateChanged, this, &MediaPlayer::on_playerStateChanged);
       progress_timer.setInterval(500);
       connect(&progress_timer, &QTimer::timeout, this, &MediaPlayer::updateProgressNow);

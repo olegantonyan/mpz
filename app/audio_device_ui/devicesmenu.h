@@ -13,18 +13,21 @@
 #include <QActionGroup>
 #include <QHash>
 
+namespace Playback { class Controller; }
+
 namespace AudioDeviceUi {
   class DevicesMenu : public QMenu {
     Q_OBJECT
 
   public:
-    explicit DevicesMenu(QWidget *parent, Config::Local &local_c);
+    explicit DevicesMenu(QWidget *parent, Config::Local &local_c, Playback::Controller *controller);
 
   signals:
     void outputDeviceChanged(QByteArray id);
 
   private:
     Config::Local &local_conf;
+    Playback::Controller *controller;
     QActionGroup *action_group = nullptr;
 
     bool isDefaultOutput() const;

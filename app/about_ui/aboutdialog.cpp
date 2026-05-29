@@ -40,6 +40,10 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
+#ifdef ENABLE_FFMPEG_BACKEND
+  os << libraryInfo("FFmpeg", "https://ffmpeg.org/");
+  os << libraryInfo("miniaudio", "https://miniaud.io/");
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");
 #endif
