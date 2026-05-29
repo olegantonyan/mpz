@@ -38,7 +38,9 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
     EXTRA_CMAKE_ARGS="-DPACKAGE_VERSION=$PACKAGE_VERSION"
 fi
 
-cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
+# 32-bit Windows uses the QtMultimedia backend: MSYS2 dropped 32-bit MinGW, so
+# the vendored FFmpeg can't be built here. (64-bit Qt6 builds the native engine.)
+cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON -DENABLE_FFMPEG_BACKEND=OFF $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
 windeployqt.exe ./mpz.exe --dir $ARTIFACT_NAME
 cp ./mpz.exe $ARTIFACT_NAME
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"

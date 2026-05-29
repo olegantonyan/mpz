@@ -102,6 +102,13 @@ if(MPZ_FFMPEG_DISABLE_ASM)
   list(APPEND _ff_flags --disable-x86asm)
 endif()
 
+if(WIN32)
+  # Build FFmpeg with the same MinGW gcc CMake uses for the app (ABI match with
+  # the Qt mingw build) and target native Windows. Its configure is a POSIX
+  # shell script, so it's invoked via `sh` below (cmd.exe can't run it).
+  list(APPEND _ff_flags --target-os=mingw32 "--cc=${CMAKE_C_COMPILER}")
+endif()
+
 set(_ff_link_openssl OFF)
 if(MPZ_FFMPEG_HTTPS)
   if(APPLE)
@@ -197,11 +204,21 @@ if(APPLE)
   add_custom_target(ffmpeg_external
     DEPENDS ${_ff_universal_libs} "${_ff_inc}/libavformat/avformat.h")
 else()
+  # FFmpeg's configure is a POSIX shell script. On Windows (MinGW) cmd.exe can't
+  # run it directly, so invoke it through `sh` (provided by MSYS2/Git Bash);
+  # elsewhere run it directly. Use ${_ff_src} (forward slashes) rather than the
+  # <SOURCE_DIR> placeholder, which ExternalProject renders with backslashes on
+  # Windows.
+  if(WIN32)
+    set(_ff_configure_cmd sh "${_ff_src}/configure" "--prefix=${_ff_install}" ${_ff_flags})
+  else()
+    set(_ff_configure_cmd "${_ff_src}/configure" "--prefix=${_ff_install}" ${_ff_flags})
+  endif()
   ExternalProject_Add(ffmpeg_external
     PREFIX "${_ff_root}"
     SOURCE_DIR "${_ff_src}"        # the committed source tree
     DOWNLOAD_COMMAND ""            # nothing is fetched; build out-of-tree
-    CONFIGURE_COMMAND "<SOURCE_DIR>/configure" "--prefix=${_ff_install}" ${_ff_flags}
+    CONFIGURE_COMMAND ${_ff_configure_cmd}
     BUILD_COMMAND "${MAKE_EXECUTABLE}" "-j${_ff_jobs}"
     INSTALL_COMMAND "${MAKE_EXECUTABLE}" install
     BUILD_BYPRODUCTS
