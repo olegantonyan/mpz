@@ -1,19 +1,27 @@
 #ifndef MEDIAPLAYER_H
 #define MEDIAPLAYER_H
 
-#include "playback/stream.h"
+#include "streammetadata.h"
 #include "track.h"
 
 #include <QObject>
-#include <QMediaPlayer>
+#include <QByteArray>
+#include <QString>
+#include <QList>
+
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  #include <QAudioOutput>
-  #include <QMediaDevices>
-  #include <QAudioDevice>
+  // Defined while the QtMultimedia backend is in use to enable workarounds for
+  // Qt6 QMediaPlayer streaming quirks (see Playback::Qtmm::MediaPlayer and
+  // Playback::Controller::play). Retired once the native engine is the only
+  // stream backend.
   #define QT6_STREAM_HACKS
 #endif
 
 namespace Playback {
+  // Abstract audio-backend interface. Concrete backends:
+  //   - Playback::Qtmm::MediaPlayer   (QtMultimedia, fallback)
+  //   - Playback::Native::MediaPlayer (FFmpeg + miniaudio, default)
+  //   - Playback::Mpd::MediaPlayer    (MPD daemon)
   class MediaPlayer : public QObject {
     Q_OBJECT
   public:
@@ -24,11 +32,26 @@ namespace Playback {
     };
     Q_ENUM(State)
 
-    explicit MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
+    // Backend-neutral audio-output device descriptor. `id` is an opaque token
+    // understood by the backend that produced it (passed back to
+    // setOutputDevice); an empty id means the system default.
+    struct AudioDevice {
+      QByteArray id;
+      QString description;
+      bool is_default = false;
+    };
 
-    virtual MediaPlayer::State state();
-    virtual int volume();
-    virtual qint64 position();
+    explicit MediaPlayer(QObject *parent = nullptr);
+    ~MediaPlayer() override = default;
+
+    virtual State state() = 0;
+    virtual int volume() = 0;
+    virtual qint64 position() = 0;
+
+    // Output devices the active backend can play to. Default: none (e.g. MPD,
+    // or QtMultimedia on Qt5). The device UI enumerates through this so the ids
+    // always match the backend that will receive setOutputDevice().
+    virtual QList<AudioDevice> audioOutputs() { return {}; }
 
   signals:
     void positionChanged(qint64 position);
@@ -38,49 +61,22 @@ namespace Playback {
     void streamMetaChanged(const StreamMetaData& meta);
     void prevRequested();
     void nextRequested();
+    void audioOutputsChanged();   // device list changed (hot-plug)
 
   public slots:
-    virtual void pause();
-    virtual void play();
-    virtual void stop();
+    virtual void pause() = 0;
+    virtual void play() = 0;
+    virtual void stop() = 0;
     virtual void next();
     virtual void prev();
-    virtual void setPosition(qint64 position);
-    virtual void setVolume(int volume);
-    virtual void setTrack(const Track &track);
-    virtual void clearTrack();
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void setOutputDevice(QByteArray deviceid);
-#endif
-
-  private:
-    QMediaPlayer player;
-    Stream stream;
-    QByteArray output_device_id;
-    bool next_after_stop;
-    bool next_after_stop_cue;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QAudioOutput audio_output;
-    QMediaDevices media_devices;
-#endif
-#ifdef QT6_STREAM_HACKS
-    bool suppress_emit_playing_state;
-    bool start_stream();
-#endif
-    bool unpause_workaround_needed_on_playing_state_change = false;
-
-    quint64 offset_begin = 0;
-    quint64 offset_end = 0;
-    QUrl current_source_url;
-    bool synthetic_playing_on_play = false;
-    void seek_to_offset_begin();
-    void unpause_workaround();
-    void emitStateChanged(MediaPlayer::State state);
-
-  private slots:
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void onAudioDevicesChanged();
-#endif
+    virtual void setPosition(qint64 position) = 0;
+    virtual void setVolume(int volume) = 0;
+    virtual void setTrack(const Track &track) = 0;
+    virtual void clearTrack() = 0;
+    // Output-device selection. Backends without device control (MPD) use the
+    // no-op default. Available on every Qt version now that device handling no
+    // longer depends on QMediaDevices.
+    virtual void setOutputDevice(QByteArray deviceid);
   };
 }
 

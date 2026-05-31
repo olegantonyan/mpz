@@ -517,7 +517,7 @@ void MainWindow::setupSleepLock() {
 void MainWindow::setupOutputDevice() {
 #ifdef ENABLE_DEVICES_MENU
   connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
-    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
+    AudioDeviceUi::DevicesMenu device_menu(this, local_conf, player);
     connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
     int menu_width = device_menu.sizeHint().width();
     int x = ui->toolButtonOutputDevice->width() - menu_width;
@@ -621,7 +621,7 @@ void MainWindow::setupMacMenuBar() {
 #ifdef ENABLE_DEVICES_MENU
   playback->addSeparator();
 
-  auto *output = new AudioDeviceUi::DevicesMenu(this, local_conf);
+  auto *output = new AudioDeviceUi::DevicesMenu(this, local_conf, player);
   output->setTitle(tr("Output Device"));
   connect(output, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
   playback->addMenu(output);

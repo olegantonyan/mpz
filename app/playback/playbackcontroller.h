@@ -14,6 +14,8 @@
 #include <QMouseEvent>
 #include <QTimer>
 
+#include <memory>
+
 namespace Playback {
   class Controller : public QObject {
     Q_OBJECT
@@ -33,6 +35,7 @@ namespace Playback {
     enum State state();
     int position();
     const Track& currentTrack() const;
+    QList<MediaPlayer::AudioDevice> audioOutputs();
 
   signals:
     void started(const Track &track);
@@ -48,15 +51,14 @@ namespace Playback {
     void trackChanged(const Track &track);
     void monotonicPlaybackTimerIncrement(int by);
     void trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
+    void audioOutputsChanged();
 
   public slots:
     void play(const Track &track);
     void stop();
     void setVolume(int value);
     void seek(int seconds);
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);
-#endif
     void setCurrentTrack(const Track &track);
     void trackChangedQueryComplete(const Track &track);
 
@@ -67,7 +69,7 @@ namespace Playback {
     MediaPlayer &player();
 
     Playback::Controls _controls;
-    MediaPlayer _player;
+    std::unique_ptr<MediaPlayer> _player;
     ModusOperandi &modus_operndi;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::MediaPlayer _mpdplayer;

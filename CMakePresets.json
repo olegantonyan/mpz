@@ -39,7 +39,8 @@
       "cacheVariables": {
         "USE_SYSTEM_TAGLIB": "ON",
         "USE_SYSTEM_YAMLCPP": "ON",
-        "USE_SYSTEM_LIBMPDCLIENT": "ON"
+        "USE_SYSTEM_LIBMPDCLIENT": "ON",
+        "USE_SYSTEM_FFMPEG": "ON"
       }
     },
     {

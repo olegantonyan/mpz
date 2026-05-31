@@ -39,6 +39,20 @@ jobs:
           modules: 'qtmultimedia'
           tools: 'tools_mingw1310 tools_ifw tools_ninja tools_cmake'
 
+      # The vendored FFmpeg builds from source via its own ./configure && make,
+      # which needs a Unix toolchain. Provide sh/make/nasm from MSYS2 while
+      # keeping the install-qt-action Qt + mingw1310 toolchain + IFW on PATH
+      # (path-type: inherit) so FFmpeg is built by the same mingw gcc as Qt.
+      - name: Setup MSYS2 (sh + make + nasm for the vendored FFmpeg build)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          path-type: inherit
+          update: false
+          install: >-
+            make
+            nasm
+
       - name: Extract version
         id: ver
         run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
@@ -51,6 +65,7 @@ jobs:
           echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
 
       - name: Build portable + installer
+        shell: msys2 {0}
         env:
           QTDIR: ${{ env.QT_ROOT_DIR }}
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist

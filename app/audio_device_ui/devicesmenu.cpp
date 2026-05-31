@@ -1,14 +1,17 @@
 #include "audio_device_ui/devicesmenu.h"
-
-#include <QMediaDevices>
-#include <QAudioDevice>
+#include "playback/playbackcontroller.h"
 
 namespace AudioDeviceUi {
-  DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c) : QMenu(parent), local_conf(local_c) {
+  using AudioDevice = Playback::MediaPlayer::AudioDevice;
+
+  DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c, Playback::Controller *controller)
+      : QMenu(parent), local_conf(local_c), controller(controller) {
     // Rebuild on every open so hot-plugged devices and the current selection
-    // stay in sync (matters for a persistent submenu; harmless for the
-    // recreated-per-click toolbar popup).
+    // stay in sync, and whenever the backend reports a device-list change.
     connect(this, &QMenu::aboutToShow, this, &DevicesMenu::populate);
+    if (controller) {
+      connect(controller, &Playback::Controller::audioOutputsChanged, this, &DevicesMenu::populate);
+    }
     populate();
   }
 
@@ -16,7 +19,7 @@ namespace AudioDeviceUi {
     clear();
     delete action_group;
 
-    auto devices = QMediaDevices::audioOutputs();
+    const QList<AudioDevice> devices = controller ? controller->audioOutputs() : QList<AudioDevice>();
     action_group = new QActionGroup(this);
     auto action_default = new QAction(action_group);
     QString default_text(tr("Default"));
@@ -37,19 +40,26 @@ namespace AudioDeviceUi {
       device_exists = true;
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     action_group->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
-    for (auto &device : devices) {
+#else
+    // ExclusionPolicy/setExclusionPolicy arrived in Qt 5.14. On older Qt5 fall
+    // back to plain exclusive selection (radio-style: one device checked at a
+    // time), which is the behaviour the device menu wants anyway.
+    action_group->setExclusive(true);
+#endif
+    for (const auto &device : devices) {
       auto action = new QAction(action_group);
-      QString text(device.description());
-      if (device.isDefault()) {
+      QString text(device.description);
+      if (device.is_default) {
         default_text.append(" [");
-        default_text.append(device.description());
+        default_text.append(device.description);
         default_text.append("]");
         action_default->setText(default_text);
       }
       action->setText(text);
       action->setCheckable(true);
-      action->setData(device.id());
+      action->setData(device.id);
       connect(action, &QAction::triggered, this, [=](bool checked) {
         if (checked) {
           on_selected(action->data().toByteArray());
@@ -58,12 +68,12 @@ namespace AudioDeviceUi {
       action_group->addAction(action);
       addAction(action);
 
-      if (!isDefaultOutput() && currentOutput() == device.id()) {
+      if (!isDefaultOutput() && currentOutput() == device.id) {
         action->setChecked(true);
         device_exists = true;
       }
 
-      devices_id_description_cache.insert(device.id(), device.description());
+      devices_id_description_cache.insert(device.id, device.description);
     }
 
     if (!device_exists) {
@@ -86,9 +96,9 @@ namespace AudioDeviceUi {
       saveDefaultOutput();
       emit outputDeviceChanged(deviceid);
     } else {
-      auto devices = QMediaDevices::audioOutputs();
-      for (auto &device : devices) {
-        if (device.id() == deviceid) {
+      const QList<AudioDevice> devices = controller ? controller->audioOutputs() : QList<AudioDevice>();
+      for (const auto &device : devices) {
+        if (device.id == deviceid) {
           saveOutput(deviceid);
           emit outputDeviceChanged(deviceid);
           break;
