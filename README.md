@@ -182,11 +182,9 @@ This will ignore commands issued by Wireplumber. Starting with version around 0.
 ## Limitations
 
 - Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
-- Global hotkeys don't work in Wayland.
+- Global hotkeys don't work in Wayland (https://github.com/olegantonyan/mpz/issues/129, but in KDE Plasma, for example, global media keys work and send MPRIS commands to the player).
 
-Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux. You can enable it via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz`.
-
-NOTE: currently on openSUSE Tumbleweed (~ year 2024) they seem to be using ffmpeg by default and this may cause issues. You can switch to gstreamer via the same environment variable `QT_MEDIA_BACKEND=gstreamer mpz`.
+Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems like they are heading towards enabling it by default. You can set multimedia bakend via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz` or `QT_MEDIA_BACKEND=gstreamer mpz`.
 
 ### mpd impedance mismatch
 When used as an [mpd](https://musicpd.org) client, there is a fundamental difference that can lead to some weird behavior. By design mpz does not have an explicit playback queue - the playlist itself is the queue. In mpd, there's an explicit playback queue and playlists are merely lists of tracks that can be loaded into the queue to play.
