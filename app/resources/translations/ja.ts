@@ -124,7 +124,7 @@
     <message>
         <location filename="../../directory_ui/addmpddialog.cpp" line="22"/>
         <source>password (optional)</source>
-        <translation>パスワード(任意)</translation>
+        <translation>パスワード (任意)</translation>
     </message>
     <message>
         <location filename="../../directory_ui/addmpddialog.cpp" line="29"/>
@@ -336,17 +336,17 @@
     <message>
         <location filename="../../mainwindow.ui" line="179"/>
         <source>Filter library</source>
-        <translation>ライブラリをフィルター</translation>
+        <translation>ライブラリをフィルタリング</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="193"/>
         <source>Filter playlists</source>
-        <translation>プレイリストをフィルター</translation>
+        <translation>プレイリストをフィルタリング</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="216"/>
         <source>Filter tracks</source>
-        <translation>トラックをフィルター</translation>
+        <translation>トラックをフィルタリング</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="223"/>
@@ -361,7 +361,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="233"/>
         <source>Order:</source>
-        <translation>順序:</translation>
+        <translation>順序 :</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="240"/>
@@ -399,7 +399,7 @@
         <location filename="../../mainwindow.cpp" line="201"/>
         <location filename="../../mainwindow.cpp" line="234"/>
         <source>sequential (no loop)</source>
-        <translation>順次(繰り返しなし)</translation>
+        <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="231"/>
@@ -603,7 +603,7 @@
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="28"/>
         <source>Rename</source>
-        <translation>名前変更</translation>
+        <translation>名前の変更</translation>
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="29"/>
@@ -634,7 +634,7 @@
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="89"/>
         <source>Rename playlist</source>
-        <translation>プレイリスト名変更</translation>
+        <translation>プレイリスト名の変更</translation>
     </message>
     <message>
         <location filename="../../playlists_ui/playlistscontextmenu.cpp" line="52"/>
@@ -647,27 +647,27 @@
     <message>
         <location filename="../../mpd_client/connection.cpp" line="26"/>
         <source>timeout: %1</source>
-        <translation>タイムアウト: %1</translation>
+        <translation>タイムアウト : %1</translation>
     </message>
     <message>
         <location filename="../../mpd_client/connection.cpp" line="27"/>
         <source>host not found: %1</source>
-        <translation>ホストが見つかりません: %1</translation>
+        <translation>ホストが見つかりません : %1</translation>
     </message>
     <message>
         <location filename="../../mpd_client/connection.cpp" line="28"/>
         <source>connection closed by server: %1</source>
-        <translation>サーバーによって接続が切断されました: %1</translation>
+        <translation>サーバーによって接続が切断されました : %1</translation>
     </message>
     <message>
         <location filename="../../mpd_client/connection.cpp" line="31"/>
         <source>authentication failed: %1</source>
-        <translation>認証に失敗しました: %1</translation>
+        <translation>認証に失敗しました : %1</translation>
     </message>
     <message>
         <location filename="../../mpd_client/connection.cpp" line="32"/>
         <source>permission denied: %1</source>
-        <translation>アクセスが拒否されました: %1</translation>
+        <translation>アクセスが拒否されました : %1</translation>
     </message>
 </context>
 <context>
@@ -680,7 +680,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
         <source>General</source>
-        <translation>一般</translation>
+        <translation>全般</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="59"/>
@@ -720,7 +720,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="119"/>
         <source>Stream buffer size:</source>
-        <translation>ストリームバッファサイズ:</translation>
+        <translation>ストリームバッファサイズ :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="127"/>
@@ -740,7 +740,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
         <source>Override theme&apos;s playlist row height:</source>
-        <translation>テーマのプレイリストの行の高さを上書き:</translation>
+        <translation>テーマのプレイリストの行の高さを上書き :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="141"/>
@@ -750,7 +750,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="159"/>
         <source>Language:</source>
-        <translation>言語:</translation>
+        <translation>言語 :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="161"/>
@@ -778,7 +778,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="188"/>
         <source>Filter scope:</source>
-        <translation>フィルター範囲:</translation>
+        <translation>フィルター範囲 :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="196"/>
@@ -857,12 +857,12 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="363"/>
         <source>IPC port:</source>
-        <translation>IPC ポート:</translation>
+        <translation>IPC ポート :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
         <source>Playback log size:</source>
-        <translation>再生ログのサイズ:</translation>
+        <translation>再生ログのサイズ :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
@@ -887,7 +887,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="405"/>
         <source>Sender name:</source>
-        <translation>送信者名:</translation>
+        <translation>送信者名 :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
@@ -1093,7 +1093,7 @@
     <message>
         <location filename="../../sort_ui/sortingpresets.ui" line="66"/>
         <source>Rename</source>
-        <translation>名前変更</translation>
+        <translation>名前の変更</translation>
     </message>
     <message>
         <location filename="../../sort_ui/sortingpresets.ui" line="73"/>
@@ -1111,7 +1111,7 @@
     <message>
         <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="52"/>
         <source>Rename sorting preset</source>
-        <translation>並び替えプリセットの名前変更</translation>
+        <translation>並び替えプリセット名の変更</translation>
     </message>
     <message>
         <location filename="../../sort_ui/sortingpresetsdialog.cpp" line="103"/>
@@ -1193,7 +1193,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="14"/>
         <source>Edit tags</source>
-        <translation>タグを編集</translation>
+        <translation>タグの編集</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
@@ -1283,7 +1283,7 @@
         <location filename="../../playlist_ui/tageditordialog.cpp" line="295"/>
         <source>Could not write tags for the following files:
 %1</source>
-        <translation>次のファイルにタグを書き込めませんでした：
+        <translation>次のファイルにタグを書き込めませんでした :
 %1</translation>
     </message>
 </context>
