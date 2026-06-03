@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Japanese translations corrected (@coolvitto)
+
 ### Misc
 
 ## [2.0.9] - 2026-05-30
