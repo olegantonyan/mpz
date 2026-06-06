@@ -7,6 +7,7 @@
 ### Fixed
 
 - Japanese translations corrected (@coolvitto)
+- Output device hotplug playback recovery on Linux Qt 6.11 with ffmpeg
 
 ### Misc
 
