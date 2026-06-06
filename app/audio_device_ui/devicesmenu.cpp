@@ -2,8 +2,13 @@
 
 #include <QMediaDevices>
 #include <QAudioDevice>
+#include <QHash>
 
 namespace AudioDeviceUi {
+  // Remembers descriptions of devices seen plugged in, so the configured but
+  // currently disconnected device can still be shown by name.
+  static QHash<QByteArray, QString> devices_id_description_cache;
+
   DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c) : QMenu(parent), local_conf(local_c) {
     // Rebuild on every open so hot-plugged devices and the current selection
     // stay in sync (matters for a persistent submenu; harmless for the

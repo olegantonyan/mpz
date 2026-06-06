@@ -47,7 +47,9 @@ namespace PlaylistsUi {
   void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist == nullptr) {
       highlight_uid = 0;
-      emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
+      if (!list.isEmpty()) {
+        emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
+      }
     } else {
       highlight_uid = playlist->uid();
       emit dataChanged(itemIndex(playlist), itemIndex(playlist));
@@ -132,7 +134,7 @@ namespace PlaylistsUi {
   QVariant Model::data(const QModelIndex &index, int role) const {
     QVariant none;
 
-    if (!index.isValid()) {
+    if (!index.isValid() || index.row() >= list.size()) {
       return none;
     }
 

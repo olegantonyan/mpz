@@ -53,11 +53,11 @@ namespace PlaylistUi {
 
   bool ProxyFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const {
     Q_UNUSED(source_parent)
-    if (source_row >= activeModel()->rowCount()) {
+    if (source_row < 0 || source_row >= activeModel()->rowCount()) {
       return true;
     }
 
-    auto t = activeModel()->itemAt(activeModel()->buildIndex(source_row));
+    const Track &t = activeModel()->trackAt(source_row);
 
     return (t.artist().contains(filter_term, Qt::CaseInsensitive) ||
             t.album().contains(filter_term, Qt::CaseInsensitive) ||

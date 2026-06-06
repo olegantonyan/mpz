@@ -18,7 +18,6 @@ namespace PlaylistsUi {
 
     public:
       explicit Model(Config::Local &conf, MpdClient::Client &cl, QObject *parent = nullptr);
-      QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
       bool persist() override;
       void remove(const QModelIndex &index) override;
@@ -48,6 +47,7 @@ namespace PlaylistsUi {
       QString currentLibraryPath() const;
       void sortPlaylistsByOrder();
       void loadPlaylistsOrder();
+      void syncHighlightUid();
 
       void applyAsyncLoadedList(const QList<std::shared_ptr<Playlist::Playlist>> &loadedList);
     };

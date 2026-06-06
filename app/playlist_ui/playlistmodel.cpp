@@ -113,6 +113,10 @@ namespace PlaylistUi {
     return tracks.at(index.row());
   }
 
+  const Track &Model::trackAt(int row) const {
+    return tracks.at(row);
+  }
+
   int Model::tracksSize() const {
     return tracks.size();
   }

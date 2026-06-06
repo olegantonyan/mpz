@@ -63,7 +63,7 @@
 <context>
     <name>AudioDeviceUi::DevicesMenu</name>
     <message>
-        <location filename="../../audio_device_ui/devicesmenu.cpp" line="22"/>
+        <location filename="../../audio_device_ui/devicesmenu.cpp" line="27"/>
         <source>Default</source>
         <translation>Подразумевано</translation>
     </message>
