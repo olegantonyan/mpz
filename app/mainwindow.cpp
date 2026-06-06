@@ -10,6 +10,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHash>
+#include <QTimer>
 
 #include "settings_ui/settingsdialog.h"
 
@@ -561,6 +562,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
     loop.quit();
   });
 
+  QTimer::singleShot(60000, &loop, &QEventLoop::quit); // deadline: don't hang startup if loaded never fires
   emit library->createNewPlaylist(preload_files, "");
   loop.exec();
   if (pl != nullptr && pl->tracks().size() > 0) {

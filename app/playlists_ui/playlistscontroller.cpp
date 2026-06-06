@@ -238,7 +238,7 @@ namespace PlaylistsUi {
 
   void Controller::on_search(const QString &term) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QRegularExpression regex(term);
+    QRegularExpression regex(QRegularExpression::escape(term));
     proxy->setFilterRegularExpression(regex);
 #else
     QRegExp regex(term, Qt::CaseInsensitive, QRegExp::Wildcard);

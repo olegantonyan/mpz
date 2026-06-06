@@ -322,14 +322,20 @@ namespace Playlist {
       } else if (cmd == QLatin1String("track")) {
         flush_track();
         in_track = true;
-        cur.track_no = toks.value(1).toInt();
+        bool track_no_ok = false;
+        const int track_no = toks.value(1).toInt(&track_no_ok);
+        cur.track_no = (track_no_ok && track_no > 0) ? track_no : 0;
         const QString type = toks.value(2);
         cur_audio = type.isEmpty() || type.compare(QLatin1String("AUDIO"), Qt::CaseInsensitive) == 0;
       } else if (cmd == QLatin1String("index")) {
         if (!in_track) {
           continue;
         }
-        const int idx = toks.value(1).toInt();
+        bool idx_ok = false;
+        const int idx = toks.value(1).toInt(&idx_ok);
+        if (!idx_ok) {
+          continue;
+        }
         const qint64 t = parse_index_position(toks.value(2));
         if (t < 0) {
           continue;

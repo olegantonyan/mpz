@@ -355,7 +355,7 @@ namespace Playback {
 
   qint64 Stream::readData(char *data, qint64 maxlen) {
     _mutex.lock();
-    int bytes_read = qMin(static_cast<int>(maxlen), static_cast<int>(_buffer.size()));
+    qint64 bytes_read = qMin(maxlen, static_cast<qint64>(_buffer.size()));
     memcpy(data, _buffer.data(), static_cast<size_t>(bytes_read));
     _buffer.remove(0, bytes_read);
     quint32 new_size = static_cast<quint32>(_buffer.size());
@@ -372,10 +372,12 @@ namespace Playback {
   }
 
   qint64 Stream::pos() const {
+    QMutexLocker locker(&_mutex);
     return _total_bytes_received;
   }
 
   qint64 Stream::bytesAvailable() const {
+    QMutexLocker locker(&_mutex);
     return _buffer.size();
   }
 }

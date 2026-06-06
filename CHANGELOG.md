@@ -10,6 +10,8 @@
 
 ### Misc
 
+- Small bugfixes and minor imrovements
+
 ## [2.0.9] - 2026-05-30
 
 ### Added

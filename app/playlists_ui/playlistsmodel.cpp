@@ -62,7 +62,7 @@ namespace PlaylistsUi {
     beginInsertRows(QModelIndex(), list.size(), list.size());
     list.append(item);
     endInsertRows();
-    QModelIndex idx = buildIndex(list.size());
+    QModelIndex idx = buildIndex(list.size() - 1);
     emit dataChanged(idx, idx);
     persist();
     return idx;
@@ -76,7 +76,6 @@ namespace PlaylistsUi {
     list.removeAt(index.row());
     endRemoveRows();
     persist();
-    emit dataChanged(index, index);
   }
 
   std::shared_ptr<Playlist::Playlist> Model::itemAt(const QModelIndex &index) const {
