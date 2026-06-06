@@ -1,5 +1,7 @@
 #include "lyrics/provider.h"
 
+#include <QApplication>
+
 namespace Lyrics {
   Provider::Provider(QObject *parent) : QObject(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
@@ -15,7 +17,7 @@ namespace Lyrics {
                     QStringLiteral("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"));
     } else {
       req.setHeader(QNetworkRequest::UserAgentHeader,
-                    QString("mpz/%1 (https://github.com/olegantonyan/mpz)").arg(VERSION));
+                    QString("mpz/%1").arg(qApp->applicationVersion()));
     }
     return req;
   }
