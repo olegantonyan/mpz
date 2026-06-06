@@ -33,6 +33,7 @@ mpz_add_test(tst_randomtrail    tst_randomtrail.cpp    ${APP}/playback/randomtra
 mpz_add_test(tst_rnjesus        tst_rnjesus.cpp        ${APP}/rnjesus.cpp)
 mpz_add_test(tst_lrcparser      tst_lrcparser.cpp      ${APP}/lyrics/lrcparser.cpp)
 mpz_add_test(tst_lyricstextmatch tst_lyricstextmatch.cpp ${APP}/lyrics/textmatch.cpp)
+mpz_add_test(tst_lyricscache    tst_lyricscache.cpp    ${APP}/lyrics/cache.cpp)
 mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp)
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)

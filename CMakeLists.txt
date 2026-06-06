@@ -44,6 +44,7 @@ set(PROJECT_SOURCES
   app/config/storage.cpp
   app/config/value.cpp
   app/coverart/embedded.cpp
+  app/lyrics/cache.cpp
   app/lyrics/lrclibclient.cpp
   app/lyrics/lrcparser.cpp
   app/lyrics/lyricsovhclient.cpp

@@ -11,6 +11,8 @@
 namespace Lyrics {
   // Walks enabled online providers in the user-configured order, advancing on
   // notFound/failed. Emits found(provider_name, lyrics) or notFound() once.
+  // Results are cached for the session (see Cache); a cache hit emits
+  // synchronously from fetch(), so connect before fetching.
   class ProviderChain : public QObject {
     Q_OBJECT
   public:
@@ -32,6 +34,7 @@ namespace Lyrics {
     QStringList pending;
     TrackQuery query;
     QTimer watchdog;
+    bool had_failure = false;
   };
 }
 

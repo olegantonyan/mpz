@@ -1,4 +1,5 @@
 #include "lyrics/providerchain.h"
+#include "lyrics/cache.h"
 #include "lyrics/lrclibclient.h"
 #include "lyrics/lyricsovhclient.h"
 #include "lyrics/neteaseclient.h"
@@ -43,6 +44,21 @@ namespace Lyrics {
         pending << name;
       }
     }
+    Cache::Entry cached;
+    if (Cache::instance().lookup(query, cached)) {
+      if (cached.found) {
+        emit found(cached.provider, cached.lyrics);
+      } else {
+        emit notFound();
+      }
+      return;
+    }
+    if (pending.isEmpty()) {
+      // No provider consulted — don't record a negative entry.
+      emit notFound();
+      return;
+    }
+    had_failure = false;
     advance();
   }
 
@@ -50,6 +66,11 @@ namespace Lyrics {
     watchdog.stop();
     watchdog.disconnect();
     if (pending.isEmpty()) {
+      if (!had_failure) {
+        // Every provider genuinely returned not-found; a failed/timed-out
+        // provider must not poison the session cache.
+        Cache::instance().storeNotFound(query);
+      }
       emit notFound();
       return;
     }
@@ -62,6 +83,7 @@ namespace Lyrics {
     connect(provider, &Provider::found, this, [this, name, provider](const QString &lyrics) {
       watchdog.stop();
       provider->deleteLater();
+      Cache::instance().storeFound(query, name, lyrics);
       emit found(name, lyrics);
     });
     connect(provider, &Provider::notFound, this, [this, provider]() {
@@ -70,11 +92,13 @@ namespace Lyrics {
     });
     connect(provider, &Provider::failed, this, [this, name, provider](const QString &message) {
       qWarning() << "lyrics provider" << name << "failed:" << message;
+      had_failure = true;
       provider->deleteLater();
       advance();
     });
     connect(&watchdog, &QTimer::timeout, this, [this, name, provider]() {
       qWarning() << "lyrics provider" << name << "timed out";
+      had_failure = true;
       provider->disconnect(this);
       provider->deleteLater();
       advance();

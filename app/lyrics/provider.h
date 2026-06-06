@@ -1,6 +1,8 @@
 #ifndef LYRICS_PROVIDER_H
 #define LYRICS_PROVIDER_H
 
+#include "lyrics/trackquery.h"
+
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QObject>
@@ -8,13 +10,6 @@
 #include <QUrl>
 
 namespace Lyrics {
-  struct TrackQuery {
-    QString artist;
-    QString title;
-    QString album;
-    int duration_seconds = 0; // 0 = unknown
-  };
-
   // Base class for online lyrics providers. Exactly one of found/notFound/failed
   // is emitted per fetch().
   class Provider : public QObject {
