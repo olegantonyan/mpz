@@ -333,15 +333,18 @@ namespace Playback {
     preferred_device_missing = false;
     ++device_change_epoch; // invalidate in-flight device-switch timers
     if (deviceid.isEmpty()) {
-      audio_output.setDevice(QAudioDevice()); // null device = follow system default natively
+      // the ffmpeg backend resolves the sink at open time and doesn't follow
+      // system default changes (a null QAudioDevice doesn't either); pin the
+      // current default and re-pin in evaluateAudioDevice when it changes
+      audio_output.setDevice(QMediaDevices::defaultAudioOutput());
       return;
     }
     const QAudioDevice device = findPreferredDevice();
     if (device.isNull()) {
-      // configured device not present (e.g. unplugged before startup): fall back to
-      // follow-default; evaluateAudioDevice switches back when it appears
+      // configured device not present (e.g. unplugged before startup): fall back
+      // to the default; evaluateAudioDevice switches back when it appears
       preferred_device_missing = true;
-      audio_output.setDevice(QAudioDevice());
+      audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     } else {
       audio_output.setDevice(device);
     }
@@ -358,23 +361,23 @@ namespace Playback {
   }
 
   void MediaPlayer::onAudioDevicesChanged() {
-    if (output_device_id.isEmpty()) {
-      return; // following system default: the backend re-routes by itself
-    }
+    // also fires when the system default changes — QMediaDevices has no
+    // separate notifier for defaultAudioOutput
     devices_changed_debounce.start();
   }
 
   void MediaPlayer::evaluateAudioDevice() {
     ++device_change_epoch;
-    const QAudioDevice preferred = findPreferredDevice();
+    const QAudioDevice preferred = findPreferredDevice(); // null in default mode too (empty id matches nothing)
 
     if (preferred.isNull()) {
-      // configured device unplugged: fall back to follow-default and unwedge the
-      // pipeline that stalled on the dead sink
-      if (!preferred_device_missing) {
-        preferred_device_missing = true;
-        audio_output.setDevice(QAudioDevice());
-        recoverPlayback();
+      // default mode, or configured device unplugged: play through the current
+      // default sink; the backend doesn't re-route by itself
+      preferred_device_missing = !output_device_id.isEmpty();
+      const QAudioDevice default_device = QMediaDevices::defaultAudioOutput();
+      if (audio_output.device().id() != default_device.id()) {
+        audio_output.setDevice(default_device);
+        recoverPlayback(); // unwedge in case the pipeline stalled on a dead sink
       }
       return;
     }
@@ -395,7 +398,7 @@ namespace Playback {
       const QAudioDevice device = findPreferredDevice(); // re-resolve, may be gone again
       if (device.isNull()) {
         preferred_device_missing = true;
-        audio_output.setDevice(QAudioDevice());
+        audio_output.setDevice(QMediaDevices::defaultAudioOutput());
       } else {
         audio_output.setDevice(device);
       }
