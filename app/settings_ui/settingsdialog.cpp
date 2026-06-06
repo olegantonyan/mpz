@@ -45,7 +45,8 @@ namespace {
     "path", "url", "filename", "format", "bitrate", "channels", "sample_rate",
   };
 
-  const QStringList kLyricsProviders = {"embedded", "sidecar", "lrclib"};
+  // Online names must match Lyrics::ProviderChain::knownProviders().
+  const QStringList kLyricsProviders = {"embedded", "sidecar", "lrclib", "netease", "qq", "lyrics.ovh"};
 }
 
 SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) :
@@ -487,10 +488,13 @@ void SettingsDialog::populateLyrics() {
   }
   for (const auto &p : all) {
     QString label;
-    if      (p == "embedded") label = tr("Embedded (tags)");
-    else if (p == "sidecar")  label = tr("Sidecar (.lrc, .txt)");
-    else if (p == "lrclib")   label = tr("LRCLIB (online)");
-    else                      label = p;
+    if      (p == "embedded")   label = "Embedded (tags)";
+    else if (p == "sidecar")    label = "Sidecar (.lrc, .txt)";
+    else if (p == "lrclib")     label = "LRCLIB (online)";
+    else if (p == "netease")    label = "NetEase Cloud Music (online)";
+    else if (p == "qq")         label = "QQ Music (online)";
+    else if (p == "lyrics.ovh") label = "Lyrics.ovh (online)";
+    else                        label = p;
     auto *item = new QListWidgetItem(label);
     item->setData(Qt::UserRole, p);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable |

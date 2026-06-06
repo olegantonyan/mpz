@@ -2,6 +2,8 @@
 
 ### Added
 
+- New lyrics providers: NetEase, QQ Music, lyrics.ovh (have to be enabled in settings)
+
 ### Fixed
 
 - Japanese translations corrected (@coolvitto)

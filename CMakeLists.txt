@@ -46,6 +46,12 @@ set(PROJECT_SOURCES
   app/coverart/embedded.cpp
   app/lyrics/lrclibclient.cpp
   app/lyrics/lrcparser.cpp
+  app/lyrics/lyricsovhclient.cpp
+  app/lyrics/neteaseclient.cpp
+  app/lyrics/provider.cpp
+  app/lyrics/providerchain.cpp
+  app/lyrics/qqmusicclient.cpp
+  app/lyrics/textmatch.cpp
   app/directory_ui/directorycontroller.cpp
   app/directory_ui/directorysettings.cpp
   app/feedback_ui/feedbackform.cpp
