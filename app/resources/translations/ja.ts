@@ -1287,83 +1287,83 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="61"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="65"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="64"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="68"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="67"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="71"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="70"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="74"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="73"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="77"/>
         <source>Track number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="74"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="78"/>
         <source>Duration</source>
         <translation>長さ</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="76"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="80"/>
         <source>Format</source>
         <translation>フォーマット</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="78"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
         <source>Bitrate</source>
         <translation>ビットレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="81"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="85"/>
         <source>Sample rate</source>
         <translation>サンプルレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="84"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="88"/>
         <source>Channels</source>
         <translation>チャンネル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="87"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="91"/>
         <source>Stream url</source>
         <translation>ストリーム URL</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="95"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="97"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="99"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="101"/>
         <source>File path</source>
         <translation>ファイルパス</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="101"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="105"/>
         <source>CUE start at</source>
         <translation>CUE 開始位置</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="123"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="127"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="127"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="131"/>
         <source>Search on web</source>
         <translation>ウェブ検索</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="185"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="213"/>
         <source>Searching lyrics...</source>
         <translation>歌詞を検索中...</translation>
     </message>
@@ -1372,18 +1372,18 @@
         <translation type="vanished">LRCLIB</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="192"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="200"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="220"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="228"/>
         <source>No lyrics found.</source>
         <translation>歌詞が見つかりません。</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="253"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="281"/>
         <source>Copy to clipboard</source>
         <translation>クリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="261"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
         <source>Open in external viewer</source>
         <translation>外部ビューアで開く</translation>
     </message>
@@ -1398,9 +1398,14 @@
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="111"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="113"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="120"/>
+        <source>Edit tags…</source>
+        <translation>タグを編集…</translation>
     </message>
 </context>
 <context>

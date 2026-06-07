@@ -116,9 +116,15 @@ namespace PlaylistUi {
     auto selection = rows.first();
     if (selection.isValid()) {
       auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
-      TrackInfoDialog *dlg = new TrackInfoDialog(track);
+      auto pl = proxy->activeModel()->playlist();
+      TrackInfoDialog *dlg = new TrackInfoDialog(track, pl);
       dlg->setModal(false);
       connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
+      connect(dlg, &TrackInfoDialog::tagEditorOpened, this, [this, pl](TagEditorDialog *editor) {
+        connect(editor, &TagEditorDialog::saved, this, [this, pl](const QList<quint64> &uids) {
+          emit tracksChanged(pl, uids);
+        });
+      });
       dlg->show();
     }
   }

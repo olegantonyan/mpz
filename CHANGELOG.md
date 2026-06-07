@@ -2,6 +2,8 @@
 
 ### Added
 
+- Button to open tags editor dialog from track info
+
 ### Fixed
 
 ### Misc

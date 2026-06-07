@@ -1,6 +1,7 @@
 #include "trackinfodialog.h"
 #include "ui_trackinfodialog.h"
 
+#include "tageditordialog.h"
 #include "config/global.h"
 #include "lyrics/lrcparser.h"
 #include "lyrics/providerchain.h"
@@ -17,10 +18,12 @@
 #include <QFileInfo>
 #include <QPixmap>
 
-TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
+TrackInfoDialog::TrackInfoDialog(const Track &track, std::shared_ptr<Playlist::Playlist> playlist, QWidget *parent) :
+  QDialog(parent), ui(new Ui::TrackInfoDialog), _track(track), _playlist(playlist) {
   ui->setupUi(this);
 
-  setWindowTitle(windowTitle() + ": " + track.formattedTitle());
+  base_title = windowTitle();
+  setWindowTitle(base_title + ": " + track.formattedTitle());
   ui->tableView->horizontalHeader()->setVisible(false);
   ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -37,6 +40,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
     ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
   }
   ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
+  ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isMpd() && !track.isStream());
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -148,6 +152,30 @@ void TrackInfoDialog::setup_cover_art(const Track &track) {
 
 void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
   revealInFileManager({ track_path });
+}
+
+void TrackInfoDialog::on_toolButtonEditTags_clicked() {
+  TagEditorDialog *dlg = new TagEditorDialog({_track}, _playlist);
+  dlg->setModal(false);
+  connect(dlg, &TagEditorDialog::finished, dlg, &TagEditorDialog::deleteLater);
+  // Queued: the playlist reloads tracks in response to saved() (via tracksChanged), refresh must run after.
+  connect(dlg, &TagEditorDialog::saved, this, &TrackInfoDialog::refresh_track, Qt::QueuedConnection);
+  emit tagEditorOpened(dlg);
+  dlg->show();
+}
+
+void TrackInfoDialog::refresh_track(const QList<quint64> &uids) {
+  if (!_playlist || !uids.contains(_track.uid())) {
+    return;
+  }
+  const Track t = _playlist->trackBy(_track.uid());
+  if (t.uid() != _track.uid()) {
+    return;
+  }
+  _track = t;
+  model.removeRows(0, model.rowCount());
+  setup_table(_track);
+  setWindowTitle(base_title + ": " + _track.formattedTitle());
 }
 
 void TrackInfoDialog::setup_lyrics(const Track &track) {
