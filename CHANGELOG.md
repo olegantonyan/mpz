@@ -1,4 +1,4 @@
-## [2.0.10] - next
+## [2.0.10] - 2026-06-07
 
 ### Added
 
@@ -7,7 +7,7 @@
 ### Fixed
 
 - Japanese translations corrected (@coolvitto)
-- Output device hotplug playback recovery on Linux Qt 6.11 with ffmpeg
+- Fixed output device hotplug playback recovery on Linux Qt 6.11 with ffmpeg
 
 ### Misc
 
