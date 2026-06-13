@@ -164,7 +164,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR (Arch). On Windows, download a release from GitHub. On macOS (experimental), download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub. On macOS (experimental), download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -237,16 +237,16 @@
                     {
                         "@type": "HowToStep",
                         "position": 1,
-                        "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia",
+                        "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro",
                         "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
                         "text": "Install from the omnipackage stable repositories (recommended), or use the unstable repositories for builds from master."
                     },
                     {
                         "@type": "HowToStep",
                         "position": 2,
-                        "name": "Arch Linux",
+                        "name": "Arch (AUR)",
                         "url": "https://aur.archlinux.org/packages/mpz/",
-                        "text": "Build the AUR package against Qt6, or the Qt5 variant (mpz-qt5)."
+                        "text": "An AUR package is also available if you prefer it over the binary repositories — built against Qt6, or the Qt5 variant (mpz-qt5)."
                     },
                     {
                         "@type": "HowToStep",
@@ -870,7 +870,8 @@
                                 <tr>
                                     <th scope="row" style="white-space: nowrap">
                                         openSUSE, Debian,<br />Fedora,
-                                        Ubuntu,<br />RedHat, Mageia
+                                        Ubuntu,<br />RedHat, Mageia,<br />Arch,
+                                        Manjaro
                                     </th>
                                     <td>
                                         Install from the omnipackage
@@ -934,9 +935,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Arch Linux</th>
+                                    <th scope="row">Arch <small>(AUR)</small></th>
                                     <td>
-                                        Build the
+                                        An AUR package is also available if you
+                                        prefer it over the binary repositories:
                                         <a
                                             href="https://aur.archlinux.org/packages/mpz/"
                                             target="_blank"
@@ -1079,9 +1081,9 @@
                                 ><br />
                                 Linux, macOS, and Windows. On Linux, install
                                 from the omnipackage repositories (openSUSE,
-                                Debian, Fedora, Ubuntu, RedHat, Mageia) or AUR
-                                (Arch). On Windows, download a release from
-                                GitHub. On macOS (experimental), download the
+                                Debian, Fedora, Ubuntu, RedHat, Mageia, Arch,
+                                Manjaro) or the AUR on Arch. On Windows, download
+                                a release from GitHub. On macOS (experimental), download the
                                 <code>.dmg</code> from GitHub releases — the
                                 build is unsigned, so Gatekeeper blocks it on
                                 first launch — either remove the quarantine flag
