@@ -1,0 +1,29 @@
+# Maintainer: {{ maintainer }}
+pkgname={{ package_name }}
+pkgver={{ version }}
+pkgrel=1
+pkgdesc="{{ summary }}"
+arch=("$(uname -m)")
+url="{{ homepage }}"
+license=('GPL-3.0-or-later')
+depends=({{ runtime_dependencies | join: ' ' }})
+makedepends=({{ build_dependencies | join: ' ' }})
+options=('!lto')
+source=("{{ source_folder_name }}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "$srcdir/{{ source_folder_name }}"
+  cmake -S . -B _build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -DPACKAGE_VERSION={{ version }} \
+    {{ CMAKE_EXTRA_CLI }}
+  cmake --build _build --parallel "$(nproc)"
+}
+
+package() {
+  cd "$srcdir/{{ source_folder_name }}"
+  DESTDIR="$pkgdir" cmake --install _build
+}
