@@ -30,7 +30,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Installation
 
-#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
+#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
 
 **New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
 
@@ -43,9 +43,9 @@ Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built 
 
 </details>
 
-#### Arch
+##### AUR
 
-Use AUR package: https://aur.archlinux.org/packages/mpz/
+Arch AUR package also available if you prefer it over binary repositories: https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
