@@ -1,0 +1,54 @@
+#!/bin/bash -e
+# Contract: runs with CWD /work, source copy at /work/src, must populate /work/AppDir.
+set -eo pipefail   # omnipackage runs this as `bash <file>`, so the shebang's -e is ignored
+QT_VERSION=6.8.1
+case "$(uname -m)" in
+  x86_64)  QT_ARCH=linux_gcc_64;    QT_LIBDIR=gcc_64 ;;
+  aarch64) QT_ARCH=linux_arm64_gcc; QT_LIBDIR=arm64 ;;   # untested
+  *) echo "unsupported arch $(uname -m)"; exit 1 ;;
+esac
+
+# aqt, not apt: ubuntu:22.04 Qt is 6.2 (GStreamer-only); aqt Qt ships the FFmpeg backend.
+pip3 install --no-cache-dir aqtinstall
+aqt install-qt linux desktop "$QT_VERSION" "$QT_ARCH" -m qtmultimedia qtimageformats -O /opt/Qt
+export QTDIR="/opt/Qt/$QT_VERSION/$QT_LIBDIR"
+export PATH="$QTDIR/bin:$PATH" LD_LIBRARY_PATH="$QTDIR/lib:$LD_LIBRARY_PATH"
+
+cd /work/src
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QTDIR" \
+  -DCMAKE_INSTALL_PREFIX=/usr {{ CMAKE_EXTRA_CLI }}
+cmake --build build --parallel 2
+
+APPDIR=/work/AppDir
+DESTDIR="$APPDIR" cmake --install build
+
+cd /work
+ARCH=$(uname -m)
+curl -fsSL -o linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-$ARCH.AppImage"
+curl -fsSL -o linuxdeploy-plugin-qt "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-$ARCH.AppImage"
+chmod +x linuxdeploy linuxdeploy-plugin-qt
+
+# linuxdeploy doesn't auto-deploy FFmpeg libs on Linux; hand them over for rpath patching.
+FFMPEG_LIBS=""
+for lib in "$QTDIR"/lib/lib{avformat,avcodec,avutil,swresample,swscale}.so*; do
+  [ -e "$lib" ] && FFMPEG_LIBS="$FFMPEG_LIBS --library=$lib"
+done
+
+export QMAKE="$QTDIR/bin/qmake" APPIMAGE_EXTRACT_AND_RUN=1
+# Force-deploy the multimedia plugin (not auto-detected) and, beside the default xcb, the wayland
+# plugins (they ship in the base install; shell-integration is what makes the window show).
+export EXTRA_QT_PLUGINS="multimedia"
+if [ -e "$QTDIR/plugins/platforms/libqwayland-generic.so" ]; then
+  export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so"
+  export EXTRA_QT_PLUGINS="$EXTRA_QT_PLUGINS;wayland-shell-integration;wayland-decoration-client;wayland-graphics-integration-client"
+else
+  echo "WARNING: $QTDIR/plugins/platforms/libqwayland-generic.so missing; bundling xcb only"
+fi
+./linuxdeploy --appdir "$APPDIR" --plugin qt \
+  --executable "$APPDIR/usr/bin/{{ package_name }}" \
+  --desktop-file "$APPDIR/usr/share/applications/{{ package_name }}.desktop" \
+  --icon-file "$APPDIR/usr/share/icons/hicolor/256x256/apps/{{ package_name }}.png" \
+  $FFMPEG_LIBS
+
+mkdir -p "$APPDIR/apprun-hooks"
+echo 'export QT_MEDIA_BACKEND=ffmpeg' > "$APPDIR/apprun-hooks/qt-media-backend.sh"

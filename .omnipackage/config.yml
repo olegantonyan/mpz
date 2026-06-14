@@ -126,6 +126,23 @@ pacman: &pacman
   pacman:
     pkgbuild_template: ".omnipackage/PKGBUILD.liquid"
 
+appimage: &appimage
+  <<: *common
+  # Qt comes from aqt (see recipe); these are only the system libs the app/plugins link against.
+  build_dependencies:
+    [g++, make, cmake, git, python3-pip, file,
+     libgl1-mesa-dev, libegl1-mesa-dev, libdbus-1-dev, libglib2.0-0, libpulse0, libasound2,
+     libxkbcommon-dev, libxkbcommon-x11-dev, libfontconfig1-dev, libfreetype6-dev,
+     libx11-dev, libx11-xcb-dev, libxcb1-dev, libxcb-cursor0, libxcb-icccm4, libxcb-image0,
+     libxcb-keysyms1, libxcb-randr0, libxcb-render-util0, libxcb-shape0, libxcb-xinerama0,
+     libxcb-xkb1, libxcb-util1,
+     libxrandr2, libxext6, libxrender1, libxi6, libxfixes3, libxcursor1, libxdamage1,
+     libxcomposite1, libxtst6, libxss1, libxinerama1, libsm6, libice6,
+     libwayland-client0, libwayland-egl1, libwayland-cursor0]
+  appimage:
+    recipe_template: ".omnipackage/appimage.sh.liquid"
+    zsync: true
+
 builds:
   - distro: "opensuse_15.3"
     <<: *opensuse_qt5
@@ -233,6 +250,9 @@ builds:
 
   - distro: "manjaro"
     <<: *pacman
+
+  - distro: "appimage"
+    <<: *appimage
 
 ignore_source_files:
   - .git
