@@ -29,12 +29,20 @@ cmake -S . -B _build \
   -DCMAKE_INSTALL_PREFIX=%{_prefix} \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DPACKAGE_VERSION={{ version }} \
+  -DSENTRY_DSN="{{ secrets.SENTRY_DSN }}" \
   {{ CMAKE_EXTRA_CLI }}
 cmake --build _build %{?_smp_mflags}
 
 
 %install
 DESTDIR=%{buildroot} cmake --install _build
+
+
+%check
+# Upload debug symbols to Sentry. Runs after __debug_install_post has split DWARF
+# into %{buildroot}/usr/lib/debug/.build-id/. Silent no-op when SENTRY_AUTH_TOKEN
+# is unset, so distro maintainer builds and forks aren't affected.
+%{_builddir}/%{name}-%{version}/scripts/upload-symbols.sh %{buildroot} || true
 
 
 %files

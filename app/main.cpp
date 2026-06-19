@@ -15,6 +15,9 @@
 #ifdef ENABLE_CRASH_HANDLER
   #include "crash_handler.h"
 #endif
+#ifdef SENTRY_DSN_STRING
+  #include "sentry_init.h"
+#endif
 
 #include <QDebug>
 #include <QTranslator>
@@ -93,6 +96,10 @@ int main(int argc, char *argv[]) {
   a.setApplicationVersion(version);
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
 
+#ifdef SENTRY_DSN_STRING
+  mpz::sentry::init(SENTRY_DSN_STRING, VERSION);
+#endif
+
   auto arguments = args(argc, argv);
   if (arguments.size() == 1 && arguments.first() == "--version") {
     std::cout << a.applicationVersion().toStdString() << std::endl;
@@ -128,5 +135,9 @@ int main(int argc, char *argv[]) {
 #endif
 
   w.show();
-  return a.exec();
+  const int rc = a.exec();
+#ifdef SENTRY_DSN_STRING
+  mpz::sentry::shutdown();
+#endif
+  return rc;
 }
