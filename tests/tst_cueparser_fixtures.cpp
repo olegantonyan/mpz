@@ -74,6 +74,8 @@ private slots:
   void cp1251JungleBook();
   void multifileVibrasphereArchipelago();
   void multifileVibrasphereTributaries();
+  void multifileNightwishImaginaerum_oneTrackPerFile();
+  void multifileTherionFleurs_tracksGroupedPerFile();
   void mp3BseDrivingInsane();
   void mp3BseCruelAndUnusual();
   void backslashDjTiestoTraffic();
@@ -465,6 +467,84 @@ void TestCueParserFixtures::multifileVibrasphereTributaries() {
   QCOMPARE(tracks.at(10).title(),   QStringLiteral("Track11"));
   QCOMPARE(tracks.at(10).begin(),   quint32{391360});
   QVERIFY(tracks.at(10).path().endsWith(QStringLiteral("10 - Unknown Artist - Track10.wav")));
+}
+
+void TestCueParserFixtures::multifileNightwishImaginaerum_oneTrackPerFile() {
+  // One FILE per TRACK, every track at INDEX 01 00:00:00 — each track is a whole
+  // standalone file. This is the layout that made multi-file playback stop after
+  // every file (each track is the last/only track in its file).
+  const QString cue = stage(tempDir, "multifile_nightwish_imaginaerum.cue", {
+    "01. Taikatalvi.flac",
+    "02. Storytime.flac",
+    "03. Ghost River.flac",
+    "04. Slow, Love, Slow.flac",
+    "05. I Want My Tears Back.flac",
+    "06. Scaretale.flac",
+    "07. Arabesque.flac",
+    "08. Turn Loose the Mermaids.flac",
+    "09. Rest Calm.flac",
+    "10. The Crow, the Owl and the Dove.flac",
+    "11. Last Ride of the Day.flac",
+    "12. Song of Myself.flac",
+    "13. Imaginaerum.flac",
+    "14. The Heart Asks Pleasure First (Theme from the Movie 'Piano') [Michael Nyman cover] [bonus track].flac"});
+  QVERIFY(!cue.isEmpty());
+
+  const auto tracks = CueParser(cue).tracks_list();
+  QCOMPARE(tracks.size(), 14);
+  QCOMPARE(tracks.first().album(),  QStringLiteral("Imaginaerum"));
+  QCOMPARE(tracks.first().artist(), QStringLiteral("Nightwish"));
+  QCOMPARE(tracks.first().year(),   quint16{2011});
+  QCOMPARE(tracks.first().title(),  QStringLiteral("Taikatalvi"));
+  QCOMPARE(tracks.at(1).title(),    QStringLiteral("Storytime"));
+  // Every track is its own FILE, each starting at 0; assert distinct per-file paths.
+  for (int i = 0; i < tracks.size(); ++i) {
+    QCOMPARE(tracks.at(i).begin(), quint32{0});
+  }
+  QVERIFY(tracks.first().path().endsWith(QStringLiteral("01. Taikatalvi.flac")));
+  QVERIFY(tracks.at(11).path().endsWith(QStringLiteral("12. Song of Myself.flac")));
+  // Bonus track: brackets and apostrophes in both title and filename parse intact.
+  QCOMPARE(tracks.last().title(),
+           QStringLiteral("The Heart Asks Pleasure First (Theme from the Movie 'Piano') [Michael Nyman cover] [bonus track]"));
+  QVERIFY(tracks.last().path().endsWith(
+            QStringLiteral("14. The Heart Asks Pleasure First (Theme from the Movie 'Piano') [Michael Nyman cover] [bonus track].flac")));
+}
+
+void TestCueParserFixtures::multifileTherionFleurs_tracksGroupedPerFile() {
+  // Mixed layout: one cue, four files (a/b/c/d.flac), several tracks per file.
+  // Each file's first track starts at 0; later tracks are mid-file (same FILE).
+  const QString cue = stage(tempDir, "multifile_therion_fleurs.cue",
+                            {"a.flac", "b.flac", "c.flac", "d.flac"});
+  QVERIFY(!cue.isEmpty());
+
+  const auto tracks = CueParser(cue).tracks_list();
+  QCOMPARE(tracks.size(), 15);
+  QCOMPARE(tracks.first().album(),  QStringLiteral("Les Fleurs Du Mal"));
+  QCOMPARE(tracks.first().artist(), QStringLiteral("Therion"));
+  QCOMPARE(tracks.first().year(),   quint16{2012});
+
+  // Per-file grouping: 1-4 -> a, 5-7 -> b, 8-11 -> c, 12-15 -> d.
+  for (int i = 0; i < 4; ++i) {
+    QVERIFY(tracks.at(i).path().endsWith(QStringLiteral("a.flac")));
+  }
+  for (int i = 4; i < 7; ++i) {
+    QVERIFY(tracks.at(i).path().endsWith(QStringLiteral("b.flac")));
+  }
+  for (int i = 7; i < 11; ++i) {
+    QVERIFY(tracks.at(i).path().endsWith(QStringLiteral("c.flac")));
+  }
+  for (int i = 11; i < 15; ++i) {
+    QVERIFY(tracks.at(i).path().endsWith(QStringLiteral("d.flac")));
+  }
+
+  // First track of each file starts at 0.
+  QCOMPARE(tracks.at(0).begin(),  quint32{0});
+  QCOMPARE(tracks.at(4).begin(),  quint32{0});
+  QCOMPARE(tracks.at(7).begin(),  quint32{0});
+  QCOMPARE(tracks.at(11).begin(), quint32{0});
+  // Sampled mid-file INDEX 01 02:50:48 = (2*60+50)*75+48 = 12798 frames -> 170640 ms.
+  QCOMPARE(tracks.at(1).title(),  QStringLiteral("Une Fleur Dans Le C?ur"));
+  QCOMPARE(tracks.at(1).begin(),  quint32{170640});
 }
 
 // ---------- MP3-as-WAVE cues ----------

@@ -29,6 +29,7 @@ private slots:
   void init();
 
   void singleFileMultipleTracks();
+  void multiFileOneTrackPerFile();
   void crlfLineEndingsHandled();
   void utf8BomStripped();
   void nonAudioTrackTypeIsSkipped();
@@ -89,6 +90,42 @@ void TestCueParser::singleFileMultipleTracks() {
   QCOMPARE(tracks.at(2).begin(),        quint32{390000});  // 6:30 in ms
   QCOMPARE(tracks.at(1).duration(),     quint32{210000});  // 6:30 - 3:00
   for (const Track &t : tracks) {
+    QVERIFY(t.isCue());
+  }
+}
+
+void TestCueParser::multiFileOneTrackPerFile() {
+  // One FILE per TRACK, each at INDEX 01 00:00:00 — every track is a whole
+  // standalone file (the multi-file cue layout). Each track maps to its own file
+  // and starts at 0.
+  QVERIFY(touch(tempDir.filePath(QStringLiteral("01 first.flac"))));
+  QVERIFY(touch(tempDir.filePath(QStringLiteral("02 second.flac"))));
+  QVERIFY(touch(tempDir.filePath(QStringLiteral("03 third.flac"))));
+  const QString cue = tempDir.filePath(QStringLiteral("multifile.cue"));
+  QVERIFY(writeFile(cue,
+    "PERFORMER \"Band\"\n"
+    "TITLE \"Album\"\n"
+    "FILE \"01 first.flac\" WAVE\n"
+    "  TRACK 01 AUDIO\n"
+    "    TITLE \"First\"\n"
+    "    INDEX 01 00:00:00\n"
+    "FILE \"02 second.flac\" WAVE\n"
+    "  TRACK 02 AUDIO\n"
+    "    TITLE \"Second\"\n"
+    "    INDEX 01 00:00:00\n"
+    "FILE \"03 third.flac\" WAVE\n"
+    "  TRACK 03 AUDIO\n"
+    "    TITLE \"Third\"\n"
+    "    INDEX 01 00:00:00\n"));
+
+  CueParser p(cue);
+  auto tracks = p.tracks_list();
+  QCOMPARE(tracks.size(), 3);
+  QVERIFY(tracks.at(0).path().endsWith(QStringLiteral("01 first.flac")));
+  QVERIFY(tracks.at(1).path().endsWith(QStringLiteral("02 second.flac")));
+  QVERIFY(tracks.at(2).path().endsWith(QStringLiteral("03 third.flac")));
+  for (const Track &t : tracks) {
+    QCOMPARE(t.begin(), quint32{0});
     QVERIFY(t.isCue());
   }
 }

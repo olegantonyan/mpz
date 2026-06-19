@@ -78,6 +78,7 @@ namespace Playback {
 
     quint64 offset_begin = 0;
     quint64 offset_end = 0;
+    bool soft_advance_pending = false; // a soft CUE boundary just queued nextRequested; swallow the file's EOF StoppedState
     QUrl current_source_url;
     bool synthetic_playing_on_play = false;
     void seek_to_offset_begin();

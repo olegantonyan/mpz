@@ -23,15 +23,16 @@ namespace Playback {
       // underflow that would publish a near-ULLONG_MAX duration to the UI.
       emit positionChanged(pos > offset_begin ? pos - offset_begin : 0);
       if (offset_end > 0 && pos >= offset_end) {
-        // Soft CUE boundary: let the underlying file keep playing. If the
-        // upcoming setTrack() points at the same file (sequential/random
-        // same-file CUE) we'll skip setSource entirely; otherwise setSource
-        // will halt playback as usual. next_after_stop is cleared so any
-        // implicit StoppedState that setSource emits doesn't re-fire
-        // nextRequested.
+        // Soft CUE boundary: let the underlying file keep playing and advance to
+        // the next track. If the upcoming setTrack() points at the same file
+        // (same-file CUE) we skip setSource entirely. If this track is the
+        // last/only one in its file, the file hits a natural EOF right after this
+        // — soft_advance_pending makes the StoppedState handler swallow that one
+        // EOF (we've already queued the advance), instead of stopping playback.
         offset_begin = offset_end;
         offset_end = 0;
         next_after_stop = false;
+        soft_advance_pending = true;
         emit positionChanged(0);
         QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
       }
@@ -43,6 +44,13 @@ namespace Playback {
 #endif
       switch (state) {
         case QMediaPlayer::StoppedState:
+          if (soft_advance_pending) {
+            // Natural EOF right after a soft CUE boundary (last/only track in a
+            // file). The boundary already queued nextRequested, so don't stop and
+            // don't re-advance — just consume this one StoppedState.
+            soft_advance_pending = false;
+            break;
+          }
           emit positionChanged(0);
           if (next_after_stop) {
             // Defer one tick so the next setSource/play doesn't re-enter
@@ -138,6 +146,7 @@ namespace Playback {
   void MediaPlayer::emitStateChanged(State state) {
     if (state == PlayingState) {
       next_after_stop = true;
+      soft_advance_pending = false; // a same-file CUE continuation reached PlayingState without an EOF; nothing to swallow
     }
     emit stateChanged(state);
   }
@@ -198,6 +207,7 @@ namespace Playback {
   void MediaPlayer::stop() {
     next_after_stop = false;
     synthetic_playing_on_play = false;
+    soft_advance_pending = false; // honor an explicit stop even if it lands right after a soft boundary
     // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed
     // stop back here; player.stop() is a no-op so synthesise the transition.
     const bool already_stopped = state() == MediaPlayer::StoppedState;
@@ -210,11 +220,13 @@ namespace Playback {
 
   void MediaPlayer::next() {
     next_after_stop = false;
+    soft_advance_pending = false;
     emit nextRequested();
   }
 
   void MediaPlayer::prev() {
     next_after_stop = false;
+    soft_advance_pending = false;
     emit prevRequested();
   }
 
@@ -323,6 +335,7 @@ namespace Playback {
 #endif
     offset_begin = 0;
     offset_end = 0;
+    soft_advance_pending = false;
     current_source_url = QUrl();
     synthetic_playing_on_play = false;
   }

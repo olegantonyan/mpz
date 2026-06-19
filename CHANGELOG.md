@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- fix multi-file CUE playback stopping after each track
+
 ### Misc
 
 ## [2.0.10] - 2026-06-07
