@@ -20,7 +20,7 @@ namespace CoverArt {
     temp_dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "embedded_covers" + QDir::separator();
     //QDir::tempPath() + QDir::separator() + qAppName() + "_embedded_covers" + QDir::separator();
     if (!QDir(temp_dir).exists()) {
-      QDir().mkdir(temp_dir);
+      QDir().mkpath(temp_dir);
     }
   }
 

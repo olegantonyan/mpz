@@ -7,6 +7,7 @@
 ### Fixed
 
 - fix multi-file CUE playback stopping after each track
+- canceling library folder addition no longer adds empty line 
 
 ### Misc
 
