@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- fix multi-file CUE (EAC gaps-appended) playing silence for every track after the first
+
 ### Misc
 
 ## [2.0.11] - 2026-06-24

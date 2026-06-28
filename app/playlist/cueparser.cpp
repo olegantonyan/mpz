@@ -312,9 +312,15 @@ namespace Playlist {
       const QString cmd = toks.at(0).toLower();
 
       if (cmd == QLatin1String("file")) {
-        flush_track();
         const QString name = toks.value(1);
         const QString type = toks.value(2);
+        // EAC "gaps appended": the open track's INDEX 00 (pregap) is the tail of
+        // the file we're leaving, but its INDEX 01 (audio) starts in this new
+        // file. Keep it open so the next INDEX 01 binds here, not onto the
+        // previous file at the pregap offset.
+        if (!(in_track && cur.index01_ms < 0)) {
+          flush_track();
+        }
         cur_file = resolve_audio_file(cue_dir, name);
         // BINARY/MOTOROLA = data tracks. Skip everything under them.
         cur_file_audio = !(type.compare(QLatin1String("BINARY"), Qt::CaseInsensitive) == 0

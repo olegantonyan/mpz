@@ -76,6 +76,7 @@ private slots:
   void multifileVibrasphereTributaries();
   void multifileNightwishImaginaerum_oneTrackPerFile();
   void multifileTherionFleurs_tracksGroupedPerFile();
+  void multifileChapuisNoel_gapsAppendedCrossFile();
   void mp3BseDrivingInsane();
   void mp3BseCruelAndUnusual();
   void backslashDjTiestoTraffic();
@@ -367,12 +368,14 @@ void TestCueParserFixtures::cp1251Wagner() {
 }
 
 void TestCueParserFixtures::cp1251JungleBook() {
-  // CP1251 album title, ASCII track titles, multi-FILE with cross-FILE INDEX 00
-  // pregaps, plus the PREGAP directive (silently ignored). The cue's FILE 03
-  // line carries a CP1251 byte 0xDC (Ь) inside the filename — on Qt6 the
-  // CP1251 fallback decodes it and the stub matches; on Qt5 lenient UTF-8
-  // turns it into U+FFFD, the FILE 03 stub can't be resolved, and the track
-  // that was bound to FILE 03 (track 4) gets dropped — 7 surviving tracks.
+  // CP1251 album title, ASCII track titles, multi-FILE EAC "gaps appended"
+  // layout (each track's INDEX 00 pregap sits at the tail of the previous file,
+  // its INDEX 01 audio at the head of its own file), plus the PREGAP directive
+  // (silently ignored). The cue's FILE 03 line carries a CP1251 byte 0xDC (Ь)
+  // inside the filename — on Qt6 the CP1251 fallback decodes it and the stub
+  // matches; on Qt5 lenient UTF-8 turns it into U+FFFD, the FILE 03 stub can't
+  // be resolved, and the track whose audio lives in FILE 03 (track 3) gets
+  // dropped — 7 surviving tracks.
   const QString cue = stage(tempDir, "cp1251_jungle_book.cue", {
     "01 - Mega-Phone - Hard Dramma.wav",
     "02 - Plexus - Protein.wav",
@@ -389,11 +392,12 @@ void TestCueParserFixtures::cp1251JungleBook() {
   QCOMPARE(tracks.first().year(),   quint16{1997});
   QCOMPARE(tracks.first().title(),  QStringLiteral("Hard Dramma"));
   QCOMPARE(tracks.first().begin(),  quint32{0});
-  // Track 2 starts at INDEX 00 05:29:56 — INDEX 01 of next FILE was skipped
-  // because flush_track ran before that INDEX line was processed.
+  // Track 2's audio is the whole of FILE 02 (INDEX 01 00:00:00); its INDEX 00
+  // pregap at 05:29:56 belongs to the tail of FILE 01 and is discarded.
   QCOMPARE(tracks.at(1).title(),    QStringLiteral("Protein"));
   QCOMPARE(tracks.at(1).artist(),   QStringLiteral("Plexus"));
-  QCOMPARE(tracks.at(1).begin(),    quint32{329746});  // 05:29:56
+  QCOMPARE(tracks.at(1).begin(),    quint32{0});
+  QVERIFY(tracks.at(1).path().endsWith(QStringLiteral("02 - Plexus - Protein.wav")));
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   QCOMPARE(tracks.size(), 8);
   QCOMPARE(tracks.first().album(),  QString::fromUtf8(u8"Книга джунглей. Том 1"));
@@ -428,10 +432,11 @@ void TestCueParserFixtures::multifileVibrasphereArchipelago() {
   QCOMPARE(tracks.first().artist(), QStringLiteral("Vibrasphere"));
   QCOMPARE(tracks.first().year(),   quint16{2006});
   QCOMPARE(tracks.first().title(),  QStringLiteral("Tierra azul"));
-  // Track 2 keeps file=01 (pregap declared before next FILE) at INDEX 00 06:55:59.
+  // Track 2's audio is the whole of file 02 (INDEX 01 0); its INDEX 00 06:55:59
+  // pregap rode at the tail of file 01 and is discarded.
   QCOMPARE(tracks.at(1).title(),    QStringLiteral("Sweet september"));
-  QCOMPARE(tracks.at(1).begin(),    quint32{415786});
-  QVERIFY(tracks.at(1).path().endsWith(QStringLiteral("01-Vibrasphere - Tierra azul-2006.wav")));
+  QCOMPARE(tracks.at(1).begin(),    quint32{0});
+  QVERIFY(tracks.at(1).path().endsWith(QStringLiteral("02-Vibrasphere - Sweet september-2006.wav")));
   // Track 3 jumps to file=03 at INDEX 01 0.
   QCOMPARE(tracks.at(2).title(),    QStringLiteral("Reservoir"));
   QCOMPARE(tracks.at(2).begin(),    quint32{0});
@@ -462,11 +467,11 @@ void TestCueParserFixtures::multifileVibrasphereTributaries() {
   QCOMPARE(tracks.first().album(),  QStringLiteral("Unknown Title"));
   QCOMPARE(tracks.first().artist(), QStringLiteral("Unknown Artist"));
   QCOMPARE(tracks.first().title(),  QStringLiteral("Track01"));
-  // Track 11 starts under file=10 (INDEX 00 06:31:27 before FILE 11 line).
-  // 06:31:27 frames = (6*60*75 + 31*75 + 27) = 29352 → 391360ms.
+  // Track 11's audio is the whole of file 11 (INDEX 01 0); its INDEX 00 06:31:27
+  // pregap rode at the tail of file 10 and is discarded.
   QCOMPARE(tracks.at(10).title(),   QStringLiteral("Track11"));
-  QCOMPARE(tracks.at(10).begin(),   quint32{391360});
-  QVERIFY(tracks.at(10).path().endsWith(QStringLiteral("10 - Unknown Artist - Track10.wav")));
+  QCOMPARE(tracks.at(10).begin(),   quint32{0});
+  QVERIFY(tracks.at(10).path().endsWith(QStringLiteral("11 - Unknown Artist - Track11.wav")));
 }
 
 void TestCueParserFixtures::multifileNightwishImaginaerum_oneTrackPerFile() {
@@ -545,6 +550,44 @@ void TestCueParserFixtures::multifileTherionFleurs_tracksGroupedPerFile() {
   // Sampled mid-file INDEX 01 02:50:48 = (2*60+50)*75+48 = 12798 frames -> 170640 ms.
   QCOMPARE(tracks.at(1).title(),  QStringLiteral("Une Fleur Dans Le C?ur"));
   QCOMPARE(tracks.at(1).begin(),  quint32{170640});
+}
+
+void TestCueParserFixtures::multifileChapuisNoel_gapsAppendedCrossFile() {
+  // The exact cue from the bug report: a 12-track EAC "gaps appended to previous
+  // file" rip, one FLAC per track. Every track 2..12 has its INDEX 00 pregap at
+  // the tail of the previous file and its INDEX 01 audio at 0 in its own file.
+  // Pre-fix, tracks 2..12 bound to the previous file at the pregap offset and
+  // played a few seconds of trailing silence; each must bind to its own file at
+  // begin 0. FILE names are NFC; we touch identical stubs and assert on them.
+  static const char* files[] = {
+    "01 Noël étranger (Noël VIII).flac",
+    "02 Noël en dialogue, duo, trio (Noël II).flac",
+    "03 A minuit fut fait un Réveil.flac",
+    "04 Quoy ma Voisine es tu faché.flac",
+    "05 A minuit fut fait un Réveil.flac",
+    "06 Puer nobis nascitur.flac",
+    "07 Allons voir ce divin Gage.flac",
+    "08 Chanton de Voix Hautaine.flac",
+    "09 Prélude - A la venue de Noël.flac",
+    "10 Joseph est bien marié.flac",
+    "11 Où s'en vont Ces gais bergers.flac",
+    "12 Au jô deu de pubelle - Grand déi, ribon ribeine.flac",
+  };
+  const QString cue = tempDir.filePath(QStringLiteral("multifile_chapuis_noel.cue"));
+  QVERIFY(QFile::copy(fixturePath("multifile_chapuis_noel.cue"), cue));
+  for (const char* f : files) {
+    QVERIFY(touch(tempDir.filePath(QString::fromUtf8(f))));
+  }
+
+  const auto tracks = CueParser(cue).tracks_list();
+  QCOMPARE(tracks.size(), 12);
+  for (int i = 0; i < 12; ++i) {
+    QCOMPARE(tracks.at(i).begin(), quint32{0});
+    QVERIFY(tracks.at(i).path().endsWith(QString::fromUtf8(files[i])));
+  }
+  QCOMPARE(tracks.first().artist(), QStringLiteral("Michel Chapuis"));
+  QCOMPARE(tracks.first().year(),   quint16{1968});
+  QVERIFY(tracks.first().album().contains(QStringLiteral("Organ Music for Christmas")));
 }
 
 // ---------- MP3-as-WAVE cues ----------
