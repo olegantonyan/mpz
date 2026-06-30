@@ -90,6 +90,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupSortMenu();
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
+  setupMacMediaControls();
 #endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
@@ -267,6 +268,12 @@ void MainWindow::setupMpris() {
     global_conf.savePlaybackOrder(val ? "random" : "sequential");
     global_conf.sync();
   });
+}
+#endif
+
+#ifdef Q_OS_MACOS
+void MainWindow::setupMacMediaControls() {
+  mac_media = new MacMediaControls(player, this);
 }
 #endif
 

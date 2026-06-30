@@ -163,6 +163,11 @@ if (WIN32)
   list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
 endif()
 
+if (APPLE)
+  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm)
+  set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+endif()
+
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
@@ -182,7 +187,8 @@ if (WIN32)
 endif()
 
 if (APPLE)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "-framework IOKit")
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+    "-framework IOKit" "-framework MediaPlayer" "-framework AppKit" "-framework Foundation")
 endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)

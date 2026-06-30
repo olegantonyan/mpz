@@ -31,6 +31,10 @@
   #include "dbus/mpris.h"
 #endif
 
+#ifdef Q_OS_MACOS
+  #include "macos/macmediacontrols.h"
+#endif
+
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
@@ -71,6 +75,9 @@ private:
 #if defined(MPRIS_ENABLE)
   Mpris *mpris = nullptr;
 #endif
+#ifdef Q_OS_MACOS
+  MacMediaControls *mac_media = nullptr;
+#endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
@@ -98,6 +105,7 @@ private:
   void setupMainMenu();
 #ifdef Q_OS_MACOS
   void setupMacMenuBar();
+  void setupMacMediaControls();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();

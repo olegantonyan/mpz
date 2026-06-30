@@ -106,6 +106,10 @@ void Shortcuts::setupGlobal() {
     // https://github.com/olegantonyan/mpz/issues/129
     return;
   }
+#ifndef Q_OS_MACOS
+  // On macOS the hardware media keys are owned by MPRemoteCommandCenter
+  // (see MacMediaControls); a Carbon QHotkey grab here is unreliable and
+  // would double-fire alongside it.
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);
   connect(&_stop_global, &QHotkey::activated, this, &Shortcuts::stop);
@@ -117,6 +121,7 @@ void Shortcuts::setupGlobal() {
   _pause_global.setShortcut(Qt::Key_MediaPause, Qt::NoModifier, true);
   _next_global.setShortcut(Qt::Key_MediaNext, Qt::NoModifier, true);
   _prev_global.setShortcut(Qt::Key_MediaPrevious, Qt::NoModifier, true);
+#endif
 }
 
 void Shortcuts::setupLocal() {
