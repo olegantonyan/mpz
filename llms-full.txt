@@ -8,7 +8,7 @@ This is the self-contained, full-content version of <https://mpz-player.org/llms
 
 mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar — mpz keeps only the features the author has been using daily for many years, with no plugin system or extensive customization layer.
 
-Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open source under GPL-3.0. Cross-platform: Linux, macOS (experimental), and Windows.
+Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open source under GPL-3.0. Cross-platform: Linux, macOS, and Windows.
 
 ## Features
 
@@ -32,7 +32,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro: install from the omnipackage stable repositories (recommended) at <https://repositories.omnipackage.org/mpz/stable/install.html>, or the unstable repositories for builds from master at <https://repositories.omnipackage.org/mpz/next/install.html>. The previous Open Build Service repositories still exist and existing installations keep working, but both new and existing users are encouraged to switch to omnipackage. Note: OBS builds on Debian/Ubuntu were always Qt5; omnipackage builds use Qt6 where the distro supports it.
 - Arch and Manjaro: covered by the omnipackage repositories above. An AUR package is also available if you prefer it over the binary repositories — Qt6 at <https://aur.archlinux.org/packages/mpz/> or the Qt5 variant at <https://aur.archlinux.org/packages/mpz-qt5>.
 - Windows: download the latest installer or portable binaries from <https://github.com/olegantonyan/mpz/releases>.
-- macOS (experimental): download the `.dmg` from <https://github.com/olegantonyan/mpz/releases>. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch — after dragging `mpz.app` to `/Applications`, remove the quarantine flag with `xattr -dr com.apple.quarantine /Applications/mpz.app`. See the README at <https://github.com/olegantonyan/mpz#macos-experimental> for details.
+- macOS: download the `.dmg` from <https://github.com/olegantonyan/mpz/releases>. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch — after dragging `mpz.app` to `/Applications`, remove the quarantine flag with `xattr -dr com.apple.quarantine /Applications/mpz.app`. See the README at <https://github.com/olegantonyan/mpz#macos> for details.
 - From source: clone <https://github.com/olegantonyan/mpz> and follow the README. Works on any platform with Qt and a C++ compiler.
 
 ## mpd client mode
@@ -43,7 +43,7 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 
 **What is mpz?** A free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.
 
-**What platforms does mpz support?** Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub. On macOS (experimental), download the `.dmg` from GitHub releases — the build is unsigned, so Gatekeeper requires removing the quarantine flag (`xattr -dr com.apple.quarantine /Applications/mpz.app`) on first launch. Building from source is supported on any platform with Qt and a C++ compiler.
+**What platforms does mpz support?** Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub. On macOS, download the `.dmg` from GitHub releases — the build is unsigned, so Gatekeeper requires removing the quarantine flag (`xattr -dr com.apple.quarantine /Applications/mpz.app`) on first launch. Building from source is supported on any platform with Qt and a C++ compiler.
 
 **Is mpz free?** Yes. Free and open-source under the GNU GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.html>).
 
