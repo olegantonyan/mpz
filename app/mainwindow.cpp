@@ -654,6 +654,11 @@ void MainWindow::setupMacMenuBar() {
     QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
   });
 
+  auto *github = help->addAction(tr("mpz GitHub"));
+  connect(github, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
+  });
+
   auto *feedback = help->addAction(tr("Send Feedback…"));
   connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
 
