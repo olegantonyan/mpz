@@ -2,6 +2,8 @@
 
 ### Added
 
+- macOS global media controls
+
 ### Fixed
 
 - fix multi-file CUE (EAC gaps-appended) playing silence for every track after the first
