@@ -59,7 +59,7 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
-#### macOS (experimental)
+#### macOS
 
 Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
 
