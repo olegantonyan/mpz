@@ -3,6 +3,7 @@
 ### Added
 
 - macOS global media controls
+- macOS dock menu
 
 ### Fixed
 

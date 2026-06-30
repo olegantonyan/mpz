@@ -91,6 +91,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
   setupMacMediaControls();
+  setupMacDockMenu();
 #endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
@@ -274,6 +275,10 @@ void MainWindow::setupMpris() {
 #ifdef Q_OS_MACOS
 void MainWindow::setupMacMediaControls() {
   mac_media = new MacMediaControls(player, this);
+}
+
+void MainWindow::setupMacDockMenu() {
+  mac_dock = new MacDockMenu(player, this);
 }
 #endif
 

@@ -14,14 +14,17 @@ MacMediaControls::MacMediaControls(Playback::Controller *pl, QObject *parent) : 
   connect(player, &Playback::Controller::started, this, [this](const Track &) {
     updateNowPlayingInfo();
     updatePlaybackState(Playback::Controller::Playing);
+    beginPlaybackActivity();
   });
   connect(player, &Playback::Controller::paused, this, [this](const Track &) {
     updateNowPlayingInfo();
     updatePlaybackState(Playback::Controller::Paused);
+    endPlaybackActivity();
   });
   connect(player, &Playback::Controller::stopped, this, [this]() {
     [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = @{};
     updatePlaybackState(Playback::Controller::Stopped);
+    endPlaybackActivity();
   });
   connect(player, &Playback::Controller::seeked, this, [this](int) {
     updateNowPlayingInfo();
@@ -29,8 +32,30 @@ MacMediaControls::MacMediaControls(Playback::Controller *pl, QObject *parent) : 
 }
 
 MacMediaControls::~MacMediaControls() {
+  endPlaybackActivity();
   [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = @{};
   [MPNowPlayingInfoCenter defaultCenter].playbackState = MPNowPlayingPlaybackStateStopped;
+}
+
+void MacMediaControls::beginPlaybackActivity() {
+  if (nap_activity != nullptr) {
+    return;
+  }
+  // Background + LatencyCritical, NOT UserInitiated: the latter also disables
+  // idle system sleep, which would override the user's inhibitSleepWhilePlaying
+  // setting. Sleep is owned by SleepLock; here we only opt out of App Nap.
+  id token = [[NSProcessInfo processInfo] beginActivityWithOptions:(NSActivityBackground | NSActivityLatencyCritical)
+                                                            reason:@"playing audio"];
+  nap_activity = (__bridge_retained void *)token;
+}
+
+void MacMediaControls::endPlaybackActivity() {
+  if (nap_activity == nullptr) {
+    return;
+  }
+  id token = (__bridge_transfer id)nap_activity;
+  [[NSProcessInfo processInfo] endActivity:token];
+  nap_activity = nullptr;
 }
 
 void MacMediaControls::updateNowPlayingInfo() {

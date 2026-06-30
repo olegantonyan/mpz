@@ -33,6 +33,7 @@
 
 #ifdef Q_OS_MACOS
   #include "macos/macmediacontrols.h"
+  #include "macos/macdockmenu.h"
 #endif
 
 #ifdef ENABLE_MPD_SUPPORT
@@ -77,6 +78,7 @@ private:
 #endif
 #ifdef Q_OS_MACOS
   MacMediaControls *mac_media = nullptr;
+  MacDockMenu *mac_dock = nullptr;
 #endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
@@ -106,6 +108,7 @@ private:
 #ifdef Q_OS_MACOS
   void setupMacMenuBar();
   void setupMacMediaControls();
+  void setupMacDockMenu();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();

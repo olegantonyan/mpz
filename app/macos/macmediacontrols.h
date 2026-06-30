@@ -15,8 +15,11 @@ private:
   void updateNowPlayingInfo();
   void updatePlaybackState(Playback::Controller::State state);
   void setupRemoteCommands();
+  void beginPlaybackActivity();
+  void endPlaybackActivity();
 
   Playback::Controller *player;
+  void *nap_activity = nullptr;
 };
 
 #endif // MACMEDIACONTROLS_H
