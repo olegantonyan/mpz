@@ -36,6 +36,10 @@
   #include "macos/macdockmenu.h"
 #endif
 
+#ifdef ENABLE_SPARKLE
+  #include "macos/macupdater.h"
+#endif
+
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
@@ -80,6 +84,9 @@ private:
   MacMediaControls *mac_media = nullptr;
   MacDockMenu *mac_dock = nullptr;
 #endif
+#ifdef ENABLE_SPARKLE
+  MacUpdater *mac_updater = nullptr;
+#endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
@@ -109,6 +116,9 @@ private:
   void setupMacMenuBar();
   void setupMacMediaControls();
   void setupMacDockMenu();
+#endif
+#ifdef ENABLE_SPARKLE
+  void setupMacUpdater();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();

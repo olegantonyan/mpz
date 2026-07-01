@@ -20,6 +20,10 @@
   <key>NSPrincipalClass</key>                    <string>NSApplication</string>
   <key>NSRequiresAquaSystemAppearance</key>      <false/>
   <key>NSSupportsAutomaticGraphicsSwitching</key><true/>
+  <key>SUFeedURL</key>                           <string>https://github.com/olegantonyan/mpz/releases/latest/download/appcast.xml</string>
+  <key>SUPublicEDKey</key>                        <string>REPLACE_WITH_generate_keys_PUBLIC_KEY</string>
+  <key>SUEnableAutomaticChecks</key>             <true/>
+  <key>SUScheduledCheckInterval</key>            <integer>86400</integer>
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>

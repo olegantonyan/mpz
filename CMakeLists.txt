@@ -168,6 +168,19 @@ if (APPLE)
   set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 
+option(ENABLE_SPARKLE "Enable macOS Sparkle auto-updater (framework built from vendored 3rdparty/Sparkle-2.9.3 source)" OFF)
+if (ENABLE_SPARKLE AND APPLE)
+  set(SPARKLE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/Sparkle-2.9.3)
+  if (NOT EXISTS ${SPARKLE_SRC}/Sparkle.xcodeproj)
+    message(FATAL_ERROR "ENABLE_SPARKLE=ON but the vendored Sparkle source is missing at ${SPARKLE_SRC}")
+  endif()
+  set(SPARKLE_PRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/sparkle/Build/Products/Release)
+  set(SPARKLE_FRAMEWORK ${SPARKLE_PRODUCTS}/Sparkle.framework)
+  message(STATUS "sparkle: building framework from ${SPARKLE_SRC}")
+  list(APPEND PROJECT_SOURCES app/macos/macupdater.mm)
+  set_source_files_properties(app/macos/macupdater.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+endif()
+
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
@@ -189,6 +202,33 @@ endif()
 if (APPLE)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     "-framework IOKit" "-framework MediaPlayer" "-framework AppKit" "-framework Foundation")
+endif()
+
+if (ENABLE_SPARKLE AND APPLE)
+  # Sparkle is an Xcode project, not CMake, so build it with xcodebuild as a
+  # custom target the app depends on (built during the normal cmake build, once,
+  # output-stamped). Unsigned here; the bundle's ad-hoc codesign covers it.
+  add_custom_command(
+    OUTPUT ${SPARKLE_FRAMEWORK}/Sparkle
+    COMMAND xcodebuild -project ${SPARKLE_SRC}/Sparkle.xcodeproj
+            -scheme Sparkle -configuration Release
+            -derivedDataPath ${CMAKE_CURRENT_BINARY_DIR}/sparkle
+            "ARCHS=arm64 x86_64" ONLY_ACTIVE_ARCH=NO
+            "CODE_SIGN_IDENTITY=" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+            -quiet build
+    COMMENT "Building Sparkle.framework from vendored source"
+    VERBATIM
+  )
+  add_custom_target(sparkle_framework DEPENDS ${SPARKLE_FRAMEWORK}/Sparkle)
+  add_dependencies(${CMAKE_PROJECT_NAME} sparkle_framework)
+
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_SPARKLE)
+  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE "-F${SPARKLE_PRODUCTS}")
+  target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+    "-F${SPARKLE_PRODUCTS}" "-Wl,-rpath,@executable_path/../Frameworks")
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "-framework Sparkle")
+  # Bundle-embedding is done by the packaging script *after* macdeployqt (which
+  # resolves the main binary's @rpath/Sparkle dep) — see mac/portable_macos_qt6_host.sh.
 endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)

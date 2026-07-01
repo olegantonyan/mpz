@@ -27,6 +27,18 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
     EXTRA_CMAKE_ARGS+=("-DPACKAGE_VERSION=$PACKAGE_VERSION")
 fi
 
+# Sparkle is built by cmake (custom target) from the vendored source in one build;
+# we only opt in here and note where cmake writes the framework so we can embed it
+# after macdeployqt below.
+SPARKLE_FRAMEWORK=""
+if [ -d "$SRC_DIR/3rdparty/Sparkle-2.9.3/Sparkle.xcodeproj" ]; then
+    EXTRA_CMAKE_ARGS+=("-DENABLE_SPARKLE=ON")
+    SPARKLE_FRAMEWORK="$TMP_DIR/sparkle/Build/Products/Release/Sparkle.framework"
+    echo -e "Sparkle:\tenabled (cmake builds the framework from vendored source)"
+else
+    echo -e "Sparkle:\tdisabled (no vendored source)"
+fi
+
 cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
       -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
@@ -43,6 +55,15 @@ if [ -z "$MACDEPLOYQT" ] || [ ! -x "$MACDEPLOYQT" ]; then
 fi
 
 "$MACDEPLOYQT" ./mpz.app -always-overwrite -verbose=1
+
+# Embed the cmake-built Sparkle.framework after macdeployqt — doing it before
+# would let macdeployqt (which sees the main binary's @rpath/Sparkle dependency)
+# rewrite the framework's nested code. Before codesign so the ad-hoc sign covers
+# it; ditto preserves symlinks and executable bits.
+if [ -d "$SPARKLE_FRAMEWORK" ]; then
+    mkdir -p ./mpz.app/Contents/Frameworks
+    ditto "$SPARKLE_FRAMEWORK" ./mpz.app/Contents/Frameworks/Sparkle.framework
+fi
 
 # Ad-hoc codesign: enough for Gatekeeper "right-click → Open" bypass,
 # not enough for redistribution without warnings. Replace later with

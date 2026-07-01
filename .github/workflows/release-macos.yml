@@ -86,9 +86,36 @@ jobs:
           path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.dmg
           archive: false
 
+      - name: Generate signed appcast
+        if: env.RELEASE_TAG != ''
+        env:
+          SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+        run: |
+          if [ -z "${SPARKLE_ED_PRIVATE_KEY:-}" ] || [ ! -d 3rdparty/Sparkle-2.9.3/Sparkle.xcodeproj ]; then
+            echo "Sparkle source or signing key missing - skipping appcast"
+            exit 0
+          fi
+          xcodebuild -project 3rdparty/Sparkle-2.9.3/Sparkle.xcodeproj \
+            -scheme generate_appcast -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/sparkle-tools" \
+            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -quiet build
+          GEN="$RUNNER_TEMP/sparkle-tools/Build/Products/Release/generate_appcast"
+          KEYFILE="$RUNNER_TEMP/sparkle_ed_priv"
+          printf '%s' "$SPARKLE_ED_PRIVATE_KEY" > "$KEYFILE"
+          "$GEN" \
+            --ed-key-file "$KEYFILE" \
+            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG/" \
+            --link "https://github.com/${{ github.repository }}/releases" \
+            -o "$MPZ_OUTPUT_DIR/appcast.xml" \
+            "$MPZ_OUTPUT_DIR"
+          rm -f "$KEYFILE"
+
       - name: Upload to GitHub release
         if: env.RELEASE_TAG != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-macos-universal-qt6.dmg" --repo "${{ github.repository }}" --clobber
+          ASSETS=("dist/mpz-${{ steps.ver.outputs.version }}-macos-universal-qt6.dmg")
+          [ -f dist/appcast.xml ] && ASSETS+=("dist/appcast.xml")
+          gh release upload "$RELEASE_TAG" "${ASSETS[@]}" --repo "${{ github.repository }}" --clobber

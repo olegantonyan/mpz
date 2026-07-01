@@ -88,6 +88,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupMainMenu();
   setupShortcuts();
   setupSortMenu();
+#ifdef ENABLE_SPARKLE
+  setupMacUpdater();
+#endif
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
   setupMacMediaControls();
@@ -279,6 +282,12 @@ void MainWindow::setupMacMediaControls() {
 
 void MainWindow::setupMacDockMenu() {
   mac_dock = new MacDockMenu(player, this);
+}
+#endif
+
+#ifdef ENABLE_SPARKLE
+void MainWindow::setupMacUpdater() {
+  mac_updater = new MacUpdater(this);
 }
 #endif
 
@@ -592,6 +601,12 @@ void MainWindow::setupMacMenuBar() {
   auto *about = app_menu->addAction(tr("About mpz"));
   about->setMenuRole(QAction::AboutRole);
   connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
+
+#ifdef ENABLE_SPARKLE
+  auto *updates = app_menu->addAction(tr("Check for Updates…"));
+  updates->setMenuRole(QAction::ApplicationSpecificRole);
+  connect(updates, &QAction::triggered, mac_updater, &MacUpdater::checkForUpdates);
+#endif
 
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
