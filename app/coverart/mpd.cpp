@@ -50,7 +50,7 @@ namespace CoverArt {
   Mpd::Mpd(MpdClient::Client &cl) : client(cl) {
     temp_dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "mpd_covers" + QDir::separator();
     if (!QDir(temp_dir).exists()) {
-      QDir().mkdir(temp_dir);
+      QDir().mkpath(temp_dir);
     }
   }
 

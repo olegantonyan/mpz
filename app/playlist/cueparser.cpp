@@ -312,9 +312,15 @@ namespace Playlist {
       const QString cmd = toks.at(0).toLower();
 
       if (cmd == QLatin1String("file")) {
-        flush_track();
         const QString name = toks.value(1);
         const QString type = toks.value(2);
+        // EAC "gaps appended": the open track's INDEX 00 (pregap) is the tail of
+        // the file we're leaving, but its INDEX 01 (audio) starts in this new
+        // file. Keep it open so the next INDEX 01 binds here, not onto the
+        // previous file at the pregap offset.
+        if (!(in_track && cur.index01_ms < 0)) {
+          flush_track();
+        }
         cur_file = resolve_audio_file(cue_dir, name);
         // BINARY/MOTOROLA = data tracks. Skip everything under them.
         cur_file_audio = !(type.compare(QLatin1String("BINARY"), Qt::CaseInsensitive) == 0
@@ -322,14 +328,20 @@ namespace Playlist {
       } else if (cmd == QLatin1String("track")) {
         flush_track();
         in_track = true;
-        cur.track_no = toks.value(1).toInt();
+        bool track_no_ok = false;
+        const int track_no = toks.value(1).toInt(&track_no_ok);
+        cur.track_no = (track_no_ok && track_no > 0) ? track_no : 0;
         const QString type = toks.value(2);
         cur_audio = type.isEmpty() || type.compare(QLatin1String("AUDIO"), Qt::CaseInsensitive) == 0;
       } else if (cmd == QLatin1String("index")) {
         if (!in_track) {
           continue;
         }
-        const int idx = toks.value(1).toInt();
+        bool idx_ok = false;
+        const int idx = toks.value(1).toInt(&idx_ok);
+        if (!idx_ok) {
+          continue;
+        }
         const qint64 t = parse_index_position(toks.value(2));
         if (t < 0) {
           continue;

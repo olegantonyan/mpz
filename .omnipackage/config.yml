@@ -118,6 +118,14 @@ debian_qt6: &debian_qt6
   runtime_dependencies: [hicolor-icon-theme]
   <<: *deb
 
+pacman: &pacman
+  <<: *common
+  CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON"
+  build_dependencies: [cmake, make, qt6-base, qt6-multimedia, taglib, yaml-cpp, libmpdclient]
+  runtime_dependencies: [qt6-base, qt6-multimedia, hicolor-icon-theme, taglib, yaml-cpp, libmpdclient]
+  pacman:
+    pkgbuild_template: ".omnipackage/PKGBUILD.liquid"
+
 builds:
   - distro: "opensuse_15.3"
     <<: *opensuse_qt5
@@ -219,6 +227,12 @@ builds:
 
   - distro: "mageia_cauldron"
     <<: *mageia_qt6
+
+  - distro: "arch"
+    <<: *pacman
+
+  - distro: "manjaro"
+    <<: *pacman
 
 ignore_source_files:
   - .git

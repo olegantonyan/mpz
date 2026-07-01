@@ -58,11 +58,13 @@ void load_locale(MpzApplication &a, const QString &conf_language) {
     lang = conf_language;
   }
 
-  auto trans = new QTranslator;
+  auto trans = new QTranslator(&a);
   bool load_ok = trans->load(lang, ":/app/resources/translations/");
-  qDebug() << "system language:" << system_language << "config language:" << conf_language << "| transaltions load:" << load_ok;
+  qDebug() << "system language:" << system_language << "config language:" << conf_language << "| translations load:" << load_ok;
   if (load_ok) {
     a.installTranslator(trans);
+  } else {
+    delete trans;
   }
 }
 

@@ -1,12 +1,43 @@
-## [2.0.10] - next
+## [2.0.12] - next
 
 ### Added
+
+- macOS global media controls
+- macOS dock menu
+
+### Fixed
+
+- fix multi-file CUE (EAC gaps-appended) playing silence for every track after the first
+
+### Misc
+
+## [2.0.11] - 2026-06-24
+
+### Added
+
+- Button to open tags editor dialog from track info
+
+### Fixed
+
+- fix multi-file CUE playback stopping after each track
+- canceling library folder addition no longer adds empty line 
+
+### Misc
+
+## [2.0.10] - 2026-06-07
+
+### Added
+
+- New lyrics providers: NetEase, QQ Music, lyrics.ovh (have to be enabled in settings)
 
 ### Fixed
 
 - Japanese translations corrected (@coolvitto)
+- Fixed output device hotplug playback recovery on Linux Qt 6.11 with ffmpeg
 
 ### Misc
+
+- Small bugfixes and minor imrovements
 
 ## [2.0.9] - 2026-05-30
 

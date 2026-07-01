@@ -106,11 +106,35 @@
     </widget>
    </item>
    <item>
-    <widget class="QToolButton" name="toolButtonOpenFileManager">
-     <property name="text">
-      <string>Show in file manager</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="buttonsLayout">
+     <item>
+      <widget class="QToolButton" name="toolButtonOpenFileManager">
+       <property name="text">
+        <string>Show in file manager</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="toolButtonEditTags">
+       <property name="text">
+        <string>Edit tags…</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="buttonsSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

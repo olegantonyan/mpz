@@ -36,6 +36,7 @@ namespace PlaylistUi {
     void setPlaylist(std::shared_ptr<Playlist::Playlist> pl);
 
     Track itemAt(const QModelIndex &index) const;
+    const Track &trackAt(int row) const; // row must be in [0, tracksSize())
     QModelIndex buildIndex(int row, int col = 0) const;
     int tracksSize() const;
     void highlight(quint64 uid, enum HighlightState st);

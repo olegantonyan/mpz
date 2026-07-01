@@ -63,7 +63,7 @@
 <context>
     <name>AudioDeviceUi::DevicesMenu</name>
     <message>
-        <location filename="../../audio_device_ui/devicesmenu.cpp" line="22"/>
+        <location filename="../../audio_device_ui/devicesmenu.cpp" line="27"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -206,12 +206,12 @@
         <translation>送信</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>フィードバックありがとうございます！(再度クリックで閉じます)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="68"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="69"/>
         <source>Error occured, please try again</source>
         <translation>エラーが発生しました、再試行してください</translation>
     </message>
@@ -263,7 +263,7 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
-        <location filename="../../mainwindow.cpp" line="598"/>
+        <location filename="../../mainwindow.cpp" line="600"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
@@ -304,7 +304,7 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="102"/>
-        <location filename="../../mainwindow.cpp" line="635"/>
+        <location filename="../../mainwindow.cpp" line="637"/>
         <source>Sort</source>
         <translation>並び替え</translation>
     </message>
@@ -384,126 +384,126 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="199"/>
-        <location filename="../../mainwindow.cpp" line="233"/>
+        <location filename="../../mainwindow.cpp" line="200"/>
+        <location filename="../../mainwindow.cpp" line="234"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="200"/>
-        <location filename="../../mainwindow.cpp" line="232"/>
+        <location filename="../../mainwindow.cpp" line="201"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="201"/>
-        <location filename="../../mainwindow.cpp" line="234"/>
+        <location filename="../../mainwindow.cpp" line="202"/>
+        <location filename="../../mainwindow.cpp" line="235"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="231"/>
+        <location filename="../../mainwindow.cpp" line="232"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="378"/>
-        <location filename="../../mainwindow.cpp" line="382"/>
+        <location filename="../../mainwindow.cpp" line="379"/>
+        <location filename="../../mainwindow.cpp" line="383"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="384"/>
+        <location filename="../../mainwindow.cpp" line="385"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="576"/>
+        <location filename="../../mainwindow.cpp" line="578"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="578"/>
+        <location filename="../../mainwindow.cpp" line="580"/>
         <source>About mpz</source>
         <translation>mpz について</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="582"/>
+        <location filename="../../mainwindow.cpp" line="584"/>
         <source>Settings…</source>
         <translation>設定…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="587"/>
+        <location filename="../../mainwindow.cpp" line="589"/>
         <source>Quit mpz</source>
         <translation>mpz を終了</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="592"/>
+        <location filename="../../mainwindow.cpp" line="594"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="594"/>
+        <location filename="../../mainwindow.cpp" line="596"/>
         <source>Play / Pause</source>
         <translation>再生 / 一時停止</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="603"/>
+        <location filename="../../mainwindow.cpp" line="605"/>
         <source>Next Track</source>
         <translation>次のトラック</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="607"/>
+        <location filename="../../mainwindow.cpp" line="609"/>
         <source>Previous Track</source>
         <translation>前のトラック</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="613"/>
+        <location filename="../../mainwindow.cpp" line="615"/>
         <source>Volume Up</source>
         <translation>音量を上げる</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="617"/>
+        <location filename="../../mainwindow.cpp" line="619"/>
         <source>Volume Down</source>
         <translation>音量を下げる</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="625"/>
+        <location filename="../../mainwindow.cpp" line="627"/>
         <source>Output Device</source>
         <translation>出力デバイス</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="634"/>
+        <location filename="../../mainwindow.cpp" line="636"/>
         <source>View</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="640"/>
+        <location filename="../../mainwindow.cpp" line="642"/>
         <source>Playback Log</source>
         <translation>再生ログ</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="644"/>
+        <location filename="../../mainwindow.cpp" line="646"/>
         <source>Keyboard Shortcuts</source>
         <translation>キーボードショートカット</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="648"/>
+        <location filename="../../mainwindow.cpp" line="650"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="640"/>
+        <location filename="../../mainwindow.cpp" line="652"/>
         <source>mpz Website</source>
         <translation>mpz ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="645"/>
+        <location filename="../../mainwindow.cpp" line="657"/>
         <source>Send Feedback…</source>
         <translation>フィードバックを送る…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="648"/>
+        <location filename="../../mainwindow.cpp" line="660"/>
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>
@@ -673,241 +673,238 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="54"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="55"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="58"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="59"/>
         <source>General</source>
         <translation>全般</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="59"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="61"/>
         <source>Advanced</source>
         <translation>詳細</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="66"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="67"/>
         <source>Open config directory</source>
         <translation>設定ディレクトリを開く</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="99"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="100"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="103"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="104"/>
         <source>Stop playback when current track or playlist is removed</source>
         <translation>現在のトラックまたはプレイリストが削除されたら再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="107"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="108"/>
         <source>Prevent system sleep while playing</source>
         <translation>再生中はシステムのスリープを抑制</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="113"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="114"/>
         <source>KiB</source>
         <translation>KiB</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="119"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="120"/>
         <source>Stream buffer size:</source>
         <translation>ストリームバッファサイズ :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="127"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="128"/>
         <source>Interface</source>
         <translation>インターフェイス</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="130"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="131"/>
         <source>Show system tray icon</source>
         <translation>システムトレイアイコンを表示</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="134"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="135"/>
         <source>Close to tray instead of quitting</source>
         <translation>終了せずにトレイに格納</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="139"/>
         <source>Override theme&apos;s playlist row height:</source>
         <translation>テーマのプレイリストの行の高さを上書き :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="141"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="142"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="159"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="160"/>
         <source>Language:</source>
         <translation>言語 :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="161"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="227"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="355"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="162"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="228"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="356"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="369"/>
         <source>(requires restart)</source>
         <translation>(再起動が必要)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="170"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="171"/>
         <source>Library</source>
         <translation>ライブラリ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="174"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
         <source>All levels (default)</source>
         <translation>すべての階層 (デフォルト)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="175"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="176"/>
         <source>Top level only</source>
         <translation>最上位のみ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="188"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="189"/>
         <source>Filter scope:</source>
         <translation>フィルター範囲 :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="196"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="197"/>
         <source>Playlist columns</source>
         <translation>プレイリストの列</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="202"/>
         <source>Field</source>
         <translation>フィールド</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="202"/>
         <source>Width %</source>
         <translation>幅 %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="202"/>
         <source>Alignment</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="202"/>
         <source>Stretch</source>
         <translation>伸縮</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="215"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="394"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="395"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="395"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="217"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="217"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="218"/>
         <source>Move up</source>
         <translation>上へ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="218"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="219"/>
         <source>Move down</source>
         <translation>下へ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="219"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="220"/>
         <source>Restore defaults</source>
         <translation>デフォルトに戻す</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="252"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="253"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="253"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="254"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="467"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="336"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="337"/>
         <source>Provider order (drag to reorder, uncheck to disable):</source>
         <translation>プロバイダの順序 (ドラッグで並べ替え、チェックを外して無効化):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="352"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="353"/>
         <source>Single instance mode</source>
         <translation>シングルインスタンスモード</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="363"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="364"/>
         <source>IPC port:</source>
         <translation>IPC ポート :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="377"/>
         <source>Playback log size:</source>
         <translation>再生ログのサイズ :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="380"/>
         <source>entries</source>
         <translation>件</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="387"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="388"/>
         <source>MPRIS blacklist</source>
         <translation>MPRIS ブラックリスト</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="390"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="391"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>MPRIS の送信者名を無視 (例: &quot;wireplumber&quot;):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="404"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="405"/>
         <source>Add MPRIS sender</source>
         <translation>MPRIS 送信者を追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="405"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="406"/>
         <source>Sender name:</source>
         <translation>送信者名 :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="417"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>mpz 終了時に MPD の再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
         <source>Embedded (tags)</source>
-        <translation>埋め込み (タグ)</translation>
+        <translation type="vanished">埋め込み (タグ)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="491"/>
         <source>Sidecar (.lrc, .txt)</source>
-        <translation>外部ファイル (.lrc, .txt)</translation>
+        <translation type="vanished">外部ファイル (.lrc, .txt)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
         <source>LRCLIB (online)</source>
-        <translation>LRCLIB (オンライン)</translation>
+        <translation type="vanished">LRCLIB (オンライン)</translation>
     </message>
 </context>
 <context>
@@ -1290,105 +1287,103 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="63"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="65"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="66"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="68"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="69"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="71"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="72"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="74"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="75"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="77"/>
         <source>Track number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="76"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="78"/>
         <source>Duration</source>
         <translation>長さ</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="78"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="80"/>
         <source>Format</source>
         <translation>フォーマット</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="80"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="82"/>
         <source>Bitrate</source>
         <translation>ビットレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="83"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="85"/>
         <source>Sample rate</source>
         <translation>サンプルレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="86"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="88"/>
         <source>Channels</source>
         <translation>チャンネル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="89"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="91"/>
         <source>Stream url</source>
         <translation>ストリーム URL</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="97"/>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="99"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="101"/>
         <source>File path</source>
         <translation>ファイルパス</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="103"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="105"/>
         <source>CUE start at</source>
         <translation>CUE 開始位置</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="125"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="127"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="129"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="131"/>
         <source>Search on web</source>
         <translation>ウェブ検索</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="180"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="213"/>
         <source>Searching lyrics...</source>
         <translation>歌詞を検索中...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="185"/>
         <source>LRCLIB</source>
-        <translation>LRCLIB</translation>
+        <translation type="vanished">LRCLIB</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="191"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="198"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="206"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="220"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="228"/>
         <source>No lyrics found.</source>
         <translation>歌詞が見つかりません。</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="259"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="281"/>
         <source>Copy to clipboard</source>
         <translation>クリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="267"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
         <source>Open in external viewer</source>
         <translation>外部ビューアで開く</translation>
     </message>
@@ -1403,9 +1398,14 @@
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="111"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="113"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="120"/>
+        <source>Edit tags…</source>
+        <translation>タグを編集…</translation>
     </message>
 </context>
 <context>

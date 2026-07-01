@@ -6,6 +6,7 @@
 #include <QtNetwork>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QElapsedTimer>
 
 FeedbackForm::FeedbackForm(QWidget *parent) : QDialog(parent), ui(new Ui::FeedbackForm), done(false) {
   ui->setupUi(this);
@@ -90,7 +91,13 @@ bool FeedbackForm::send() {
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QNetworkAccessManager nam;
   QNetworkReply *reply = nam.post(request, buildJson());
+  QElapsedTimer deadline;
+  deadline.start();
   while (!reply->isFinished()) {
+    if (deadline.hasExpired(30000)) {
+      reply->abort(); // emits finished with OperationCanceledError
+      break;
+    }
     qApp->processEvents();
   }
 

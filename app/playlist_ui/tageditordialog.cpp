@@ -164,7 +164,7 @@ void TagEditorDialog::update_header() {
     const int idx = _playlist->trackIndex(_tracks.first().uid());
     const int total = _playlist->tracks().size();
     if (idx >= 0) {
-      ui->labelHeader->setText(tr("Track %1 of %2 — %3").arg(idx + 1).arg(total).arg(_tracks.first().formattedTitle()));
+      ui->labelHeader->setText(tr("Track %1 of %2 — %3").arg(idx + 1).arg(total).arg(_tracks.first().filename()));
       return;
     }
   }

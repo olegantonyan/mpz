@@ -11,14 +11,6 @@ namespace PlaylistsUi {
       connect(&client, &MpdClient::Client::playlistUpdated, this, &Model::loadAsync);
     }
 
-  QVariant Model::data(const QModelIndex &index, int role) const {
-    auto pl = list.at(index.row());
-    if (pl && pl->name() == highlight_name) {
-      highlight_uid = pl->uid();
-    }
-    return PlaylistsUi::Model::data(index, role);
-  }
-
     void Model::loadAsync() {
       (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
         auto loadedList = loadMpdPlaylists();
@@ -32,6 +24,7 @@ namespace PlaylistsUi {
       list = loadedList;
       loadPlaylistsOrder();
       sortPlaylistsByOrder();
+      syncHighlightUid();
       endResetModel();
       emit asyncLoadFinished();
       persist();
@@ -83,7 +76,23 @@ namespace PlaylistsUi {
         emit dataChanged(buildIndex(0), buildIndex(list.size() - 1));
       } else {
         highlight_name = playlist->name();
+        highlight_uid = playlist->uid();
         emit dataChanged(itemIndex(playlist), itemIndex(playlist));
+      }
+    }
+
+    // MPD playlists are recreated on every reload, so uids change; re-resolve the
+    // highlighted playlist by name.
+    void Model::syncHighlightUid() {
+      highlight_uid = 0;
+      if (highlight_name.isEmpty()) {
+        return;
+      }
+      for (const auto &pl : std::as_const(list)) {
+        if (pl && pl->name() == highlight_name) {
+          highlight_uid = pl->uid();
+          return;
+        }
       }
     }
 

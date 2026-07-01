@@ -41,6 +41,7 @@ private slots:
   void m3uSkipsUnsupportedExtension();
   void httpEntryProducesStreamTrack();
   void plsStyleFileEntryProducesStreamTrack();
+  void plsStyleFileEntrySupportsMultiDigitIndexes();
 
 private:
   QTemporaryDir tempDir;
@@ -134,7 +135,6 @@ void TestFileParser::httpEntryProducesStreamTrack() {
 }
 
 void TestFileParser::plsStyleFileEntryProducesStreamTrack() {
-  // "FileN=URL" → strip first 6 characters and treat as stream URL.
   const QString pl = tempDir.filePath(QStringLiteral("pls.m3u"));
   QVERIFY(writeFile(pl, "File1=http://radio.example/stream\n"));
   FileParser p{QDir(pl)};
@@ -143,6 +143,22 @@ void TestFileParser::plsStyleFileEntryProducesStreamTrack() {
   QVERIFY(tracks.first().isStream());
   QCOMPARE(tracks.first().url(),
            QUrl(QStringLiteral("http://radio.example/stream")));
+}
+
+void TestFileParser::plsStyleFileEntrySupportsMultiDigitIndexes() {
+  const QString pl = tempDir.filePath(QStringLiteral("multi-digit.pls"));
+  QVERIFY(writeFile(pl,
+    "File10=http://radio.example/tenth\n"
+    "File001=http://radio.example/padded\n"));
+  FileParser p{QDir(pl)};
+  auto tracks = p.tracks_list();
+  QCOMPARE(tracks.size(), 2);
+  QVERIFY(tracks.at(0).isStream());
+  QVERIFY(tracks.at(1).isStream());
+  QCOMPARE(tracks.at(0).url(),
+           QUrl(QStringLiteral("http://radio.example/tenth")));
+  QCOMPARE(tracks.at(1).url(),
+           QUrl(QStringLiteral("http://radio.example/padded")));
 }
 
 QTEST_GUILESS_MAIN(TestFileParser)

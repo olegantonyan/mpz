@@ -1,9 +1,10 @@
 #include "trackinfodialog.h"
 #include "ui_trackinfodialog.h"
 
+#include "tageditordialog.h"
 #include "config/global.h"
-#include "lyrics/lrclibclient.h"
 #include "lyrics/lrcparser.h"
+#include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
 
 #include <fileref.h>
@@ -12,17 +13,17 @@
 
 #include <QMenu>
 #include <QClipboard>
-#include <QDebug>
 #include <QDesktopServices>
 #include <QFile>
 #include <QFileInfo>
 #include <QPixmap>
-#include <QPointer>
 
-TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(parent), ui(new Ui::TrackInfoDialog) {
+TrackInfoDialog::TrackInfoDialog(const Track &track, std::shared_ptr<Playlist::Playlist> playlist, QWidget *parent) :
+  QDialog(parent), ui(new Ui::TrackInfoDialog), _track(track), _playlist(playlist) {
   ui->setupUi(this);
 
-  setWindowTitle(windowTitle() + ": " + track.formattedTitle());
+  base_title = windowTitle();
+  setWindowTitle(base_title + ": " + track.formattedTitle());
   ui->tableView->horizontalHeader()->setVisible(false);
   ui->tableView->verticalHeader()->setVisible(false);
   ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -39,6 +40,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, QWidget *parent) : QDialog(
     ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
   }
   ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
+  ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isMpd() && !track.isStream());
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -152,6 +154,30 @@ void TrackInfoDialog::on_toolButtonOpenFileManager_clicked() {
   revealInFileManager({ track_path });
 }
 
+void TrackInfoDialog::on_toolButtonEditTags_clicked() {
+  TagEditorDialog *dlg = new TagEditorDialog({_track}, _playlist);
+  dlg->setModal(false);
+  connect(dlg, &TagEditorDialog::finished, dlg, &TagEditorDialog::deleteLater);
+  // Queued: the playlist reloads tracks in response to saved() (via tracksChanged), refresh must run after.
+  connect(dlg, &TagEditorDialog::saved, this, &TrackInfoDialog::refresh_track, Qt::QueuedConnection);
+  emit tagEditorOpened(dlg);
+  dlg->show();
+}
+
+void TrackInfoDialog::refresh_track(const QList<quint64> &uids) {
+  if (!_playlist || !uids.contains(_track.uid())) {
+    return;
+  }
+  const Track t = _playlist->trackBy(_track.uid());
+  if (t.uid() != _track.uid()) {
+    return;
+  }
+  _track = t;
+  model.removeRows(0, model.rowCount());
+  setup_table(_track);
+  setWindowTitle(base_title + ": " + _track.formattedTitle());
+}
+
 void TrackInfoDialog::setup_lyrics(const Track &track) {
   if (track.isStream()) {
     ui->lyricsWidget->setVisible(false);
@@ -176,30 +202,26 @@ void TrackInfoDialog::setup_lyrics(const Track &track) {
     }
   }
 
-  if (providers.contains("lrclib") && !track.artist().isEmpty() && !track.title().isEmpty()) {
+  QStringList online;
+  const auto known = Lyrics::ProviderChain::knownProviders();
+  for (const auto &name : providers) {
+    if (known.contains(name)) {
+      online << name;
+    }
+  }
+  if (!online.isEmpty() && !track.artist().isEmpty() && !track.title().isEmpty()) {
     render_lyrics_state(tr("Searching lyrics..."));
-    auto *client = new Lyrics::LrcLibClient(this);
-    QPointer<TrackInfoDialog> guard(this);
-    connect(client, &Lyrics::LrcLibClient::found, this, [guard, client](const QString &lyrics) {
-      if (guard) {
-        guard->render_lyrics(TrackInfoDialog::tr("LRCLIB"), lyrics);
-      }
-      client->deleteLater();
+    auto *chain = new Lyrics::ProviderChain(this);
+    connect(chain, &Lyrics::ProviderChain::found, this, [this, chain](const QString &provider, const QString &lyrics) {
+      render_lyrics(Lyrics::ProviderChain::displayName(provider), lyrics);
+      chain->deleteLater();
     });
-    connect(client, &Lyrics::LrcLibClient::notFound, this, [guard, client]() {
-      if (guard) {
-        guard->render_lyrics_state(TrackInfoDialog::tr("No lyrics found."));
-      }
-      client->deleteLater();
+    connect(chain, &Lyrics::ProviderChain::notFound, this, [this, chain]() {
+      render_lyrics_state(tr("No lyrics found."));
+      chain->deleteLater();
     });
-    connect(client, &Lyrics::LrcLibClient::failed, this, [guard, client](const QString &msg) {
-      if (guard) {
-        qWarning() << "lrclib error:" << msg;
-        guard->render_lyrics_state(TrackInfoDialog::tr("No lyrics found."));
-      }
-      client->deleteLater();
-    });
-    client->fetch(track.artist(), track.title(), track.album(), static_cast<int>(track.duration() / 1000));
+    chain->fetch(online, Lyrics::TrackQuery{track.artist(), track.title(), track.album(),
+                                            static_cast<int>(track.duration() / 1000)});
     return;
   }
 

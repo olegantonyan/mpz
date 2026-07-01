@@ -1,27 +1,43 @@
 #ifndef LYRICS_LRCLIBCLIENT_H
 #define LYRICS_LRCLIBCLIENT_H
 
-#include <QObject>
+#include "lyrics/provider.h"
+
 #include <QString>
-#include <QNetworkAccessManager>
+#include <QVector>
+
+class QNetworkReply;
 
 namespace Lyrics {
-  class LrcLibClient : public QObject {
+  // lrclib.net client. Runs a cascade of progressively looser queries and
+  // stops at the first confident hit; search results are ranked with
+  // TextMatch::bestCandidate instead of first-match-wins.
+  class LrcLibClient : public Provider {
     Q_OBJECT
   public:
     explicit LrcLibClient(QObject *parent = nullptr);
 
-    void fetch(const QString &artist, const QString &title, const QString &album, int duration_seconds);
-
-  signals:
-    void found(const QString &lyrics);
-    void notFound();
-    void failed(const QString &message);
+    void fetch(const TrackQuery &query) override;
 
   private:
-    void searchFallback(const QString &artist, const QString &title);
+    struct Attempt {
+      enum class Kind { Get, Search, SearchQ };
+      Kind kind = Kind::Get;
+      QString artist;
+      QString title;
+      QString album;
+      int duration_seconds = 0;
+    };
 
-    QNetworkAccessManager nam;
+    void addSearchAttempt(const QString &artist, const QString &title);
+    void runNext();
+    void handleGetReply(QNetworkReply *reply);
+    void handleSearchReply(QNetworkReply *reply);
+
+    QVector<Attempt> attempts;
+    int next_attempt = 0;
+    TrackQuery query;
+    QString last_error;
   };
 }
 

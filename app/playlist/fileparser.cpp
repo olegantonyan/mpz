@@ -18,8 +18,15 @@ namespace Playlist {
       result = line;
       is_stream = true;
     } else if (line.startsWith("File", Qt::CaseInsensitive)) { // pls stream
-      result = line.mid(6);
-      is_stream = true;
+      int value_start = 4;
+      while (value_start < line.size() && line.at(value_start).isDigit()) {
+        ++value_start;
+      }
+
+      if (value_start > 4 && value_start < line.size() && line.at(value_start) == '=') {
+        result = line.mid(value_start + 1);
+        is_stream = true;
+      }
     } else if (Loader::is_supported_file(line)) { // probably local m3u
       is_stream = false;
       QFileInfo fi(line);

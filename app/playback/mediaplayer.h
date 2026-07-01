@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#include <QTimer>
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   #include <QAudioOutput>
   #include <QMediaDevices>
@@ -62,6 +63,12 @@ namespace Playback {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
     QMediaDevices media_devices;
+    bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
+    int device_change_epoch = 0; // cancels stale device-switch timer callbacks during event bursts
+    QTimer devices_changed_debounce; // single-shot, coalesces audioOutputsChanged bursts
+    QAudioDevice findPreferredDevice() const;
+    void evaluateAudioDevice();
+    void recoverPlayback();
 #endif
 #ifdef QT6_STREAM_HACKS
     bool suppress_emit_playing_state;
@@ -71,6 +78,7 @@ namespace Playback {
 
     quint64 offset_begin = 0;
     quint64 offset_end = 0;
+    bool soft_advance_pending = false; // a soft CUE boundary just queued nextRequested; swallow the file's EOF StoppedState
     QUrl current_source_url;
     bool synthetic_playing_on_play = false;
     void seek_to_offset_begin();

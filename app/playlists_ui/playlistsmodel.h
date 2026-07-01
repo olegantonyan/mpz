@@ -56,7 +56,7 @@ namespace PlaylistsUi {
     QList<std::shared_ptr<Playlist::Playlist>> list;
     Config::Local &local_conf;
 
-    mutable quint64 highlight_uid = 0;
+    quint64 highlight_uid = 0;
   };
 }
 

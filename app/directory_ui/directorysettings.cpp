@@ -58,6 +58,9 @@ QStringList DirectorySettings::libraryPaths() const {
 
 void DirectorySettings::on_pushButtonAddFolder_clicked() {
   auto dir = QFileDialog::getExistingDirectory(this);
+  if (dir.isEmpty()) {
+    return;
+  }
   auto existing = model.stringList();
   existing.append(dir);
   model.setStringList(existing);
@@ -145,5 +148,4 @@ void DirectorySettings::on_pushButtonUp_clicked() {
 void DirectorySettings::on_pushButtonDown_clicked() {
   moveCurrent(1);
 }
-
 

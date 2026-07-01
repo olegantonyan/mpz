@@ -195,6 +195,9 @@ namespace DirectoryUi {
         return QModelIndex();
       }
       int row = item->parent->children.indexOf(item);
+      if (row < 0) {
+        return QModelIndex();
+      }
       return createIndex(row, 0, item);
     }
 

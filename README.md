@@ -30,7 +30,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Installation
 
-#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia
+#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
 
 **New users:** install from the omnipackage repositories — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
 
@@ -43,9 +43,9 @@ Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built 
 
 </details>
 
-#### Arch
+##### AUR
 
-Use AUR package: https://aur.archlinux.org/packages/mpz/
+Arch AUR package also available if you prefer it over binary repositories: https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
@@ -59,7 +59,7 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
-#### macOS (experimental)
+#### macOS
 
 Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
 

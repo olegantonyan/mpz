@@ -11,7 +11,6 @@
 #include <QDebug>
 #include <QList>
 #include <QActionGroup>
-#include <QHash>
 
 namespace AudioDeviceUi {
   class DevicesMenu : public QMenu {
@@ -37,9 +36,6 @@ namespace AudioDeviceUi {
     void populate();
     void on_selected(QByteArray deviceid);
   };
-
-  static QHash<QByteArray, QString> devices_id_description_cache;
-
 } // namespace AudioDeviceUi
 
 #endif // DEVICESMENU_H

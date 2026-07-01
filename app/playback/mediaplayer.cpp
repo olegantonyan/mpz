@@ -11,6 +11,9 @@ namespace Playback {
   MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid), next_after_stop(true), next_after_stop_cue(true) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     connect(&media_devices, &QMediaDevices::audioOutputsChanged, this, &MediaPlayer::onAudioDevicesChanged);
+    devices_changed_debounce.setSingleShot(true);
+    devices_changed_debounce.setInterval(200); // unplug/replug emits audioOutputsChanged in bursts; coalesce into one evaluation
+    connect(&devices_changed_debounce, &QTimer::timeout, this, &MediaPlayer::evaluateAudioDevice);
     player.setAudioOutput(&audio_output);
     setOutputDevice(output_device_id);
 #endif
@@ -20,15 +23,16 @@ namespace Playback {
       // underflow that would publish a near-ULLONG_MAX duration to the UI.
       emit positionChanged(pos > offset_begin ? pos - offset_begin : 0);
       if (offset_end > 0 && pos >= offset_end) {
-        // Soft CUE boundary: let the underlying file keep playing. If the
-        // upcoming setTrack() points at the same file (sequential/random
-        // same-file CUE) we'll skip setSource entirely; otherwise setSource
-        // will halt playback as usual. next_after_stop is cleared so any
-        // implicit StoppedState that setSource emits doesn't re-fire
-        // nextRequested.
+        // Soft CUE boundary: let the underlying file keep playing and advance to
+        // the next track. If the upcoming setTrack() points at the same file
+        // (same-file CUE) we skip setSource entirely. If this track is the
+        // last/only one in its file, the file hits a natural EOF right after this
+        // — soft_advance_pending makes the StoppedState handler swallow that one
+        // EOF (we've already queued the advance), instead of stopping playback.
         offset_begin = offset_end;
         offset_end = 0;
         next_after_stop = false;
+        soft_advance_pending = true;
         emit positionChanged(0);
         QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
       }
@@ -40,6 +44,13 @@ namespace Playback {
 #endif
       switch (state) {
         case QMediaPlayer::StoppedState:
+          if (soft_advance_pending) {
+            // Natural EOF right after a soft CUE boundary (last/only track in a
+            // file). The boundary already queued nextRequested, so don't stop and
+            // don't re-advance — just consume this one StoppedState.
+            soft_advance_pending = false;
+            break;
+          }
           emit positionChanged(0);
           if (next_after_stop) {
             // Defer one tick so the next setSource/play doesn't re-enter
@@ -135,6 +146,7 @@ namespace Playback {
   void MediaPlayer::emitStateChanged(State state) {
     if (state == PlayingState) {
       next_after_stop = true;
+      soft_advance_pending = false; // a same-file CUE continuation reached PlayingState without an EOF; nothing to swallow
     }
     emit stateChanged(state);
   }
@@ -195,6 +207,7 @@ namespace Playback {
   void MediaPlayer::stop() {
     next_after_stop = false;
     synthetic_playing_on_play = false;
+    soft_advance_pending = false; // honor an explicit stop even if it lands right after a soft boundary
     // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed
     // stop back here; player.stop() is a no-op so synthesise the transition.
     const bool already_stopped = state() == MediaPlayer::StoppedState;
@@ -207,11 +220,13 @@ namespace Playback {
 
   void MediaPlayer::next() {
     next_after_stop = false;
+    soft_advance_pending = false;
     emit nextRequested();
   }
 
   void MediaPlayer::prev() {
     next_after_stop = false;
+    soft_advance_pending = false;
     emit prevRequested();
   }
 
@@ -320,44 +335,110 @@ namespace Playback {
 #endif
     offset_begin = 0;
     offset_end = 0;
+    soft_advance_pending = false;
     current_source_url = QUrl();
     synthetic_playing_on_play = false;
   }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   void MediaPlayer::setOutputDevice(QByteArray deviceid) {
+    output_device_id = deviceid;
+    preferred_device_missing = false;
+    ++device_change_epoch; // invalidate in-flight device-switch timers
     if (deviceid.isEmpty()) {
+      // the ffmpeg backend resolves the sink at open time and doesn't follow
+      // system default changes (a null QAudioDevice doesn't either); pin the
+      // current default and re-pin in evaluateAudioDevice when it changes
+      audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+      return;
+    }
+    const QAudioDevice device = findPreferredDevice();
+    if (device.isNull()) {
+      // configured device not present (e.g. unplugged before startup): fall back
+      // to the default; evaluateAudioDevice switches back when it appears
+      preferred_device_missing = true;
       audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     } else {
-      auto devices = QMediaDevices::audioOutputs();
-      for (const auto &device : std::as_const(devices)) {
-        if (device.id() == deviceid) {
-          audio_output.setDevice(device);
-          break;
-        }
-      }
+      audio_output.setDevice(device);
     }
   }
 
-  void MediaPlayer::onAudioDevicesChanged() {
-    auto devices = QMediaDevices::audioOutputs();
+  QAudioDevice MediaPlayer::findPreferredDevice() const {
+    const auto devices = QMediaDevices::audioOutputs();
     for (const auto &device : std::as_const(devices)) {
       if (device.id() == output_device_id) {
-        // hack to force device change if it was disconnected
-        // desperation delay because sometimes it switches to default and keep playing through it
-        audio_output.setDevice(QMediaDevices::defaultAudioOutput());
-        QTimer timer;
-        QEventLoop loop;
-        timer.setSingleShot(true);
-        timer.setInterval(100);
-        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-        timer.start();
-        loop.exec();
-
-        audio_output.setDevice(device);
-        break;
+        return device;
       }
     }
+    return QAudioDevice();
+  }
+
+  void MediaPlayer::onAudioDevicesChanged() {
+    // also fires when the system default changes — QMediaDevices has no
+    // separate notifier for defaultAudioOutput
+    devices_changed_debounce.start();
+  }
+
+  void MediaPlayer::evaluateAudioDevice() {
+    ++device_change_epoch;
+    const QAudioDevice preferred = findPreferredDevice(); // null in default mode too (empty id matches nothing)
+
+    if (preferred.isNull()) {
+      // default mode, or configured device unplugged: play through the current
+      // default sink; the backend doesn't re-route by itself
+      preferred_device_missing = !output_device_id.isEmpty();
+      const QAudioDevice default_device = QMediaDevices::defaultAudioOutput();
+      if (audio_output.device().id() != default_device.id()) {
+        audio_output.setDevice(default_device);
+        recoverPlayback(); // unwedge in case the pipeline stalled on a dead sink
+      }
+      return;
+    }
+
+    if (!preferred_device_missing && audio_output.device().id() == preferred.id()) {
+      return; // unrelated hotplug: don't disturb playback
+    }
+
+    // configured device replugged: switch back to it. Double-set through default
+    // with a delay because pipewire sometimes keeps the stream on the wrong sink.
+    preferred_device_missing = false;
+    audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+    const int epoch = device_change_epoch;
+    QTimer::singleShot(100, this, [this, epoch]() {
+      if (epoch != device_change_epoch) {
+        return; // superseded by a newer device change
+      }
+      const QAudioDevice device = findPreferredDevice(); // re-resolve, may be gone again
+      if (device.isNull()) {
+        preferred_device_missing = true;
+        audio_output.setDevice(QMediaDevices::defaultAudioOutput());
+      } else {
+        audio_output.setDevice(device);
+      }
+      recoverPlayback();
+    });
+  }
+
+  void MediaPlayer::recoverPlayback() {
+    if (state() != MediaPlayer::PlayingState) {
+      return; // paused/stopped: play() runs unpause_workaround itself
+    }
+    unpause_workaround(); // seek nudge, usually enough to unwedge the backend
+    // watchdog: if position is still frozen after the device switch, escalate to a
+    // direct pause/play cycle. Not this->pause()/play(): those toggle and touch
+    // next_after_stop/stream logic.
+    const qint64 pos_before = player.position();
+    const int epoch = device_change_epoch;
+    QTimer::singleShot(500, this, [this, epoch, pos_before]() {
+      if (epoch != device_change_epoch || state() != MediaPlayer::PlayingState) {
+        return;
+      }
+      if (player.position() != pos_before) {
+        return; // recovered
+      }
+      player.pause();
+      player.play();
+    });
   }
 #endif
 }

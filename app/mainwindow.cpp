@@ -10,6 +10,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHash>
+#include <QTimer>
 
 #include "settings_ui/settingsdialog.h"
 
@@ -89,6 +90,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupSortMenu();
 #ifdef Q_OS_MACOS
   setupMacMenuBar();
+  setupMacMediaControls();
+  setupMacDockMenu();
 #endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
@@ -266,6 +269,16 @@ void MainWindow::setupMpris() {
     global_conf.savePlaybackOrder(val ? "random" : "sequential");
     global_conf.sync();
   });
+}
+#endif
+
+#ifdef Q_OS_MACOS
+void MainWindow::setupMacMediaControls() {
+  mac_media = new MacMediaControls(player, this);
+}
+
+void MainWindow::setupMacDockMenu() {
+  mac_dock = new MacDockMenu(player, this);
 }
 #endif
 
@@ -561,6 +574,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
     loop.quit();
   });
 
+  QTimer::singleShot(60000, &loop, &QEventLoop::quit); // deadline: don't hang startup if loaded never fires
   emit library->createNewPlaylist(preload_files, "");
   loop.exec();
   if (pl != nullptr && pl->tracks().size() > 0) {
@@ -650,6 +664,11 @@ void MainWindow::setupMacMenuBar() {
   auto *website = help->addAction(tr("mpz Website"));
   connect(website, &QAction::triggered, this, []() {
     QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
+  });
+
+  auto *github = help->addAction(tr("mpz GitHub"));
+  connect(github, &QAction::triggered, this, []() {
+    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
   });
 
   auto *feedback = help->addAction(tr("Send Feedback…"));

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.0.10 LANGUAGES CXX C)
+project(mpz VERSION 2.0.12 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -44,8 +44,15 @@ set(PROJECT_SOURCES
   app/config/storage.cpp
   app/config/value.cpp
   app/coverart/embedded.cpp
+  app/lyrics/cache.cpp
   app/lyrics/lrclibclient.cpp
   app/lyrics/lrcparser.cpp
+  app/lyrics/lyricsovhclient.cpp
+  app/lyrics/neteaseclient.cpp
+  app/lyrics/provider.cpp
+  app/lyrics/providerchain.cpp
+  app/lyrics/qqmusicclient.cpp
+  app/lyrics/textmatch.cpp
   app/directory_ui/directorycontroller.cpp
   app/directory_ui/directorysettings.cpp
   app/feedback_ui/feedbackform.cpp
@@ -156,6 +163,11 @@ if (WIN32)
   list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
 endif()
 
+if (APPLE)
+  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp)
+  set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+endif()
+
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
@@ -175,7 +187,8 @@ if (WIN32)
 endif()
 
 if (APPLE)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "-framework IOKit")
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+    "-framework IOKit" "-framework MediaPlayer" "-framework AppKit" "-framework Foundation")
 endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
