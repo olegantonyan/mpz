@@ -1,6 +1,8 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
+#include "config/global.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -10,7 +12,7 @@ namespace Ui {
 class AboutDialog : public QDialog {
   Q_OBJECT
 public:
-  explicit AboutDialog(QWidget *parent = nullptr);
+  explicit AboutDialog(Config::Global &global_c, QWidget *parent = nullptr);
   ~AboutDialog();
 
   static void show_changelog();

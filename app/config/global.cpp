@@ -34,6 +34,14 @@ namespace Config {
     storage.set("tray_icon_enabled", Config::Value(arg));
   }
 
+  bool Global::disableAutoUpdateCheck() const {
+    return storage.get("disable_auto_update_check").get<bool>();
+  }
+
+  void Global::saveDisableAutoUpdateCheck(bool arg) {
+    storage.set("disable_auto_update_check", Config::Value(arg));
+  }
+
   int Global::streamBufferSize() const {
     return storage.get("stream_buffer_size").get<int>();
   }

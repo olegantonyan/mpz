@@ -136,6 +136,12 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());
   iv->addWidget(check_minimize_to_tray);
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  check_auto_update = new QCheckBox(tr("Check for updates on startup"));
+  check_auto_update->setChecked(!global_conf.disableAutoUpdateCheck());
+  iv->addWidget(check_auto_update);
+#endif
+
   check_row_height = new QCheckBox(tr("Override theme's playlist row height:"));
   spin_row_height = new QSpinBox;
   spin_row_height->setRange(8, 48);
@@ -579,6 +585,9 @@ void SettingsDialog::apply() {
   // Interface
   global_conf.saveTrayIconEnabled(check_tray_icon->isChecked());
   global_conf.saveMinimizeToTray(check_minimize_to_tray->isChecked());
+  if (check_auto_update) {
+    global_conf.saveDisableAutoUpdateCheck(!check_auto_update->isChecked());
+  }
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());

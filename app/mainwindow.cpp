@@ -420,6 +420,9 @@ void MainWindow::setupStatusBar() {
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 void MainWindow::setupUpdateChecker() {
+  if (global_conf.disableAutoUpdateCheck()) {
+    return;
+  }
   update_checker = new UpdateChecker(this);
   connect(update_checker, &UpdateChecker::updateAvailable, this, [this](const QString &version, const QString &url) {
     status_label_update->setText(tr("Update available:") + QString(" <a href=\"%1\">v%2</a>").arg(url, version));
@@ -621,7 +624,7 @@ void MainWindow::setupMacMenuBar() {
 
   auto *about = app_menu->addAction(tr("About mpz"));
   about->setMenuRole(QAction::AboutRole);
-  connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
+  connect(about, &QAction::triggered, this, [this]() { AboutDialog(global_conf).exec(); });
 
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
