@@ -64,6 +64,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="updateLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="taglineLabel">
          <property name="text">
           <string>Music player for big local collections</string>
