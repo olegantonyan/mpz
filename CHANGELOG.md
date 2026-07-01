@@ -4,6 +4,7 @@
 
 - macOS global media controls
 - macOS dock menu
+- update check on macOS and Windows;
 
 ### Fixed
 

@@ -3,6 +3,10 @@
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  #include "update_check/updatechecker.h"
+#endif
+
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
@@ -12,7 +16,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 
-AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
+AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
 
   ui->versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
@@ -23,6 +27,22 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   ui->linksLabel->setText(QString("<a href=\"https://mpz-player.org\">%1</a> &middot; "
                                   "<a href=\"https://github.com/olegantonyan/mpz\">%2</a>")
                           .arg(tr("Website"), tr("GitHub")));
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  if (!global_c.disableAutoUpdateCheck()) {
+    ui->updateLabel->setTextFormat(Qt::RichText);
+    ui->updateLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->updateLabel->setOpenExternalLinks(true);
+    auto *checker = new UpdateChecker(this);
+    connect(checker, &UpdateChecker::updateAvailable, this, [this](const QString &version, const QString &url) {
+      ui->updateLabel->setText(tr("Update available:") + QString(" <a href=\"%1\">v%2</a>").arg(url, version));
+      ui->updateLabel->show();
+    });
+    checker->check();
+  }
+#else
+  Q_UNUSED(global_c)
+#endif
 
   ui->copyrightLabel->setTextFormat(Qt::RichText);
   ui->copyrightLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);

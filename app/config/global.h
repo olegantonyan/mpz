@@ -24,6 +24,9 @@ namespace Config {
     bool trayIconEnabled() const;
     void saveTrayIconEnabled(bool arg);
 
+    bool disableAutoUpdateCheck() const;
+    void saveDisableAutoUpdateCheck(bool arg);
+
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
 

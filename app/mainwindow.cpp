@@ -14,6 +14,10 @@
 
 #include "settings_ui/settingsdialog.h"
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  #include "update_check/updatechecker.h"
+#endif
+
 #ifdef Q_OS_MACOS
   #include "about_ui/aboutdialog.h"
   #include "feedback_ui/feedbackform.h"
@@ -115,6 +119,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupMpdOrder();
 #endif
   CoverArt::Covers::instance(modus_operandi);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  setupUpdateChecker();
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -388,6 +396,17 @@ void MainWindow::setupStatusBar() {
     }
   });
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  ui->statusbar->addWidget(new QWidget(this), 1);
+  status_label_update = new QLabel(this);
+  status_label_update->setTextFormat(Qt::RichText);
+  status_label_update->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  status_label_update->setOpenExternalLinks(true);
+  status_label_update->hide();
+  ui->statusbar->addWidget(status_label_update, 0);
+  ui->statusbar->addWidget(new QWidget(this), 1);
+#endif
+
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -398,6 +417,20 @@ void MainWindow::setupStatusBar() {
     }
   });
 }
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+void MainWindow::setupUpdateChecker() {
+  if (global_conf.disableAutoUpdateCheck()) {
+    return;
+  }
+  update_checker = new UpdateChecker(this);
+  connect(update_checker, &UpdateChecker::updateAvailable, this, [this](const QString &version, const QString &url) {
+    status_label_update->setText(tr("Update available:") + QString(" <a href=\"%1\">v%2</a>").arg(url, version));
+    status_label_update->show();
+  });
+  QTimer::singleShot(0, this, [this]() { update_checker->check(); });
+}
+#endif
 
 void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this);
@@ -591,7 +624,7 @@ void MainWindow::setupMacMenuBar() {
 
   auto *about = app_menu->addAction(tr("About mpz"));
   about->setMenuRole(QAction::AboutRole);
-  connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
+  connect(about, &QAction::triggered, this, [this]() { AboutDialog(global_conf).exec(); });
 
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);

@@ -44,6 +44,10 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+class UpdateChecker;
+#endif
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -73,6 +77,10 @@ private:
   MainMenu *main_menu = nullptr;
   StatusBarLabel *status_label = nullptr;
   QLabel *status_label_right = nullptr;
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  QLabel *status_label_update = nullptr;
+  UpdateChecker *update_checker = nullptr;
+#endif
 #if defined(MPRIS_ENABLE)
   Mpris *mpris = nullptr;
 #endif
@@ -100,6 +108,9 @@ private:
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+  void setupUpdateChecker();
+#endif
 #if defined(MPRIS_ENABLE)
   void setupMpris();
 #endif

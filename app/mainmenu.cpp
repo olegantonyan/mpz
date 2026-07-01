@@ -28,7 +28,7 @@ void MainMenu::on_open() {
     dlg.exec();
   });
   connect(&about, &QAction::triggered, [=]() {
-    AboutDialog().exec();
+    AboutDialog(global_conf).exec();
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
