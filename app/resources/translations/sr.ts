@@ -550,6 +550,22 @@
         <source>Report a Bug…</source>
         <translation>Пријави грешку…</translation>
     </message>
+    <message>
+        <source>Window</source>
+        <translation>Прозор</translation>
+    </message>
+    <message>
+        <source>Minimize</source>
+        <translation>Умањи</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation>Зумирај</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Затвори</translation>
+    </message>
 </context>
 <context>
     <name>ModusOperandi</name>

@@ -11,6 +11,7 @@
 #include <QTableWidgetItem>
 #include <QHash>
 #include <QTimer>
+#include <QFontDatabase>
 
 #include "settings_ui/settingsdialog.h"
 
@@ -63,6 +64,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
+  ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
@@ -691,6 +693,27 @@ void MainWindow::setupMacMenuBar() {
   auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
   shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
   connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
+
+  auto *window_menu = bar->addMenu(tr("Window"));
+
+  auto *minimize = window_menu->addAction(tr("Minimize"));
+  minimize->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
+  connect(minimize, &QAction::triggered, this, &QWidget::showMinimized);
+
+  auto *zoom = window_menu->addAction(tr("Zoom"));
+  connect(zoom, &QAction::triggered, this, [this]() {
+    if (isMaximized()) {
+      showNormal();
+    } else {
+      showMaximized();
+    }
+  });
+
+  window_menu->addSeparator();
+
+  auto *close_window = window_menu->addAction(tr("Close"));
+  close_window->setShortcut(QKeySequence::Close);
+  connect(close_window, &QAction::triggered, this, [this]() { hide(); });
 
   auto *help = bar->addMenu(tr("Help"));
 

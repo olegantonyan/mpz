@@ -550,6 +550,22 @@
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>
+    <message>
+        <source>Window</source>
+        <translation>ウインドウ</translation>
+    </message>
+    <message>
+        <source>Minimize</source>
+        <translation>しまう</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation>拡大/縮小</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>閉じる</translation>
+    </message>
 </context>
 <context>
     <name>ModusOperandi</name>
