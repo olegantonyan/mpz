@@ -21,6 +21,7 @@ namespace PlaylistUi {
   public slots:
     void show(const QPoint &pos);
     void on_remove();
+    void on_trackInfo();
 
   signals:
     void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
@@ -42,7 +43,6 @@ namespace PlaylistUi {
     void on_clearFilter();
     void on_copyName();
     void on_showInFilemanager();
-    void on_trackInfo();
     void on_editTags();
   };
 }

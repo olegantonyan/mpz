@@ -64,11 +64,6 @@
       </item>
       <item>
        <widget class="QLabel" name="timeLabel">
-        <property name="font">
-         <font>
-          <family>Monospace</family>
-         </font>
-        </property>
         <property name="toolTip">
          <string>Track duration</string>
         </property>

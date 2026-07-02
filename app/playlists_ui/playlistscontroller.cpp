@@ -102,7 +102,11 @@ namespace PlaylistsUi {
   void Controller::eventFilterTableView(QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
       QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
-      if (keyevent->key() == Qt::Key_Delete) {
+      if (keyevent->key() == Qt::Key_Delete
+#ifdef Q_OS_MACOS
+          || keyevent->key() == Qt::Key_Backspace
+#endif
+         ) {
         for (const auto &i : view->selectionModel()->selectedIndexes()) {
           on_removeItem(i);
         }

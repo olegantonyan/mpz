@@ -37,6 +37,8 @@
         <string>org.xiph.flac</string>
         <string>org.xiph.ogg-audio</string>
         <string>org.xiph.opus</string>
+        <string>org.monkeysaudio.ape</string>
+        <string>com.sony.dsf</string>
       </array>
     </dict>
     <dict>
@@ -48,6 +50,126 @@
         <string>public.m3u-playlist</string>
         <string>public.pls-playlist</string>
       </array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeName</key>                <string>Cue sheet</string>
+      <key>CFBundleTypeRole</key>                <string>Viewer</string>
+      <key>LSHandlerRank</key>                   <string>Alternate</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>org.mpz-player.cue-sheet</string>
+      </array>
+    </dict>
+  </array>
+
+  <key>UTImportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>org.xiph.flac</string>
+      <key>UTTypeDescription</key>      <string>FLAC audio</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.audio</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>flac</string></array>
+        <key>public.mime-type</key>
+        <array>
+          <string>audio/flac</string>
+          <string>audio/x-flac</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>org.xiph.ogg-audio</string>
+      <key>UTTypeDescription</key>      <string>Ogg audio</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.audio</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array>
+          <string>ogg</string>
+          <string>oga</string>
+        </array>
+        <key>public.mime-type</key>
+        <array>
+          <string>audio/ogg</string>
+          <string>audio/x-vorbis+ogg</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>org.xiph.opus</string>
+      <key>UTTypeDescription</key>      <string>Opus audio</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.audio</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>opus</string></array>
+        <key>public.mime-type</key>
+        <array><string>audio/opus</string></array>
+      </dict>
+    </dict>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>org.monkeysaudio.ape</string>
+      <key>UTTypeDescription</key>      <string>Monkey's Audio</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.audio</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>ape</string></array>
+        <key>public.mime-type</key>
+        <array>
+          <string>audio/x-ape</string>
+          <string>audio/x-monkeys-audio</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>com.sony.dsf</string>
+      <key>UTTypeDescription</key>      <string>DSD audio</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.audio</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>dsf</string></array>
+        <key>public.mime-type</key>
+        <array><string>audio/x-dsf</string></array>
+      </dict>
+    </dict>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>public.pls-playlist</string>
+      <key>UTTypeDescription</key>      <string>PLS playlist</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.text</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>pls</string></array>
+        <key>public.mime-type</key>
+        <array><string>audio/x-scpls</string></array>
+      </dict>
+    </dict>
+  </array>
+
+  <key>UTExportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key>       <string>org.mpz-player.cue-sheet</string>
+      <key>UTTypeDescription</key>      <string>Cue sheet</string>
+      <key>UTTypeConformsTo</key>
+      <array><string>public.text</string></array>
+      <key>UTTypeTagSpecification</key>
+      <dict>
+        <key>public.filename-extension</key>
+        <array><string>cue</string></array>
+        <key>public.mime-type</key>
+        <array><string>application/x-cue</string></array>
+      </dict>
     </dict>
   </array>
 </dict>

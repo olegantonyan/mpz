@@ -180,8 +180,14 @@ namespace PlaylistUi {
   void Controller::eventFilterTableView(QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
       QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
-      if (keyevent->key() == Qt::Key_Delete) {
+      if (keyevent->key() == Qt::Key_Delete
+#ifdef Q_OS_MACOS
+          || keyevent->key() == Qt::Key_Backspace
+#endif
+         ) {
         context_menu->on_remove();
+      } else if (keyevent->key() == Qt::Key_I && keyevent->modifiers().testFlag(Qt::ControlModifier)) {
+        context_menu->on_trackInfo();
       }
     }
   }
