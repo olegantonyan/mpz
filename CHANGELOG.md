@@ -2,6 +2,8 @@
 
 ### Added
 
+- macOS DMG contains link to /Applicaions for simplifying the installation
+
 ### Fixed
 
 ### Misc
