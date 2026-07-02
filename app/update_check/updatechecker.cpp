@@ -3,7 +3,9 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
@@ -100,7 +102,7 @@ bool UpdateChecker::isNewer(const QString &remoteTag, const QString &localVersio
 }
 
 QString UpdateChecker::cachePath() const {
-  return QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mpz_update_check.json";
+  return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QDir::separator() + "mpz_update_check.json";
 }
 
 bool UpdateChecker::readCache(qint64 &last_check, QString &version, QString &url) const {
@@ -128,9 +130,11 @@ void UpdateChecker::writeCache(const QString &version, const QString &url) {
   obj.insert("version", version);
   obj.insert("url", url);
 
-  QFile f(cachePath());
+  const QString path = cachePath();
+  QDir().mkpath(QFileInfo(path).absolutePath());
+  QFile f(path);
   if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    qWarning() << "update check: cannot write cache" << cachePath();
+    qWarning() << "update check: cannot write cache" << path;
     return;
   }
   f.write(QJsonDocument(obj).toJson(QJsonDocument::Compact));
