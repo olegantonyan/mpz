@@ -79,12 +79,14 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
   populateMprisBlacklist();
   fitColumnsTableHeight();
 
+#ifndef Q_OS_MACOS
   // Minimize-to-tray depends on tray-icon being enabled.
   check_minimize_to_tray->setEnabled(check_tray_icon->isChecked());
   connect(check_tray_icon, &QCheckBox::toggled,
           check_minimize_to_tray, &QCheckBox::setEnabled);
 
   tray_was_enabled = check_tray_icon->isChecked();
+#endif
 
   connect(button_box, &QDialogButtonBox::accepted, this, &SettingsDialog::accept);
   connect(button_box, &QDialogButtonBox::rejected, this, &SettingsDialog::reject);
@@ -128,6 +130,9 @@ QWidget *SettingsDialog::buildGeneralTab() {
   auto *gb_iface = new QGroupBox(tr("Interface"));
   auto *iv = new QVBoxLayout(gb_iface);
 
+#ifndef Q_OS_MACOS
+  // On macOS the tray icon is replaced by native surfaces (Control Center, Dock
+  // menu, menu bar) and close hides rather than quits, so both are meaningless.
   check_tray_icon = new QCheckBox(tr("Show system tray icon"));
   check_tray_icon->setChecked(global_conf.trayIconEnabled());
   iv->addWidget(check_tray_icon);
@@ -135,6 +140,7 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_minimize_to_tray = new QCheckBox(tr("Close to tray instead of quitting"));
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());
   iv->addWidget(check_minimize_to_tray);
+#endif
 
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
   check_auto_update = new QCheckBox(tr("Check for updates on startup"));
@@ -583,8 +589,10 @@ void SettingsDialog::apply() {
   global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
 
   // Interface
+#ifndef Q_OS_MACOS
   global_conf.saveTrayIconEnabled(check_tray_icon->isChecked());
   global_conf.saveMinimizeToTray(check_minimize_to_tray->isChecked());
+#endif
   if (check_auto_update) {
     global_conf.saveDisableAutoUpdateCheck(!check_auto_update->isChecked());
   }
@@ -615,11 +623,13 @@ void SettingsDialog::apply() {
   global_conf.sync();
   local_conf.sync();
 
+#ifndef Q_OS_MACOS
   const bool tray_now = check_tray_icon->isChecked();
   if (tray_now != tray_was_enabled) {
     tray_was_enabled = tray_now;
     emit trayIconToggled();
   }
+#endif
 }
 
 void SettingsDialog::onButtonBoxClicked(QAbstractButton *btn) {

@@ -84,6 +84,12 @@ int main(int argc, char *argv[]) {
 
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
+#ifdef Q_OS_MACOS
+  // The main window hides (not quits) on close, so don't let the app exit when
+  // the last visible window — e.g. a dialog while the window is hidden — closes.
+  // MainWindow::requestQuit() quits explicitly on Cmd-Q / menu Quit.
+  a.setQuitOnLastWindowClosed(false);
+#endif
   QString version = VERSION;
 #ifdef PACKAGE_VERSION
   if (QStringLiteral(PACKAGE_VERSION) != version) {

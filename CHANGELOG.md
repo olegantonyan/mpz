@@ -4,6 +4,7 @@
 
 - macOS DMG contains link to /Applicaions for simplifying the installation
 - hide hamburger icon on macOS in favor of native menubar
+- on macOS closing the window hides it and keeps playing (Cmd+Q to quit); tray icon removed in favor of native Control Center/Dock controls
 
 ### Fixed
 

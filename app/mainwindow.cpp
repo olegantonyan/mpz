@@ -164,11 +164,21 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+#ifdef Q_OS_MACOS
+  // Native Mac idiom for a media player: the red button / Cmd-W hides the
+  // window and playback keeps going; only Cmd-Q (requestQuit) really quits.
+  if (!quitting) {
+    hide();
+    event->ignore();
+    return;
+  }
+#else
   if (!quitting && trayicon != nullptr && global_conf.trayIconEnabled() && global_conf.minimizeToTray()) {
     hide();
     event->ignore();
     return;
   }
+#endif
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
@@ -186,6 +196,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 void MainWindow::requestQuit() {
   quitting = true;
   close();
+#ifdef Q_OS_MACOS
+  // quitOnLastWindowClosed is off on macOS (see main.cpp) so closing windows
+  // no longer ends the event loop — quit explicitly.
+  qApp->quit();
+#endif
 }
 
 #ifdef Q_OS_MACOS
@@ -326,6 +341,11 @@ void MainWindow::setupMainMenu() {
 }
 
 void MainWindow::setupTrayIcon() {
+#ifdef Q_OS_MACOS
+  // No Qt status item on macOS: Control Center / media keys (MacMediaControls),
+  // the Dock menu (MacDockMenu) and the native menu bar already cover it.
+  return;
+#else
   if (!global_conf.trayIconEnabled()) {
     if (trayicon != nullptr) {
       trayicon->hide();
@@ -348,6 +368,7 @@ void MainWindow::setupTrayIcon() {
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
   connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
+#endif
 }
 
 void MainWindow::setupPlaybackDispatch() {
