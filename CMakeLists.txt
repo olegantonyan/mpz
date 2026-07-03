@@ -152,10 +152,11 @@ if (ENABLE_DBUS)
 endif()
 
 if (WIN32)
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
+  if(MINGW AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
     # Force MinGW's windres; CMake 3.28+ may otherwise pick up llvm-rc / rc.exe,
     # whose flags differ from the ones below. CMAKE_RC_COMPILER_INIT must be
     # set BEFORE enable_language("RC") to influence the compiler search.
+    # MSVC (used for the ARM64 build) uses rc.exe with CMake's default handling.
     set(CMAKE_RC_COMPILER_INIT windres)
     set(CMAKE_RC_FLAGS "--input-format=rc --output-format=coff")
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> --input-format=rc --output-format=coff -i <SOURCE> -o <OBJECT>")

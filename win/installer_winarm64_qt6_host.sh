@@ -5,7 +5,7 @@ source `dirname $0`/_env.sh
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
 VERSION=$(`dirname $0`/_extract_version.sh)
 OUTPUT_DIR=${MPZ_OUTPUT_DIR:-$HOME/Desktop}
-TMP_DIR=$(mktemp -d -t mpz-build-win64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
+TMP_DIR=$(mktemp -d -t mpz-build-winarm64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
 cp -R $SRC_DIR/win/installer .
@@ -13,7 +13,7 @@ mkdir installer/packages/mpz/data
 
 ARTIFACT_PATH=installer/packages/mpz/data/
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win-x86_64-qt6-installer.exe
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win-arm64-qt6-installer.exe
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -24,10 +24,12 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
     EXTRA_CMAKE_ARGS="-DPACKAGE_VERSION=$PACKAGE_VERSION"
 fi
 
+# See portable_winarm64_qt6_host.sh for notes on the MSVC/windeployqt setup.
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
 cp ./mpz.exe $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
+copy_vc_runtime "$ARTIFACT_PATH"
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/
@@ -41,5 +43,3 @@ cat ./packages/mpz/meta/package.xml
 
 binarycreator.exe --offline-only -c config/config.xml -p packages $ARTIFACT_NAME
 cp "./$ARTIFACT_NAME" "$OUTPUT_DIR/"
-
-
