@@ -3,7 +3,7 @@
 ### Added
 
 - macOS DMG contains link to /Applicaions for simplifying the installation
-- varios macOS UI/UX improvements
+- hide hamburger icon on macOS in favor of native menubar
 
 ### Fixed
 

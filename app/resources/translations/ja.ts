@@ -250,6 +250,139 @@
     </message>
 </context>
 <context>
+    <name>MacMenuBar</name>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="29"/>
+        <source>mpz</source>
+        <translation>mpz</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="31"/>
+        <source>About mpz</source>
+        <translation>mpz について</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="35"/>
+        <source>Settings…</source>
+        <translation>設定…</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="40"/>
+        <source>Quit mpz</source>
+        <translation>mpz を終了</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="45"/>
+        <source>Playback</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="47"/>
+        <source>Play / Pause</source>
+        <translation>再生 / 一時停止</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="51"/>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="56"/>
+        <source>Next Track</source>
+        <translation>次のトラック</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="60"/>
+        <source>Previous Track</source>
+        <translation>前のトラック</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="66"/>
+        <source>Volume Up</source>
+        <translation>音量を上げる</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="70"/>
+        <source>Volume Down</source>
+        <translation>音量を下げる</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="78"/>
+        <source>Output Device</source>
+        <translation>出力デバイス</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="90"/>
+        <source>mpd update</source>
+        <translation>mpd を更新</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="100"/>
+        <source>View</source>
+        <translation>表示</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="101"/>
+        <source>Sort</source>
+        <translation>並び替え</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="106"/>
+        <source>Playback Log</source>
+        <translation>再生ログ</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="110"/>
+        <source>Keyboard Shortcuts</source>
+        <translation>キーボードショートカット</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="114"/>
+        <source>Window</source>
+        <translation>ウインドウ</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="116"/>
+        <source>Minimize</source>
+        <translation>しまう</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="120"/>
+        <source>Zoom</source>
+        <translation>拡大/縮小</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
+        <source>Close</source>
+        <translation>閉じる</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="135"/>
+        <source>Help</source>
+        <translation>ヘルプ</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="137"/>
+        <source>mpz Website</source>
+        <translation>mpz ウェブサイト</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="142"/>
+        <source>mpz GitHub</source>
+        <translation>mpz GitHub</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="147"/>
+        <source>Send Feedback…</source>
+        <translation>フィードバックを送る…</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="150"/>
+        <source>Report a Bug…</source>
+        <translation>バグを報告…</translation>
+    </message>
+</context>
+<context>
     <name>MainMenu</name>
     <message>
         <location filename="../../mainmenu.cpp" line="17"/>
@@ -296,7 +429,6 @@
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="23"/>
-        <location filename="../../mainwindow.cpp" line="645"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
@@ -321,121 +453,120 @@
         <translation>次のトラック</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="73"/>
+        <location filename="../../mainwindow.ui" line="68"/>
         <source>Track duration</source>
         <translation>トラック長</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="95"/>
+        <location filename="../../mainwindow.ui" line="90"/>
         <source>Background operation running</source>
         <translation>バックグラウンド処理実行中</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="112"/>
+        <location filename="../../mainwindow.ui" line="107"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="102"/>
-        <location filename="../../mainwindow.cpp" line="682"/>
+        <location filename="../../mainwindow.ui" line="97"/>
         <source>Sort</source>
         <translation>並び替え</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="125"/>
+        <location filename="../../mainwindow.ui" line="120"/>
         <source>🎧 Output</source>
         <translation>🎧 出力</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="132"/>
+        <location filename="../../mainwindow.ui" line="127"/>
         <source>Main menu</source>
         <translation>メインメニュー</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="153"/>
+        <location filename="../../mainwindow.ui" line="148"/>
         <source>Configure library folders</source>
         <translation>ライブラリフォルダーを設定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="156"/>
+        <location filename="../../mainwindow.ui" line="151"/>
         <source>⚙</source>
         <translation>⚙</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="163"/>
+        <location filename="../../mainwindow.ui" line="158"/>
         <source>Select library folder</source>
         <translation>ライブラリフォルダーを選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="179"/>
+        <location filename="../../mainwindow.ui" line="174"/>
         <source>Filter library</source>
         <translation>ライブラリをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="193"/>
+        <location filename="../../mainwindow.ui" line="188"/>
         <source>Filter playlists</source>
         <translation>プレイリストをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="216"/>
+        <location filename="../../mainwindow.ui" line="211"/>
         <source>Filter tracks</source>
         <translation>トラックをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="223"/>
+        <location filename="../../mainwindow.ui" line="218"/>
         <source>Playback follows selection</source>
         <translation>選択に連動して再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="226"/>
+        <location filename="../../mainwindow.ui" line="221"/>
         <source>Playback follows cursor</source>
         <translation>カーソルに連動して再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="233"/>
+        <location filename="../../mainwindow.ui" line="228"/>
         <source>Order:</source>
         <translation>順序 :</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="240"/>
+        <location filename="../../mainwindow.ui" line="235"/>
         <source>global</source>
         <translation>全体</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="247"/>
+        <location filename="../../mainwindow.ui" line="242"/>
         <source>Default playback order</source>
         <translation>デフォルトの再生順序</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="254"/>
+        <location filename="../../mainwindow.ui" line="249"/>
         <source>playlist</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="261"/>
+        <location filename="../../mainwindow.ui" line="256"/>
         <source>Override playback for current playlist</source>
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="210"/>
-        <location filename="../../mainwindow.cpp" line="244"/>
+        <location filename="../../mainwindow.cpp" line="204"/>
+        <location filename="../../mainwindow.cpp" line="238"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="211"/>
-        <location filename="../../mainwindow.cpp" line="243"/>
+        <location filename="../../mainwindow.cpp" line="205"/>
+        <location filename="../../mainwindow.cpp" line="237"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="212"/>
-        <location filename="../../mainwindow.cpp" line="245"/>
+        <location filename="../../mainwindow.cpp" line="206"/>
+        <location filename="../../mainwindow.cpp" line="239"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="242"/>
+        <location filename="../../mainwindow.cpp" line="236"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
@@ -454,117 +585,6 @@
         <location filename="../../mainwindow.cpp" line="428"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="623"/>
-        <source>mpz</source>
-        <translation>mpz</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="625"/>
-        <source>About mpz</source>
-        <translation>mpz について</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="629"/>
-        <source>Settings…</source>
-        <translation>設定…</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="634"/>
-        <source>Quit mpz</source>
-        <translation>mpz を終了</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="639"/>
-        <source>Playback</source>
-        <translation>再生</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="641"/>
-        <source>Play / Pause</source>
-        <translation>再生 / 一時停止</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="650"/>
-        <source>Next Track</source>
-        <translation>次のトラック</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="654"/>
-        <source>Previous Track</source>
-        <translation>前のトラック</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="660"/>
-        <source>Volume Up</source>
-        <translation>音量を上げる</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="664"/>
-        <source>Volume Down</source>
-        <translation>音量を下げる</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="672"/>
-        <source>Output Device</source>
-        <translation>出力デバイス</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="681"/>
-        <source>View</source>
-        <translation>表示</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="687"/>
-        <source>Playback Log</source>
-        <translation>再生ログ</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="691"/>
-        <source>Keyboard Shortcuts</source>
-        <translation>キーボードショートカット</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="695"/>
-        <source>Help</source>
-        <translation>ヘルプ</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="697"/>
-        <source>mpz Website</source>
-        <translation>mpz ウェブサイト</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="702"/>
-        <source>mpz GitHub</source>
-        <translation>mpz GitHub</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="707"/>
-        <source>Send Feedback…</source>
-        <translation>フィードバックを送る…</translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="710"/>
-        <source>Report a Bug…</source>
-        <translation>バグを報告…</translation>
-    </message>
-    <message>
-        <source>Window</source>
-        <translation>ウインドウ</translation>
-    </message>
-    <message>
-        <source>Minimize</source>
-        <translation>しまう</translation>
-    </message>
-    <message>
-        <source>Zoom</source>
-        <translation>拡大/縮小</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>閉じる</translation>
     </message>
 </context>
 <context>
@@ -962,131 +982,130 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
-        <location filename="../../shortcuts.cpp" line="74"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="75"/>
         <source>Open shortcuts dialog</source>
         <translation>ショートカットダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
-        <location filename="../../shortcuts.cpp" line="75"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
+        <location filename="../../shortcuts.cpp" line="76"/>
         <source>Jump to playing track</source>
         <translation>再生中のトラックにジャンプ</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="51"/>
-        <location filename="../../shortcuts.cpp" line="76"/>
+        <location filename="../../shortcuts.cpp" line="52"/>
+        <location filename="../../shortcuts.cpp" line="77"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="35"/>
-        <location filename="../../shortcuts.cpp" line="62"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Focus on library</source>
         <translation>ライブラリにフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="26"/>
-        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="54"/>
         <source>Play / Pause</source>
         <translation>再生 / 一時停止</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="32"/>
-        <location filename="../../shortcuts.cpp" line="59"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Volume up</source>
         <translation>音量を上げる</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="33"/>
-        <location filename="../../shortcuts.cpp" line="60"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Volume down</source>
         <translation>音量を下げる</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="34"/>
-        <location filename="../../shortcuts.cpp" line="61"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="36"/>
-        <location filename="../../shortcuts.cpp" line="63"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Focus on playlists</source>
         <translation>プレイリスト一覧にフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="37"/>
-        <location filename="../../shortcuts.cpp" line="64"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Focus on playlist</source>
         <translation>プレイリスト内容にフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="40"/>
-        <location filename="../../shortcuts.cpp" line="65"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Focus on library filter</source>
         <translation>ライブラリフィルターにフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="41"/>
-        <location filename="../../shortcuts.cpp" line="66"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Focus on playlists filter</source>
         <translation>プレイリスト一覧フィルターにフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="42"/>
-        <location filename="../../shortcuts.cpp" line="67"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Focus on playlist filter</source>
         <translation>プレイリスト内容フィルターにフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
-        <location filename="../../shortcuts.cpp" line="68"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Open main menu</source>
         <translation>メインメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
-        <location filename="../../shortcuts.cpp" line="69"/>
+        <location filename="../../shortcuts.cpp" line="45"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Open playback log</source>
         <translation>再生ログを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="45"/>
-        <location filename="../../shortcuts.cpp" line="70"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="71"/>
         <source>Open sort menu</source>
         <translation>並び替えメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
-        <location filename="../../shortcuts.cpp" line="72"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="73"/>
         <source>Open output device menu</source>
         <translation>出力デバイスメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="54"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="30"/>
-        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="58"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="31"/>
-        <location filename="../../shortcuts.cpp" line="58"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>

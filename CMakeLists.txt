@@ -165,7 +165,7 @@ if (WIN32)
 endif()
 
 if (APPLE)
-  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp)
+  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp app/macos/macmenubar.cpp)
   set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 

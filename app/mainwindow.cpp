@@ -19,14 +19,6 @@
   #include "update_check/updatechecker.h"
 #endif
 
-#ifdef Q_OS_MACOS
-  #include "about_ui/aboutdialog.h"
-  #include "feedback_ui/feedbackform.h"
-  #include <QMenuBar>
-  #include <QDesktopServices>
-  #include <QUrl>
-#endif
-
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -321,6 +313,12 @@ void MainWindow::setupMainMenu() {
   //ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
   ui->menuButton->setText(QString::fromUtf8("\u2630"));
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+#ifdef Q_OS_MACOS
+  // Everything the hamburger menu offers lives in the native menu bar
+  // (see setupMacMenuBar), so a duplicate in-window app menu is redundant.
+  // Keep the MainMenu object: the Open-main-menu shortcut still uses it.
+  ui->menuButton->setVisible(false);
+#endif
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
@@ -620,119 +618,6 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 
 #ifdef Q_OS_MACOS
 void MainWindow::setupMacMenuBar() {
-  auto *bar = menuBar();
-
-  auto *app_menu = bar->addMenu(tr("mpz"));
-
-  auto *about = app_menu->addAction(tr("About mpz"));
-  about->setMenuRole(QAction::AboutRole);
-  connect(about, &QAction::triggered, this, [this]() { AboutDialog(global_conf).exec(); });
-
-  auto *prefs = app_menu->addAction(tr("Settings…"));
-  prefs->setMenuRole(QAction::PreferencesRole);
-  prefs->setShortcut(QKeySequence::Preferences);
-  connect(prefs, &QAction::triggered, shortcuts, &Shortcuts::openSettings);
-
-  auto *quit = app_menu->addAction(tr("Quit mpz"));
-  quit->setMenuRole(QAction::QuitRole);
-  quit->setShortcut(QKeySequence::Quit);
-  connect(quit, &QAction::triggered, this, &MainWindow::requestQuit);
-
-  auto *playback = bar->addMenu(tr("Playback"));
-
-  auto *play_pause = playback->addAction(tr("Play / Pause"));
-  play_pause->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::PlayPause));
-  connect(play_pause, &QAction::triggered, shortcuts, &Shortcuts::playPause);
-
-  auto *stop_action = playback->addAction(tr("Stop"));
-  connect(stop_action, &QAction::triggered, shortcuts, &Shortcuts::stop);
-
-  playback->addSeparator();
-
-  auto *next_action = playback->addAction(tr("Next Track"));
-  next_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Next));
-  connect(next_action, &QAction::triggered, shortcuts, &Shortcuts::next);
-
-  auto *prev_action = playback->addAction(tr("Previous Track"));
-  prev_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Prev));
-  connect(prev_action, &QAction::triggered, shortcuts, &Shortcuts::prev);
-
-  playback->addSeparator();
-
-  auto *vol_up = playback->addAction(tr("Volume Up"));
-  vol_up->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeUp));
-  connect(vol_up, &QAction::triggered, shortcuts, &Shortcuts::volumeUp);
-
-  auto *vol_down = playback->addAction(tr("Volume Down"));
-  vol_down->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeDown));
-  connect(vol_down, &QAction::triggered, shortcuts, &Shortcuts::volumeDown);
-
-#ifdef ENABLE_DEVICES_MENU
-  playback->addSeparator();
-
-  auto *output = new AudioDeviceUi::DevicesMenu(this, local_conf);
-  output->setTitle(tr("Output Device"));
-  connect(output, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
-  playback->addMenu(output);
-  output->menuAction()->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
-  connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
-    output->menuAction()->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
-  });
-#endif
-
-  auto *view = bar->addMenu(tr("View"));
-  auto *sort_submenu = view->addMenu(tr("Sort"));
-  sort_menu->attachToMenu(sort_submenu);
-
-  view->addSeparator();
-
-  auto *playback_log_action = view->addAction(tr("Playback Log"));
-  playback_log_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenPlaybackLog));
-  connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
-
-  auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
-  shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
-  connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
-
-  auto *window_menu = bar->addMenu(tr("Window"));
-
-  auto *minimize = window_menu->addAction(tr("Minimize"));
-  minimize->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
-  connect(minimize, &QAction::triggered, this, &QWidget::showMinimized);
-
-  auto *zoom = window_menu->addAction(tr("Zoom"));
-  connect(zoom, &QAction::triggered, this, [this]() {
-    if (isMaximized()) {
-      showNormal();
-    } else {
-      showMaximized();
-    }
-  });
-
-  window_menu->addSeparator();
-
-  auto *close_window = window_menu->addAction(tr("Close"));
-  close_window->setShortcut(QKeySequence::Close);
-  connect(close_window, &QAction::triggered, this, [this]() { hide(); });
-
-  auto *help = bar->addMenu(tr("Help"));
-
-  auto *website = help->addAction(tr("mpz Website"));
-  connect(website, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
-  });
-
-  auto *github = help->addAction(tr("mpz GitHub"));
-  connect(github, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
-  });
-
-  auto *feedback = help->addAction(tr("Send Feedback…"));
-  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
-
-  auto *bug_report = help->addAction(tr("Report a Bug…"));
-  connect(bug_report, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz/issues"));
-  });
+  mac_menubar = new MacMenuBar(this, global_conf, local_conf, shortcuts, player, modus_operandi, sort_menu);
 }
 #endif

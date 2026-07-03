@@ -40,7 +40,8 @@ const QVector<Shortcuts::Spec> &Shortcuts::specs() {
     t << Spec{Action::FocusFilterLibrary, tr("Focus on library filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_1), true};
     t << Spec{Action::FocusFilterPlaylists, tr("Focus on playlists filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_2), true};
     t << Spec{Action::FocusFilterPlaylist, tr("Focus on playlist filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_3), true};
-    t << Spec{Action::OpenMainMenu, tr("Open main menu"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), true};
+    // No hamburger main menu on macOS: it is hidden in favor of the native
+    // menu bar, so there is nothing for an Open-main-menu shortcut to open.
     t << Spec{Action::OpenPlaybackLog, tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
     t << Spec{Action::OpenSortMenu, tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
 #ifdef ENABLE_DEVICES_MENU
