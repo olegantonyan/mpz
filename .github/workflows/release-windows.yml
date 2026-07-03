@@ -146,7 +146,18 @@ jobs:
           target: desktop
           arch: win64_msvc2022_arm64
           modules: 'qtmultimedia'
-          tools: 'tools_ifw tools_ninja tools_cmake'
+          tools: 'tools_ninja tools_cmake'
+
+      - name: Install Qt Installer Framework (x64 host; runs under x64 emulation)
+        run: |
+          # tools_ifw is not published for the windows_arm64 host, so pull the
+          # x64 binarycreator. It only packages files, so the ARM64 payload is
+          # unaffected; it runs on the ARM runner via built-in x64 emulation.
+          python -m pip install --upgrade aqtinstall
+          python -m aqt install-tool windows desktop tools_ifw --outputdir ifw
+          IFW_BIN=$(cd "$(dirname "$(find ifw -iname binarycreator.exe | head -1)")" && pwd)
+          echo "Found Qt IFW bin: $IFW_BIN"
+          echo "IFW_BIN=$IFW_BIN" >> "$GITHUB_ENV"
 
       - name: Set up MSVC ARM64 toolchain
         uses: ilammy/msvc-dev-cmd@v1
@@ -169,6 +180,7 @@ jobs:
           QTDIR: ${{ env.QT_ROOT_DIR }}
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
         run: |
+          export PATH="$IFW_BIN:$PATH"
           mkdir -p "$MPZ_OUTPUT_DIR"
           ./win/portable_winarm64_qt6_host.sh
           ./win/installer_winarm64_qt6_host.sh
