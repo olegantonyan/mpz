@@ -29,6 +29,7 @@ cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
 windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
 cp ./mpz.exe $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
+copy_vc_runtime "$ARTIFACT_PATH"
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/

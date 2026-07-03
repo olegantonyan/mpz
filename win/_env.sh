@@ -21,3 +21,25 @@ if [ -z "${QTDIR:-}" ]; then
     echo -e "Ninja:\t$NINJA_PATH"
     echo -e "Installer:\t$INSTALLER_FRAMEWORK_PATH"
 fi
+
+# Copy the MSVC ARM64 C runtime (vcruntime140*.dll, msvcp140*.dll, ...) next to
+# the app so it runs on machines without the VC++ redistributable installed.
+# Used by the ARM64 (MSVC) build scripts; windeployqt --compiler-runtime is
+# unreliable on arm64. Requires the MSVC environment (VCToolsRedistDir) to be
+# set, e.g. by "vcvarsall arm64" / the ilammy/msvc-dev-cmd action.
+copy_vc_runtime() {
+    local dest="$1"
+    if [ -z "${VCToolsRedistDir:-}" ]; then
+        echo "ERROR: VCToolsRedistDir is not set; MSVC environment not initialized" >&2
+        exit 1
+    fi
+    local redist crt_dir
+    redist=$(cygpath -u "$VCToolsRedistDir")
+    crt_dir=$(find "$redist/arm64" -maxdepth 1 -type d -iname 'Microsoft.VC*.CRT' | head -1)
+    if [ -z "$crt_dir" ]; then
+        echo "ERROR: could not find Microsoft.VC*.CRT under $redist/arm64" >&2
+        exit 1
+    fi
+    echo "bundling VC++ ARM64 runtime from: $crt_dir"
+    cp "$crt_dir"/*.dll "$dest"/
+}
