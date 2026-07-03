@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- on macOS "Show in Finder" for multiple selected tracks now opens a single Finder window per folder with all items selected, instead of one window per file
+
 ### Misc
 
 ## [2.0.12] - 2026-07-02
