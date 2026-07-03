@@ -22,7 +22,7 @@ env:
 
 jobs:
   qt6:
-    name: Qt6 64-bit
+    name: Qt6 x86_64
     runs-on: windows-latest
     permissions:
       contents: write
@@ -81,7 +81,7 @@ jobs:
           gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win-x86_64-qt6-portable.zip" "dist/mpz-${{ steps.ver.outputs.version }}-win-x86_64-qt6-installer.exe" --repo "${{ github.repository }}" --clobber
 
   qt5:
-    name: Qt5 32-bit
+    name: Qt5 x86
     runs-on: windows-latest
     permissions:
       contents: write
