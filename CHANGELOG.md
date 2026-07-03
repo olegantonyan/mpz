@@ -12,6 +12,8 @@
 
 ### Misc
 
+- experimental Windows ARM64 build
+
 ## [2.0.12] - 2026-07-02
 
 ### Added
