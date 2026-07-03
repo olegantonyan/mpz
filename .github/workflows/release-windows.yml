@@ -63,14 +63,14 @@ jobs:
         if: env.RELEASE_TAG == ''
         uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win-x86_64-qt6-portable.zip
           archive: false
 
       - name: Upload installer as workflow artifact (non-release builds)
         if: env.RELEASE_TAG == ''
         uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win64-qt6-installer.exe
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win-x86_64-qt6-installer.exe
           archive: false
 
       - name: Upload to GitHub release
@@ -78,7 +78,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-portable.zip" "dist/mpz-${{ steps.ver.outputs.version }}-win64-qt6-installer.exe" --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win-x86_64-qt6-portable.zip" "dist/mpz-${{ steps.ver.outputs.version }}-win-x86_64-qt6-installer.exe" --repo "${{ github.repository }}" --clobber
 
   qt5:
     name: Qt5 32-bit
@@ -129,3 +129,67 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip" --repo "${{ github.repository }}" --clobber
+
+  qt6-arm64:
+    name: Qt6 ARM64
+    runs-on: windows-11-arm
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install dependencies
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.3
+          host: windows_arm64
+          target: desktop
+          arch: win64_msvc2022_arm64
+          modules: 'qtmultimedia'
+          tools: 'tools_ifw tools_ninja tools_cmake'
+
+      - name: Set up MSVC ARM64 toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: arm64
+
+      - name: Extract version
+        id: ver
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: env.RELEASE_TAG == ''
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
+
+      - name: Build portable + installer
+        env:
+          QTDIR: ${{ env.QT_ROOT_DIR }}
+          MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
+        run: |
+          mkdir -p "$MPZ_OUTPUT_DIR"
+          ./win/portable_winarm64_qt6_host.sh
+          ./win/installer_winarm64_qt6_host.sh
+
+      - name: Upload portable as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win-arm64-qt6-portable.zip
+          archive: false
+
+      - name: Upload installer as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win-arm64-qt6-installer.exe
+          archive: false
+
+      - name: Upload to GitHub release
+        if: env.RELEASE_TAG != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win-arm64-qt6-portable.zip" "dist/mpz-${{ steps.ver.outputs.version }}-win-arm64-qt6-installer.exe" --repo "${{ github.repository }}" --clobber
