@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QStyle>
 
-TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(parent), global_conf(global_c) {
+TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
   trayicon->setToolTip(tr("Stopped"));
   menu = new QMenu(parent);
@@ -47,10 +47,8 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
     // Popping our QMenu on top would stack two menus.
     Q_UNUSED(reason)
 #else
-    if (global_conf.minimizeToTray()) {
+    if (reason == QSystemTrayIcon::Trigger) {
       emit clicked();
-    } else if (reason == QSystemTrayIcon::Trigger) {
-      menu->popup(QCursor::pos());
     }
 #endif
   });

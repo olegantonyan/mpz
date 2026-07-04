@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- tray icon: left-click now shows/hides the window; the menu opens on right-click (previously left-click opened the menu)
+
 ### Misc
 
 - Windows Qt6 build switch to MSVC toolchain

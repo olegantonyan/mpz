@@ -363,7 +363,7 @@ void MainWindow::setupTrayIcon() {
     trayicon = nullptr;
     return;
   }
-  trayicon = new TrayIcon(this, global_conf);
+  trayicon = new TrayIcon(this);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
