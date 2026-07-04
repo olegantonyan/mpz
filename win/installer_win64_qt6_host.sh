@@ -25,9 +25,10 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
 fi
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --release
 cp ./mpz.exe $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
+copy_vc_runtime "$ARTIFACT_PATH" x64
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/

@@ -26,10 +26,10 @@ fi
 
 # See portable_winarm64_qt6_host.sh for notes on the MSVC/windeployqt setup.
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --release ${WINDEPLOYQT_EXTRA_ARGS:-}
 cp ./mpz.exe $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
-copy_vc_runtime "$ARTIFACT_PATH"
+copy_vc_runtime "$ARTIFACT_PATH" arm64
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/
