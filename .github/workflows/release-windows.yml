@@ -125,7 +125,7 @@ jobs:
         if: env.RELEASE_TAG == ''
         uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win32-qt5-portable.zip
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-win32-qt5-legacy-portable.zip
           archive: false
 
       - name: Upload to GitHub release
@@ -133,7 +133,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-portable.zip" --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-win32-qt5-legacy-portable.zip" --repo "${{ github.repository }}" --clobber
 
   qt6-arm64:
     name: Qt6 ARM64

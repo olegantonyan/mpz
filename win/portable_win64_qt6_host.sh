@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 source `dirname $0`/_env.sh
 
@@ -22,6 +23,8 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
 fi
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
+# set -e misses a cmake-configure failure hidden inside `cmake && ninja`.
+test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2; exit 1; }
 # --no-compiler-runtime: windeployqt otherwise drops vc_redist.<arch>.exe (the
 # redist *installer*) into the package in release mode. We ship the CRT DLLs
 # app-local via copy_vc_runtime below instead, so suppress the installer.

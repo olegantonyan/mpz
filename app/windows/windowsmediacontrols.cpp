@@ -49,8 +49,7 @@ struct WindowsMediaControls::Impl {
 WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *window, QObject *parent)
   : QObject(parent), player(pl), d(new Impl) {
   try {
-    // Qt already OleInitializes the GUI thread as STA; requesting the same
-    // apartment is a no-op. Swallow RPC_E_CHANGED_MODE just in case.
+    // Qt already inits the GUI thread's COM apartment; tolerate the mismatch.
     winrt::init_apartment(winrt::apartment_type::single_threaded);
   } catch (winrt::hresult_error const &) {
   }
@@ -66,9 +65,7 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   d->smtc.IsNextEnabled(true);
   d->smtc.IsPreviousEnabled(true);
 
-  // ButtonPressed/PlaybackPositionChangeRequested arrive on a WinRT thread-pool
-  // thread. QToolButton/QObject are GUI-thread only, so hop back with a queued
-  // invocation before touching the player or its controls.
+  // SMTC callbacks arrive on a WinRT pool thread; marshal to the GUI thread before touching widgets.
   d->smtc.ButtonPressed([this](SystemMediaTransportControls const &, SystemMediaTransportControlsButtonPressedEventArgs const &args) {
     const SystemMediaTransportControlsButton button = args.Button();
     QMetaObject::invokeMethod(this, [this, button]() {
@@ -143,8 +140,6 @@ void WindowsMediaControls::updateMetadata() {
     music.TrackNumber(track.track_number());
   }
 
-  // Push the text metadata now; the thumbnail is loaded asynchronously below and
-  // pushed with a second Update() once ready.
   updater.Thumbnail(nullptr);
   updater.Update();
 
@@ -153,10 +148,8 @@ void WindowsMediaControls::updateMetadata() {
     return;
   }
 
-  // artCover() is a local file path. CreateFromUri(file://...) is unreliable for
-  // SMTC thumbnails (renders a black box), so resolve a StorageFile and use
-  // CreateFromFile. GetFileFromPathAsync completes on a pool thread; the SMTC
-  // DisplayUpdater is agile, so setting the thumbnail + Update() there is safe.
+  // CreateFromUri(file://) renders a black box in SMTC; resolve a StorageFile and
+  // use CreateFromFile. The async completes on a pool thread — fine, DisplayUpdater is agile.
   const winrt::hstring path = to_hstring(QDir::toNativeSeparators(art));
   auto op = StorageFile::GetFileFromPathAsync(path);
   op.Completed([updater](IAsyncOperation<StorageFile> const &operation, AsyncStatus status) {
@@ -187,8 +180,7 @@ void WindowsMediaControls::updateTimeline() {
 
   d->smtc.PlaybackRate(player->state() == Playback::Controller::Playing ? 1.0 : 0.0);
 
-  // A default (all-zero) props object hides the scrubber, which is what we want
-  // for streams (no meaningful duration) and matches the macOS seek guard.
+  // All-zero props hide the scrubber — wanted for streams (no duration).
   SystemMediaTransportControlsTimelineProperties props;
   if (!track.isStream() && track.duration() > 0) {
     props.StartTime(TimeSpan{ 0 });

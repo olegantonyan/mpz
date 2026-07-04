@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 source `dirname $0`/_env.sh
 
@@ -26,6 +27,8 @@ fi
 # recipe (e.g. --qtpaths <arm64>/bin/qtpaths.bat); empty for the native
 # windows_arm64 Qt where windeployqt6.exe resolves paths on its own.
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
+# set -e misses a cmake-configure failure hidden inside `cmake && ninja`.
+test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2; exit 1; }
 windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --no-compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
 cp ./mpz.exe $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME

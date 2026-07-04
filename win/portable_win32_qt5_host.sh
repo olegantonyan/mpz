@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 if [ -z "${QTDIR:-}" ]; then
     QT_VERSION=5.15.2
@@ -26,7 +27,7 @@ TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win32-qt5-portable
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win32-qt5-legacy-portable
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -39,6 +40,8 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
 fi
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
+# set -e misses a cmake-configure failure hidden inside `cmake && ninja`.
+test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2; exit 1; }
 windeployqt.exe ./mpz.exe --dir $ARTIFACT_NAME
 cp ./mpz.exe $ARTIFACT_NAME
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"
