@@ -2,6 +2,8 @@
 
 ### Added
 
+- Windows native media controls (SMTC): title/artist/album, cover art and play/pause/stop/next/prev in the system media overlay
+
 ### Fixed
 
 ### Misc

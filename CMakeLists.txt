@@ -170,6 +170,13 @@ if (APPLE)
   set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 
+# Windows System Media Transport Controls (SMTC). MSVC-only: NOT MINGW keeps it
+# out of the Qt5 x86 MinGW build (which has no C++/WinRT), while covering the
+# MSVC Qt6 x64 + ARM64 builds. See the SMTC_ENABLE define/link block below.
+if (WIN32 AND NOT MINGW)
+  list(APPEND PROJECT_SOURCES app/windows/windowsmediacontrols.cpp)
+endif()
+
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
@@ -186,6 +193,15 @@ endforeach()
 
 if (WIN32)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+endif()
+
+# SMTC_ENABLE gates all the app-side SMTC code (windowsmediacontrols.*, the
+# mainwindow wiring, and the shortcuts media-key carve-out), mirroring how
+# MPRIS_ENABLE gates the Linux path. runtimeobject (RuntimeObject.lib) provides
+# the C++/WinRT activation/string entry points (RoGetActivationFactory, etc.).
+if (WIN32 AND NOT MINGW)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE SMTC_ENABLE)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE runtimeobject)
 endif()
 
 if (APPLE)

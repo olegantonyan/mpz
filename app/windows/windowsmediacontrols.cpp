@@ -1,0 +1,181 @@
+#include "windowsmediacontrols.h"
+
+#include "track.h"
+#include "playback/controls.h"
+
+#include <QMetaObject>
+#include <QToolButton>
+#include <QUrl>
+
+#include <chrono>
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Media.h>
+#include <winrt/Windows.Storage.Streams.h>
+#include <systemmediatransportcontrolsinterop.h>
+
+using winrt::Windows::Foundation::TimeSpan;
+using winrt::Windows::Foundation::Uri;
+using winrt::Windows::Media::MediaPlaybackStatus;
+using winrt::Windows::Media::MediaPlaybackType;
+using winrt::Windows::Media::PlaybackPositionChangeRequestedEventArgs;
+using winrt::Windows::Media::SystemMediaTransportControls;
+using winrt::Windows::Media::SystemMediaTransportControlsButton;
+using winrt::Windows::Media::SystemMediaTransportControlsButtonPressedEventArgs;
+using winrt::Windows::Media::SystemMediaTransportControlsTimelineProperties;
+using winrt::Windows::Storage::Streams::RandomAccessStreamReference;
+
+namespace {
+  winrt::hstring to_hstring(const QString &s) {
+    return winrt::hstring{ s.toStdWString() };
+  }
+}
+
+struct WindowsMediaControls::Impl {
+  SystemMediaTransportControls smtc{ nullptr };
+};
+
+WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *window, QObject *parent)
+  : QObject(parent), player(pl), d(new Impl) {
+  try {
+    // Qt already OleInitializes the GUI thread as STA; requesting the same
+    // apartment is a no-op. Swallow RPC_E_CHANGED_MODE just in case.
+    winrt::init_apartment(winrt::apartment_type::single_threaded);
+  } catch (winrt::hresult_error const &) {
+  }
+
+  HWND hwnd = reinterpret_cast<HWND>(window->winId());
+  auto interop = winrt::get_activation_factory<SystemMediaTransportControls, ISystemMediaTransportControlsInterop>();
+  winrt::check_hresult(interop->GetForWindow(hwnd, winrt::guid_of<SystemMediaTransportControls>(), winrt::put_abi(d->smtc)));
+
+  d->smtc.IsEnabled(true);
+  d->smtc.IsPlayEnabled(true);
+  d->smtc.IsPauseEnabled(true);
+  d->smtc.IsStopEnabled(true);
+  d->smtc.IsNextEnabled(true);
+  d->smtc.IsPreviousEnabled(true);
+
+  // ButtonPressed/PlaybackPositionChangeRequested arrive on a WinRT thread-pool
+  // thread. QToolButton/QObject are GUI-thread only, so hop back with a queued
+  // invocation before touching the player or its controls.
+  d->smtc.ButtonPressed([this](SystemMediaTransportControls const &, SystemMediaTransportControlsButtonPressedEventArgs const &args) {
+    const SystemMediaTransportControlsButton button = args.Button();
+    QMetaObject::invokeMethod(this, [this, button]() {
+      const Playback::Controls c = player->controls();
+      switch (button) {
+        case SystemMediaTransportControlsButton::Play:     c.play->click(); break;
+        case SystemMediaTransportControlsButton::Pause:    c.pause->click(); break;
+        case SystemMediaTransportControlsButton::Stop:     c.stop->click(); break;
+        case SystemMediaTransportControlsButton::Next:     c.next->click(); break;
+        case SystemMediaTransportControlsButton::Previous: c.prev->click(); break;
+        default: break;
+      }
+    }, Qt::QueuedConnection);
+  });
+
+  d->smtc.PlaybackPositionChangeRequested([this](SystemMediaTransportControls const &, PlaybackPositionChangeRequestedEventArgs const &args) {
+    const int seconds = static_cast<int>(std::chrono::duration_cast<std::chrono::seconds>(args.RequestedPlaybackPosition()).count());
+    QMetaObject::invokeMethod(this, [this, seconds]() {
+      player->seek(seconds);
+    }, Qt::QueuedConnection);
+  });
+
+  connect(player, &Playback::Controller::started, this, [this](const Track &) {
+    updateMetadata();
+    updateState(Playback::Controller::Playing);
+    updateTimeline();
+  });
+  connect(player, &Playback::Controller::paused, this, [this](const Track &) {
+    updateMetadata();
+    updateState(Playback::Controller::Paused);
+    updateTimeline();
+  });
+  connect(player, &Playback::Controller::stopped, this, [this]() {
+    auto updater = d->smtc.DisplayUpdater();
+    updater.ClearAll();
+    updater.Update();
+    updateState(Playback::Controller::Stopped);
+  });
+  connect(player, &Playback::Controller::trackChanged, this, [this](const Track &) {
+    updateMetadata();
+    updateTimeline();
+  });
+  connect(player, &Playback::Controller::seeked, this, [this](int) {
+    updateTimeline();
+  });
+}
+
+WindowsMediaControls::~WindowsMediaControls() {
+  if (d->smtc) {
+    try {
+      auto updater = d->smtc.DisplayUpdater();
+      updater.ClearAll();
+      updater.Update();
+      d->smtc.PlaybackStatus(MediaPlaybackStatus::Stopped);
+      d->smtc.IsEnabled(false);
+    } catch (winrt::hresult_error const &) {
+    }
+  }
+  delete d;
+}
+
+void WindowsMediaControls::updateMetadata() {
+  const Track &track = player->currentTrack();
+  auto updater = d->smtc.DisplayUpdater();
+  updater.Type(MediaPlaybackType::Music);
+
+  auto music = updater.MusicProperties();
+  music.Title(to_hstring(track.title()));
+  music.Artist(to_hstring(track.artist()));
+  music.AlbumTitle(to_hstring(track.album()));
+  if (track.track_number() > 0) {
+    music.TrackNumber(track.track_number());
+  }
+
+  const QString art = track.artCover();
+  if (!art.isEmpty()) {
+    const Uri uri{ to_hstring(QUrl::fromLocalFile(art).toString()) };
+    updater.Thumbnail(RandomAccessStreamReference::CreateFromUri(uri));
+  } else {
+    updater.Thumbnail(nullptr);
+  }
+
+  updater.Update();
+}
+
+void WindowsMediaControls::updateState(Playback::Controller::State state) {
+  MediaPlaybackStatus status = MediaPlaybackStatus::Stopped;
+  switch (state) {
+    case Playback::Controller::Playing: status = MediaPlaybackStatus::Playing; break;
+    case Playback::Controller::Paused:  status = MediaPlaybackStatus::Paused; break;
+    case Playback::Controller::Stopped: status = MediaPlaybackStatus::Stopped; break;
+  }
+  d->smtc.PlaybackStatus(status);
+}
+
+void WindowsMediaControls::updateTimeline() {
+  using namespace std::chrono;
+  const Track &track = player->currentTrack();
+
+  d->smtc.PlaybackRate(player->state() == Playback::Controller::Playing ? 1.0 : 0.0);
+
+  // A default (all-zero) props object hides the scrubber, which is what we want
+  // for streams (no meaningful duration) and matches the macOS seek guard.
+  SystemMediaTransportControlsTimelineProperties props;
+  if (!track.isStream() && track.duration() > 0) {
+    props.StartTime(TimeSpan{ 0 });
+    props.MinSeekTime(TimeSpan{ 0 });
+    props.EndTime(milliseconds{ track.duration() });
+    props.MaxSeekTime(milliseconds{ track.duration() });
+    props.Position(seconds{ player->position() });
+  }
+  d->smtc.UpdateTimelineProperties(props);
+}

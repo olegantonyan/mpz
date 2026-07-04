@@ -37,6 +37,10 @@
   #include "macos/macmenubar.h"
 #endif
 
+#ifdef SMTC_ENABLE
+  #include "windows/windowsmediacontrols.h"
+#endif
+
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
@@ -90,6 +94,9 @@ private:
   MacDockMenu *mac_dock = nullptr;
   MacMenuBar *mac_menubar = nullptr;
 #endif
+#ifdef SMTC_ENABLE
+  WindowsMediaControls *win_media = nullptr;
+#endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
@@ -122,6 +129,9 @@ private:
   void setupMacMenuBar();
   void setupMacMediaControls();
   void setupMacDockMenu();
+#endif
+#ifdef SMTC_ENABLE
+  void setupWindowsMediaControls();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();

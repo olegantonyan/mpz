@@ -107,10 +107,12 @@ void Shortcuts::setupGlobal() {
     // https://github.com/olegantonyan/mpz/issues/129
     return;
   }
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
   // On macOS the hardware media keys are owned by MPRemoteCommandCenter
-  // (see MacMediaControls); a Carbon QHotkey grab here is unreliable and
-  // would double-fire alongside it.
+  // (see MacMediaControls), and on the SMTC build (MSVC Qt6 Windows) by the
+  // System Media Transport Controls (see WindowsMediaControls); a QHotkey grab
+  // here is unreliable and would double-fire alongside them. The Qt5/MinGW
+  // Windows build has no SMTC, so it keeps these QHotkey media keys.
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);
   connect(&_stop_global, &QHotkey::activated, this, &Shortcuts::stop);
