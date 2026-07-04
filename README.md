@@ -59,6 +59,12 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
 
+* win-x86_64 - x86 64-bit build (recommended for most users)
+* win-arm64 - native ARM 64-bit build
+* win32 - legacy version for x86 32-bits systems
+
+win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have ARM64 Windows PC.
+
 #### macOS
 
 Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
