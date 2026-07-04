@@ -6,6 +6,8 @@
 
 ### Misc
 
+- Windows Qt6 build switch to MSVC toolchain
+
 ## [2.0.13] - 2026-07-04
 
 ### Added
