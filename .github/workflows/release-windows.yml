@@ -35,9 +35,14 @@ jobs:
           version: 6.10.3
           host: windows
           target: desktop
-          arch: win64_mingw
+          arch: win64_msvc2022_64
           modules: 'qtmultimedia'
-          tools: 'tools_mingw1310 tools_ifw tools_ninja tools_cmake'
+          tools: 'tools_ifw tools_ninja tools_cmake'
+
+      - name: Set up MSVC x64 toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
 
       - name: Extract version
         id: ver
