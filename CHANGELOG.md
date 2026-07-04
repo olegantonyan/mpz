@@ -2,9 +2,13 @@
 
 ### Added
 
+- Windows native media controls (SMTC): title/artist/album, cover art and play/pause/stop/next/prev in the system media overlay
+
 ### Fixed
 
 ### Misc
+
+- Windows Qt6 build switch to MSVC toolchain
 
 ## [2.0.13] - 2026-07-04
 

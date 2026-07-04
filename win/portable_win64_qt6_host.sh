@@ -22,9 +22,13 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
 fi
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release
+# --no-compiler-runtime: windeployqt otherwise drops vc_redist.<arch>.exe (the
+# redist *installer*) into the package in release mode. We ship the CRT DLLs
+# app-local via copy_vc_runtime below instead, so suppress the installer.
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --no-compiler-runtime --release
 cp ./mpz.exe $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME
+copy_vc_runtime "$ARTIFACT_NAME" x64
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"
 cp -R "$ARTIFACT_NAME" "$OUTPUT_DIR/"
 (cd "$OUTPUT_DIR" && 7z a "$ARTIFACT_NAME.zip" "$ARTIFACT_NAME")

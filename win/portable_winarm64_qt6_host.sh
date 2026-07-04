@@ -26,10 +26,10 @@ fi
 # recipe (e.g. --qtpaths <arm64>/bin/qtpaths.bat); empty for the native
 # windows_arm64 Qt where windeployqt6.exe resolves paths on its own.
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --no-compiler-runtime --release ${WINDEPLOYQT_EXTRA_ARGS:-}
 cp ./mpz.exe $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME
-copy_vc_runtime "$ARTIFACT_NAME"
+copy_vc_runtime "$ARTIFACT_NAME" arm64
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"
 cp -R "$ARTIFACT_NAME" "$OUTPUT_DIR/"
 (cd "$OUTPUT_DIR" && 7z a "$ARTIFACT_NAME.zip" "$ARTIFACT_NAME")
