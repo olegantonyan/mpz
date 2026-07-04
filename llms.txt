@@ -20,7 +20,7 @@ mpz treats your folder structure as the library — there is no global indexing 
 - [omnipackage unstable repositories](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master branch
 - [AUR (Qt6)](https://aur.archlinux.org/packages/mpz/): Arch Linux package, also available if you prefer it over the binary repositories
 - [AUR (Qt5)](https://aur.archlinux.org/packages/mpz-qt5): Arch Linux package built against Qt5
-- [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries; macOS .dmg (unsigned — see README for Gatekeeper workaround); tagged source archives
+- [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries (x64, native ARM64, and legacy 32-bit); macOS .dmg (unsigned — see README for Gatekeeper workaround); tagged source archives
 
 ## Source and feedback
 

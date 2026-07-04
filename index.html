@@ -164,7 +164,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub — builds for 64-bit x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -253,7 +253,7 @@
                         "position": 3,
                         "name": "Windows",
                         "url": "https://github.com/olegantonyan/mpz/releases",
-                        "text": "Download the latest installer or portable binaries from the GitHub releases page."
+                        "text": "Download the latest installer or portable binaries from the GitHub releases page. Builds are available for 64-bit x64 (recommended), native ARM64 for Windows on ARM devices, and legacy 32-bit systems."
                     },
                     {
                         "@type": "HowToStep",
@@ -957,13 +957,16 @@
                                 <tr>
                                     <th scope="row">Windows</th>
                                     <td>
-                                        Download the latest binaries from the
+                                        Download the installer or portable build
+                                        from the
                                         <a
                                             href="https://github.com/olegantonyan/mpz/releases"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             >GitHub releases page</a
-                                        >.
+                                        >. Builds are available for 64-bit x64
+                                        (recommended), native ARM64 (Windows on
+                                        ARM), and legacy 32-bit systems.
                                     </td>
                                 </tr>
                                 <tr>
@@ -1083,7 +1086,9 @@
                                 from the omnipackage repositories (openSUSE,
                                 Debian, Fedora, Ubuntu, RedHat, Mageia, Arch,
                                 Manjaro) or the AUR on Arch. On Windows, download
-                                a release from GitHub. On macOS, download the
+                                a release from GitHub — builds for 64-bit x64,
+                                native ARM64 (Windows on ARM), and legacy 32-bit.
+                                On macOS, download the
                                 <code>.dmg</code> from GitHub releases — the
                                 build is unsigned, so Gatekeeper blocks it on
                                 first launch — either remove the quarantine flag
