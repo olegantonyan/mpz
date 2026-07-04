@@ -3,9 +3,9 @@
 #include "track.h"
 #include "playback/controls.h"
 
+#include <QDir>
 #include <QMetaObject>
 #include <QToolButton>
-#include <QUrl>
 
 #include <chrono>
 
@@ -19,11 +19,13 @@
 
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Media.h>
+#include <winrt/Windows.Storage.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <systemmediatransportcontrolsinterop.h>
 
+using winrt::Windows::Foundation::AsyncStatus;
+using winrt::Windows::Foundation::IAsyncOperation;
 using winrt::Windows::Foundation::TimeSpan;
-using winrt::Windows::Foundation::Uri;
 using winrt::Windows::Media::MediaPlaybackStatus;
 using winrt::Windows::Media::MediaPlaybackType;
 using winrt::Windows::Media::PlaybackPositionChangeRequestedEventArgs;
@@ -31,6 +33,7 @@ using winrt::Windows::Media::SystemMediaTransportControls;
 using winrt::Windows::Media::SystemMediaTransportControlsButton;
 using winrt::Windows::Media::SystemMediaTransportControlsButtonPressedEventArgs;
 using winrt::Windows::Media::SystemMediaTransportControlsTimelineProperties;
+using winrt::Windows::Storage::StorageFile;
 using winrt::Windows::Storage::Streams::RandomAccessStreamReference;
 
 namespace {
@@ -140,15 +143,32 @@ void WindowsMediaControls::updateMetadata() {
     music.TrackNumber(track.track_number());
   }
 
+  // Push the text metadata now; the thumbnail is loaded asynchronously below and
+  // pushed with a second Update() once ready.
+  updater.Thumbnail(nullptr);
+  updater.Update();
+
   const QString art = track.artCover();
-  if (!art.isEmpty()) {
-    const Uri uri{ to_hstring(QUrl::fromLocalFile(art).toString()) };
-    updater.Thumbnail(RandomAccessStreamReference::CreateFromUri(uri));
-  } else {
-    updater.Thumbnail(nullptr);
+  if (art.isEmpty()) {
+    return;
   }
 
-  updater.Update();
+  // artCover() is a local file path. CreateFromUri(file://...) is unreliable for
+  // SMTC thumbnails (renders a black box), so resolve a StorageFile and use
+  // CreateFromFile. GetFileFromPathAsync completes on a pool thread; the SMTC
+  // DisplayUpdater is agile, so setting the thumbnail + Update() there is safe.
+  const winrt::hstring path = to_hstring(QDir::toNativeSeparators(art));
+  auto op = StorageFile::GetFileFromPathAsync(path);
+  op.Completed([updater](IAsyncOperation<StorageFile> const &operation, AsyncStatus status) {
+    if (status != AsyncStatus::Completed) {
+      return;
+    }
+    try {
+      updater.Thumbnail(RandomAccessStreamReference::CreateFromFile(operation.GetResults()));
+      updater.Update();
+    } catch (winrt::hresult_error const &) {
+    }
+  });
 }
 
 void WindowsMediaControls::updateState(Playback::Controller::State state) {
