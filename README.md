@@ -57,7 +57,7 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 #### Windows
 
-Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/.
+Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/. Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
 
 * win-x86_64 - x86 64-bit build (recommended for most users)
 * win-arm64 - native ARM 64-bit build
