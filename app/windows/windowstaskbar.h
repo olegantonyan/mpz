@@ -16,7 +16,12 @@ public:
 
   static void setAppUserModelId();
 
-  bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  using native_result_t = qintptr;
+#else
+  using native_result_t = long;
+#endif
+  bool nativeEventFilter(const QByteArray &eventType, void *message, native_result_t *result) override;
 
 private:
   void buildIcons();

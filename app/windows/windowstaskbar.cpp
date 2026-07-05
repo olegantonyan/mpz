@@ -293,7 +293,7 @@ void WindowsTaskbar::onThumbClick(int id) {
   }
 }
 
-bool WindowsTaskbar::nativeEventFilter(const QByteArray &, void *message, qintptr *) {
+bool WindowsTaskbar::nativeEventFilter(const QByteArray &, void *message, native_result_t *) {
   MSG *msg = static_cast<MSG *>(message);
   if (!msg || msg->hwnd != d->hwnd) {
     return false;
