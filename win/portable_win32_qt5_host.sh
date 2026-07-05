@@ -27,7 +27,7 @@ TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
 
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win32-qt5-legacy-portable
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win-legacy-qt5-portable
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
