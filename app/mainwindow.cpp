@@ -94,6 +94,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef SMTC_ENABLE
   setupWindowsMediaControls();
 #endif
+#ifdef Q_OS_WIN
+  setupWindowsTaskbar();
+#endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -305,6 +308,12 @@ void MainWindow::setupMacDockMenu() {
 #ifdef SMTC_ENABLE
 void MainWindow::setupWindowsMediaControls() {
   win_media = new WindowsMediaControls(player, this, this);
+}
+#endif
+
+#ifdef Q_OS_WIN
+void MainWindow::setupWindowsTaskbar() {
+  win_taskbar = new WindowsTaskbar(player, this, this);
 }
 #endif
 

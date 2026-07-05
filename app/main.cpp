@@ -15,6 +15,9 @@
 #ifdef ENABLE_CRASH_HANDLER
   #include "crash_handler.h"
 #endif
+#ifdef Q_OS_WIN
+  #include "windows/windowstaskbar.h"
+#endif
 
 #include <QDebug>
 #include <QTranslator>
@@ -84,6 +87,9 @@ int main(int argc, char *argv[]) {
 
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
+#ifdef Q_OS_WIN
+  WindowsTaskbar::setAppUserModelId();
+#endif
 #ifdef Q_OS_MACOS
   // The main window hides (not quits) on close, so don't let the app exit when
   // the last visible window — e.g. a dialog while the window is hidden — closes.

@@ -163,6 +163,7 @@ if (WIN32)
   endif()
   enable_language("RC")
   list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
+  list(APPEND PROJECT_SOURCES app/windows/windowstaskbar.cpp)
 endif()
 
 if (APPLE)

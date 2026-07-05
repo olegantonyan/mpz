@@ -41,6 +41,10 @@
   #include "windows/windowsmediacontrols.h"
 #endif
 
+#ifdef Q_OS_WIN
+  #include "windows/windowstaskbar.h"
+#endif
+
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
@@ -97,6 +101,9 @@ private:
 #ifdef SMTC_ENABLE
   WindowsMediaControls *win_media = nullptr;
 #endif
+#ifdef Q_OS_WIN
+  WindowsTaskbar *win_taskbar = nullptr;
+#endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
@@ -132,6 +139,9 @@ private:
 #endif
 #ifdef SMTC_ENABLE
   void setupWindowsMediaControls();
+#endif
+#ifdef Q_OS_WIN
+  void setupWindowsTaskbar();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();
