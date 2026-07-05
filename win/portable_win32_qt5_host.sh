@@ -42,7 +42,7 @@ fi
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DUSE_QT5=ON $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
 # set -e misses a cmake-configure failure hidden inside `cmake && ninja`.
 test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2; exit 1; }
-windeployqt.exe ./mpz.exe --dir $ARTIFACT_NAME
+windeployqt.exe ./mpz.exe --dir $ARTIFACT_NAME --release
 cp ./mpz.exe $ARTIFACT_NAME
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"
 cp -R "$ARTIFACT_NAME" "$OUTPUT_DIR/"
