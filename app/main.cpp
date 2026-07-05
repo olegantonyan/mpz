@@ -85,6 +85,11 @@ int main(int argc, char *argv[]) {
   registerMetaTypes();
   RNJesus::seed();
 
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
 #ifdef Q_OS_WIN

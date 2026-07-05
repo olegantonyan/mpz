@@ -1,4 +1,4 @@
-## [2.0.13] - next
+## [2.0.14] - next
 
 ### Added
 
@@ -8,6 +8,7 @@
 ### Fixed
 
 - tray icon: left-click now shows/hides the window; the menu opens on right-click (previously left-click opened the menu)
+- Windows Qt5 legacy build: high-DPI scaling (no longer tiny on scaled displays)
 
 ### Misc
 
