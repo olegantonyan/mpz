@@ -162,7 +162,12 @@ if (WIN32)
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> --input-format=rc --output-format=coff -i <SOURCE> -o <OBJECT>")
   endif()
   enable_language("RC")
-  list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
+  string(TIMESTAMP MPZ_BUILD_YEAR "%Y")
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.rc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc
+    @ONLY)
+  list(APPEND PROJECT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc)
   list(APPEND PROJECT_SOURCES app/windows/windowstaskbar.cpp)
 endif()
 
