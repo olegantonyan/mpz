@@ -7,6 +7,7 @@
 
 ### Fixed
 
+- Windows installer: removes the previous version automatically
 - tray icon: left-click now shows/hides the window; the menu opens on right-click (previously left-click opened the menu)
 - Windows Qt5 legacy build: high-DPI scaling (no longer tiny on scaled displays)
 
