@@ -1,12 +1,12 @@
 function Controller() {
 }
 
-Controller.prototype.TargetDirectoryPageCallback = function() {
-    var page = gui.currentPageWidget();
-    if (page === null)
-        return;
-
-    var targetDir = page.TargetDirectoryLineEdit.text;
+// Uninstall a previous version on the first page: purge relaunches the old
+// maintenancetool from %TEMP% to delete itself and returns before the folder is
+// empty, so starting here lets it finish while the user clicks through the wizard,
+// avoiding a busy-wait for QtIFW's "directory not empty" check on the target page.
+Controller.prototype.IntroductionPageCallback = function() {
+    var targetDir = installer.value("TargetDir");
     var maintenanceTool = targetDir + "/maintenancetool.exe";
     if (!installer.fileExists(maintenanceTool))
         return;
@@ -22,21 +22,12 @@ Controller.prototype.TargetDirectoryPageCallback = function() {
     }
 
     installer.execute("taskkill", ["/F", "/IM", "mpz.exe"]);
-
     installer.gainAdminRights();
     var result = installer.execute(maintenanceTool, ["purge", "--confirm-command"], "y\n");
     if (result[1] != 0) {
-        QMessageBox.critical("mpz.purge.failed", "Could not remove previous version",
-            "Uninstalling the previous version failed. Please uninstall mpz manually " +
-            "(Settings > Apps, or run maintenancetool in " + targetDir +
-            "), then run this installer again.", QMessageBox.Ok);
+        QMessageBox.critical("mpz.remove.failed", "Could not remove previous version",
+            "Removing the previous version in " + targetDir + " failed. Please uninstall " +
+            "mpz manually, then run this installer again.", QMessageBox.Ok);
         gui.clickButton(buttons.CancelButton);
-        return;
     }
-
-    // purge relaunches maintenancetool from %TEMP% to delete itself, so it returns
-    // before the folder is gone; wait for the old install to actually disappear or
-    // the target-directory page validation will still block Next.
-    for (var i = 0; i < 20 && installer.fileExists(maintenanceTool); i++)
-        installer.execute("cmd", ["/c", "ping -n 2 127.0.0.1 >nul"]);
 };
