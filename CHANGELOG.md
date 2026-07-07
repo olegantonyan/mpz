@@ -2,6 +2,7 @@
 
 ### Added
 
+- New icon (feat. @Hacker-Planet)
 - Windows native media controls (SMTC): title/artist/album, cover art and play/pause/stop/next/prev in the system media overlay
 - Windows taskbar: thumbnail buttons, progress bar and play/pause overlay
 

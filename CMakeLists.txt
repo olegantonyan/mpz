@@ -237,31 +237,7 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 )
 
 if(APPLE)
-  set(_iconset_dir ${CMAKE_CURRENT_BINARY_DIR}/mpz.iconset)
-  set(_icns_file ${CMAKE_CURRENT_BINARY_DIR}/mpz.icns)
-  set(_icon_src ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons)
-  add_custom_command(
-    OUTPUT ${_icns_file}
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${_iconset_dir}
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/16x16/mpz.png   ${_iconset_dir}/icon_16x16.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/32x32/mpz.png   ${_iconset_dir}/icon_16x16@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/32x32/mpz.png   ${_iconset_dir}/icon_32x32.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/64x64/mpz.png   ${_iconset_dir}/icon_32x32@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/128x128/mpz.png ${_iconset_dir}/icon_128x128.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/256x256/mpz.png ${_iconset_dir}/icon_128x128@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/256x256/mpz.png ${_iconset_dir}/icon_256x256.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/512x512/mpz.png ${_iconset_dir}/icon_256x256@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/512x512/mpz.png ${_iconset_dir}/icon_512x512.png
-    COMMAND iconutil -c icns ${_iconset_dir} -o ${_icns_file}
-    DEPENDS
-      ${_icon_src}/16x16/mpz.png
-      ${_icon_src}/32x32/mpz.png
-      ${_icon_src}/64x64/mpz.png
-      ${_icon_src}/128x128/mpz.png
-      ${_icon_src}/256x256/mpz.png
-      ${_icon_src}/512x512/mpz.png
-    VERBATIM
-  )
+  set(_icns_file ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.icns)
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${_icns_file})
   set_source_files_properties(${_icns_file} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
   set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES

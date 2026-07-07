@@ -2,6 +2,11 @@
     <qresource prefix="/">
         <file alias="app/resources/translations/ru.qm">resources/translations/ru.qm</file>
         <file alias="CHANGELOG.md">../CHANGELOG.md</file>
+        <file alias="app/resources/icons/16x16/mpz.png">resources/icons/16x16/mpz.png</file>
+        <file alias="app/resources/icons/22x22/mpz.png">resources/icons/22x22/mpz.png</file>
+        <file alias="app/resources/icons/24x24/mpz.png">resources/icons/24x24/mpz.png</file>
+        <file alias="app/resources/icons/32x32/mpz.png">resources/icons/32x32/mpz.png</file>
+        <file alias="app/resources/icons/48x48/mpz.png">resources/icons/48x48/mpz.png</file>
         <file alias="app/resources/icons/64x64/mpz.png">resources/icons/64x64/mpz.png</file>
         <file alias="app/resources/icons/256x256/mpz.png">resources/icons/256x256/mpz.png</file>
         <file alias="app/resources/translations/sr.qm">resources/translations/sr.qm</file>
