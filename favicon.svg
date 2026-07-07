@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 512 512" width="512" height="512" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <radialGradient id="bg6" cx="50%" cy="22%" r="82%">
+      <stop offset="0%" stop-color="#ff7ab8"/>
+      <stop offset="48%" stop-color="#c2477f"/>
+      <stop offset="100%" stop-color="#54203f"/>
+    </radialGradient>
+    <radialGradient id="d6" cx="43%" cy="35%" r="74%">
+      <stop offset="0%" stop-color="#40182a"/>
+      <stop offset="72%" stop-color="#220d18"/>
+      <stop offset="100%" stop-color="#12060d"/>
+    </radialGradient>
+    <linearGradient id="l6" x1="30%" y1="0%" x2="68%" y2="100%">
+      <stop offset="0%" stop-color="#ffef5c"/>
+      <stop offset="52%" stop-color="#ffd329"/>
+      <stop offset="100%" stop-color="#f5a400"/>
+    </linearGradient>
+    <linearGradient id="bars" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cf528b"/>
+      <stop offset="100%" stop-color="#5a2140"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bg6)"/>
+  <circle cx="256" cy="256" r="188" fill="url(#d6)"/>
+  <circle cx="256" cy="256" r="122" fill="url(#l6)"/>
+  <g transform="rotate(-43.688553,256,256)" fill="url(#bars)">
+    <rect x="193" y="225" width="34" height="62" rx="17"/>
+    <rect x="239" y="237" width="34" height="38" rx="17"/>
+    <rect x="285" y="222" width="34" height="68" rx="17"/>
+  </g>
+</svg>
