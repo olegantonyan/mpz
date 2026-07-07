@@ -33,7 +33,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #endif
   ui->setupUi(this);
   ui->verticalLayout->insertWidget(1, banner);
-  setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
+  QIcon app_icon;
+  for (const QString &size : {"16x16", "22x22", "24x24", "32x32", "48x48", "64x64", "256x256"})
+    app_icon.addFile(":/app/resources/icons/" + size + "/mpz.png");
+  setWindowIcon(app_icon);
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
