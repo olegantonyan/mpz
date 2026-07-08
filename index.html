@@ -108,6 +108,7 @@
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
                 "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
+                "keywords": "foobar2000 alternative, folder-based music player, FLAC player, local music player, CUE sheet player, MPRIS music player",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
@@ -176,10 +177,34 @@
                     },
                     {
                         "@type": "Question",
+                        "name": "Is mpz a Foobar2000 alternative?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Sort of. mpz is inspired by Foobar2000 — especially its 'Album list' — but it isn't a Foobar2000 clone; a faithful cross-platform clone isn't feasible and isn't the goal. It keeps the features the author has used daily for years, in a native, folder-based player that runs on Linux, macOS, and Windows, whereas Foobar2000 is Windows-only. If you organize your music in folders and want a Foobar2000-style workflow on Linux or macOS, mpz may suit you."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can mpz handle very large music collections?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes — that's what it's built for. mpz treats your folder structure as the library, with no global indexing step, so it doesn't scan a whole collection into a database before you can play anything."
+                        }
+                    },
+                    {
+                        "@type": "Question",
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub — builds for 64-bit x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz have a mobile app (Android or iOS)?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "No. mpz is a desktop music player for Linux, macOS, and Windows only; there is no Android or iOS version. On Linux, you can control desktop playback from a phone over MPRIS — for example via KDE Connect."
                         }
                     },
                     {
@@ -196,6 +221,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services are not."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "What audio formats does mpz support?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Common formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, and WAV — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine."
                         }
                     },
                     {
@@ -1120,9 +1153,7 @@
                     </div>
 
                     <details id="faq" class="mt-6 has-text-grey">
-                        <summary class="is-size-7">
-                            Frequently asked questions
-                        </summary>
+                        <summary>Frequently asked questions</summary>
                         <div class="content is-small mt-3">
                             <p>
                                 <strong>What is mpz?</strong><br />
@@ -1131,6 +1162,34 @@
                                 and Qt. It treats your folder structure as the
                                 library and offers a 3-column UI for the
                                 directory tree, playlists, and tracks.
+                            </p>
+
+                            <p>
+                                <strong
+                                    >Is mpz a Foobar2000 alternative?</strong
+                                ><br />
+                                Sort of. mpz is inspired by Foobar2000 —
+                                especially its "Album list" — but it isn't a
+                                Foobar2000 clone; a faithful cross-platform clone
+                                isn't feasible and isn't the goal. It keeps the
+                                features the author has used daily for years, in
+                                a native, folder-based player that runs on Linux,
+                                macOS, and Windows, whereas Foobar2000 is
+                                Windows-only. If you organize your music in
+                                folders and want a Foobar2000-style workflow on
+                                Linux or macOS, mpz may suit you.
+                            </p>
+
+                            <p>
+                                <strong
+                                    >Can mpz handle very large music
+                                    collections?</strong
+                                ><br />
+                                Yes — that's what it's built for. mpz treats your
+                                folder structure as the library, with no global
+                                indexing step, so it doesn't scan a whole
+                                collection into a database before you can play
+                                anything.
                             </p>
 
                             <p>
@@ -1156,6 +1215,24 @@
                             </p>
 
                             <p>
+                                <strong
+                                    >Does mpz have a mobile app (Android or
+                                    iOS)?</strong
+                                ><br />
+                                No. mpz is a desktop music player for Linux,
+                                macOS, and Windows only; there is no Android or
+                                iOS version. On Linux, you can control desktop
+                                playback from a phone over MPRIS — for example
+                                via
+                                <a
+                                    href="https://kdeconnect.kde.org/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >KDE Connect</a
+                                >.
+                            </p>
+
+                            <p>
                                 <strong>Is mpz free?</strong><br />
                                 Yes. mpz is free and open-source software,
                                 licensed under the GNU GPL v3.
@@ -1170,6 +1247,20 @@
                                 radio streams in m3u and pls playlist formats
                                 are supported, but online streaming services are
                                 not.
+                            </p>
+
+                            <p>
+                                <strong
+                                    >What audio formats does mpz
+                                    support?</strong
+                                ><br />
+                                Common formats — FLAC, MP3, Ogg Vorbis, AAC,
+                                ALAC, and WAV — played through your system's
+                                codecs (QtMultimedia with the GStreamer or ffmpeg
+                                backend on Linux, native backends on macOS and
+                                Windows). Because playback uses system codecs,
+                                exact format availability depends on what's
+                                installed on your machine.
                             </p>
 
                             <p>

@@ -43,11 +43,19 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 
 **What is mpz?** A free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.
 
+**Is mpz a Foobar2000 alternative?** Sort of. mpz is inspired by Foobar2000 — especially its "Album list" — but it isn't a Foobar2000 clone; a faithful cross-platform clone isn't feasible and isn't the goal. It keeps the features the author has used daily for years, in a native, folder-based player that runs on Linux, macOS, and Windows, whereas Foobar2000 is Windows-only. If you organize your music in folders and want a Foobar2000-style workflow on Linux or macOS, mpz may suit you.
+
+**Can mpz handle very large music collections?** Yes — that's what it's built for. mpz treats your folder structure as the library, with no global indexing step, so it doesn't scan a whole collection into a database before you can play anything.
+
 **What platforms does mpz support?** Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub — builds for x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the `.dmg` from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch — either remove the quarantine flag with `xattr -dr com.apple.quarantine "/Applications/mpz music player.app"`, or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler.
+
+**Does mpz have a mobile app (Android or iOS)?** No. mpz is a desktop music player for Linux, macOS, and Windows only; there is no Android or iOS version. On Linux, you can control desktop playback from a phone over MPRIS — for example via KDE Connect (<https://kdeconnect.kde.org/>).
 
 **Is mpz free?** Yes. Free and open-source under the GNU GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.html>).
 
 **Does mpz support streaming services?** No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services (Spotify, Apple Music, etc.) are not.
+
+**What audio formats does mpz support?** Common formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, and WAV — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine.
 
 **Does mpz support CUE sheets?** Yes.
 

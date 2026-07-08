@@ -308,6 +308,7 @@ section.pt-4 .has-text-centered img {
 
 /* Details/summary tweak so the FAQ block reads cleanly */
 details > summary { cursor: pointer; }
+#faq > summary { font-size: 1.05rem; font-weight: 600; color: var(--text); }
 
 /* Theme toggle: ghost button, only the active icon is visible */
 #theme-toggle {
