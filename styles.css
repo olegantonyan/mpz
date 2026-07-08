@@ -166,7 +166,8 @@ code {
   color: var(--text-muted);
 }
 
-h3 { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
+.screenshot { margin: 0; }
+.screenshot figcaption { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0 0; }
 
 .content { line-height: 1.55; }
 .content p { margin: 0 0 0.85em 0; }
@@ -291,6 +292,7 @@ header { display: block; }
 main { display: block; }
 
 /* Badge row: normalize heights so mixed shields.io styles align cleanly */
+section.pt-4 .has-text-centered { min-height: 2.5rem; }
 section.pt-4 .has-text-centered a {
   display: inline-block;
   margin: 0.15rem 0.2rem;
@@ -324,3 +326,39 @@ details > summary { cursor: pointer; }
 #theme-toggle[data-state="system"] [data-icon="system"],
 #theme-toggle[data-state="light"]  [data-icon="light"],
 #theme-toggle[data-state="dark"]   [data-icon="dark"] { display: inline-block; }
+
+/* Section anchor nav */
+.section-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.section-nav .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding-block: 0.6rem;
+}
+.section-nav a {
+  color: var(--text-muted);
+  position: relative;
+}
+.section-nav a:hover { color: var(--link); text-decoration: none; }
+.section-nav a + a::before {
+  content: "·";
+  position: absolute;
+  left: -0.7rem;
+  color: var(--border);
+}
+
+[id] { scroll-margin-top: 1rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Install table: highlight the visitor's OS row */
+.table tr.os-current th,
+.table tr.os-current td { background: var(--surface-2); }
+.table tr.os-current th { border-left: 3px solid var(--link); }

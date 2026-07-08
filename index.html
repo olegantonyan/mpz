@@ -5,7 +5,7 @@
         <title>mpz — music player for large local collections</title>
         <meta
             name="description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -28,6 +28,12 @@
             title="Plain-text content for LLMs"
             href="/llms-full.txt"
         />
+        <link
+            rel="alternate"
+            type="application/atom+xml"
+            title="mpz releases"
+            href="https://github.com/olegantonyan/mpz/releases.atom"
+        />
 
         <meta
             property="og:title"
@@ -35,7 +41,7 @@
         />
         <meta
             property="og:description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -43,14 +49,14 @@
         <meta property="og:locale" content="en_US" />
         <meta
             property="og:image"
-            content="https://mpz-player.org/images/breeze-dark.png"
+            content="https://mpz-player.org/images/social-card.png"
         />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1960" />
-        <meta property="og:image:height" content="1094" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta
             property="og:image:alt"
-            content="mpz music player main window with the KDE Breeze Dark theme: directory tree, playlists, and tracks"
+            content="mpz — free and open-source music player for large local collections on Linux, macOS, and Windows"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -60,15 +66,15 @@
         />
         <meta
             name="twitter:description"
-            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client. Linux, macOS, Windows."
+            content="Open-source, native C++/Qt music player for large local collections. Folder-based 3-column UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta
             name="twitter:image"
-            content="https://mpz-player.org/images/breeze-dark.png"
+            content="https://mpz-player.org/images/social-card.png"
         />
         <meta
             name="twitter:image:alt"
-            content="mpz music player main window with the KDE Breeze Dark theme: directory tree, playlists, and tracks"
+            content="mpz — free and open-source music player for large local collections on Linux, macOS, and Windows"
         />
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -103,7 +109,15 @@
                 "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
                 "description": "Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
                 "url": "https://mpz-player.org/",
-                "downloadUrl": "https://mpz-player.org/#install",
+                "sameAs": [
+                    "https://github.com/olegantonyan/mpz",
+                    "https://www.producthunt.com/products/mpz-desktop-music-player"
+                ],
+                "downloadUrl": "https://github.com/olegantonyan/mpz/releases",
+                "installUrl": "https://mpz-player.org/#install",
+                "softwareHelp": "https://github.com/olegantonyan/mpz#readme",
+                "releaseNotes": "https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md",
+                "image": "https://mpz-player.org/images/mpz.png",
                 "screenshot": "https://mpz-player.org/images/breeze-dark.png",
                 "featureList": [
                     "Folder-based library — no global indexing step",
@@ -398,9 +412,9 @@
 
                             <div class="column">
                                 <h1 class="title">mpz</h1>
-                                <h2 class="subtitle">
+                                <p class="subtitle">
                                     Music player for large local collections
-                                </h2>
+                                </p>
                             </div>
 
                             <div class="column is-narrow">
@@ -473,6 +487,21 @@
             </section>
         </header>
 
+        <nav class="section-nav" aria-label="Sections">
+            <div class="container">
+                <a href="#library">Screenshots</a>
+                <a href="#features">Features</a>
+                <a href="#install">Install</a>
+                <a href="#faq">FAQ</a>
+                <a
+                    href="https://github.com/olegantonyan/mpz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >GitHub</a
+                >
+            </div>
+        </nav>
+
         <main>
             <section class="section pt-4 pb-2">
                 <div class="container has-text-centered">
@@ -483,6 +512,7 @@
                         ><img
                             src="https://img.shields.io/badge/license-GPL--3.0-blue"
                             alt="GPL-3.0 license"
+                            height="20"
                     /></a>
                     <a
                         href="https://github.com/olegantonyan/mpz/releases/latest"
@@ -491,6 +521,7 @@
                         ><img
                             src="https://img.shields.io/github/v/release/olegantonyan/mpz?color=success"
                             alt="Latest release"
+                            height="20"
                     /></a>
                     <a
                         href="https://github.com/olegantonyan/mpz/commits/master"
@@ -499,6 +530,7 @@
                         ><img
                             src="https://img.shields.io/github/last-commit/olegantonyan/mpz"
                             alt="Last commit"
+                            height="20"
                     /></a>
                     <a
                         href="https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md"
@@ -507,6 +539,7 @@
                         ><img
                             src="https://img.shields.io/badge/changelog-md-lightgrey"
                             alt="Changelog"
+                            height="20"
                     /></a>
                     <a
                         href="https://github.com/olegantonyan/mpz/stargazers"
@@ -515,6 +548,7 @@
                         ><img
                             src="https://img.shields.io/github/stars/olegantonyan/mpz?style=social"
                             alt="GitHub stars"
+                            height="20"
                     /></a>
                     <a
                         href="https://repositories.omnipackage.org/mpz/stable/install.html"
@@ -591,104 +625,118 @@
 
                     <div class="columns">
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/breeze-dark.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/breeze-dark.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/breeze-dark.png"
-                                            alt="mpz on KDE Plasma with the Breeze Dark theme"
-                                            width="512"
-                                            height="285"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/breeze-dark.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/breeze-dark.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/breeze-dark.png"
+                                                alt="mpz on KDE Plasma with the Breeze Dark theme"
+                                                width="512"
+                                                height="285"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>
+                                    KDE Breeze Dark desktop theme
+                                </figcaption>
                             </figure>
-                            <h3>KDE Breeze Dark desktop theme</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/breeze-light.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/breeze-light.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/breeze-light.png"
-                                            alt="mpz on KDE Plasma with the Breeze Light theme"
-                                            width="512"
-                                            height="285"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/breeze-light.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/breeze-light.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/breeze-light.png"
+                                                alt="mpz on KDE Plasma with the Breeze Light theme"
+                                                width="512"
+                                                height="285"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>
+                                    KDE Breeze Light desktop theme
+                                </figcaption>
                             </figure>
-                            <h3>KDE Breeze Light desktop theme</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/ubuntu.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/ubuntu.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/ubuntu.png"
-                                            alt="mpz running on Ubuntu"
-                                            width="512"
-                                            height="292"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/ubuntu.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/ubuntu.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/ubuntu.png"
+                                                alt="mpz running on Ubuntu"
+                                                width="512"
+                                                height="292"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Ubuntu</figcaption>
                             </figure>
-                            <h3>Ubuntu</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/windows10.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/windows10.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/windows10.png"
-                                            alt="mpz running on Windows 10"
-                                            width="512"
-                                            height="292"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/windows10.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/windows10.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/windows10.png"
+                                                alt="mpz running on Windows 10"
+                                                width="512"
+                                                height="292"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Windows 10</figcaption>
                             </figure>
-                            <h3>Windows 10</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/macos.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/macos.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/macos.png"
-                                            alt="mpz running on macOS"
-                                            width="512"
-                                            height="299"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/macos.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/macos.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/macos.png"
+                                                alt="mpz running on macOS"
+                                                width="512"
+                                                height="299"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>macOS</figcaption>
                             </figure>
-                            <h3>macOS</h3>
                         </div>
                     </div>
 
@@ -744,13 +792,6 @@
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 >KDE Connect</a
-                            >. Got feedback? Feature request? Found a bug? Use
-                            the built-in feedback form, or open a
-                            <a
-                                href="https://github.com/olegantonyan/mpz/issues"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >GitHub issue</a
                             >.
                         </p>
                         <p>
@@ -783,84 +824,94 @@
 
                     <div class="columns">
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/feedback-form.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/feedback-form.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/feedback-form.png"
-                                            alt="The built-in feedback form dialog"
-                                            width="512"
-                                            height="288"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/feedback-form.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/feedback-form.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/feedback-form.png"
+                                                alt="The built-in feedback form dialog"
+                                                width="512"
+                                                height="288"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Feedback form</figcaption>
                             </figure>
-                            <h3>Feedback form</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/about.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/about.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/about.png"
-                                            alt="The mpz About window showing version and credits"
-                                            width="512"
-                                            height="288"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/about.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/about.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/about.png"
+                                                alt="The mpz About window showing version and credits"
+                                                width="512"
+                                                height="288"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>About window</figcaption>
                             </figure>
-                            <h3>About window</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/library-config.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/library-config.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/library-config.png"
-                                            alt="Dialog for configuring library folders"
-                                            width="512"
-                                            height="288"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/library-config.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/library-config.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/library-config.png"
+                                                alt="Dialog for configuring library folders"
+                                                width="512"
+                                                height="288"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>
+                                    Library folders configuration
+                                </figcaption>
                             </figure>
-                            <h3>Library folders configuration</h3>
                         </div>
                         <div class="column">
-                            <figure class="image is-16by9">
-                                <a href="/images/playback-log.png">
-                                    <picture>
-                                        <source
-                                            srcset="/images/small/playback-log.webp"
-                                            type="image/webp"
-                                        />
-                                        <img
-                                            src="/images/small/playback-log.png"
-                                            alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
-                                            width="512"
-                                            height="288"
-                                            loading="lazy"
-                                        />
-                                    </picture>
-                                </a>
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/playback-log.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/playback-log.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/playback-log.png"
+                                                alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
+                                                width="512"
+                                                height="288"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Playback log</figcaption>
                             </figure>
-                            <h3>Playback log</h3>
                         </div>
                     </div>
 
@@ -868,7 +919,7 @@
                     <div class="content">
                         <table class="table is-fullwidth">
                             <tbody>
-                                <tr>
+                                <tr data-os="linux">
                                     <th scope="row" style="white-space: nowrap">
                                         openSUSE, Debian,<br />Fedora,
                                         Ubuntu,<br />RedHat, Mageia,<br />Arch,
@@ -935,7 +986,7 @@
                                         </details>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr data-os="linux">
                                     <th scope="row">Arch <small>(AUR)</small></th>
                                     <td>
                                         An AUR package is also available if you
@@ -955,7 +1006,7 @@
                                         >.
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr data-os="windows">
                                     <th scope="row">Windows</th>
                                     <td>
                                         Download the installer or portable build
@@ -970,7 +1021,7 @@
                                         ARM), and legacy 32-bit systems.
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr data-os="macos">
                                     <th scope="row">macOS</th>
                                     <td>
                                         Download the
@@ -1054,8 +1105,10 @@
                         Foobar2000 clone — that's not feasible, and not the
                         goal. Instead, mpz has all the features I've been using
                         for many years (quite literally the same unchanged
-                        Foobar2000 config since 2005 or so). You may find it
-                        useful too, or it may not fit your taste. Either way,
+                        Foobar2000 config since 2005 or so). So if you're
+                        looking for a Foobar2000-style alternative on Linux,
+                        macOS, or Windows, mpz may be it — or it may not fit
+                        your taste. Either way,
                         I'd love to hear from you — use the built-in feedback
                         form or
                         <a
@@ -1291,6 +1344,27 @@
                 }
                 window.addEventListener("hashchange", openHashTargetDetails);
                 openHashTargetDetails();
+
+                var plat = (
+                    navigator.userAgentData?.platform ||
+                    navigator.platform ||
+                    ""
+                ).toLowerCase();
+                var os =
+                    plat.indexOf("win") >= 0
+                        ? "windows"
+                        : plat.indexOf("mac") >= 0
+                          ? "macos"
+                          : plat.indexOf("linux") >= 0
+                            ? "linux"
+                            : "";
+                if (os) {
+                    document
+                        .querySelectorAll('tr[data-os="' + os + '"]')
+                        .forEach(function (row) {
+                            row.classList.add("os-current");
+                        });
+                }
 
                 var btn = document.getElementById("theme-toggle");
                 var states = ["system", "light", "dark"];
