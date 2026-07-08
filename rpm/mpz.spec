@@ -45,13 +45,7 @@ make install
 %license license.txt
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
-%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
-%{_datadir}/icons/hicolor/192x192/apps/%{name}.png
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-%{_datadir}/icons/hicolor/96x96/apps/%{name}.png
-%{_datadir}/icons/hicolor/72x72/apps/%{name}.png
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 %{_datadir}/icons/hicolor/24x24/apps/%{name}.png
@@ -60,20 +54,8 @@ make install
 
 %dir %{_datadir}/applications/
 %dir %{_datadir}/icons/hicolor/
-%dir %{_datadir}/icons/hicolor/512x512
-%dir %{_datadir}/icons/hicolor/512x512/apps/
-%dir %{_datadir}/icons/hicolor/256x256
-%dir %{_datadir}/icons/hicolor/256x256/apps/
-%dir %{_datadir}/icons/hicolor/192x192
-%dir %{_datadir}/icons/hicolor/192x192/apps/
-%dir %{_datadir}/icons/hicolor/128x128
-%dir %{_datadir}/icons/hicolor/128x128/apps/
-%dir %{_datadir}/icons/hicolor/96x96
-%dir %{_datadir}/icons/hicolor/96x96/apps/
-%dir %{_datadir}/icons/hicolor/72x72
-%dir %{_datadir}/icons/hicolor/72x72/apps/
-%dir %{_datadir}/icons/hicolor/64x64
-%dir %{_datadir}/icons/hicolor/64x64/apps/
+%dir %{_datadir}/icons/hicolor/scalable
+%dir %{_datadir}/icons/hicolor/scalable/apps/
 %dir %{_datadir}/icons/hicolor/48x48
 %dir %{_datadir}/icons/hicolor/48x48/apps/
 %dir %{_datadir}/icons/hicolor/32x32
