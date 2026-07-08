@@ -43,6 +43,19 @@ mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/direc
 mpz_add_test(tst_sysinfo tst_sysinfo.cpp ${APP}/sysinfo.cpp)
 target_link_libraries(tst_sysinfo PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
+# ProviderChain statics (knownProviders/displayName) are pure; the .cpp includes
+# the network client headers, but --gc-sections drops the unreferenced
+# makeProvider/fetch bodies so only QtNetwork include paths are needed.
+mpz_add_test(tst_providerchain tst_providerchain.cpp ${APP}/lyrics/providerchain.cpp)
+target_link_libraries(tst_providerchain PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
+# UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
+# <QApplication> and a QNetworkAccessManager member for its include paths; the
+# networking/qApp code is unreferenced by the test and dropped by --gc-sections.
+mpz_add_test(tst_updatechecker tst_updatechecker.cpp ${APP}/update_check/updatechecker.cpp)
+target_link_libraries(tst_updatechecker PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network)
+
 # Tests that compile track.cpp pull TagLib + yaml-cpp transitively through
 # coverart/covers.h → modusoperandi.h → config/local.h → storage.h. With
 # --gc-sections the unreferenced TagLib/CoverArt calls inside track.o get
@@ -63,6 +76,16 @@ mpz_add_test(tst_sorter tst_sorter.cpp
   ${APP}/streammetadata.cpp)
 target_link_libraries(tst_sorter PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+
+mpz_add_test(tst_playlist tst_playlist.cpp
+  ${APP}/playlist/playlist.cpp
+  ${APP}/playlist/sorter.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_playlist PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
 
 mpz_add_test(tst_columnsconfig tst_columnsconfig.cpp
   ${APP}/playlist_ui/columnsconfig.cpp
