@@ -16,6 +16,10 @@ public:
 
   static void setAppUserModelId();
 
+public slots:
+  void refresh();
+
+public:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
   using native_result_t = qintptr;
 #else

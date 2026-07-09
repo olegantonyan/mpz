@@ -26,6 +26,7 @@ signals:
 
 public slots:
   void hide();
+  void refreshIcons();
   void on_playerStarted(const Track &track);
   void on_playerStopped();
   void on_playerPaused(const Track &track);

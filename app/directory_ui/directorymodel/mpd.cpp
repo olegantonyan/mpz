@@ -1,4 +1,5 @@
 #include "mpd.h"
+#include "icons.h"
 
 #include <QDebug>
 #include <QUrl>
@@ -149,7 +150,7 @@ namespace DirectoryUi {
         return item->path;
       case Qt::DecorationRole:
         if (item->is_directory) {
-          return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+          return Icons::get(Icons::Icon::Folder);
         } else {
           return QFileIconProvider().icon(QFileInfo(item->name));
         }

@@ -1,6 +1,7 @@
 #include "sortingpresetsdialog.h"
 #include "ui_sortingpresets.h"
 #include "playlist/sorter.h"
+#include "icons.h"
 
 #include <QInputDialog>
 #include <QStyle>
@@ -9,7 +10,7 @@
 SortingPresetsDialog::SortingPresetsDialog(const QList<SortingPreset> &_pr, QWidget *parent) : QDialog(parent), ui(new Ui::SortingPresets), presets(_pr) {
   ui->setupUi(this);
   ui->listViewPresets->setModel(&model);
-  ui->buttonHelp->setIcon(style()->standardIcon(QStyle::SP_DialogHelpButton));
+  ui->buttonHelp->setIcon(Icons::get(Icons::Icon::Help));
   refreshModel();
   ui->labelDefault->setText(tr("Default") + ": " + Playlist::Sorter::defaultCriteria());
 }

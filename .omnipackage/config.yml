@@ -74,55 +74,55 @@ deb: &deb
     debian_templates: ".omnipackage/deb"
 
 opensuse_qt5: &opensuse_qt5
-  build_dependencies: [gcc, make, cmake, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel]
+  runtime_dependencies: [hicolor-icon-theme, libQt5Svg5]
   CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 opensuse_qt6: &opensuse_qt6
-  build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel]
+  runtime_dependencies: [hicolor-icon-theme, libQt6Svg6]
   <<: *rpm
 
 mageia_qt5: &mageia_qt5
   build_dependencies:
-    [gcc, make, cmake, qtbase5-common-devel, lib64qt5core-devel, lib64qt5gui-devel, lib64qt5widgets-devel, lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+    [gcc, make, cmake, qtbase5-common-devel, lib64qt5core-devel, lib64qt5gui-devel, lib64qt5widgets-devel, lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel, lib64qt5svg-devel]
+  runtime_dependencies: [hicolor-icon-theme, lib64qt5svg5]
   CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 mageia_qt6: &mageia_qt6
-  build_dependencies: [gcc, make, cmake, qtbase6-common-devel, lib64qt6core-devel, lib64qt6gui-devel, lib64qt6widgets-devel, lib64qt6concurrent-devel, lib64qt6multimedia-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, qtbase6-common-devel, lib64qt6core-devel, lib64qt6gui-devel, lib64qt6widgets-devel, lib64qt6concurrent-devel, lib64qt6multimedia-devel, lib64qt6svg-devel]
+  runtime_dependencies: [hicolor-icon-theme, lib64qt6svg6]
   <<: *rpm
 
 readhat_qt5: &readhat_qt5
-  build_dependencies: [gcc, make, cmake, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, qt5-qtbase-devel, qt5-qtmultimedia-devel, qt5-qtx11extras-devel, qt5-qtsvg-devel]
+  runtime_dependencies: [hicolor-icon-theme, qt5-qtsvg]
   CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 readhat_qt6: &readhat_qt6
-  build_dependencies: [gcc, make, cmake, qt6-qtbase-devel, qt6-qtmultimedia-devel]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, qt6-qtbase-devel, qt6-qtmultimedia-devel, qt6-qtsvg-devel]
+  runtime_dependencies: [hicolor-icon-theme, qt6-qtsvg]
   <<: *rpm
 
 debian_qt5: &debian_qt5
-  build_dependencies: [gcc, make, cmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev]
-  runtime_dependencies: [hicolor-icon-theme, libqt5multimedia5-plugins]
+  build_dependencies: [gcc, make, cmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev, libqt5svg5-dev]
+  runtime_dependencies: [hicolor-icon-theme, libqt5multimedia5-plugins, libqt5svg5]
   CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *deb
 
 debian_qt6: &debian_qt6
-  build_dependencies: [gcc, make, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev]
-  runtime_dependencies: [hicolor-icon-theme]
+  build_dependencies: [gcc, make, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev, libqt6svg6-dev]
+  runtime_dependencies: [hicolor-icon-theme, libqt6svg6]
   <<: *deb
 
 pacman: &pacman
   <<: *common
   CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON"
-  build_dependencies: [cmake, make, qt6-base, qt6-multimedia, taglib, yaml-cpp, libmpdclient]
-  runtime_dependencies: [qt6-base, qt6-multimedia, hicolor-icon-theme, taglib, yaml-cpp, libmpdclient]
+  build_dependencies: [cmake, make, qt6-base, qt6-multimedia, qt6-svg, taglib, yaml-cpp, libmpdclient]
+  runtime_dependencies: [qt6-base, qt6-multimedia, qt6-svg, hicolor-icon-theme, taglib, yaml-cpp, libmpdclient]
   pacman:
     pkgbuild_template: ".omnipackage/PKGBUILD.liquid"
 
@@ -145,7 +145,7 @@ builds:
   - distro: "opensuse_tumbleweed"
     <<: *opensuse_qt6
     CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON"
-    build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, libtag-devel, yaml-cpp-devel, libmpdclient-devel]
+    build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel, libtag-devel, yaml-cpp-devel, libmpdclient-devel]
 
   - distro: "debian_11"
     <<: *debian_qt5

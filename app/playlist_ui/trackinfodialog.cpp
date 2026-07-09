@@ -1,6 +1,7 @@
 #include "trackinfodialog.h"
 #include "ui_trackinfodialog.h"
 
+#include "icons.h"
 #include "tageditordialog.h"
 #include "config/global.h"
 #include "lyrics/lrcparser.h"
@@ -287,7 +288,7 @@ void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &
   });
 
   QAction show_in_filemanager(tr("Open in external viewer"));
-  show_in_filemanager.setIcon(ui->labelCoverArt->style()->standardIcon(QStyle::SP_DirLinkIcon));
+  show_in_filemanager.setIcon(Icons::get(Icons::Icon::FolderReveal));
   connect(&show_in_filemanager, &QAction::triggered, this, [=]() {
     if (!cover_art_path.isEmpty()) {
       QDesktopServices::openUrl(QUrl::fromLocalFile(cover_art_path));

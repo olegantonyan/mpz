@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="icons/ui/play.svg">../../../../3rdparty/icons-1.13.1/icons/play-fill.svg</file>
+        <file alias="icons/ui/pause.svg">../../../../3rdparty/icons-1.13.1/icons/pause-fill.svg</file>
+        <file alias="icons/ui/stop.svg">../../../../3rdparty/icons-1.13.1/icons/stop-fill.svg</file>
+        <file alias="icons/ui/next.svg">../../../../3rdparty/icons-1.13.1/icons/skip-end-fill.svg</file>
+        <file alias="icons/ui/prev.svg">../../../../3rdparty/icons-1.13.1/icons/skip-start-fill.svg</file>
+        <file alias="icons/ui/volume.svg">../../../../3rdparty/icons-1.13.1/icons/volume-up.svg</file>
+        <file alias="icons/ui/volume-muted.svg">../../../../3rdparty/icons-1.13.1/icons/volume-mute.svg</file>
+        <file alias="icons/ui/headphones.svg">../../../../3rdparty/icons-1.13.1/icons/headphones.svg</file>
+        <file alias="icons/ui/settings.svg">../../../../3rdparty/icons-1.13.1/icons/gear.svg</file>
+        <file alias="icons/ui/menu.svg">../../../../3rdparty/icons-1.13.1/icons/list.svg</file>
+        <file alias="icons/ui/sort.svg">../../../../3rdparty/icons-1.13.1/icons/arrow-down-up.svg</file>
+        <file alias="icons/ui/trash.svg">../../../../3rdparty/icons-1.13.1/icons/trash.svg</file>
+        <file alias="icons/ui/folder.svg">../../../../3rdparty/icons-1.13.1/icons/folder.svg</file>
+        <file alias="icons/ui/folder-reveal.svg">../../../../3rdparty/icons-1.13.1/icons/folder2-open.svg</file>
+        <file alias="icons/ui/reload.svg">../../../../3rdparty/icons-1.13.1/icons/arrow-clockwise.svg</file>
+        <file alias="icons/ui/save.svg">../../../../3rdparty/icons-1.13.1/icons/floppy.svg</file>
+        <file alias="icons/ui/info.svg">../../../../3rdparty/icons-1.13.1/icons/info-circle.svg</file>
+        <file alias="icons/ui/details.svg">../../../../3rdparty/icons-1.13.1/icons/list-ul.svg</file>
+        <file alias="icons/ui/help.svg">../../../../3rdparty/icons-1.13.1/icons/question-circle.svg</file>
+        <file alias="icons/ui/cancel.svg">../../../../3rdparty/icons-1.13.1/icons/x-lg.svg</file>
+    </qresource>
+</RCC>

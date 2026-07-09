@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
 #include "coverart/covers.h"
+#include "icons.h"
+#include "mpzapplication.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -44,13 +46,15 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, modus_operandi, this);
 
-  ui->toolButtonLibrarySort->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
+  ui->toolButtonLibrarySort->setIcon(Icons::get(Icons::Icon::Sort));
+  ui->toolButtonLibraries->setIcon(Icons::get(Icons::Icon::Settings));
+  ui->toolButtonLibraries->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-  ui->stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-  ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-  ui->pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-  ui->nextButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-  ui->prevButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+  ui->stopButton->setIcon(Icons::get(Icons::Icon::Stop));
+  ui->playButton->setIcon(Icons::get(Icons::Icon::Play));
+  ui->pauseButton->setIcon(Icons::get(Icons::Icon::Pause));
+  ui->nextButton->setIcon(Icons::get(Icons::Icon::Next));
+  ui->prevButton->setIcon(Icons::get(Icons::Icon::Prev));
   Playback::Controls pc;
   pc.next = ui->nextButton;
   pc.prev = ui->prevButton;
@@ -317,6 +321,7 @@ void MainWindow::setupWindowsMediaControls() {
 #ifdef Q_OS_WIN
 void MainWindow::setupWindowsTaskbar() {
   win_taskbar = new WindowsTaskbar(player, this, this);
+  connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, win_taskbar, &WindowsTaskbar::refresh);
 }
 #endif
 
@@ -346,8 +351,7 @@ void MainWindow::setupVolumeControl() {
 }
 
 void MainWindow::setupMainMenu() {
-  //ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-  ui->menuButton->setText(QString::fromUtf8("\u2630"));
+  ui->menuButton->setIcon(Icons::get(Icons::Icon::Menu));
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 #ifdef Q_OS_MACOS
   // Everything the hamburger menu offers lives in the native menu bar
@@ -376,6 +380,7 @@ void MainWindow::setupTrayIcon() {
     return;
   }
   trayicon = new TrayIcon(this);
+  connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, trayicon, &TrayIcon::refreshIcons);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
@@ -577,7 +582,7 @@ void MainWindow::setupPlaybackLog() {
 void MainWindow::setupSortMenu() {
   sort_menu = new SortUi::SortMenu(ui->sortButton, global_conf);
 
-  ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
+  ui->sortButton->setIcon(Icons::get(Icons::Icon::Sort));
 
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
 }
@@ -617,6 +622,8 @@ void MainWindow::setupOutputDevice() {
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
   });
   ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
+  ui->toolButtonOutputDevice->setIcon(Icons::get(Icons::Icon::Headphones));
+  ui->toolButtonOutputDevice->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
