@@ -751,229 +751,234 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="55"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="56"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="59"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="61"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="61"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="62"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="67"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="68"/>
         <source>Open config directory</source>
         <translation>Открыть папку с конфигами</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="102"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="103"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="106"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="107"/>
         <source>Stop playback when current track or playlist is removed</source>
         <translation>Останавливать воспроизведение при удалении трека или плейлиста</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="110"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="111"/>
         <source>Prevent system sleep while playing</source>
         <translation>Не давать системе уснуть во время воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="116"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="117"/>
         <source>KiB</source>
         <translation>КиБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="122"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="123"/>
         <source>Stream buffer size:</source>
         <translation>Размер буфера потока:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="130"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="131"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="136"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="137"/>
         <source>Show system tray icon</source>
         <translation>Показывать значок в трее</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="140"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="143"/>
+        <source>No system tray detected. On GNOME, install the &quot;AppIndicator and KStatusNotifierItem Support&quot; extension for the tray icon to appear.</source>
+        <translation>Системный трей не обнаружен. В GNOME установите расширение «AppIndicator and KStatusNotifierItem Support», чтобы значок в трее отображался.</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="151"/>
         <source>Close to tray instead of quitting</source>
         <translation>Скрывать в трей вместо выхода</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="146"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="157"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="151"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="162"/>
         <source>Override theme&apos;s playlist row height:</source>
         <translation>Переопределить высоту строки плейлиста из темы:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="154"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="165"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="172"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="183"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="174"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="240"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="368"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="381"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="185"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="251"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="379"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="392"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="183"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="194"/>
         <source>Library</source>
         <translation>Библиотека</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="187"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="198"/>
         <source>All levels (default)</source>
         <translation>Все уровни (по умолчанию)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="188"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="199"/>
         <source>Top level only</source>
         <translation>Только верхний уровень</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="201"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="212"/>
         <source>Filter scope:</source>
         <translation>Область фильтра:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="209"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="220"/>
         <source>Playlist columns</source>
         <translation>Столбцы плейлиста</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="214"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="225"/>
         <source>Field</source>
         <translation>Поле</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="214"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="225"/>
         <source>Width %</source>
         <translation>Ширина %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="214"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="225"/>
         <source>Alignment</source>
         <translation>Выравнивание</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="214"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="225"/>
         <source>Stretch</source>
         <translation>Растягивать</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="228"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="407"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="239"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="418"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="229"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="408"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="240"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="419"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="230"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="241"/>
         <source>Move up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="231"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="242"/>
         <source>Move down</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="232"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="243"/>
         <source>Restore defaults</source>
         <translation>Восстановить по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="265"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="478"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="276"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="489"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="266"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="479"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="277"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="349"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="360"/>
         <source>Provider order (drag to reorder, uncheck to disable):</source>
         <translation>Порядок источников (перетащите для изменения, снимите галочку для отключения):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="365"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
         <source>Single instance mode</source>
         <translation>Один экземпляр приложения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="387"/>
         <source>IPC port:</source>
         <translation>IPC порт:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="389"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="400"/>
         <source>Playback log size:</source>
         <translation>Размер лога воспроизведения:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="392"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="403"/>
         <source>entries</source>
         <translation>записей</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="400"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="411"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="403"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="414"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="417"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="428"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="418"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="429"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="429"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="440"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
