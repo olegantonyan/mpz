@@ -38,7 +38,7 @@ set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from pack
 
 set(PROJECT_SOURCES
   app/icons.cpp
-  app/resources/icons/ui/tabler.qrc
+  app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
   app/busyspinner.cpp
   app/config/global.cpp
@@ -408,9 +408,9 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
-  file(GLOB TABLER_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/tabler-icons-*/LICENSE")
-  if(TABLER_LICENSE)
-    install(FILES ${TABLER_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME tabler-LICENSE.txt)
+  file(GLOB ICON_SET_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/icons-*/LICENSE")
+  if(ICON_SET_LICENSE)
+    install(FILES ${ICON_SET_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME bootstrap-icons-LICENSE.txt)
   endif()
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
