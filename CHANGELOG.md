@@ -2,6 +2,8 @@
 
 ### Added
 
+- Bootstrap Icons for in-app icons (play/pause/context menus/etc)
+
 ### Fixed
 
 ### Misc
