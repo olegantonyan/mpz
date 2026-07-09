@@ -1,7 +1,7 @@
 #ifndef FEEDBACKFORM_H
 #define FEEDBACKFORM_H
 
-#include "waitingspinnerwidget.h"
+#include "loadingspinner.h"
 
 #include <QDialog>
 
@@ -21,7 +21,7 @@ private slots:
 
 private:
   Ui::FeedbackForm *ui;
-  WaitingSpinnerWidget *spinner;
+  LoadingSpinner *spinner;
   bool done;
 
   bool send();

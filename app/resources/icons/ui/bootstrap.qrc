@@ -25,5 +25,6 @@
         <file alias="icons/ui/open-file.svg">../../../../3rdparty/icons-1.13.1/icons/file-earmark-music.svg</file>
         <file alias="icons/ui/new-playlist.svg">../../../../3rdparty/icons-1.13.1/icons/plus-square.svg</file>
         <file alias="icons/ui/add-to-playlist.svg">../../../../3rdparty/icons-1.13.1/icons/plus-lg.svg</file>
+        <file alias="icons/ui/spinner.svg">../../../../3rdparty/icons-1.13.1/icons/arrow-repeat.svg</file>
     </qresource>
 </RCC>

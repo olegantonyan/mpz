@@ -58,7 +58,6 @@ AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(pa
   os << libraryInfo("Qt", "https://www.qt.io/");
   os << libraryInfo("TagLib", "https://taglib.org/");
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
-  os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
   os << libraryInfo("Bootstrap Icons", "https://icons.getbootstrap.com/");
 #ifdef ENABLE_MPD_SUPPORT

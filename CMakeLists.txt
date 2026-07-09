@@ -41,6 +41,7 @@ set(PROJECT_SOURCES
   app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
   app/busyspinner.cpp
+  app/loadingspinner.cpp
   app/config/global.cpp
   app/config/local.cpp
   app/config/storage.cpp
@@ -342,14 +343,6 @@ set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
 add_subdirectory(${QHOTKEY_DIR})
 message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
 # ENDOF QHOTKEY
-
-# QTWAITINGSPINNER
-set(QTWAITINGSPINNER_DIR 3rdparty/qtwaitingspinner)
-add_library(qtwaitingspinner ${QTWAITINGSPINNER_DIR}/waitingspinnerwidget.cpp)
-target_include_directories(qtwaitingspinner PUBLIC ${QTWAITINGSPINNER_DIR})
-target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
-# ENDOF QTWAITINGSPINNER
 
 # LIBMPDCLIENT
 if (ENABLE_MPD_SUPPORT)

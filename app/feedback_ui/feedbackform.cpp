@@ -15,16 +15,7 @@ FeedbackForm::FeedbackForm(QWidget *parent) : QDialog(parent), ui(new Ui::Feedba
   ui->lineEditSysinfo->setReadOnly(true);
   ui->lineEditSysinfo->setText(SysInfo::get().join(" | "));
 
-  spinner = new WaitingSpinnerWidget(ui->pushButtonSend);
-  spinner->setRoundness(70.0);
-  spinner->setMinimumTrailOpacity(15.0);
-  spinner->setTrailFadePercentage(70.0);
-  spinner->setNumberOfLines(7);
-  spinner->setLineLength(6);
-  spinner->setLineWidth(3);
-  spinner->setInnerRadius(3);
-  spinner->setRevolutionsPerSecond(1);
-  spinner->setColor(QColor(120, 120, 120));
+  spinner = new LoadingSpinner(ui->pushButtonSend);
   spinner->hide();
 }
 
@@ -55,7 +46,6 @@ void FeedbackForm::on_pushButtonSend_clicked() {
 }
 
 void FeedbackForm::beginSend() {
-  spinner->show();
   spinner->start();
   ui->pushButtonSend->setEnabled(false);
   ui->pushButtonSend->setText("");
@@ -64,7 +54,6 @@ void FeedbackForm::beginSend() {
 void FeedbackForm::endSend(const QString &error) {
   ui->pushButtonSend->setEnabled(true);
   spinner->stop();
-  spinner->hide();
   if (!error.isEmpty()) {
     ui->pushButtonSend->setText(tr("Error occured, please try again") + "\n" + error);
   }
