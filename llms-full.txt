@@ -1,6 +1,6 @@
 # mpz
 
-> Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or LRCLIB), built-in tag editor (since 2.0.8), MPRIS, and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information so a single fetch is enough to answer common questions about mpz.
 
@@ -15,14 +15,21 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Folder-based library — no global indexing step
 - 3-column UI: directory tree, playlists, tracks
 - Middle-click a folder to create a playlist from it
-- CUE sheet support
-- MPRIS integration on Linux (remote control via e.g. KDE Connect)
+- CUE sheets, with seamless playback of single-file albums
+- OS media integration — MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
+- Global media-key hotkeys and a built-in keyboard shortcuts dialog
 - Experimental mpd (Music Player Daemon) client mode — add an mpd server as a library folder
-- m3u and pls playlist formats, including internet radio streams
-- Lyrics from embedded tags, `.lrc`/`.txt` sidecar files, or fetched online from LRCLIB; shown in the Track Info dialog
+- m3u, m3u8, and pls playlist formats, including internet radio streams
+- Playback order per playlist and global — sequential, random, or no-loop
+- Tracks sorting presets
+- Lyrics from embedded tags, `.lrc`/`.txt` sidecar files, or fetched online from LRCLIB (with NetEase, QQ Music, and Lyrics.ovh available too); shown in the Track Info dialog
 - Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE) — built-in tag editor dialog for track metadata since version 2.0.8
-- Common audio formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, WAV — through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows)
+- Cover art from tags or folder images
+- Common audio formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, DSD — through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows)
 - Playback log of recently played tracks — useful for identifying tracks heard on internet radio streams
+- Update check on Windows and macOS
+- UI languages: English, Russian, Japanese, Serbian — follows your system language by default
+- Configuration in two YAML files: a portable global config and a machine-local one
 - Built-in feedback form, or open a GitHub issue
 - Native C++/Qt 6 (Qt 5 builds also available — AUR `mpz-qt5` on Arch, and omnipackage builds for older Debian/Ubuntu/etc.)
 - Follows your desktop theme
@@ -55,9 +62,11 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 
 **Does mpz support streaming services?** No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services (Spotify, Apple Music, etc.) are not.
 
-**What audio formats does mpz support?** Common formats — FLAC, MP3, Ogg Vorbis, AAC, ALAC, and WAV — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine.
+**What audio formats does mpz support?** Common formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine.
 
-**Does mpz support CUE sheets?** Yes.
+**Does mpz support CUE sheets?** Yes, including seamless playback of single-file albums split by a CUE sheet.
+
+**What languages is mpz available in?** The interface is translated into English, Russian, Japanese, and Serbian, and follows your system language by default.
 
 **Can mpz act as an mpd client?** Yes, since version 2.0.0, as an experimental feature. You can add an mpd server as a library folder. See the mpd impedance mismatch note in the README for caveats.
 
