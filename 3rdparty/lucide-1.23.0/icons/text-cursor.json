@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "select",
+    "caret",
+    "type",
+    "typing",
+    "write",
+    "writing",
+    "edit",
+    "insert",
+    "input",
+    "textarea"
+  ],
+  "categories": [
+    "text",
+    "cursors"
+  ]
+}

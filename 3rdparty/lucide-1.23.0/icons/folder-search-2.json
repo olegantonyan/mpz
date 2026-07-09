@@ -1,0 +1,18 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "directory",
+    "search",
+    "find",
+    "lost",
+    "browser",
+    "lens"
+  ],
+  "categories": [
+    "files"
+  ]
+}

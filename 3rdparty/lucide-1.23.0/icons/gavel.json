@@ -1,0 +1,27 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Andreto",
+    "ericfennis",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "justice",
+    "law",
+    "court",
+    "judgment",
+    "legal",
+    "hands",
+    "penalty",
+    "decision",
+    "authority",
+    "hammer",
+    "mallet"
+  ],
+  "categories": [
+    "navigation",
+    "tools"
+  ]
+}

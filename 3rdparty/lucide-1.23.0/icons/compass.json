@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "direction",
+    "north",
+    "east",
+    "south",
+    "west",
+    "safari",
+    "browser"
+  ],
+  "categories": [
+    "navigation",
+    "travel"
+  ]
+}

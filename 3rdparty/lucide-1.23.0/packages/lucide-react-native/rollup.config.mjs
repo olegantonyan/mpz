@@ -1,0 +1,96 @@
+import plugins from '@lucide/rollup-plugins';
+import dts from 'rollup-plugin-dts';
+import pkg from './package.json' with { type: 'json' };
+
+const packageName = 'LucideReact';
+const outputFileName = 'lucide-react-native';
+const outputDir = 'dist';
+const inputs = ['src/lucide-react-native.ts'];
+const bundles = [
+  {
+    format: 'cjs',
+    inputs,
+    outputDir,
+    preserveModules: true,
+  },
+  {
+    format: 'esm',
+    inputs,
+    outputDir,
+    preserveModules: true,
+    extension: 'mjs',
+  },
+];
+
+const configs = bundles
+  .map(({ inputs, outputDir, format, preserveModules, extension = 'js' }) =>
+    inputs.map((input) => ({
+      input,
+      plugins: plugins({ pkg }),
+      external: ['react', 'react-native-svg'],
+      output: {
+        name: packageName,
+        ...(preserveModules
+          ? {
+              dir: `${outputDir}/${format}`,
+              entryFileNames: `[name].${extension}`,
+            }
+          : {
+              file: `${outputDir}/${format}/${outputFileName}.${extension}`,
+            }),
+        format,
+        preserveModules,
+        preserveModulesRoot: 'src',
+        sourcemap: true,
+        globals: {
+          react: 'react',
+          'react-native-svg': 'react-native-svg',
+        },
+      },
+    })),
+  )
+  .flat();
+
+export default [
+  {
+    input: inputs[0],
+    output: [
+      {
+        file: `dist/${outputFileName}.d.ts`,
+        format: 'es',
+      },
+    ],
+    plugins: [dts()],
+  },
+  {
+    input: 'src/icons/index.ts',
+    output: [
+      {
+        file: `dist/icons.d.ts`,
+        format: 'es',
+      },
+    ],
+    plugins: [dts()],
+  },
+  {
+    input: `src/${outputFileName}.suffixed.ts`,
+    output: [
+      {
+        file: `dist/${outputFileName}.suffixed.d.ts`,
+        format: 'es',
+      },
+    ],
+    plugins: [dts()],
+  },
+  {
+    input: `src/${outputFileName}.prefixed.ts`,
+    output: [
+      {
+        file: `dist/${outputFileName}.prefixed.d.ts`,
+        format: 'es',
+      },
+    ],
+    plugins: [dts()],
+  },
+  ...configs,
+];

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "lscheibel",
+    "csandman",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "t-shirt",
+    "shopping",
+    "store",
+    "clothing",
+    "clothes"
+  ],
+  "categories": [
+    "shopping"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "statistics"
+  ],
+  "categories": [
+    "charts",
+    "arrows"
+  ]
+}

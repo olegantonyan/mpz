@@ -1,0 +1,36 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "coding",
+    "version control",
+    "git",
+    "repository",
+    "template",
+    "draft",
+    "script",
+    "screenplay",
+    "writing",
+    "writer",
+    "author",
+    "unwritten",
+    "unpublished",
+    "untold"
+  ],
+  "categories": [
+    "development"
+  ],
+  "aliases": [
+    {
+      "name": "book-template",
+      "deprecationReason": "alias.name",
+      "deprecated": true,
+      "toBeRemovedInVersion": "v1.0.0"
+    }
+  ]
+}

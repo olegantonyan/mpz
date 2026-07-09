@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "achievement",
+    "badge",
+    "rosette",
+    "prize",
+    "winner"
+  ],
+  "categories": [
+    "account",
+    "sports",
+    "gaming"
+  ]
+}

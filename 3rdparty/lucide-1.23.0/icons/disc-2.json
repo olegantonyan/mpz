@@ -1,0 +1,26 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "album",
+    "music",
+    "vinyl",
+    "record",
+    "cd",
+    "dvd",
+    "format",
+    "dj",
+    "spin",
+    "rotate",
+    "rpm"
+  ],
+  "categories": [
+    "devices",
+    "multimedia"
+  ]
+}

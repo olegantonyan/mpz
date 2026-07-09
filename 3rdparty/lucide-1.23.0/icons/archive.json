@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis",
+    "karsa-mistmere",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "index",
+    "backup",
+    "box",
+    "storage",
+    "records"
+  ],
+  "categories": [
+    "files",
+    "mail"
+  ]
+}

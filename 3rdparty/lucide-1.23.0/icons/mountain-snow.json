@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "kerkeslager",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "alpine",
+    "climb",
+    "snow"
+  ],
+  "categories": [
+    "nature"
+  ]
+}

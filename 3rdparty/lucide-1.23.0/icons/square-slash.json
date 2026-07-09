@@ -1,0 +1,30 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "git",
+    "diff",
+    "ignored",
+    "divide",
+    "division",
+    "shortcut",
+    "or",
+    "/"
+  ],
+  "categories": [
+    "development",
+    "math"
+  ],
+  "aliases": [
+    {
+      "name": "slash-square",
+      "deprecationReason": "alias.name",
+      "deprecated": true,
+      "toBeRemovedInVersion": "v1.0"
+    }
+  ]
+}

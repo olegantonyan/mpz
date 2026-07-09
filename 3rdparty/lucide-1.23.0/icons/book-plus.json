@@ -1,0 +1,35 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "coding",
+    "version control",
+    "git",
+    "repository",
+    "remove",
+    "delete",
+    "read",
+    "write",
+    "author",
+    "publish",
+    "inform",
+    "graduate",
+    "re-educate",
+    "study",
+    "learn",
+    "research",
+    "knowledge",
+    "improve",
+    "upgrade",
+    "level up"
+  ],
+  "categories": [
+    "development",
+    "text",
+    "gaming"
+  ]
+}

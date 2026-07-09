@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "sidebar",
+    "secondary",
+    "drawer"
+  ],
+  "categories": [
+    "layout"
+  ]
+}

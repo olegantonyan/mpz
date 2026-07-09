@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis",
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "unlike",
+    "dislike",
+    "hate",
+    "emotion"
+  ],
+  "categories": [
+    "social",
+    "multimedia"
+  ]
+}

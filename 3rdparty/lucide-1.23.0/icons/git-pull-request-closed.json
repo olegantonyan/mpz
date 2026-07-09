@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "version control",
+    "rejected",
+    "closed",
+    "cancelled",
+    "x"
+  ],
+  "categories": [
+    "development"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "karsa-mistmere",
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "email",
+    "message",
+    "letter",
+    "unread"
+  ],
+  "categories": [
+    "text",
+    "account",
+    "mail"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "it-is-not"
+  ],
+  "use-cases": [],
+  "tags": [
+    "airport",
+    "travel",
+    "tower",
+    "transportation",
+    "lighthouse"
+  ],
+  "categories": [
+    "travel",
+    "transportation"
+  ]
+}

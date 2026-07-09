@@ -1,0 +1,26 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "wojtekmaj",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "checkout",
+    "till",
+    "cart",
+    "transaction",
+    "purchase",
+    "buy",
+    "product",
+    "packaging",
+    "retail",
+    "consumer",
+    "qr-code",
+    "dashed"
+  ],
+  "categories": [
+    "devices",
+    "shopping"
+  ]
+}

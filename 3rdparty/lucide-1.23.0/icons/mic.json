@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "record",
+    "sound",
+    "listen",
+    "radio",
+    "podcast",
+    "microphone"
+  ],
+  "categories": [
+    "devices",
+    "communication",
+    "connectivity",
+    "multimedia"
+  ]
+}

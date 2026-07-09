@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "app",
+    "home",
+    "start",
+    "grid"
+  ],
+  "categories": [
+    "design",
+    "layout"
+  ]
+}

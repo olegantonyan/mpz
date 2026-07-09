@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "stack",
+    "pile",
+    "pages",
+    "sheets",
+    "paperwork",
+    "copies",
+    "copy",
+    "duplicate",
+    "double",
+    "shortcuts"
+  ],
+  "categories": [
+    "design",
+    "layout"
+  ]
+}

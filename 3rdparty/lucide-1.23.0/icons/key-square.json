@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "password",
+    "login",
+    "authentication",
+    "secure",
+    "unlock",
+    "car key"
+  ],
+  "categories": [
+    "security",
+    "account"
+  ]
+}

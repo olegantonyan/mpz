@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "exit fullscreen",
+    "arrows",
+    "close",
+    "shrink"
+  ],
+  "categories": [
+    "arrows",
+    "layout",
+    "design"
+  ]
+}

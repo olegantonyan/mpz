@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "vegetarian",
+    "fruitarian",
+    "herbivorous",
+    "animal rights",
+    "diet"
+  ],
+  "categories": [
+    "food-beverage",
+    "sustainability"
+  ]
+}

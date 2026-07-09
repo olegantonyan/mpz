@@ -1,0 +1,14 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "options"
+  ],
+  "categories": [
+    "text"
+  ]
+}

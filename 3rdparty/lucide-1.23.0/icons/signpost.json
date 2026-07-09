@@ -1,0 +1,32 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "navigation",
+    "direction",
+    "arrow",
+    "wayfinding",
+    "guide",
+    "location",
+    "pointer",
+    "route",
+    "indicator",
+    "marker",
+    "bidirectional",
+    "left",
+    "right",
+    "east",
+    "west"
+  ],
+  "categories": [
+    "arrows",
+    "navigation",
+    "development",
+    "gaming"
+  ]
+}

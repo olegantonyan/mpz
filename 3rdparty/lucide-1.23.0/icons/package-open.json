@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "box",
+    "container",
+    "storage",
+    "unpack",
+    "unarchive",
+    "unzip",
+    "opened",
+    "delivered"
+  ],
+  "categories": [
+    "files",
+    "development"
+  ]
+}

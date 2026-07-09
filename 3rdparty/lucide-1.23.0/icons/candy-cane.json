@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "sugar",
+    "food",
+    "sweet",
+    "christmas",
+    "xmas"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

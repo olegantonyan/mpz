@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "index",
+    "backup",
+    "box",
+    "storage",
+    "records",
+    "junk"
+  ],
+  "categories": [
+    "files",
+    "mail"
+  ]
+}

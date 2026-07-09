@@ -1,0 +1,27 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "paper",
+    "log",
+    "scripture",
+    "document",
+    "notes",
+    "parchment",
+    "list",
+    "long",
+    "script",
+    "story",
+    "code",
+    "coding"
+  ],
+  "categories": [
+    "gaming",
+    "development",
+    "text"
+  ]
+}

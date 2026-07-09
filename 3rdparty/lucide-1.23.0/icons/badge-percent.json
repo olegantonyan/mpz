@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "verified",
+    "unverified",
+    "sale",
+    "discount",
+    "offer",
+    "marketing",
+    "sticker",
+    "price tag"
+  ],
+  "categories": [
+    "social",
+    "finance",
+    "shopping",
+    "math"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "weather",
+    "rainfall"
+  ],
+  "categories": [
+    "weather"
+  ]
+}

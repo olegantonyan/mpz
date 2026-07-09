@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "kemie"
+  ],
+  "use-cases": [],
+  "tags": [
+    "food",
+    "dish",
+    "restaurant",
+    "course",
+    "meal",
+    "bowl",
+    "starter"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "movie",
+    "video",
+    "reel",
+    "camera",
+    "cinema",
+    "entertainment"
+  ],
+  "categories": [
+    "photography",
+    "multimedia"
+  ]
+}

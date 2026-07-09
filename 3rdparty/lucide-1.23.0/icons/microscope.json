@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "medical",
+    "education",
+    "science",
+    "imaging",
+    "research"
+  ],
+  "categories": [
+    "science",
+    "medical"
+  ]
+}

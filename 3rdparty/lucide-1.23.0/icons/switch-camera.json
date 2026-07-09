@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "lscheibel",
+    "csandman",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "photo",
+    "selfie",
+    "front",
+    "back"
+  ],
+  "categories": [
+    "communication",
+    "devices"
+  ]
+}

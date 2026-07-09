@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "csandman",
+    "ericfennis",
+    "johnletey"
+  ],
+  "use-cases": [],
+  "tags": [
+    "host",
+    "desktop",
+    "monitor"
+  ],
+  "categories": [
+    "connectivity",
+    "devices",
+    "communication"
+  ]
+}

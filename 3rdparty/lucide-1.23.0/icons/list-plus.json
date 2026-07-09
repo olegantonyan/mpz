@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "playlist",
+    "add",
+    "song",
+    "track",
+    "new"
+  ],
+  "categories": [
+    "multimedia",
+    "text"
+  ]
+}

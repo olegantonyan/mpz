@@ -1,0 +1,29 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "coding",
+    "version control",
+    "git",
+    "repository",
+    "private",
+    "public",
+    "secret",
+    "unlocked",
+    "hidden",
+    "revealed",
+    "knowledge",
+    "learning"
+  ],
+  "categories": [
+    "development",
+    "security",
+    "gaming"
+  ]
+}

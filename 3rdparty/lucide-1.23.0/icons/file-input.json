@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Andreto",
+    "ericfennis",
+    "karsa-mistmere",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "document"
+  ],
+  "categories": [
+    "files",
+    "arrows"
+  ]
+}

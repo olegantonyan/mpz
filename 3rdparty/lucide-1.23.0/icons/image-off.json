@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "picture",
+    "photo"
+  ],
+  "categories": [
+    "photography",
+    "multimedia",
+    "files"
+  ]
+}

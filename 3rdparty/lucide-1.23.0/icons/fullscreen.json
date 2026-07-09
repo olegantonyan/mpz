@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "expand",
+    "zoom",
+    "preview",
+    "focus",
+    "camera",
+    "lens",
+    "image"
+  ],
+  "categories": [
+    "layout",
+    "multimedia",
+    "design",
+    "photography"
+  ]
+}

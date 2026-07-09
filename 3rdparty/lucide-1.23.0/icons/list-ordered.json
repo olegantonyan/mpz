@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "csandman",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "number",
+    "order",
+    "queue"
+  ],
+  "categories": [
+    "text"
+  ]
+}

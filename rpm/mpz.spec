@@ -9,9 +9,9 @@ Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
 %if %{with qt6}
-BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel qt6-svg-devel
 %else
-BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel libqt5-qtsvg-devel
 %endif
 
 

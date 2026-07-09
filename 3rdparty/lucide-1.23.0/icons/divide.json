@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "csandman",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "calculate",
+    "math",
+    "division",
+    "operator",
+    "code",
+    "÷",
+    "/"
+  ],
+  "categories": [
+    "math",
+    "development"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "reception",
+    "bell",
+    "porter"
+  ],
+  "categories": [
+    "travel"
+  ]
+}

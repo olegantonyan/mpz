@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "directory",
+    "heart",
+    "favourite",
+    "bookmark",
+    "quick link"
+  ],
+  "categories": [
+    "files"
+  ]
+}

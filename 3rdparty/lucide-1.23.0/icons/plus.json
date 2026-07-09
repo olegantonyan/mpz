@@ -1,0 +1,35 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "add",
+    "new",
+    "increase",
+    "increment",
+    "positive",
+    "calculate",
+    "toolbar",
+    "crosshair",
+    "aim",
+    "target",
+    "scope",
+    "sight",
+    "reticule",
+    "maximum",
+    "upgrade",
+    "extra",
+    "+"
+  ],
+  "categories": [
+    "math",
+    "tools",
+    "development",
+    "text",
+    "cursors",
+    "gaming"
+  ]
+}

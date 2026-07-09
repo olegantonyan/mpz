@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "hazelnut",
+    "acorn",
+    "food",
+    "allergy",
+    "intolerance",
+    "diet"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

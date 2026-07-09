@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "Andreto",
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "dashboard",
+    "dial",
+    "meter",
+    "speed",
+    "pressure",
+    "measure",
+    "level"
+  ],
+  "categories": [
+    "transportation",
+    "sports",
+    "science"
+  ]
+}

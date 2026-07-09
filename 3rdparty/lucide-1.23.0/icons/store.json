@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "shop",
+    "supermarket",
+    "stand",
+    "boutique",
+    "building"
+  ],
+  "categories": [
+    "buildings",
+    "navigation",
+    "shopping"
+  ]
+}

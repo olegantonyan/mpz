@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "bars",
+    "navigation",
+    "hamburger",
+    "options"
+  ],
+  "categories": [
+    "layout",
+    "account"
+  ]
+}

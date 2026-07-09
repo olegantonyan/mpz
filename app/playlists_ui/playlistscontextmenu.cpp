@@ -1,4 +1,5 @@
 #include "playlistscontextmenu.h"
+#include "icons.h"
 
 #include <QMenu>
 #include <QAction>
@@ -34,12 +35,11 @@ namespace PlaylistsUi {
     connect(&reload, &QAction::triggered, this, [&]() {
       on_reload(index);
     });
-    reload.setIcon(view->style()->standardIcon(QStyle::SP_BrowserReload));
+    reload.setIcon(Icons::get(Icons::Icon::Reload));
 
-    remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
-    savem3u.setIcon(view->style()->standardIcon(QStyle::SP_DialogSaveButton));
-    //rename.setIcon(view->style()->standardIcon(QStyle::SP_FileIcon));
-    play.setIcon(view->style()->standardIcon(QStyle::SP_MediaPlay));
+    remove.setIcon(Icons::get(Icons::Icon::Trash));
+    savem3u.setIcon(Icons::get(Icons::Icon::Save));
+    play.setIcon(Icons::get(Icons::Icon::Play));
 
     connect(&remove, &QAction::triggered, this, [&]() {
       emit removed(index);
@@ -50,7 +50,7 @@ namespace PlaylistsUi {
     });
 
     QAction clear_filter(tr("Clear filter"));
-    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
+    clear_filter.setIcon(Icons::get(Icons::Icon::Cancel));
     if (!search->text().isEmpty()) {
        connect(&clear_filter, &QAction::triggered, this, [=]() {
          search->clear();

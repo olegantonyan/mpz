@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(QT_COMPONENTS Core Gui Widgets Multimedia Concurrent Network)
+set(QT_COMPONENTS Core Gui Widgets Multimedia Concurrent Network Svg)
 
 if(UNIX AND NOT APPLE)
   set(DEFAULT_ENABLE_DBUS ON)
@@ -36,7 +36,11 @@ endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 
+set(ICON_SET "lucide" CACHE STRING "Which vendored icon set to bundle (see app/resources/icons/ui/<set>.qrc)")
+
 set(PROJECT_SOURCES
+  app/icons.cpp
+  app/resources/icons/ui/${ICON_SET}.qrc
   app/about_ui/aboutdialog.cpp
   app/busyspinner.cpp
   app/config/global.cpp
@@ -406,6 +410,10 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
+  file(GLOB ICON_SET_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/${ICON_SET}-*/LICENSE")
+  if(ICON_SET_LICENSE)
+    install(FILES ${ICON_SET_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME ${ICON_SET}-LICENSE.txt)
+  endif()
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")

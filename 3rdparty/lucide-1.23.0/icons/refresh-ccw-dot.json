@@ -1,0 +1,27 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "csandman",
+    "ericfennis",
+    "danielbayley",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "arrows",
+    "rotate",
+    "reload",
+    "synchronise",
+    "synchronize",
+    "circular",
+    "cycle",
+    "issue",
+    "code",
+    "coding",
+    "version control"
+  ],
+  "categories": [
+    "arrows",
+    "development"
+  ]
+}

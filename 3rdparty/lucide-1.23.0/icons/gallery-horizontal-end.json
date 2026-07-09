@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "carousel",
+    "pictures",
+    "images",
+    "scroll",
+    "swipe",
+    "album",
+    "portfolio",
+    "history",
+    "versions",
+    "backup",
+    "time machine"
+  ],
+  "categories": [
+    "layout",
+    "design",
+    "development",
+    "photography",
+    "multimedia",
+    "files"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "it-is-not",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "layout",
+    "spell",
+    "settings",
+    "mouse"
+  ],
+  "categories": [
+    "text",
+    "devices",
+    "development"
+  ]
+}

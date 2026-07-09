@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "patch",
+    "difference",
+    "compare",
+    "plus",
+    "minus",
+    "plus-minus",
+    "math"
+  ],
+  "categories": [
+    "development",
+    "files"
+  ]
+}

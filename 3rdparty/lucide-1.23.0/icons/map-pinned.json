@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "location",
+    "waypoint",
+    "marker",
+    "drop"
+  ],
+  "categories": [
+    "navigation",
+    "travel",
+    "account"
+  ]
+}

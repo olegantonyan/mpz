@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "siarie",
+    "ericfennis",
+    "karsa-mistmere",
+    "jonas-hoebenreich"
+  ],
+  "use-cases": [],
+  "tags": [
+    "arrow",
+    "direction"
+  ],
+  "categories": [
+    "arrows"
+  ]
+}

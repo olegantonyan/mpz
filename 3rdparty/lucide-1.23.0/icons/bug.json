@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "issue",
+    "error",
+    "defect",
+    "testing",
+    "troubleshoot",
+    "problem",
+    "report",
+    "debug",
+    "code",
+    "insect",
+    "beetle"
+  ],
+  "categories": [
+    "development",
+    "animals"
+  ]
+}

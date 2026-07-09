@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "done",
+    "directory",
+    "todo",
+    "tick",
+    "complete",
+    "task"
+  ],
+  "categories": [
+    "files"
+  ]
+}

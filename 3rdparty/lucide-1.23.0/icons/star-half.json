@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "bookmark",
+    "favorite",
+    "like",
+    "review",
+    "rating"
+  ],
+  "categories": [
+    "social",
+    "multimedia"
+  ]
+}

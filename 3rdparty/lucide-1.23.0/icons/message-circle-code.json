@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "comment",
+    "chat",
+    "conversation",
+    "dialog",
+    "feedback",
+    "speech bubble",
+    "code review",
+    "coding"
+  ],
+  "categories": [
+    "development",
+    "social"
+  ]
+}

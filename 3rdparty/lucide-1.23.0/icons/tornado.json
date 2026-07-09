@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "weather",
+    "wind",
+    "storm",
+    "hurricane"
+  ],
+  "categories": [
+    "weather"
+  ]
+}

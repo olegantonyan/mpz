@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "notification",
+    "silent",
+    "reminder",
+    "add",
+    "create",
+    "new"
+  ],
+  "categories": [
+    "notifications"
+  ]
+}

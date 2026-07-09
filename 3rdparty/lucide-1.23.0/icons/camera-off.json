@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "lscheibel",
+    "Andreto",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "photo",
+    "webcam",
+    "video"
+  ],
+  "categories": [
+    "photography",
+    "devices",
+    "communication"
+  ]
+}

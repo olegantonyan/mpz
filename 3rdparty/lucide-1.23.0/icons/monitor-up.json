@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "tv",
+    "screen",
+    "display",
+    "upload",
+    "connect",
+    "remote",
+    "screen share"
+  ],
+  "categories": [
+    "connectivity",
+    "devices"
+  ]
+}

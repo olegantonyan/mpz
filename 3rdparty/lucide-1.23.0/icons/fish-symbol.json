@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "dish",
+    "restaurant",
+    "course",
+    "meal",
+    "seafood",
+    "pet",
+    "sea",
+    "marine"
+  ],
+  "categories": [
+    "food-beverage",
+    "animals"
+  ]
+}

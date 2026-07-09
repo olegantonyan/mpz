@@ -1,4 +1,5 @@
 #include "trayicon.h"
+#include "icons.h"
 
 #include <QAction>
 #include <QDebug>
@@ -12,15 +13,15 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   quit = new QAction(tr("Quit"), this);
 
   play = new QAction(tr("Play"), this);
-  play->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPlay));
+  play->setIcon(Icons::get(Icons::Icon::Play));
   pause = new QAction(tr("Pause"), this);
-  pause->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPause));
+  pause->setIcon(Icons::get(Icons::Icon::Pause));
   stop = new QAction(tr("Stop"), this);
-  stop->setIcon(parent->style()->standardIcon(QStyle::SP_MediaStop));
+  stop->setIcon(Icons::get(Icons::Icon::Stop));
   next = new QAction(tr("Next"), this);
-  next->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekForward));
+  next->setIcon(Icons::get(Icons::Icon::Next));
   prev = new QAction(tr("Previous"), this);
-  prev->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekBackward));
+  prev->setIcon(Icons::get(Icons::Icon::Prev));
   now_playing = new QAction("", this);
   now_playing->setEnabled(false);
   connect(play, &QAction::triggered, this, &TrayIcon::startTriggered);
@@ -56,6 +57,14 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
 
 void TrayIcon::hide() {
   trayicon->hide();
+}
+
+void TrayIcon::refreshIcons() {
+  play->setIcon(Icons::get(Icons::Icon::Play));
+  pause->setIcon(Icons::get(Icons::Icon::Pause));
+  stop->setIcon(Icons::get(Icons::Icon::Stop));
+  next->setIcon(Icons::get(Icons::Icon::Next));
+  prev->setIcon(Icons::get(Icons::Icon::Prev));
 }
 
 void TrayIcon::on_playerStarted(const Track &track) {

@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "siarie",
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "save",
+    "favorite",
+    "mark",
+    "label",
+    "attachment",
+    "file",
+    "stick",
+    "pin",
+    "read",
+    "clip",
+    "marker",
+    "tag"
+  ],
+  "categories": [
+    "account"
+  ]
+}

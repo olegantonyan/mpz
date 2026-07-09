@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "UsamaKhan"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cloud",
+    "storage",
+    "computing",
+    "cog",
+    "gear"
+  ],
+  "categories": [
+    "development",
+    "devices"
+  ]
+}

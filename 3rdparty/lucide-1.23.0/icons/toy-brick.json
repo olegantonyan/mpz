@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "lego",
+    "block",
+    "addon",
+    "plugin",
+    "integration"
+  ],
+  "categories": [
+    "gaming",
+    "development"
+  ]
+}

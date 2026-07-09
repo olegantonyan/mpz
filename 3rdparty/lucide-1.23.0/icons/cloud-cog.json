@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "UsamaKhan"
+  ],
+  "use-cases": [],
+  "tags": [
+    "computing",
+    "ai",
+    "cluster",
+    "network"
+  ],
+  "categories": [
+    "development"
+  ]
+}

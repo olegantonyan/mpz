@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "csandman"
+  ],
+  "use-cases": [],
+  "tags": [
+    "pairing"
+  ],
+  "categories": [
+    "connectivity",
+    "devices"
+  ]
+}

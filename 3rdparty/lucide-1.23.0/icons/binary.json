@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "digits",
+    "computer",
+    "zero",
+    "one",
+    "boolean"
+  ],
+  "categories": [
+    "text",
+    "development"
+  ]
+}

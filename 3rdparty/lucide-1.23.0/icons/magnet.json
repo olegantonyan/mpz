@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "horseshoe",
+    "lock",
+    "science",
+    "snap"
+  ],
+  "categories": [
+    "design"
+  ]
+}

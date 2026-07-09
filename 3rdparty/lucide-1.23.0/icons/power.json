@@ -1,0 +1,26 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "on",
+    "off",
+    "device",
+    "switch",
+    "toggle",
+    "binary",
+    "boolean",
+    "reboot",
+    "restart",
+    "button",
+    "keyboard",
+    "troubleshoot"
+  ],
+  "categories": [
+    "connectivity"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "guillermo-angeles",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "flag",
+    "bullseye"
+  ],
+  "categories": [
+    "gaming"
+  ]
+}

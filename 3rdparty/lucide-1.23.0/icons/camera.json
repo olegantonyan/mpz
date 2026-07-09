@@ -1,0 +1,29 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "lscheibel",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "photography",
+    "lens",
+    "focus",
+    "capture",
+    "shot",
+    "visual",
+    "image",
+    "device",
+    "equipment",
+    "photo",
+    "webcam",
+    "video"
+  ],
+  "categories": [
+    "photography",
+    "devices",
+    "communication"
+  ]
+}

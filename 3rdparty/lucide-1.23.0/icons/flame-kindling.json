@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "campfire",
+    "camping",
+    "wilderness",
+    "outdoors",
+    "lit",
+    "warmth",
+    "wood",
+    "twigs",
+    "sticks"
+  ],
+  "categories": [
+    "nature",
+    "social",
+    "gaming"
+  ]
+}

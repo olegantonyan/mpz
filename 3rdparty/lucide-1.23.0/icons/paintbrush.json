@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "brush",
+    "paintbrush",
+    "design",
+    "color",
+    "colour",
+    "decoration",
+    "diy"
+  ],
+  "categories": [
+    "text",
+    "design",
+    "photography",
+    "home",
+    "tools"
+  ]
+}

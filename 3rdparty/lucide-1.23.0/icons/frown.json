@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "mittalyashu",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "emoji",
+    "face",
+    "bad",
+    "sad",
+    "emotion"
+  ],
+  "categories": [
+    "emoji",
+    "account"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "lolly",
+    "candy",
+    "sugar",
+    "food",
+    "sweet",
+    "dessert",
+    "spiral"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

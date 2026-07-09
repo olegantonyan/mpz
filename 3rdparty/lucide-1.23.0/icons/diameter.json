@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "shape",
+    "circle",
+    "geometry",
+    "trigonometry",
+    "width",
+    "height",
+    "size",
+    "calculate",
+    "measure"
+  ],
+  "categories": [
+    "shapes",
+    "math",
+    "design",
+    "tools"
+  ]
+}

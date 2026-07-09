@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "find",
+    "scan",
+    "magnifier",
+    "magnifying glass",
+    "grep",
+    "chevrons",
+    "<>",
+    "lens",
+    "locate",
+    "explore",
+    "discover",
+    "enlarge",
+    "zoom"
+  ],
+  "categories": [
+    "text",
+    "social",
+    "development"
+  ]
+}

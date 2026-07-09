@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "followed",
+    "subscribed",
+    "done",
+    "todo",
+    "tick",
+    "complete",
+    "task"
+  ],
+  "categories": [
+    "account"
+  ]
+}

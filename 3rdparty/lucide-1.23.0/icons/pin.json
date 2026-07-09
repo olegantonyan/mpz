@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "save",
+    "map",
+    "lock",
+    "fix"
+  ],
+  "categories": [
+    "navigation",
+    "account"
+  ]
+}

@@ -1,6 +1,7 @@
 #include "playback_log_ui/playbacklogdialog.h"
 #include "ui_playbacklogdialog.h"
 #include "track.h"
+#include "icons.h"
 
 #include <QMenu>
 #include <QAction>
@@ -18,7 +19,7 @@ PlaybackLogDialog::PlaybackLogDialog(PlaybackLogUi::Model *m, QWidget *parent) :
   ui->tableView->setModel(model);
   ui->tableView->resizeColumnsToContents();
 
-  ui->buttonSaveCsv->setIcon(style()->standardIcon(QStyle::SP_DialogSaveButton));
+  ui->buttonSaveCsv->setIcon(Icons::get(Icons::Icon::Save));
 
   connect(model, &PlaybackLogUi::Model::changed, ui->tableView, &QTableView::resizeColumnsToContents);
   connect(model, &PlaybackLogUi::Model::totalPlayTimeChanged, this, &PlaybackLogDialog::on_totalPlayTimeChanged);

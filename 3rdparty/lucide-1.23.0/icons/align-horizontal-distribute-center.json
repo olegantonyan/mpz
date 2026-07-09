@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "r4lv",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "items",
+    "flex",
+    "justify",
+    "space",
+    "evenly",
+    "around"
+  ],
+  "categories": [
+    "layout"
+  ]
+}

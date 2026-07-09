@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "signpost",
+    "direction",
+    "right",
+    "east",
+    "forward",
+    "version control",
+    "waypoint"
+  ],
+  "categories": [
+    "arrows",
+    "navigation",
+    "development",
+    "gaming"
+  ]
+}

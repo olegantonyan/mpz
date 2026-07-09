@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "morning",
+    "turn-off"
+  ],
+  "categories": [
+    "devices",
+    "notifications",
+    "time"
+  ]
+}

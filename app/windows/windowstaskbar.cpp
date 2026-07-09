@@ -9,6 +9,7 @@
 
 #include "track.h"
 #include "playback/controls.h"
+#include "icons.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -189,14 +190,25 @@ void WindowsTaskbar::setAppUserModelId() {
 }
 
 void WindowsTaskbar::buildIcons() {
+  for (HICON *icon : { &d->prev_icon, &d->next_icon, &d->play_icon, &d->pause_icon }) {
+    if (*icon) {
+      DestroyIcon(*icon);
+      *icon = nullptr;
+    }
+  }
   int w = GetSystemMetrics(SM_CXSMICON);
   int h = GetSystemMetrics(SM_CYSMICON);
   const QSize sz(w > 0 ? w : 16, h > 0 ? h : 16);
-  QStyle *style = QApplication::style();
-  d->prev_icon = iconFromPixmap(style->standardIcon(QStyle::SP_MediaSkipBackward).pixmap(sz));
-  d->next_icon = iconFromPixmap(style->standardIcon(QStyle::SP_MediaSkipForward).pixmap(sz));
-  d->play_icon = iconFromPixmap(style->standardIcon(QStyle::SP_MediaPlay).pixmap(sz));
-  d->pause_icon = iconFromPixmap(style->standardIcon(QStyle::SP_MediaPause).pixmap(sz));
+  d->prev_icon = iconFromPixmap(Icons::pixmap(Icons::Icon::Prev, sz));
+  d->next_icon = iconFromPixmap(Icons::pixmap(Icons::Icon::Next, sz));
+  d->play_icon = iconFromPixmap(Icons::pixmap(Icons::Icon::Play, sz));
+  d->pause_icon = iconFromPixmap(Icons::pixmap(Icons::Icon::Pause, sz));
+}
+
+void WindowsTaskbar::refresh() {
+  buildIcons();
+  updateButtons();
+  updateOverlay();
 }
 
 void WindowsTaskbar::ensureTaskbarList() {

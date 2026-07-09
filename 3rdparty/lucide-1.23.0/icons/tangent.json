@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "tangential",
+    "shape",
+    "circle",
+    "geometry",
+    "trigonometry",
+    "bezier curve"
+  ],
+  "categories": [
+    "shapes",
+    "math",
+    "design",
+    "tools"
+  ]
+}

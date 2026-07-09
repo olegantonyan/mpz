@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "lscheibel",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cold",
+    "weather",
+    "freeze",
+    "snow",
+    "winter"
+  ],
+  "categories": [
+    "weather",
+    "seasons"
+  ]
+}

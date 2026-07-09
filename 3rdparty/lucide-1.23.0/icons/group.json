@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cubes",
+    "packages",
+    "parts",
+    "units",
+    "collection",
+    "cluster",
+    "gather",
+    "dashed"
+  ],
+  "categories": [
+    "files"
+  ]
+}

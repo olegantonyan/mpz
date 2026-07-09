@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "pending",
+    "dot",
+    "progress",
+    "issue",
+    "code",
+    "coding",
+    "version control",
+    "choices",
+    "multiple choice",
+    "choose"
+  ],
+  "categories": [
+    "development",
+    "shapes"
+  ]
+}

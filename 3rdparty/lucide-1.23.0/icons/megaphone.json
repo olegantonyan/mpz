@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "advertisement",
+    "announcement",
+    "attention",
+    "alert",
+    "loudspeaker",
+    "megaphone",
+    "notification"
+  ],
+  "categories": [
+    "multimedia",
+    "notifications"
+  ]
+}

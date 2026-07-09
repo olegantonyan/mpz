@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "planet",
+    "space",
+    "physics",
+    "satellites",
+    "moons"
+  ],
+  "categories": [
+    "science"
+  ]
+}

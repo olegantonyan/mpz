@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "done",
+    "received",
+    "double",
+    "todo",
+    "tick",
+    "complete",
+    "task"
+  ],
+  "categories": [
+    "notifications"
+  ]
+}

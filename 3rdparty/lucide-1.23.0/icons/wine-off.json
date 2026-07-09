@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "alcohol",
+    "beverage",
+    "drink",
+    "glass",
+    "alcohol free",
+    "abstinence",
+    "abstaining",
+    "teetotalism",
+    "allergy",
+    "intolerance"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

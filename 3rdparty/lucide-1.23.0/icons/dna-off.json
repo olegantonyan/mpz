@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "gene",
+    "gmo free",
+    "helix",
+    "heredity",
+    "chromosome",
+    "nucleic acid"
+  ],
+  "categories": [
+    "medical",
+    "food-beverage"
+  ]
+}

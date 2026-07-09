@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "album",
+    "music",
+    "vinyl",
+    "record",
+    "cd",
+    "dvd",
+    "format",
+    "dj",
+    "spin",
+    "rotate",
+    "rpm"
+  ],
+  "categories": [
+    "devices",
+    "multimedia"
+  ]
+}

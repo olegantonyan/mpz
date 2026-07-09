@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "news",
+    "feed",
+    "home",
+    "magazine",
+    "article",
+    "headline"
+  ],
+  "categories": [
+    "multimedia",
+    "communication"
+  ]
+}

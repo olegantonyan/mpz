@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "danielbayley",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "lighting",
+    "household",
+    "floor",
+    "home",
+    "furniture"
+  ],
+  "categories": [
+    "home"
+  ]
+}

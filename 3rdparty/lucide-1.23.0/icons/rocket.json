@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "release",
+    "boost",
+    "launch",
+    "space",
+    "version"
+  ],
+  "categories": [
+    "gaming",
+    "development"
+  ]
+}

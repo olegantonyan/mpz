@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "calculate",
+    "="
+  ],
+  "categories": [
+    "math"
+  ],
+  "aliases": [
+    {
+      "name": "equal-square",
+      "deprecationReason": "alias.name",
+      "deprecated": true,
+      "toBeRemovedInVersion": "v1.0"
+    }
+  ]
+}

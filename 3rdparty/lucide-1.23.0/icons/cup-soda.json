@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "beverage",
+    "cup",
+    "drink",
+    "soda",
+    "straw",
+    "water"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "done",
+    "document",
+    "todo",
+    "tick",
+    "complete",
+    "task"
+  ],
+  "categories": [
+    "files"
+  ]
+}

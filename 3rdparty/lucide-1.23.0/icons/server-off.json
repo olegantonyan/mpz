@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "yukosgiti",
+    "ericfennis",
+    "csandman"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cloud",
+    "storage"
+  ],
+  "categories": [
+    "development",
+    "devices"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "dperezcabrera",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "previous",
+    "music"
+  ],
+  "categories": [
+    "arrows",
+    "multimedia"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "versions",
+    "multiple",
+    "copy",
+    "documents",
+    "revisions",
+    "version control",
+    "history"
+  ],
+  "categories": [
+    "files",
+    "development"
+  ]
+}

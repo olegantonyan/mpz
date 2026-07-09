@@ -1,0 +1,33 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "danielbayley",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "arrow",
+    "left",
+    "counter-clockwise",
+    "restart",
+    "reload",
+    "rerun",
+    "refresh",
+    "backup",
+    "undo",
+    "replay",
+    "redo",
+    "retry",
+    "rewind",
+    "reverse"
+  ],
+  "categories": [
+    "arrows",
+    "design",
+    "photography"
+  ]
+}

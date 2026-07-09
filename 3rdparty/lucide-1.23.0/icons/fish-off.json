@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "jguddas",
+    "kemie",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "food",
+    "dish",
+    "restaurant",
+    "course",
+    "meal",
+    "seafood",
+    "animal",
+    "pet",
+    "sea",
+    "marine",
+    "allergy",
+    "intolerance",
+    "diet"
+  ],
+  "categories": [
+    "food-beverage",
+    "animals"
+  ]
+}

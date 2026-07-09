@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "audio",
+    "music",
+    "recording",
+    "play"
+  ],
+  "categories": [
+    "connectivity",
+    "devices",
+    "multimedia",
+    "communication",
+    "files"
+  ]
+}

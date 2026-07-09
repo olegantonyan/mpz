@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "comment",
+    "chat",
+    "conversation",
+    "dialog",
+    "feedback",
+    "speech bubble",
+    "report",
+    "abuse",
+    "offense",
+    "alert",
+    "danger",
+    "caution",
+    "protected",
+    "exclamation mark"
+  ],
+  "categories": [
+    "social",
+    "notifications"
+  ]
+}

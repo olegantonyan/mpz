@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cinema",
+    "movies",
+    "films",
+    "salted",
+    "sweet",
+    "sugar",
+    "candy",
+    "snack"
+  ],
+  "categories": [
+    "food-beverage",
+    "multimedia"
+  ]
+}

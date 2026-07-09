@@ -1,0 +1,27 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "coding",
+    "programming",
+    "symbol",
+    "calculate",
+    "algebra",
+    "x",
+    "parentheses",
+    "parenthesis",
+    "brackets",
+    "parameter",
+    "(",
+    ")"
+  ],
+  "categories": [
+    "development",
+    "math"
+  ]
+}

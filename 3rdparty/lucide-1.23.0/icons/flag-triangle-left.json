@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "tidoni",
+    "ericfennis",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "report",
+    "timeline",
+    "marker",
+    "pin"
+  ],
+  "categories": [
+    "development",
+    "navigation"
+  ]
+}

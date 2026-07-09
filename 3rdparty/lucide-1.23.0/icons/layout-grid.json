@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "zenoamaro",
+    "ericfennis",
+    "csandman",
+    "mittalyashu",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "app",
+    "home",
+    "start"
+  ],
+  "categories": [
+    "design",
+    "layout"
+  ]
+}

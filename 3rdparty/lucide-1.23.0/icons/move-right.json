@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "jonas-hoebenreich"
+  ],
+  "use-cases": [],
+  "tags": [
+    "arrow",
+    "direction",
+    "trend flat",
+    "east"
+  ],
+  "categories": [
+    "arrows"
+  ]
+}

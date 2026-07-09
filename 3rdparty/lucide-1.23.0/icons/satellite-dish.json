@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "antenna",
+    "receiver",
+    "dish aerial",
+    "saucer"
+  ],
+  "categories": [
+    "connectivity",
+    "devices",
+    "multimedia"
+  ]
+}

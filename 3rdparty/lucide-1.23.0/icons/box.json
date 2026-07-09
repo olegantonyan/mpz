@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cube",
+    "package",
+    "container",
+    "storage",
+    "geometry",
+    "3d",
+    "isometric"
+  ],
+  "categories": [
+    "shapes",
+    "gaming",
+    "development",
+    "math"
+  ]
+}

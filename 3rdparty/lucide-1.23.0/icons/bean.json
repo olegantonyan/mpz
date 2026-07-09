@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "legume",
+    "soy",
+    "food",
+    "seed"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

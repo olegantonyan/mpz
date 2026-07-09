@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "jmsv",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "person",
+    "account",
+    "contact",
+    "find",
+    "scan",
+    "magnifier",
+    "magnifying glass",
+    "lens"
+  ],
+  "categories": [
+    "account",
+    "social"
+  ]
+}

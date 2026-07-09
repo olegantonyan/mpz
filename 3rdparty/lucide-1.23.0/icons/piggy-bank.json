@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "money",
+    "savings"
+  ],
+  "categories": [
+    "finance"
+  ]
+}

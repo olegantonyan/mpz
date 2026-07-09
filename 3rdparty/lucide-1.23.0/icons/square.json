@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "stop",
+    "playback",
+    "music",
+    "audio",
+    "video",
+    "rectangle",
+    "aspect ratio",
+    "1:1",
+    "shape"
+  ],
+  "categories": [
+    "shapes",
+    "multimedia"
+  ]
+}

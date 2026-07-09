@@ -1,0 +1,26 @@
+{
+  "$schema": "../icon.schema.json",
+  "use-cases": [
+    "indicating a large and small text size",
+    "formatting text size",
+    "indicating a heading and body text"
+  ],
+  "contributors": [
+    "it-is-not",
+    "jguddas",
+    "danielbayley",
+    "ericfennis",
+    "vichotech",
+    "karsa-mistmere"
+  ],
+  "tags": [
+    "letter",
+    "font size",
+    "text",
+    "formatting"
+  ],
+  "categories": [
+    "text",
+    "design"
+  ]
+}

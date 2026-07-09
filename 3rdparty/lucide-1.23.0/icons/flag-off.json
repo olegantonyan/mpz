@@ -1,0 +1,28 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "cyberalien",
+    "ericfennis",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "unflag",
+    "unmark",
+    "report",
+    "marker",
+    "notification",
+    "warning",
+    "milestone",
+    "goal",
+    "notice",
+    "signal",
+    "attention",
+    "banner"
+  ],
+  "categories": [
+    "account",
+    "social"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Andreto",
+    "ericfennis",
+    "karsa-mistmere",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "beaker",
+    "erlenmeyer",
+    "lab",
+    "chemistry",
+    "experiment",
+    "test"
+  ],
+  "categories": [
+    "science",
+    "gaming"
+  ]
+}

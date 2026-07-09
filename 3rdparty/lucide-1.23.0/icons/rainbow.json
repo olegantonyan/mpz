@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "colors",
+    "colours",
+    "spectrum",
+    "light",
+    "prism",
+    "arc",
+    "clear",
+    "sunshine"
+  ],
+  "categories": [
+    "weather"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ahtohbi4",
+    "ericfennis",
+    "Andreto",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "bus",
+    "vehicle",
+    "transport",
+    "trip"
+  ],
+  "categories": [
+    "transportation"
+  ]
+}

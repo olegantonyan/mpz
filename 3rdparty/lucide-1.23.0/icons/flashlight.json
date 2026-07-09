@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "csandman",
+    "ericfennis",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "torch",
+    "light",
+    "beam",
+    "emergency",
+    "safety",
+    "tool",
+    "bright"
+  ],
+  "categories": [
+    "photography",
+    "devices"
+  ]
+}

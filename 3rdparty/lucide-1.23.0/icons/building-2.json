@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "maxim-s-barabash",
+    "ericfennis",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "business",
+    "company",
+    "enterprise",
+    "skyscraper",
+    "organisation",
+    "organization",
+    "city"
+  ],
+  "categories": [
+    "account",
+    "buildings"
+  ]
+}

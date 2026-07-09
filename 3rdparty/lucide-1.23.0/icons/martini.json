@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis",
+    "danielbayley",
+    "jamiemlaw"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cocktail",
+    "alcohol",
+    "beverage",
+    "bar",
+    "drink",
+    "glass",
+    "spirit",
+    "party",
+    "celebration",
+    "mixer"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

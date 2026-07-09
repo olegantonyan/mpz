@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "danielbayley",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "fallout",
+    "waste",
+    "biology",
+    "chemistry",
+    "chemical",
+    "element"
+  ],
+  "categories": [
+    "science"
+  ]
+}

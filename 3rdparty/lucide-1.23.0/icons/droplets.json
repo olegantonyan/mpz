@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Andreto",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "water",
+    "weather",
+    "liquid",
+    "fluid",
+    "wet",
+    "moisture",
+    "damp",
+    "bead",
+    "globule"
+  ],
+  "categories": [
+    "weather"
+  ]
+}

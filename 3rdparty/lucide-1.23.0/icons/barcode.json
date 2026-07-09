@@ -1,0 +1,23 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "scan",
+    "checkout",
+    "till",
+    "cart",
+    "transaction",
+    "purchase",
+    "buy",
+    "product",
+    "packaging",
+    "retail",
+    "consumer"
+  ],
+  "categories": [
+    "shopping"
+  ]
+}

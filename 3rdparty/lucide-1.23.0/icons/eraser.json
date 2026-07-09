@@ -1,0 +1,21 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "maxwellito",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "pencil",
+    "drawing",
+    "undo",
+    "delete",
+    "clear",
+    "trash",
+    "remove"
+  ],
+  "categories": [
+    "text"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "baggage",
+    "luggage",
+    "travel",
+    "suitcase"
+  ],
+  "categories": [
+    "travel",
+    "transportation"
+  ]
+}

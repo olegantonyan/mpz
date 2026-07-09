@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ahtohbi4",
+    "ericfennis",
+    "Andreto",
+    "csandman",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "bicycle",
+    "transport",
+    "trip"
+  ],
+  "categories": [
+    "transportation"
+  ]
+}

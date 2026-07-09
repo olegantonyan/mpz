@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Andreto",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "helmet",
+    "construction",
+    "safety",
+    "savety"
+  ],
+  "categories": [
+    "tools"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "tubes",
+    "vials",
+    "phials",
+    "flasks",
+    "ampoules",
+    "ampules",
+    "lab",
+    "chemistry",
+    "experiment",
+    "test"
+  ],
+  "categories": [
+    "science"
+  ]
+}

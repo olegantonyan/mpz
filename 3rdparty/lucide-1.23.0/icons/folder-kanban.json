@@ -1,0 +1,32 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "projects",
+    "manage",
+    "overview",
+    "board",
+    "tickets",
+    "issues",
+    "roadmap",
+    "plan",
+    "intentions",
+    "productivity",
+    "work",
+    "agile",
+    "code",
+    "coding",
+    "directory",
+    "project",
+    "root"
+  ],
+  "categories": [
+    "charts",
+    "development",
+    "design",
+    "files"
+  ]
+}

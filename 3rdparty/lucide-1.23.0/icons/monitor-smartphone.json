@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "badraxas",
+    "karsa-mistmere",
+    "jguddas",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "smartphone",
+    "phone",
+    "cellphone",
+    "device",
+    "mobile",
+    "desktop",
+    "monitor",
+    "responsive",
+    "screens"
+  ],
+  "categories": [
+    "connectivity",
+    "devices"
+  ]
+}

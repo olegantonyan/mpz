@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "count",
+    "score",
+    "enumerate",
+    "days",
+    "three",
+    "3",
+    "third",
+    "triple",
+    "bars",
+    "prison",
+    "cell",
+    "sentence"
+  ],
+  "categories": [
+    "math",
+    "gaming"
+  ]
+}

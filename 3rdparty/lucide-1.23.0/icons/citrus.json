@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "lemon",
+    "orange",
+    "grapefruit",
+    "fruit"
+  ],
+  "categories": [
+    "food-beverage"
+  ]
+}

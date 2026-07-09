@@ -1,0 +1,16 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "version control",
+    "open"
+  ],
+  "categories": [
+    "development",
+    "arrows"
+  ]
+}

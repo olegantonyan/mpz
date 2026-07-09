@@ -1,0 +1,25 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "git",
+    "diff",
+    "modified",
+    "."
+  ],
+  "categories": [
+    "development"
+  ],
+  "aliases": [
+    {
+      "name": "dot-square",
+      "deprecationReason": "alias.name",
+      "deprecated": true,
+      "toBeRemovedInVersion": "v1.0"
+    }
+  ]
+}

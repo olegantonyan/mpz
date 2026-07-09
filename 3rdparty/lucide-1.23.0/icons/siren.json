@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "police",
+    "ambulance",
+    "emergency",
+    "security",
+    "alert",
+    "alarm",
+    "light"
+  ],
+  "categories": [
+    "medical"
+  ]
+}

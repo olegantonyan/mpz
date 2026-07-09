@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "lost",
+    "delete",
+    "remove",
+    "document"
+  ],
+  "categories": [
+    "files"
+  ]
+}

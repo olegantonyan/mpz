@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "turn",
+    "corner"
+  ],
+  "categories": [
+    "arrows",
+    "gaming"
+  ]
+}

@@ -1,4 +1,5 @@
 #include "directorycontextmenu.h"
+#include "icons.h"
 
 #include <QMenu>
 #include <QAction>
@@ -28,12 +29,12 @@ namespace DirectoryUi {
 
     QMenu menu;
     QAction clear_filter(tr("Clear filter"));
-    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
+    clear_filter.setIcon(Icons::get(Icons::Icon::Cancel));
     QAction create_playlist(tr("Create new playlist"));
 
     QAction append_to_playlist(tr("Append to current playlist"));
     QAction open_in_filemanager(tr("Open in file manager"));
-    open_in_filemanager.setIcon(view->style()->standardIcon(QStyle::SP_DirLinkIcon));
+    open_in_filemanager.setIcon(Icons::get(Icons::Icon::FolderReveal));
 
     connect(&create_playlist, &QAction::triggered, this, [&]() {
       emit createNewPlaylist(selected_dirs);

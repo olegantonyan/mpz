@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "hearing",
+    "hard of hearing",
+    "hearing loss",
+    "deafness",
+    "noise",
+    "silence",
+    "audio",
+    "accessibility"
+  ],
+  "categories": [
+    "medical",
+    "accessibility"
+  ]
+}

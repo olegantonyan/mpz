@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "text",
+    "font",
+    "typography",
+    "alternates",
+    "alternatives"
+  ],
+  "categories": [
+    "text"
+  ]
+}

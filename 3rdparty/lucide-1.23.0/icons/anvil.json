@@ -1,0 +1,24 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "karsa-mistmere",
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "metal",
+    "iron",
+    "alloy",
+    "materials",
+    "heavy",
+    "weight",
+    "blacksmith",
+    "forge",
+    "acme"
+  ],
+  "categories": [
+    "buildings",
+    "tools",
+    "gaming"
+  ]
+}

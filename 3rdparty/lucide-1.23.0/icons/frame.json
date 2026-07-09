@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "Bowero",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "logo",
+    "design",
+    "tool"
+  ],
+  "categories": [
+    "design",
+    "photography"
+  ]
+}

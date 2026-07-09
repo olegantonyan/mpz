@@ -1,0 +1,18 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "jguddas",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "search",
+    "substitute",
+    "swap",
+    "change"
+  ],
+  "categories": [
+    "text"
+  ]
+}

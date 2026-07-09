@@ -1,0 +1,15 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "lscheibel",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "healthcare",
+    "first aid"
+  ],
+  "categories": [
+    "shapes"
+  ]
+}

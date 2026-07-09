@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "smartphone",
+    "notification",
+    "rumble",
+    "haptic feedback",
+    "screen"
+  ],
+  "categories": [
+    "devices",
+    "connectivity",
+    "account",
+    "notifications"
+  ]
+}

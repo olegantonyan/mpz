@@ -1,0 +1,14 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "mouse"
+  ],
+  "categories": [
+    "cursors"
+  ]
+}

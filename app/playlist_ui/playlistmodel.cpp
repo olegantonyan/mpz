@@ -1,5 +1,6 @@
 #include "playlistmodel.h"
 #include "playlist/loader.h"
+#include "icons.h"
 
 #include <QDebug>
 #include <QFont>
@@ -63,9 +64,9 @@ namespace PlaylistUi {
        if (index.column() == 0) {
          if (highlight_uid == t.uid()) {
            if (highlight_state == Playing) {
-             return style->standardIcon(QStyle::SP_MediaPlay);
+             return Icons::get(Icons::Icon::Play);
            } else if (highlight_state == Paused) {
-             return style->standardIcon(QStyle::SP_MediaPause);
+             return Icons::get(Icons::Icon::Pause);
            }
          }
        }

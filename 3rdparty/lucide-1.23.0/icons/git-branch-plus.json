@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "code",
+    "version control",
+    "vcs",
+    "repository",
+    "add",
+    "create",
+    "+"
+  ],
+  "categories": [
+    "development"
+  ]
+}

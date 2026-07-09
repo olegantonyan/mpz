@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "arrow",
+    "next",
+    "music",
+    "right",
+    "continue"
+  ],
+  "categories": [
+    "multimedia",
+    "arrows"
+  ]
+}

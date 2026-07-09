@@ -1,0 +1,22 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "camera",
+    "movie",
+    "film"
+  ],
+  "categories": [
+    "devices",
+    "communication",
+    "connectivity",
+    "photography"
+  ]
+}

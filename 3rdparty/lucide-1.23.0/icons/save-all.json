@@ -1,0 +1,17 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley",
+    "karsa-mistmere",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "floppy disks",
+    "copy"
+  ],
+  "categories": [
+    "text",
+    "files"
+  ]
+}

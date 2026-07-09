@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "ericfennis"
+  ],
+  "use-cases": [],
+  "tags": [
+    "date",
+    "month",
+    "year",
+    "event",
+    "birthday",
+    "birthdate"
+  ],
+  "categories": [
+    "time"
+  ]
+}

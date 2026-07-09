@@ -1,0 +1,20 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "danielbayley"
+  ],
+  "use-cases": [],
+  "tags": [
+    "camping",
+    "campsite",
+    "holiday",
+    "retreat",
+    "nomadic",
+    "wilderness",
+    "outdoors"
+  ],
+  "categories": [
+    "travel",
+    "nature"
+  ]
+}

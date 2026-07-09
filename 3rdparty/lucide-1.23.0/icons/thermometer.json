@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "colebemis",
+    "csandman",
+    "ericfennis",
+    "karsa-mistmere"
+  ],
+  "use-cases": [],
+  "tags": [
+    "temperature",
+    "celsius",
+    "fahrenheit",
+    "weather"
+  ],
+  "categories": [
+    "weather"
+  ]
+}

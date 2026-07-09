@@ -1,0 +1,19 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "mittalyashu",
+    "ericfennis",
+    "jguddas"
+  ],
+  "use-cases": [],
+  "tags": [
+    "cog",
+    "edit",
+    "gear",
+    "preferences",
+    "slider"
+  ],
+  "categories": [
+    "account"
+  ]
+}
