@@ -34,6 +34,11 @@ namespace {
       case Icons::Icon::Details:      return QStringLiteral(":/icons/ui/details.svg");
       case Icons::Icon::Help:         return QStringLiteral(":/icons/ui/help.svg");
       case Icons::Icon::Cancel:       return QStringLiteral(":/icons/ui/cancel.svg");
+      case Icons::Icon::Copy:         return QStringLiteral(":/icons/ui/copy.svg");
+      case Icons::Icon::Edit:         return QStringLiteral(":/icons/ui/edit.svg");
+      case Icons::Icon::OpenFile:     return QStringLiteral(":/icons/ui/open-file.svg");
+      case Icons::Icon::NewPlaylist:  return QStringLiteral(":/icons/ui/new-playlist.svg");
+      case Icons::Icon::AddToPlaylist:return QStringLiteral(":/icons/ui/add-to-playlist.svg");
     }
     return QString();
   }

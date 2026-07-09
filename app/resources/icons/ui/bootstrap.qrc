@@ -20,5 +20,10 @@
         <file alias="icons/ui/details.svg">../../../../3rdparty/icons-1.13.1/icons/list-ul.svg</file>
         <file alias="icons/ui/help.svg">../../../../3rdparty/icons-1.13.1/icons/question-circle.svg</file>
         <file alias="icons/ui/cancel.svg">../../../../3rdparty/icons-1.13.1/icons/x-lg.svg</file>
+        <file alias="icons/ui/copy.svg">../../../../3rdparty/icons-1.13.1/icons/files.svg</file>
+        <file alias="icons/ui/edit.svg">../../../../3rdparty/icons-1.13.1/icons/pencil.svg</file>
+        <file alias="icons/ui/open-file.svg">../../../../3rdparty/icons-1.13.1/icons/file-earmark-music.svg</file>
+        <file alias="icons/ui/new-playlist.svg">../../../../3rdparty/icons-1.13.1/icons/plus-square.svg</file>
+        <file alias="icons/ui/add-to-playlist.svg">../../../../3rdparty/icons-1.13.1/icons/plus-lg.svg</file>
     </qresource>
 </RCC>

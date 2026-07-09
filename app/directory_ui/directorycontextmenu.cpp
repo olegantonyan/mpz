@@ -31,8 +31,10 @@ namespace DirectoryUi {
     QAction clear_filter(tr("Clear filter"));
     clear_filter.setIcon(Icons::get(Icons::Icon::Cancel));
     QAction create_playlist(tr("Create new playlist"));
+    create_playlist.setIcon(Icons::get(Icons::Icon::NewPlaylist));
 
     QAction append_to_playlist(tr("Append to current playlist"));
+    append_to_playlist.setIcon(Icons::get(Icons::Icon::AddToPlaylist));
     QAction open_in_filemanager(tr("Open in file manager"));
     open_in_filemanager.setIcon(Icons::get(Icons::Icon::FolderReveal));
 

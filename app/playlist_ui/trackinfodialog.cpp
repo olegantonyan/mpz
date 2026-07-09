@@ -280,6 +280,7 @@ void TrackInfoDialog::render_lyrics_state(const QString &message) {
 void TrackInfoDialog::on_labelCoverArt_customContextMenuRequested(const QPoint &pos) {
   QMenu menu;
   QAction copy(tr("Copy to clipboard"));
+  copy.setIcon(Icons::get(Icons::Icon::Copy));
   connect(&copy, &QAction::triggered, this, [=]() {
     QPixmap pixmap(cover_art_path);
     if (!pixmap.isNull()) {

@@ -40,6 +40,8 @@ namespace PlaylistsUi {
     remove.setIcon(Icons::get(Icons::Icon::Trash));
     savem3u.setIcon(Icons::get(Icons::Icon::Save));
     play.setIcon(Icons::get(Icons::Icon::Play));
+    rename.setIcon(Icons::get(Icons::Icon::Edit));
+    loadm3u.setIcon(Icons::get(Icons::Icon::OpenFile));
 
     connect(&remove, &QAction::triggered, this, [&]() {
       emit removed(index);

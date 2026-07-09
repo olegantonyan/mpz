@@ -25,6 +25,7 @@ namespace PlaylistUi {
 
     copy_name.setText(tr("Copy name"));
     connect(&copy_name, &QAction::triggered, this, &PlaylistContextMenu::on_copyName);
+    copy_name.setIcon(Icons::get(Icons::Icon::Copy));
 
     clear_filter.setText(tr("Clear filter"));
     connect(&clear_filter, &QAction::triggered, this, &PlaylistContextMenu::on_clearFilter);
