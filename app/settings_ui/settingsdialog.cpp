@@ -19,6 +19,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QSystemTrayIcon>
 #include <QTabWidget>
 #include <QTableWidget>
 #include <QUrl>
@@ -136,6 +137,16 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_tray_icon = new QCheckBox(tr("Show system tray icon"));
   check_tray_icon->setChecked(global_conf.trayIconEnabled());
   iv->addWidget(check_tray_icon);
+
+  if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+    auto *tray_warning = new QLabel(
+      tr("No system tray detected. On GNOME, install the "
+         "\"AppIndicator and KStatusNotifierItem Support\" extension "
+         "for the tray icon to appear."));
+    tray_warning->setWordWrap(true);
+    tray_warning->setStyleSheet("color: #d35400;");
+    iv->addWidget(tray_warning);
+  }
 
   check_minimize_to_tray = new QCheckBox(tr("Close to tray instead of quitting"));
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());

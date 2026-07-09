@@ -3,6 +3,7 @@
 ### Added
 
 - Bootstrap Icons for in-app icons (play/pause/context menus/etc)
+- On systems without tray show warning under tray icon checkbox in settings
 
 ### Fixed
 
