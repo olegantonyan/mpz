@@ -36,19 +36,9 @@ endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 
-set(ICON_SET "tabler" CACHE STRING "Which vendored icon set to bundle (see app/resources/icons/ui/<set>.qrc)")
-
-if(ICON_SET STREQUAL "tabler")
-  set(ICON_SET_CREDIT_NAME "Tabler")
-  set(ICON_SET_CREDIT_URL "https://tabler.io/icons")
-else()
-  set(ICON_SET_CREDIT_NAME "Lucide")
-  set(ICON_SET_CREDIT_URL "https://lucide.dev/")
-endif()
-
 set(PROJECT_SOURCES
   app/icons.cpp
-  app/resources/icons/ui/${ICON_SET}.qrc
+  app/resources/icons/ui/tabler.qrc
   app/about_ui/aboutdialog.cpp
   app/busyspinner.cpp
   app/config/global.cpp
@@ -231,7 +221,6 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ICON_SET_CREDIT_NAME="${ICON_SET_CREDIT_NAME}" ICON_SET_CREDIT_URL="${ICON_SET_CREDIT_URL}")
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
@@ -419,9 +408,9 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
-  file(GLOB ICON_SET_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/${ICON_SET}-*/LICENSE")
-  if(ICON_SET_LICENSE)
-    install(FILES ${ICON_SET_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME ${ICON_SET}-LICENSE.txt)
+  file(GLOB TABLER_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/tabler-icons-*/LICENSE")
+  if(TABLER_LICENSE)
+    install(FILES ${TABLER_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME tabler-LICENSE.txt)
   endif()
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)

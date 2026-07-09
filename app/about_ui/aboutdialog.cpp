@@ -60,7 +60,7 @@ AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(pa
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
   os << libraryInfo("QtWaitingSpinner", "https://github.com/snowwlex/QtWaitingSpinner");
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
-  os << libraryInfo(ICON_SET_CREDIT_NAME, ICON_SET_CREDIT_URL);
+  os << libraryInfo("Tabler", "https://tabler.io/icons");
 #ifdef ENABLE_MPD_SUPPORT
   os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");
 #endif
