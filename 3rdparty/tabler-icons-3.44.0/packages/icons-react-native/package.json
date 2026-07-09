@@ -1,0 +1,79 @@
+{
+  "name": "@tabler/icons-react-native",
+  "version": "3.44.0",
+  "license": "MIT",
+  "author": "codecalm",
+  "description": "A set of free MIT-licensed high-quality SVG icons for you to use in your web projects.",
+  "homepage": "https://tabler.io/icons",
+  "bugs": {
+    "url": "https://github.com/tabler/tabler-icons/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/codecalm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tabler/tabler-icons.git",
+    "directory": "packages/icons-react-native"
+  },
+  "type": "module",
+  "main": "./dist/cjs/tabler-icons-react-native.cjs",
+  "types": "./dist/cjs/tabler-icons-react-native.d.cts",
+  "module": "./dist/esm/tabler-icons-react-native.mjs",
+  "amdName": "TablerIconsReactNative",
+  "react-native": "./dist/esm/tabler-icons-react-native.mjs",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/cjs/tabler-icons-react-native.d.cts",
+        "default": "./dist/cjs/tabler-icons-react-native.cjs"
+      },
+      "import": {
+        "types": "./dist/tabler-icons-react-native.d.ts",
+        "default": "./dist/esm/tabler-icons-react-native.mjs"
+      }
+    },
+    "./*": {
+      "require": {
+        "types": "./dist/cjs/icons/*.d.cts",
+        "default": "./dist/cjs/icons/*.cjs"
+      },
+      "import": {
+        "types": "./dist/icons/*.d.ts",
+        "default": "./dist/esm/icons/*.mjs"
+      }
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && pnpm run copy:license && pnpm run build:icons && pnpm typecheck && pnpm run build:bundles",
+    "build:icons": "node build.mjs",
+    "build:bundles": "rollup -c ./rollup.config.mjs",
+    "copy:license": "cp ../../LICENSE ./LICENSE",
+    "clean": "find dist -mindepth 1 -delete 2>/dev/null; rm -rf dist && find . ! -name '.gitkeep' -path '*/src/icons/*' -exec rm -rf {} +",
+    "typecheck": "tsc",
+    "imports-check": "attw $(npm pack)"
+  },
+  "dependencies": {
+    "@tabler/icons": "workspace:"
+  },
+  "devDependencies": {
+    "@testing-library/react": "catalog:",
+    "@types/react": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "^0.73.5",
+    "react-native-svg": "^15.0.0",
+    "react-test-renderer": "catalog:"
+  },
+  "peerDependencies": {
+    "react": ">= 16.5.1",
+    "react-native-svg": ">= 13.0.0"
+  },
+  "optionalDependencies": {}
+}

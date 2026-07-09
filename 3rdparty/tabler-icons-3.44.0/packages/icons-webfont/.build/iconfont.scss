@@ -1,0 +1,49 @@
+@charset "UTF-8";
+/*!
+ * Tabler Icons <%= it.v %> by tabler - https://tabler.io
+ * License - https://github.com/tabler/tabler-icons/blob/master/LICENSE
+ */
+@use "sass:string";
+
+$ti-font-family: '<%= it.fileName %>' !default;
+$ti-font-path: './fonts' !default;
+$ti-font-display: null !default;
+$ti-prefix: 'ti' !default;
+
+@font-face {
+  font-family: $ti-font-family;
+  font-style: normal;
+  font-weight: 400;
+  font-display: $ti-font-display;
+  src: url('#{$ti-font-path}/<%= it.fileName %>.woff2?v<%= it.v %>') format('woff2'),
+    url('#{$ti-font-path}/<%= it.fileName %>.woff?') format('woff'),
+    url('#{$ti-font-path}/<%= it.fileName %>.ttf?v<%= it.v %>') format('truetype');
+}
+
+.#{$ti-prefix} {
+  font-family: $ti-font-family !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@function unicode($str) {
+  @return string.unquote("\"")+string.unquote(string.insert($str, "\\", 1))+string.unquote("\"")
+}
+
+<% it.glyphs.forEach(function(glyph) { %>
+$ti-icon-<%= glyph.name %>: unicode('<%= glyph.unicodeHex %>');<% }) %>
+
+<% it.glyphs.forEach(function(glyph) { %>
+.#{$ti-prefix}-<%= glyph.name %>:before { content: $ti-icon-<%= glyph.name %>; }<% }) %>
+
+// Aliases
+<% it.aliases.forEach(function(alias) { %>.#{$ti-prefix}-<%= alias.from %>:before { content: $ti-icon-<%= alias.to %>; }
+<% }) %>

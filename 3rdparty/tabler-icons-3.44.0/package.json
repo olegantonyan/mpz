@@ -1,0 +1,133 @@
+{
+  "name": "tabler-icons",
+  "version": "3.44.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tabler/tabler-icons.git"
+  },
+  "private": true,
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "eleventy --serve --watch",
+    "preview": "eleventy",
+    "build": "pnpm run validate && pnpm run update && pnpm run validate --hard && pnpm run optimize && pnpm run build:packages && pnpm run preview && pnpm run changelog-image && pnpm run zip && pnpm run update-readme",
+    "clean": "turbo run clean",
+    "test": "turbo run test",
+    "generate-ai-tags": "node ./.build/generate-ai-tags.mjs",
+    "changelog": "node ./.build/changelog.mjs",
+    "changelog-commit": "git add . && node ./.build/changelog-commit.mjs",
+    "changelog-image": "node ./.build/changelog-image.mjs",
+    "update": "pnpm run update:icons",
+    "update:icons": "node ./.build/update-icons.mjs",
+    "optimize": "node ./.build/optimize.mjs",
+    "import": "node ./.build/import.mjs && pnpm run optimize",
+    "import-tags": "node ./.build/import-tags.mjs",
+    "import-categories": "node ./.build/import-categories.mjs",
+    "generate-preview": "pnpm run preview-icons && pnpm run preview-stroke",
+    "generate-preview-icons": "node ./.build/preview-icons.mjs",
+    "generate-preview-random-icons": "node ./.build/preview-random-icons.mjs",
+    "generate-preview-stroke": "node ./.build/preview-stroke.mjs",
+    "validate": "node ./.build/validate-icons.mjs",
+    "release": "git pull && release-it --verbose",
+    "build:copy": "rm -rf ./icons && mkdir ./icons && cp ./_site/tags.json tags.json && cp ./_site/icons/* ./icons/ && rm -rf ./_site/",
+    "build:packages": "pnpm run build:icons && pnpm run build:sprite && pnpm run build:react && pnpm run build:react-native && pnpm run build:preact && pnpm run build:solidjs && pnpm run build:svelte && pnpm run build:svelte-runes && pnpm run build:vue && pnpm run build:angular && pnpm run build:png && pnpm run build:pdf && pnpm run build:esp && pnpm run build:webfont",
+    "build:icons": "pnpm --filter @tabler/icons build",
+    "build:angular": "pnpm --filter @tabler/icons-angular build",
+    "build:react": "pnpm --filter @tabler/icons-react build",
+    "build:react-native": "pnpm --filter @tabler/icons-react-native build",
+    "build:preact": "pnpm --filter @tabler/icons-preact build",
+    "build:solidjs": "pnpm --filter @tabler/icons-solidjs build",
+    "build:svelte": "pnpm --filter @tabler/icons-svelte build",
+    "build:svelte-runes": "pnpm --filter @tabler/icons-svelte-runes build",
+    "build:vue": "pnpm --filter @tabler/icons-vue build",
+    "build:png": "pnpm --filter @tabler/icons-png build",
+    "build:pdf": "pnpm --filter @tabler/icons-pdf build",
+    "build:esp": "pnpm --filter @tabler/icons-esp build",
+    "build:sprite": "pnpm --filter @tabler/icons-sprite build",
+    "build:webfont": "pnpm --filter @tabler/icons-webfont build",
+    "update-readme": "node ./.build/update-readme.mjs",
+    "zip": "node ./.build/zip-files.mjs",
+    "validate-pr": "node ./.build/validate-pr.mjs",
+    "generate-icons-comment": "node ./.build/generate-icons-comment.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@release-it-plugins/workspaces": "^5.0.3",
+    "@rollup/plugin-node-resolve": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "adm-zip": "^0.5.16",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.20.2",
+    "fs-extra": "^11.2.0",
+    "glob": "10.3.16",
+    "gray-matter": "^4.0.3",
+    "html-minifier": "^4.0.0",
+    "jest-serializer-html": "catalog:",
+    "jsdom": "catalog:",
+    "minimist": "1.2.8",
+    "openai": "^4.73.1",
+    "parse-svg-path": "^0.1.2",
+    "prettier": "^3.2.5",
+    "release-it": "19.2.4",
+    "rollup": "catalog:",
+    "rollup-plugin-dts": "catalog:",
+    "rollup-plugin-esbuild": "catalog:",
+    "rollup-plugin-filesize": "catalog:",
+    "rollup-plugin-license": "catalog:",
+    "rollup-plugin-peer-deps-external": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "sass": "^1.71.1",
+    "slash": "^5.1.0",
+    "svg-outline-stroke": "1.3.1",
+    "svgo": "^4.0.0",
+    "svgpath": "^2.6.0",
+    "svgson": "^5.3.1",
+    "turbo": "^2.7.2",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "release-it": {
+    "plugins": {
+      "@release-it-plugins/workspaces": {
+        "skipChecks": true,
+        "workspaces": [
+          "packages/*"
+        ]
+      }
+    },
+    "npm": false,
+    "hooks": {
+      "after:bump": "export LATEST_VERSION=${latestVersion} && export NEW_VERSION=${version} && pnpm run build && pnpm install",
+      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+    },
+    "git": {
+      "addUntrackedFiles": true,
+      "changelog": "LATEST_VERSION=${latestTag} pnpm run --silent changelog",
+      "tagName": "v${version}",
+      "requireBranch": "main",
+      "requireCommits": true,
+      "requireCleanWorkingDir": false
+    },
+    "github": {
+      "release": true
+    }
+  },
+  "packageManager": "pnpm@10.30.3",
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "sharp",
+      "svelte-preprocess",
+      "ttf2woff2"
+    ],
+    "onlyBuiltDependencies": [
+      "canvas"
+    ]
+  }
+}

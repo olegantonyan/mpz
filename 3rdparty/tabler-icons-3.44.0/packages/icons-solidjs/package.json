@@ -1,0 +1,74 @@
+{
+  "name": "@tabler/icons-solidjs",
+  "version": "3.44.0",
+  "license": "MIT",
+  "author": "codecalm",
+  "description": "A set of free MIT-licensed high-quality SVG icons for you to use in your web projects.",
+  "homepage": "https://tabler.io/icons",
+  "bugs": {
+    "url": "https://github.com/tabler/tabler-icons/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/codecalm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tabler/tabler-icons.git",
+    "directory": "packages/icons-solidjs"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "amdName": "TablerIconsSolidjs",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/tabler-icons-solidjs.js",
+      "import": {
+        "types": "./dist/types/tabler-icons-solidjs.d.ts",
+        "default": "./dist/esm/tabler-icons-solidjs.js"
+      },
+      "browser": {
+        "types": "./dist/types/tabler-icons-solidjs.d.ts",
+        "default": "./dist/esm/tabler-icons-solidjs.js"
+      },
+      "require": {
+        "types": "./dist/types/tabler-icons-solidjs.d.ts",
+        "default": "./dist/cjs/tabler-icons-solidjs.js"
+      },
+      "node": {
+        "default": "./dist/cjs/tabler-icons-solidjs.js",
+        "types": "./dist/types/tabler-icons-solidjs.d.ts"
+      }
+    }
+  },
+  "main": "./dist/cjs/tabler-icons-solidjs.js",
+  "module": "./dist/esm/tabler-icons-solidjs.js",
+  "types": "./dist/types/tabler-icons-solidjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && pnpm run copy:license && pnpm run build:icons && pnpm typecheck && pnpm run build:bundles",
+    "build:icons": "node build.js",
+    "build:bundles": "rollup -c ./rollup.config.js",
+    "copy:license": "cp ../../LICENSE ./LICENSE",
+    "clean": "find dist -mindepth 1 -delete 2>/dev/null; rm -rf dist && find . ! -name '.gitkeep' -path '*/src/icons/*' -exec rm -rf {} +",
+    "test": "vitest run",
+    "typecheck": "tsc",
+    "imports-check": "attw $(npm pack)"
+  },
+  "dependencies": {
+    "@tabler/icons": "workspace:"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "^0.8.6",
+    "rollup-preset-solid": "^2.0.1",
+    "vite-plugin-solid": "^2.10.1",
+    "solid-js": "^1.8.15",
+    "rollup": "catalog:"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.4.7"
+  },
+  "optionalDependencies": {}
+}

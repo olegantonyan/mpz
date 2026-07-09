@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["ICONS_LIMIT"],
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**", "src/icons/**", "icons/**", "icons.json", "tabler-nodes-*.json", "categories/**", "docs/**"],
+      "dependsOn": ["^build"],
+      "inputs": ["../../icons/**"]
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["build", "^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["build", "^build"]
+    },
+    "imports-check": {
+      "dependsOn": ["build", "^build"]
+    }
+  }
+}

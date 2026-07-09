@@ -36,7 +36,15 @@ endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 
-set(ICON_SET "lucide" CACHE STRING "Which vendored icon set to bundle (see app/resources/icons/ui/<set>.qrc)")
+set(ICON_SET "tabler" CACHE STRING "Which vendored icon set to bundle (see app/resources/icons/ui/<set>.qrc)")
+
+if(ICON_SET STREQUAL "tabler")
+  set(ICON_SET_CREDIT_NAME "Tabler")
+  set(ICON_SET_CREDIT_URL "https://tabler.io/icons")
+else()
+  set(ICON_SET_CREDIT_NAME "Lucide")
+  set(ICON_SET_CREDIT_URL "https://lucide.dev/")
+endif()
 
 set(PROJECT_SOURCES
   app/icons.cpp
@@ -223,6 +231,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ICON_SET_CREDIT_NAME="${ICON_SET_CREDIT_NAME}" ICON_SET_CREDIT_URL="${ICON_SET_CREDIT_URL}")
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
