@@ -284,7 +284,7 @@
     <message>
         <location filename="../../macos/macmenubar.cpp" line="51"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Стоп</translation>
     </message>
     <message>
         <location filename="../../macos/macmenubar.cpp" line="56"/>
@@ -489,7 +489,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиовыход</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="158"/>
@@ -1535,22 +1535,22 @@
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="101"/>
         <source>Previous</source>
-        <translation type="unfinished">Предыдущий</translation>
+        <translation>Предыдущий</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="107"/>
         <source>Pause</source>
-        <translation type="unfinished">Пауза</translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="108"/>
         <source>Play</source>
-        <translation type="unfinished">Воспроизвести</translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="114"/>
         <source>Next</source>
-        <translation type="unfinished">Следующий</translation>
+        <translation>Следующий</translation>
     </message>
 </context>
 </TS>

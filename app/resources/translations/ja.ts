@@ -493,7 +493,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>出力</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="158"/>
@@ -1537,22 +1537,22 @@
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="101"/>
         <source>Previous</source>
-        <translation type="unfinished">前へ</translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="107"/>
         <source>Pause</source>
-        <translation type="unfinished">一時停止</translation>
+        <translation>一時停止</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="108"/>
         <source>Play</source>
-        <translation type="unfinished">再生</translation>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="114"/>
         <source>Next</source>
-        <translation type="unfinished">次へ</translation>
+        <translation>次へ</translation>
     </message>
 </context>
 </TS>

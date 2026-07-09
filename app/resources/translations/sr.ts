@@ -493,7 +493,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="120"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудиоизлаз</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="158"/>
@@ -1539,22 +1539,22 @@
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="101"/>
         <source>Previous</source>
-        <translation type="unfinished">Претходна</translation>
+        <translation>Претходна</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="107"/>
         <source>Pause</source>
-        <translation type="unfinished">Пауза</translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="108"/>
         <source>Play</source>
-        <translation type="unfinished">Пусти</translation>
+        <translation>Пусти</translation>
     </message>
     <message>
         <location filename="../../windows/windowstaskbar.cpp" line="114"/>
         <source>Next</source>
-        <translation type="unfinished">Следећа</translation>
+        <translation>Следећа</translation>
     </message>
 </context>
 </TS>
