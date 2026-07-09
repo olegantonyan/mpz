@@ -252,132 +252,159 @@
 <context>
     <name>MacMenuBar</name>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="29"/>
+        <location filename="../../macos/macmenubar.cpp" line="30"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="31"/>
+        <location filename="../../macos/macmenubar.cpp" line="32"/>
         <source>About mpz</source>
         <translation>mpz について</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="35"/>
+        <location filename="../../macos/macmenubar.cpp" line="36"/>
         <source>Settings…</source>
         <translation>設定…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="40"/>
+        <location filename="../../macos/macmenubar.cpp" line="41"/>
         <source>Quit mpz</source>
         <translation>mpz を終了</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="45"/>
+        <location filename="../../macos/macmenubar.cpp" line="46"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="47"/>
+        <location filename="../../macos/macmenubar.cpp" line="52"/>
         <source>Play / Pause</source>
         <translation>再生 / 一時停止</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="51"/>
+        <location filename="../../macos/macmenubar.cpp" line="56"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="56"/>
+        <location filename="../../macos/macmenubar.cpp" line="61"/>
         <source>Next Track</source>
         <translation>次のトラック</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="60"/>
+        <location filename="../../macos/macmenubar.cpp" line="65"/>
         <source>Previous Track</source>
         <translation>前のトラック</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="66"/>
+        <location filename="../../macos/macmenubar.cpp" line="75"/>
+        <source>Pause</source>
+        <translation>一時停止</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="75"/>
+        <location filename="../../macos/macmenubar.cpp" line="82"/>
+        <source>Play</source>
+        <translation>再生</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="96"/>
         <source>Volume Up</source>
         <translation>音量を上げる</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="70"/>
+        <location filename="../../macos/macmenubar.cpp" line="100"/>
         <source>Volume Down</source>
         <translation>音量を下げる</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="78"/>
+        <location filename="../../macos/macmenubar.cpp" line="108"/>
         <source>Output Device</source>
         <translation>出力デバイス</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="90"/>
+        <location filename="../../macos/macmenubar.cpp" line="120"/>
         <source>mpd update</source>
         <translation>mpd を更新</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="100"/>
+        <location filename="../../macos/macmenubar.cpp" line="130"/>
         <source>View</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="101"/>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
         <source>Sort</source>
         <translation>並び替え</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="106"/>
+        <location filename="../../macos/macmenubar.cpp" line="136"/>
+        <source>Jump to Playing Track</source>
+        <translation>再生中のトラックにジャンプ</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="140"/>
         <source>Playback Log</source>
         <translation>再生ログ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="110"/>
+        <location filename="../../macos/macmenubar.cpp" line="144"/>
         <source>Keyboard Shortcuts</source>
         <translation>キーボードショートカット</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="114"/>
+        <location filename="../../macos/macmenubar.cpp" line="150"/>
+        <location filename="../../macos/macmenubar.cpp" line="160"/>
+        <source>Enter Full Screen</source>
+        <translation>フルスクリーンにする</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="160"/>
+        <source>Exit Full Screen</source>
+        <translation>フルスクリーンを解除</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="163"/>
         <source>Window</source>
         <translation>ウインドウ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="116"/>
+        <location filename="../../macos/macmenubar.cpp" line="165"/>
         <source>Minimize</source>
         <translation>しまう</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="120"/>
+        <location filename="../../macos/macmenubar.cpp" line="169"/>
         <source>Zoom</source>
         <translation>拡大/縮小</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="131"/>
+        <location filename="../../macos/macmenubar.cpp" line="180"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="135"/>
+        <location filename="../../macos/macmenubar.cpp" line="184"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="137"/>
+        <location filename="../../macos/macmenubar.cpp" line="186"/>
         <source>mpz Website</source>
         <translation>mpz ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="142"/>
+        <location filename="../../macos/macmenubar.cpp" line="191"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="147"/>
+        <location filename="../../macos/macmenubar.cpp" line="196"/>
         <source>Send Feedback…</source>
         <translation>フィードバックを送る…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="150"/>
+        <location filename="../../macos/macmenubar.cpp" line="199"/>
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>

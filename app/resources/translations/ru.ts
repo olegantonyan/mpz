@@ -252,132 +252,159 @@
 <context>
     <name>MacMenuBar</name>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="29"/>
+        <location filename="../../macos/macmenubar.cpp" line="30"/>
         <source>mpz</source>
         <translation>mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="31"/>
+        <location filename="../../macos/macmenubar.cpp" line="32"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="35"/>
+        <location filename="../../macos/macmenubar.cpp" line="36"/>
         <source>Settings…</source>
         <translation>Настройки…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="40"/>
+        <location filename="../../macos/macmenubar.cpp" line="41"/>
         <source>Quit mpz</source>
         <translation>Выйти из mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="45"/>
+        <location filename="../../macos/macmenubar.cpp" line="46"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="47"/>
+        <location filename="../../macos/macmenubar.cpp" line="52"/>
         <source>Play / Pause</source>
         <translation>Воспроизведение / Пауза</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="51"/>
+        <location filename="../../macos/macmenubar.cpp" line="56"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="56"/>
+        <location filename="../../macos/macmenubar.cpp" line="61"/>
         <source>Next Track</source>
         <translation>Следующий трек</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="60"/>
+        <location filename="../../macos/macmenubar.cpp" line="65"/>
         <source>Previous Track</source>
         <translation>Предыдущий трек</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="66"/>
+        <location filename="../../macos/macmenubar.cpp" line="75"/>
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="75"/>
+        <location filename="../../macos/macmenubar.cpp" line="82"/>
+        <source>Play</source>
+        <translation>Воспроизвести</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="96"/>
         <source>Volume Up</source>
         <translation>Увеличить громкость</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="70"/>
+        <location filename="../../macos/macmenubar.cpp" line="100"/>
         <source>Volume Down</source>
         <translation>Уменьшить громкость</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="78"/>
+        <location filename="../../macos/macmenubar.cpp" line="108"/>
         <source>Output Device</source>
         <translation>Устройство вывода</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="90"/>
+        <location filename="../../macos/macmenubar.cpp" line="120"/>
         <source>mpd update</source>
         <translation>mpd update</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="100"/>
+        <location filename="../../macos/macmenubar.cpp" line="130"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="101"/>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
         <source>Sort</source>
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="106"/>
+        <location filename="../../macos/macmenubar.cpp" line="136"/>
+        <source>Jump to Playing Track</source>
+        <translation>Перейти к воспроизводимому треку</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="140"/>
         <source>Playback Log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="110"/>
+        <location filename="../../macos/macmenubar.cpp" line="144"/>
         <source>Keyboard Shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="114"/>
+        <location filename="../../macos/macmenubar.cpp" line="150"/>
+        <location filename="../../macos/macmenubar.cpp" line="160"/>
+        <source>Enter Full Screen</source>
+        <translation>Перейти в полноэкранный режим</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="160"/>
+        <source>Exit Full Screen</source>
+        <translation>Выйти из полноэкранного режима</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="163"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="116"/>
+        <location filename="../../macos/macmenubar.cpp" line="165"/>
         <source>Minimize</source>
         <translation>Свернуть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="120"/>
+        <location filename="../../macos/macmenubar.cpp" line="169"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="131"/>
+        <location filename="../../macos/macmenubar.cpp" line="180"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="135"/>
+        <location filename="../../macos/macmenubar.cpp" line="184"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="137"/>
+        <location filename="../../macos/macmenubar.cpp" line="186"/>
         <source>mpz Website</source>
         <translation>Сайт mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="142"/>
+        <location filename="../../macos/macmenubar.cpp" line="191"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="147"/>
+        <location filename="../../macos/macmenubar.cpp" line="196"/>
         <source>Send Feedback…</source>
         <translation>Отправить отзыв…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="150"/>
+        <location filename="../../macos/macmenubar.cpp" line="199"/>
         <source>Report a Bug…</source>
         <translation>Сообщить об ошибке…</translation>
     </message>

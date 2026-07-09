@@ -4,6 +4,7 @@
 #include "shortcuts.h"
 #include "modusoperandi.h"
 #include "playback/playbackcontroller.h"
+#include "track.h"
 #include "sort_ui/sortmenu.h"
 #include "config/global.h"
 #include "config/local.h"
@@ -44,6 +45,10 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
 
   auto *playback = bar->addMenu(tr("Playback"));
 
+  auto *now_playing = playback->addAction("");
+  now_playing->setEnabled(false);
+  auto *now_playing_sep = playback->addSeparator();
+
   auto *play_pause = playback->addAction(tr("Play / Pause"));
   play_pause->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::PlayPause));
   connect(play_pause, &QAction::triggered, shortcuts, &Shortcuts::playPause);
@@ -60,6 +65,34 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   auto *prev_action = playback->addAction(tr("Previous Track"));
   prev_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Prev));
   connect(prev_action, &QAction::triggered, shortcuts, &Shortcuts::prev);
+
+  auto update_now_playing = [now_playing, now_playing_sep](const Track &track) {
+    const QString text = track.shortText();
+    const bool visible = !text.isEmpty();
+    now_playing->setVisible(visible);
+    now_playing_sep->setVisible(visible);
+    now_playing->setText(text);
+  };
+  auto apply_active = [=](const Track &track, bool playing) {
+    play_pause->setText(playing ? tr("Pause") : tr("Play"));
+    stop_action->setEnabled(true);
+    next_action->setEnabled(true);
+    prev_action->setEnabled(true);
+    update_now_playing(track);
+  };
+  auto apply_stopped = [=]() {
+    play_pause->setText(tr("Play"));
+    stop_action->setEnabled(false);
+    next_action->setEnabled(false);
+    prev_action->setEnabled(false);
+    now_playing->setVisible(false);
+    now_playing_sep->setVisible(false);
+  };
+  connect(player, &Playback::Controller::started, this, [=](const Track &t) { apply_active(t, true); });
+  connect(player, &Playback::Controller::paused, this, [=](const Track &t) { apply_active(t, false); });
+  connect(player, &Playback::Controller::trackChanged, this, update_now_playing);
+  connect(player, &Playback::Controller::stopped, this, apply_stopped);
+  apply_stopped();
 
   playback->addSeparator();
 
@@ -103,6 +136,10 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
 
   view->addSeparator();
 
+  auto *jump = view->addAction(tr("Jump to Playing Track"));
+  jump->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::JumpToPlayingTrack));
+  connect(jump, &QAction::triggered, shortcuts, &Shortcuts::jumpToPLayingTrack);
+
   auto *playback_log_action = view->addAction(tr("Playback Log"));
   playback_log_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenPlaybackLog));
   connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
@@ -110,6 +147,21 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
   shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
   connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
+
+  view->addSeparator();
+
+  auto *fullscreen = view->addAction(tr("Enter Full Screen"));
+  fullscreen->setShortcut(QKeySequence(QKeySequence::FullScreen));
+  connect(fullscreen, &QAction::triggered, window, [this]() {
+    if (window->isFullScreen()) {
+      window->showNormal();
+    } else {
+      window->showFullScreen();
+    }
+  });
+  connect(view, &QMenu::aboutToShow, this, [this, fullscreen]() {
+    fullscreen->setText(window->isFullScreen() ? tr("Exit Full Screen") : tr("Enter Full Screen"));
+  });
 
   auto *window_menu = bar->addMenu(tr("Window"));
 

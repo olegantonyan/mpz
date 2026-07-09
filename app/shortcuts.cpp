@@ -48,7 +48,7 @@ const QVector<Shortcuts::Spec> &Shortcuts::specs() {
     t << Spec{Action::OpenOutputMenu, tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
 #endif
     t << Spec{Action::OpenShortcutsMenu, tr("Open shortcuts dialog"), QKeySequence(Qt::CTRL | Qt::Key_Slash), true};
-    t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), true};
+    t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), false};
     t << Spec{Action::Quit, tr("Quit"), QKeySequence(QKeySequence::Quit), false};
 #else
     t << Spec{Action::PlayPause, tr("Play / Pause"), QKeySequence(Qt::Key_Space), true};
