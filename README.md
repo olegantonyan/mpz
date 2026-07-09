@@ -19,14 +19,28 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Features
 
-- 3-column UI which allows you to quickly create playlists from folders and switch between playlists;
-- Built with C++/Qt - fast and responsive native UI;
-- Supports internet radio in `m3u` and `pls` playlists formats;
-- Supports CUE sheets;
-- Supports MPRIS on Linux for remote control (for example, via [KDE Connect](https://kdeconnect.kde.org/));
-- Configuration in 2 yaml files: one for global (portable between computers) and one local (for settings specific to the current installation);
-- [mpd](https://musicpd.org) client mode support (version 2.0.0+);
-- Tags editor.
+- 3-column UI to quickly create playlists from folders and switch between them;
+- Native C++/Qt UI - fast and responsive;
+- Internet radio in `m3u` and `pls` formats;
+- CUE sheets, with seamless playback of single-file albums;
+- Tag editor;
+- Lyrics in the track info dialog;
+- Cover art from tags or folder images;
+- Playback order per playlist and global: sequential, random, or no-loop;
+- Tracks sorting presets;
+- Global media-key hotkeys and a built-in keyboard shortcuts dialog;
+- Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray with playback controls;
+- Update check on Windows and macOS;
+- UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation));
+- Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation);
+- [mpd](https://musicpd.org) client mode (version 2.0.0+).
+
+## Supported formats
+
+- Audio: mp3, flac, ogg, opus, m4a/mp4, aac, wav, wma, ape, dsf, and CUE sheets;
+- Playlists and radio: m3u, m3u8, pls.
+
+Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format support depends on what is installed.
 
 ## Installation
 
@@ -83,7 +97,7 @@ The app will then launch normally.
 
 #### From sources
 
-Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel for Qt6 on openSUSE).
+Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel for Qt6 on openSUSE).
 Packages' names may differ in different distros.
 
 ```
@@ -98,6 +112,8 @@ sudo cmake --install build
 To build Qt5 version add `-DUSE_QT5=ON` to cmake cli.
 
 You can also link against shared libraries Taglib, yaml-cpp, or libmpdclient installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON` to cmake cli.
+
+Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode.
 
 ## Configuration
 
@@ -161,13 +177,15 @@ The sum of `width_percent` of all columns must add up to 100 or below. Sometimes
 
 #### Lyrics
 
-The track info dialog (right-click a track → "Track info") shows lyrics next to the metadata. Three providers are available, tried in order until one returns lyrics:
+The track info dialog (right-click a track → "Track info") shows lyrics next to the metadata. Providers are tried in order until one returns lyrics:
 
 1. `embedded` - lyrics stored in tags (ID3v2 USLT, Vorbis Comment LYRICS, MP4 ©lyr, APE LYRICS);
 2. `sidecar` - a `<filename>.lrc` or `<filename>.txt` file next to the audio file. LRC timestamps are stripped for plain-text rendering;
 3. `lrclib` - online lookup via [LRCLIB](https://lrclib.net) (open, no API key required).
 
-The default order is `[embedded, sidecar, lrclib]`. To override (for example, to disable online lookup, or change the order), add a `lyrics:` block to `global.yml`:
+Additional online providers, off by default: `netease` (NetEase), `qq` (QQ Music), `lyrics.ovh` (Lyrics.ovh).
+
+The default order is `[embedded, sidecar, lrclib]`. To override (change the order, disable online lookup, or add providers), add a `lyrics:` block to `global.yml`:
 
 ```
 lyrics:
@@ -185,6 +203,12 @@ This will ignore commands issued by Wireplumber. Starting with version around 0.
 
 </details>
 
+## Keyboard shortcuts
+
+The full, platform-aware list is in the app: press Alt+S (Linux/Windows) or ⌘+/ (macOS), or open the main menu → "Keyboard shortcuts".
+
+Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - playback log; Ctrl+J - jump to the playing track.
+
 ## Limitations
 
 - Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
@@ -199,5 +223,28 @@ Known issues:
 - when another client modifies the playback queue, mpz cannot pick up these changes;
 - upon start, if mpd is already playing a song, mpz can recognize it only if this song is from the last selected playlist, i.e. the one loaded at startup;
 - "playback follows cursor" cannot follow into a different playlist;
+
+## Contributing
+
+### Adding a translation
+
+Translations live in `app/resources/translations/` as `.ts` (source) and `.qm` (compiled) files, embedded via `app/resources.qrc`. Run the commands from the repo root.
+
+1. Create or update the source file (scans the `app` sources):
+
+   ```
+   lupdate app -ts app/resources/translations/<lang>.ts
+   ```
+2. Translate the strings in Qt Linguist;
+3. Compile it to `.qm` (written next to the `.ts`):
+
+   ```
+   lrelease app/resources/translations/<lang>.ts
+   ```
+4. Add `<lang>.qm` to `app/resources.qrc`.
+
+### Running tests
+
+`cmake --workflow tests-qt6` (or `tests-qt5`) configures, builds, and runs the unit tests.
 
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)
