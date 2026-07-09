@@ -408,10 +408,6 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
-  file(GLOB ICON_SET_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/icons-*/LICENSE")
-  if(ICON_SET_LICENSE)
-    install(FILES ${ICON_SET_LICENSE} DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME} RENAME bootstrap-icons-LICENSE.txt)
-  endif()
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
