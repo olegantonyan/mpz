@@ -62,6 +62,7 @@ rm -rf "$STAGE_DIR"
 mkdir -p "$STAGE_DIR"
 cp -R ./mpz.app "$STAGE_DIR/$APP_NAME.app"
 ln -s /Applications "$STAGE_DIR/Applications"
+cp "$SRC_DIR/app/resources/icons/mpz.icns" "$STAGE_DIR/.VolumeIcon.icns"
 
 hdiutil create -volname "$VOL_NAME" -srcfolder "$STAGE_DIR" \
                -ov -format UDRW "$RW_DMG"
@@ -74,6 +75,11 @@ for attempt in 1 2 3; do
     echo "attach failed (attempt $attempt), retrying..." >&2
     sleep 2
 done
+
+SetFile -c icnC "$MOUNT_POINT/.VolumeIcon.icns" \
+    || echo "warning: could not set .VolumeIcon.icns type code" >&2
+SetFile -a C "$MOUNT_POINT" \
+    || echo "warning: could not set volume custom-icon flag; shipping default volume icon" >&2
 
 osascript <<EOF || echo "warning: Finder layout failed; shipping default icon layout" >&2
 tell application "Finder"
@@ -94,15 +100,6 @@ tell application "Finder"
     end tell
 end tell
 EOF
-
-# Custom volume icon (shown on the Desktop when mounted). Must run AFTER the
-# Finder layout above: the Finder session clears both .VolumeIcon.icns and the
-# volume's custom-icon flag, so setting it earlier is silently undone.
-cp "$SRC_DIR/app/resources/icons/mpz.icns" "$MOUNT_POINT/.VolumeIcon.icns"
-SetFile -c icnC "$MOUNT_POINT/.VolumeIcon.icns" \
-    || echo "warning: could not set .VolumeIcon.icns type code" >&2
-SetFile -a C "$MOUNT_POINT" \
-    || echo "warning: could not set volume custom-icon flag; shipping default volume icon" >&2
 
 sync
 hdiutil detach "$MOUNT_POINT" -force
