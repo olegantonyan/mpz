@@ -17,10 +17,10 @@ jobs:
         include:
           - qt: Qt6
             workflow: tests-qt6
-            packages: qt6-tools-dev qt6-base-dev qt6-multimedia-dev
+            packages: qt6-tools-dev qt6-base-dev qt6-multimedia-dev libqt6svg6-dev
           - qt: Qt5
             workflow: tests-qt5
-            packages: qtbase5-dev-tools qtchooser qtbase5-dev qtmultimedia5-dev libqt5x11extras5-dev
+            packages: qtbase5-dev-tools qtchooser qtbase5-dev qtmultimedia5-dev libqt5x11extras5-dev libqt5svg5-dev
 
     env:
       QT_QPA_PLATFORM: offscreen
