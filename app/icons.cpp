@@ -62,10 +62,21 @@ namespace {
       return renderTinted(size, 1.0, mode);
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QPixmap scaledPixmap(const QSize &size, QIcon::Mode mode, QIcon::State state, qreal scale) override {
       Q_UNUSED(state)
       return renderTinted(size, scale, mode);
     }
+#else
+    void virtual_hook(int id, void *data) override {
+      if (id == QIconEngine::ScaledPixmapHook) {
+        auto *arg = reinterpret_cast<QIconEngine::ScaledPixmapArgument *>(data);
+        arg->pixmap = renderTinted(arg->size, arg->scale, arg->mode);
+      } else {
+        QIconEngine::virtual_hook(id, data);
+      }
+    }
+#endif
 
     QSize actualSize(const QSize &size, QIcon::Mode mode, QIcon::State state) override {
       Q_UNUSED(mode)
