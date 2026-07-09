@@ -353,12 +353,6 @@ void MainWindow::setupVolumeControl() {
 void MainWindow::setupMainMenu() {
   ui->menuButton->setIcon(Icons::get(Icons::Icon::Menu));
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-#ifdef Q_OS_MACOS
-  // Everything the hamburger menu offers lives in the native menu bar
-  // (see setupMacMenuBar), so a duplicate in-window app menu is redundant.
-  // Keep the MainMenu object: the Open-main-menu shortcut still uses it.
-  ui->menuButton->setVisible(false);
-#endif
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);

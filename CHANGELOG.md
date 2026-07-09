@@ -5,6 +5,7 @@
 - Bootstrap Icons for in-app icons (play/pause/context menus/etc)
 - On systems without tray show warning under tray icon checkbox in settings
 - macOS menu bar: live Playback menu, Jump to Playing Track, Full Screen
+- macOS: show in-window hamburger menu again (alongside the native menu bar)
 
 ### Fixed
 
