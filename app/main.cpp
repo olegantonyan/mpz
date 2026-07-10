@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
+#include <QStandardPaths>
 #include <iostream>
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
@@ -92,6 +93,11 @@ int main(int argc, char *argv[]) {
 
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::set_crash_log_path(
+    (QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crash.log")
+      .toStdString());
+#endif
 #ifdef Q_OS_WIN
   WindowsTaskbar::setAppUserModelId();
 #endif

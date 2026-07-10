@@ -372,11 +372,12 @@ endif()
 # ENDOF LIBMPDCLIENT
 
 # CPPTRACE
-# Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives
-# demangled function names from STRIPPED release binaries (no DWARF shipped).
-# Skipped on Windows: PE has no .dynsym equivalent for executables, so the
-# same trick can't work there without shipping DWARF or PDBs.
-if(UNIX AND NOT APPLE)
+# Crash handler for Linux + macOS. cpptrace + libdl + dladdr gives demangled
+# function names from STRIPPED release binaries with no DWARF shipped: on Linux
+# -rdynamic exports symbols into .dynsym; on macOS dladdr reads the retained
+# Mach-O symbol table. Skipped on Windows: PE executables have no .dynsym
+# equivalent, so the trick needs a shipped PDB there.
+if(UNIX)
   set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
   set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
   set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
@@ -387,7 +388,9 @@ if(UNIX AND NOT APPLE)
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
-  target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+  if(NOT APPLE)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+  endif()
 endif()
 # ENDOF CPPTRACE
 

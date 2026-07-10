@@ -2,6 +2,8 @@
 
 ### Added
 
+- Crash stack traces saved to a log file, openable from Settings (Linux, macOS)
+
 ### Fixed
 
 ### Misc

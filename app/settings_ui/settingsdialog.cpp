@@ -1,6 +1,9 @@
 #include "settings_ui/settingsdialog.h"
 #include "playlist_ui/columnsconfig.h"
 #include "config/storage.h"
+#ifdef ENABLE_CRASH_HANDLER
+  #include "crash_handler.h"
+#endif
 
 #include <algorithm>
 
@@ -9,6 +12,8 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
+#include <QDir>
+#include <QFileInfo>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -17,6 +22,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QSystemTrayIcon>
@@ -64,14 +70,31 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
   button_box = new QDialogButtonBox(
     QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel,
     this);
-  auto *open_config_dir_btn = button_box->addButton(
-    tr("Open config directory"), QDialogButtonBox::ActionRole);
+
+  auto *folder_buttons = new QHBoxLayout;
+  auto *open_config_dir_btn = new QPushButton(tr("Open config directory"), this);
   connect(open_config_dir_btn, &QPushButton::clicked, this, []() {
     QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
   });
+  folder_buttons->addWidget(open_config_dir_btn);
+#ifdef ENABLE_CRASH_HANDLER
+  auto *open_crash_log_dir_btn = new QPushButton(tr("Open crash log directory"), this);
+  connect(open_crash_log_dir_btn, &QPushButton::clicked, this, [this]() {
+    const QString dir = QFileInfo(QString::fromStdString(mpz::crash_log_path())).absolutePath();
+    if (!QDir(dir).exists()) {
+      QMessageBox::warning(this, tr("Crash log"),
+                           tr("The crash log directory does not exist yet."));
+      return;
+    }
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+  });
+  folder_buttons->addWidget(open_crash_log_dir_btn);
+#endif
+  folder_buttons->addStretch();
 
   auto *root = new QVBoxLayout(this);
   root->addWidget(tabs);
+  root->addLayout(folder_buttons);
   root->addWidget(button_box);
 
   populateLanguages();
