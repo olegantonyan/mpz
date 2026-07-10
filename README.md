@@ -79,6 +79,8 @@ Grab installer or portable binary from releases page: https://github.com/olegant
 
 win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have ARM64 Windows PC.
 
+To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
+
 #### macOS
 
 Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
