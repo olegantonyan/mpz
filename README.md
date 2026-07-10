@@ -21,6 +21,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 - 3-column UI to quickly create playlists from folders and switch between them;
 - Native C++/Qt UI - fast and responsive;
+- Drag-n-drop files and folders from file manager;
 - Internet radio in `m3u` and `pls` formats;
 - CUE sheets, with seamless playback of single-file albums;
 - Tag editor;
