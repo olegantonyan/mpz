@@ -3,6 +3,12 @@ name: Release AppImage
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
+      - run.sh
   workflow_dispatch:
     inputs:
       release_tag:
