@@ -48,6 +48,7 @@ namespace PlaylistUi {
     virtual void remove(const QList<QModelIndex> &items);
 
     virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
+    virtual void insertTracksAsync(const QList<QDir> &filepaths, int atRow);
 
     virtual void sortBy(const QString &criteria);
 

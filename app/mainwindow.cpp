@@ -71,6 +71,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
+  connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
   connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);

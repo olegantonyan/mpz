@@ -18,6 +18,8 @@
 #include <memory>
 #include <QLineEdit>
 
+class QDropEvent;
+
 namespace PlaylistsUi {
   class Controller : public QObject {
     Q_OBJECT
@@ -57,11 +59,14 @@ namespace PlaylistsUi {
     QListView *view;
     QLineEdit *search;
     BusySpinner *spinner;
+    ModusOperandi &modus_operandi;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
+    bool handleExternalDnd(QEvent *event);
+    void onExternalDrop(QDropEvent *event);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

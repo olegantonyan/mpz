@@ -2,6 +2,7 @@
 #include "playlist/playlist.h"
 #include "playlistsmodel.h"
 #include "playlist/loader.h"
+#include "dropdirs.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -10,13 +11,16 @@
 #include <QItemSelectionModel>
 #include <QtConcurrent>
 #include <QMouseEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 namespace PlaylistsUi {
   Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
-    spinner(_spinner) {
+    spinner(_spinner),
+    modus_operandi(modus) {
 
     proxy = new ProxyFilterModel(conf, modus, this);
     spinner->show();
@@ -92,11 +96,67 @@ namespace PlaylistsUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
+      if (handleExternalDnd(event)) {
+        return true;
+      }
       eventFilterViewport(event);
     } else if (obj == view) {
       eventFilterTableView(event);
     }
     return QObject::eventFilter(obj, event);
+  }
+
+  bool Controller::handleExternalDnd(QEvent *event) {
+    const auto type = event->type();
+    if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
+      return false;
+    }
+    if (modus_operandi.get() != ModusOperandi::MODUS_LOCALFS) {
+      return false;
+    }
+    auto *drop_event = static_cast<QDropEvent *>(event);
+    if (!drop_event->mimeData()->hasUrls()) {
+      return false;
+    }
+    if (type == QEvent::Drop) {
+      onExternalDrop(drop_event);
+    }
+    drop_event->acceptProposedAction();
+    return true;
+  }
+
+  void Controller::onExternalDrop(QDropEvent *event) {
+    const auto dirs = DropUtil::droppedDirs(event->mimeData());
+    if (dirs.isEmpty()) {
+      return;
+    }
+
+    const QString libraryDir = DropUtil::commonParentDir(dirs);
+    const auto index = view->indexAt(DropUtil::dropPosition(event));
+    if (!index.isValid()) {
+      on_createPlaylist(dirs, libraryDir);
+      return;
+    }
+
+    auto playlist = proxy->itemAt(index);
+    if (!playlist) {
+      return;
+    }
+
+    QMenu menu(view);
+    auto *create_action = menu.addAction(tr("Create new playlist"));
+    auto *append_action = menu.addAction(tr("Append to \"%1\"").arg(playlist->name()));
+    auto *chosen = menu.exec(view->viewport()->mapToGlobal(DropUtil::dropPosition(event)));
+
+    if (chosen == create_action) {
+      on_createPlaylist(dirs, libraryDir);
+    } else if (chosen == append_action) {
+      QStringList paths;
+      for (const auto &dir : std::as_const(dirs)) {
+        paths << dir.absolutePath();
+      }
+      on_importPlayistFiles(index, paths);
+    }
   }
 
   void Controller::eventFilterTableView(QEvent *event) {
