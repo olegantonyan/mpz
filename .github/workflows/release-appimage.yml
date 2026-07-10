@@ -114,6 +114,9 @@ jobs:
           rm -f "$QTDIR/plugins/multimedia/libgstreamermediaplugin.so"
 
           export QMAKE="$QTDIR/bin/qmake6"
+          # Qt lives in /opt/Qt (non-standard), so linuxdeploy can't resolve mpz's
+          # libQt6*.so deps without this on the search path.
+          export LD_LIBRARY_PATH="$QTDIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
           export EXTRA_QT_PLUGINS="multimedia;svg"
           export APPIMAGE_EXTRACT_AND_RUN=1
           export OUTPUT="dist/$ARTIFACT.AppImage"
