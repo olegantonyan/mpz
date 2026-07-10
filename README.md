@@ -69,9 +69,13 @@ makepkg -si
 
 For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
+##### AppImage
+
+Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+
 #### Windows
 
-Grab installer or portable binary from releases page: https://github.com/olegantonyan/mpz/releases/. Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
+Grab installer or portable binary from releases page: [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
 
 * win-x86_64 - x86 64-bit build (recommended for most users)
 * win-arm64 - native ARM 64-bit build
@@ -83,7 +87,7 @@ To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Sett
 
 #### macOS
 
-Grab the `.dmg` from the releases page: https://github.com/olegantonyan/mpz/releases/. Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
+Grab the `.dmg` from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
 
 The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz music player.app` to `/Applications`, use either method below.
 
