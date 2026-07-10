@@ -2,6 +2,7 @@
 
 ### Added
 
+- Drag-and-drop files/folders from the file manager into the playlists list (empty space creates a new playlist, dropping onto a playlist asks to create or append) and into the track list (inserts at the drop position)
 - Bootstrap Icons for in-app icons (play/pause/context menus/etc)
 - On systems without tray show warning under tray icon checkbox in settings
 - macOS menu bar: live Playback menu, Jump to Playing Track, Full Screen

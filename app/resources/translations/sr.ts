@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="90"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="89"/>
         <source>Changelog</source>
         <translation>Списак измена</translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>BusySpinner</name>
     <message>
-        <location filename="../../busyspinner.cpp" line="18"/>
+        <location filename="../../busyspinner.cpp" line="8"/>
         <source>Background operation running</source>
         <translation>Радња у позадини је покренута</translation>
     </message>
@@ -211,12 +211,12 @@
         <translation>Пошаљи</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>Хвала на повратним информацијама! (кликните поново да затворите)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="69"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
         <source>Error occured, please try again</source>
         <translation>Дошло је до грешке, покушајте поново</translation>
     </message>
@@ -500,10 +500,6 @@
         <translation>Гласноћа</translation>
     </message>
     <message>
-        <source>🎧 Output</source>
-        <translation type="vanished">🎧 Аудиоизлаз</translation>
-    </message>
-    <message>
         <location filename="../../mainwindow.ui" line="127"/>
         <source>Main menu</source>
         <translation>Главни мени</translation>
@@ -512,10 +508,6 @@
         <location filename="../../mainwindow.ui" line="148"/>
         <source>Configure library folders</source>
         <translation>Конфигуришите фасцикле библиотеке</translation>
-    </message>
-    <message>
-        <source>⚙</source>
-        <translation type="vanished">⚙</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="120"/>
@@ -578,41 +570,41 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="232"/>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
+        <location filename="../../mainwindow.cpp" line="267"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="233"/>
-        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="234"/>
+        <location filename="../../mainwindow.cpp" line="266"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="234"/>
-        <location filename="../../mainwindow.cpp" line="267"/>
+        <location filename="../../mainwindow.cpp" line="235"/>
+        <location filename="../../mainwindow.cpp" line="268"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="264"/>
+        <location filename="../../mainwindow.cpp" line="265"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="451"/>
-        <location filename="../../mainwindow.cpp" line="455"/>
+        <location filename="../../mainwindow.cpp" line="452"/>
+        <location filename="../../mainwindow.cpp" line="456"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="457"/>
+        <location filename="../../mainwindow.cpp" line="458"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="469"/>
+        <location filename="../../mainwindow.cpp" line="470"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
@@ -700,6 +692,19 @@
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
         <source>Edit tags…</source>
         <translation>Уреди ознаке…</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistsUi::Controller</name>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="147"/>
+        <source>Create new playlist</source>
+        <translation>Креирајте нову листу песама</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="148"/>
+        <source>Append to &quot;%1&quot;</source>
+        <translation>Додај у „%1“</translation>
     </message>
 </context>
 <context>
@@ -1300,53 +1305,53 @@
         <translation>Уређивање ознака</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="32"/>
         <source>Artist</source>
         <translation>Извођач</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="39"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="42"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="49"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="52"/>
         <source>Title</source>
         <translation>Наслов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="59"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="62"/>
         <source>Year</source>
         <translation>Година</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="69"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="72"/>
         <source>Track number</source>
         <translation>Број нумере</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="79"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="82"/>
         <source>Genre</source>
         <translation>Жанр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="89"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="92"/>
         <source>Comment</source>
         <translation>Коментар</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="119"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
         <translation>Претходна</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="139"/>
         <source>Auto-save on navigation</source>
         <translation>Аутоматско чување при навигацији</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="162"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
         <translation>Следећа</translation>

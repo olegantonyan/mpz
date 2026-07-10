@@ -186,6 +186,31 @@ namespace PlaylistUi {
     });
   }
 
+  void Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {
+    auto pl = playlist();
+    if (!pl) {
+      return;
+    }
+
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, atRow, pl]() -> void {
+      Playlist::Playlist batch;
+      for (const auto &path : std::as_const(filepaths)) {
+        Playlist::Loader loader(path);
+        batch.append(loader.tracks(), !loader.is_playlist_file());
+      }
+
+      auto merged = pl->tracks();
+      const int pos = qBound(0, atRow, static_cast<int>(merged.size()));
+      const auto incoming = batch.tracks();
+      for (int i = 0; i < incoming.size(); ++i) {
+        merged.insert(pos + i, incoming.at(i));
+      }
+      pl->load(merged);
+
+      emit appendToPlaylistAsyncFinished(pl);
+    });
+  }
+
   void Model::sortBy(const QString &criteria) {
     playlist()->sortBy(criteria);
     reload();

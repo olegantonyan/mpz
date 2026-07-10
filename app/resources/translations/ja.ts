@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="90"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="89"/>
         <source>Changelog</source>
         <translation>更新履歴</translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>BusySpinner</name>
     <message>
-        <location filename="../../busyspinner.cpp" line="18"/>
+        <location filename="../../busyspinner.cpp" line="8"/>
         <source>Background operation running</source>
         <translation>バックグラウンド処理実行中</translation>
     </message>
@@ -211,12 +211,12 @@
         <translation>送信</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>フィードバックありがとうございます！(再度クリックで閉じます)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="69"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
         <source>Error occured, please try again</source>
         <translation>エラーが発生しました、再試行してください</translation>
     </message>
@@ -500,10 +500,6 @@
         <translation>並び替え</translation>
     </message>
     <message>
-        <source>🎧 Output</source>
-        <translation type="vanished">🎧 出力</translation>
-    </message>
-    <message>
         <location filename="../../mainwindow.ui" line="127"/>
         <source>Main menu</source>
         <translation>メインメニュー</translation>
@@ -512,10 +508,6 @@
         <location filename="../../mainwindow.ui" line="148"/>
         <source>Configure library folders</source>
         <translation>ライブラリフォルダーを設定</translation>
-    </message>
-    <message>
-        <source>⚙</source>
-        <translation type="vanished">⚙</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="120"/>
@@ -578,41 +570,41 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="232"/>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
+        <location filename="../../mainwindow.cpp" line="267"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="233"/>
-        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="234"/>
+        <location filename="../../mainwindow.cpp" line="266"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="234"/>
-        <location filename="../../mainwindow.cpp" line="267"/>
+        <location filename="../../mainwindow.cpp" line="235"/>
+        <location filename="../../mainwindow.cpp" line="268"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="264"/>
+        <location filename="../../mainwindow.cpp" line="265"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="451"/>
-        <location filename="../../mainwindow.cpp" line="455"/>
+        <location filename="../../mainwindow.cpp" line="452"/>
+        <location filename="../../mainwindow.cpp" line="456"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="457"/>
+        <location filename="../../mainwindow.cpp" line="458"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="469"/>
+        <location filename="../../mainwindow.cpp" line="470"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
@@ -700,6 +692,19 @@
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
         <source>Edit tags…</source>
         <translation>タグを編集…</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistsUi::Controller</name>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="147"/>
+        <source>Create new playlist</source>
+        <translation>新しいプレイリストを作成</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="148"/>
+        <source>Append to &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; に追加</translation>
     </message>
 </context>
 <context>
@@ -1300,53 +1305,53 @@
         <translation>タグの編集</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="32"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="39"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="42"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="49"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="52"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="59"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="62"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="69"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="72"/>
         <source>Track number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="79"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="82"/>
         <source>Genre</source>
         <translation>ジャンル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="89"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="92"/>
         <source>Comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="119"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="139"/>
         <source>Auto-save on navigation</source>
         <translation>切り替え時に自動保存</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="162"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
         <translation>次へ</translation>

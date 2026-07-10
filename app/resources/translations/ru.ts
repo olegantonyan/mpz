@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="90"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="89"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>BusySpinner</name>
     <message>
-        <location filename="../../busyspinner.cpp" line="18"/>
+        <location filename="../../busyspinner.cpp" line="8"/>
         <source>Background operation running</source>
         <translation>Выполняется фоновая операция</translation>
     </message>
@@ -211,12 +211,12 @@
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>Спасибо за вашу обратную связь (нажмите ещё раз чтобы закрыть)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="69"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
         <source>Error occured, please try again</source>
         <translation>Произошла ошибка, пожалуйста, повторите</translation>
     </message>
@@ -500,10 +500,6 @@
         <translation>Сортировка</translation>
     </message>
     <message>
-        <source>🎧 Output</source>
-        <translation type="vanished">🎧 Аудиовыход</translation>
-    </message>
-    <message>
         <location filename="../../mainwindow.ui" line="127"/>
         <source>Main menu</source>
         <translation>Главное меню</translation>
@@ -574,41 +570,41 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="232"/>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="233"/>
+        <location filename="../../mainwindow.cpp" line="267"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="233"/>
-        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="234"/>
+        <location filename="../../mainwindow.cpp" line="266"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="234"/>
-        <location filename="../../mainwindow.cpp" line="267"/>
+        <location filename="../../mainwindow.cpp" line="235"/>
+        <location filename="../../mainwindow.cpp" line="268"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="264"/>
+        <location filename="../../mainwindow.cpp" line="265"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="451"/>
-        <location filename="../../mainwindow.cpp" line="455"/>
+        <location filename="../../mainwindow.cpp" line="452"/>
+        <location filename="../../mainwindow.cpp" line="456"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="457"/>
+        <location filename="../../mainwindow.cpp" line="458"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="469"/>
+        <location filename="../../mainwindow.cpp" line="470"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -696,6 +692,19 @@
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
         <source>Edit tags…</source>
         <translation>Редактировать теги…</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistsUi::Controller</name>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="147"/>
+        <source>Create new playlist</source>
+        <translation>Создать новый плейлист</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="148"/>
+        <source>Append to &quot;%1&quot;</source>
+        <translation>Добавить в «%1»</translation>
     </message>
 </context>
 <context>
@@ -1296,53 +1305,53 @@
         <translation>Редактирование тегов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="29"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="32"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="39"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="42"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="49"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="52"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="59"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="62"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="69"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="72"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="79"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="82"/>
         <source>Genre</source>
         <translation>Жанр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="89"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="92"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="116"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="119"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="136"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="139"/>
         <source>Auto-save on navigation</source>
         <translation>Автосохранение при переходе</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="159"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="162"/>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
         <source>Next</source>
         <translation>Следующий</translation>

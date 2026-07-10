@@ -1,4 +1,5 @@
 #include "playlistcontroller.h"
+#include "dropdirs.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -7,9 +8,11 @@
 #include <QThread>
 #include <QTimer>
 #include <QMouseEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 namespace PlaylistUi {
-  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg), modus_operandi(modus) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
@@ -170,11 +173,60 @@ namespace PlaylistUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
+      if (handleExternalDnd(event)) {
+        return true;
+      }
       eventFilterViewport(event);
     } else if (obj == view) {
       eventFilterTableView(event);
     }
     return QObject::eventFilter(obj, event);
+  }
+
+  bool Controller::handleExternalDnd(QEvent *event) {
+    const auto type = event->type();
+    if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
+      return false;
+    }
+    if (modus_operandi.get() != ModusOperandi::MODUS_LOCALFS) {
+      return false;
+    }
+    auto *drop_event = static_cast<QDropEvent *>(event);
+    if (!drop_event->mimeData()->hasUrls()) {
+      return false;
+    }
+    if (type == QEvent::Drop) {
+      onExternalDrop(drop_event);
+    }
+    drop_event->acceptProposedAction();
+    return true;
+  }
+
+  void Controller::onExternalDrop(QDropEvent *event) {
+    const auto dirs = DropUtil::droppedDirs(event->mimeData());
+    if (dirs.isEmpty()) {
+      return;
+    }
+
+    auto model = proxy->activeModel();
+    if (model->playlist() == nullptr) {
+      emit createPlaylistRequested(dirs, DropUtil::commonParentDir(dirs));
+      return;
+    }
+
+    const QPoint pos = DropUtil::dropPosition(event);
+    const auto index = view->indexAt(pos);
+    int at_row;
+    if (!index.isValid()) {
+      at_row = model->rowCount();
+    } else {
+      const QRect rect = view->visualRect(index);
+      const bool below = pos.y() > rect.center().y();
+      at_row = proxy->mapToSource(index).row() + (below ? 1 : 0);
+    }
+
+    model->insertTracksAsync(dirs, at_row);
+    spinner->show();
   }
 
   void Controller::eventFilterTableView(QEvent *event) {
