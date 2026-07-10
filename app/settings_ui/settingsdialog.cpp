@@ -153,7 +153,7 @@ QWidget *SettingsDialog::buildGeneralTab() {
   iv->addWidget(check_minimize_to_tray);
 #endif
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   check_auto_update = new QCheckBox(tr("Check for updates on startup"));
   check_auto_update->setChecked(!global_conf.disableAutoUpdateCheck());
   iv->addWidget(check_auto_update);

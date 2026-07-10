@@ -53,7 +53,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
 class UpdateChecker;
 #endif
 
@@ -86,7 +86,7 @@ private:
   MainMenu *main_menu = nullptr;
   StatusBarLabel *status_label = nullptr;
   QLabel *status_label_right = nullptr;
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   QLabel *status_label_update = nullptr;
   UpdateChecker *update_checker = nullptr;
 #endif
@@ -124,7 +124,7 @@ private:
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   void setupUpdateChecker();
 #endif
 #if defined(MPRIS_ENABLE)

@@ -3,7 +3,7 @@
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   #include "update_check/updatechecker.h"
 #endif
 
@@ -28,7 +28,7 @@ AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(pa
                                   "<a href=\"https://github.com/olegantonyan/mpz\">%2</a>")
                           .arg(tr("Website"), tr("GitHub")));
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   if (!global_c.disableAutoUpdateCheck()) {
     ui->updateLabel->setTextFormat(Qt::RichText);
     ui->updateLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);

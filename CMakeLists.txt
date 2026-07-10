@@ -23,6 +23,13 @@ else()
   message(STATUS "DBus support OFF")
 endif()
 
+if(WIN32 OR APPLE)
+  set(DEFAULT_ENABLE_UPDATE_CHECK ON)
+else()
+  set(DEFAULT_ENABLE_UPDATE_CHECK OFF)
+endif()
+option(ENABLE_UPDATE_CHECK "Enable builtin update checker (checks GitHub for new releases)" ${DEFAULT_ENABLE_UPDATE_CHECK})
+
 option(BUILD_TESTING "Build unit tests" OFF)
 
 option(USE_QT5 "Use Qt5, the default is Qt6" OFF)
@@ -103,7 +110,6 @@ set(PROJECT_SOURCES
   app/sort_ui/sortmenu.cpp
   app/statusbarlabel.cpp
   app/sysinfo.cpp
-  app/update_check/updatechecker.cpp
   app/track.cpp
   app/reveal_in_filemanager.cpp
   app/trayicon.cpp
@@ -141,6 +147,10 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/mpd_client/output.cpp)
   list(APPEND PROJECT_SOURCES app/coverart/mpd.cpp)
   list(APPEND PROJECT_SOURCES app/directory_ui/addmpddialog.cpp)
+endif()
+
+if (ENABLE_UPDATE_CHECK)
+  list(APPEND PROJECT_SOURCES app/update_check/updatechecker.cpp)
 endif()
 
 if (ENABLE_DBUS)
@@ -228,6 +238,9 @@ if (ENABLE_DBUS)
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
+endif()
+if (ENABLE_UPDATE_CHECK)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_UPDATE_CHECK)
 endif()
 
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)

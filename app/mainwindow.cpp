@@ -17,7 +17,7 @@
 
 #include "settings_ui/settingsdialog.h"
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   #include "update_check/updatechecker.h"
 #endif
 
@@ -128,7 +128,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #endif
   CoverArt::Covers::instance(modus_operandi);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   setupUpdateChecker();
 #endif
 }
@@ -438,7 +438,7 @@ void MainWindow::setupStatusBar() {
     }
   });
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
   ui->statusbar->addWidget(new QWidget(this), 1);
   status_label_update = new QLabel(this);
   status_label_update->setTextFormat(Qt::RichText);
@@ -460,7 +460,7 @@ void MainWindow::setupStatusBar() {
   });
 }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(ENABLE_UPDATE_CHECK)
 void MainWindow::setupUpdateChecker() {
   if (global_conf.disableAutoUpdateCheck()) {
     return;
