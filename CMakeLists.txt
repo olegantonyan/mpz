@@ -47,6 +47,7 @@ set(PROJECT_SOURCES
   app/icons.cpp
   app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
+  app/about_ui/area51dialog.cpp
   app/busyspinner.cpp
   app/loadingspinner.cpp
   app/config/global.cpp
@@ -372,24 +373,40 @@ endif()
 # ENDOF LIBMPDCLIENT
 
 # CPPTRACE
-# Crash handler for Linux + macOS. cpptrace + libdl + dladdr gives demangled
-# function names from STRIPPED release binaries with no DWARF shipped: on Linux
+# Crash handler with cpptrace. On Linux + macOS libdl + dladdr gives demangled
+# function names from stripped release binaries with no DWARF shipped: on Linux
 # -rdynamic exports symbols into .dynsym; on macOS dladdr reads the retained
-# Mach-O symbol table. Skipped on Windows: PE executables have no .dynsym
-# equivalent, so the trick needs a shipped PDB there.
-if(UNIX)
+# Mach-O symbol table. On MSVC/Windows PE has no .dynsym equivalent, so symbols
+# come from mpz.pdb shipped next to mpz.exe, read at runtime via dbghelp.
+# The legacy Qt5 x86 MinGW build is excluded.
+if(UNIX OR (WIN32 AND NOT MINGW))
   set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
   set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
-  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
-  set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
-  set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+  if(UNIX)
+    set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
+    set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+  else()
+    set(CPPTRACE_GET_SYMBOLS_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_UNWIND_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_DEMANGLE_WITH_WINAPI ON CACHE BOOL "" FORCE)
+  endif()
   add_subdirectory(${CPPTRACE_DIR})
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
-  if(NOT APPLE)
+  if(UNIX AND NOT APPLE)
     target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+  elseif(WIN32 AND NOT MINGW)
+    # Emit a PDB from the optimized Release build so dbghelp symbolizes at runtime.
+    # /OPT:REF /OPT:ICF restore the folding /DEBUG disables; /O2 stays untouched.
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE $<$<CONFIG:Release>:/Zi>)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+      $<$<CONFIG:Release>:/DEBUG>
+      $<$<CONFIG:Release>:/OPT:REF>
+      $<$<CONFIG:Release>:/OPT:ICF>)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dbghelp)
   endif()
 endif()
 # ENDOF CPPTRACE

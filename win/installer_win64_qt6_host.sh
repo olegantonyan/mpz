@@ -32,6 +32,8 @@ test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2;
 # copy_vc_runtime below deploys the CRT DLLs app-local instead.
 windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --no-compiler-runtime --release
 cp ./mpz.exe $ARTIFACT_PATH
+# Ship the PDB so the crash handler can symbolize crash.log via dbghelp at runtime.
+cp ./mpz.pdb $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
 copy_vc_runtime "$ARTIFACT_PATH" x64
 

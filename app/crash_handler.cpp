@@ -13,6 +13,12 @@
 #include <string>
 #include <utility>
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#endif
+
 namespace mpz {
 
 namespace {
@@ -67,8 +73,29 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   std::abort();
 }
 
+#ifdef _WIN32
+// A real access violation is delivered as an SEH exception, not a C signal, so
+// the std::signal handlers below never fire for it on Windows. This top-level
+// filter runs before stack unwinding, so generate_trace() still sees the faulting
+// frames (rooted at the filter itself). cpptrace installs no such filter itself.
+LONG WINAPI seh_filter(EXCEPTION_POINTERS *info) {
+  char reason[64];
+  std::snprintf(reason, sizeof(reason), "SEH exception 0x%08lX",
+                info->ExceptionRecord->ExceptionCode);
+  write_trace(cpptrace::generate_trace(), reason);
+  return EXCEPTION_EXECUTE_HANDLER;
+}
+#endif
+
 }
 
+#ifdef _WIN32
+void install_crash_handler() {
+  SetUnhandledExceptionFilter(&seh_filter);
+  std::set_terminate(&terminate_handler);
+  std::signal(SIGABRT, &crash_handler);
+}
+#else
 void install_crash_handler() {
   std::signal(SIGSEGV, &crash_handler);
   std::signal(SIGABRT, &crash_handler);
@@ -79,6 +106,7 @@ void install_crash_handler() {
 #endif
   std::set_terminate(&terminate_handler);
 }
+#endif
 
 void set_crash_log_path(std::string path) {
   g_log_path = std::move(path);

@@ -3,6 +3,10 @@
 #include "sysinfo.h"
 #include "feedback_ui/feedbackform.h"
 
+#include "about_ui/area51dialog.h"
+#include <QEvent>
+#include <QMouseEvent>
+
 #if defined(ENABLE_UPDATE_CHECK)
   #include "update_check/updatechecker.h"
 #endif
@@ -20,6 +24,7 @@ AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(pa
   ui->setupUi(this);
 
   ui->versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
+  ui->versionLabel->installEventFilter(this);
 
   ui->linksLabel->setTextFormat(Qt::RichText);
   ui->linksLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -73,6 +78,17 @@ AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(pa
 
 AboutDialog::~AboutDialog() {
   delete ui;
+}
+
+bool AboutDialog::eventFilter(QObject *obj, QEvent *event) {
+  if (obj == ui->versionLabel && event->type() == QEvent::MouseButtonPress &&
+      (static_cast<QMouseEvent *>(event)->modifiers() & Qt::ShiftModifier)) {
+    if (++version_shift_clicks_ >= 10) {
+      version_shift_clicks_ = 0;
+      Area51Dialog(this).exec();
+    }
+  }
+  return QDialog::eventFilter(obj, event);
 }
 
 void AboutDialog::show_changelog() {

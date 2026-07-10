@@ -2,7 +2,7 @@
 
 ### Added
 
-- Crash stack traces saved to a log file, openable from Settings (Linux, macOS)
+- Crash stack traces saved to a log file, openable from Settings (Linux, macOS, Windows)
 
 ### Fixed
 

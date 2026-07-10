@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="89"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="105"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -45,22 +45,22 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="22"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="26"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="29"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="29"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="38"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="43"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>

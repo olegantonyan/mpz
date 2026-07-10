@@ -5,13 +5,12 @@
 
 namespace mpz {
 
-// Installs std::signal handlers for SIGSEGV/SIGABRT/SIGBUS/SIGFPE/SIGILL plus a
-// std::terminate handler. On fault, prints a cpptrace stack trace to stderr (and
-// appends it to the crash-log file when one is set) and exits with 128+signum.
-// Symbol resolution uses libdl + dladdr: on Linux the -rdynamic link flag exports
-// symbols into .dynsym; on macOS dladdr reads the retained Mach-O symbol table.
-// Either way it yields demangled function names from stripped release binaries
-// with no DWARF shipped.
+// On POSIX, installs std::signal handlers for SIGSEGV/SIGABRT/SIGBUS/SIGFPE/SIGILL;
+// on Windows, a SetUnhandledExceptionFilter for SEH faults plus a SIGABRT handler.
+// Both also set a std::terminate handler. On fault, prints a cpptrace stack trace
+// to stderr (and appends it to the crash-log file when one is set). Symbol
+// resolution: Linux -rdynamic .dynsym, macOS Mach-O symbol table, Windows the
+// mpz.pdb shipped beside mpz.exe (read via dbghelp) — demangled names either way.
 void install_crash_handler();
 
 // Registers the file that each crash trace is appended to, separated by a banner.

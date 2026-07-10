@@ -17,6 +17,9 @@ public:
 
   static void show_changelog();
 
+protected:
+  bool eventFilter(QObject *obj, QEvent *event) override;
+
 private slots:
   void on_buttonAboutQt_clicked() const;
 
@@ -26,6 +29,8 @@ private slots:
 
 private:
   Ui::AboutDialog *ui;
+
+  int version_shift_clicks_ = 0;
 
   QString libraryInfo(const QString &name, const QString &url) const;
 };

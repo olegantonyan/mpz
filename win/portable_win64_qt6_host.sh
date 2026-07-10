@@ -30,6 +30,8 @@ test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2;
 # app-local via copy_vc_runtime below instead, so suppress the installer.
 windeployqt6.exe ./mpz.exe --dir $ARTIFACT_NAME --no-compiler-runtime --release
 cp ./mpz.exe $ARTIFACT_NAME
+# Ship the PDB so the crash handler can symbolize crash.log via dbghelp at runtime.
+cp ./mpz.pdb $ARTIFACT_NAME
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_NAME
 copy_vc_runtime "$ARTIFACT_NAME" x64
 rm -rf "$OUTPUT_DIR/$ARTIFACT_NAME" "$OUTPUT_DIR/$ARTIFACT_NAME.zip"
