@@ -15,6 +15,8 @@
 
 ### Misc
 
+- experimental Linux AppImage build (x86_64 and arm64)
+
 ## [2.0.14] - 2026-07-07
 
 ### Added
