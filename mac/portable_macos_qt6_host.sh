@@ -10,7 +10,7 @@ TMP_DIR=$(mktemp -d -t mpz-build-macos-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd "$TMP_DIR"
 
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-macos-universal-qt6
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-macos-universal
 # Name shown in Finder / Applications / "Open With" — this is the on-disk
 # bundle name, which is what macOS displays (CFBundleDisplayName only applies
 # when it matches the filesystem name). Kept separate from the versioned
