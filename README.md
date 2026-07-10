@@ -75,7 +75,7 @@ Grab installer or portable binary from releases page: https://github.com/olegant
 
 * win-x86_64 - x86 64-bit build (recommended for most users)
 * win-arm64 - native ARM 64-bit build
-* win32 - legacy version for x86 32-bits systems
+* win-legacy - legacy version for x86 32-bits systems
 
 win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have ARM64 Windows PC.
 
