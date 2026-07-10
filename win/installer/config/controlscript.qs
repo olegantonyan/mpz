@@ -6,6 +6,11 @@ function Controller() {
 // empty, so starting here lets it finish while the user clicks through the wizard,
 // avoiding a busy-wait for QtIFW's "directory not empty" check on the target page.
 Controller.prototype.IntroductionPageCallback = function() {
+    // Control scripts also run in the installed maintenancetool; without this the
+    // uninstall/update flow would try to purge the very install it is running from.
+    if (!installer.isInstaller())
+        return;
+
     var targetDir = installer.value("TargetDir");
     var maintenanceTool = targetDir + "/maintenancetool.exe";
     if (!installer.fileExists(maintenanceTool))

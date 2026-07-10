@@ -10,6 +10,8 @@
 
 ### Fixed
 
+- Windows installer: uninstalling/updating via the maintenance tool no longer tries to remove itself
+
 ### Misc
 
 ## [2.0.14] - 2026-07-07
