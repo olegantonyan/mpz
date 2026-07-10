@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   push:
     branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
 
 jobs:
   run:

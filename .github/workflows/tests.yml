@@ -3,7 +3,17 @@ name: tests
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
   pull_request:
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
   workflow_dispatch:
 
 jobs:
