@@ -7,7 +7,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <exception>
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -43,8 +42,6 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   trace.print(std::cerr);
 
   if (g_log_path.empty()) return;
-  std::error_code ec;
-  std::filesystem::create_directories(std::filesystem::path(g_log_path).parent_path(), ec);
   std::ofstream ofs(g_log_path, std::ios::app);
   if (!ofs) return;
   ofs << "\n\n======== Fatal: " << reason << " @ " << std::time(nullptr)
