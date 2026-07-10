@@ -390,6 +390,10 @@ if(UNIX)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
   if(NOT APPLE)
     target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+    # GCC <9.1 needs libstdc++fs for std::filesystem
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
+      target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE stdc++fs)
+    endif()
   endif()
 endif()
 # ENDOF CPPTRACE
