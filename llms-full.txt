@@ -15,6 +15,8 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Folder-based library — no global indexing step
 - 3-column UI: directory tree, playlists, tracks
 - Middle-click a folder to create a playlist from it
+- Drag and drop files and folders from your file manager to add them
+- Reorder tracks within a playlist by dragging
 - CUE sheets, with seamless playback of single-file albums
 - OS media integration — MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog
