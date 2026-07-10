@@ -101,6 +101,7 @@ jobs:
           # ENABLE_UPDATE_CHECK is OFF by default on Linux (distro packages self-update);
           # the AppImage is a manually-downloaded binary like the win/mac ones, so opt in.
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -GNinja \
+            -DCMAKE_PREFIX_PATH="$QTDIR" \
             -DENABLE_UPDATE_CHECK=ON \
             ${PACKAGE_VERSION:+-DPACKAGE_VERSION=$PACKAGE_VERSION}
           cmake --build build
