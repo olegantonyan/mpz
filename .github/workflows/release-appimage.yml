@@ -38,7 +38,10 @@ jobs:
       - name: Install Qt6
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.8.3
+          # 6.7.x is the last series whose aarch64 binaries are built on Debian 11.6
+          # (glibc 2.28); 6.8+ moved to Ubuntu 24.04 and needs glibc 2.38, which the
+          # ubuntu-22.04 runners (glibc 2.35) lack. Kept uniform across both arches.
+          version: 6.7.3
           host: ${{ matrix.qt_host }}
           target: desktop
           arch: ${{ matrix.qt_arch }}
