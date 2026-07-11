@@ -16,6 +16,7 @@ namespace SortUi {
 class MainWindow;
 class Shortcuts;
 class ModusOperandi;
+class QAction;
 
 // Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for
 // the given window. All items live here rather than in the in-window hamburger
@@ -25,7 +26,7 @@ class MacMenuBar : public QObject {
 public:
   MacMenuBar(MainWindow *window, Config::Global &global_c, Config::Local &local_c,
              Shortcuts *shortcuts, Playback::Controller *player, ModusOperandi &modus,
-             SortUi::SortMenu *sort_menu);
+             SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle);
 
 private:
   MainWindow *window;

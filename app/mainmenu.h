@@ -7,11 +7,16 @@
 
 #include <QObject>
 #include <QToolButton>
+#include <QList>
+
+class QAction;
 
 class MainMenu : public QObject {
   Q_OBJECT
 public:
   explicit MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &local_c, ModusOperandi &modus);
+
+  void setViewActions(const QList<QAction *> &actions);
 
 signals:
   void exit();
@@ -24,6 +29,7 @@ public slots:
 
 private:
   QToolButton *button;
+  QList<QAction *> view_actions;
 
   Config::Global &global_conf;
   Config::Local &local_conf;

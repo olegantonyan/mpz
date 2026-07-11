@@ -11,6 +11,10 @@ MainMenu::MainMenu(QToolButton *btn, Config::Global &global_c, Config::Local &lo
   connect(button, &QToolButton::clicked, this, &MainMenu::on_open);
 }
 
+void MainMenu::setViewActions(const QList<QAction *> &actions) {
+  view_actions = actions;
+}
+
 void MainMenu::on_open() {
   QMenu menu;
 
@@ -43,6 +47,12 @@ void MainMenu::on_open() {
 #endif
 
   menu.addAction(&settings);
+  if (!view_actions.isEmpty()) {
+    menu.addSeparator();
+    for (auto *action : std::as_const(view_actions)) {
+      menu.addAction(action);
+    }
+  }
 #ifdef ENABLE_MPD_SUPPORT
   if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
     menu.addAction(&mpdupdate);

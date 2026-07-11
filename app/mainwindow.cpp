@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
 #include "coverart/covers.h"
+#include "coverart/coverartwidget.h"
+#include "lyrics/lyricswidget.h"
 #include "icons.h"
 #include "mpzapplication.h"
 
@@ -13,6 +15,7 @@
 #include <QTableWidgetItem>
 #include <QHash>
 #include <QTimer>
+#include <QDockWidget>
 #include <QFontDatabase>
 
 #include "settings_ui/settingsdialog.h"
@@ -82,6 +85,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
 
+  setupDockWidgets();
   setupUiSettings();
 
   setupPlaybackDispatch();
@@ -351,11 +355,43 @@ void MainWindow::setupVolumeControl() {
   connect(player, &Playback::Controller::volumeChanged, volume, &VolumeControl::setValue);
 }
 
+void MainWindow::setupDockWidgets() {
+  setDockNestingEnabled(true);
+
+  cover_widget = new CoverArt::Widget(this);
+  cover_dock = new QDockWidget(tr("Album cover"), this);
+  cover_dock->setObjectName("coverArtDock");
+  cover_dock->setWidget(cover_widget);
+  addDockWidget(Qt::RightDockWidgetArea, cover_dock);
+
+  lyrics_widget = new Lyrics::Widget(this);
+  lyrics_dock = new QDockWidget(tr("Lyrics"), this);
+  lyrics_dock->setObjectName("lyricsDock");
+  lyrics_dock->setWidget(lyrics_widget);
+  addDockWidget(Qt::RightDockWidgetArea, lyrics_dock);
+
+  splitDockWidget(cover_dock, lyrics_dock, Qt::Vertical);
+
+  // Hidden by default. restoreState() (in setupUiSettings, called next) reapplies
+  // saved visibility/position on later runs; on first run they stay hidden.
+  cover_dock->hide();
+  lyrics_dock->hide();
+
+  connect(player, &Playback::Controller::started, cover_widget, &CoverArt::Widget::setTrack);
+  connect(player, &Playback::Controller::trackChanged, cover_widget, &CoverArt::Widget::setTrack);
+  connect(player, &Playback::Controller::stopped, cover_widget, &CoverArt::Widget::clear);
+
+  connect(player, &Playback::Controller::started, lyrics_widget, &Lyrics::Widget::setTrack);
+  connect(player, &Playback::Controller::trackChanged, lyrics_widget, &Lyrics::Widget::setTrack);
+  connect(player, &Playback::Controller::stopped, lyrics_widget, &Lyrics::Widget::clear);
+}
+
 void MainWindow::setupMainMenu() {
   ui->menuButton->setIcon(Icons::get(Icons::Icon::Menu));
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
+  main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction() });
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
@@ -662,6 +698,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 
 #ifdef Q_OS_MACOS
 void MainWindow::setupMacMenuBar() {
-  mac_menubar = new MacMenuBar(this, global_conf, local_conf, shortcuts, player, modus_operandi, sort_menu);
+  mac_menubar = new MacMenuBar(this, global_conf, local_conf, shortcuts, player, modus_operandi, sort_menu,
+                               cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction());
 }
 #endif
