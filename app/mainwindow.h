@@ -130,6 +130,7 @@ private:
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
   void setupDockWidgets();
+  void openTrackInfo(const Track &track);
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();

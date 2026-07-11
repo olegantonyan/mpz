@@ -4,6 +4,7 @@
 #include "lyrics/lrcparser.h"
 #include "lyrics/providerchain.h"
 #include "lyrics/trackquery.h"
+#include "icons.h"
 
 #include <fileref.h>
 #include <tag.h>
@@ -14,6 +15,8 @@
 #include <QPlainTextEdit>
 #include <QFile>
 #include <QFileInfo>
+#include <QMenu>
+#include <QAction>
 
 namespace Lyrics {
   Widget::Widget(QWidget *parent) : QWidget(parent) {
@@ -24,6 +27,8 @@ namespace Lyrics {
     text = new QPlainTextEdit(this);
     text->setReadOnly(true);
     text->setFrameShape(QFrame::NoFrame);
+    text->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(text, &QWidget::customContextMenuRequested, this, &Widget::showContextMenu);
 
     layout->addWidget(source_label);
     layout->addWidget(text);
@@ -31,8 +36,22 @@ namespace Lyrics {
     clear();
   }
 
+  void Widget::showContextMenu(const QPoint &pos) {
+    QMenu *menu = text->createStandardContextMenu();
+    if (_track.isValid()) {
+      menu->addSeparator();
+      QAction *info = menu->addAction(Icons::get(Icons::Icon::Info), tr("Track info"));
+      connect(info, &QAction::triggered, this, [this]() {
+        emit trackInfoRequested(_track);
+      });
+    }
+    menu->exec(text->mapToGlobal(pos));
+    delete menu;
+  }
+
   void Widget::setTrack(const Track &track) {
     cancel_pending();
+    _track = track;
 
     if (track.isStream() || (track.artist().isEmpty() && track.title().isEmpty())) {
       render_state(tr("No lyrics found."));
@@ -85,6 +104,7 @@ namespace Lyrics {
 
   void Widget::clear() {
     cancel_pending();
+    _track = Track();
     render_state(tr("Nothing playing"));
   }
 

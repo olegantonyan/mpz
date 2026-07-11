@@ -82,6 +82,29 @@
     </message>
 </context>
 <context>
+    <name>CoverArt::Widget</name>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="39"/>
+        <source>No cover art</source>
+        <translation>アルバムアートがありません</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="51"/>
+        <source>Nothing playing</source>
+        <translation>再生していません</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="61"/>
+        <source>Open in external viewer</source>
+        <translation>外部ビューアで開く</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="70"/>
+        <source>Track info</source>
+        <translation>トラック情報</translation>
+    </message>
+</context>
+<context>
     <name>DirectorySettings</name>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="27"/>
@@ -222,6 +245,31 @@
     </message>
 </context>
 <context>
+    <name>Lyrics::Widget</name>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="43"/>
+        <source>Track info</source>
+        <translation>トラック情報</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="57"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="94"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="102"/>
+        <source>No lyrics found.</source>
+        <translation>歌詞が見つかりません。</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="87"/>
+        <source>Searching lyrics...</source>
+        <translation>歌詞を検索中...</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="108"/>
+        <source>Nothing playing</source>
+        <translation>再生していません</translation>
+    </message>
+</context>
+<context>
     <name>MacDockMenu</name>
     <message>
         <location filename="../../macos/macdockmenu.cpp" line="15"/>
@@ -338,73 +386,73 @@
         <translation>並び替え</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="139"/>
+        <location filename="../../macos/macmenubar.cpp" line="144"/>
         <source>Jump to Playing Track</source>
         <translation>再生中のトラックにジャンプ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="143"/>
+        <location filename="../../macos/macmenubar.cpp" line="148"/>
         <source>Playback Log</source>
         <translation>再生ログ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="147"/>
+        <location filename="../../macos/macmenubar.cpp" line="152"/>
         <source>Keyboard Shortcuts</source>
         <translation>キーボードショートカット</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="153"/>
-        <location filename="../../macos/macmenubar.cpp" line="163"/>
+        <location filename="../../macos/macmenubar.cpp" line="158"/>
+        <location filename="../../macos/macmenubar.cpp" line="168"/>
         <source>Enter Full Screen</source>
         <translation>フルスクリーンにする</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="163"/>
+        <location filename="../../macos/macmenubar.cpp" line="168"/>
         <source>Exit Full Screen</source>
         <translation>フルスクリーンを解除</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="166"/>
+        <location filename="../../macos/macmenubar.cpp" line="171"/>
         <source>Window</source>
         <translation>ウインドウ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="168"/>
+        <location filename="../../macos/macmenubar.cpp" line="173"/>
         <source>Minimize</source>
         <translation>しまう</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="172"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Zoom</source>
         <translation>拡大/縮小</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="183"/>
+        <location filename="../../macos/macmenubar.cpp" line="188"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="187"/>
+        <location filename="../../macos/macmenubar.cpp" line="192"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="189"/>
+        <location filename="../../macos/macmenubar.cpp" line="194"/>
         <source>mpz Website</source>
         <translation>mpz ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="194"/>
+        <location filename="../../macos/macmenubar.cpp" line="199"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="199"/>
+        <location filename="../../macos/macmenubar.cpp" line="204"/>
         <source>Send Feedback…</source>
         <translation>フィードバックを送る…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="202"/>
+        <location filename="../../macos/macmenubar.cpp" line="207"/>
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>
@@ -412,37 +460,37 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../../mainmenu.cpp" line="17"/>
+        <location filename="../../mainmenu.cpp" line="21"/>
         <source>Settings…</source>
         <translation>設定…</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="18"/>
+        <location filename="../../mainmenu.cpp" line="22"/>
         <source>Playback log</source>
         <translation>再生ログ</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="19"/>
+        <location filename="../../mainmenu.cpp" line="23"/>
         <source>About mpz</source>
         <translation>mpz について</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="20"/>
+        <location filename="../../mainmenu.cpp" line="24"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="21"/>
+        <location filename="../../mainmenu.cpp" line="25"/>
         <source>Got feedback?</source>
         <translation>フィードバックはありますか？</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="22"/>
+        <location filename="../../mainmenu.cpp" line="26"/>
         <source>Keyboard shortcuts</source>
         <translation>キーボードショートカット</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="23"/>
+        <location filename="../../mainmenu.cpp" line="27"/>
         <source>mpd update</source>
         <translation>mpd を更新</translation>
     </message>
@@ -570,41 +618,51 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="233"/>
-        <location filename="../../mainwindow.cpp" line="267"/>
+        <location filename="../../mainwindow.cpp" line="238"/>
+        <location filename="../../mainwindow.cpp" line="272"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="234"/>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="239"/>
+        <location filename="../../mainwindow.cpp" line="271"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="235"/>
-        <location filename="../../mainwindow.cpp" line="268"/>
+        <location filename="../../mainwindow.cpp" line="240"/>
+        <location filename="../../mainwindow.cpp" line="273"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="270"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="452"/>
-        <location filename="../../mainwindow.cpp" line="456"/>
+        <location filename="../../mainwindow.cpp" line="363"/>
+        <source>Album cover</source>
+        <translation>アルバムアート</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="369"/>
+        <source>Lyrics</source>
+        <translation>歌詞</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="500"/>
+        <location filename="../../mainwindow.cpp" line="504"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="458"/>
+        <location filename="../../mainwindow.cpp" line="506"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="470"/>
+        <location filename="../../mainwindow.cpp" line="518"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>

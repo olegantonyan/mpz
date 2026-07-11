@@ -82,6 +82,29 @@
     </message>
 </context>
 <context>
+    <name>CoverArt::Widget</name>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="39"/>
+        <source>No cover art</source>
+        <translation>Нет обложки альбома</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="51"/>
+        <source>Nothing playing</source>
+        <translation>Ничего не воспроизводится</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="61"/>
+        <source>Open in external viewer</source>
+        <translation>Открыть во внешнем просмотрщике</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="70"/>
+        <source>Track info</source>
+        <translation>Информация о треке</translation>
+    </message>
+</context>
+<context>
     <name>DirectorySettings</name>
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="27"/>
@@ -222,6 +245,31 @@
     </message>
 </context>
 <context>
+    <name>Lyrics::Widget</name>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="43"/>
+        <source>Track info</source>
+        <translation>Информация о треке</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="57"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="94"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="102"/>
+        <source>No lyrics found.</source>
+        <translation>Текст песни не найден.</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="87"/>
+        <source>Searching lyrics...</source>
+        <translation>Поиск текста песни...</translation>
+    </message>
+    <message>
+        <location filename="../../lyrics/lyricswidget.cpp" line="108"/>
+        <source>Nothing playing</source>
+        <translation>Ничего не воспроизводится</translation>
+    </message>
+</context>
+<context>
     <name>MacDockMenu</name>
     <message>
         <location filename="../../macos/macdockmenu.cpp" line="15"/>
@@ -338,73 +386,73 @@
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="139"/>
+        <location filename="../../macos/macmenubar.cpp" line="144"/>
         <source>Jump to Playing Track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="143"/>
+        <location filename="../../macos/macmenubar.cpp" line="148"/>
         <source>Playback Log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="147"/>
+        <location filename="../../macos/macmenubar.cpp" line="152"/>
         <source>Keyboard Shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="153"/>
-        <location filename="../../macos/macmenubar.cpp" line="163"/>
+        <location filename="../../macos/macmenubar.cpp" line="158"/>
+        <location filename="../../macos/macmenubar.cpp" line="168"/>
         <source>Enter Full Screen</source>
         <translation>Перейти в полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="163"/>
+        <location filename="../../macos/macmenubar.cpp" line="168"/>
         <source>Exit Full Screen</source>
         <translation>Выйти из полноэкранного режима</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="166"/>
+        <location filename="../../macos/macmenubar.cpp" line="171"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="168"/>
+        <location filename="../../macos/macmenubar.cpp" line="173"/>
         <source>Minimize</source>
         <translation>Свернуть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="172"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="183"/>
+        <location filename="../../macos/macmenubar.cpp" line="188"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="187"/>
+        <location filename="../../macos/macmenubar.cpp" line="192"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="189"/>
+        <location filename="../../macos/macmenubar.cpp" line="194"/>
         <source>mpz Website</source>
         <translation>Сайт mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="194"/>
+        <location filename="../../macos/macmenubar.cpp" line="199"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="199"/>
+        <location filename="../../macos/macmenubar.cpp" line="204"/>
         <source>Send Feedback…</source>
         <translation>Отправить отзыв…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="202"/>
+        <location filename="../../macos/macmenubar.cpp" line="207"/>
         <source>Report a Bug…</source>
         <translation>Сообщить об ошибке…</translation>
     </message>
@@ -412,37 +460,37 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../../mainmenu.cpp" line="17"/>
+        <location filename="../../mainmenu.cpp" line="21"/>
         <source>Settings…</source>
         <translation>Настройки…</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="18"/>
+        <location filename="../../mainmenu.cpp" line="22"/>
         <source>Playback log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="19"/>
+        <location filename="../../mainmenu.cpp" line="23"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="20"/>
+        <location filename="../../mainmenu.cpp" line="24"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="21"/>
+        <location filename="../../mainmenu.cpp" line="25"/>
         <source>Got feedback?</source>
         <translation>Связаться с автором?</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="22"/>
+        <location filename="../../mainmenu.cpp" line="26"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="23"/>
+        <location filename="../../mainmenu.cpp" line="27"/>
         <source>mpd update</source>
         <translation>mpd update</translation>
     </message>
@@ -570,41 +618,51 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="233"/>
-        <location filename="../../mainwindow.cpp" line="267"/>
+        <location filename="../../mainwindow.cpp" line="238"/>
+        <location filename="../../mainwindow.cpp" line="272"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="234"/>
-        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="239"/>
+        <location filename="../../mainwindow.cpp" line="271"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="235"/>
-        <location filename="../../mainwindow.cpp" line="268"/>
+        <location filename="../../mainwindow.cpp" line="240"/>
+        <location filename="../../mainwindow.cpp" line="273"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="270"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="452"/>
-        <location filename="../../mainwindow.cpp" line="456"/>
+        <location filename="../../mainwindow.cpp" line="363"/>
+        <source>Album cover</source>
+        <translation>Обложка альбома</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="369"/>
+        <source>Lyrics</source>
+        <translation>Текст песни</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="500"/>
+        <location filename="../../mainwindow.cpp" line="504"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="458"/>
+        <location filename="../../mainwindow.cpp" line="506"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="470"/>
+        <location filename="../../mainwindow.cpp" line="518"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>

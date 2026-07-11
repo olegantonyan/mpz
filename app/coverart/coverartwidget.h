@@ -5,6 +5,7 @@
 
 #include <QLabel>
 #include <QPixmap>
+#include <QString>
 
 namespace CoverArt {
   class Widget : public QLabel {
@@ -16,13 +17,21 @@ namespace CoverArt {
     void setTrack(const Track &track);
     void clear();
 
+  signals:
+    void trackInfoRequested(const Track &track);
+
   protected:
     void resizeEvent(QResizeEvent *event) override;
+
+  private slots:
+    void showContextMenu(const QPoint &pos);
 
   private:
     void render();
 
     QPixmap source;
+    Track _track;
+    QString _cover_path;
   };
 }
 

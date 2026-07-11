@@ -4,6 +4,7 @@
 #include "coverart/covers.h"
 #include "coverart/coverartwidget.h"
 #include "lyrics/lyricswidget.h"
+#include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
 #include "mpzapplication.h"
 
@@ -372,8 +373,7 @@ void MainWindow::setupDockWidgets() {
 
   splitDockWidget(cover_dock, lyrics_dock, Qt::Vertical);
 
-  // Hidden by default. restoreState() (in setupUiSettings, called next) reapplies
-  // saved visibility/position on later runs; on first run they stay hidden.
+  // first run: hidden; later, restoreState() restores visibility
   cover_dock->hide();
   lyrics_dock->hide();
 
@@ -384,6 +384,17 @@ void MainWindow::setupDockWidgets() {
   connect(player, &Playback::Controller::started, lyrics_widget, &Lyrics::Widget::setTrack);
   connect(player, &Playback::Controller::trackChanged, lyrics_widget, &Lyrics::Widget::setTrack);
   connect(player, &Playback::Controller::stopped, lyrics_widget, &Lyrics::Widget::clear);
+
+  connect(cover_widget, &CoverArt::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
+  connect(lyrics_widget, &Lyrics::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
+}
+
+void MainWindow::openTrackInfo(const Track &track) {
+  auto pl = playlists->playlistByTrackUid(track.uid());
+  TrackInfoDialog *dlg = new TrackInfoDialog(track, pl, this);
+  dlg->setModal(false);
+  connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
+  dlg->show();
 }
 
 void MainWindow::setupMainMenu() {

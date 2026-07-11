@@ -20,10 +20,17 @@ namespace Lyrics {
     void setTrack(const Track &track);
     void clear();
 
+  signals:
+    void trackInfoRequested(const Track &track);
+
+  private slots:
+    void showContextMenu(const QPoint &pos);
+
   private:
     QLabel *source_label;
     QPlainTextEdit *text;
     ProviderChain *chain = nullptr;
+    Track _track;
 
     QString fetch_embedded_lyrics(const Track &track) const;
     QString fetch_sidecar_lyrics(const Track &track) const;
