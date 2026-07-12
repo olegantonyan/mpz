@@ -2,6 +2,7 @@
 
 ### Added
 
+- Dockable album cover and lyrics panels (hidden by default, toggled from the menu)
 - Crash stack traces saved to a log file, openable from Settings (Linux, macOS, Windows)
 
 ### Fixed
