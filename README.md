@@ -7,7 +7,7 @@
 
 ![image](https://raw.githubusercontent.com/olegantonyan/mpz/gh-pages/images/mpz-workflow.apng)
 
-If you like organizing your music in folders, then this player might be for you. It doesn't try to index all the files into a library, but rather treats your files and folders as the library and provides a convenient way to create playlists directly from folders. Similar to Foobar2000's Album List, but it's not an attempt to clone.
+If you like organizing your music in folders, then this player might be for you. It doesn't try to index all the files into a library, but rather treats your files and folders as the library and provides a convenient way to create playlists directly from folders. Similar to Foobar2000's Album List, but not an attempt to clone it.
 
 More screenshots here: https://mpz-player.org
 
@@ -27,7 +27,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Tag editor;
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
-- Tracks sorting presets;
+- Track sorting presets;
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog;
 - Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray with playback controls;
 - Update check on Windows, macOS, and Linux AppImage;
@@ -46,7 +46,7 @@ Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format 
 
 #### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
 
-Install from the omnipackage repositories x86_64 arch — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
+Install from the omnipackage repositories (x86_64 arch) — [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended) or [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html). These are the primary repositories going forward.
 
 <details>
 <summary>Already using the old Open Build Service repositories?</summary>
@@ -59,7 +59,7 @@ Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built 
 
 ##### AUR
 
-Arch AUR package also available if you prefer it over binary repositories: https://aur.archlinux.org/packages/mpz/
+An Arch AUR package is also available if you prefer it over binary repositories: https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
@@ -75,13 +75,13 @@ Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https
 
 #### Windows
 
-Grab installer or portable binary from releases page: [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
+Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
 
 * win-x86_64 - x86 64-bit build (recommended for most users)
 * win-arm64 - native ARM 64-bit build
-* win-legacy - legacy version for x86 32-bits systems
+* win-legacy - legacy version for x86 32-bit systems
 
-win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have ARM64 Windows PC.
+win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have an ARM64 Windows PC.
 
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
 
@@ -104,7 +104,7 @@ The app will then launch normally.
 #### From sources
 
 Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel for Qt6 on openSUSE).
-Packages' names may differ in different distros.
+Package names may differ between distros.
 
 ```
 cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
@@ -123,7 +123,7 @@ Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPP
 
 ## Configuration
 
-Starting from version 2.0.8 there is settings dialog where all these options can be changed via GUI.
+Starting from version 2.0.8 there is a settings dialog where all these options can be changed via the GUI.
 
 <details>
 <summary>Manual yaml configuration</summary>
@@ -134,12 +134,12 @@ The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/
 
 The available config options are:
 
-- `inhibit_sleep_while_playing` in `global.yml` - when `true` player will prevent your OS from automatic sleep while playing (on Linux requires `systemd-inhibit`);
-- `stream_buffer_size` in `global.yml` - minimal stream buffer size in bytes. The default is 128KB;
-- `single_instance` in `global.yml` - when `true` the player will reuse 1 instance, launching another instance with files as command line arguments will send these files to running instance as a new playlist;
+- `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`);
+- `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB;
+- `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist;
 - `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
-- `columns_config` in `global.yml` - configure columns in playlist section, more on this below;
+- `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 - `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 
@@ -177,7 +177,7 @@ Available fields: artist, album, title, year, length, path, url, sample_rate, bi
 
 Available alignments: left, right.
 
-The sum of `width_percent` of all columns must add up to 100 or below. Sometimes it has to be below 100 to get rid of horizontal scroll; this may happen due to padding and a few extra pixels in your desktop theme.
+The sum of `width_percent` of all columns must add up to 100 or less. Sometimes it has to be below 100 to get rid of horizontal scroll; this may happen due to padding and a few extra pixels in your desktop theme.
 
 `stretch` will stretch the column to fit the window width to the right. It's advised to have the last column stretched and the sum of all `width_percent` below 100, but you can experiment with it and see how it looks on your desktop.
 
@@ -205,7 +205,7 @@ You can ignore MPRIS commands from certain senders, for example, in `global.yml`
 mpris_blacklist: ["wireplumber"]
 ```
 
-This will ignore commands issued by Wireplumber. Starting with version around 0.5 it has a feature that cannot be disabled - whenever the audio device disconnects it issues an MPRIS Pause command. Until they make it configurable, blocking wireplumber is a viable workaround if you also find this feature annoying.
+This will ignore commands issued by Wireplumber. Starting around version 0.5, it has a feature that cannot be disabled - whenever the audio device disconnects it issues an MPRIS Pause command. Until they make it configurable, blocking wireplumber is a viable workaround if you also find this feature annoying.
 
 </details>
 
@@ -220,7 +220,7 @@ Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - pl
 - Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
 - Global hotkeys don't work in Wayland (https://github.com/olegantonyan/mpz/issues/129, but in KDE Plasma, for example, global media keys work and send MPRIS commands to the player).
 
-Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems like they are heading towards enabling it by default. You can set multimedia bakend via environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz` or `QT_MEDIA_BACKEND=gstreamer mpz`.
+Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems like they are heading towards enabling it by default. You can set the multimedia backend via the environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz` or `QT_MEDIA_BACKEND=gstreamer mpz`.
 
 ### mpd impedance mismatch
 When used as an [mpd](https://musicpd.org) client, there is a fundamental difference that can lead to some weird behavior. By design mpz does not have an explicit playback queue - the playlist itself is the queue. In mpd, there's an explicit playback queue and playlists are merely lists of tracks that can be loaded into the queue to play.
