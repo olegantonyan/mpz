@@ -8,7 +8,7 @@
 
 ### Fixed
 
-- Playback order combobox width truncation on some platforms/themes
+- Playback order combobox width truncation on some platforms/themes (https://github.com/olegantonyan/mpz/issues/202)
 
 ### Misc
 
