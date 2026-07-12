@@ -18,8 +18,19 @@
 #include <QTimer>
 #include <QDockWidget>
 #include <QFontDatabase>
+#include <QComboBox>
+#include <QAbstractItemView>
 
 #include "settings_ui/settingsdialog.h"
+
+namespace {
+  // widen popup so long items aren't elided when the combobox is squeezed narrow
+  void fitComboBoxPopupToContents(QComboBox *combo) {
+    int width = combo->view()->sizeHintForColumn(0);
+    width += combo->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    combo->view()->setMinimumWidth(width);
+  }
+}
 
 #if defined(ENABLE_UPDATE_CHECK)
   #include "update_check/updatechecker.h"
@@ -257,6 +268,7 @@ void MainWindow::setupOrderCombobox() {
   combobox_item_position.insert("sequential (no loop)", 2);
 
   ui->orderComboBox->setCurrentIndex(combobox_item_position.value(global_conf.playbackOrder(), 0));
+  fitComboBoxPopupToContents(ui->orderComboBox);
 
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
     QString order_name = combobox_item_position.key(idx, "sequential");
@@ -283,6 +295,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem(tr("random"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential (no loop)"));
+  fitComboBoxPopupToContents(ui->perPlaylistOrdercomboBox);
   connect(playlists, &PlaylistsUi::Controller::selected, this, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {

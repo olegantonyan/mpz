@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Playback order combobox width truncation on some platforms/themes (https://github.com/olegantonyan/mpz/issues/202)
+
 ### Misc
 
 ## [2.0.15] - 2026-07-10
