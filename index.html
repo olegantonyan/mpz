@@ -133,9 +133,8 @@
                     "m3u, m3u8, and pls playlist formats including internet radio streams",
                     "Playback order per playlist and global — sequential, random, or no-loop",
                     "Tracks sorting presets",
-                    "Lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB, NetEase, QQ Music, or Lyrics.ovh",
+                    "Cover art (from tags or folder images) and lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB, NetEase, QQ Music, or Lyrics.ovh — in the Track Info dialog or as dockable panels that follow the playing track",
                     "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
-                    "Cover art from tags or folder images",
                     "Common audio formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, DSD — via system codecs",
                     "Playback log of recently played tracks",
                     "Update check on Windows and macOS",
@@ -268,7 +267,7 @@
                         "name": "Does mpz support lyrics?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog."
+                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog, or in a dockable Lyrics panel."
                         }
                     },
                     {
@@ -847,7 +846,8 @@
                             playback controls.
                         </p>
                         <p>
-                            Lyrics — embedded in tags, in
+                            Cover art (from tags or folder images) and lyrics
+                            — embedded in tags, in
                             <code>.lrc</code>/<code>.txt</code> sidecar files,
                             or fetched online from
                             <a
@@ -857,7 +857,8 @@
                                 >LRCLIB</a
                             >
                             (with NetEase, QQ Music, and Lyrics.ovh available too)
-                            — are shown in the Track Info dialog. Tag reading
+                            — shown in the Track Info dialog or as dockable
+                            panels that follow the playing track. Tag reading
                             and editing via
                             <a
                                 href="https://taglib.org/"
@@ -867,8 +868,7 @@
                             >
                             (ID3v2, Vorbis Comment, MP4, APE) — edit track
                             metadata directly from the built-in tag editor
-                            dialog (since 2.0.8). Cover art from tags or folder
-                            images. Common audio
+                            dialog (since 2.0.8). Common audio
                             formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC,
                             M4A/MP4, WAV, WMA, APE, DSD — through your system's
                             codecs (QtMultimedia with the GStreamer or ffmpeg
@@ -1353,7 +1353,8 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >LRCLIB</a
-                                >. They are shown in the Track Info dialog.
+                                >. They are shown in the Track Info dialog, or
+                                in a dockable Lyrics panel.
                             </p>
 
                             <p>
