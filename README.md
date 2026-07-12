@@ -25,8 +25,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Internet radio in `m3u` and `pls` formats;
 - CUE sheets, with seamless playback of single-file albums;
 - Tag editor;
-- Lyrics in the track info dialog;
-- Cover art from tags or folder images;
+- Cover art (from tags or folder images) and lyrics — in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
 - Tracks sorting presets;
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog;
