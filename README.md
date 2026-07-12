@@ -25,12 +25,12 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Internet radio in `m3u` and `pls` formats;
 - CUE sheets, with seamless playback of single-file albums;
 - Tag editor;
-- Cover art (from tags or folder images) and lyrics — in the track info dialog or as dockable panels that follow the playing track;
+- Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
 - Tracks sorting presets;
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog;
 - Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray with playback controls;
-- Update check on Windows and macOS;
+- Update check on Windows, macOS, and Linux AppImage;
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation));
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation);
 - [mpd](https://musicpd.org) client mode (version 2.0.0+).
