@@ -53,6 +53,10 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+class QDockWidget;
+namespace CoverArt { class Widget; }
+namespace Lyrics { class Widget; }
+
 #if defined(ENABLE_UPDATE_CHECK)
 class UpdateChecker;
 #endif
@@ -109,6 +113,10 @@ private:
   SortUi::SortMenu *sort_menu = nullptr;
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
+  QDockWidget *cover_dock = nullptr;
+  QDockWidget *lyrics_dock = nullptr;
+  CoverArt::Widget *cover_widget = nullptr;
+  Lyrics::Widget *lyrics_widget = nullptr;
   ModusOperandi modus_operandi;
 #ifdef ENABLE_MPD_SUPPORT
   Playback::Mpd::PlaybackOrder *mpd_order = nullptr;
@@ -121,6 +129,8 @@ private:
   void setupPerPlaylistOrderCombobox();
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
+  void setupDockWidgets();
+  void openTrackInfo(const Track &track);
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
