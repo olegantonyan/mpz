@@ -69,6 +69,8 @@ set(PROJECT_SOURCES
   app/directory_ui/directorycontroller.cpp
   app/directory_ui/directorysettings.cpp
   app/feedback_ui/feedbackform.cpp
+  app/feedback_ui/feedbacksender.cpp
+  app/crash_report/crashreport.cpp
   app/ipc/instance.cpp
   app/main.cpp
   app/mainmenu.cpp

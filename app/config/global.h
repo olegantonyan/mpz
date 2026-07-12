@@ -27,6 +27,12 @@ namespace Config {
     bool disableAutoUpdateCheck() const;
     void saveDisableAutoUpdateCheck(bool arg);
 
+    QString crashReportConsent() const;
+    void saveCrashReportConsent(const QString &arg);
+
+    QString lastReportedCrash() const;
+    void saveLastReportedCrash(const QString &arg);
+
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
 

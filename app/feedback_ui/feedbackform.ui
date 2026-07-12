@@ -61,6 +61,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="checkBoxAutoCrashReport">
+     <property name="text">
+      <string>Auto-send crash reports</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="pushButtonSend">
      <property name="text">
       <string>Send</string>

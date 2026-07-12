@@ -2,34 +2,42 @@
 #include "ui_feedbackform.h"
 #include "sysinfo.h"
 
-#include <QDebug>
-#include <QtNetwork>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QElapsedTimer>
+#include <QCloseEvent>
 
-FeedbackForm::FeedbackForm(QWidget *parent) : QDialog(parent), ui(new Ui::FeedbackForm), done(false) {
+FeedbackForm::FeedbackForm(Config::Global &global, QWidget *parent) :
+  QDialog(parent), ui(new Ui::FeedbackForm), global_conf(global), done(false) {
   ui->setupUi(this);
 
   ui->checkBoxSysinfo->setChecked(true);
   ui->lineEditSysinfo->setReadOnly(true);
   ui->lineEditSysinfo->setText(SysInfo::get().join(" | "));
 
+  ui->checkBoxAutoCrashReport->setVisible(false);
+
   spinner = new LoadingSpinner(ui->pushButtonSend);
   spinner->hide();
+
+  connect(&sender, &FeedbackSender::finished, this, [this](bool ok, const QString &error) {
+    endSend(error);
+    if (ok) {
+      finalize();
+    }
+  });
 }
 
 FeedbackForm::~FeedbackForm() {
   delete ui;
 }
 
-void FeedbackForm::finalize() {
-  ui->pushButtonSend->setText(tr("Thanks for you feedback! (click again to close)"));
-  ui->checkBoxSysinfo->setEnabled(false);
-  ui->lineEditSysinfo->setEnabled(false);
-  ui->textEditText->setEnabled(false);
-  ui->lineEditAuthor->setEnabled(false);
-  done = true;
+void FeedbackForm::setCrashReport(const QString &crashText, const QString &crashId) {
+  crash_mode = true;
+  crash_id = crashId;
+  setWindowTitle(tr("Crash report"));
+  ui->label->setText(tr("mpz closed unexpectedly last time. Send this report to help fix it?"));
+  ui->textEditText->setPlainText(crashText);
+  ui->lineEditAuthor->setText(QStringLiteral("auto-crash-report"));
+  ui->checkBoxAutoCrashReport->setChecked(global_conf.crashReportConsent() != QStringLiteral("disabled"));
+  ui->checkBoxAutoCrashReport->setVisible(true);
 }
 
 void FeedbackForm::on_pushButtonSend_clicked() {
@@ -37,12 +45,13 @@ void FeedbackForm::on_pushButtonSend_clicked() {
     close();
     return;
   }
+  send();
+}
 
-  if (!send()) {
-    return;
-  }
-
-  finalize();
+void FeedbackForm::send() {
+  beginSend();
+  const QString sysinfo = ui->checkBoxSysinfo->isChecked() ? ui->lineEditSysinfo->text() : QString();
+  sender.submit(ui->textEditText->toPlainText(), ui->lineEditAuthor->text(), sysinfo);
 }
 
 void FeedbackForm::beginSend() {
@@ -59,41 +68,26 @@ void FeedbackForm::endSend(const QString &error) {
   }
 }
 
-QByteArray FeedbackForm::buildJson() {
-  QJsonObject json;
-  json["text"] = ui->textEditText->toPlainText();
-  json["author"] = ui->lineEditAuthor->text();
-  if (ui->checkBoxSysinfo->isChecked()) {
-    json["sysinfo"] = ui->lineEditSysinfo->text();
-  }
-  return QJsonDocument(json).toJson();
+void FeedbackForm::finalize() {
+  ui->pushButtonSend->setText(tr("Thanks for you feedback! (click again to close)"));
+  ui->checkBoxSysinfo->setEnabled(false);
+  ui->lineEditSysinfo->setEnabled(false);
+  ui->textEditText->setEnabled(false);
+  ui->lineEditAuthor->setEnabled(false);
+  done = true;
 }
 
-bool FeedbackForm::send() {
-  beginSend();
-
-  QUrl url("https://us-central1-random-360814.cloudfunctions.net/mpz-feedback");
-#ifdef DISABLE_HTTPS
-  url.setScheme("http"); // TODO: https make openssl static build for windows
-#endif
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-  QNetworkAccessManager nam;
-  QNetworkReply *reply = nam.post(request, buildJson());
-  QElapsedTimer deadline;
-  deadline.start();
-  while (!reply->isFinished()) {
-    if (deadline.hasExpired(30000)) {
-      reply->abort(); // emits finished with OperationCanceledError
-      break;
-    }
-    qApp->processEvents();
+void FeedbackForm::persistConsent() {
+  if (!crash_mode) {
+    return;
   }
+  global_conf.saveCrashReportConsent(ui->checkBoxAutoCrashReport->isChecked()
+    ? QStringLiteral("enabled") : QStringLiteral("disabled"));
+  global_conf.saveLastReportedCrash(crash_id);
+  global_conf.sync();
+}
 
-  bool ok = reply->error() == QNetworkReply::NoError;
-  endSend(ok ? "" : reply->errorString());
-
-  reply->deleteLater();
-
-  return ok;
+void FeedbackForm::closeEvent(QCloseEvent *event) {
+  persistConsent();
+  QDialog::closeEvent(event);
 }

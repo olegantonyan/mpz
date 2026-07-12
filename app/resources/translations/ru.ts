@@ -84,22 +84,22 @@
 <context>
     <name>CoverArt::Widget</name>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="39"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="37"/>
         <source>No cover art</source>
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="51"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="49"/>
         <source>Nothing playing</source>
         <translation>Ничего не воспроизводится</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="61"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="59"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="70"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="68"/>
         <source>Track info</source>
         <translation>Информация о треке</translation>
     </message>
@@ -230,16 +230,31 @@
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
+        <source>Auto-send crash reports</source>
+        <translation>Автоматически отправлять отчёты о сбоях</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="73"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
+        <source>Crash report</source>
+        <translation>Отчёт о сбое</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <source>mpz closed unexpectedly last time. Send this report to help fix it?</source>
+        <translation>В прошлый раз mpz аварийно завершил работу. Отправить этот отчёт, чтобы помочь исправить проблему?</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="72"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>Спасибо за вашу обратную связь (нажмите ещё раз чтобы закрыть)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="67"/>
         <source>Error occured, please try again</source>
         <translation>Произошла ошибка, пожалуйста, повторите</translation>
     </message>
@@ -618,51 +633,51 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="238"/>
-        <location filename="../../mainwindow.cpp" line="272"/>
+        <location filename="../../mainwindow.cpp" line="250"/>
+        <location filename="../../mainwindow.cpp" line="284"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="239"/>
-        <location filename="../../mainwindow.cpp" line="271"/>
+        <location filename="../../mainwindow.cpp" line="251"/>
+        <location filename="../../mainwindow.cpp" line="283"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="240"/>
-        <location filename="../../mainwindow.cpp" line="273"/>
+        <location filename="../../mainwindow.cpp" line="252"/>
+        <location filename="../../mainwindow.cpp" line="285"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="270"/>
+        <location filename="../../mainwindow.cpp" line="282"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="363"/>
+        <location filename="../../mainwindow.cpp" line="375"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="369"/>
+        <location filename="../../mainwindow.cpp" line="381"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="500"/>
-        <location filename="../../mainwindow.cpp" line="504"/>
+        <location filename="../../mainwindow.cpp" line="511"/>
+        <location filename="../../mainwindow.cpp" line="515"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="506"/>
+        <location filename="../../mainwindow.cpp" line="517"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="518"/>
+        <location filename="../../mainwindow.cpp" line="529"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -1021,13 +1036,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="292"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="293"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="506"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="520"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
@@ -1080,6 +1095,26 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="456"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
+        <source>Crash reports:</source>
+        <translation>Отчёты о сбоях:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
+        <source>Send automatically</source>
+        <translation>Отправлять автоматически</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <source>Ask after next crash</source>
+        <translation>Спрашивать после сбоя</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="467"/>
+        <source>Never send</source>
+        <translation>Не отправлять</translation>
     </message>
 </context>
 <context>

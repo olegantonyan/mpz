@@ -37,6 +37,7 @@ mpz_add_test(tst_lyricscache    tst_lyricscache.cpp    ${APP}/lyrics/cache.cpp)
 mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp)
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)
+mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
 
 # SysInfo needs <QApplication> headers for qApp; pulls in Qt::Widgets for the
 # include path only (the test uses QCoreApplication).

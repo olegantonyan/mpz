@@ -61,6 +61,10 @@ namespace Lyrics { class Widget; }
 class UpdateChecker;
 #endif
 
+#if defined(ENABLE_CRASH_HANDLER)
+class FeedbackSender;
+#endif
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -93,6 +97,9 @@ private:
 #if defined(ENABLE_UPDATE_CHECK)
   QLabel *status_label_update = nullptr;
   UpdateChecker *update_checker = nullptr;
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  FeedbackSender *crash_sender = nullptr;
 #endif
 #if defined(MPRIS_ENABLE)
   Mpris *mpris = nullptr;
@@ -136,6 +143,9 @@ private:
   void setupStatusBar();
 #if defined(ENABLE_UPDATE_CHECK)
   void setupUpdateChecker();
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  void setupCrashReporter();
 #endif
 #if defined(MPRIS_ENABLE)
   void setupMpris();

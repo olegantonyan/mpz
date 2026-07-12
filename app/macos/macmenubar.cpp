@@ -202,7 +202,7 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   });
 
   auto *feedback = help->addAction(tr("Send Feedback…"));
-  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
+  connect(feedback, &QAction::triggered, this, [this]() { FeedbackForm(global_conf).exec(); });
 
   auto *bug_report = help->addAction(tr("Report a Bug…"));
   connect(bug_report, &QAction::triggered, this, []() {

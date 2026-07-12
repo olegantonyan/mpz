@@ -29,6 +29,7 @@ private slots:
 
 private:
   Ui::AboutDialog *ui;
+  Config::Global &global_conf;
 
   int version_shift_clicks_ = 0;
 

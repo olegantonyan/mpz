@@ -84,22 +84,22 @@
 <context>
     <name>CoverArt::Widget</name>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="39"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="37"/>
         <source>No cover art</source>
         <translation>Нема омота албума</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="51"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="49"/>
         <source>Nothing playing</source>
         <translation>Ништа се не репродукује</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="61"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="59"/>
         <source>Open in external viewer</source>
         <translation>Отвори у спољном прегледнику</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="70"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="68"/>
         <source>Track info</source>
         <translation>Информације о нумери</translation>
     </message>
@@ -230,16 +230,31 @@
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
+        <source>Auto-send crash reports</source>
+        <translation>Аутоматски шаљите извештаје о падовима</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="73"/>
         <source>Send</source>
         <translation>Пошаљи</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
+        <source>Crash report</source>
+        <translation>Извештај о паду</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <source>mpz closed unexpectedly last time. Send this report to help fix it?</source>
+        <translation>mpz се прошли пут неочекивано затворио. Пошаљите овај извештај да помогнете да се проблем реши?</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="72"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>Хвала на повратним информацијама! (кликните поново да затворите)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="67"/>
         <source>Error occured, please try again</source>
         <translation>Дошло је до грешке, покушајте поново</translation>
     </message>
@@ -618,51 +633,51 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="238"/>
-        <location filename="../../mainwindow.cpp" line="272"/>
+        <location filename="../../mainwindow.cpp" line="250"/>
+        <location filename="../../mainwindow.cpp" line="284"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="239"/>
-        <location filename="../../mainwindow.cpp" line="271"/>
+        <location filename="../../mainwindow.cpp" line="251"/>
+        <location filename="../../mainwindow.cpp" line="283"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="240"/>
-        <location filename="../../mainwindow.cpp" line="273"/>
+        <location filename="../../mainwindow.cpp" line="252"/>
+        <location filename="../../mainwindow.cpp" line="285"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="270"/>
+        <location filename="../../mainwindow.cpp" line="282"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="363"/>
+        <location filename="../../mainwindow.cpp" line="375"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="369"/>
+        <location filename="../../mainwindow.cpp" line="381"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="500"/>
-        <location filename="../../mainwindow.cpp" line="504"/>
+        <location filename="../../mainwindow.cpp" line="511"/>
+        <location filename="../../mainwindow.cpp" line="515"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="506"/>
+        <location filename="../../mainwindow.cpp" line="517"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="518"/>
+        <location filename="../../mainwindow.cpp" line="529"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
@@ -1021,13 +1036,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="292"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
         <source>Left</source>
         <translation>Лево</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="293"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="506"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="520"/>
         <source>Right</source>
         <translation>Десно</translation>
     </message>
@@ -1080,6 +1095,26 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="456"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Заустави MPD репродукцију при затварању mpz-а</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
+        <source>Crash reports:</source>
+        <translation>Извештаји о падовима:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
+        <source>Send automatically</source>
+        <translation>Шаљи аутоматски</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <source>Ask after next crash</source>
+        <translation>Питај после следећег пада</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="467"/>
+        <source>Never send</source>
+        <translation>Никад не шаљи</translation>
     </message>
 </context>
 <context>

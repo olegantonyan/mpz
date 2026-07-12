@@ -25,6 +25,15 @@
   #include "update_check/updatechecker.h"
 #endif
 
+#if defined(ENABLE_CRASH_HANDLER)
+  #include "crash_handler.h"
+  #include "crash_report/crashreport.h"
+  #include "feedback_ui/feedbacksender.h"
+  #include "feedback_ui/feedbackform.h"
+  #include "sysinfo.h"
+  #include <QFile>
+#endif
+
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -135,6 +144,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
 #if defined(ENABLE_UPDATE_CHECK)
   setupUpdateChecker();
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  setupCrashReporter();
 #endif
 }
 
@@ -518,6 +530,50 @@ void MainWindow::setupUpdateChecker() {
     status_label_update->show();
   });
   QTimer::singleShot(0, this, [this]() { update_checker->check(); });
+}
+#endif
+
+#if defined(ENABLE_CRASH_HANDLER)
+void MainWindow::setupCrashReporter() {
+  const QString path = QString::fromStdString(mpz::crash_log_path());
+  if (path.isEmpty()) {
+    return;
+  }
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    return;
+  }
+  const CrashEntry entry = lastCrash(QString::fromUtf8(file.readAll()));
+  file.close();
+
+  if (!entry.valid || entry.id == global_conf.lastReportedCrash()) {
+    return;
+  }
+
+  const QString consent = global_conf.crashReportConsent();
+  if (consent == QStringLiteral("disabled")) {
+    return;
+  }
+
+  if (consent == QStringLiteral("enabled")) {
+    crash_sender = new FeedbackSender(this);
+    const QString id = entry.id;
+    connect(crash_sender, &FeedbackSender::finished, this, [this, id](bool ok, const QString &) {
+      if (ok) {
+        global_conf.saveLastReportedCrash(id);
+        global_conf.sync();
+      }
+    });
+    crash_sender->submit(entry.text, QStringLiteral("auto-crash-report"), SysInfo::get().join(" | "));
+    return;
+  }
+
+  QTimer::singleShot(0, this, [this, entry]() {
+    auto *form = new FeedbackForm(global_conf, this);
+    form->setAttribute(Qt::WA_DeleteOnClose);
+    form->setCrashReport(entry.text, entry.id);
+    form->exec();
+  });
 }
 #endif
 
