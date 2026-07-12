@@ -23,7 +23,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Experimental mpd (Music Player Daemon) client mode — add an mpd server as a library folder
 - m3u, m3u8, and pls playlist formats, including internet radio streams
 - Playback order per playlist and global — sequential, random, or no-loop
-- Tracks sorting presets
+- Track sorting presets
 - Cover art (from tags or folder images) and lyrics — from embedded tags, `.lrc`/`.txt` sidecar files, or fetched online from LRCLIB (with NetEase, QQ Music, and Lyrics.ovh available too); shown in the Track Info dialog or as dockable panels that follow the playing track
 - Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE) — built-in tag editor dialog for track metadata since version 2.0.8
 - Common audio formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, DSD — through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows)
