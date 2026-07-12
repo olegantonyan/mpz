@@ -32,12 +32,12 @@ void MainMenu::on_open() {
     dlg.exec();
   });
   connect(&about, &QAction::triggered, [=]() {
-    AboutDialog(global_conf).exec();
+    AboutDialog(global_conf, local_conf).exec();
   });
   connect(&quit, &QAction::triggered, this, &MainMenu::exit);
   connect(&lpog, &QAction::triggered, this, &MainMenu::openPlaybackLog);
   connect(&feedback, &QAction::triggered, [=]() {
-    FeedbackForm().exec();
+    FeedbackForm(local_conf).exec();
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
 #ifdef ENABLE_MPD_SUPPORT

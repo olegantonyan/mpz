@@ -1,4 +1,5 @@
 #include "crash_handler.h"
+#include "crash_report/crashlog_format.h"
 
 #include <cpptrace/cpptrace.hpp>
 
@@ -45,10 +46,12 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   if (g_log_path.empty()) return;
   std::ofstream ofs(g_log_path, std::ios::app);
   if (!ofs) return;
-  ofs << "\n\n======== Fatal: " << reason << " @ " << std::time(nullptr)
-      << " ========\n\n";
+  ofs << "\n" << kCrashBegin << "\n";
+  ofs << kCrashTimeLabel << std::time(nullptr) << "\n";
+  ofs << kCrashReasonLabel << reason << "\n";
   if (!g_system_info.empty()) ofs << g_system_info << "\n\n";
   trace.print(ofs);
+  ofs << "\n" << kCrashEnd << "\n";
 }
 
 [[noreturn]] void crash_handler(int signum) {

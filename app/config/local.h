@@ -55,6 +55,12 @@ namespace Config {
     QByteArray outputDeviceId() const;
     bool saveOutputDeviceId(const QByteArray &arg);
 
+    QString crashReportConsent() const;
+    void saveCrashReportConsent(const QString &arg);
+
+    QString lastReportedCrash() const;
+    void saveLastReportedCrash(const QString &arg);
+
   private:
     Config::Storage storage;
 

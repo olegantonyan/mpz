@@ -20,7 +20,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 
-AboutDialog::AboutDialog(Config::Global &global_c, QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
+AboutDialog::AboutDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog), local_conf(local_c) {
   ui->setupUi(this);
 
   ui->versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
@@ -132,7 +132,7 @@ void AboutDialog::on_buttonAboutQt_clicked() const {
 }
 
 void AboutDialog::on_buttonContact_clicked() const {
-  FeedbackForm().exec();
+  FeedbackForm(local_conf).exec();
 }
 
 void AboutDialog::on_buttonChangelog_clicked() const {

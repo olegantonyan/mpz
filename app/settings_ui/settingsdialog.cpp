@@ -458,6 +458,20 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   vbox->addWidget(check_mpd_stop_on_close);
 #endif
 
+#ifdef ENABLE_CRASH_HANDLER
+  auto *crash_row = new QHBoxLayout;
+  crash_row->addWidget(new QLabel(tr("Crash reports:")));
+  combo_crash_reports = new QComboBox;
+  combo_crash_reports->addItem(tr("Send automatically"), QStringLiteral("enabled"));
+  combo_crash_reports->addItem(tr("Ask after next crash"), QString());
+  combo_crash_reports->addItem(tr("Never send"), QStringLiteral("disabled"));
+  const int crash_idx = combo_crash_reports->findData(local_conf.crashReportConsent());
+  combo_crash_reports->setCurrentIndex(crash_idx >= 0 ? crash_idx : 1);
+  crash_row->addWidget(combo_crash_reports);
+  crash_row->addStretch();
+  vbox->addLayout(crash_row);
+#endif
+
   vbox->addStretch();
   return page;
 }
@@ -644,6 +658,11 @@ void SettingsDialog::apply() {
 #ifdef ENABLE_MPD_SUPPORT
   if (check_mpd_stop_on_close) {
     global_conf.saveMpdStopPlayerOnClose(check_mpd_stop_on_close->isChecked());
+  }
+#endif
+#ifdef ENABLE_CRASH_HANDLER
+  if (combo_crash_reports) {
+    local_conf.saveCrashReportConsent(combo_crash_reports->currentData().toString());
   }
 #endif
 

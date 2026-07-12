@@ -24,14 +24,14 @@
 MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local &local_c,
                        Shortcuts *shortcuts, Playback::Controller *player, ModusOperandi &modus,
                        SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle) :
-  QObject(win), window(win), global_conf(global_c), modus_operandi(modus) {
+  QObject(win), window(win), global_conf(global_c), local_conf(local_c), modus_operandi(modus) {
   auto *bar = window->menuBar();
 
   auto *app_menu = bar->addMenu(tr("mpz"));
 
   auto *about = app_menu->addAction(tr("About mpz"));
   about->setMenuRole(QAction::AboutRole);
-  connect(about, &QAction::triggered, this, [this]() { AboutDialog(global_conf).exec(); });
+  connect(about, &QAction::triggered, this, [this]() { AboutDialog(global_conf, local_conf).exec(); });
 
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
@@ -202,7 +202,7 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   });
 
   auto *feedback = help->addAction(tr("Send Feedback…"));
-  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
+  connect(feedback, &QAction::triggered, this, [this]() { FeedbackForm(local_conf).exec(); });
 
   auto *bug_report = help->addAction(tr("Report a Bug…"));
   connect(bug_report, &QAction::triggered, this, []() {

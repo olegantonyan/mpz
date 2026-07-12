@@ -49,6 +49,7 @@ private:
 
   QListWidget *list_mpris_blacklist = nullptr;
   QCheckBox *check_mpd_stop_on_close = nullptr;
+  QComboBox *combo_crash_reports = nullptr;
 
   QDialogButtonBox *button_box = nullptr;
 

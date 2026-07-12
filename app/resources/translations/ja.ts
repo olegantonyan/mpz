@@ -84,22 +84,22 @@
 <context>
     <name>CoverArt::Widget</name>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="39"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="37"/>
         <source>No cover art</source>
         <translation>アルバムアートがありません</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="51"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="49"/>
         <source>Nothing playing</source>
         <translation>再生していません</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="61"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="59"/>
         <source>Open in external viewer</source>
         <translation>外部ビューアで開く</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="70"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="68"/>
         <source>Track info</source>
         <translation>トラック情報</translation>
     </message>
@@ -230,16 +230,31 @@
     </message>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="66"/>
+        <source>Auto-send crash reports</source>
+        <translation>クラッシュレポートを自動送信する</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.ui" line="73"/>
         <source>Send</source>
         <translation>送信</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="27"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="35"/>
+        <source>Crash report</source>
+        <translation>クラッシュレポート</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="36"/>
+        <source>mpz closed unexpectedly last time. Send this report to help fix it?</source>
+        <translation>前回 mpz が予期せず終了しました。修正に役立てるため、このレポートを送信しますか？</translation>
+    </message>
+    <message>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="72"/>
         <source>Thanks for you feedback! (click again to close)</source>
         <translation>フィードバックありがとうございます！(再度クリックで閉じます)</translation>
     </message>
     <message>
-        <location filename="../../feedback_ui/feedbackform.cpp" line="58"/>
+        <location filename="../../feedback_ui/feedbackform.cpp" line="67"/>
         <source>Error occured, please try again</source>
         <translation>エラーが発生しました、再試行してください</translation>
     </message>
@@ -618,51 +633,51 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="238"/>
-        <location filename="../../mainwindow.cpp" line="272"/>
+        <location filename="../../mainwindow.cpp" line="250"/>
+        <location filename="../../mainwindow.cpp" line="284"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="239"/>
-        <location filename="../../mainwindow.cpp" line="271"/>
+        <location filename="../../mainwindow.cpp" line="251"/>
+        <location filename="../../mainwindow.cpp" line="283"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="240"/>
-        <location filename="../../mainwindow.cpp" line="273"/>
+        <location filename="../../mainwindow.cpp" line="252"/>
+        <location filename="../../mainwindow.cpp" line="285"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="270"/>
+        <location filename="../../mainwindow.cpp" line="282"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="363"/>
+        <location filename="../../mainwindow.cpp" line="375"/>
         <source>Album cover</source>
         <translation>アルバムアート</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="369"/>
+        <location filename="../../mainwindow.cpp" line="381"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="500"/>
-        <location filename="../../mainwindow.cpp" line="504"/>
+        <location filename="../../mainwindow.cpp" line="511"/>
+        <location filename="../../mainwindow.cpp" line="515"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="506"/>
+        <location filename="../../mainwindow.cpp" line="517"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="518"/>
+        <location filename="../../mainwindow.cpp" line="529"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
@@ -1021,13 +1036,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="292"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="293"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="506"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="520"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
@@ -1080,6 +1095,26 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="456"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>mpz 終了時に MPD の再生を停止</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
+        <source>Crash reports:</source>
+        <translation>クラッシュレポート:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="465"/>
+        <source>Send automatically</source>
+        <translation>自動的に送信</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <source>Ask after next crash</source>
+        <translation>次回のクラッシュ後に確認</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="467"/>
+        <source>Never send</source>
+        <translation>送信しない</translation>
     </message>
 </context>
 <context>
