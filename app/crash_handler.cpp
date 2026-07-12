@@ -23,6 +23,7 @@ namespace mpz {
 namespace {
 
 std::string g_log_path;
+std::string g_system_info;
 
 const char *signal_name(int signum) {
   switch (signum) {
@@ -46,6 +47,7 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   if (!ofs) return;
   ofs << "\n\n======== Fatal: " << reason << " @ " << std::time(nullptr)
       << " ========\n\n";
+  if (!g_system_info.empty()) ofs << g_system_info << "\n\n";
   trace.print(ofs);
 }
 
@@ -111,6 +113,10 @@ void set_crash_log_path(std::string path) {
 
 std::string crash_log_path() {
   return g_log_path;
+}
+
+void set_system_info(std::string info) {
+  g_system_info = std::move(info);
 }
 
 }

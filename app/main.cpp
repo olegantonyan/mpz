@@ -14,6 +14,7 @@
 #endif
 #ifdef ENABLE_CRASH_HANDLER
   #include "crash_handler.h"
+  #include "sysinfo.h"
 #endif
 #ifdef Q_OS_WIN
   #include "windows/windowstaskbar.h"
@@ -116,6 +117,9 @@ int main(int argc, char *argv[]) {
 #endif
   a.setApplicationVersion(version);
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::set_system_info(SysInfo::get().join("\n").toStdString());
+#endif
 
   auto arguments = args(argc, argv);
   if (arguments.size() == 1 && arguments.first() == "--version") {

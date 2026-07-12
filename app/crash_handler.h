@@ -21,6 +21,10 @@ void set_crash_log_path(std::string path);
 // Returns the crash-log file path set via set_crash_log_path(), or empty if unset.
 std::string crash_log_path();
 
+// Registers a pre-rendered system-info block written into each crash item.
+// Call once at startup after the application version is set. Safe to omit.
+void set_system_info(std::string info);
+
 }
 
 #endif
