@@ -4,8 +4,8 @@
 
 #include <QCloseEvent>
 
-FeedbackForm::FeedbackForm(Config::Global &global, QWidget *parent) :
-  QDialog(parent), ui(new Ui::FeedbackForm), global_conf(global), done(false) {
+FeedbackForm::FeedbackForm(Config::Local &local, QWidget *parent) :
+  QDialog(parent), ui(new Ui::FeedbackForm), local_conf(local), done(false) {
   ui->setupUi(this);
 
   ui->checkBoxSysinfo->setChecked(true);
@@ -36,7 +36,7 @@ void FeedbackForm::setCrashReport(const QString &crashText, const QString &crash
   ui->label->setText(tr("mpz closed unexpectedly last time. Send this report to help fix it?"));
   ui->textEditText->setPlainText(crashText);
   ui->lineEditAuthor->setText(QStringLiteral("auto-crash-report"));
-  ui->checkBoxAutoCrashReport->setChecked(global_conf.crashReportConsent() != QStringLiteral("disabled"));
+  ui->checkBoxAutoCrashReport->setChecked(local_conf.crashReportConsent() != QStringLiteral("disabled"));
   ui->checkBoxAutoCrashReport->setVisible(true);
 }
 
@@ -81,10 +81,10 @@ void FeedbackForm::persistConsent() {
   if (!crash_mode) {
     return;
   }
-  global_conf.saveCrashReportConsent(ui->checkBoxAutoCrashReport->isChecked()
+  local_conf.saveCrashReportConsent(ui->checkBoxAutoCrashReport->isChecked()
     ? QStringLiteral("enabled") : QStringLiteral("disabled"));
-  global_conf.saveLastReportedCrash(crash_id);
-  global_conf.sync();
+  local_conf.saveLastReportedCrash(crash_id);
+  local_conf.sync();
 }
 
 void FeedbackForm::closeEvent(QCloseEvent *event) {

@@ -546,11 +546,11 @@ void MainWindow::setupCrashReporter() {
   const CrashEntry entry = lastCrash(QString::fromUtf8(file.readAll()));
   file.close();
 
-  if (!entry.valid || entry.id == global_conf.lastReportedCrash()) {
+  if (!entry.valid || entry.id == local_conf.lastReportedCrash()) {
     return;
   }
 
-  const QString consent = global_conf.crashReportConsent();
+  const QString consent = local_conf.crashReportConsent();
   if (consent == QStringLiteral("disabled")) {
     return;
   }
@@ -560,8 +560,8 @@ void MainWindow::setupCrashReporter() {
     const QString id = entry.id;
     connect(crash_sender, &FeedbackSender::finished, this, [this, id](bool ok, const QString &) {
       if (ok) {
-        global_conf.saveLastReportedCrash(id);
-        global_conf.sync();
+        local_conf.saveLastReportedCrash(id);
+        local_conf.sync();
       }
     });
     crash_sender->submit(entry.text, QStringLiteral("auto-crash-report"), SysInfo::get().join(" | "));
@@ -569,7 +569,7 @@ void MainWindow::setupCrashReporter() {
   }
 
   QTimer::singleShot(0, this, [this, entry]() {
-    auto *form = new FeedbackForm(global_conf, this);
+    auto *form = new FeedbackForm(local_conf, this);
     form->setAttribute(Qt::WA_DeleteOnClose);
     form->setCrashReport(entry.text, entry.id);
     form->exec();

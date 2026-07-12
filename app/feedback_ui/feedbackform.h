@@ -3,7 +3,7 @@
 
 #include "loadingspinner.h"
 #include "feedback_ui/feedbacksender.h"
-#include "config/global.h"
+#include "config/local.h"
 
 #include <QDialog>
 
@@ -15,7 +15,7 @@ class FeedbackForm : public QDialog {
   Q_OBJECT
 
 public:
-  explicit FeedbackForm(Config::Global &global, QWidget *parent = nullptr);
+  explicit FeedbackForm(Config::Local &local, QWidget *parent = nullptr);
   ~FeedbackForm();
 
   void setCrashReport(const QString &crashText, const QString &crashId);
@@ -30,7 +30,7 @@ private:
   Ui::FeedbackForm *ui;
   LoadingSpinner *spinner;
   FeedbackSender sender;
-  Config::Global &global_conf;
+  Config::Local &local_conf;
   bool done;
   bool crash_mode = false;
   QString crash_id;

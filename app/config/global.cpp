@@ -42,22 +42,6 @@ namespace Config {
     storage.set("disable_auto_update_check", Config::Value(arg));
   }
 
-  QString Global::crashReportConsent() const {
-    return storage.get("crash_report_consent").get<QString>();
-  }
-
-  void Global::saveCrashReportConsent(const QString &arg) {
-    storage.set("crash_report_consent", Config::Value(arg));
-  }
-
-  QString Global::lastReportedCrash() const {
-    return storage.get("last_reported_crash").get<QString>();
-  }
-
-  void Global::saveLastReportedCrash(const QString &arg) {
-    storage.set("last_reported_crash", Config::Value(arg));
-  }
-
   int Global::streamBufferSize() const {
     return storage.get("stream_buffer_size").get<int>();
   }

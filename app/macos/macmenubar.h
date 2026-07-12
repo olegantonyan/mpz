@@ -31,6 +31,7 @@ public:
 private:
   MainWindow *window;
   Config::Global &global_conf;
+  Config::Local &local_conf;
   ModusOperandi &modus_operandi;
 };
 

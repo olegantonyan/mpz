@@ -2,6 +2,7 @@
 #define ABOUTDIALOG_H
 
 #include "config/global.h"
+#include "config/local.h"
 
 #include <QDialog>
 
@@ -12,7 +13,7 @@ namespace Ui {
 class AboutDialog : public QDialog {
   Q_OBJECT
 public:
-  explicit AboutDialog(Config::Global &global_c, QWidget *parent = nullptr);
+  explicit AboutDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent = nullptr);
   ~AboutDialog();
 
   static void show_changelog();
@@ -29,7 +30,7 @@ private slots:
 
 private:
   Ui::AboutDialog *ui;
-  Config::Global &global_conf;
+  Config::Local &local_conf;
 
   int version_shift_clicks_ = 0;
 

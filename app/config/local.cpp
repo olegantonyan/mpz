@@ -212,6 +212,22 @@ namespace Config {
     return storage.set("output_device_id", arg);
   }
 
+  QString Local::crashReportConsent() const {
+    return storage.get("crash_report_consent").get<QString>();
+  }
+
+  void Local::saveCrashReportConsent(const QString &arg) {
+    storage.set("crash_report_consent", Config::Value(arg));
+  }
+
+  QString Local::lastReportedCrash() const {
+    return storage.get("last_reported_crash").get<QString>();
+  }
+
+  void Local::saveLastReportedCrash(const QString &arg) {
+    storage.set("last_reported_crash", Config::Value(arg));
+  }
+
   Value Local::serializeTrack(const Track &t) const {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();
