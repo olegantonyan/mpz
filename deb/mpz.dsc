@@ -1,9 +1,9 @@
 Format: 1.0
 Source: mpz
-Version: 2.0.16-0
+Version: 2.0.17-0
 Binary: mpz
 Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
 Architecture: amd64
 Homepage: https://github.com/olegantonyan/mpz
 Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 8.0.0), build-essential, cmake, qt5-qmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev
+Build-Depends: debhelper (>= 8.0.0), build-essential, cmake, qt5-qmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev, libqt5svg5-dev
