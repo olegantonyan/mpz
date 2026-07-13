@@ -3,7 +3,7 @@
 [![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
 [![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html)
 
-# Folder player for big local collections
+# Folder player for big local music collections
 
 ![image](https://raw.githubusercontent.com/olegantonyan/mpz/gh-pages/images/mpz-workflow.apng)
 
