@@ -1,18 +1,18 @@
 # mpz
 
-> Music player for large local collections. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> A folder player for large local music collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information so a single fetch is enough to answer common questions about mpz.
 
 ## Overview
 
-mpz treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar — mpz keeps only the features the author has been using daily for many years, with no plugin system or extensive customization layer.
+mpz is a folder player: it treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar — mpz keeps only the features the author has been using daily for many years, with no plugin system or extensive customization layer.
 
 Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open source under GPL-3.0. Cross-platform: Linux, macOS, and Windows.
 
 ## Features
 
-- Folder-based library — no global indexing step
+- Folder player — play music straight from your folders, with no global indexing step
 - 3-column UI: directory tree, playlists, tracks
 - Middle-click a folder to create a playlist from it
 - Drag and drop files and folders from your file manager to add them
@@ -50,7 +50,9 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 
 ## FAQ
 
-**What is mpz?** A free and open-source music player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.
+**What is mpz?** A free and open-source folder player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks.
+
+**Is mpz a folder player?** Yes. mpz is a folder player: it plays music straight from your folder structure instead of importing it into a database. Middle-click any folder to turn it into a playlist — your directory tree is the library, with no global indexing step.
 
 **Is mpz a Foobar2000 alternative?** Sort of. mpz is inspired by Foobar2000 — especially its "Album list" — but it isn't a Foobar2000 clone; a faithful cross-platform clone isn't feasible and isn't the goal. It keeps the features the author has used daily for years, in a native, folder-based player that runs on Linux, macOS, and Windows, whereas Foobar2000 is Windows-only. If you organize your music in folders and want a Foobar2000-style workflow on Linux or macOS, mpz may suit you.
 
