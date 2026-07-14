@@ -23,8 +23,8 @@ namespace DirectoryUi {
     date_p.setData("Date");
     menu.addAction(&date_p);
 
-    QAction date_n("- Date");
-    date_n.setData("- Date");
+    QAction date_n("-Date");
+    date_n.setData("-Date");
     menu.addAction(&date_n);
 
     int menu_width = menu.sizeHint().width();
