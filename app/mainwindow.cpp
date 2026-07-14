@@ -17,6 +17,8 @@
 #include <QHash>
 #include <QTimer>
 #include <QDockWidget>
+#include <QToolBar>
+#include <QAction>
 #include <QFontDatabase>
 #include <QComboBox>
 #include <QAbstractItemView>
@@ -106,6 +108,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
 
+  setupControlsToolBar();
   setupDockWidgets();
   setupUiSettings();
 
@@ -381,6 +384,29 @@ void MainWindow::setupVolumeControl() {
   connect(player, &Playback::Controller::volumeChanged, volume, &VolumeControl::setValue);
 }
 
+void MainWindow::setupControlsToolBar() {
+  controls_toolbar = new QToolBar(this);
+  controls_toolbar->setObjectName("controlsToolBar");
+  controls_toolbar->setFloatable(false);
+  controls_toolbar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+  controls_toolbar->setMovable(local_conf.toolbarMovable());
+  controls_toolbar->addWidget(ui->topControls);
+  addToolBar(Qt::TopToolBarArea, controls_toolbar);
+
+  lock_toolbar_action = new QAction(tr("Lock toolbar"), this);
+  lock_toolbar_action->setCheckable(true);
+  lock_toolbar_action->setChecked(!local_conf.toolbarMovable());
+  connect(lock_toolbar_action, &QAction::toggled, this, [this](bool locked) {
+    controls_toolbar->setMovable(!locked);
+    local_conf.saveToolbarMovable(!locked);
+    local_conf.sync();
+  });
+}
+
+QMenu *MainWindow::createPopupMenu() {
+  return nullptr;
+}
+
 void MainWindow::setupDockWidgets() {
   setDockNestingEnabled(true);
 
@@ -427,7 +453,7 @@ void MainWindow::setupMainMenu() {
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
-  main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction() });
+  main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action });
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
@@ -779,6 +805,6 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 #ifdef Q_OS_MACOS
 void MainWindow::setupMacMenuBar() {
   mac_menubar = new MacMenuBar(this, global_conf, local_conf, shortcuts, player, modus_operandi, sort_menu,
-                               cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction());
+                               cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action);
 }
 #endif

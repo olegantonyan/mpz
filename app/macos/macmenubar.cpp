@@ -23,7 +23,7 @@
 
 MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local &local_c,
                        Shortcuts *shortcuts, Playback::Controller *player, ModusOperandi &modus,
-                       SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle) :
+                       SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle, QAction *lock_toggle) :
   QObject(win), window(win), global_conf(global_c), local_conf(local_c), modus_operandi(modus) {
   auto *bar = window->menuBar();
 
@@ -138,6 +138,7 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
 
   view->addAction(cover_toggle);
   view->addAction(lyrics_toggle);
+  view->addAction(lock_toggle);
 
   view->addSeparator();
 

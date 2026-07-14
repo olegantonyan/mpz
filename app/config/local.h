@@ -22,6 +22,9 @@ namespace Config {
     bool saveSplitterSizes(const QList<int> &list);
     QList<int> splitterSizes() const;
 
+    bool toolbarMovable() const;
+    bool saveToolbarMovable(bool v);
+
     QList<std::shared_ptr<Playlist::Playlist>> playlists() const;
     bool savePlaylists(QList<std::shared_ptr<Playlist::Playlist>> &list);
 

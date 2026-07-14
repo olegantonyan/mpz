@@ -40,6 +40,14 @@ namespace Config {
     return storage.getIntList("splitter_sizes");
   }
 
+  bool Local::toolbarMovable() const {
+    return storage.get("toolbar_movable").get<bool>();
+  }
+
+  bool Local::saveToolbarMovable(bool v) {
+    return storage.set("toolbar_movable", Config::Value(v));
+  }
+
   QList<std::shared_ptr<Playlist::Playlist> > Local::playlists() const {
     auto raw = storage.get("playlists");
     if (raw.listType() != Config::Value::Map) {

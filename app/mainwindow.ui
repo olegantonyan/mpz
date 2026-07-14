@@ -16,7 +16,26 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <widget class="QWidget" name="topControls" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
       <item>
        <widget class="QToolButton" name="stopButton">
         <property name="toolTip">
@@ -128,7 +147,8 @@
         </property>
        </widget>
       </item>
-     </layout>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QSplitter" name="splitter">

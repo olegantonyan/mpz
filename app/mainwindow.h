@@ -54,6 +54,9 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class QDockWidget;
+class QMenu;
+class QToolBar;
+class QAction;
 namespace CoverArt { class Widget; }
 namespace Lyrics { class Widget; }
 
@@ -120,6 +123,8 @@ private:
   SortUi::SortMenu *sort_menu = nullptr;
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
+  QToolBar *controls_toolbar = nullptr;
+  QAction *lock_toolbar_action = nullptr;
   QDockWidget *cover_dock = nullptr;
   QDockWidget *lyrics_dock = nullptr;
   CoverArt::Widget *cover_widget = nullptr;
@@ -136,6 +141,7 @@ private:
   void setupPerPlaylistOrderCombobox();
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
+  void setupControlsToolBar();
   void setupDockWidgets();
   void openTrackInfo(const Track &track);
   void setupTrayIcon();
@@ -176,5 +182,6 @@ private:
 
 protected:
   void closeEvent(QCloseEvent *event) override;
+  QMenu *createPopupMenu() override;
 };
 #endif // MAINWINDOW_H

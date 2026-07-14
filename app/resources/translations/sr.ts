@@ -401,73 +401,73 @@
         <translation>Сортирање</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="144"/>
+        <location filename="../../macos/macmenubar.cpp" line="145"/>
         <source>Jump to Playing Track</source>
         <translation>Пређите на нумеру за репродукцију</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="148"/>
+        <location filename="../../macos/macmenubar.cpp" line="149"/>
         <source>Playback Log</source>
         <translation>Дневник репродукције</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="152"/>
+        <location filename="../../macos/macmenubar.cpp" line="153"/>
         <source>Keyboard Shortcuts</source>
         <translation>Пречице на тастатури</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="158"/>
-        <location filename="../../macos/macmenubar.cpp" line="168"/>
+        <location filename="../../macos/macmenubar.cpp" line="159"/>
+        <location filename="../../macos/macmenubar.cpp" line="169"/>
         <source>Enter Full Screen</source>
         <translation>Пређи у цео екран</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="168"/>
+        <location filename="../../macos/macmenubar.cpp" line="169"/>
         <source>Exit Full Screen</source>
         <translation>Изађи из целог екрана</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="171"/>
+        <location filename="../../macos/macmenubar.cpp" line="172"/>
         <source>Window</source>
         <translation>Прозор</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="173"/>
+        <location filename="../../macos/macmenubar.cpp" line="174"/>
         <source>Minimize</source>
         <translation>Умањи</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="177"/>
+        <location filename="../../macos/macmenubar.cpp" line="178"/>
         <source>Zoom</source>
         <translation>Зумирај</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="188"/>
+        <location filename="../../macos/macmenubar.cpp" line="189"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="192"/>
+        <location filename="../../macos/macmenubar.cpp" line="193"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="194"/>
+        <location filename="../../macos/macmenubar.cpp" line="195"/>
         <source>mpz Website</source>
         <translation>mpz веб-сајт</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="199"/>
+        <location filename="../../macos/macmenubar.cpp" line="200"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="204"/>
+        <location filename="../../macos/macmenubar.cpp" line="205"/>
         <source>Send Feedback…</source>
         <translation>Пошаљи повратне информације…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="207"/>
+        <location filename="../../macos/macmenubar.cpp" line="208"/>
         <source>Report a Bug…</source>
         <translation>Пријави грешку…</translation>
     </message>
@@ -518,166 +518,171 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="23"/>
+        <location filename="../../mainwindow.ui" line="42"/>
         <source>Stop</source>
         <translation>Заустави</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="30"/>
+        <location filename="../../mainwindow.ui" line="49"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="37"/>
+        <location filename="../../mainwindow.ui" line="56"/>
         <source>Play</source>
         <translation>Пусти</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="44"/>
+        <location filename="../../mainwindow.ui" line="63"/>
         <source>Previous track</source>
         <translation>Претходна нумера</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="51"/>
+        <location filename="../../mainwindow.ui" line="70"/>
         <source>Next track</source>
         <translation>Следећа нумера</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="68"/>
+        <location filename="../../mainwindow.ui" line="87"/>
         <source>Track duration</source>
         <translation>Трајање нумере</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="90"/>
+        <location filename="../../mainwindow.ui" line="109"/>
         <source>Background operation running</source>
         <translation>Радња у позадини је покренута</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="97"/>
+        <location filename="../../mainwindow.ui" line="116"/>
         <source>Sort</source>
         <translation>Сортирање</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="107"/>
+        <location filename="../../mainwindow.ui" line="126"/>
         <source>Volume</source>
         <translation>Гласноћа</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="127"/>
+        <location filename="../../mainwindow.ui" line="146"/>
         <source>Main menu</source>
         <translation>Главни мени</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="148"/>
+        <location filename="../../mainwindow.ui" line="168"/>
         <source>Configure library folders</source>
         <translation>Конфигуришите фасцикле библиотеке</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="120"/>
+        <location filename="../../mainwindow.ui" line="139"/>
         <source>Output</source>
         <translation>Аудиоизлаз</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="158"/>
+        <location filename="../../mainwindow.ui" line="178"/>
         <source>Select library folder</source>
         <translation>Изаберите фасциклу библиотеке</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="174"/>
+        <location filename="../../mainwindow.ui" line="194"/>
         <source>Filter library</source>
         <translation>Филтер библиотеке</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="188"/>
+        <location filename="../../mainwindow.ui" line="208"/>
         <source>Filter playlists</source>
         <translation>Филтрирајте листе песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="211"/>
+        <location filename="../../mainwindow.ui" line="231"/>
         <source>Filter tracks</source>
         <translation>Филтер нумера</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="218"/>
+        <location filename="../../mainwindow.ui" line="238"/>
         <source>Playback follows selection</source>
         <translation>Репродукција следи избор</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="221"/>
+        <location filename="../../mainwindow.ui" line="241"/>
         <source>Playback follows cursor</source>
         <translation>Репродукција прати курсор</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="228"/>
+        <location filename="../../mainwindow.ui" line="248"/>
         <source>Order:</source>
         <translation>Редослед:</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="235"/>
+        <location filename="../../mainwindow.ui" line="255"/>
         <source>global</source>
         <translation>глобално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="242"/>
+        <location filename="../../mainwindow.ui" line="262"/>
         <source>Default playback order</source>
         <translation>Подразумевани редослед репродукције</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="249"/>
+        <location filename="../../mainwindow.ui" line="269"/>
         <source>playlist</source>
         <translation>плејлиста</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="256"/>
+        <location filename="../../mainwindow.ui" line="276"/>
         <source>Override playback for current playlist</source>
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="261"/>
-        <location filename="../../mainwindow.cpp" line="296"/>
+        <location filename="../../mainwindow.cpp" line="264"/>
+        <location filename="../../mainwindow.cpp" line="299"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="262"/>
-        <location filename="../../mainwindow.cpp" line="295"/>
+        <location filename="../../mainwindow.cpp" line="265"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="263"/>
-        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="266"/>
+        <location filename="../../mainwindow.cpp" line="300"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="294"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="388"/>
+        <location filename="../../mainwindow.cpp" line="396"/>
+        <source>Lock toolbar</source>
+        <translation>Закључај траку с алаткама</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="414"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="394"/>
+        <location filename="../../mainwindow.cpp" line="420"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="524"/>
-        <location filename="../../mainwindow.cpp" line="528"/>
+        <location filename="../../mainwindow.cpp" line="550"/>
+        <location filename="../../mainwindow.cpp" line="554"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="530"/>
+        <location filename="../../mainwindow.cpp" line="556"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="542"/>
+        <location filename="../../mainwindow.cpp" line="568"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>

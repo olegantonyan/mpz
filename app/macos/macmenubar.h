@@ -26,7 +26,7 @@ class MacMenuBar : public QObject {
 public:
   MacMenuBar(MainWindow *window, Config::Global &global_c, Config::Local &local_c,
              Shortcuts *shortcuts, Playback::Controller *player, ModusOperandi &modus,
-             SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle);
+             SortUi::SortMenu *sort_menu, QAction *cover_toggle, QAction *lyrics_toggle, QAction *lock_toggle);
 
 private:
   MainWindow *window;
