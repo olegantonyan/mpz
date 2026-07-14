@@ -633,56 +633,56 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="264"/>
-        <location filename="../../mainwindow.cpp" line="299"/>
+        <location filename="../../mainwindow.cpp" line="272"/>
+        <location filename="../../mainwindow.cpp" line="307"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="265"/>
-        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="273"/>
+        <location filename="../../mainwindow.cpp" line="306"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="266"/>
-        <location filename="../../mainwindow.cpp" line="300"/>
+        <location filename="../../mainwindow.cpp" line="274"/>
+        <location filename="../../mainwindow.cpp" line="308"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="305"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="399"/>
+        <location filename="../../mainwindow.cpp" line="407"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="417"/>
+        <location filename="../../mainwindow.cpp" line="425"/>
         <source>Album cover</source>
         <translation>アルバムアート</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="423"/>
+        <location filename="../../mainwindow.cpp" line="431"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="547"/>
-        <location filename="../../mainwindow.cpp" line="551"/>
+        <location filename="../../mainwindow.cpp" line="556"/>
+        <location filename="../../mainwindow.cpp" line="560"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="553"/>
+        <location filename="../../mainwindow.cpp" line="562"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="565"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
@@ -1628,7 +1628,7 @@
     <name>TrayIcon</name>
     <message>
         <location filename="../../trayicon.cpp" line="16"/>
-        <location filename="../../trayicon.cpp" line="94"/>
+        <location filename="../../trayicon.cpp" line="97"/>
         <source>Stopped</source>
         <translation>停止</translation>
     </message>
@@ -1638,37 +1638,42 @@
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="21"/>
+        <location filename="../../trayicon.cpp" line="20"/>
+        <source>Show mpz</source>
+        <translation>mpz を表示</translation>
+    </message>
+    <message>
+        <location filename="../../trayicon.cpp" line="22"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="23"/>
+        <location filename="../../trayicon.cpp" line="24"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="25"/>
+        <location filename="../../trayicon.cpp" line="26"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="27"/>
+        <location filename="../../trayicon.cpp" line="28"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="29"/>
+        <location filename="../../trayicon.cpp" line="30"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="84"/>
+        <location filename="../../trayicon.cpp" line="87"/>
         <source>Playing</source>
         <translation>再生中</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="104"/>
+        <location filename="../../trayicon.cpp" line="107"/>
         <source>Paused</source>
         <translation>一時停止中</translation>
     </message>

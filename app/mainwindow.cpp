@@ -170,13 +170,17 @@ MainWindow::~MainWindow() {
 
 void MainWindow::toggleHidden() {
   if (isHidden()) {
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    show();
-    raise();
-    activateWindow();
+    showWindow();
   } else {
     hide();
   }
+}
+
+void MainWindow::showWindow() {
+  setWindowState(windowState() & ~Qt::WindowMinimized);
+  show();
+  raise();
+  activateWindow();
 }
 
 int MainWindow::streamBuffer() {
@@ -484,6 +488,7 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
+  connect(trayicon, &TrayIcon::showWindowTriggered, this, &MainWindow::showWindow);
   connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
 }
 

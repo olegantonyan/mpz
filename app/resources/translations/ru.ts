@@ -633,56 +633,56 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="264"/>
-        <location filename="../../mainwindow.cpp" line="299"/>
+        <location filename="../../mainwindow.cpp" line="272"/>
+        <location filename="../../mainwindow.cpp" line="307"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="265"/>
-        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="273"/>
+        <location filename="../../mainwindow.cpp" line="306"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="266"/>
-        <location filename="../../mainwindow.cpp" line="300"/>
+        <location filename="../../mainwindow.cpp" line="274"/>
+        <location filename="../../mainwindow.cpp" line="308"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="305"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="399"/>
+        <location filename="../../mainwindow.cpp" line="407"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="417"/>
+        <location filename="../../mainwindow.cpp" line="425"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="423"/>
+        <location filename="../../mainwindow.cpp" line="431"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="547"/>
-        <location filename="../../mainwindow.cpp" line="551"/>
+        <location filename="../../mainwindow.cpp" line="556"/>
+        <location filename="../../mainwindow.cpp" line="560"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="553"/>
+        <location filename="../../mainwindow.cpp" line="562"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="565"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -1630,7 +1630,7 @@
     <name>TrayIcon</name>
     <message>
         <location filename="../../trayicon.cpp" line="16"/>
-        <location filename="../../trayicon.cpp" line="94"/>
+        <location filename="../../trayicon.cpp" line="97"/>
         <source>Stopped</source>
         <translation>Остановлено</translation>
     </message>
@@ -1640,37 +1640,42 @@
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="21"/>
+        <location filename="../../trayicon.cpp" line="20"/>
+        <source>Show mpz</source>
+        <translation>Показать mpz</translation>
+    </message>
+    <message>
+        <location filename="../../trayicon.cpp" line="22"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="23"/>
+        <location filename="../../trayicon.cpp" line="24"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="25"/>
+        <location filename="../../trayicon.cpp" line="26"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="27"/>
+        <location filename="../../trayicon.cpp" line="28"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="29"/>
+        <location filename="../../trayicon.cpp" line="30"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="84"/>
+        <location filename="../../trayicon.cpp" line="87"/>
         <source>Playing</source>
         <translation>Воспроизводится</translation>
     </message>
     <message>
-        <location filename="../../trayicon.cpp" line="104"/>
+        <location filename="../../trayicon.cpp" line="107"/>
         <source>Paused</source>
         <translation>На паузе</translation>
     </message>
