@@ -4,6 +4,7 @@
 
 - Controls bar (buttons, seekbar, menu) now spans the full window width, with cover and lyrics panels below it
 - Controls bar can be moved to the top or bottom and locked in place from the menu
+- macOS: optional menu bar icon
 
 ### Fixed
 

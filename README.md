@@ -29,7 +29,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Playback order per playlist and global: sequential, random, or no-loop;
 - Track sorting presets;
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog;
-- Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray with playback controls;
+- Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar;
 - Update check on Windows, macOS, and Linux AppImage;
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation));
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation);

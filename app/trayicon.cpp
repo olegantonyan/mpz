@@ -6,7 +6,13 @@
 #include <QStyle>
 
 TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
+#ifdef Q_OS_MACOS
+  QIcon icon(QStringLiteral(":/app/resources/icons/mpz-template.svg"));
+  icon.setIsMask(true);
+  trayicon = new QSystemTrayIcon(icon, parent);
+#else
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
+#endif
   trayicon->setToolTip(tr("Stopped"));
   menu = new QMenu(parent);
 

@@ -462,17 +462,12 @@ void MainWindow::setupMainMenu() {
 }
 
 void MainWindow::setupTrayIcon() {
-#ifdef Q_OS_MACOS
-  // No Qt status item on macOS: Control Center / media keys (MacMediaControls),
-  // the Dock menu (MacDockMenu) and the native menu bar already cover it.
-  return;
-#else
-  if (!global_conf.trayIconEnabled()) {
-    if (trayicon != nullptr) {
-      trayicon->hide();
-      trayicon->deleteLater();
-    }
+  if (trayicon != nullptr) {
+    trayicon->hide();
+    trayicon->deleteLater();
     trayicon = nullptr;
+  }
+  if (!global_conf.trayIconEnabled()) {
     return;
   }
   trayicon = new TrayIcon(this);
@@ -490,7 +485,6 @@ void MainWindow::setupTrayIcon() {
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
   connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
-#endif
 }
 
 void MainWindow::setupPlaybackDispatch() {
