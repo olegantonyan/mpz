@@ -656,33 +656,33 @@
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="396"/>
+        <location filename="../../mainwindow.cpp" line="399"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="414"/>
+        <location filename="../../mainwindow.cpp" line="417"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="420"/>
+        <location filename="../../mainwindow.cpp" line="423"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="550"/>
-        <location filename="../../mainwindow.cpp" line="554"/>
+        <location filename="../../mainwindow.cpp" line="553"/>
+        <location filename="../../mainwindow.cpp" line="557"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="556"/>
+        <location filename="../../mainwindow.cpp" line="559"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="568"/>
+        <location filename="../../mainwindow.cpp" line="571"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>

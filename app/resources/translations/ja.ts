@@ -656,33 +656,33 @@
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="396"/>
+        <location filename="../../mainwindow.cpp" line="399"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="414"/>
+        <location filename="../../mainwindow.cpp" line="417"/>
         <source>Album cover</source>
         <translation>アルバムアート</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="420"/>
+        <location filename="../../mainwindow.cpp" line="423"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="550"/>
-        <location filename="../../mainwindow.cpp" line="554"/>
+        <location filename="../../mainwindow.cpp" line="553"/>
+        <location filename="../../mainwindow.cpp" line="557"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="556"/>
+        <location filename="../../mainwindow.cpp" line="559"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="568"/>
+        <location filename="../../mainwindow.cpp" line="571"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
