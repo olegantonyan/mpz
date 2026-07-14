@@ -49,7 +49,7 @@ Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format 
 Install from the omnipackage repositories (x86_64 arch):
 
 * [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended)
-* [unstable builds aka "next"](https://repositories.omnipackage.org/mpz/next/install.html).
+* [unstable aka "next"](https://repositories.omnipackage.org/mpz/next/install.html)
 
 <details>
 <summary>Already using the old Open Build Service repositories?</summary>
