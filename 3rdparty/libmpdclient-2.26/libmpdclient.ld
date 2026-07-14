@@ -20,6 +20,7 @@ global:
 	mpd_send_disallowed_commands;
 	mpd_send_list_url_schemes;
 	mpd_send_list_tag_types;
+	mpd_send_list_tag_types_available;
 	mpd_send_disable_tag_types;
 	mpd_run_disable_tag_types;
 	mpd_send_enable_tag_types;
@@ -401,10 +402,13 @@ global:
 	mpd_song_dup;
 	mpd_song_get_uri;
 	mpd_song_get_tag;
+	mpd_song_get_real_uri;
 	mpd_song_get_duration;
 	mpd_song_get_duration_ms;
 	mpd_song_get_start;
+	mpd_song_get_start_ms;
 	mpd_song_get_end;
+	mpd_song_get_end_ms;
 	mpd_song_get_last_modified;
 	mpd_song_get_added;
 	mpd_song_set_pos;
@@ -467,6 +471,20 @@ global:
 	mpd_parse_single_state;
 	mpd_lookup_consume_state;
 	mpd_parse_consume_state;
+
+	/* mpd/stringnormalization.h */
+	mpd_stringnormalization_name;
+	mpd_stringnormalization_name_parse;
+	mpd_send_list_stringnormalization;
+	mpd_send_list_stringnormalization_available;
+	mpd_send_disable_stringnormalization;
+	mpd_run_disable_stringnormalization;
+	mpd_send_enable_stringnormalization;
+	mpd_run_enable_stringnormalization;
+	mpd_send_clear_stringnormalization;
+	mpd_run_clear_stringnormalization;
+	mpd_send_all_stringnormalization;
+	mpd_run_all_stringnormalization;
 
 	/* mpd/tag.h */
 	mpd_tag_name;
@@ -539,15 +557,15 @@ global:
 	mpd_send_binarylimit;
 	mpd_run_binarylimit;
 
-    /* mpd/albumart.h */
-    mpd_send_albumart;
-    mpd_recv_albumart;
-    mpd_run_albumart;
+	/* mpd/albumart.h */
+	mpd_send_albumart;
+	mpd_recv_albumart;
+	mpd_run_albumart;
 
-    /* mpd/readpicture.h */
-    mpd_send_readpicture;
-    mpd_recv_readpicture;
-    mpd_run_readpicture;
+	/* mpd/readpicture.h */
+	mpd_send_readpicture;
+	mpd_recv_readpicture;
+	mpd_run_readpicture;
 
 	/* mpd/position.h */
 	mpd_position_whence_char;

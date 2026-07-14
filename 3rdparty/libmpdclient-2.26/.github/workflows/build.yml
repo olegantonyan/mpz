@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
@@ -52,14 +52,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: macos
 
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v5
 
       - name: Install dependencies
         run: |
@@ -79,7 +79,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Meson Build
         uses: BSFishy/meson-build@v1.0.3
@@ -94,7 +94,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Add VisualStudio command line tools into path
         uses: ilammy/msvc-dev-cmd@v1
@@ -104,6 +104,6 @@ jobs:
         with:
           action: build
           directory: output
-          setup-options: -Ddocumentation=false
+          setup-options: -Ddefault_library=static -Ddocumentation=false
           options: --verbose
           meson-version: 1.3.0

@@ -1,3 +1,18 @@
+libmpdclient 2.26 (2026/06/30)
+* fix NULL pointer dereference in mpd_song_dup() (2.25 regression)
+
+libmpdclient 2.25 (2026/06/17)
+* fix typos in MPD_STICKER_SORT_UNKOWN and MPD_STICKER_SORT_UNKOWN
+* support MPD protocol 0.25
+  - song properties "RealUri", "start_ms", "end_ms"
+  - tag "DiscSubtitle"
+* switch to C11
+
+libmpdclient 2.24 (2025/08/23)
+* fix missing "mpd_send_list_tag_types_available" in libmpdclient.ld
+* support MPD protocol 0.25
+  - stringnormalization
+
 libmpdclient 2.23 (2025/06/24)
 * support MPD protocol 0.24.0
   - allow window for listplaylist and listplaylistinfo

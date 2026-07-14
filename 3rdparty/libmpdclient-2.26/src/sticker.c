@@ -142,11 +142,18 @@ mpd_parse_sticker(const char *input, size_t *name_length_r)
 	return eq + 1;
 }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+/* to allow casting the "const" away (see code comment inside
+   mpd_recv_sticker()) */
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
+
 struct mpd_pair *
 mpd_recv_sticker(struct mpd_connection *connection)
 {
 	struct mpd_pair *pair;
-	char *eq;
+	const char *eq;
 
 	pair = mpd_recv_pair_named(connection, "sticker");
 	if (pair == NULL)
@@ -159,7 +166,7 @@ mpd_recv_sticker(struct mpd_connection *connection)
 		/* we shouldn't modify a const string, but in this
 		   case, we know that this points to the writable
 		   input buffer */
-		*eq = 0;
+		*(char *)eq = 0;
 		pair->value = eq + 1;
 	} else
 		/* malformed response?  what to do now?  pretend
@@ -168,6 +175,10 @@ mpd_recv_sticker(struct mpd_connection *connection)
 
 	return pair;
 }
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 void
 mpd_return_sticker(struct mpd_connection *connection, struct mpd_pair *pair)
@@ -251,7 +262,7 @@ static const char *get_sticker_oper_str(enum mpd_sticker_operator oper) {
 	case MPD_STICKER_OP_LT_INT:      return "lt";
 	case MPD_STICKER_OP_CONTAINS:    return "contains";
 	case MPD_STICKER_OP_STARTS_WITH: return "starts_with";
-	case MPD_STICKER_OP_UNKOWN:      return NULL;
+	case MPD_STICKER_OP_UNKNOWN:     return NULL;
 	}
 	return NULL;
 }
@@ -293,7 +304,7 @@ static const char *get_sticker_sort_name(enum mpd_sticker_sort sort) {
 	case MPD_STICKER_SORT_URI:       return "uri";
 	case MPD_STICKER_SORT_VALUE:     return "value";
 	case MPD_STICKER_SORT_VALUE_INT: return "value_int";
-	case MPD_STICKER_SORT_UNKOWN:    return NULL;
+	case MPD_STICKER_SORT_UNKNOWN:   return NULL;
 	}
 	return NULL;
 }

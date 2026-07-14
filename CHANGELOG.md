@@ -6,6 +6,8 @@
 
 ### Misc
 
+- vendored libmpdclient updated to 2.26
+
 ## [2.0.16] - 2026-07-13
 
 ### Added

@@ -1,7 +1,10 @@
-set(LIBMPDCLIENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmpdclient-2.23)
+set(LIBMPDCLIENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libmpdclient-2.26)
+set(MAJOR_VERSION 2)
+set(MINOR_VERSION 26)
+set(PATCH_VERSION 0)
+
 message(STATUS "using vendored libmpdclient from ${LIBMPDCLIENT_DIR}")
 
-set(MPDCLIENT_VERSION "2.23")
 # Generate config.h
 include(CheckSymbolExists)
 include(CheckFunctionExists)

@@ -1,7 +1,7 @@
-project('libmpdclient', 'c', version: '2.23',
+project('libmpdclient', 'c', version: '2.26',
   meson_version: '>= 0.56.0',
   default_options: [
-    'c_std=c99',
+    'c_std=c11',
     'warning_level=3',
   ],
   license: 'BSD',
@@ -155,6 +155,7 @@ libmpdclient = library('mpdclient',
   'src/albumart.c',
   'src/readpicture.c',
   'src/position.c',
+  'src/stringnormalization.c',
   link_depends: [
     'libmpdclient.ld'
   ],
