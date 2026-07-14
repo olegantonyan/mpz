@@ -99,10 +99,16 @@ namespace PlaylistUi {
       return track.artist();
     } else if (fld == "album") {
       return track.album();
+    } else if (fld == "album_artist") {
+      return track.album_artist();
+    } else if (fld == "genre") {
+      return track.genre();
     } else if (fld == "title") {
       return track.title();
     } else if (fld == "year" && track.year() > 0) {
       return QString::number(track.year());
+    } else if (fld == "disc_number" && track.disc_number() > 0) {
+      return QString::number(track.disc_number());
     } else if (fld == "length") {
       return track.formattedDuration();
     } else if (fld == "path") {

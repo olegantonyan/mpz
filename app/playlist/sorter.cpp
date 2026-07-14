@@ -40,6 +40,12 @@ namespace Playlist {
       result = compare_artist(t1, t2);
     } else if (attr == "ALBUM") {
       result = compare_album(t1, t2);
+    } else if (attr == "ALBUMARTIST") {
+      result = compare_album_artist(t1, t2);
+    } else if (attr == "GENRE") {
+      result = compare_genre(t1, t2);
+    } else if (attr == "DISCNUMBER") {
+      result = compare_disc_number(t1, t2);
     } else if (attr == "YEAR") {
       result = compare_year(t1, t2);
     } else if (attr == "TRACKNUMBER") {
@@ -91,5 +97,22 @@ namespace Playlist {
 
   int Sorter::compare_dir(const Track &t1, const Track &t2) const {
     return -QString::localeAwareCompare(t1.dir(), t2.dir());
+  }
+
+  int Sorter::compare_album_artist(const Track &t1, const Track &t2) const {
+    return -QString::localeAwareCompare(t1.album_artist(), t2.album_artist());
+  }
+
+  int Sorter::compare_genre(const Track &t1, const Track &t2) const {
+    return -QString::localeAwareCompare(t1.genre(), t2.genre());
+  }
+
+  int Sorter::compare_disc_number(const Track &t1, const Track &t2) const {
+    if (t1.disc_number() < t2.disc_number()) {
+      return 1;
+    } else if (t1.disc_number() > t2.disc_number()) {
+      return -1;
+    }
+    return 0;
   }
 }

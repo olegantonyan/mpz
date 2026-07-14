@@ -26,6 +26,9 @@ namespace Playlist {
     int compare_title(const Track &t1, const Track &t2) const;
     int compare_artist(const Track &t1, const Track &t2) const;
     int compare_dir(const Track &t1, const Track &t2) const;
+    int compare_album_artist(const Track &t1, const Track &t2) const;
+    int compare_genre(const Track &t1, const Track &t2) const;
+    int compare_disc_number(const Track &t1, const Track &t2) const;
   };
 }
 

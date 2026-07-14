@@ -24,6 +24,7 @@ public:
   explicit Track(const QUrl &stream_url, const QString &filepath_reference);
 
   static QString formattedTime(quint64 tm);
+  static quint16 parseDiscNumber(const QString &raw);
 
   bool isValid() const;
 
@@ -31,6 +32,9 @@ public:
   bool fillTags();
   bool reload();
   void setDuration(quint64 dur);
+  void setAlbumArtist(const QString &aa);
+  void setGenre(const QString &g);
+  void setDiscNumber(quint16 dn);
   void setCue(bool is_cue = true);
   void generateUidByHashing(const QString &prefix);
   void setPlaylistName(const QString &pln);
@@ -40,8 +44,11 @@ public:
   QUrl url() const;
   QString artist() const;
   QString album() const;
+  QString album_artist() const;
+  QString genre() const;
   QString title() const;
   quint16 year() const;
+  quint16 disc_number() const;
   quint32 duration() const;
   quint32 sample_rate() const;
   quint8 channels() const;
@@ -80,8 +87,11 @@ private:
   QString filepath;
   QString _artist;
   QString _album;
+  QString _album_artist;
+  QString _genre;
   QString _title;
   quint16 _year;
+  quint16 _disc_number = 0;
   quint64 _duration;
   quint32 _sample_rate;
   quint8 _channels;

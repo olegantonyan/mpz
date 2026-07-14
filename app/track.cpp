@@ -12,6 +12,18 @@
 #include <QDir>
 #include <QHash>
 
+#include <limits>
+
+namespace {
+  QString firstProperty(const TagLib::PropertyMap &props, const char *key) {
+    const TagLib::StringList v = props.value(key);
+    if (v.isEmpty()) {
+      return QString();
+    }
+    return QString(v.front().toCString(true));
+  }
+}
+
 Track::Track() {
   _uid = 0;
   _begin = 0;
@@ -128,21 +140,36 @@ bool Track::fillTags() {
   if(!f.isNull()) {
     if (f.tag()) {
       TagLib::Tag *tag = f.tag();
+      const TagLib::PropertyMap props = tag->properties();
+      _album_artist = firstProperty(props, "ALBUMARTIST");
       _artist = QString(tag->artist().toCString(true));
       if (_artist.isEmpty()) {
-        const TagLib::StringList aa = tag->properties().value("ALBUMARTIST");
-        if (!aa.isEmpty()) {
-          _artist = QString(aa.front().toCString(true));
-        }
+        _artist = _album_artist;
       }
       _album = QString(tag->album().toCString(true));
+      _genre = QString(tag->genre().toCString(true));
       _title = QString(tag->title().toCString(true));
       _year = static_cast<quint16>(tag->year());
       _track_number = static_cast<quint16>(tag->track());
+      _disc_number = parseDiscNumber(firstProperty(props, "DISCNUMBER"));
       return true;
     }
   }
   return false;
+}
+
+// DISCNUMBER is commonly "1/2" - take the numerator
+quint16 Track::parseDiscNumber(const QString &raw) {
+  if (raw.isEmpty()) {
+    return 0;
+  }
+  const QString num = raw.section('/', 0, 0).trimmed();
+  bool ok = false;
+  const uint value = num.toUInt(&ok);
+  if (!ok || value > std::numeric_limits<quint16>::max()) {
+    return 0;
+  }
+  return static_cast<quint16>(value);
 }
 
 bool Track::reload() {
@@ -164,6 +191,18 @@ void Track::setMpd(const QUrl &mpd_server_url) {
 
 void Track::setDuration(quint64 dur) {
   _duration = dur;
+}
+
+void Track::setAlbumArtist(const QString &aa) {
+  _album_artist = aa;
+}
+
+void Track::setGenre(const QString &g) {
+  _genre = g;
+}
+
+void Track::setDiscNumber(quint16 dn) {
+  _disc_number = dn;
 }
 
 void Track::setCue(bool is_cue) {
@@ -190,6 +229,14 @@ QString Track::artist() const {
 
 QString Track::album() const {
   return _album;
+}
+
+QString Track::album_artist() const {
+  return _album_artist;
+}
+
+QString Track::genre() const {
+  return _genre;
 }
 
 QString Track::title() const {
@@ -340,6 +387,10 @@ QString Track::filename() const {
 
 quint16 Track::track_number() const {
   return _track_number;
+}
+
+quint16 Track::disc_number() const {
+  return _disc_number;
 }
 
 quint32 Track::begin() const {

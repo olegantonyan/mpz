@@ -176,7 +176,7 @@ columns_config:
     width_percent: 0
 ```
 
-Available fields: artist, album, title, year, length, path, url, sample_rate, bitrate, channels, track_number, format, filename.
+Available fields: artist, album, album_artist, title, year, genre, length, path, url, sample_rate, bitrate, channels, track_number, disc_number, format, filename.
 
 Available alignments: left, right.
 

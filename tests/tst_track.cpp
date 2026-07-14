@@ -14,6 +14,13 @@ private slots:
   void formattedTimeDays();
   void formattedTimeRoundsDownToSeconds();
 
+  void parseDiscNumberPlain();
+  void parseDiscNumberWithTotal();
+  void parseDiscNumberEmptyOrGarbage();
+  void parseDiscNumberOutOfRange();
+
+  void extraTagSettersRoundTrip();
+
   void fullCtorPopulatesFields();
   void fullCtorGeneratesNonZeroUid();
   void fullCtorWithNonexistentPathIsInvalid();
@@ -66,6 +73,9 @@ void TestTrack::defaultTrackIsZeroed() {
   QCOMPARE(t.sample_rate(),  quint32{0});
   QCOMPARE(t.year(),         quint16{0});
   QCOMPARE(t.track_number(), quint16{0});
+  QCOMPARE(t.disc_number(),  quint16{0});
+  QVERIFY(t.album_artist().isEmpty());
+  QVERIFY(t.genre().isEmpty());
   QVERIFY(!t.isCue());
   QVERIFY(!t.isMpd());
   QVERIFY(!t.isStream());
@@ -366,6 +376,42 @@ void TestTrack::urlForStreamReturnsStreamUrl() {
 void TestTrack::isStreamWithEmptyUrlIsFalse() {
   Track t(QUrl(), QStringLiteral("ref"));
   QVERIFY(!t.isStream());
+}
+
+void TestTrack::parseDiscNumberPlain() {
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("1")), quint16{1});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("12")), quint16{12});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral(" 2 ")), quint16{2});
+}
+
+void TestTrack::parseDiscNumberWithTotal() {
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("1/2")), quint16{1});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("2/2")), quint16{2});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral(" 3 / 4 ")), quint16{3});
+}
+
+void TestTrack::parseDiscNumberEmptyOrGarbage() {
+  QCOMPARE(Track::parseDiscNumber(QString()), quint16{0});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("")), quint16{0});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("disc one")), quint16{0});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("/2")), quint16{0});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("-1")), quint16{0});
+}
+
+void TestTrack::parseDiscNumberOutOfRange() {
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("65535")), quint16{65535});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("65536")), quint16{0});
+  QCOMPARE(Track::parseDiscNumber(QStringLiteral("99999999999")), quint16{0});
+}
+
+void TestTrack::extraTagSettersRoundTrip() {
+  Track t;
+  t.setAlbumArtist(QStringLiteral("Various Artists"));
+  t.setGenre(QStringLiteral("Jazz"));
+  t.setDiscNumber(2);
+  QCOMPARE(t.album_artist(), QStringLiteral("Various Artists"));
+  QCOMPARE(t.genre(), QStringLiteral("Jazz"));
+  QCOMPARE(t.disc_number(), quint16{2});
 }
 
 QTEST_GUILESS_MAIN(TestTrack)

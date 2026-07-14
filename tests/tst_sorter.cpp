@@ -30,6 +30,10 @@ private slots:
   void unknownCriterionIsIgnored();
   void titleArtistAlbumFilenameOrderings();
   void sortVectorEndToEnd();
+  void albumArtistOrdering();
+  void genreOrdering();
+  void discNumberOrdering();
+  void discNumberBeforeTrackNumber();
 };
 
 void TestSorter::defaultCriteriaIsCanonical() {
@@ -124,6 +128,63 @@ void TestSorter::sortVectorEndToEnd() {
   QCOMPARE(v.at(0).year(), quint16{1990});
   QCOMPARE(v.at(1).year(), quint16{2000});
   QCOMPARE(v.at(2).year(), quint16{2010});
+}
+
+void TestSorter::albumArtistOrdering() {
+  Sorter s(QStringLiteral("ALBUMARTIST"));
+  Track a = mk({}, {}, {}, {}, 0, 0);
+  Track b = mk({}, {}, {}, {}, 0, 0);
+  a.setAlbumArtist(QStringLiteral("Aphex Twin"));
+  b.setAlbumArtist(QStringLiteral("Boards of Canada"));
+  QVERIFY(s.condition(a, b));
+  QVERIFY(!s.condition(b, a));
+
+  Sorter desc(QStringLiteral("-ALBUMARTIST"));
+  QVERIFY(desc.condition(b, a));
+}
+
+void TestSorter::genreOrdering() {
+  Sorter s(QStringLiteral("GENRE"));
+  Track a = mk({}, {}, {}, {}, 0, 0);
+  Track b = mk({}, {}, {}, {}, 0, 0);
+  a.setGenre(QStringLiteral("Ambient"));
+  b.setGenre(QStringLiteral("Rock"));
+  QVERIFY(s.condition(a, b));
+  QVERIFY(!s.condition(b, a));
+  QVERIFY(!s.condition(a, a));
+}
+
+void TestSorter::discNumberOrdering() {
+  Sorter s(QStringLiteral("DISCNUMBER"));
+  Track d1 = mk({}, {}, {}, {}, 0, 0);
+  Track d2 = mk({}, {}, {}, {}, 0, 0);
+  d1.setDiscNumber(1);
+  d2.setDiscNumber(2);
+  QVERIFY(s.condition(d1, d2));
+  QVERIFY(!s.condition(d2, d1));
+  QVERIFY(!s.condition(d1, d1));
+
+  Sorter desc(QStringLiteral("-DISCNUMBER"));
+  QVERIFY(desc.condition(d2, d1));
+}
+
+// The multi-disc fix: disc 2 track 1 must not sort beside disc 1 track 1.
+void TestSorter::discNumberBeforeTrackNumber() {
+  Sorter s(QStringLiteral("DISCNUMBER / TRACKNUMBER"));
+  Track d1t1 = mk(QStringLiteral("/d1t1.flac"), {}, {}, {}, 1, 0);
+  Track d1t2 = mk(QStringLiteral("/d1t2.flac"), {}, {}, {}, 2, 0);
+  Track d2t1 = mk(QStringLiteral("/d2t1.flac"), {}, {}, {}, 1, 0);
+  d1t1.setDiscNumber(1);
+  d1t2.setDiscNumber(1);
+  d2t1.setDiscNumber(2);
+
+  QVector<Track> v{d2t1, d1t2, d1t1};
+  std::sort(v.begin(), v.end(), [&s](const Track &a, const Track &b) {
+    return s.condition(a, b);
+  });
+  QCOMPARE(v.at(0).filename(), QStringLiteral("d1t1.flac"));
+  QCOMPARE(v.at(1).filename(), QStringLiteral("d1t2.flac"));
+  QCOMPARE(v.at(2).filename(), QStringLiteral("d2t1.flac"));
 }
 
 QTEST_GUILESS_MAIN(TestSorter)

@@ -46,7 +46,8 @@ namespace {
   };
 
   const QStringList kColumnFields = {
-    "artist", "album", "title", "year", "length", "track_number",
+    "artist", "album", "album_artist", "title", "year", "genre",
+    "length", "track_number", "disc_number",
     "path", "url", "filename", "format", "bitrate", "channels", "sample_rate",
   };
 

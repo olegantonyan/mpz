@@ -32,6 +32,8 @@ private slots:
   void valueByFieldName();
   void valueForYearZeroIsEmpty();
   void valueForUnknownFieldIsEmpty();
+  void valueForNewTagFields();
+  void valueForDiscNumberZeroIsEmpty();
   void settersReplaceContents();
   void serializeRoundTripsThroughDeserialize();
   void vaidateThrowsOnMismatchedVectorSizes();
@@ -84,6 +86,28 @@ void TestColumnsConfig::valueByFieldName() {
   QCOMPARE(cfg.value(3, t), QStringLiteral("Some Title"));
   QCOMPARE(cfg.value(4, t), QStringLiteral("2024"));
   QCOMPARE(cfg.value(5, t), t.formattedDuration());
+}
+
+void TestColumnsConfig::valueForNewTagFields() {
+  ColumnsConfig cfg;
+  cfg.setFields(QVector<QString>{ QStringLiteral("album_artist"),
+                                  QStringLiteral("genre"),
+                                  QStringLiteral("disc_number") });
+  Track t = mk();
+  t.setAlbumArtist(QStringLiteral("Various Artists"));
+  t.setGenre(QStringLiteral("Jazz"));
+  t.setDiscNumber(2);
+  QCOMPARE(cfg.value(1, t), QStringLiteral("Various Artists"));
+  QCOMPARE(cfg.value(2, t), QStringLiteral("Jazz"));
+  QCOMPARE(cfg.value(3, t), QStringLiteral("2"));
+}
+
+void TestColumnsConfig::valueForDiscNumberZeroIsEmpty() {
+  ColumnsConfig cfg;
+  cfg.setFields(QVector<QString>{ QStringLiteral("disc_number") });
+  Track t = mk();
+  QCOMPARE(t.disc_number(), quint16{0});
+  QCOMPARE(cfg.value(1, t), QString());
 }
 
 void TestColumnsConfig::valueForYearZeroIsEmpty() {

@@ -60,6 +60,9 @@ namespace Playlist {
         0,
         0
       );
+      track.setAlbumArtist(song.albumArtist);
+      track.setGenre(song.genre);
+      track.setDiscNumber(song.discNumber > 0 ? static_cast<quint16>(song.discNumber) : 0);
     }
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);
