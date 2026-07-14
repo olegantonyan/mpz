@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
 #include <QtGlobal>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -405,9 +406,17 @@ namespace Playlist {
     QVector<Track> tracks;
     tracks.reserve(entries.size());
 
+    // Every entry of a FILE block shares one audio file, so read its properties once.
+    QHash<QString, Track::AudioProperties> props_by_file;
+
     for (int i = 0; i < entries.size(); ++i) {
       const Entry& e = entries.at(i);
       const qint64 begin = e.index01_ms >= 0 ? e.index01_ms : (e.index00_ms >= 0 ? e.index00_ms : 0);
+
+      if (!props_by_file.contains(e.file)) {
+        props_by_file.insert(e.file, Track::audioPropertiesOf(e.file));
+      }
+      const auto props = props_by_file.value(e.file);
 
       Track track(e.file,
                   static_cast<quint64>(begin),
@@ -416,8 +425,10 @@ namespace Playlist {
                   e.title,
                   static_cast<quint16>(e.track_no > 0 ? e.track_no : i + 1),
                   year,
-                  0, 0, 0, 0);
-      track.fillAudioProperties();
+                  props.duration,
+                  props.channels,
+                  props.bitrate,
+                  props.sample_rate);
       track.setCue();
 
       qint64 duration_ms = -1;
@@ -431,7 +442,7 @@ namespace Playlist {
       }
       if (duration_ms < 0) {
         // Last track for this file: use audio file length.
-        duration_ms = static_cast<qint64>(track.duration()) - begin;
+        duration_ms = static_cast<qint64>(props.duration) - begin;
       }
       track.setDuration(duration_ms < 0 ? 0 : static_cast<quint64>(duration_ms));
 

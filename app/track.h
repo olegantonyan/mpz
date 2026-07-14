@@ -8,6 +8,13 @@
 
 class Track {
 public:
+  struct AudioProperties {
+    quint64 duration = 0;
+    quint8 channels = 0;
+    quint16 bitrate = 0;
+    quint32 sample_rate = 0;
+  };
+
   explicit Track();
   explicit Track(const QString &filepath, quint32 begin = 0);
   explicit Track(const QString &filepath,
@@ -24,11 +31,10 @@ public:
   explicit Track(const QUrl &stream_url, const QString &filepath_reference);
 
   static QString formattedTime(quint64 tm);
+  static AudioProperties audioPropertiesOf(const QString &filepath);
 
   bool isValid() const;
 
-  bool fillAudioProperties();
-  bool fillTags();
   bool reload();
   void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
@@ -106,6 +112,7 @@ private:
 
   quint64 generateUid() const;
   QString detectFormat() const;
+  bool readMetadata();
 };
 
 #endif // TRACK_H

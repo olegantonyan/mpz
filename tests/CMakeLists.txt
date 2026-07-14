@@ -146,7 +146,8 @@ mpz_add_test(tst_fileparser tst_fileparser.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)
 target_link_libraries(tst_fileparser PRIVATE
-  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
 
 mpz_add_test(tst_cueparser tst_cueparser.cpp
   ${APP}/playlist/cueparser.cpp
@@ -176,4 +177,5 @@ mpz_add_test(tst_loader tst_loader.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)
 target_link_libraries(tst_loader PRIVATE
-  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)

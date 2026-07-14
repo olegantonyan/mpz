@@ -10,7 +10,8 @@
 
 ### Misc
 
-- vendored libmpdclient updated to 2.26
+- Faster playlist creation: fewer tag reads per file, scanning runs on all cores
+- Vendored libmpdclient updated to 2.26
 
 ## [2.0.16] - 2026-07-13
 
