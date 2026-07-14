@@ -42,8 +42,7 @@ Track::Track(const QString &fp, quint32 bgn) {
 
   filepath = fp;
 
-  fillAudioProperties();
-  fillTags();
+  readMetadata();
   setCue(false);
 
   _format = detectFormat();
@@ -115,47 +114,55 @@ bool Track::isValid() const {
   return uid() != 0 && (isMpd() || QFile::exists(path()) || isStream());
 }
 
-bool Track::fillAudioProperties() {
-  if (isMpd() || !isValid()) {
-    return false;
+Track::AudioProperties Track::audioPropertiesOf(const QString &filepath) {
+  AudioProperties result;
+  const QByteArray encoded = filepath.toUtf8();
+  TagLib::FileRef f(encoded.constData());
+  if (f.isNull()) {
+    return result;
   }
-  TagLib::FileRef f(path().toUtf8().constData());
-  if(!f.isNull()) {
-    if (f.audioProperties()) {
-      _duration = static_cast<quint64>(f.audioProperties()->lengthInMilliseconds());
-      _channels = static_cast<quint8>(f.audioProperties()->channels());
-      _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
-      _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
-      return true;
-    }
+  if (const auto *props = f.audioProperties()) {
+    result.duration = static_cast<quint64>(props->lengthInMilliseconds());
+    result.channels = static_cast<quint8>(props->channels());
+    result.bitrate = static_cast<quint16>(props->bitrate());
+    result.sample_rate = static_cast<quint32>(props->sampleRate());
   }
-  return false;
+  return result;
 }
 
-bool Track::fillTags() {
+bool Track::readMetadata() {
   if (isMpd() || !isValid()) {
     return false;
   }
-  TagLib::FileRef f(path().toUtf8().constData());
-  if(!f.isNull()) {
-    if (f.tag()) {
-      TagLib::Tag *tag = f.tag();
-      const TagLib::PropertyMap props = tag->properties();
-      _album_artist = firstProperty(props, "ALBUMARTIST");
-      _artist = QString(tag->artist().toCString(true));
-      if (_artist.isEmpty()) {
-        _artist = _album_artist;
-      }
-      _album = QString(tag->album().toCString(true));
-      _genre = QString(tag->genre().toCString(true));
-      _title = QString(tag->title().toCString(true));
-      _year = static_cast<quint16>(tag->year());
-      _track_number = static_cast<quint16>(tag->track());
-      _disc_number = parseDiscNumber(firstProperty(props, "DISCNUMBER"));
-      return true;
-    }
+  const QByteArray encoded = path().toUtf8();
+  TagLib::FileRef f(encoded.constData());
+  if (f.isNull()) {
+    return false;
   }
-  return false;
+
+  if (const auto *props = f.audioProperties()) {
+    _duration = static_cast<quint64>(props->lengthInMilliseconds());
+    _channels = static_cast<quint8>(props->channels());
+    _bitrate = static_cast<quint16>(props->bitrate());
+    _sample_rate = static_cast<quint32>(props->sampleRate());
+  }
+
+  if (TagLib::Tag *tag = f.tag()) {
+    const TagLib::PropertyMap tag_props = tag->properties();
+    _album_artist = firstProperty(tag_props, "ALBUMARTIST");
+    _artist = QString(tag->artist().toCString(true));
+    if (_artist.isEmpty()) {
+      _artist = _album_artist;
+    }
+    _album = QString(tag->album().toCString(true));
+    _genre = QString(tag->genre().toCString(true));
+    _title = QString(tag->title().toCString(true));
+    _year = static_cast<quint16>(tag->year());
+    _track_number = static_cast<quint16>(tag->track());
+    _disc_number = parseDiscNumber(firstProperty(tag_props, "DISCNUMBER"));
+  }
+
+  return true;
 }
 
 // DISCNUMBER is commonly "1/2" - take the numerator
@@ -173,7 +180,7 @@ quint16 Track::parseDiscNumber(const QString &raw) {
 }
 
 bool Track::reload() {
-  return fillAudioProperties() && fillTags();
+  return readMetadata();
 }
 
 void Track::generateUidByHashing(const QString &prefix) {

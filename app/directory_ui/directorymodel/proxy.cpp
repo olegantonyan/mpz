@@ -148,7 +148,7 @@ namespace DirectoryUi {
         sourceModel()->sort(0, Qt::AscendingOrder);
       } else if (direction.toLower() == "date") {
         sourceModel()->sort(3, Qt::AscendingOrder);
-      } else if (direction.toLower() == "- date") {
+      } else if (direction.toLower() == "-date") {
         sourceModel()->sort(3, Qt::DescendingOrder);
       }
     }

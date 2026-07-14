@@ -2,15 +2,54 @@
 #include "playlist/fileparser.h"
 #include "playlist/cueparser.h"
 
+#include <QAtomicInt>
 #include <QDirIterator>
 #include <QFileInfo>
+#include <QFutureSynchronizer>
 #include <QSet>
+#include <QThread>
+#include <QThreadPool>
+#include <QtConcurrent>
+
+#include <utility>
 
 namespace Playlist {
   namespace {
     QString canonical_or_abs(const QString& p) {
       QString c = QFileInfo(p).canonicalFilePath();
       return c.isEmpty() ? QFileInfo(p).absoluteFilePath() : c;
+    }
+
+    QThreadPool &scan_pool() {
+      // Deliberately not globalInstance(): tracks() itself runs on a global-pool thread
+      // and blocks here, so sharing that pool could starve it.
+      static QThreadPool pool;
+      return pool;
+    }
+
+    // Applies fn to every path concurrently, preserving input order.
+    template <typename T, typename F>
+    QVector<T> parallel_map(const QStringList &paths, F fn) {
+      QVector<T> out(paths.size());
+      if (paths.isEmpty()) {
+        return out;
+      }
+
+      T *out_data = out.data(); // detach once here so workers never race on the refcount
+      QAtomicInt next(0);
+      const int workers = qBound(1, QThread::idealThreadCount(), paths.size());
+
+      QFutureSynchronizer<void> sync;
+      for (int w = 0; w < workers; ++w) {
+        sync.addFuture(QtConcurrent::run(&scan_pool(), [&paths, &next, out_data, fn]() {
+          for (int i = next.fetchAndAddOrdered(1); i < paths.size(); i = next.fetchAndAddOrdered(1)) {
+            out_data[i] = fn(paths.at(i));
+          }
+        }));
+      }
+      sync.waitForFinished();
+
+      return out;
     }
   }
 
@@ -51,54 +90,55 @@ namespace Playlist {
       return QVector<Track>() << Track(path.absolutePath());
     }
 
+    QStringList audio_paths;
+    QStringList cue_paths;
+    QDirIterator it(path.absolutePath(), files_filter(), QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+      const auto current_path = it.next();
+      (is_cue(current_path) ? cue_paths : audio_paths) << current_path;
+    }
+
     QVector<Track> result;
 
-    // Audio file paths (canonicalized) referenced by any cue we encounter.
-    // Used to drop the "raw" Track entries for files that a cue already covers.
+    // Audio file paths (canonicalized) referenced by any cue. Files a cue already
+    // covers are never tag-read as standalone tracks below.
     QSet<QString> cue_audio_paths;
     // (canonical_audio_path + "@" + begin_ms) -- used to drop duplicate cue
     // entries when more than one cue covers the same audio at the same offset.
     QSet<QString> seen_cue_keys;
 
-    QDirIterator it(path.absolutePath(), files_filter(), QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-      auto current_path = it.next();
-      if (is_cue(current_path)) {
-        auto current_cues = CueParser(current_path).tracks_list();
-        for (const auto& c : current_cues) {
-          const QString canon = canonical_or_abs(c.path());
-          cue_audio_paths.insert(canon);
-          const QString key = canon + QChar('@') + QString::number(c.begin());
-          if (seen_cue_keys.contains(key)) {
-            continue; // duplicate cue entry from a sibling cue
-          }
-          seen_cue_keys.insert(key);
-          result.append(c);
+    const auto per_cue = parallel_map<QVector<Track>>(cue_paths, [](const QString &p) {
+      return CueParser(p).tracks_list();
+    });
+    for (const auto &current_cues : per_cue) {
+      for (const auto &c : current_cues) {
+        const QString canon = canonical_or_abs(c.path());
+        cue_audio_paths.insert(canon);
+        const QString key = canon + QChar('@') + QString::number(c.begin());
+        if (seen_cue_keys.contains(key)) {
+          continue; // duplicate cue entry from a sibling cue
         }
-      } else {
-        result.append(Track(current_path));
+        seen_cue_keys.insert(key);
+        result.append(c);
       }
     }
 
-    remove_tracks_added_from_cue(cue_audio_paths, result);
+    QStringList to_read;
+    if (cue_audio_paths.isEmpty()) {
+      to_read = audio_paths;
+    } else {
+      for (const auto &p : std::as_const(audio_paths)) {
+        if (!cue_audio_paths.contains(canonical_or_abs(p))) {
+          to_read << p;
+        }
+      }
+    }
+
+    result.append(parallel_map<Track>(to_read, [](const QString &p) {
+      return Track(p);
+    }));
 
     return result;
-  }
-
-  void Loader::remove_tracks_added_from_cue(const QSet<QString> &cue_audio_paths, QVector<Track> &tracks) const {
-    if (cue_audio_paths.isEmpty()) {
-      return;
-    }
-    QMutableVectorIterator<Track> mit(tracks);
-    while (mit.hasNext()) {
-      const auto& track = mit.next();
-      if (track.isCue()) {
-        continue;
-      }
-      if (cue_audio_paths.contains(canonical_or_abs(track.path()))) {
-        mit.remove();
-      }
-    }
   }
 
   bool Loader::is_dir_empty() const {
