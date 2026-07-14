@@ -392,6 +392,9 @@ void MainWindow::setupControlsToolBar() {
   controls_toolbar->setMovable(local_conf.toolbarMovable());
   controls_toolbar->addWidget(ui->topControls);
   addToolBar(Qt::TopToolBarArea, controls_toolbar);
+#ifdef Q_OS_MACOS
+  setUnifiedTitleAndToolBarOnMac(true);
+#endif
 
   lock_toolbar_action = new QAction(tr("Lock toolbar"), this);
   lock_toolbar_action->setCheckable(true);
