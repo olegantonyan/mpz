@@ -2,7 +2,10 @@
 #define SHORTCUTS_H
 
 #include "config/global.h"
+
+#ifdef ENABLE_QHOTKEY
 #include <qhotkey.h>
+#endif
 
 #include <QObject>
 #include <QWidget>
@@ -93,11 +96,13 @@ private:
 
   QWidget *_parent;
 
+#ifdef ENABLE_QHOTKEY
   QHotkey _play_global;
   QHotkey _pause_global;
   QHotkey _stop_global;
   QHotkey _prev_global;
   QHotkey _next_global;
+#endif
 };
 
 #endif // SHORTCUTS_H

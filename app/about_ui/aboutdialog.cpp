@@ -62,7 +62,9 @@ AboutDialog::AboutDialog(Config::Global &global_c, Config::Local &local_c, QWidg
   QStringList os;
   os << libraryInfo("Qt", "https://www.qt.io/");
   os << libraryInfo("TagLib", "https://taglib.org/");
+#ifdef ENABLE_QHOTKEY
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
+#endif
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
   os << libraryInfo("Bootstrap Icons", "https://icons.getbootstrap.com/");
 #ifdef ENABLE_MPD_SUPPORT

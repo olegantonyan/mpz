@@ -17,7 +17,7 @@
 
 - Faster playlist creation: fewer tag reads per file, scanning runs on all cores
 - Vendored libmpdclient updated to 2.26
-- New build options: `USE_SYSTEM_QHOTKEY` (default off), `ENABLE_CRASH_HANDLER` (default on for Linux, macOS and MSVC)
+- New build options: `ENABLE_QHOTKEY` (default on, off on macOS and Windows MSVC where the OS owns media keys), `USE_SYSTEM_QHOTKEY` (default off), `ENABLE_CRASH_HANDLER` (default on for Linux, macOS and MSVC)
 
 ## [2.0.16] - 2026-07-13
 

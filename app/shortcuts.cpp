@@ -2,13 +2,15 @@
 
 #include <QGuiApplication>
 
-Shortcuts::Shortcuts(QWidget *parent) : QObject(parent),
-  _parent(parent),
-  _play_global(parent),
-  _pause_global(parent),
-  _stop_global(parent),
-  _prev_global(parent),
-  _next_global(parent)
+Shortcuts::Shortcuts(QWidget *parent) : QObject(parent)
+  , _parent(parent)
+#ifdef ENABLE_QHOTKEY
+  , _play_global(parent)
+  , _pause_global(parent)
+  , _stop_global(parent)
+  , _prev_global(parent)
+  , _next_global(parent)
+#endif
 {
   setupLocal();
   setupGlobal();
@@ -101,12 +103,12 @@ QVector<QPair<QString, QString> > Shortcuts::describe() const {
 }
 
 void Shortcuts::setupGlobal() {
+#if defined(ENABLE_QHOTKEY) && !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
   if (QGuiApplication::platformName() == "wayland") {
     // wayland not supported and results in crash
     // https://github.com/olegantonyan/mpz/issues/129
     return;
   }
-#if !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
   // Skip where the OS owns the media keys — macOS (MPRemoteCommandCenter) and the
   // SMTC build (WindowsMediaControls); a QHotkey grab would double-fire alongside them.
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
