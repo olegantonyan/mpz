@@ -10,6 +10,37 @@
 #include <QDBusReply>
 #include <QFile>
 
+#ifdef Q_OS_FREEBSD
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <vector>
+#endif
+
+namespace {
+  // NUL-separated argv, same format as /proc/<pid>/cmdline
+  QString processCmdline(uint pid) {
+#ifdef Q_OS_FREEBSD
+    // procfs is deprecated and unmounted by default on FreeBSD
+    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_ARGS, static_cast<int>(pid) };
+    size_t len = 0;
+    if (sysctl(mib, 4, nullptr, &len, nullptr, 0) != 0 || len == 0) {
+      return {};
+    }
+    std::vector<char> buf(len);
+    if (sysctl(mib, 4, buf.data(), &len, nullptr, 0) != 0) {
+      return {};
+    }
+    return QString::fromUtf8(buf.data(), static_cast<int>(len));
+#else
+    QFile cmd_line(QString("/proc/%1/cmdline").arg(pid));
+    if (!cmd_line.open(QIODevice::ReadOnly)) {
+      return {};
+    }
+    return QString::fromUtf8(cmd_line.readAll());
+#endif
+  }
+}
+
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
 static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
 static const auto MPRIS_ENTRY = "org.mpris.MediaPlayer2.Player";
@@ -319,9 +350,8 @@ bool Mpris::isBlacklistedSender() {
   QDBusReply<uint> pid_reply = QDBusConnection::sessionBus().call(pid_msg);
 
   if (pid_reply.isValid()) {
-    QFile cmd_line(QString("/proc/%1/cmdline").arg(pid_reply.value()));
-    if (cmd_line.open(QIODevice::ReadOnly)) {
-      auto line = QString::fromUtf8(cmd_line.readAll());
+    const auto line = processCmdline(pid_reply.value());
+    if (!line.isEmpty()) {
       for (const auto &item : std::as_const(balcklist)) {
         if (line.contains(item)) {
           qDebug() << "MPRIS: ignoring blacklisted sender " << line << sender;
