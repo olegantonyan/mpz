@@ -21,6 +21,7 @@ signals:
   void prevTriggered();
   void pauseTriggered();
   void quitTriggered();
+  void showWindowTriggered();
 
   void clicked();
 
@@ -37,6 +38,7 @@ private:
   QMenu *menu;
 
   QAction *quit;
+  QAction *show_window;
   QAction *play;
   QAction *pause;
   QAction *stop;

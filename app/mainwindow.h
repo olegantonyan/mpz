@@ -77,6 +77,7 @@ public:
 
 public slots:
   void toggleHidden();
+  void showWindow();
   void requestQuit();
 #ifdef Q_OS_MACOS
   void onAppActivated();

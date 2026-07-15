@@ -17,6 +17,7 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   menu = new QMenu(parent);
 
   quit = new QAction(tr("Quit"), this);
+  show_window = new QAction(tr("Show mpz"), this);
 
   play = new QAction(tr("Play"), this);
   play->setIcon(Icons::get(Icons::Icon::Play));
@@ -36,6 +37,7 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   connect(next, &QAction::triggered, this, &TrayIcon::nextTriggered);
   connect(prev, &QAction::triggered, this, &TrayIcon::prevTriggered);
   connect(quit, &QAction::triggered, this, &TrayIcon::quitTriggered);
+  connect(show_window, &QAction::triggered, this, &TrayIcon::showWindowTriggered);
 
   menu->addAction(now_playing);
   menu->addSeparator();
@@ -45,6 +47,7 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   menu->addAction(next);
   menu->addAction(prev);
   menu->addSeparator();
+  menu->addAction(show_window);
   menu->addAction(quit);
   trayicon->setContextMenu(menu);
   trayicon->show();

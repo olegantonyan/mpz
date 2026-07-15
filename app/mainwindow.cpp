@@ -169,14 +169,28 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::toggleHidden() {
-  if (isHidden()) {
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    show();
-    raise();
-    activateWindow();
-  } else {
-    hide();
+  if (!global_conf.minimizeToTray()) {
+    showWindow();
+    return;
   }
+#ifdef Q_OS_WIN
+  // Clicking the tray icon deactivates the app on Windows, so isActiveWindow() is never true here.
+  const bool hideable = !isHidden() && !isMinimized();
+#else
+  const bool hideable = !isHidden() && !isMinimized() && isActiveWindow();
+#endif
+  if (hideable) {
+    hide();
+  } else {
+    showWindow();
+  }
+}
+
+void MainWindow::showWindow() {
+  setWindowState(windowState() & ~Qt::WindowMinimized);
+  show();
+  raise();
+  activateWindow();
 }
 
 int MainWindow::streamBuffer() {
@@ -484,6 +498,7 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
+  connect(trayicon, &TrayIcon::showWindowTriggered, this, &MainWindow::showWindow);
   connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
 }
 

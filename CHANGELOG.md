@@ -5,8 +5,12 @@
 - Controls bar (buttons, seekbar, menu) now spans the full window width, with cover and lyrics panels below it
 - Controls bar can be moved to the top or bottom and locked in place from the menu
 - macOS: optional menu bar icon
+- Tray menu: "Show mpz"
 
 ### Fixed
+
+- Tray click hides the window only if "close to tray" is enabled
+- Linux: tray click switches to the window's desktop instead of hiding it
 
 ### Misc
 
