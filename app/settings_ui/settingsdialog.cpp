@@ -424,7 +424,7 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   plog_row->addStretch();
   vbox->addLayout(plog_row);
 
-#ifdef Q_OS_LINUX
+#ifdef MPRIS_ENABLE
   auto *gb_mpris = new QGroupBox(tr("MPRIS blacklist"));
   auto *mv = new QVBoxLayout(gb_mpris);
   mv->addWidget(new QLabel(
@@ -655,7 +655,11 @@ void SettingsDialog::apply() {
   global_conf.saveSingleInstance(check_single_instance->isChecked());
   global_conf.saveIpcPort(spin_ipc_port->value());
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
-  global_conf.saveMprisBlacklist(collectMprisBlacklist());
+#ifdef MPRIS_ENABLE
+  if (list_mpris_blacklist) {
+    global_conf.saveMprisBlacklist(collectMprisBlacklist());
+  }
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   if (check_mpd_stop_on_close) {
     global_conf.saveMpdStopPlayerOnClose(check_mpd_stop_on_close->isChecked());

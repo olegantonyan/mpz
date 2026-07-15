@@ -359,10 +359,17 @@ endif()
 # ENDOF TAGLIB
 
 # QHOTKEY
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
-set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
-add_subdirectory(${QHOTKEY_DIR})
-message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+option(USE_SYSTEM_QHOTKEY "Use QHotkey provided by the OS" OFF)
+if (USE_SYSTEM_QHOTKEY)
+  find_library(QHOTKEY_LIB qhotkey REQUIRED)
+  message(STATUS "using system-wide qhotkey")
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${QHOTKEY_LIB})
+else()
+  set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
+  message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+  add_subdirectory(${QHOTKEY_DIR})
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
+endif()
 # ENDOF QHOTKEY
 
 # LIBMPDCLIENT
@@ -386,7 +393,15 @@ endif()
 # Mach-O symbol table. On MSVC/Windows PE has no .dynsym equivalent, so symbols
 # come from mpz.pdb shipped next to mpz.exe, read at runtime via dbghelp.
 # The legacy Qt5 x86 MinGW build is excluded.
-if(UNIX OR (WIN32 AND NOT MINGW))
+# cpptrace itself only builds on these three platforms; anywhere else it #errors out.
+if(CMAKE_SYSTEM_NAME MATCHES "Linux|Darwin" OR (WIN32 AND NOT MINGW))
+  set(DEFAULT_ENABLE_CRASH_HANDLER ON)
+else()
+  set(DEFAULT_ENABLE_CRASH_HANDLER OFF)
+endif()
+option(ENABLE_CRASH_HANDLER "Enable builtin crash handler (backtrace on fatal signals)" ${DEFAULT_ENABLE_CRASH_HANDLER})
+if(ENABLE_CRASH_HANDLER)
+  message(STATUS "crash handler ON")
   set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
   set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
   if(UNIX)
@@ -415,6 +430,8 @@ if(UNIX OR (WIN32 AND NOT MINGW))
       $<$<CONFIG:Release>:/OPT:ICF>)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dbghelp)
   endif()
+else()
+  message(STATUS "crash handler OFF")
 endif()
 # ENDOF CPPTRACE
 

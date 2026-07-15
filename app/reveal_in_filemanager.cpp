@@ -18,7 +18,7 @@
 #include <shlobj.h>
 #endif
 
-#if defined(Q_OS_LINUX) && defined(MPZ_ENABLE_DBUS)
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && defined(MPZ_ENABLE_DBUS)
 #include <QDBusConnection>
 #include <QDBusMessage>
 #endif
@@ -126,7 +126,7 @@ void revealInFileManager(const QStringList &absolute_file_paths) {
   for (const auto &p : fallback) {
     QProcess::startDetached(QStringLiteral("open"), { QStringLiteral("-R"), p });
   }
-#elif defined(Q_OS_LINUX) && defined(MPZ_ENABLE_DBUS)
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && defined(MPZ_ENABLE_DBUS)
   QStringList uris;
   uris.reserve(absolute_file_paths.size());
   for (const auto &p : absolute_file_paths) {
