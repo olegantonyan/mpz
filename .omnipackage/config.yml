@@ -144,8 +144,8 @@ builds:
 
   - distro: "opensuse_tumbleweed"
     <<: *opensuse_qt6
-    CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON"
-    build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel, libtag-devel, yaml-cpp-devel, libmpdclient-devel]
+    CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_CPPTRACE=ON"
+    build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel, libtag-devel, yaml-cpp-devel, libmpdclient-devel, cpptrace-devel]
 
   - distro: "debian_11"
     <<: *debian_qt5
