@@ -189,6 +189,9 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, std::shared_ptr<Playlist::P
   setup_view(ui->tableViewTags, &model_tags);
   setup_view(ui->tableViewFile, &model_file);
   setup_view(ui->tableViewOther, &model_other);
+  for (int i = 0; i < ui->tabWidget->count(); ++i) {
+    tab_titles << ui->tabWidget->tabText(i);
+  }
   setup_table();
   setup_cover_art();
   setup_lyrics();
@@ -223,18 +226,34 @@ void TrackInfoDialog::setup_table() {
   add_other_rows();
 
   const struct {
+    QWidget *page;
     QTableView *view;
     QStandardItemModel *m;
   } tabs[] = {
-    { ui->tableView, &model },
-    { ui->tableViewTags, &model_tags },
-    { ui->tableViewFile, &model_file },
-    { ui->tableViewOther, &model_other },
+    { ui->tabGeneral, ui->tableView, &model },
+    { ui->tabTags, ui->tableViewTags, &model_tags },
+    { ui->tabFile, ui->tableViewFile, &model_file },
+    { ui->tabOther, ui->tableViewOther, &model_other },
   };
+
+  // Re-adding only the non-empty pages rather than QTabWidget::setTabVisible,
+  // which needs Qt 5.15 (openSUSE Leap 15.3 still ships 5.12).
+  QWidget *current = ui->tabWidget->currentWidget();
+  while (ui->tabWidget->count() > 0) {
+    ui->tabWidget->removeTab(0);
+  }
+  int i = 0;
   for (const auto &t : tabs) {
     t.view->resizeColumnToContents(0);
     t.view->resizeRowsToContents();
-    ui->tabWidget->setTabVisible(ui->tabWidget->indexOf(t.view->parentWidget()), t.m->rowCount() > 0);
+    if (t.m->rowCount() > 0) {
+      ui->tabWidget->addTab(t.page, tab_titles.at(i));
+    }
+    ++i;
+  }
+  const int restored = current ? ui->tabWidget->indexOf(current) : -1;
+  if (restored >= 0) {
+    ui->tabWidget->setCurrentIndex(restored);
   }
 }
 

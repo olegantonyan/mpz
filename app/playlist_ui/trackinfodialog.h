@@ -50,6 +50,7 @@ private:
   QString base_title;
   QString track_path;
   QString cover_art_path;
+  QStringList tab_titles;
 
   void setup_table();
   void setup_view(QTableView *view, QStandardItemModel *m);
