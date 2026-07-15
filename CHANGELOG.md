@@ -6,6 +6,7 @@
 - Controls bar can be moved to the top or bottom and locked in place from the menu
 - macOS: optional menu bar icon
 - Tray menu: "Show mpz"
+- Track info: tabs with all tags, file and audio metadata
 
 ### Fixed
 

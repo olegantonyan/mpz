@@ -331,8 +331,10 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/dsf>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/flac>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/it>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/matroska>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mod>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mp4>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpc>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v1>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v2>
@@ -346,6 +348,7 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/aiff>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/wav>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/s3m>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/shorten>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/toolkit>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/trueaudio>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/wavpack>

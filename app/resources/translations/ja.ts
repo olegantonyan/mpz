@@ -633,56 +633,56 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="272"/>
-        <location filename="../../mainwindow.cpp" line="307"/>
+        <location filename="../../mainwindow.cpp" line="278"/>
+        <location filename="../../mainwindow.cpp" line="313"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="273"/>
-        <location filename="../../mainwindow.cpp" line="306"/>
+        <location filename="../../mainwindow.cpp" line="279"/>
+        <location filename="../../mainwindow.cpp" line="312"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="274"/>
-        <location filename="../../mainwindow.cpp" line="308"/>
+        <location filename="../../mainwindow.cpp" line="280"/>
+        <location filename="../../mainwindow.cpp" line="314"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="305"/>
+        <location filename="../../mainwindow.cpp" line="311"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="407"/>
+        <location filename="../../mainwindow.cpp" line="413"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="425"/>
+        <location filename="../../mainwindow.cpp" line="431"/>
         <source>Album cover</source>
         <translation>アルバムアート</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="431"/>
+        <location filename="../../mainwindow.cpp" line="437"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="556"/>
-        <location filename="../../mainwindow.cpp" line="560"/>
+        <location filename="../../mainwindow.cpp" line="562"/>
+        <location filename="../../mainwindow.cpp" line="566"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="562"/>
+        <location filename="../../mainwindow.cpp" line="568"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="574"/>
+        <location filename="../../mainwindow.cpp" line="580"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
@@ -1507,99 +1507,159 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="66"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="243"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="69"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="246"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="72"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="249"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="75"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="252"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="78"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="255"/>
         <source>Track number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="79"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="256"/>
         <source>Duration</source>
         <translation>長さ</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="81"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="258"/>
         <source>Format</source>
         <translation>フォーマット</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="83"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="260"/>
         <source>Bitrate</source>
         <translation>ビットレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="86"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="263"/>
         <source>Sample rate</source>
         <translation>サンプルレート</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="89"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="266"/>
         <source>Channels</source>
         <translation>チャンネル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="92"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="269"/>
         <source>Stream url</source>
         <translation>ストリーム URL</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="100"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="102"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="277"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="279"/>
         <source>File path</source>
         <translation>ファイルパス</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="106"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="283"/>
         <source>CUE start at</source>
         <translation>CUE 開始位置</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="128"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="301"/>
+        <source>Unsupported tags</source>
+        <translation>未対応のタグ</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="310"/>
+        <source>File name</source>
+        <translation>ファイル名</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="311"/>
+        <source>Directory</source>
+        <translation>フォルダー</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="312"/>
+        <source>Size</source>
+        <translation>サイズ</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="312"/>
+        <source>%1 (%2 bytes)</source>
+        <translation>%1 (%2 バイト)</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="315"/>
+        <source>Modified</source>
+        <translation>更新日時</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="318"/>
+        <source>Created</source>
+        <translation>作成日時</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="320"/>
+        <source>Read-only</source>
+        <translation>読み取り専用</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="322"/>
+        <source>Symlink target</source>
+        <translation>シンボリックリンクのリンク先</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="478"/>
+        <source>yes</source>
+        <translation>はい</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="478"/>
+        <source>no</source>
+        <translation>いいえ</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="506"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="132"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="510"/>
         <source>Search on web</source>
         <translation>ウェブ検索</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="214"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="536"/>
+        <source>No cover art</source>
+        <translation>アルバムアートがありません</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="623"/>
         <source>Searching lyrics...</source>
         <translation>歌詞を検索中...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="221"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="229"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="630"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="638"/>
         <source>No lyrics found.</source>
         <translation>歌詞が見つかりません。</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="691"/>
         <source>Copy to clipboard</source>
         <translation>クリップボードにコピー</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="291"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="699"/>
         <source>Open in external viewer</source>
         <translation>外部ビューアで開く</translation>
     </message>
@@ -1609,17 +1669,37 @@
         <translation>トラック情報</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="65"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="38"/>
+        <source>General</source>
+        <translation>全般</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="60"/>
+        <source>Tags</source>
+        <translation>タグ</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="82"/>
+        <source>File</source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="104"/>
+        <source>Audio</source>
+        <translation>オーディオ</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="165"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="113"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="213"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.ui" line="120"/>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="220"/>
         <source>Edit tags…</source>
         <translation>タグを編集…</translation>
     </message>
