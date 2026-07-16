@@ -225,6 +225,9 @@ builds:
   - distro: "mageia_9"
     <<: *mageia_qt6
 
+  - distro: "mageia_10"
+    <<: *mageia_qt6
+
   - distro: "mageia_cauldron"
     <<: *mageia_qt6
 
