@@ -1,5 +1,6 @@
 #include "macmediacontrols.h"
 
+#include "coverart/online/downloader.h"
 #include "track.h"
 
 #import <MediaPlayer/MediaPlayer.h>
@@ -28,6 +29,15 @@ MacMediaControls::MacMediaControls(Playback::Controller *pl, QObject *parent) : 
   });
   connect(player, &Playback::Controller::seeked, this, [this](int) {
     updateNowPlayingInfo();
+  });
+  // Now Playing snapshots the artwork per track, so a mid-track download needs
+  // an explicit refresh.
+  connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
+          this, [this](const QString &artist, const QString &album, const QString &) {
+    const Track current = player->currentTrack();
+    if (current.isValid() && current.artist() == artist && current.album() == album) {
+      updateNowPlayingInfo();
+    }
   });
 }
 

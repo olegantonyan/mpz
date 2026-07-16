@@ -1,6 +1,10 @@
 #include "settings_ui/settingsdialog.h"
 #include "playlist_ui/columnsconfig.h"
 #include "config/storage.h"
+#include "coverart/online/cache.h"
+#include "coverart/online/providerchain.h"
+#include "lyrics/cache.h"
+#include "lyrics/providerchain.h"
 #ifdef ENABLE_CRASH_HANDLER
   #include "crash_handler.h"
 #endif
@@ -21,6 +25,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QMessageBox>
+#include <QPalette>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QSystemTrayIcon>
@@ -49,9 +55,6 @@ namespace {
     "artist", "album", "title", "year", "length", "track_number",
     "path", "url", "filename", "format", "bitrate", "channels", "sample_rate",
   };
-
-  // Online names must match Lyrics::ProviderChain::knownProviders().
-  const QStringList kLyricsProviders = {"embedded", "sidecar", "lrclib", "netease", "qq", "lyrics.ovh"};
 }
 
 SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) :
@@ -62,7 +65,8 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
 
   auto *tabs = new QTabWidget(this);
   tabs->addTab(buildGeneralTab(),  tr("General"));
-  tabs->addTab(buildLyricsTab(),   tr("Lyrics"));
+  // "&&" so the ampersand renders instead of being eaten as a mnemonic.
+  tabs->addTab(buildOnlineTab(),   tr("Online lyrics && covers"));
   tabs->addTab(buildAdvancedTab(), tr("Advanced"));
 
   button_box = new QDialogButtonBox(
@@ -93,6 +97,7 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
   populateLanguages();
   populateColumns();
   populateLyrics();
+  populateCovers();
   populateMprisBlacklist();
   fitColumnsTableHeight();
 
@@ -370,18 +375,69 @@ QWidget *SettingsDialog::buildGeneralTab() {
   return page;
 }
 
-QWidget *SettingsDialog::buildLyricsTab() {
+QWidget *SettingsDialog::buildOnlineTab() {
   auto *page = new QWidget;
   auto *vbox = new QVBoxLayout(page);
-  vbox->addWidget(new QLabel(
-    tr("Provider order (drag to reorder, uncheck to disable):")));
 
+  auto *hint = new QLabel(
+    tr("Embedded tags and files next to the music are always used first. "
+       "These are the online sources tried when nothing is found locally."));
+  hint->setWordWrap(true);
+  hint->setForegroundRole(QPalette::PlaceholderText);
+  vbox->addWidget(hint);
+
+  auto *gb_lyrics = new QGroupBox(tr("Lyrics"));
+  auto *lv = new QVBoxLayout(gb_lyrics);
+  lv->addWidget(new QLabel(tr("Drag to reorder, uncheck to disable:")));
   list_lyrics = new QListWidget;
   list_lyrics->setDragDropMode(QAbstractItemView::InternalMove);
   list_lyrics->setSelectionMode(QAbstractItemView::SingleSelection);
-  vbox->addWidget(list_lyrics);
+  lv->addWidget(list_lyrics);
+  lv->addLayout(buildCacheButtons(tr("Open lyrics folder"), tr("Clear downloaded lyrics"),
+                                  tr("Delete all lyrics downloaded from online providers?"),
+                                  []() { return Lyrics::Cache::instance().dir(); },
+                                  []() { return Lyrics::Cache::instance().clear(); }));
+  vbox->addWidget(gb_lyrics);
+
+  auto *gb_covers = new QGroupBox(tr("Album covers"));
+  auto *cv = new QVBoxLayout(gb_covers);
+  cv->addWidget(new QLabel(tr("Download missing covers from (drag to reorder, uncheck to disable):")));
+  list_covers = new QListWidget;
+  list_covers->setDragDropMode(QAbstractItemView::InternalMove);
+  list_covers->setSelectionMode(QAbstractItemView::SingleSelection);
+  cv->addWidget(list_covers);
+  cv->addLayout(buildCacheButtons(tr("Open covers folder"), tr("Clear downloaded covers"),
+                                  tr("Delete all covers downloaded from online providers?"),
+                                  []() { return CoverArt::Online::Cache::instance().dir(); },
+                                  []() { return CoverArt::Online::Cache::instance().clear(); }));
+  vbox->addWidget(gb_covers);
 
   return page;
+}
+
+QLayout *SettingsDialog::buildCacheButtons(const QString &open_text, const QString &clear_text,
+                                           const QString &confirm_text,
+                                           std::function<QString()> dir,
+                                           std::function<int()> clear) {
+  auto *row = new QHBoxLayout;
+  auto *open_btn = new QPushButton(open_text);
+  auto *clear_btn = new QPushButton(clear_text);
+  row->addWidget(open_btn);
+  row->addWidget(clear_btn);
+  row->addStretch();
+
+  connect(open_btn, &QPushButton::clicked, this, [dir]() {
+    // The cache constructor creates the directory, so this works before the
+    // first download too.
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir()));
+  });
+  connect(clear_btn, &QPushButton::clicked, this, [this, clear, clear_text, confirm_text]() {
+    if (QMessageBox::question(this, clear_text, confirm_text) != QMessageBox::Yes) {
+      return;
+    }
+    QMessageBox::information(this, clear_text, tr("Removed %n file(s).", nullptr, clear()));
+  });
+  return row;
 }
 
 QWidget *SettingsDialog::buildAdvancedTab() {
@@ -531,30 +587,35 @@ void SettingsDialog::populateColumns() {
 }
 
 void SettingsDialog::populateLyrics() {
-  const QStringList configured = global_conf.lyricsProviders();
-  // Configured ones first (in order), then any known-but-disabled providers as unchecked.
+  populateProviders(list_lyrics, Lyrics::ProviderChain::knownProviders(),
+                    global_conf.lyricsProviders(), &Lyrics::ProviderChain::displayName);
+}
+
+void SettingsDialog::populateCovers() {
+  populateProviders(list_covers, CoverArt::Online::ProviderChain::knownProviders(),
+                    global_conf.coverProviders(), &CoverArt::Online::ProviderChain::displayName);
+}
+
+void SettingsDialog::populateProviders(QListWidget *list, const QStringList &known,
+                                       const QStringList &configured,
+                                       QString (*display_name)(const QString &)) {
+  // Configured ones first (in order), then any known-but-disabled providers as
+  // unchecked. Names the chain doesn't know are dropped, which is how legacy
+  // built-in entries retire themselves on the next save.
   QStringList all;
   for (const auto &p : configured) {
-    if (kLyricsProviders.contains(p) && !all.contains(p)) all << p;
+    if (known.contains(p) && !all.contains(p)) all << p;
   }
-  for (const auto &p : kLyricsProviders) {
+  for (const auto &p : known) {
     if (!all.contains(p)) all << p;
   }
   for (const auto &p : all) {
-    QString label;
-    if      (p == "embedded")   label = "Embedded (tags)";
-    else if (p == "sidecar")    label = "Sidecar (.lrc, .txt)";
-    else if (p == "lrclib")     label = "LRCLIB (online)";
-    else if (p == "netease")    label = "NetEase Cloud Music (online)";
-    else if (p == "qq")         label = "QQ Music (online)";
-    else if (p == "lyrics.ovh") label = "Lyrics.ovh (online)";
-    else                        label = p;
-    auto *item = new QListWidgetItem(label);
+    auto *item = new QListWidgetItem(display_name(p));
     item->setData(Qt::UserRole, p);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable |
                    Qt::ItemIsEnabled | Qt::ItemIsDragEnabled);
     item->setCheckState(configured.contains(p) ? Qt::Checked : Qt::Unchecked);
-    list_lyrics->addItem(item);
+    list->addItem(item);
   }
 }
 
@@ -604,10 +665,12 @@ PlaylistUi::ColumnsConfig SettingsDialog::collectColumns() const {
   return result;
 }
 
-QStringList SettingsDialog::collectLyrics() const {
+QStringList SettingsDialog::collectProviders(const QListWidget *list) const {
   QStringList result;
-  for (int i = 0; i < list_lyrics->count(); ++i) {
-    auto *item = list_lyrics->item(i);
+  if (!list) return result;
+  // Row order is the fallback order; unchecked means absent.
+  for (int i = 0; i < list->count(); ++i) {
+    auto *item = list->item(i);
     if (item->checkState() == Qt::Checked) {
       result << item->data(Qt::UserRole).toString();
     }
@@ -649,7 +712,8 @@ void SettingsDialog::apply() {
   global_conf.saveColumnsConfig(collectColumns());
 
   // Lyrics
-  global_conf.saveLyricsProviders(collectLyrics());
+  global_conf.saveLyricsProviders(collectProviders(list_lyrics));
+  global_conf.saveCoverProviders(collectProviders(list_covers));
 
   // Advanced
   global_conf.saveSingleInstance(check_single_instance->isChecked());

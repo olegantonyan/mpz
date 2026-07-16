@@ -56,6 +56,7 @@ private:
   void setup_view(QTableView *view, QStandardItemModel *m);
   void setup_context_menu(QTableView *view);
   void setup_cover_art();
+  void render_cover_art();
   void setup_lyrics();
 
   void add_general_rows();

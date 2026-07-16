@@ -4,6 +4,7 @@
 #include "icons.h"
 #include "tageditordialog.h"
 #include "config/global.h"
+#include "coverart/online/downloader.h"
 #include "lyrics/lrcparser.h"
 #include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
@@ -539,10 +540,20 @@ void TrackInfoDialog::setup_context_menu(QTableView *view) {
 }
 
 void TrackInfoDialog::setup_cover_art() {
-  cover_art = QPixmap(_track.artCover());
   // The label's geometry is only final after the layout runs, which is later
   // than any resizeEvent on the dialog; follow the label itself instead.
   ui->labelCoverArt->installEventFilter(this);
+  connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
+          this, [this](const QString &artist, const QString &album, const QString &) {
+    if (_track.isValid() && _track.artist() == artist && _track.album() == album) {
+      render_cover_art();
+    }
+  });
+  render_cover_art();
+}
+
+void TrackInfoDialog::render_cover_art() {
+  cover_art = QPixmap(_track.artCover());
   if (cover_art.isNull()) {
     // Same muted placeholder the dockable cover widget uses.
     ui->labelCoverArt->setForegroundRole(QPalette::PlaceholderText);
@@ -613,31 +624,19 @@ void TrackInfoDialog::setup_lyrics() {
     return;
   }
 
+  QString embedded = fetch_embedded_lyrics();
+  if (!embedded.isEmpty()) {
+    render_lyrics("embedded", embedded);
+    return;
+  }
+  QString sidecar = fetch_sidecar_lyrics();
+  if (!sidecar.isEmpty()) {
+    render_lyrics("sidecar", sidecar);
+    return;
+  }
+
   Config::Global global;
-  const auto providers = global.lyricsProviders();
-
-  for (const auto &name : providers) {
-    QString text;
-    if (name == "embedded") {
-      text = fetch_embedded_lyrics();
-    } else if (name == "sidecar") {
-      text = fetch_sidecar_lyrics();
-    } else {
-      continue;
-    }
-    if (!text.isEmpty()) {
-      render_lyrics(name, text);
-      return;
-    }
-  }
-
-  QStringList online;
-  const auto known = Lyrics::ProviderChain::knownProviders();
-  for (const auto &name : providers) {
-    if (known.contains(name)) {
-      online << name;
-    }
-  }
+  const auto online = Lyrics::ProviderChain::filterKnown(global.lyricsProviders());
   if (!online.isEmpty() && !_track.artist().isEmpty() && !_track.title().isEmpty()) {
     render_lyrics_state(tr("Searching lyrics..."));
     auto *chain = new Lyrics::ProviderChain(this);

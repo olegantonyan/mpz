@@ -3,6 +3,7 @@
 #include "shortcuts_ui/shortcutsdialog.h"
 #include "coverart/covers.h"
 #include "coverart/coverartwidget.h"
+#include "coverart/online/downloader.h"
 #include "lyrics/lyricswidget.h"
 #include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
@@ -448,6 +449,14 @@ void MainWindow::setupDockWidgets() {
   connect(player, &Playback::Controller::started, cover_widget, &CoverArt::Widget::setTrack);
   connect(player, &Playback::Controller::trackChanged, cover_widget, &CoverArt::Widget::setTrack);
   connect(player, &Playback::Controller::stopped, cover_widget, &CoverArt::Widget::clear);
+
+  // The only trigger for online cover lookups: driving it from playback rather
+  // than from Track::artCover() is what keeps "current track only" true no
+  // matter who reads a cover.
+  connect(player, &Playback::Controller::started, &CoverArt::Online::Downloader::instance(),
+          &CoverArt::Online::Downloader::request);
+  connect(player, &Playback::Controller::trackChanged, &CoverArt::Online::Downloader::instance(),
+          &CoverArt::Online::Downloader::request);
 
   connect(player, &Playback::Controller::started, lyrics_widget, &Lyrics::Widget::setTrack);
   connect(player, &Playback::Controller::trackChanged, lyrics_widget, &Lyrics::Widget::setTrack);

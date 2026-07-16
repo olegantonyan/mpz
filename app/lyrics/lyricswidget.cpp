@@ -58,31 +58,19 @@ namespace Lyrics {
       return;
     }
 
+    QString embedded = fetch_embedded_lyrics(track);
+    if (!embedded.isEmpty()) {
+      render_lyrics("embedded", embedded);
+      return;
+    }
+    QString sidecar = fetch_sidecar_lyrics(track);
+    if (!sidecar.isEmpty()) {
+      render_lyrics("sidecar", sidecar);
+      return;
+    }
+
     Config::Global global;
-    const auto providers = global.lyricsProviders();
-
-    for (const auto &name : providers) {
-      QString found;
-      if (name == "embedded") {
-        found = fetch_embedded_lyrics(track);
-      } else if (name == "sidecar") {
-        found = fetch_sidecar_lyrics(track);
-      } else {
-        continue;
-      }
-      if (!found.isEmpty()) {
-        render_lyrics(name, found);
-        return;
-      }
-    }
-
-    QStringList online;
-    const auto known = ProviderChain::knownProviders();
-    for (const auto &name : providers) {
-      if (known.contains(name)) {
-        online << name;
-      }
-    }
+    const auto online = ProviderChain::filterKnown(global.lyricsProviders());
     if (!online.isEmpty() && !track.artist().isEmpty() && !track.title().isEmpty()) {
       render_state(tr("Searching lyrics..."));
       chain = new ProviderChain(this);

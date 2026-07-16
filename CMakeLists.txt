@@ -54,8 +54,17 @@ set(PROJECT_SOURCES
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/coverartwidget.cpp
+  app/coverart/online/albummatch.cpp
+  app/coverart/online/cache.cpp
+  app/coverart/online/coverartarchiveclient.cpp
+  app/coverart/online/deezerclient.cpp
+  app/coverart/online/downloader.cpp
+  app/coverart/online/itunesclient.cpp
+  app/coverart/online/provider.cpp
+  app/coverart/online/providerchain.cpp
   app/lyrics/lyricswidget.cpp
   app/lyrics/cache.cpp
   app/lyrics/lrclibclient.cpp

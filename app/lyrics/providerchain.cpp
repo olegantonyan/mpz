@@ -35,26 +35,33 @@ namespace Lyrics {
     return name;
   }
 
-  void ProviderChain::fetch(const QStringList &enabled_providers, const TrackQuery &q) {
-    query = q;
-    pending.clear();
+  QStringList ProviderChain::filterKnown(const QStringList &names) {
     const auto known = knownProviders();
-    for (const auto &name : enabled_providers) {
+    QStringList result;
+    for (const auto &name : names) {
       if (known.contains(name)) {
-        pending << name;
+        result << name;
       }
     }
+    return result;
+  }
+
+  void ProviderChain::fetch(const QStringList &enabled_providers, const TrackQuery &q) {
+    query = q;
+    enabled = filterKnown(enabled_providers);
+    pending = enabled;
+
     Cache::Entry cached;
     if (Cache::instance().lookup(query, cached)) {
-      if (cached.found) {
-        emit found(cached.provider, cached.lyrics);
-      } else {
-        emit notFound();
-      }
+      emit found(cached.provider, cached.lyrics);
       return;
     }
     if (pending.isEmpty()) {
       // No provider consulted — don't record a negative entry.
+      emit notFound();
+      return;
+    }
+    if (Cache::instance().isKnownMiss(query, enabled)) {
       emit notFound();
       return;
     }
@@ -68,8 +75,8 @@ namespace Lyrics {
     if (pending.isEmpty()) {
       if (!had_failure) {
         // Every provider genuinely returned not-found; a failed/timed-out
-        // provider must not poison the session cache.
-        Cache::instance().storeNotFound(query);
+        // provider must not poison the cache with a 30-day sentinel.
+        Cache::instance().storeNotFound(query, enabled);
       }
       emit notFound();
       return;
@@ -82,17 +89,20 @@ namespace Lyrics {
     }
     connect(provider, &Provider::found, this, [this, name, provider](const QString &lyrics) {
       watchdog.stop();
+      provider->disconnect(this);
       provider->deleteLater();
       Cache::instance().storeFound(query, name, lyrics);
       emit found(name, lyrics);
     });
     connect(provider, &Provider::notFound, this, [this, provider]() {
+      provider->disconnect(this);
       provider->deleteLater();
       advance();
     });
     connect(provider, &Provider::failed, this, [this, name, provider](const QString &message) {
       qWarning() << "lyrics provider" << name << "failed:" << message;
       had_failure = true;
+      provider->disconnect(this);
       provider->deleteLater();
       advance();
     });
