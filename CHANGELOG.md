@@ -7,8 +7,11 @@
 - macOS: optional menu bar icon
 - Tray menu: "Show mpz"
 - Track info: tabs with all tags, file and audio metadata
+- Download missing album covers online (off by default)
 
 ### Fixed
+
+- Unchecking all lyrics providers no longer re-enables them
 
 - Tray click hides the window only if "close to tray" is enabled
 - Linux: tray click switches to the window's desktop instead of hiding it

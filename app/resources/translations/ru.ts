@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="105"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="107"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -84,22 +84,28 @@
 <context>
     <name>CoverArt::Widget</name>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="37"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="46"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="71"/>
+        <source>Searching cover art...</source>
+        <translation>Поиск обложки альбома...</translation>
+    </message>
+    <message>
+        <location filename="../../coverart/coverartwidget.cpp" line="71"/>
         <source>No cover art</source>
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="49"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="83"/>
         <source>Nothing playing</source>
         <translation>Ничего не воспроизводится</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="59"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="93"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>
     <message>
-        <location filename="../../coverart/coverartwidget.cpp" line="68"/>
+        <location filename="../../coverart/coverartwidget.cpp" line="102"/>
         <source>Track info</source>
         <translation>Информация о треке</translation>
     </message>
@@ -268,18 +274,18 @@
     </message>
     <message>
         <location filename="../../lyrics/lyricswidget.cpp" line="57"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="94"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="102"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="82"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="90"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="87"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="75"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="108"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="96"/>
         <source>Nothing playing</source>
         <translation>Ничего не воспроизводится</translation>
     </message>
@@ -633,56 +639,56 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="278"/>
-        <location filename="../../mainwindow.cpp" line="313"/>
+        <location filename="../../mainwindow.cpp" line="279"/>
+        <location filename="../../mainwindow.cpp" line="314"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="279"/>
-        <location filename="../../mainwindow.cpp" line="312"/>
+        <location filename="../../mainwindow.cpp" line="280"/>
+        <location filename="../../mainwindow.cpp" line="313"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="280"/>
-        <location filename="../../mainwindow.cpp" line="314"/>
+        <location filename="../../mainwindow.cpp" line="281"/>
+        <location filename="../../mainwindow.cpp" line="315"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="311"/>
+        <location filename="../../mainwindow.cpp" line="312"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="413"/>
+        <location filename="../../mainwindow.cpp" line="414"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="431"/>
+        <location filename="../../mainwindow.cpp" line="432"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="437"/>
+        <location filename="../../mainwindow.cpp" line="438"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="562"/>
-        <location filename="../../mainwindow.cpp" line="566"/>
+        <location filename="../../mainwindow.cpp" line="571"/>
+        <location filename="../../mainwindow.cpp" line="575"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="568"/>
+        <location filename="../../mainwindow.cpp" line="577"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="580"/>
+        <location filename="../../mainwindow.cpp" line="589"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -865,264 +871,323 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="60"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="63"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="64"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="67"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="65"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="370"/>
+        <source>Embedded tags and files next to the music are always used first. These are the online sources tried when nothing is found locally.</source>
+        <translation>Встроенные тексты и изображения всегда в приоритете. Онлайн провайдеры используются только если встроенных нет локально.</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="376"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="66"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="70"/>
         <source>Advanced</source>
         <translation>Дополнительно</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="73"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="69"/>
+        <source>Online lyrics &amp;&amp; covers</source>
+        <translation>Онлайн тексты песен и обложки альбомов</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="77"/>
         <source>Open config directory</source>
         <translation>Открыть папку с конфигами</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="79"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="83"/>
         <source>Open crash log directory</source>
         <translation>Открыть папку с журналом сбоев</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="118"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="123"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="122"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="127"/>
         <source>Stop playback when current track or playlist is removed</source>
         <translation>Останавливать воспроизведение при удалении трека или плейлиста</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="126"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="131"/>
         <source>Prevent system sleep while playing</source>
         <translation>Не давать системе уснуть во время воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="132"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
         <source>KiB</source>
         <translation>КиБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="460"/>
         <source>Stream buffer size:</source>
         <translation>Размер буфера потока:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="146"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="150"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="142"/>
         <source>Show icon in the menu bar</source>
         <translation>Показывать значок в строке меню</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="152"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="144"/>
         <source>Show system tray icon</source>
         <translation>Показывать значок в трее</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="160"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="152"/>
         <source>No system tray detected. On GNOME, install the &quot;AppIndicator and KStatusNotifierItem Support&quot; extension for the tray icon to appear.</source>
         <translation>Системный трей не обнаружен. В GNOME установите расширение «AppIndicator and KStatusNotifierItem Support», чтобы значок в трее отображался.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="168"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="160"/>
         <source>Close to tray instead of quitting</source>
         <translation>Скрывать в трей вместо выхода</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="174"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="166"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="179"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="171"/>
         <source>Override theme&apos;s playlist row height:</source>
         <translation>Переопределить высоту строки плейлиста из темы:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="174"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="200"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="192"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="202"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="268"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="409"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="194"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="452"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="211"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="203"/>
         <source>Library</source>
         <translation>Библиотека</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="215"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="207"/>
         <source>All levels (default)</source>
         <translation>Все уровни (по умолчанию)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="216"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="208"/>
         <source>Top level only</source>
         <translation>Только верхний уровень</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="229"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="221"/>
         <source>Filter scope:</source>
         <translation>Область фильтра:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="237"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="229"/>
         <source>Playlist columns</source>
         <translation>Столбцы плейлиста</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="242"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="234"/>
         <source>Field</source>
         <translation>Поле</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="242"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="234"/>
         <source>Width %</source>
         <translation>Ширина %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="242"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="234"/>
         <source>Alignment</source>
         <translation>Выравнивание</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="242"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="234"/>
         <source>Stretch</source>
         <translation>Растягивать</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="256"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="435"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="248"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="257"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="436"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="249"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="493"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="258"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="250"/>
         <source>Move up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="259"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="251"/>
         <source>Move down</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="252"/>
         <source>Restore defaults</source>
         <translation>Восстановить по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="293"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="520"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="294"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="286"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="578"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="377"/>
-        <source>Provider order (drag to reorder, uncheck to disable):</source>
-        <translation>Порядок источников (перетащите для изменения, снимите галочку для отключения):</translation>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="378"/>
+        <source>Drag to reorder, uncheck to disable:</source>
+        <translation>Перетащите для приоритезации, снимите галку чтобы отключить:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="393"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="383"/>
+        <source>Open lyrics folder</source>
+        <translation>Открыть папку с текстами</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="383"/>
+        <source>Clear downloaded lyrics</source>
+        <translation>Очистить загруженные тексты</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="384"/>
+        <source>Delete all lyrics downloaded from online providers?</source>
+        <translation>Удалить все тексты загруженные из онлайн провайдеров?</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="389"/>
+        <source>Album covers</source>
+        <translation>Обложки альбомов</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="391"/>
+        <source>Download missing covers from (drag to reorder, uncheck to disable):</source>
+        <translation>Загружать недостающие обложки альбомов (для приоритезации перетащите, для отключения снимите галку):</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
+        <source>Open covers folder</source>
+        <translation>Открыть папку с обложками</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
+        <source>Clear downloaded covers</source>
+        <translation>Очистить загруженные обложки</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="397"/>
+        <source>Delete all covers downloaded from online providers?</source>
+        <translation>Удалить все загруженные из онлайн провайдеров обложки альбомов?</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../settings_ui/settingsdialog.cpp" line="425"/>
+        <source>Removed %n file(s).</source>
+        <translation>
+            <numerusform>Удалено %n файл.</numerusform>
+            <numerusform>Удалено %n файла.</numerusform>
+            <numerusform>Удалено %n файлов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="436"/>
         <source>Single instance mode</source>
         <translation>Один экземпляр приложения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="404"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
         <source>IPC port:</source>
         <translation>IPC порт:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="417"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
         <source>Playback log size:</source>
         <translation>Размер лога воспроизведения:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="420"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="477"/>
         <source>entries</source>
         <translation>записей</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="428"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="485"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="431"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="488"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="445"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="502"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="446"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="503"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="457"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="514"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
         <source>Crash reports:</source>
         <translation>Отчёты о сбоях:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="466"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
         <source>Send automatically</source>
         <translation>Отправлять автоматически</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="467"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="524"/>
         <source>Ask after next crash</source>
         <translation>Спрашивать после сбоя</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="468"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
         <source>Never send</source>
         <translation>Не отправлять</translation>
     </message>
@@ -1130,131 +1195,131 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
-        <location filename="../../shortcuts.cpp" line="74"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="80"/>
         <source>Open shortcuts dialog</source>
         <translation>Открыть диалог клавиатурных сочетаний</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
-        <location filename="../../shortcuts.cpp" line="75"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="81"/>
         <source>Jump to playing track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="51"/>
-        <location filename="../../shortcuts.cpp" line="76"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="82"/>
         <source>Quit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="35"/>
-        <location filename="../../shortcuts.cpp" line="62"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Focus on library</source>
         <translation>Фокус на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="26"/>
-        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Play / Pause</source>
         <translation>Воспроизведение / Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="32"/>
-        <location filename="../../shortcuts.cpp" line="59"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Volume up</source>
         <translation>Увеличить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
-        <location filename="../../shortcuts.cpp" line="60"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Volume down</source>
         <translation>Уменьшить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="34"/>
-        <location filename="../../shortcuts.cpp" line="61"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="36"/>
-        <location filename="../../shortcuts.cpp" line="63"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Focus on playlists</source>
         <translation>Фокус на плейлисты</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
-        <location filename="../../shortcuts.cpp" line="64"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Focus on playlist</source>
         <translation>Фокус на плейлист</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
-        <location filename="../../shortcuts.cpp" line="65"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="71"/>
         <source>Focus on library filter</source>
         <translation>Фокус на фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
-        <location filename="../../shortcuts.cpp" line="66"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="72"/>
         <source>Focus on playlists filter</source>
         <translation>Фокус на фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
-        <location filename="../../shortcuts.cpp" line="67"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="73"/>
         <source>Focus on playlist filter</source>
         <translation>Фокус на фильтр плейлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
-        <location filename="../../shortcuts.cpp" line="68"/>
+        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="74"/>
         <source>Open main menu</source>
         <translation>Открыть главное меню</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
-        <location filename="../../shortcuts.cpp" line="69"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="75"/>
         <source>Open playback log</source>
         <translation>Открыть лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="45"/>
-        <location filename="../../shortcuts.cpp" line="70"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
+        <location filename="../../shortcuts.cpp" line="76"/>
         <source>Open sort menu</source>
         <translation>Открыть меню сортировок</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
-        <location filename="../../shortcuts.cpp" line="72"/>
+        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="78"/>
         <source>Open output device menu</source>
         <translation>Открыть меню устройства вывода</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="54"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="30"/>
-        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="31"/>
-        <location filename="../../shortcuts.cpp" line="58"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
@@ -1509,159 +1574,159 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="262"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="263"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="265"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="266"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="268"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="269"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="271"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="272"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="274"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="275"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="275"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="276"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="277"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="279"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="283"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="285"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="286"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="288"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="296"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="298"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="297"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="299"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="302"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="303"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="320"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="321"/>
         <source>Unsupported tags</source>
         <translation>Неподдерживаемые теги</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="329"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="330"/>
         <source>File name</source>
         <translation>Имя файла</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="330"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="331"/>
         <source>Directory</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="331"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="332"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="331"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="332"/>
         <source>%1 (%2 bytes)</source>
         <translation>%1 (%2 байт)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="334"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="335"/>
         <source>Modified</source>
         <translation>Изменён</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
         <source>Created</source>
         <translation>Создан</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="339"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="340"/>
         <source>Read-only</source>
         <translation>Только для чтения</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="341"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="342"/>
         <source>Symlink target</source>
         <translation>Цель символьной ссылки</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="497"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="498"/>
         <source>yes</source>
         <translation>да</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="497"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="498"/>
         <source>no</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="525"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="526"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="529"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="530"/>
         <source>Search on web</source>
         <translation>Искать в интернете</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="555"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="566"/>
         <source>No cover art</source>
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="642"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="641"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="649"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="657"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="648"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="656"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="710"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="709"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="718"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="717"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>

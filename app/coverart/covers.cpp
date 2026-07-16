@@ -30,7 +30,7 @@ namespace CoverArt {
   {
   }
 
-  QString Covers::get(const QString &filepath) {
+  QString Covers::get(const QString &filepath, const QString &artist, const QString &album) {
     if (filepath.isEmpty()) {
       return QString();
     }
@@ -51,13 +51,19 @@ namespace CoverArt {
     } else if (modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
       found = findCoverLocally(key);
       if (found.isEmpty()) {
-        auto img = embedded_covers.get(filepath);
-        if (!img.isEmpty()) {
-          return img;
-        }
+        // Not cached: `cache` is keyed by directory but embedded art is per
+        // file, so caching it here would serve one track's art to the whole dir.
+        found = embedded_covers.get(filepath);
       } else {
         cache.insert(key, found);
       }
+    }
+
+    if (found.isEmpty()) {
+      // Downloaded covers are keyed by artist+album, so for the same reason as
+      // above they must not go into the dir-keyed `cache` either. Cheap enough
+      // to re-check: a hash plus a few QFile::exists.
+      found = Online::Cache::instance().lookup(Online::AlbumQuery{artist, album});
     }
 
     return found;

@@ -69,10 +69,16 @@ namespace Config {
     QStringList lyricsProviders() const;
     bool saveLyricsProviders(const QStringList &arg);
 
+    QStringList coverProviders() const;
+    bool saveCoverProviders(const QStringList &arg);
+
     QString libraryFilterScope() const;
     void saveLibraryFilterScope(const QString &arg);
 
   private:
+    QStringList providersUnder(const QString &key) const;
+    bool saveProvidersUnder(const QString &key, const QStringList &arg);
+
     Config::Storage storage;
   };
 }

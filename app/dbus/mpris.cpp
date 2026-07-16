@@ -3,6 +3,8 @@
 #include "playeradaptor.h" // generated
 #include "mediaplayer2adaptor.h" // generated
 
+#include "coverart/online/downloader.h"
+
 #include <QDebug>
 #include <QHostInfo>
 #include <QDBusConnection>
@@ -74,6 +76,17 @@ Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QOb
   connect(player, &Playback::Controller::trackChanged, this, [=](const Track &t) {
     Q_UNUSED(t)
     notify("Metadata", Metadata());
+  });
+
+  // A cover downloaded mid-track changes artUrl without any playback event, so
+  // republish rather than leave the art blank until the next pause.
+  connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
+          this, [=](const QString &artist, const QString &album, const QString &path) {
+    Q_UNUSED(path)
+    const Track current = player->currentTrack();
+    if (current.isValid() && current.artist() == artist && current.album() == album) {
+      notify("Metadata", Metadata());
+    }
   });
 
   connect(player, &Playback::Controller::volumeChanged, this, [=](int val) {

@@ -1,5 +1,6 @@
 #include "coverartwidget.h"
 
+#include "coverart/online/downloader.h"
 #include "icons.h"
 
 #include <QResizeEvent>
@@ -24,17 +25,50 @@ namespace CoverArt {
     setFont(f);
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &QWidget::customContextMenuRequested, this, &Widget::showContextMenu);
+    auto &downloader = Online::Downloader::instance();
+    connect(&downloader, &Online::Downloader::searchStarted, this, &Widget::onSearchStarted);
+    connect(&downloader, &Online::Downloader::coverAvailable, this, &Widget::onCoverDownloaded);
+    connect(&downloader, &Online::Downloader::searchFinished, this, &Widget::onSearchFinished);
     clear();
   }
 
   void Widget::setTrack(const Track &track) {
     _track = track;
-    const QString path = track.artCover();
+    render_cover();
+  }
+
+  bool Widget::isCurrent(const QString &artist, const QString &album) const {
+    return _track.isValid() && _track.artist() == artist && _track.album() == album;
+  }
+
+  void Widget::onSearchStarted(const QString &artist, const QString &album) {
+    if (isCurrent(artist, album) && _cover_path.isEmpty()) {
+      setText(tr("Searching cover art..."));
+    }
+  }
+
+  void Widget::onCoverDownloaded(const QString &artist, const QString &album, const QString &path) {
+    Q_UNUSED(path)
+    if (isCurrent(artist, album)) {
+      render_cover();
+    }
+  }
+
+  void Widget::onSearchFinished(const QString &artist, const QString &album) {
+    if (isCurrent(artist, album)) {
+      render_cover();
+    }
+  }
+
+  void Widget::render_cover() {
+    const QString path = _track.artCover();
     QPixmap cover(path);
     if (path.isEmpty() || cover.isNull()) {
       _cover_path.clear();
       source = QPixmap();
-      setText(tr("No cover art"));
+      // request() may not have run yet, so ask rather than assume.
+      const bool searching = Online::Downloader::instance().isSearching(_track.artist(), _track.album());
+      setText(searching ? tr("Searching cover art...") : tr("No cover art"));
       return;
     }
     _cover_path = path;
