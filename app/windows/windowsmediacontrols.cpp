@@ -64,6 +64,7 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   d->smtc.IsStopEnabled(true);
   d->smtc.IsNextEnabled(true);
   d->smtc.IsPreviousEnabled(true);
+  updateState(player->state());
 
   // SMTC callbacks arrive on a WinRT pool thread; marshal to the GUI thread before touching widgets.
   d->smtc.ButtonPressed([this](SystemMediaTransportControls const &, SystemMediaTransportControlsButtonPressedEventArgs const &args) {
@@ -71,8 +72,15 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
     QMetaObject::invokeMethod(this, [this, button]() {
       const Playback::Controls c = player->controls();
       switch (button) {
-        case SystemMediaTransportControlsButton::Play:     c.play->click(); break;
-        case SystemMediaTransportControlsButton::Pause:    c.pause->click(); break;
+        // Windows picks Play vs Pause from the PlaybackStatus we reported and gets it wrong in the background.
+        case SystemMediaTransportControlsButton::Play:
+        case SystemMediaTransportControlsButton::Pause:
+          if (player->state() == Playback::Controller::Playing) {
+            c.pause->click();
+          } else {
+            c.play->click();
+          }
+          break;
         case SystemMediaTransportControlsButton::Stop:     c.stop->click(); break;
         case SystemMediaTransportControlsButton::Next:     c.next->click(); break;
         case SystemMediaTransportControlsButton::Previous: c.prev->click(); break;
@@ -89,13 +97,13 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   });
 
   connect(player, &Playback::Controller::started, this, [this](const Track &) {
-    updateMetadata();
     updateState(Playback::Controller::Playing);
+    updateMetadata();
     updateTimeline();
   });
   connect(player, &Playback::Controller::paused, this, [this](const Track &) {
-    updateMetadata();
     updateState(Playback::Controller::Paused);
+    updateMetadata();
     updateTimeline();
   });
   connect(player, &Playback::Controller::stopped, this, [this]() {
@@ -151,17 +159,20 @@ void WindowsMediaControls::updateMetadata() {
   // CreateFromUri(file://) renders a black box in SMTC; resolve a StorageFile and
   // use CreateFromFile. The async completes on a pool thread — fine, DisplayUpdater is agile.
   const winrt::hstring path = to_hstring(QDir::toNativeSeparators(art));
-  auto op = StorageFile::GetFileFromPathAsync(path);
-  op.Completed([updater](IAsyncOperation<StorageFile> const &operation, AsyncStatus status) {
-    if (status != AsyncStatus::Completed) {
-      return;
-    }
-    try {
-      updater.Thumbnail(RandomAccessStreamReference::CreateFromFile(operation.GetResults()));
-      updater.Update();
-    } catch (winrt::hresult_error const &) {
-    }
-  });
+  try {
+    auto op = StorageFile::GetFileFromPathAsync(path);
+    op.Completed([updater](IAsyncOperation<StorageFile> const &operation, AsyncStatus status) {
+      if (status != AsyncStatus::Completed) {
+        return;
+      }
+      try {
+        updater.Thumbnail(RandomAccessStreamReference::CreateFromFile(operation.GetResults()));
+        updater.Update();
+      } catch (winrt::hresult_error const &) {
+      }
+    });
+  } catch (winrt::hresult_error const &) {
+  }
 }
 
 void WindowsMediaControls::updateState(Playback::Controller::State state) {
