@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 
 project(mpz VERSION 2.0.17 LANGUAGES CXX C)
 
