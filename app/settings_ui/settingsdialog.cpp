@@ -132,19 +132,6 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_inhibit_sleep->setChecked(global_conf.inhibitSleepWhilePlaying());
   pv->addWidget(check_inhibit_sleep);
 
-  spin_buffer_kib = new QSpinBox;
-  spin_buffer_kib->setRange(16, 4096);
-  spin_buffer_kib->setSuffix(" " + tr("KiB"));
-  // streamBufferSize() is in bytes; default 131072 = 128 KiB.
-  int bytes = global_conf.streamBufferSize();
-  if (bytes <= 0) bytes = 128 * BUFFER_BYTES_PER_KIB;
-  spin_buffer_kib->setValue(bytes / BUFFER_BYTES_PER_KIB);
-  auto *buf_row = new QHBoxLayout;
-  buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
-  buf_row->addWidget(spin_buffer_kib);
-  buf_row->addStretch();
-  pv->addLayout(buf_row);
-
   vbox->addWidget(gb_playback);
 
   // Interface
@@ -468,6 +455,20 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   port_row->addStretch();
   vbox->addLayout(port_row);
 
+  // Stream buffer size
+  auto *buf_row = new QHBoxLayout;
+  buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
+  spin_buffer_kib = new QSpinBox;
+  spin_buffer_kib->setRange(16, 4096);
+  spin_buffer_kib->setSuffix(" " + tr("KiB"));
+  // streamBufferSize() is in bytes; default 131072 = 128 KiB.
+  int bytes = global_conf.streamBufferSize();
+  if (bytes <= 0) bytes = 128 * BUFFER_BYTES_PER_KIB;
+  spin_buffer_kib->setValue(bytes / BUFFER_BYTES_PER_KIB);
+  buf_row->addWidget(spin_buffer_kib);
+  buf_row->addStretch();
+  vbox->addLayout(buf_row);
+
   // Playback log size
   auto *plog_row = new QHBoxLayout;
   plog_row->addWidget(new QLabel(tr("Playback log size:")));
@@ -691,7 +692,6 @@ void SettingsDialog::apply() {
   // Playback
   global_conf.saveStopWhenTrackRemoved(check_stop_when_track_removed->isChecked());
   global_conf.saveInhibitSleepWhilePlaying(check_inhibit_sleep->isChecked());
-  global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
 
   // Interface
   global_conf.saveTrayIconEnabled(check_tray_icon->isChecked());
@@ -718,6 +718,7 @@ void SettingsDialog::apply() {
   // Advanced
   global_conf.saveSingleInstance(check_single_instance->isChecked());
   global_conf.saveIpcPort(spin_ipc_port->value());
+  global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
 #ifdef MPRIS_ENABLE
   if (list_mpris_blacklist) {
