@@ -23,7 +23,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Native C++/Qt UI - fast and responsive;
 - Drag-n-drop files and folders from file manager;
 - Internet radio in `m3u` and `pls` formats;
-- CUE sheets, with seamless playback of single-file albums;
+- CUE sheets, with gapless playback of single-file albums;
 - Tag editor;
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
