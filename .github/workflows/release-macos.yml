@@ -81,7 +81,7 @@ jobs:
           echo "--- linked libs (non-system) ---"
           otool -L "$APP/Contents/MacOS/mpz" | grep -vE '^\s*(/System/|/usr/lib/)' || true
           echo "--- codesign verify ---"
-          codesign --verify --deep --strict --verbose=2 "$APP" || true
+          codesign --verify --deep --strict --verbose=2 "$APP"
         env:
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
 

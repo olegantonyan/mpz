@@ -5,15 +5,15 @@ pkgbase = <%= pkgname %>
 	url = https://github.com/olegantonyan/mpz
 	arch = x86_64
 	license = GPL3
+	makedepends = cmake
 	depends = qt6-multimedia
 	depends = qt6-svg
 	depends = hicolor-icon-theme
-  depends = yaml-cpp
-  depends = taglib
-	depends = cmake
+	depends = yaml-cpp
+	depends = taglib
 	depends = libmpdclient
 	depends = cpptrace
-  provides = <%= pkgname %>
+	provides = <%= pkgname %>
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 
