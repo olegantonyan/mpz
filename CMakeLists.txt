@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 
 project(mpz VERSION 2.0.17 LANGUAGES CXX C)
 
@@ -377,7 +377,10 @@ if (ENABLE_QHOTKEY)
   else()
     set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
     message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+    # QHotkey declares cmake_minimum_required(3.1), which CMake >= 4 rejects outright
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
     add_subdirectory(${QHOTKEY_DIR})
+    unset(CMAKE_POLICY_VERSION_MINIMUM)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
   endif()
 else()

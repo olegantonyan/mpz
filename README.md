@@ -110,7 +110,7 @@ Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, lib
 Package names may differ between distros.
 
 ```
-cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 
 # now you can use build/mpz binary directly

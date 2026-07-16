@@ -27,7 +27,6 @@ Requires:      {{ runtime_dependencies | join: ' ' }}
 cmake -S . -B _build \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=%{_prefix} \
-  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DPACKAGE_VERSION={{ version }} \
   {{ CMAKE_EXTRA_CLI }}
 cmake --build _build %{?_smp_mflags}
