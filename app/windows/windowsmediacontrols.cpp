@@ -183,7 +183,6 @@ void WindowsMediaControls::updateState(Playback::Controller::State state) {
     case Playback::Controller::Stopped: status = MediaPlaybackStatus::Stopped; break;
   }
   d->smtc.PlaybackStatus(status);
-  Sleep(100);
 }
 
 void WindowsMediaControls::updateTimeline() {
