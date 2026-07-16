@@ -119,10 +119,6 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   connect(player, &Playback::Controller::seeked, this, [this](int) {
     updateTimeline();
   });
-  // Re-assert status each tick: Windows drops us as the play/pause target if our reported state goes stale.
-  connect(player, &Playback::Controller::progress, this, [this](const Track &, int) {
-    updateState(player->state());
-  });
 }
 
 WindowsMediaControls::~WindowsMediaControls() {
@@ -187,6 +183,7 @@ void WindowsMediaControls::updateState(Playback::Controller::State state) {
     case Playback::Controller::Stopped: status = MediaPlaybackStatus::Stopped; break;
   }
   d->smtc.PlaybackStatus(status);
+  Sleep(100);
 }
 
 void WindowsMediaControls::updateTimeline() {
