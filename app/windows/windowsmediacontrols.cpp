@@ -6,6 +6,10 @@
 #include <QDir>
 #include <QMetaObject>
 #include <QToolButton>
+#include <QFile>
+#include <QStandardPaths>
+#include <QDateTime>
+#include <QTextStream>
 
 #include <chrono>
 
@@ -40,10 +44,40 @@ namespace {
   winrt::hstring to_hstring(const QString &s) {
     return winrt::hstring{ s.toStdWString() };
   }
+
+  void debug_log(const QString &msg) {
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(dir);
+    QFile f(dir + "/smtc_debug.log");
+    if (f.open(QIODevice::Append | QIODevice::Text)) {
+      QTextStream(&f) << QDateTime::currentDateTime().toString(Qt::ISODateWithMs) << "  " << msg << '\n';
+    }
+  }
+
+  const char *smtc_button_name(SystemMediaTransportControlsButton b) {
+    switch (b) {
+      case SystemMediaTransportControlsButton::Play:     return "Play";
+      case SystemMediaTransportControlsButton::Pause:    return "Pause";
+      case SystemMediaTransportControlsButton::Stop:     return "Stop";
+      case SystemMediaTransportControlsButton::Next:     return "Next";
+      case SystemMediaTransportControlsButton::Previous: return "Previous";
+      default:                                           return "Other";
+    }
+  }
+
+  const char *controller_state_name(Playback::Controller::State s) {
+    switch (s) {
+      case Playback::Controller::Playing: return "Playing";
+      case Playback::Controller::Paused:  return "Paused";
+      case Playback::Controller::Stopped: return "Stopped";
+    }
+    return "?";
+  }
 }
 
 struct WindowsMediaControls::Impl {
   SystemMediaTransportControls smtc{ nullptr };
+  HWND hwnd = nullptr;
 };
 
 WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *window, QObject *parent)
@@ -55,6 +89,7 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   }
 
   HWND hwnd = reinterpret_cast<HWND>(window->winId());
+  d->hwnd = hwnd;
   auto interop = winrt::get_activation_factory<SystemMediaTransportControls, ISystemMediaTransportControlsInterop>();
   winrt::check_hresult(interop->GetForWindow(hwnd, winrt::guid_of<SystemMediaTransportControls>(), winrt::put_abi(d->smtc)));
 
@@ -69,8 +104,15 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   // SMTC callbacks arrive on a WinRT pool thread; marshal to the GUI thread before touching widgets.
   d->smtc.ButtonPressed([this](SystemMediaTransportControls const &, SystemMediaTransportControlsButtonPressedEventArgs const &args) {
     const SystemMediaTransportControlsButton button = args.Button();
+    debug_log(QString("ButtonPressed=%1 iconic=%2 fg=%3")
+              .arg(smtc_button_name(button))
+              .arg(IsIconic(d->hwnd) ? 1 : 0)
+              .arg(GetForegroundWindow() == d->hwnd ? 1 : 0));
     QMetaObject::invokeMethod(this, [this, button]() {
       const Playback::Controls c = player->controls();
+      debug_log(QString("  handling=%1 state=%2")
+                .arg(smtc_button_name(button))
+                .arg(controller_state_name(player->state())));
       switch (button) {
         // Windows picks Play vs Pause from the PlaybackStatus we reported and gets it wrong in the background.
         case SystemMediaTransportControlsButton::Play:
@@ -183,6 +225,7 @@ void WindowsMediaControls::updateState(Playback::Controller::State state) {
     case Playback::Controller::Stopped: status = MediaPlaybackStatus::Stopped; break;
   }
   d->smtc.PlaybackStatus(status);
+  debug_log(QString("PlaybackStatus <- %1").arg(controller_state_name(state)));
 }
 
 void WindowsMediaControls::updateTimeline() {
