@@ -17,7 +17,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Middle-click a folder to create a playlist from it
 - Drag and drop files and folders from your file manager to add them
 - Reorder tracks within a playlist by dragging
-- CUE sheets, with seamless playback of single-file albums
+- CUE sheets, with gapless playback of single-file albums
 - OS media integration — MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog
 - Experimental mpd (Music Player Daemon) client mode — add an mpd server as a library folder
@@ -68,7 +68,7 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 
 **What audio formats does mpz support?** Common formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine.
 
-**Does mpz support CUE sheets?** Yes, including seamless playback of single-file albums split by a CUE sheet.
+**Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
 
 **What languages is mpz available in?** The interface is translated into English, Russian, Japanese, and Serbian, and follows your system language by default.
 
