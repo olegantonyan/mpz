@@ -78,11 +78,11 @@ Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https
 
 #### Windows
 
-Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
+Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Legacy Qt5 can probably run on earlier versions, only use it if you run old 32-bit OS below Windows 10.
 
-* win-x86_64 - x86 64-bit build (recommended for most users)
-* win-arm64 - native ARM 64-bit build
-* win-legacy - legacy version for x86 32-bit systems
+* win-x86_64-qt6 - x86 64-bit build (recommended)
+* win-arm64-qt6 - native ARM 64-bit build
+* win-legacy-qt5 - legacy version for x86 32-bit systems (Windows below 10)
 
 win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have an ARM64 Windows PC.
 

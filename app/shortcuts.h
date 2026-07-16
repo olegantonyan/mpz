@@ -97,8 +97,12 @@ private:
   QWidget *_parent;
 
 #ifdef ENABLE_QHOTKEY
+#ifdef Q_OS_WIN
+  QHotkey _playpause_global;
+#else
   QHotkey _play_global;
   QHotkey _pause_global;
+#endif
   QHotkey _stop_global;
   QHotkey _prev_global;
   QHotkey _next_global;

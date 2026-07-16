@@ -5,8 +5,12 @@
 Shortcuts::Shortcuts(QWidget *parent) : QObject(parent)
   , _parent(parent)
 #ifdef ENABLE_QHOTKEY
+#ifdef Q_OS_WIN
+  , _playpause_global(parent)
+#else
   , _play_global(parent)
   , _pause_global(parent)
+#endif
   , _stop_global(parent)
   , _prev_global(parent)
   , _next_global(parent)
@@ -111,15 +115,25 @@ void Shortcuts::setupGlobal() {
   }
   // Skip where the OS owns the media keys — macOS (MPRemoteCommandCenter) and the
   // SMTC build (WindowsMediaControls); a QHotkey grab would double-fire alongside them.
+#ifdef Q_OS_WIN
+  connect(&_playpause_global, &QHotkey::activated, this, &Shortcuts::playPause);
+#else
   connect(&_play_global, &QHotkey::activated, this, &Shortcuts::play);
   connect(&_pause_global, &QHotkey::activated, this, &Shortcuts::pause);
+#endif
   connect(&_stop_global, &QHotkey::activated, this, &Shortcuts::stop);
   connect(&_prev_global, &QHotkey::activated, this, &Shortcuts::prev);
   connect(&_next_global, &QHotkey::activated, this, &Shortcuts::next);
 
   _stop_global.setShortcut(Qt::Key_MediaStop, Qt::NoModifier, true);
+#ifdef Q_OS_WIN
+  // Windows has no VK for a discrete pause — Key_MediaPause silently fails to
+  // register, and Key_MediaPlay is VK_MEDIA_PLAY_PAUSE, a single toggle key.
+  _playpause_global.setShortcut(Qt::Key_MediaPlay, Qt::NoModifier, true);
+#else
   _play_global.setShortcut(Qt::Key_MediaPlay, Qt::NoModifier, true);
   _pause_global.setShortcut(Qt::Key_MediaPause, Qt::NoModifier, true);
+#endif
   _next_global.setShortcut(Qt::Key_MediaNext, Qt::NoModifier, true);
   _prev_global.setShortcut(Qt::Key_MediaPrevious, Qt::NoModifier, true);
 #endif

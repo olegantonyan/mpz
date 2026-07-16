@@ -12,6 +12,7 @@
 
 - Tray click hides the window only if "close to tray" is enabled
 - Linux: tray click switches to the window's desktop instead of hiding it
+- Windows (legacy Qt5 build): the media play/pause key can now pause playback, not only start it
 
 ### Misc
 
