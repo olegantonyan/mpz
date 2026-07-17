@@ -11,9 +11,18 @@ version_extractors:
       regex: 'project\(mpz VERSION (.+) LANGUAGES'
 
 image_caches:
-  - name: github
+  - name: github_x86_64
     provider: registry
     image_tag: mpz-latest
+    registry:
+      url: ghcr.io
+      namespace: "${GITHUB_REGISTRY_NAMESPACE}"
+      username: "${GITHUB_REGISTRY_USERNAME}"
+      password: "${GITHUB_REGISTRY_PASSWORD}"
+
+  - name: github_aarch64
+    provider: registry
+    image_tag: mpz-aarch64-latest
     registry:
       url: ghcr.io
       namespace: "${GITHUB_REGISTRY_NAMESPACE}"
@@ -54,6 +63,41 @@ repositories:
     s3:
       bucket: repositories
       path_in_bucket: "mpz/stable"
+      bucket_public_url: "https://repositories.omnipackage.org"
+      endpoint: "${CLOUDFLARE_R2_ENDPOINT}"
+      access_key_id: "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+      secret_access_key: "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
+      region: auto
+      force_path_style: true
+      cloudflare_zone_id: "${CLOUDFLARE_ZONE_ID}"
+      cloudflare_api_token: "${CLOUDFLARE_API_TOKEN}"
+
+  - name: "Linux packages AARCH64 - next"
+    provider: s3
+    gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
+    <<: *common
+    description: "Builds from master branch aka next (aarch64)"
+    retain_packages: 3
+    s3:
+      bucket: repositories
+      path_in_bucket: "mpz/next-aarch64"
+      bucket_public_url: "https://repositories.omnipackage.org"
+      endpoint: "${CLOUDFLARE_R2_ENDPOINT}"
+      access_key_id: "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
+      secret_access_key: "${CLOUDFLARE_R2_SECRET_ACCESS_KEY}"
+      region: auto
+      force_path_style: true
+      cloudflare_zone_id: "${CLOUDFLARE_ZONE_ID}"
+      cloudflare_api_token: "${CLOUDFLARE_API_TOKEN}"
+
+  - name: "Linux packages AARCH64 - stable"
+    provider: s3
+    gpg_private_key_base64: "${GPG_PRIVATE_KEY_BASE64}"
+    <<: *common
+    retain_packages: 2
+    s3:
+      bucket: repositories
+      path_in_bucket: "mpz/stable-aarch64"
       bucket_public_url: "https://repositories.omnipackage.org"
       endpoint: "${CLOUDFLARE_R2_ENDPOINT}"
       access_key_id: "${CLOUDFLARE_R2_ACCESS_KEY_ID}"
