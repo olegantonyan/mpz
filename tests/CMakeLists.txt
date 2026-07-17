@@ -33,7 +33,6 @@ mpz_add_test(tst_randomtrail    tst_randomtrail.cpp    ${APP}/playback/randomtra
 mpz_add_test(tst_rnjesus        tst_rnjesus.cpp        ${APP}/rnjesus.cpp)
 mpz_add_test(tst_lrcparser      tst_lrcparser.cpp      ${APP}/lyrics/lrcparser.cpp)
 mpz_add_test(tst_lyricstextmatch tst_lyricstextmatch.cpp ${APP}/lyrics/textmatch.cpp)
-mpz_add_test(tst_lyricscache    tst_lyricscache.cpp    ${APP}/lyrics/cache.cpp)
 mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp)
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)
@@ -49,6 +48,29 @@ target_link_libraries(tst_sysinfo PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 # makeProvider/fetch bodies so only QtNetwork include paths are needed.
 mpz_add_test(tst_providerchain tst_providerchain.cpp ${APP}/lyrics/providerchain.cpp)
 target_link_libraries(tst_providerchain PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
+# Same shape as tst_providerchain, for the cover chain.
+mpz_add_test(tst_coverproviderchain tst_coverproviderchain.cpp ${APP}/coverart/online/providerchain.cpp)
+target_link_libraries(tst_coverproviderchain PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
+# Album scoring reuses the lyrics text normalizers; both are pure.
+mpz_add_test(tst_coveralbummatch tst_coveralbummatch.cpp
+  ${APP}/coverart/online/albummatch.cpp
+  ${APP}/lyrics/textmatch.cpp)
+
+# Both online caches write real files under QStandardPaths::CacheLocation via
+# the shared DiskCache::Store. The cover test builds a sample image, so it also
+# needs Qt::Gui.
+mpz_add_test(tst_coveronlinecache tst_coveronlinecache.cpp
+  ${APP}/coverart/online/cache.cpp
+  ${APP}/diskcache.cpp
+  ${APP}/lyrics/textmatch.cpp)
+target_link_libraries(tst_coveronlinecache PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
+
+mpz_add_test(tst_lyricscache tst_lyricscache.cpp
+  ${APP}/lyrics/cache.cpp
+  ${APP}/diskcache.cpp
+  ${APP}/lyrics/textmatch.cpp)
 
 # UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
 # <QApplication> and a QNetworkAccessManager member for its include paths; the

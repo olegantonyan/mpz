@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 # required ENV variables: GITHUB_SHA, AUR_SSH_PRIVATE_KEY, SRCINFO, PKGBUILD, PKGNAME
+# set DRY_RUN=1 to render and print PKGBUILD/.SRCINFO and exit without touching AUR
+# (GITHUB_SHA and AUR_SSH_PRIVATE_KEY are not required then, and no network is used)
 
 require 'erb'
 require 'digest'
@@ -10,8 +12,11 @@ require 'tmpdir'
 
 puts "PWD: #{::Dir.pwd}"
 
-commit_hash = ::ENV['GITHUB_SHA'] || (raise 'no GITHUB_SHA')
-aur_ssh_key = ENV['AUR_SSH_PRIVATE_KEY'] || (raise 'no AUR_SSH_PRIVATE_KEY')
+dry_run = !::ENV['DRY_RUN'].to_s.empty?
+puts "DRY RUN: nothing will be pushed to aur" if dry_run
+
+commit_hash = ::ENV['GITHUB_SHA'] || (dry_run ? `git rev-parse HEAD`.strip : raise('no GITHUB_SHA'))
+aur_ssh_key = ENV['AUR_SSH_PRIVATE_KEY'] || (dry_run ? nil : raise('no AUR_SSH_PRIVATE_KEY'))
 pkgname = ::ENV['PKGNAME'] || (raise 'no PKGNAME')
 pkgbuild_path = ::ENV['PKGBUILD'] || (raise 'no PKGBUILD')
 srcinfo_path = ::ENV['SRCINFO'] || (raise 'no SRCINFO')
@@ -24,7 +29,7 @@ puts "Source tarball: #{source}"
 aur_repo = "ssh://aur@aur.archlinux.org/#{pkgname}.git"
 pkgrel = `git log --oneline $(git describe --tags --abbrev=0).. | wc -l`.strip
 pkgver = /project\(mpz VERSION (.+) LANGUAGES/.match(::File.read('CMakeLists.txt'))[1].to_s.strip
-sha256sums = ::Digest::SHA256.hexdigest(::URI.open(source).read)
+sha256sums = dry_run ? 'SKIP' : ::Digest::SHA256.hexdigest(::URI.open(source).read)
 author_name = `git --no-pager log -1 --pretty=format:'%an'`.strip
 author_email = `git --no-pager log -1 --pretty=format:'%ae'`.strip
 last_commit_hash = `git rev-parse --short HEAD`.strip
@@ -59,6 +64,11 @@ puts "***** SRCINFO *****"
 puts srcinfo
 puts "***** END OF SRCINFO *****"
 
+if dry_run
+  puts "DRY RUN: skipping aur clone/commit/push"
+  exit 0
+end
+
 ::Dir.mktmpdir do |d|
   puts "TMP DIR: #{d}"
 
@@ -71,7 +81,7 @@ puts "***** END OF SRCINFO *****"
   puts "cloning aur repo..."
   clone_cmd = "#{git_ssh} git clone #{aur_repo}"
   puts clone_cmd
-  `cd #{d} && #{clone_cmd}`
+  system("cd #{d} && #{clone_cmd}") || raise('aur clone failed')
 
   ::File.open("#{d}/#{pkgname}/PKGBUILD", 'w') { |f| f.write(pkgbuild) }
   ::File.open("#{d}/#{pkgname}/.SRCINFO", 'w') { |f| f.write(srcinfo) }
@@ -83,5 +93,11 @@ puts "***** END OF SRCINFO *****"
   `git config --global user.name "#{author_name}"`
 
   puts "pushing changes to aur..."
-  `cd #{d}/#{pkgname} && git add . --all && git commit -m "#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_url})" && #{git_ssh} git push`
+  system("cd #{d}/#{pkgname} && git add . --all") || raise('aur git add failed')
+  if `cd #{d}/#{pkgname} && git status --porcelain`.strip.empty?
+    puts "nothing to commit, aur is already up to date"
+  else
+    system("cd #{d}/#{pkgname} && git commit -m \"#{last_commit_message} (#{pkgver}-#{pkgrel} #{last_commit_url})\"") || raise('aur commit failed')
+    system("cd #{d}/#{pkgname} && #{git_ssh} git push") || raise('aur push failed')
+  end
 end

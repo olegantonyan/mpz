@@ -184,34 +184,51 @@ namespace Config {
   }
 
   QStringList Global::lyricsProviders() const {
-    const QStringList defaults = { "embedded", "sidecar", "lrclib" };
-    auto raw = storage.get("lyrics");
-    if (raw.type() != Config::Value::Map) {
-      return defaults;
-    }
-    auto map = raw.get<QMap<QString, Config::Value>>();
-    if (!map.contains("providers")) {
-      return defaults;
-    }
-    auto list = map.value("providers");
-    if (list.type() != Config::Value::List || list.listType() != Config::Value::String) {
-      return defaults;
-    }
-    QStringList result;
-    for (const auto &i : list.get<QList<Config::Value>>()) {
-      result << i.get<QString>();
-    }
-    return result.isEmpty() ? defaults : result;
+    return providersUnder("lyrics");
   }
 
   bool Global::saveLyricsProviders(const QStringList &arg) {
+    return saveProvidersUnder("lyrics", arg);
+  }
+
+  QStringList Global::coverProviders() const {
+    return providersUnder("covers");
+  }
+
+  bool Global::saveCoverProviders(const QStringList &arg) {
+    return saveProvidersUnder("covers", arg);
+  }
+
+  // Online providers only, and there are no defaults: anything missing or
+  // malformed is simply "no online providers". Built-in sources are not
+  // configurable and never appear here. Legacy entries naming them are returned
+  // as-is and dropped downstream by ProviderChain::filterKnown.
+  QStringList Global::providersUnder(const QString &key) const {
+    auto raw = storage.get(key);
+    if (raw.type() != Config::Value::Map) {
+      return {};
+    }
+    auto list = raw.get<QMap<QString, Config::Value>>().value("providers");
+    if (list.type() != Config::Value::List) {
+      return {};
+    }
+    QStringList result;
+    for (const auto &i : list.get<QList<Config::Value>>()) {
+      if (i.type() == Config::Value::String) {
+        result << i.get<QString>();
+      }
+    }
+    return result;
+  }
+
+  bool Global::saveProvidersUnder(const QString &key, const QStringList &arg) {
     QList<Config::Value> list;
     for (const auto &i : std::as_const(arg)) {
       list << Config::Value(i);
     }
     QMap<QString, Config::Value> map;
     map.insert("providers", Config::Value(list));
-    return storage.set("lyrics", Config::Value(map));
+    return storage.set(key, Config::Value(map));
   }
 
   QString Global::libraryFilterScope() const {

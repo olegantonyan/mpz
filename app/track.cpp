@@ -350,7 +350,7 @@ const StreamMetaData &Track::streamMeta() const {
 }
 
 QString Track::artCover() const {
-  return CoverArt::Covers::instance().get(filepath);
+  return CoverArt::Covers::instance().get(filepath, artist(), album());
 }
 
 void Track::setAudioFormat(quint32 sample_rate, quint8 channels, quint16 bitrate) {

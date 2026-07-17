@@ -23,7 +23,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Native C++/Qt UI - fast and responsive;
 - Drag-n-drop files and folders from file manager;
 - Internet radio in `m3u` and `pls` formats;
-- CUE sheets, with seamless playback of single-file albums;
+- CUE sheets, with gapless playback of single-file albums;
 - Tag editor;
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
@@ -78,11 +78,11 @@ Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https
 
 #### Windows
 
-Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Qt5 can probably run on earlier versions.
+Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Legacy Qt5 can probably run on earlier versions, only use it if you run old 32-bit OS below Windows 10.
 
-* win-x86_64 - x86 64-bit build (recommended for most users)
-* win-arm64 - native ARM 64-bit build
-* win-legacy - legacy version for x86 32-bit systems
+* win-x86_64-qt6 - x86 64-bit build (recommended)
+* win-arm64-qt6 - native ARM 64-bit build
+* win-legacy-qt5 - legacy version for x86 32-bit systems (Windows below 10)
 
 win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have an ARM64 Windows PC.
 
@@ -110,7 +110,7 @@ Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, lib
 Package names may differ between distros.
 
 ```
-cmake -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 
 # now you can use build/mpz binary directly
@@ -120,9 +120,9 @@ sudo cmake --install build
 
 To build Qt5 version add `-DUSE_QT5=ON` to cmake cli.
 
-You can also link against shared libraries Taglib, yaml-cpp, or libmpdclient installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON` to cmake cli.
+You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON` to cmake cli.
 
-Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode.
+Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode, `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys), `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC — the only platforms cpptrace builds on).
 
 ## Configuration
 

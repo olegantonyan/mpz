@@ -1,20 +1,21 @@
 pkgbase = <%= pkgname %>
-	pkgdesc = Music player for the large local collections
+	pkgdesc = Music player for the large local collections (Qt5 version)
 	pkgver = <%= pkgver %>
 	pkgrel = <%= pkgrel %>
 	url = https://github.com/olegantonyan/mpz
 	arch = x86_64
 	license = GPL3
+	makedepends = cmake
 	depends = qt5-multimedia
 	depends = qt5-svg
 	depends = qt5-x11extras
 	depends = hicolor-icon-theme
-  depends = yaml-cpp
-  depends = taglib
-	depends = cmake
+	depends = yaml-cpp
+	depends = taglib
 	depends = libmpdclient
-  provides = mpz
-  conflicts = mpz
+	depends = cpptrace
+	provides = mpz
+	conflicts = mpz
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>
 

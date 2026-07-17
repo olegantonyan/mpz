@@ -25,9 +25,14 @@ namespace CoverArt {
 
   private slots:
     void showContextMenu(const QPoint &pos);
+    void onSearchStarted(const QString &artist, const QString &album);
+    void onCoverDownloaded(const QString &artist, const QString &album, const QString &path);
+    void onSearchFinished(const QString &artist, const QString &album);
 
   private:
     void render();
+    void render_cover();
+    bool isCurrent(const QString &artist, const QString &album) const;
 
     QPixmap source;
     Track _track;

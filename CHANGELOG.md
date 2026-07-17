@@ -1,4 +1,12 @@
-## [2.0.17] - next
+## [2.0.18] - next
+
+### Added
+
+### Fixed
+
+### Misc
+
+## [2.0.17] - 2026-07-16
 
 ### Added
 
@@ -6,16 +14,23 @@
 - Controls bar can be moved to the top or bottom and locked in place from the menu
 - macOS: optional menu bar icon
 - Tray menu: "Show mpz"
+- Track info: tabs with all tags, file and audio metadata
+- Download missing album covers online (off by default)
 
 ### Fixed
 
+- Unchecking all lyrics providers no longer re-enables them
+
 - Tray click hides the window only if "close to tray" is enabled
 - Linux: tray click switches to the window's desktop instead of hiding it
+- Windows (legacy Qt5 build): the media play/pause key can now pause playback, not only start it
+- Windows: media play/pause key now pauses while the window is minimized
 
 ### Misc
 
 - Faster playlist creation: fewer tag reads per file, scanning runs on all cores
 - Vendored libmpdclient updated to 2.26
+- New build options: `ENABLE_QHOTKEY` (default on, off on macOS and Windows MSVC where the OS owns media keys), `USE_SYSTEM_QHOTKEY` (default off), `ENABLE_CRASH_HANDLER` (default on for Linux, macOS and MSVC), `USE_SYSTEM_CPPTRACE` (default off)
 
 ## [2.0.16] - 2026-07-13
 

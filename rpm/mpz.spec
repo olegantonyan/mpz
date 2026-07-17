@@ -1,6 +1,6 @@
 %global __brp_check_rpaths %{nil}
 Name:       mpz
-Version:    2.0.17
+Version:    2.0.18
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
@@ -29,9 +29,9 @@ Similar to "album list" in Foobar2000.
 mkdir build
 cd build
 %if %{with qt6}
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
 %else
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DUSE_QT5=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DUSE_QT5=ON ..
 %endif
 make %{?_smp_mflags}
 

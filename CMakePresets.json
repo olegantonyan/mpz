@@ -5,10 +5,7 @@
       "name": "base",
       "hidden": true,
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
-      }
+      "binaryDir": "${sourceDir}/build/${presetName}"
     },
     {
       "name": "debug",
@@ -39,7 +36,8 @@
       "cacheVariables": {
         "USE_SYSTEM_TAGLIB": "ON",
         "USE_SYSTEM_YAMLCPP": "ON",
-        "USE_SYSTEM_LIBMPDCLIENT": "ON"
+        "USE_SYSTEM_LIBMPDCLIENT": "ON",
+        "USE_SYSTEM_CPPTRACE": "ON"
       }
     },
     {

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.0.17 LANGUAGES CXX C)
+project(mpz VERSION 2.0.18 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -54,8 +54,17 @@ set(PROJECT_SOURCES
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/coverartwidget.cpp
+  app/coverart/online/albummatch.cpp
+  app/coverart/online/cache.cpp
+  app/coverart/online/coverartarchiveclient.cpp
+  app/coverart/online/deezerclient.cpp
+  app/coverart/online/downloader.cpp
+  app/coverart/online/itunesclient.cpp
+  app/coverart/online/provider.cpp
+  app/coverart/online/providerchain.cpp
   app/lyrics/lyricswidget.cpp
   app/lyrics/cache.cpp
   app/lyrics/lrclibclient.cpp
@@ -331,8 +340,10 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/dsf>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/flac>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/it>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/matroska>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mod>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mp4>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpc>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v1>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v2>
@@ -346,6 +357,7 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/aiff>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/wav>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/s3m>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/shorten>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/toolkit>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/trueaudio>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/wavpack>
@@ -356,10 +368,33 @@ endif()
 # ENDOF TAGLIB
 
 # QHOTKEY
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
-set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
-add_subdirectory(${QHOTKEY_DIR})
-message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+# macOS (MPRemoteCommandCenter) and the SMTC build own the media keys; QHotkey would be dead weight.
+if(APPLE OR (WIN32 AND NOT MINGW))
+  set(DEFAULT_ENABLE_QHOTKEY OFF)
+else()
+  set(DEFAULT_ENABLE_QHOTKEY ON)
+endif()
+option(ENABLE_QHOTKEY "Enable global media-key hotkeys via QHotkey" ${DEFAULT_ENABLE_QHOTKEY})
+if (ENABLE_QHOTKEY)
+  message(STATUS "global hotkeys ON")
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_QHOTKEY)
+  option(USE_SYSTEM_QHOTKEY "Use QHotkey provided by the OS" OFF)
+  if (USE_SYSTEM_QHOTKEY)
+    find_library(QHOTKEY_LIB qhotkey REQUIRED)
+    message(STATUS "using system-wide qhotkey")
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${QHOTKEY_LIB})
+  else()
+    set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
+    message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+    # QHotkey declares cmake_minimum_required(3.1), which CMake >= 4 rejects outright
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+    add_subdirectory(${QHOTKEY_DIR})
+    unset(CMAKE_POLICY_VERSION_MINIMUM)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
+  endif()
+else()
+  message(STATUS "global hotkeys OFF")
+endif()
 # ENDOF QHOTKEY
 
 # LIBMPDCLIENT
@@ -383,20 +418,35 @@ endif()
 # Mach-O symbol table. On MSVC/Windows PE has no .dynsym equivalent, so symbols
 # come from mpz.pdb shipped next to mpz.exe, read at runtime via dbghelp.
 # The legacy Qt5 x86 MinGW build is excluded.
-if(UNIX OR (WIN32 AND NOT MINGW))
-  set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
-  set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-  if(UNIX)
-    set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
-    set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
-    set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
-    set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+# cpptrace itself only builds on these three platforms; anywhere else it #errors out.
+if(CMAKE_SYSTEM_NAME MATCHES "Linux|Darwin" OR (WIN32 AND NOT MINGW))
+  set(DEFAULT_ENABLE_CRASH_HANDLER ON)
+else()
+  set(DEFAULT_ENABLE_CRASH_HANDLER OFF)
+endif()
+option(ENABLE_CRASH_HANDLER "Enable builtin crash handler (backtrace on fatal signals)" ${DEFAULT_ENABLE_CRASH_HANDLER})
+if(ENABLE_CRASH_HANDLER)
+  message(STATUS "crash handler ON")
+  option(USE_SYSTEM_CPPTRACE "Use cpptrace provided by the OS" OFF)
+  if(USE_SYSTEM_CPPTRACE)
+    find_package(cpptrace 1.0 REQUIRED)
+    message(STATUS "using system-wide cpptrace ${cpptrace_VERSION}")
   else()
-    set(CPPTRACE_GET_SYMBOLS_WITH_DBGHELP ON CACHE BOOL "" FORCE)
-    set(CPPTRACE_UNWIND_WITH_DBGHELP ON CACHE BOOL "" FORCE)
-    set(CPPTRACE_DEMANGLE_WITH_WINAPI ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
+    message(STATUS "using vendored cpptrace from ${CPPTRACE_DIR}")
+    set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+    if(UNIX)
+      set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
+      set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+    else()
+      set(CPPTRACE_GET_SYMBOLS_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_UNWIND_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_DEMANGLE_WITH_WINAPI ON CACHE BOOL "" FORCE)
+    endif()
+    add_subdirectory(${CPPTRACE_DIR})
   endif()
-  add_subdirectory(${CPPTRACE_DIR})
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
@@ -412,6 +462,8 @@ if(UNIX OR (WIN32 AND NOT MINGW))
       $<$<CONFIG:Release>:/OPT:ICF>)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dbghelp)
   endif()
+else()
+  message(STATUS "crash handler OFF")
 endif()
 # ENDOF CPPTRACE
 

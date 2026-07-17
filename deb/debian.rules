@@ -10,4 +10,4 @@
 # in obj-$(DEB_HOST_MULTIARCH)/. cpptrace's PreventInSourceBuilds guard fires
 # otherwise. -DCMAKE_INSTALL_PREFIX=/usr is set automatically by debhelper.
 override_dh_auto_configure:
-	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DUSE_QT5=ON
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DUSE_QT5=ON
