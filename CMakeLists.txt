@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.0.18 LANGUAGES CXX C)
+project(mpz VERSION 2.1.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -89,6 +89,7 @@ set(PROJECT_SOURCES
   app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp
+  app/playback/pendingnext.cpp
   app/playback/mediaplayer.cpp
   app/playback/playbackcontroller.cpp
   app/playback/randomtrail.cpp
@@ -163,6 +164,8 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/addmpddialog.cpp)
 endif()
 
+option(ENABLE_GAPLESS "Enable gapless playback engine for local files (Qt6 only)" ON)
+
 if (ENABLE_UPDATE_CHECK)
   list(APPEND PROJECT_SOURCES app/update_check/updatechecker.cpp)
 endif()
@@ -217,8 +220,21 @@ endif()
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+
+  if (ENABLE_GAPLESS)
+    list(APPEND PROJECT_SOURCES
+      app/playback/gapless/pcmcache.cpp
+      app/playback/gapless/timeline.cpp
+      app/playback/gapless/trackdecoder.cpp
+      app/playback/gapless/engine.cpp
+      app/playback/gapless/gaplessmediaplayer.cpp)
+  endif()
+
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
+  if (ENABLE_GAPLESS)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
+  endif()
 else()
   message(STATUS "using Qt5")
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})

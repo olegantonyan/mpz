@@ -30,6 +30,12 @@ namespace Config {
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
 
+    bool disableGapless() const;
+    void saveDisableGapless(bool arg);
+
+    int gaplessCacheSizeMb() const;
+    void saveGaplessCacheSizeMb(int arg);
+
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
 

@@ -639,56 +639,56 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="279"/>
-        <location filename="../../mainwindow.cpp" line="314"/>
+        <location filename="../../mainwindow.cpp" line="284"/>
+        <location filename="../../mainwindow.cpp" line="319"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="280"/>
-        <location filename="../../mainwindow.cpp" line="313"/>
+        <location filename="../../mainwindow.cpp" line="285"/>
+        <location filename="../../mainwindow.cpp" line="318"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="281"/>
-        <location filename="../../mainwindow.cpp" line="315"/>
+        <location filename="../../mainwindow.cpp" line="286"/>
+        <location filename="../../mainwindow.cpp" line="320"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="312"/>
+        <location filename="../../mainwindow.cpp" line="317"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="414"/>
+        <location filename="../../mainwindow.cpp" line="419"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="432"/>
+        <location filename="../../mainwindow.cpp" line="437"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="438"/>
+        <location filename="../../mainwindow.cpp" line="443"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="571"/>
-        <location filename="../../mainwindow.cpp" line="575"/>
+        <location filename="../../mainwindow.cpp" line="578"/>
+        <location filename="../../mainwindow.cpp" line="582"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="577"/>
+        <location filename="../../mainwindow.cpp" line="584"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="589"/>
+        <location filename="../../mainwindow.cpp" line="596"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -985,6 +985,8 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="452"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
@@ -1035,13 +1037,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="248"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="530"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="249"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="493"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
@@ -1062,13 +1064,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="615"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="286"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="578"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="616"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
@@ -1147,47 +1149,67 @@
         <translation>записей</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="485"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
+        <source>Enable gapless playback</source>
+        <translation>Включить воспроизведение без пауз</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="497"/>
+        <source>Gapless memory buffer:</source>
+        <translation>Буфер памяти для воспроизведения без пауз:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="500"/>
+        <source>MB</source>
+        <translation>МБ</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
+        <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
+        <translation>Декодированный звук хранится в памяти, чтобы переходы между треками были без пауз, а перемотка внутри трека — мгновенной. Чем больше буфер, тем больше (и более длинных) треков помещается в кэш; 100 МБ достаточно для большинства библиотек.</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="488"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="502"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="540"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="503"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="514"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="552"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Crash reports:</source>
         <translation>Отчёты о сбоях:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="561"/>
         <source>Send automatically</source>
         <translation>Отправлять автоматически</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="524"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
         <source>Ask after next crash</source>
         <translation>Спрашивать после сбоя</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
         <source>Never send</source>
         <translation>Не отправлять</translation>
     </message>

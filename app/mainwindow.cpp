@@ -91,7 +91,12 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
   ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
+  bool gapless_on = !global_conf.disableGapless();
+  int gapless_mb = global_conf.gaplessCacheSizeMb();
+  if (gapless_mb <= 0) {
+    gapless_mb = 100;
+  }
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -529,6 +534,8 @@ void MainWindow::setupPlaybackDispatch() {
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
+  connect(player, &Playback::Controller::aboutToFinish, dispatch, &Playback::Dispatch::on_aboutToFinish);
+  connect(dispatch, &Playback::Dispatch::prepareNext, player, &Playback::Controller::prepareNextTrack);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(player, &Playback::Controller::trackChangedQuery, dispatch, &Playback::Dispatch::on_trackChangedQuery);
   connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);

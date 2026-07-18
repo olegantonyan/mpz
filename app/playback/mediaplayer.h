@@ -39,6 +39,7 @@ namespace Playback {
     void streamMetaChanged(const StreamMetaData& meta);
     void prevRequested();
     void nextRequested();
+    void aboutToFinish();
 
   public slots:
     virtual void pause();
@@ -50,8 +51,9 @@ namespace Playback {
     virtual void setVolume(int volume);
     virtual void setTrack(const Track &track);
     virtual void clearTrack();
+    virtual void prepareNextTrack(const Track &track) { Q_UNUSED(track) }
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void setOutputDevice(QByteArray deviceid);
+    virtual void setOutputDevice(QByteArray deviceid);
 #endif
 
   private:

@@ -37,6 +37,7 @@ mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
+mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
 
 # SysInfo needs <QApplication> headers for qApp; pulls in Qt::Widgets for the
 # include path only (the test uses QCoreApplication).
@@ -90,6 +91,26 @@ mpz_add_test(tst_track tst_track.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)
 target_link_libraries(tst_track PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+
+# Timeline stores Track by value, so it compiles track.cpp (TagLib/yaml-cpp
+# include paths only; --gc-sections drops the unreferenced bodies).
+mpz_add_test(tst_gaplesstimeline tst_gaplesstimeline.cpp
+  ${APP}/playback/gapless/timeline.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_gaplesstimeline PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+
+# PendingNext stores a Track by value, so it compiles track.cpp (same
+# TagLib/yaml-cpp include-path-only shape as tst_gaplesstimeline).
+mpz_add_test(tst_pendingnext tst_pendingnext.cpp
+  ${APP}/playback/pendingnext.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_pendingnext PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
 
 mpz_add_test(tst_sorter tst_sorter.cpp

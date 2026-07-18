@@ -50,6 +50,22 @@ namespace Config {
     storage.set("stream_buffer_size", Config::Value(arg));
   }
 
+  bool Global::disableGapless() const {
+    return storage.get("disable_gapless").get<bool>();
+  }
+
+  void Global::saveDisableGapless(bool arg) {
+    storage.set("disable_gapless", Config::Value(arg));
+  }
+
+  int Global::gaplessCacheSizeMb() const {
+    return storage.get("gapless_cache_size_mb").get<int>();
+  }
+
+  void Global::saveGaplessCacheSizeMb(int arg) {
+    storage.set("gapless_cache_size_mb", Config::Value(arg));
+  }
+
   bool Global::minimizeToTray() const {
     return storage.get("minimize_to_tray").get<bool>();
   }
