@@ -2,7 +2,7 @@
 
 ### Added
 
-- Gapless playback between tracks and files on Qt6: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced
+- Gapless playback: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced. Only Qt6
 
 ### Fixed
 
