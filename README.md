@@ -125,8 +125,6 @@ You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotk
 
 Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode, `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys), `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC — the only platforms cpptrace builds on), `-DENABLE_GAPLESS=OFF` drops the gapless playback engine (on by default, Qt6 only).
 
-When built in, gapless playback is on by default; toggle it at runtime and set its decoded-audio memory buffer under Settings → Advanced.
-
 ## Qt6/Qt5 split
 
 Some features require Qt6:
