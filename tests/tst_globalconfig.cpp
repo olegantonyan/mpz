@@ -12,6 +12,10 @@ private slots:
   void stopWhenTrackRemoved_defaultsFalse();
   void stopWhenTrackRemoved_readsTrue();
   void stopWhenTrackRemoved_readsFalse();
+  void disableGapless_defaultsFalse();
+  void disableGapless_readsTrue();
+  void gaplessCacheSizeMb_defaultsZero();
+  void gaplessCacheSizeMb_roundTrips();
   void lyricsProviders_defaultsToEmpty();
   void lyricsProviders_ignoresMalformedValue();
   void lyricsProviders_keepsLegacyBuiltinEntries();
@@ -57,6 +61,34 @@ void TestGlobalConfig::stopWhenTrackRemoved_readsFalse() {
   writeGlobalYaml("stop_when_track_removed: false\n");
   Config::Global g;
   QCOMPARE(g.stopWhenTrackRemoved(), false);
+}
+
+// Absent key means gapless is on (the stored flag is the inverted "disabled").
+void TestGlobalConfig::disableGapless_defaultsFalse() {
+  Config::Global g;
+  QCOMPARE(g.disableGapless(), false);
+}
+
+void TestGlobalConfig::disableGapless_readsTrue() {
+  writeGlobalYaml("disable_gapless: true\n");
+  Config::Global g;
+  QCOMPARE(g.disableGapless(), true);
+}
+
+// Absent key reads 0, which call sites treat as "use the default".
+void TestGlobalConfig::gaplessCacheSizeMb_defaultsZero() {
+  Config::Global g;
+  QCOMPARE(g.gaplessCacheSizeMb(), 0);
+}
+
+void TestGlobalConfig::gaplessCacheSizeMb_roundTrips() {
+  {
+    Config::Global g;
+    g.saveGaplessCacheSizeMb(250);
+    g.sync();
+  }
+  Config::Global reloaded;
+  QCOMPARE(reloaded.gaplessCacheSizeMb(), 250);
 }
 
 // No online provider is enabled until the user picks one; built-in lyrics

@@ -1,9 +1,10 @@
 #include "gaplessmediaplayer.h"
 
 namespace Playback::Gapless {
-  GaplessMediaPlayer::GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) :
+  GaplessMediaPlayer::GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, bool gapless_enabled, QObject *parent) :
     MediaPlayer(stream_buffer_size, outdevid, parent),
-    engine(qint64(GAPLESS_PCM_CACHE_MB) * 1024 * 1024) {
+    engine(qint64(cache_mb) * 1024 * 1024),
+    gapless_enabled(gapless_enabled) {
     connect(&engine, &Engine::positionChanged, this, &MediaPlayer::positionChanged);
     connect(&engine, &Engine::stateChanged, this, &MediaPlayer::stateChanged);
     connect(&engine, &Engine::error, this, &MediaPlayer::error);
@@ -58,7 +59,7 @@ namespace Playback::Gapless {
   }
 
   void GaplessMediaPlayer::setTrack(const Track &track) {
-    if (track.isStream()) {
+    if (track.isStream() || !gapless_enabled) {
       if (backend == Backend::Engine) {
         engine.clearTrack();
       }

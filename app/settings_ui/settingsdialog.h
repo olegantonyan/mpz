@@ -50,6 +50,10 @@ private:
   QCheckBox *check_single_instance = nullptr;
   QSpinBox *spin_ipc_port = nullptr;
   QSpinBox *spin_playback_log_size = nullptr;
+#ifdef ENABLE_GAPLESS
+  QCheckBox *check_gapless = nullptr;
+  QSpinBox *spin_gapless_cache_mb = nullptr;
+#endif
 
   QListWidget *list_mpris_blacklist = nullptr;
   QCheckBox *check_mpd_stop_on_close = nullptr;

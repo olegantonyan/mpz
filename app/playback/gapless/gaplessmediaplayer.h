@@ -12,7 +12,7 @@ namespace Playback::Gapless {
   class GaplessMediaPlayer : public Playback::MediaPlayer {
     Q_OBJECT
   public:
-    explicit GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent = nullptr);
+    explicit GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, bool gapless_enabled, QObject *parent = nullptr);
 
     MediaPlayer::State state() override;
     qint64 position() override;
@@ -32,6 +32,7 @@ namespace Playback::Gapless {
 
   private:
     Engine engine;
+    bool gapless_enabled;
     enum class Backend { None, Qmp, Engine } backend = Backend::None;
   };
 }

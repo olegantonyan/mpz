@@ -2,13 +2,14 @@
 
 ### Added
 
-- Gapless playback between tracks and files on Qt6: no silence at track boundaries
+- Gapless playback between tracks and files on Qt6: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced
 
 ### Fixed
 
 ### Misc
 
-- New build options: `ENABLE_GAPLESS` (default on, Qt6 only) toggles the gapless engine, `GAPLESS_PCM_CACHE_MB` (default 100) sets its decoded-PCM cache budget in MB
+- Build option `ENABLE_GAPLESS` (default on, Qt6 only) compiles the gapless engine in or out
+
 
 ## [2.0.17] - 2026-07-16
 

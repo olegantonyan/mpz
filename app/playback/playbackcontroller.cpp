@@ -4,15 +4,23 @@
 #include <QDebug>
 
 namespace Playback {
-Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent) :
+Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent) :
   QObject(parent),
   _controls(c),
+#ifdef ENABLE_GAPLESS
+  _player(stream_buffer_size, outdevid, gapless_cache_mb, gapless_enabled),
+#else
   _player(stream_buffer_size, outdevid),
+#endif
   modus_operndi(modus)
 #ifdef ENABLE_MPD_SUPPORT
   , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
 #endif
 {
+#ifndef ENABLE_GAPLESS
+    Q_UNUSED(gapless_cache_mb)
+    Q_UNUSED(gapless_enabled)
+#endif
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
     connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);

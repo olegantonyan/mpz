@@ -28,7 +28,7 @@ namespace Playback {
       Paused
     };
 
-    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent = nullptr);
+    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
     int volume();
