@@ -17,6 +17,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
     connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
     connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+    connect(&_player, &MediaPlayer::aboutToFinish, this, &Controller::aboutToFinish);
 
     connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)
@@ -147,6 +148,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::stop() {
     player().stop();
+  }
+
+  void Controller::prepareNextTrack(const Track &track) {
+    player().prepareNextTrack(track);
   }
 
   void Controller::on_controlsPause() {

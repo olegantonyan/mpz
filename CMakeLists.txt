@@ -89,6 +89,7 @@ set(PROJECT_SOURCES
   app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp
+  app/playback/pendingnext.cpp
   app/playback/mediaplayer.cpp
   app/playback/playbackcontroller.cpp
   app/playback/randomtrail.cpp
@@ -217,8 +218,28 @@ endif()
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+
+  option(ENABLE_GAPLESS "Gapless playback engine for local files (Qt6 only)" ON)
+  set(GAPLESS_PCM_CACHE_MB "100" CACHE STRING "Decoded PCM cache budget for the gapless engine, MB")
+  if(ENABLE_GAPLESS)
+    message(STATUS "gapless engine ON (PCM cache ${GAPLESS_PCM_CACHE_MB} MB)")
+    list(APPEND PROJECT_SOURCES
+      app/playback/gapless/pcmcache.cpp
+      app/playback/gapless/timeline.cpp
+      app/playback/gapless/trackdecoder.cpp
+      app/playback/gapless/engine.cpp
+      app/playback/gapless/gaplessmediaplayer.cpp)
+  else()
+    message(STATUS "gapless engine OFF")
+  endif()
+
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
+  if(ENABLE_GAPLESS)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+      ENABLE_GAPLESS
+      GAPLESS_PCM_CACHE_MB=${GAPLESS_PCM_CACHE_MB})
+  endif()
 else()
   message(STATUS "using Qt5")
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})

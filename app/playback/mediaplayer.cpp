@@ -420,17 +420,24 @@ namespace Playback {
   }
 
   void MediaPlayer::recoverPlayback() {
-    if (state() != MediaPlayer::PlayingState) {
+    // Reference only the QMediaPlayer this class manages: the virtual state()/
+    // position()/setPosition() dispatch to the gapless engine in the facade subclass,
+    // which owns its own device recovery.
+    if (player.playbackState() != QMediaPlayer::PlayingState) {
       return; // paused/stopped: play() runs unpause_workaround itself
     }
-    unpause_workaround(); // seek nudge, usually enough to unwedge the backend
+    if (player.source().isEmpty() && player.sourceDevice() == nullptr) {
+      return; // base player has no media (gapless engine owns playback)
+    }
+    if (player.isSeekable()) {
+      player.setPosition(player.position() - 1); // seek nudge, usually enough to unwedge the backend
+    }
     // watchdog: if position is still frozen after the device switch, escalate to a
-    // direct pause/play cycle. Not this->pause()/play(): those toggle and touch
-    // next_after_stop/stream logic.
+    // direct pause/play cycle (not this->pause()/play(): those toggle and touch stream logic)
     const qint64 pos_before = player.position();
     const int epoch = device_change_epoch;
     QTimer::singleShot(500, this, [this, epoch, pos_before]() {
-      if (epoch != device_change_epoch || state() != MediaPlayer::PlayingState) {
+      if (epoch != device_change_epoch || player.playbackState() != QMediaPlayer::PlayingState) {
         return;
       }
       if (player.position() != pos_before) {
