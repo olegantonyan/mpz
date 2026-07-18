@@ -26,6 +26,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
     connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
     connect(&_player, &MediaPlayer::aboutToFinish, this, &Controller::aboutToFinish);
+    connect(&_player, &MediaPlayer::error, this, [](const QString &message) {
+      qWarning() << "playback error:" << message;
+    });
 
     connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)

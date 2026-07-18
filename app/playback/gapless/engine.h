@@ -9,6 +9,7 @@
 #include <QAudioDevice>
 #include <QAudioFormat>
 #include <QByteArray>
+#include <QElapsedTimer>
 #include <QMediaDevices>
 #include <QObject>
 #include <QTimer>
@@ -86,6 +87,7 @@ namespace Playback::Gapless {
     void maybeEmitAboutToFinish();
     void checkSegmentBoundary();
     void checkEof();
+    void checkStalled();
     void finishPlayback();
 
     void catchUpTo(qint64 target_abs);
@@ -141,6 +143,10 @@ namespace Playback::Gapless {
     bool prepared_drain_restart = false;
     bool prepared_decoder_finished = false;
     bool drain_restart_scheduled = false;
+    QElapsedTimer stall_timer; // re-armed whenever the audible frame advances
+    qint64 stall_last_audible = -1;
+    qint64 stall_recovery_audible = -1; // audible frame of the last recovery attempt; -1 = none
+    bool stall_fallback_done = false;
     QTimer pump_timer;
     QTimer position_timer;
     QMediaDevices media_devices;

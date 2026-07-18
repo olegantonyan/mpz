@@ -147,6 +147,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupSleepLock();
   setupOutputDevice();
 
+  CoverArt::Covers::instance(modus_operandi);
+
   preloadPlaylist(args);
 
   connect(instance, &IPC::Instance::load_files_received, this, [=](const QStringList &lst) {
@@ -160,7 +162,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef ENABLE_MPD_SUPPORT
   setupMpdOrder();
 #endif
-  CoverArt::Covers::instance(modus_operandi);
 
 #if defined(ENABLE_UPDATE_CHECK)
   setupUpdateChecker();

@@ -118,6 +118,10 @@ namespace Playback::Gapless {
     resetPreparedState();
     advance_on_eof = false;
     synthetic_playing_on_play = false;
+    stall_timer.invalidate();
+    stall_last_audible = -1;
+    stall_recovery_audible = -1;
+    stall_fallback_done = false;
     decoder_finished = false;
     decoder_total_frames = 0;
     eof_done = false;
@@ -271,6 +275,7 @@ namespace Playback::Gapless {
     if (url != current_url) {
       return;
     }
+    qCWarning(mpzGapless) << "decode error" << url << message;
     emit error(message);
     decoder_finished = true;
     eof_done = true;
@@ -346,6 +351,10 @@ namespace Playback::Gapless {
     eof_done = false;
     about_to_finish_emitted = false;
     synthetic_playing_on_play = false;
+    stall_timer.invalidate();
+    stall_last_audible = -1;
+    stall_recovery_audible = -1;
+    stall_fallback_done = false;
     sink_format = QAudioFormat();
   }
 
@@ -526,10 +535,11 @@ namespace Playback::Gapless {
     }
   }
 
-  void Engine::onPrebufferError(const QUrl &url, const QString &) {
+  void Engine::onPrebufferError(const QUrl &url, const QString &message) {
     if (url != prepared_url) {
       return;
     }
+    qCWarning(mpzGapless) << "prebuffer error" << url << message;
     resetPreparedState(); // next stays unprepared; the current file still advances via EOF
   }
 
@@ -725,6 +735,49 @@ namespace Playback::Gapless {
     maybeEmitAboutToFinish();
     checkSegmentBoundary();
     checkEof();
+    checkStalled();
+  }
+
+  void Engine::checkStalled() {
+    if (catchup_target_frame >= 0 || eof_done) {
+      stall_timer.invalidate();
+      return;
+    }
+    const qint64 audible = audibleAbsFrame();
+    if (audible != stall_last_audible || !stall_timer.isValid()) {
+      stall_last_audible = audible;
+      stall_timer.restart();
+      return;
+    }
+    if (stall_timer.elapsed() < 10000) {
+      return;
+    }
+    stall_timer.restart();
+    qCWarning(mpzGapless) << "stalled at" << audible << current_url
+                          << "segment" << current_segment << "of" << timeline.segmentCount()
+                          << "read_cursor" << read_cursor_frame
+                          << "decoder_finished" << decoder_finished
+                          << "cache" << cache.firstFrame(current_url) << ".." << cache.frontierFrame(current_url)
+                          << "prepared" << prepared_url
+                          << "appended" << prepared_segment_appended << "deferred" << prepared_append_deferred
+                          << "drain_restart" << prepared_drain_restart
+                          << "sink" << (sink ? sink->state() : QAudio::StoppedState);
+    if (audible == stall_recovery_audible) {
+      if (!stall_fallback_done) {
+        stall_fallback_done = true;
+        qCWarning(mpzGapless) << "stall recovery failed, skipping to next track";
+        finishPlayback();
+      }
+      return;
+    }
+    qCWarning(mpzGapless) << "stall recovery: restarting current track";
+    const qint64 ms = positionMs();
+    const Track t = current_track;
+    const bool adv = advance_on_eof;
+    hardSwitchTo(t);
+    advance_on_eof = adv; // no play() follows the restart; keep EOF-advance armed
+    pending_seek_ms = ms;
+    stall_recovery_audible = audible; // after hardSwitchTo: it clears the stall trackers
   }
 
   void Engine::emitPosition() {
@@ -941,6 +994,7 @@ namespace Playback::Gapless {
     current_state = s;
     if (s == MediaPlayer::PlayingState) {
       advance_on_eof = true;
+      stall_timer.invalidate(); // re-arm on the next tick; time paused/stopped must not count
       pump_timer.start();
       position_timer.start();
     } else if (s == MediaPlayer::PausedState) {
