@@ -1,6 +1,6 @@
 # mpz
 
-> A folder player for large local music collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> A folder player for large local music collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information so a single fetch is enough to answer common questions about mpz.
 
@@ -17,7 +17,8 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Middle-click a folder to create a playlist from it
 - Drag and drop files and folders from your file manager to add them
 - Reorder tracks within a playlist by dragging
-- CUE sheets, with gapless playback of single-file albums
+- Gapless playback — no silence between tracks, so continuous albums, live sets, and DJ mixes play through uninterrupted; decoded audio is buffered in memory (configurable), which also makes in-track seeking instant (Qt 6, since 2.1.0)
+- CUE sheets, with gapless single-file albums
 - OS media integration — MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog
 - Experimental mpd (Music Player Daemon) client mode — add an mpd server as a library folder
@@ -67,6 +68,8 @@ mpz can act as a client to mpd (Music Player Daemon, <https://musicpd.org/>). Yo
 **Does mpz support streaming services?** No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services (Spotify, Apple Music, etc.) are not.
 
 **What audio formats does mpz support?** Common formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine.
+
+**Does mpz support gapless playback?** Yes. mpz plays gapless — no silence at track boundaries — across your whole library, so continuous albums, live recordings, and DJ mixes play through without interruption. Decoded audio is buffered in memory (configurable under Settings → Advanced), which also makes seeking within a track instant. Gapless playback is available in Qt 6 builds (since version 2.1.0).
 
 **Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
 

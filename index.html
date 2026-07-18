@@ -5,7 +5,7 @@
         <title>mpz — music player for large local collections</title>
         <meta
             name="description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -41,7 +41,7 @@
         />
         <meta
             property="og:description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -66,7 +66,7 @@
         />
         <meta
             name="twitter:description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta
             name="twitter:image"
@@ -107,8 +107,8 @@
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
-                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
-                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player",
+                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
+                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
@@ -126,6 +126,7 @@
                     "Middle-click a folder to create a playlist from it",
                     "Drag and drop files and folders from the file manager",
                     "Reorder tracks within a playlist by dragging",
+                    "Gapless playback — no silence between tracks, with instant in-track seeking (Qt 6)",
                     "CUE sheets, with gapless playback of single-file albums",
                     "OS media integration — MPRIS on Linux, SMTC and taskbar on Windows, Now Playing and Dock on macOS, system tray",
                     "Global media-key hotkeys and a built-in keyboard shortcuts dialog",
@@ -165,7 +166,7 @@
                 "@type": "WebSite",
                 "name": "mpz",
                 "url": "https://mpz-player.org/",
-                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode."
+                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode."
             }
         </script>
 
@@ -244,6 +245,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Common formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz support gapless playback?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. mpz plays gapless — no silence at track boundaries — across your whole library, so continuous albums, live recordings, and DJ mixes play through without interruption. Decoded audio is buffered in memory (configurable under Settings → Advanced), which also makes seeking within a track instant. Gapless playback is available in Qt 6 builds (since version 2.1.0)."
                         }
                     },
                     {
@@ -839,8 +848,13 @@
                     <div class="content">
                         <p>
                             Internet radio streams in <code>m3u</code>,
-                            <code>m3u8</code>, and <code>pls</code> formats. CUE
-                            sheets, with gapless playback of single-file albums.
+                            <code>m3u8</code>, and <code>pls</code> formats.
+                            Gapless playback — no silence between tracks, so
+                            continuous albums, live sets, and DJ mixes flow
+                            uninterrupted; buffering decoded audio in memory
+                            also makes seeking within a track instant (Qt 6,
+                            since 2.1.0). CUE sheets, with gapless single-file
+                            albums.
                             A playback log keeps a history of what played — handy
                             when you hear something you like on a radio stream.
                             OS media integration: MPRIS on Linux (remote control,
@@ -1327,6 +1341,22 @@
                                 playback uses system codecs, exact format
                                 availability depends on what's installed on your
                                 machine.
+                            </p>
+
+                            <p>
+                                <strong
+                                    >Does mpz support gapless
+                                    playback?</strong
+                                ><br />
+                                Yes. mpz plays gapless — no silence at track
+                                boundaries — across your whole library, so
+                                continuous albums, live recordings, and DJ
+                                mixes play through without interruption.
+                                Decoded audio is buffered in memory
+                                (configurable under Settings → Advanced), which
+                                also makes seeking within a track instant.
+                                Gapless playback is available in Qt 6 builds
+                                (since version 2.1.0).
                             </p>
 
                             <p>
