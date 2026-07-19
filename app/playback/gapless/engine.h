@@ -4,6 +4,7 @@
 #include "playback/gapless/pcmcache.h"
 #include "playback/gapless/timeline.h"
 #include "playback/mediaplayer.h"
+#include "streammetadata.h"
 #include "track.h"
 
 #include <QAudioDevice>
@@ -12,6 +13,7 @@
 #include <QElapsedTimer>
 #include <QMediaDevices>
 #include <QObject>
+#include <QThread>
 #include <QTimer>
 #include <QUrl>
 
@@ -22,11 +24,12 @@ QT_END_NAMESPACE
 
 namespace Playback::Gapless {
   class TrackDecoder;
+  class StreamSource;
 
   class Engine : public QObject {
     Q_OBJECT
   public:
-    explicit Engine(qint64 cache_budget_bytes, QObject *parent = nullptr);
+    explicit Engine(qint64 cache_budget_bytes, quint32 stream_threshold_bytes, QObject *parent = nullptr);
     ~Engine() override;
 
     Playback::MediaPlayer::State state() const;
@@ -49,6 +52,8 @@ namespace Playback::Gapless {
     void error(const QString &message);
     void aboutToFinish();
     void nextRequested();
+    void streamBufferfillChanged(quint32 current, quint32 total);
+    void streamMetaChanged(const StreamMetaData &meta);
 
   private:
     void hardSwitchTo(const Track &t);
@@ -90,6 +95,17 @@ namespace Playback::Gapless {
     void checkStalled();
     void finishPlayback();
 
+    void teardownStream();
+    void startStreamConnect();
+    void startStreamDecoder();
+    void onStreamRingFill(quint32 current, quint32 total);
+    void onStreamError(const QString &message);
+    void onStreamStopped();
+    void checkStreamHealth();
+    void endOfStream();
+    void restartStreamFresh();
+    void restartStreamKeepPcm();
+
     void catchUpTo(qint64 target_abs);
     void restartDecoderForSeek(qint64 target_abs);
     void maybeFinishCatchUp();
@@ -102,6 +118,8 @@ namespace Playback::Gapless {
     void evaluateAudioDevice();
     void switchSink(const QAudioDevice &device);
     QAudioFormat nearestSupported(const QAudioDevice &device, const QAudioFormat &format) const;
+
+    enum class StreamPhase { None, Connecting, Priming, Steady, Rebuffering };
 
     PcmCache cache;
     qint64 cache_budget = 0;
@@ -151,6 +169,17 @@ namespace Playback::Gapless {
     QTimer position_timer;
     QMediaDevices media_devices;
     QTimer devices_changed_debounce; // single-shot; coalesces audioOutputsChanged bursts
+
+    quint32 stream_threshold_bytes = 0;
+    bool stream_mode = false;
+    StreamSource *stream_source = nullptr;
+    StreamPhase stream_phase = StreamPhase::None;
+    bool stream_dead = false;
+    QString stream_error_message;
+    int stream_epoch = 0; // invalidates stale queued StreamSource callbacks across reconnects/switches
+    QThread stream_decoder_thread; // stream decoders live here: QAudioDecoder::start() blocks on the probe
+    int stream_reconnect_attempts = 0;
+    QTimer stream_reconnect_timer; // single-shot; an active timer is the "reconnect pending" state
   };
 }
 

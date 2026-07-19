@@ -3,13 +3,15 @@
 namespace Playback::Gapless {
   GaplessMediaPlayer::GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, bool gapless_enabled, QObject *parent) :
     MediaPlayer(stream_buffer_size, outdevid, parent),
-    engine(qint64(cache_mb) * 1024 * 1024),
+    engine(qint64(cache_mb) * 1024 * 1024, stream_buffer_size),
     gapless_enabled(gapless_enabled) {
     connect(&engine, &Engine::positionChanged, this, &MediaPlayer::positionChanged);
     connect(&engine, &Engine::stateChanged, this, &MediaPlayer::stateChanged);
     connect(&engine, &Engine::error, this, &MediaPlayer::error);
     connect(&engine, &Engine::nextRequested, this, &MediaPlayer::nextRequested);
     connect(&engine, &Engine::aboutToFinish, this, &MediaPlayer::aboutToFinish);
+    connect(&engine, &Engine::streamBufferfillChanged, this, &MediaPlayer::streamBufferfillChanged);
+    connect(&engine, &Engine::streamMetaChanged, this, &MediaPlayer::streamMetaChanged);
     engine.setOutputDevice(outdevid);
   }
 
@@ -59,7 +61,7 @@ namespace Playback::Gapless {
   }
 
   void GaplessMediaPlayer::setTrack(const Track &track) {
-    if (track.isStream() || !gapless_enabled) {
+    if (!gapless_enabled) {
       if (backend == Backend::Engine) {
         engine.clearTrack();
       }
