@@ -10,21 +10,19 @@ on:
 
 jobs:
   list-distros:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     outputs:
       distros: ${{ steps.get-distros.outputs.distros }}
     steps:
       - uses: omnipackage/omnipackage-rs@master
-
       - uses: actions/checkout@v6
-
       - name: Get distro list
         id: get-distros
         run: echo "distros=$(omnipackage info --list-distros . --format json)" >> "$GITHUB_OUTPUT"
 
   release:
     needs: [list-distros]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     concurrency:
       group: omnipackage-${{ inputs.repository }}-${{ matrix.distro }}
       cancel-in-progress: false
@@ -34,10 +32,7 @@ jobs:
         distro: ${{ fromJson(needs.list-distros.outputs.distros) }}
     steps:
       - uses: omnipackage/omnipackage-rs@master
-
       - uses: actions/checkout@v6
-
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-
       - name: Release packages for ${{ matrix.distro }}
         run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache github
