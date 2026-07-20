@@ -1,5 +1,6 @@
 #include "playback/gapless/engine.h"
 
+#include "playback/gapless/streamsource.h"
 #include "playback/gapless/trackdecoder.h"
 
 #include <QAudioDevice>
@@ -11,14 +12,18 @@
 namespace Playback::Gapless {
   namespace {
     Q_LOGGING_CATEGORY(mpzGapless, "mpz.gapless", QtWarningMsg)
+    // stream decode-ahead: keep only a small PCM runway so the decoder reads the ring
+    // at playback rate and the Stream ring stays near threshold (like QMediaPlayer)
+    constexpr qint64 kStreamRunwaySeconds = 1;
     bool sameFormat(const QAudioFormat &a, const QAudioFormat &b) {
       return a.sampleRate() == b.sampleRate() && a.channelCount() == b.channelCount() &&
              a.sampleFormat() == b.sampleFormat();
     }
   }
 
-  Engine::Engine(qint64 cache_budget_bytes, QObject *parent)
-      : QObject(parent), cache(cache_budget_bytes), cache_budget(cache_budget_bytes) {
+  Engine::Engine(qint64 cache_budget_bytes, quint32 stream_threshold_bytes, QObject *parent)
+      : QObject(parent), cache(cache_budget_bytes), cache_budget(cache_budget_bytes),
+        stream_threshold_bytes(stream_threshold_bytes) {
     pump_timer.setInterval(50);
     connect(&pump_timer, &QTimer::timeout, this, &Engine::onPumpTick);
     position_timer.setInterval(100);
@@ -30,7 +35,9 @@ namespace Playback::Gapless {
     connect(&devices_changed_debounce, &QTimer::timeout, this, &Engine::evaluateAudioDevice);
   }
 
-  Engine::~Engine() = default;
+  Engine::~Engine() {
+    teardownStream(); // release the blocked read and join the network thread before member teardown
+  }
 
   Playback::MediaPlayer::State Engine::state() const {
     return current_state;
@@ -115,6 +122,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::hardSwitchTo(const Track &t) {
+    teardownStream();
     resetPreparedState();
     advance_on_eof = false;
     synthetic_playing_on_play = false;
@@ -142,6 +150,18 @@ namespace Playback::Gapless {
     timeline.clear();
     current_track = t;
     current_url = t.url();
+    if (t.isStream()) {
+      stream_mode = true;
+      if (decoder) { // discard a leftover file decoder from the previous track
+        decoder->disconnect(this);
+        decoder->stop();
+        decoder->deleteLater();
+        decoder = nullptr;
+      }
+      startStreamConnect();
+      return;
+    }
+    stream_mode = false;
     newDecoder();
     decoder->start(current_url);
   }
@@ -175,6 +195,14 @@ namespace Playback::Gapless {
     TrackDecoder *d = decoder;
     QTimer::singleShot(0, this, [this, d, target]() {
       if (decoder != d) {
+        return;
+      }
+      if (stream_mode) {
+        stream_source->releaseRead(); // abort the old probe's blocked read so it can be discarded
+        stream_source->rearm();       // re-open the live device for the new decoder
+        newDecoder(); // fresh decoder: the aborted probe's decodeError is disconnected, not treated as stream death
+        decoder->requestFormat(target);
+        decoder->start(current_url, stream_source); // restart over the live device, never re-open the URL
         return;
       }
       decoder->stop();
@@ -253,6 +281,9 @@ namespace Playback::Gapless {
     if (url != current_url) {
       return;
     }
+    // Streams reach here only on a real end (the blocking StreamSource EOFs only when
+    // the socket is dead and the ring drained): closeSegment lets the buffered PCM
+    // play out, then checkEof -> finishPlayback advances, exactly like QMediaPlayer.
     decoder_finished = true;
     decoder_total_frames = total_frames;
     for (int i = 0; i < timeline.segmentCount(); i++) {
@@ -283,6 +314,10 @@ namespace Playback::Gapless {
   }
 
   void Engine::play() {
+    if (stream_mode && !sink) {
+      setState(MediaPlayer::PlayingState); // optimistic while the ring fills; the sink comes up active
+      return;
+    }
     if (synthetic_playing_on_play) {
       synthetic_playing_on_play = false;
       if (sink && sink->state() == QAudio::SuspendedState) {
@@ -312,6 +347,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::stop() {
+    teardownStream();
     resetPreparedState();
     advance_on_eof = false;
     synthetic_playing_on_play = false;
@@ -331,6 +367,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::clearTrack() {
+    teardownStream();
     stop();
     cache.clear();
     timeline.clear();
@@ -359,6 +396,9 @@ namespace Playback::Gapless {
   }
 
   void Engine::setPositionMs(qint64 ms) {
+    if (stream_mode) {
+      return;
+    }
     const int rate = sink_format.sampleRate();
     if (rate <= 0 || timeline.segmentCount() == 0) {
       return;
@@ -442,6 +482,9 @@ namespace Playback::Gapless {
 
   void Engine::prepareNextTrack(const Track &t) {
     resetPreparedState();
+    if (stream_mode) {
+      return;
+    }
     if (t.uid() == 0 || current_state == MediaPlayer::StoppedState || sink_format.sampleRate() <= 0) {
       qCDebug(mpzGapless) << "prepare none" << t.uid() << "state" << current_state;
       return;
@@ -717,6 +760,9 @@ namespace Playback::Gapless {
       if (!sameFormat(target, sink_format)) {
         const Track t = current_track;
         hardSwitchTo(t); // rebuild pipeline; onFirstFormat picks the device's supported format at the new rate
+        if (t.isStream()) {
+          return; // stream: no seek to restore; position restarts at 0
+        }
         pending_seek_ms = captured_ms;
         return;
       }
@@ -735,7 +781,9 @@ namespace Playback::Gapless {
     maybeEmitAboutToFinish();
     checkSegmentBoundary();
     checkEof();
-    checkStalled();
+    if (!stream_mode) {
+      checkStalled(); // streams handle stalls via the ring + blocking read, not a restart
+    }
   }
 
   void Engine::checkStalled() {
@@ -832,6 +880,15 @@ namespace Playback::Gapless {
     }
     if (catchup_target_frame >= 0) {
       decoder->setPaused(false);
+      return;
+    }
+    if (stream_mode) {
+      // Keep only a small PCM runway so the decoder pulls the ring at playback rate:
+      // the Stream ring then stays near threshold, fills on pause, drains on stall.
+      const int rate = sink_format.sampleRate();
+      const qint64 runway = cache.frontierFrame(current_url) - inFileFrame(read_cursor_frame);
+      const qint64 target = rate > 0 ? qint64(rate) * kStreamRunwaySeconds : 0;
+      decoder->setPaused(rate > 0 && runway >= target);
       return;
     }
     decoder->setPaused(!cache.wantsMoreData(current_url));
@@ -1043,5 +1100,87 @@ namespace Playback::Gapless {
       return candidate;
     }
     return device.preferredFormat();
+  }
+
+  void Engine::teardownStream() {
+    ++stream_epoch; // drop any stale queued StreamSource callbacks
+    if (stream_source && decoder) {
+      stream_source->releaseRead(); // unblock the demux read before stopping the decoder
+    }
+    if (stream_mode && decoder) {
+      decoder->disconnect(this);
+      decoder->stop();
+      decoder->deleteLater();
+      decoder = nullptr;
+    }
+    if (stream_source) {
+      stream_source->disconnect(this);
+      stream_source->shutdown(); // joins the network thread
+      stream_source->deleteLater();
+      stream_source = nullptr;
+    }
+    stream_mode = false;
+  }
+
+  void Engine::startStreamConnect() {
+    ++stream_epoch;
+    stream_source = new StreamSource(stream_threshold_bytes, this);
+    const int epoch = stream_epoch;
+    connect(stream_source, &StreamSource::ringFillChanged, this, [this, epoch](quint32 c, quint32 t) {
+      if (epoch != stream_epoch) {
+        return;
+      }
+      onStreamRingFill(c, t);
+    });
+    connect(stream_source, &StreamSource::metadataChanged, this, &Engine::streamMetaChanged);
+    connect(stream_source, &StreamSource::streamError, this, [this, epoch](const QString &m) {
+      if (epoch != stream_epoch) {
+        return;
+      }
+      onStreamError(m);
+    });
+    connect(stream_source, &StreamSource::streamStopped, this, [this, epoch]() {
+      if (epoch != stream_epoch) {
+        return;
+      }
+      onStreamStopped();
+    });
+    qCDebug(mpzGapless) << "stream connect" << current_url << "epoch" << stream_epoch;
+    stream_source->startStream(current_url); // may emit streamError synchronously
+  }
+
+  void Engine::startStreamDecoder() {
+    // Ring reached the configured size (fill-to-threshold, like QMediaPlayer's
+    // start_stream); now decode the live device. Forward-runway back-pressure then
+    // reads the ring at playback rate, keeping it near threshold.
+    newDecoder();
+    if (sink && sink_format.isValid()) {
+      decoder->requestFormat(sink_format); // sink already up (device switch): match its format
+    }
+    decoder->start(current_url, stream_source);
+  }
+
+  void Engine::onStreamRingFill(quint32 current, quint32 total) {
+    emit streamBufferfillChanged(current, total); // raw ring bytes -> status bar
+    if (!decoder && current >= total) {
+      qCDebug(mpzGapless) << "stream priming" << current_url;
+      startStreamDecoder();
+    }
+  }
+
+  void Engine::onStreamError(const QString &message) {
+    qCWarning(mpzGapless) << "stream error" << current_url << message;
+    onStreamStopped(); // pre-audio -> advance/stop; mid-stream -> the decoder's EOF advances
+  }
+
+  void Engine::onStreamStopped() {
+    if (!sink) {
+      // died before any audio (connect failure / instant end): match QMediaPlayer,
+      // which advances to the next item (or stops when there is none)
+      teardownStream();
+      finishPlayback();
+    }
+    // mid-stream: the StreamSource goes dead, the demux read drains then EOFs, and
+    // onDecoderFinished -> checkEof -> finishPlayback advances. Nothing to do here.
   }
 }

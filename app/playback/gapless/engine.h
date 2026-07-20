@@ -4,6 +4,7 @@
 #include "playback/gapless/pcmcache.h"
 #include "playback/gapless/timeline.h"
 #include "playback/mediaplayer.h"
+#include "streammetadata.h"
 #include "track.h"
 
 #include <QAudioDevice>
@@ -22,11 +23,12 @@ QT_END_NAMESPACE
 
 namespace Playback::Gapless {
   class TrackDecoder;
+  class StreamSource;
 
   class Engine : public QObject {
     Q_OBJECT
   public:
-    explicit Engine(qint64 cache_budget_bytes, QObject *parent = nullptr);
+    explicit Engine(qint64 cache_budget_bytes, quint32 stream_threshold_bytes, QObject *parent = nullptr);
     ~Engine() override;
 
     Playback::MediaPlayer::State state() const;
@@ -49,6 +51,8 @@ namespace Playback::Gapless {
     void error(const QString &message);
     void aboutToFinish();
     void nextRequested();
+    void streamBufferfillChanged(quint32 current, quint32 total);
+    void streamMetaChanged(const StreamMetaData &meta);
 
   private:
     void hardSwitchTo(const Track &t);
@@ -89,6 +93,13 @@ namespace Playback::Gapless {
     void checkEof();
     void checkStalled();
     void finishPlayback();
+
+    void teardownStream();
+    void startStreamConnect();
+    void startStreamDecoder();
+    void onStreamRingFill(quint32 current, quint32 total);
+    void onStreamError(const QString &message);
+    void onStreamStopped();
 
     void catchUpTo(qint64 target_abs);
     void restartDecoderForSeek(qint64 target_abs);
@@ -151,6 +162,11 @@ namespace Playback::Gapless {
     QTimer position_timer;
     QMediaDevices media_devices;
     QTimer devices_changed_debounce; // single-shot; coalesces audioOutputsChanged bursts
+
+    quint32 stream_threshold_bytes = 0;
+    bool stream_mode = false;
+    StreamSource *stream_source = nullptr;
+    int stream_epoch = 0; // invalidates stale queued StreamSource callbacks across track switches
   };
 }
 

@@ -7,6 +7,10 @@
 #include <QObject>
 #include <QUrl>
 
+QT_BEGIN_NAMESPACE
+class QIODevice;
+QT_END_NAMESPACE
+
 namespace Playback::Gapless {
   class TrackDecoder : public QObject {
     Q_OBJECT
@@ -14,6 +18,7 @@ namespace Playback::Gapless {
     explicit TrackDecoder(QObject *parent = nullptr);
 
     void start(const QUrl &url);
+    void start(const QUrl &key, QIODevice *device);
     void stop();
     void requestFormat(const QAudioFormat &format);
     void setPaused(bool p);
@@ -26,6 +31,8 @@ namespace Playback::Gapless {
     void decodeError(const QUrl &url, const QString &message);
 
   private:
+    void reset(const QUrl &key);
+    void startDecoder();
     void emitFormatOnce(const QAudioFormat &format);
 
     QAudioDecoder decoder;

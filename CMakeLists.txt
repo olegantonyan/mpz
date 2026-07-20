@@ -226,6 +226,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
       app/playback/gapless/pcmcache.cpp
       app/playback/gapless/timeline.cpp
       app/playback/gapless/trackdecoder.cpp
+      app/playback/gapless/streamsource.cpp
       app/playback/gapless/engine.cpp
       app/playback/gapless/gaplessmediaplayer.cpp)
   endif()

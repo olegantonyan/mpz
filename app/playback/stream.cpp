@@ -305,7 +305,7 @@ namespace Playback {
     });
 
     sock.connectToHost(url().host(), static_cast<quint16>(url().port(80)));
-    sock.waitForConnected();
+    sock.waitForConnected(5000); // cap the GUI-blocking window when tearing down mid-connect against a dead host
     sock.write(buildRequest().toLatin1());
 
     loop.exec();
