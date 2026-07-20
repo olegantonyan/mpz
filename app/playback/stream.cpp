@@ -12,6 +12,7 @@ namespace Playback {
     _total_bytes_received(0),
     _icy_metaint(0),
     _next_meta_pos(0),
+    _meta_bytes_remaining(0),
     _threshold_bytes(threshold_bytes),
     _max_bytes(threshold_bytes * threshold_multiplier),
     _chunked(false),
@@ -85,17 +86,17 @@ namespace Playback {
     }
     int bytes_appended = 0;
 
-    int meta_bytes = 0;
-    QByteArray meta;
     for (int i = 0; i < a.size(); i++) {
       if (i + _total_bytes_received == _next_meta_pos) {
-        meta_bytes = a.at(i) * 16;
-        _next_meta_pos += (_icy_metaint + meta_bytes + 1);
-      } else if (meta_bytes > 0) {
-        meta.append(a.at(i));
-        meta_bytes--;
-        if (meta_bytes == 0) {
-          _meta.insert("stream", meta);
+        _meta_bytes_remaining = static_cast<quint8>(a.at(i)) * 16;
+        _next_meta_pos += (_icy_metaint + _meta_bytes_remaining + 1);
+        _meta_pending.clear();
+      } else if (_meta_bytes_remaining > 0) {
+        _meta_pending.append(a.at(i));
+        _meta_bytes_remaining--;
+        if (_meta_bytes_remaining == 0) {
+          _meta.insert("stream", _meta_pending);
+          _meta_pending.clear();
           emit metadataChanged(_meta);
         }
       } else {
@@ -236,6 +237,8 @@ namespace Playback {
     _total_bytes_received = 0;
     _icy_metaint = 0;
     _next_meta_pos = 0;
+    _meta_pending.clear();
+    _meta_bytes_remaining = 0;
     _meta.clear();
     _chunked = false;
     _chunk_state = ChunkState::Size;

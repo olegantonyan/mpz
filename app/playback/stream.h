@@ -52,6 +52,8 @@ namespace Playback {
     QFuture<void> _future;
     int _icy_metaint;
     qint64 _next_meta_pos;
+    QByteArray _meta_pending;
+    int _meta_bytes_remaining;
     StreamMetaData _meta;
     int _timeout_ms;
     // chunked transfer-encoding decode state. HTTP/1.1 proxies in front of the
