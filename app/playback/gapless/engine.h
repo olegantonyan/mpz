@@ -13,7 +13,6 @@
 #include <QElapsedTimer>
 #include <QMediaDevices>
 #include <QObject>
-#include <QThread>
 #include <QTimer>
 #include <QUrl>
 
@@ -101,10 +100,6 @@ namespace Playback::Gapless {
     void onStreamRingFill(quint32 current, quint32 total);
     void onStreamError(const QString &message);
     void onStreamStopped();
-    void checkStreamHealth();
-    void endOfStream();
-    void restartStreamFresh();
-    void restartStreamKeepPcm();
 
     void catchUpTo(qint64 target_abs);
     void restartDecoderForSeek(qint64 target_abs);
@@ -118,8 +113,6 @@ namespace Playback::Gapless {
     void evaluateAudioDevice();
     void switchSink(const QAudioDevice &device);
     QAudioFormat nearestSupported(const QAudioDevice &device, const QAudioFormat &format) const;
-
-    enum class StreamPhase { None, Connecting, Priming, Steady, Rebuffering };
 
     PcmCache cache;
     qint64 cache_budget = 0;
@@ -173,13 +166,7 @@ namespace Playback::Gapless {
     quint32 stream_threshold_bytes = 0;
     bool stream_mode = false;
     StreamSource *stream_source = nullptr;
-    StreamPhase stream_phase = StreamPhase::None;
-    bool stream_dead = false;
-    QString stream_error_message;
-    int stream_epoch = 0; // invalidates stale queued StreamSource callbacks across reconnects/switches
-    QThread stream_decoder_thread; // stream decoders live here: QAudioDecoder::start() blocks on the probe
-    int stream_reconnect_attempts = 0;
-    QTimer stream_reconnect_timer; // single-shot; an active timer is the "reconnect pending" state
+    int stream_epoch = 0; // invalidates stale queued StreamSource callbacks across track switches
   };
 }
 

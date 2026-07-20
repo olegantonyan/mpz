@@ -26,7 +26,6 @@ namespace Playback::Gapless {
     void releaseRead();
     void rearm();
     void shutdown();
-    void grantReserveBudget(qint64 bytes, qint64 cap);
 
     bool isSequential() const override;
     bool atEnd() const override;
@@ -46,13 +45,12 @@ namespace Playback::Gapless {
     void connectStream(Playback::Stream *s);
     void forwardFill(quint32 current, quint32 total);
 
-    const quint32 threshold_bytes;
+    const quint32 threshold_bytes; // ring size for the wrapped Stream
     Playback::Stream *stream = nullptr;
     mutable QMutex wait_mutex;
     QWaitCondition wait_cond;
     std::atomic<bool> released{false};
     std::atomic<bool> dead{false};
-    qint64 reserve_budget = 0; // guarded by wait_mutex; spent only by the single demux reader
     QElapsedTimer fill_throttle; // GUI thread only
   };
 }

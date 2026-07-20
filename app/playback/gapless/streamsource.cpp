@@ -22,7 +22,6 @@ namespace Playback::Gapless {
       stream = nullptr;
       released.store(false);
       dead.store(false);
-      reserve_budget = 0;
     }
     if (old) {
       old->disconnect(this);
@@ -50,12 +49,6 @@ namespace Playback::Gapless {
   void StreamSource::rearm() {
     QMutexLocker lock(&wait_mutex);
     released.store(false);
-  }
-
-  void StreamSource::grantReserveBudget(qint64 bytes, qint64 cap) {
-    QMutexLocker lock(&wait_mutex);
-    reserve_budget = qMin(reserve_budget + bytes, cap);
-    wait_cond.wakeAll();
   }
 
   void StreamSource::shutdown() {
@@ -132,26 +125,15 @@ namespace Playback::Gapless {
   qint64 StreamSource::readData(char *data, qint64 maxlen) {
     // Runs on the decoder demux thread. The ffmpeg backend maps a 0-byte read or
     // atEnd() to AVERROR_EOF, so block until data, release, or dead+drained; the
-    // 250ms timed wait is a safety net against a missed wake.
+    // 250ms timed wait is a safety net against a missed wake. Reads straight from
+    // the ring at the decoder's rate — Engine back-pressure keeps the ring full.
     wait_mutex.lock();
     for (;;) {
       Playback::Stream *s = stream;
-      const qint64 budget = reserve_budget;
       wait_mutex.unlock();
-      // The ring keeps threshold_bytes as a standing reserve; the engine grants
-      // budget to dip into it (probe, low PCM runway, dead-stream drain-out).
-      const qint64 avail = s ? s->bytesAvailable() : 0;
-      qint64 take = avail - threshold_bytes;
-      if (take <= 0 && budget > 0) {
-        take = qMin(avail, budget);
-      }
-      const qint64 n = (s && take > 0) ? s->read(data, qMin(maxlen, take)) : 0;
+      const qint64 n = s ? s->read(data, maxlen) : 0;
       wait_mutex.lock();
       if (n > 0) {
-        const qint64 from_reserve = n - qMax<qint64>(0, avail - threshold_bytes);
-        if (from_reserve > 0) {
-          reserve_budget = qMax<qint64>(0, reserve_budget - from_reserve);
-        }
         wait_mutex.unlock();
         return n;
       }
