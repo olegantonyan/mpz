@@ -132,7 +132,9 @@ int main(int argc, char *argv[]) {
   Config::Global global_conf;
   Config::Local local_conf;
 
-  Radio::Catalog::setUserFilePath(Config::Storage::configPath() + "/radio.json");
+  if (!global_conf.hasRadioStations()) {
+    global_conf.saveRadioStations(Radio::Catalog::builtin());
+  }
 
   load_locale(a, global_conf.language());
 

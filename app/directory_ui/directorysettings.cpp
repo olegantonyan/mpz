@@ -1,6 +1,7 @@
 #include "directorysettings.h"
 #include "ui_directorysettings.h"
 #include "radiolibrary.h"
+#include "radiostationsdialog.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "addmpddialog.h"
 #endif
@@ -27,7 +28,7 @@ namespace {
   };
 }
 
-DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus) {
+DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, Config::Global &global_cfg, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus), global_conf(global_cfg) {
   ui->setupUi(this);
 
   model.setStringList(paths);
@@ -70,13 +71,17 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 }
 
 
-void DirectorySettings::on_pushButtonAddRadio_clicked() {
-  auto existing = model.stringList();
-  if (existing.contains(DirectoryUi::radioLibraryPath())) {
-    return;
+bool DirectorySettings::radioStationsEdited() const {
+  return stations_edited;
+}
+
+void DirectorySettings::editRadioStations() {
+  DirectoryUi::RadioStationsDialog dlg(global_conf.radioStations(), this);
+  if (dlg.exec() == QDialog::Accepted) {
+    global_conf.saveRadioStations(dlg.stations());
+    global_conf.sync();
+    stations_edited = true;
   }
-  existing.append(DirectoryUi::radioLibraryPath());
-  model.setStringList(existing);
 }
 
 void DirectorySettings::on_pushButtonEdit_clicked() {
@@ -87,8 +92,10 @@ void DirectorySettings::on_pushButtonEdit_clicked() {
   auto list = model.stringList();
   const QString current = list.at(idx.row());
 
+  // The radio entry has no path to edit; "Edit" opens its station list instead.
   if (DirectoryUi::isRadioLibraryPath(current)) {
-    return; // the radio entry has nothing to configure
+    editRadioStations();
+    return;
   }
 
   QString replacement;
@@ -120,6 +127,10 @@ void DirectorySettings::on_pushButtonRemove_clicked() {
   if (!current_index.isValid() || current_index.row() >= model.stringList().size()) {
     return;
   }
+  // The radio entry is permanent -- edit its stations instead of removing it.
+  if (DirectoryUi::isRadioLibraryPath(model.stringList().at(current_index.row()))) {
+    return;
+  }
   model.removeRows(current_index.row(), 1);
 }
 
@@ -143,6 +154,10 @@ void DirectorySettings::updateMoveButtons() {
   auto idx = ui->listView->currentIndex();
   ui->pushButtonUp->setEnabled(idx.isValid() && idx.row() > 0);
   ui->pushButtonDown->setEnabled(idx.isValid() && idx.row() < model.rowCount() - 1);
+
+  const bool is_radio = idx.isValid()
+    && DirectoryUi::isRadioLibraryPath(model.stringList().at(idx.row()));
+  ui->pushButtonRemove->setEnabled(idx.isValid() && !is_radio);
 }
 
 void DirectorySettings::on_pushButtonUp_clicked() {

@@ -87,11 +87,11 @@ mpz_add_test(tst_radiocatalogresource tst_radiocatalogresource.cpp
 target_compile_definitions(tst_radiocatalogresource PRIVATE
   RADIO_STATIONS_JSON="${CMAKE_SOURCE_DIR}/app/resources/radio/radio.json")
 
-# radiofixtures.qrc aliases a 2-station fixture over the built-in resource path
-# so the user-override layering can be asserted against a known baseline.
-mpz_add_test(tst_radiousercatalog tst_radiousercatalog.cpp radiofixtures.qrc
-  ${APP}/radio/catalog.cpp
-  ${APP}/radio/station.cpp)
+# resolver.cpp includes QtNetwork for the remote fetch; firstStreamUrl/
+# looksLikePlaylist are pure and the unreferenced fetch body is dropped by
+# --gc-sections, so only the include paths are needed.
+mpz_add_test(tst_radioresolver tst_radioresolver.cpp ${APP}/radio/resolver.cpp)
+target_link_libraries(tst_radioresolver PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
 # UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
 # <QApplication> and a QNetworkAccessManager member for its include paths; the
@@ -174,6 +174,7 @@ mpz_add_test(tst_globalconfig tst_globalconfig.cpp
   ${APP}/config/storage.cpp
   ${APP}/config/value.cpp
   ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/radio/station.cpp
   ${APP}/track.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)

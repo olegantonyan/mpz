@@ -34,10 +34,6 @@ namespace DirectoryUi {
     open_homepage.setIcon(Icons::get(Icons::Icon::Info));
     QAction edit_stations(tr("Edit stations..."));
     edit_stations.setIcon(Icons::get(Icons::Icon::Edit));
-    QAction reload_stations(tr("Reload stations"));
-    reload_stations.setIcon(Icons::get(Icons::Icon::Reload));
-    QAction reset_stations(tr("Reset to built-in stations"));
-    reset_stations.setIcon(Icons::get(Icons::Icon::Trash));
 
     connect(&create_playlist, &QAction::triggered, this, [&]() {
       emit createNewPlaylistFromTracks(tracks, model->displayName(index));
@@ -49,8 +45,6 @@ namespace DirectoryUi {
       QDesktopServices::openUrl(QUrl(homepage));
     });
     connect(&edit_stations, &QAction::triggered, this, [&]() { emit editStations(); });
-    connect(&reload_stations, &QAction::triggered, this, [&]() { emit reloadStations(); });
-    connect(&reset_stations, &QAction::triggered, this, [&]() { emit resetStations(); });
 
     if (!search->text().isEmpty()) {
       connect(&clear_filter, &QAction::triggered, this, [&]() { search->clear(); });
@@ -67,8 +61,6 @@ namespace DirectoryUi {
     }
     menu.addSeparator();
     menu.addAction(&edit_stations);
-    menu.addAction(&reload_stations);
-    menu.addAction(&reset_stations);
     menu.exec(view->viewport()->mapToGlobal(pos));
   }
 

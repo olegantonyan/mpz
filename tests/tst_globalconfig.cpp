@@ -3,6 +3,7 @@
 #include <QFile>
 
 #include "config/global.h"
+#include "radio/station.h"
 
 class TestGlobalConfig : public QObject {
   Q_OBJECT
@@ -24,6 +25,9 @@ private slots:
   void coverProviders_defaultsToEmpty();
   void coverProviders_readsOrder();
   void coverProviders_roundTrips();
+  void radioStations_absentByDefault();
+  void radioStations_roundTrips();
+  void radioStations_emptyListStaysPresent();
 
 private:
   QTemporaryDir tempDir;
@@ -152,6 +156,67 @@ void TestGlobalConfig::coverProviders_roundTrips() {
   }
   Config::Global reloaded;
   QCOMPARE(reloaded.coverProviders(), saved);
+}
+
+void TestGlobalConfig::radioStations_absentByDefault() {
+  Config::Global g;
+  QVERIFY(!g.hasRadioStations());
+  QVERIFY(g.radioStations().isEmpty());
+}
+
+void TestGlobalConfig::radioStations_roundTrips() {
+  Radio::Station a;
+  a.id = "somafm-groovesalad";
+  a.name = "Groove Salad";
+  a.group = "SomaFM";
+  a.description = "Ambient beats.";
+  a.url = "https://ice.somafm.com/groovesalad-256-mp3";
+  a.codec = "mp3";
+  a.bitrate = 256;
+  a.homepage = "https://somafm.com/groovesalad/";
+  a.logo_url = "https://h/g.png";
+  Radio::Station b;
+  b.id = "slay";
+  b.name = "SLAY Radio";
+  b.url = "http://relay4.slayradio.org:8000/";
+  b.codec = "mp3";
+  b.bitrate = 128;
+
+  {
+    Config::Global g;
+    QVERIFY(g.saveRadioStations({a, b}));
+    g.sync();
+  }
+
+  Config::Global reloaded;
+  QVERIFY(reloaded.hasRadioStations());
+  const auto stations = reloaded.radioStations();
+  QCOMPARE(stations.size(), 2);
+  QCOMPARE(stations.at(0).id, a.id);
+  QCOMPARE(stations.at(0).name, a.name);
+  QCOMPARE(stations.at(0).group, a.group);
+  QCOMPARE(stations.at(0).description, a.description);
+  QCOMPARE(stations.at(0).url, a.url);
+  QCOMPARE(stations.at(0).codec, a.codec);
+  QCOMPARE(stations.at(0).bitrate, a.bitrate);
+  QCOMPARE(stations.at(0).homepage, a.homepage);
+  QCOMPARE(stations.at(0).logo_url, a.logo_url);
+  QCOMPARE(stations.at(1).id, b.id);
+  QCOMPARE(stations.at(1).url, b.url);
+  QCOMPARE(stations.at(1).bitrate, b.bitrate);
+}
+
+// Deleting every station is a real state: the key must persist as an empty list
+// so first-run seeding doesn't fire again.
+void TestGlobalConfig::radioStations_emptyListStaysPresent() {
+  {
+    Config::Global g;
+    QVERIFY(g.saveRadioStations({}));
+    g.sync();
+  }
+  Config::Global reloaded;
+  QVERIFY(reloaded.hasRadioStations());
+  QVERIFY(reloaded.radioStations().isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestGlobalConfig)

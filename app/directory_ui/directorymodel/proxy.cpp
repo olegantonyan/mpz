@@ -6,7 +6,7 @@ namespace DirectoryUi {
   namespace DirectoryModel {
     Proxy::Proxy(ModusOperandi &modus, Config::Global &global_cfg, QObject *parent) : QSortFilterProxyModel(parent), modus_operandi(modus), global_conf(global_cfg) {
       localfs = new Localfs(this);
-      radio = new Radio(this);
+      radio = new Radio(global_cfg, this);
       connect(radio, &Radio::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
 #ifdef ENABLE_MPD_SUPPORT
       mpd = new Mpd(modus.mpd_client, this);

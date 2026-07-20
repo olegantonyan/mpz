@@ -3,10 +3,9 @@
 #include "directorysortmenu.h"
 #include "icons.h"
 #include "modusoperandi.h"
-#include "radio/catalog.h"
 #include "radiodelegate.h"
 #include "radiolibrary.h"
-#include "reveal_in_filemanager.h"
+#include "radiostationsdialog.h"
 
 #include <QAction>
 #include <QDebug>
@@ -82,11 +81,7 @@ namespace DirectoryUi {
     connect(context_menu, &DirectoryContextMenu::appendToCurrentPlaylist, this, &Controller::appendToCurrentPlaylist);
     connect(context_menu, &DirectoryContextMenu::createNewPlaylistFromTracks, this, &Controller::createNewPlaylistFromTracks);
     connect(context_menu, &DirectoryContextMenu::appendTracksToCurrentPlaylist, this, &Controller::appendTracksToCurrentPlaylist);
-    connect(context_menu, &DirectoryContextMenu::reloadStations, this, [=]() {
-      model->loadAsync(radioLibraryPath());
-    });
     connect(context_menu, &DirectoryContextMenu::editStations, this, &Controller::editStations);
-    connect(context_menu, &DirectoryContextMenu::resetStations, this, &Controller::resetStations);
     connect(view, &QTreeView::customContextMenuRequested, context_menu, &DirectoryContextMenu::show);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
@@ -190,7 +185,7 @@ namespace DirectoryUi {
   }
 
   void Controller::settingsDialog(QComboBox *libswitch) {
-    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi);
+    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi, global_conf);
     auto old_paths = local_conf.libraryPaths();
     if(dlg.exec() == QDialog::Accepted) {
       if (old_paths != dlg.libraryPaths()) {
@@ -203,6 +198,9 @@ namespace DirectoryUi {
           // would run under the outgoing mode.
           libswitch->setCurrentIndex(libswitch->count() - 1);
         }
+      }
+      if (dlg.radioStationsEdited() && radioMode()) {
+        model->loadAsync(radioLibraryPath());
       }
     }
   }
@@ -218,40 +216,14 @@ namespace DirectoryUi {
   }
 
   void Controller::editStations() {
-    const auto path = Radio::Catalog::userFilePath();
-    if (path.isEmpty()) {
-      return;
-    }
-    // Seed from the built-in list so the user edits a working file rather than
-    // starting from a blank page.
-    if (!QFile::exists(path)) {
-      QDir().mkpath(QFileInfo(path).absolutePath());
-      QFile f(path);
-      if (!f.open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(view, tr("Radio"), tr("Cannot create %1").arg(path));
-        return;
+    RadioStationsDialog dlg(global_conf.radioStations(), view);
+    if (dlg.exec() == QDialog::Accepted) {
+      global_conf.saveRadioStations(dlg.stations());
+      global_conf.sync();
+      if (radioMode()) {
+        model->loadAsync(radioLibraryPath());
       }
-      f.write(Radio::Catalog::builtinJson());
     }
-    revealInFileManager({path});
-  }
-
-  void Controller::resetStations() {
-    const auto path = Radio::Catalog::userFilePath();
-    if (path.isEmpty() || !QFile::exists(path)) {
-      return;
-    }
-    const auto answer = QMessageBox::question(
-      view, tr("Radio"),
-      tr("Delete %1 and go back to the built-in station list?").arg(path));
-    if (answer != QMessageBox::Yes) {
-      return;
-    }
-    if (!QFile::remove(path)) {
-      QMessageBox::warning(view, tr("Radio"), tr("Cannot delete %1").arg(path));
-      return;
-    }
-    model->loadAsync(radioLibraryPath());
   }
 
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {

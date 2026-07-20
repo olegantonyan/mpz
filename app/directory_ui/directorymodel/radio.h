@@ -1,6 +1,7 @@
 #ifndef DIRECTORYDATAMODELRADIO_H
 #define DIRECTORYDATAMODELRADIO_H
 
+#include "config/global.h"
 #include "directory_ui/directorymodel/radio/item.h"
 #include "radio/catalog.h"
 #include "track.h"
@@ -34,7 +35,7 @@ namespace DirectoryUi {
       void directoryLoaded(const QString &path);
 
     public:
-      explicit Radio(QObject *parent = nullptr);
+      explicit Radio(Config::Global &global_cfg, QObject *parent = nullptr);
       ~Radio();
 
       void loadAsync(const QString &path);
@@ -62,6 +63,7 @@ namespace DirectoryUi {
       RadioItem *itemFromIndex(const QModelIndex &index) const;
       Track trackFor(const RadioItem *item) const;
 
+      Config::Global &global_conf;
       RadioItem *root_item = nullptr;
       QString last_filter_term;
     };

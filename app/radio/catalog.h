@@ -9,37 +9,21 @@
 #include <QVector>
 
 namespace Radio {
-  // Station list backing the radio library tree. Ships baked into the qrc and is
-  // replaced wholesale by a user file when one is set and parses; a user file
-  // that sets "extends_builtin" is layered over the built-in set by station id.
-  // A malformed user file is rejected -- active() keeps serving the built-in
-  // list and lastError() explains why.
-  class Catalog {
-  public:
-    const QVector<Station> &stations() const;
-    QStringList groups() const;
-    const Station *byId(const QString &id) const;
-    bool extendsBuiltin() const;
+  // The baked-in station list shipped in the qrc. It seeds the user's list in
+  // global.yml on first run and backs "Restore defaults"; after that the live
+  // list lives in the config (see Config::Global::radioStations).
+  namespace Catalog {
+    QByteArray builtinJson();
+    QVector<Station> builtin();
 
-    static Catalog fromJson(const QByteArray &json, QString *error = nullptr);
+    // Parses and validates a station list. Rejects invalid JSON, a missing
+    // "stations" array, a station without id/name, a duplicate id, or a url
+    // that is not http/https.
+    QVector<Station> fromJson(const QByteArray &json, QString *error = nullptr);
 
-    static const Catalog &active();
-    static void reload();
-
-    // "" disables the override. Set once at startup from
-    // Config::Storage::configPath(); tests point it at a temp dir.
-    static void setUserFilePath(const QString &path);
-    static QString userFilePath();
-
-    static QByteArray builtinJson();
-    static QString lastError();
-
-  private:
-    void layerOver(const Catalog &base);
-
-    QVector<Station> _stations;
-    bool _extends_builtin = false;
-  };
+    // Groups in first-seen order, ungrouped stations excluded.
+    QStringList groups(const QVector<Station> &stations);
+  }
 }
 
 #endif // RADIO_CATALOG_H

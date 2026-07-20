@@ -27,9 +27,7 @@ namespace DirectoryUi {
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
     void createNewPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
     void appendTracksToCurrentPlaylist(const QVector<Track> &tracks);
-    void reloadStations();
     void editStations();
-    void resetStations();
 
   private:
     void showRadioMenu(const QPoint &pos, const QModelIndex &index);

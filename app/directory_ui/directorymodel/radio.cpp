@@ -10,7 +10,8 @@
 namespace DirectoryUi {
   namespace DirectoryModel {
 
-    Radio::Radio(QObject *parent) : QAbstractItemModel(parent) {
+    Radio::Radio(Config::Global &global_cfg, QObject *parent) :
+      QAbstractItemModel(parent), global_conf(global_cfg) {
       root_item = new RadioItem(true, QString());
 
       connect(&::Radio::LogoCache::instance(), &::Radio::LogoCache::logoAvailable,
@@ -43,9 +44,7 @@ namespace DirectoryUi {
     }
 
     void Radio::loadAsync(const QString &path) {
-      // Nothing polls the catalog, so pick up user-file edits on every entry
-      // into radio mode.
-      ::Radio::Catalog::reload();
+      // Re-read the config each time so edits in the stations dialog show up.
       beginResetModel();
       rebuild();
       endResetModel();
@@ -56,7 +55,7 @@ namespace DirectoryUi {
       delete root_item;
       root_item = new RadioItem(true, QString());
 
-      const auto &stations = ::Radio::Catalog::active().stations();
+      const auto stations = global_conf.radioStations();
 
       // A station renders at the top level unless it names a group; a group
       // folder is created on first use, in the order the groups appear.

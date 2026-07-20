@@ -56,7 +56,6 @@ namespace DirectoryUi {
     void populateLibrarySwitch();
     void selectLibrary(const QString &path);
     void editStations();
-    void resetStations();
     bool radioMode() const;
     // Returns true when the index was handled as a radio station/group.
     bool emitRadioTracks(const QModelIndexList &indexes, bool append);
