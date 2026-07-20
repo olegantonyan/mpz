@@ -20,10 +20,9 @@ namespace DirectoryUi {
     name_edit = new QLineEdit(_station.name);
     url_edit = new QLineEdit(_station.url);
     url_edit->setPlaceholderText(tr("stream url, or a .pls / .m3u link"));
+    connect(url_edit, &QLineEdit::editingFinished, this, &RadioStationDialog::prefillFormat);
     group_edit = new QLineEdit(_station.group);
-    description_edit = new QLineEdit(_station.description);
     homepage_edit = new QLineEdit(_station.homepage);
-    logo_edit = new QLineEdit(_station.logo_url);
     codec_edit = new QLineEdit(_station.codec);
     codec_edit->setPlaceholderText(tr("mp3, aac, ..."));
     bitrate_spin = new QSpinBox;
@@ -43,9 +42,7 @@ namespace DirectoryUi {
     form->addRow(tr("Name"), name_edit);
     form->addRow(tr("Stream"), url_row);
     form->addRow(tr("Group"), group_edit);
-    form->addRow(tr("Description"), description_edit);
     form->addRow(tr("Homepage"), homepage_edit);
-    form->addRow(tr("Logo URL"), logo_edit);
     form->addRow(tr("Codec"), codec_edit);
     form->addRow(tr("Bitrate"), bitrate_spin);
 
@@ -64,7 +61,18 @@ namespace DirectoryUi {
       this, tr("Open playlist"), QString(), tr("Playlists (*.pls *.m3u *.m3u8);;All files (*)"));
     if (!file.isEmpty()) {
       url_edit->setText(file);
+      prefillFormat();
     }
+  }
+
+  void RadioStationDialog::prefillFormat() {
+    QString codec = codec_edit->text().trimmed();
+    quint16 bitrate = static_cast<quint16>(bitrate_spin->value());
+    Radio::guessStreamFormat(url_edit->text(),
+                             codec.isEmpty() ? &codec : nullptr,
+                             bitrate == 0 ? &bitrate : nullptr);
+    codec_edit->setText(codec);
+    bitrate_spin->setValue(bitrate);
   }
 
   void RadioStationDialog::accept() {
@@ -85,9 +93,7 @@ namespace DirectoryUi {
     _station.name = name_edit->text().trimmed();
     _station.url = url;
     _station.group = group_edit->text().trimmed();
-    _station.description = description_edit->text().trimmed();
     _station.homepage = homepage_edit->text().trimmed();
-    _station.logo_url = logo_edit->text().trimmed();
     _station.codec = codec_edit->text().trimmed().toLower();
     _station.bitrate = static_cast<quint16>(bitrate_spin->value());
     if (_station.id.isEmpty()) {

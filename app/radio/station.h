@@ -8,12 +8,10 @@ namespace Radio {
     QString id;
     QString name;
     QString group;
-    QString description;
     QString url;
     QString codec;
     quint16 bitrate = 0;
     QString homepage;
-    QString logo_url;
 
     bool isValid() const;
     QString subtitle() const;

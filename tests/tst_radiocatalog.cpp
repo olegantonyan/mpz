@@ -27,16 +27,16 @@ private slots:
   void clearsErrorOnSuccess();
   void groupsAreOrderedAndDeduped();
   void ungroupedStationsHaveNoGroups();
-  void subtitleFormatsCodecAndDescription();
-  void subtitleFallsBackToDescription();
-  void subtitleCodecOnlyWhenNoDescription();
+  void subtitleFormatsCodecAndBitrate();
+  void subtitleCodecOnlyWhenNoBitrate();
+  void subtitleEmptyWhenNoCodec();
 };
 
 void TestRadioCatalog::parsesStationFields() {
   const auto json = QByteArray(R"({"stations":[{
-    "id":"somafm-lush","name":"Lush","group":"SomaFM","description":"Mellow vocals.",
+    "id":"somafm-lush","name":"Lush","group":"SomaFM",
     "url":"https://h/lush-128-mp3","codec":"mp3","bitrate":128,
-    "homepage":"https://somafm.com/lush/","logo_url":"https://h/l.png"}]})");
+    "homepage":"https://somafm.com/lush/"}]})");
   QString error;
   const auto stations = Radio::Catalog::fromJson(json, &error);
   QVERIFY2(error.isEmpty(), qPrintable(error));
@@ -46,12 +46,10 @@ void TestRadioCatalog::parsesStationFields() {
   QCOMPARE(s.id, QStringLiteral("somafm-lush"));
   QCOMPARE(s.name, QStringLiteral("Lush"));
   QCOMPARE(s.group, QStringLiteral("SomaFM"));
-  QCOMPARE(s.description, QStringLiteral("Mellow vocals."));
   QCOMPARE(s.url, QStringLiteral("https://h/lush-128-mp3"));
   QCOMPARE(s.codec, QStringLiteral("mp3"));
   QCOMPARE(s.bitrate, quint16{128});
   QCOMPARE(s.homepage, QStringLiteral("https://somafm.com/lush/"));
-  QCOMPARE(s.logo_url, QStringLiteral("https://h/l.png"));
 }
 
 void TestRadioCatalog::rejectsInvalidJson() {
@@ -131,25 +129,23 @@ void TestRadioCatalog::ungroupedStationsHaveNoGroups() {
   QVERIFY(Radio::Catalog::groups(stations).isEmpty());
 }
 
-void TestRadioCatalog::subtitleFormatsCodecAndDescription() {
+void TestRadioCatalog::subtitleFormatsCodecAndBitrate() {
   Station s;
   s.codec = QStringLiteral("mp3");
   s.bitrate = 256;
-  s.description = QStringLiteral("Chilled beats.");
-  QCOMPARE(s.subtitle(), QStringLiteral("MP3 256k · Chilled beats."));
+  QCOMPARE(s.subtitle(), QStringLiteral("MP3 256k"));
 }
 
-void TestRadioCatalog::subtitleFallsBackToDescription() {
-  Station s;
-  s.description = QStringLiteral("Just words.");
-  QCOMPARE(s.subtitle(), QStringLiteral("Just words."));
-}
-
-void TestRadioCatalog::subtitleCodecOnlyWhenNoDescription() {
+void TestRadioCatalog::subtitleCodecOnlyWhenNoBitrate() {
   Station s;
   s.codec = QStringLiteral("aac");
+  QCOMPARE(s.subtitle(), QStringLiteral("AAC"));
+}
+
+void TestRadioCatalog::subtitleEmptyWhenNoCodec() {
+  Station s;
   s.bitrate = 128;
-  QCOMPARE(s.subtitle(), QStringLiteral("AAC 128k"));
+  QVERIFY(s.subtitle().isEmpty());
 }
 
 QTEST_MAIN(TestRadioCatalog)

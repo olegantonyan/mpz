@@ -13,6 +13,9 @@ private slots:
   void noStreamLine();
   void looksLikePlaylistByExtension();
   void rawUrlIsNotPlaylist();
+  void guessCodecAndBitrateFromUrl();
+  void guessLeavesUnfilledWhenNoHint();
+  void guessKeepsExistingWhenNoHint();
 };
 
 void TestRadioResolver::plsFirstFile() {
@@ -56,6 +59,42 @@ void TestRadioResolver::looksLikePlaylistByExtension() {
 void TestRadioResolver::rawUrlIsNotPlaylist() {
   QVERIFY(!Radio::looksLikePlaylist("https://ice.somafm.com/groovesalad-256-mp3"));
   QVERIFY(!Radio::looksLikePlaylist("http://relay4.slayradio.org:8000/"));
+}
+
+void TestRadioResolver::guessCodecAndBitrateFromUrl() {
+  QString codec;
+  quint16 bitrate = 0;
+  Radio::guessStreamFormat("https://ice.somafm.com/groovesalad-256-mp3", &codec, &bitrate);
+  QCOMPARE(codec, QStringLiteral("mp3"));
+  QCOMPARE(bitrate, quint16{256});
+
+  codec.clear();
+  bitrate = 0;
+  Radio::guessStreamFormat("https://stream.radioparadise.com/aac-320", &codec, &bitrate);
+  QCOMPARE(codec, QStringLiteral("aac"));
+  QCOMPARE(bitrate, quint16{320});
+
+  codec.clear();
+  bitrate = 0;
+  Radio::guessStreamFormat("https://kexp.streamguys1.com/kexp160.aac", &codec, &bitrate);
+  QCOMPARE(codec, QStringLiteral("aac"));
+  QCOMPARE(bitrate, quint16{160});
+}
+
+void TestRadioResolver::guessLeavesUnfilledWhenNoHint() {
+  QString codec;
+  quint16 bitrate = 0;
+  Radio::guessStreamFormat("http://relay4.slayradio.org:8000/", &codec, &bitrate);
+  QVERIFY(codec.isEmpty());
+  QCOMPARE(bitrate, quint16{0});
+}
+
+void TestRadioResolver::guessKeepsExistingWhenNoHint() {
+  QString codec = QStringLiteral("mp3");
+  quint16 bitrate = 128;
+  Radio::guessStreamFormat("http://relay4.slayradio.org:8000/", &codec, &bitrate);
+  QCOMPARE(codec, QStringLiteral("mp3"));
+  QCOMPARE(bitrate, quint16{128});
 }
 
 QTEST_MAIN(TestRadioResolver)

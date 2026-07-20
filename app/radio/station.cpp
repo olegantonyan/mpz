@@ -12,17 +12,9 @@ namespace Radio {
   }
 
   QString Station::subtitle() const {
-    QString quality;
-    if (!codec.isEmpty()) {
-      quality = bitrate > 0 ? QString("%1 %2k").arg(codec.toUpper()).arg(bitrate)
-                            : codec.toUpper();
+    if (codec.isEmpty()) {
+      return QString();
     }
-    if (quality.isEmpty()) {
-      return description;
-    }
-    if (description.isEmpty()) {
-      return quality;
-    }
-    return quality + QStringLiteral(" · ") + description;
+    return bitrate > 0 ? QString("%1 %2k").arg(codec.toUpper()).arg(bitrate) : codec.toUpper();
   }
 }

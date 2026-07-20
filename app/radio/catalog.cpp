@@ -18,12 +18,10 @@ namespace Radio {
       st.id = o.value("id").toString().trimmed();
       st.name = o.value("name").toString().trimmed();
       st.group = o.value("group").toString().trimmed();
-      st.description = o.value("description").toString().trimmed();
       st.url = o.value("url").toString().trimmed();
       st.codec = o.value("codec").toString().trimmed().toLower();
       st.bitrate = static_cast<quint16>(o.value("bitrate").toInt());
       st.homepage = o.value("homepage").toString().trimmed();
-      st.logo_url = o.value("logo_url").toString().trimmed();
       return st;
     }
   }

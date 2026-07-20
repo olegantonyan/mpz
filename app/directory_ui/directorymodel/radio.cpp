@@ -2,7 +2,6 @@
 
 #include "directory_ui/radiolibrary.h"
 #include "icons.h"
-#include "radio/logocache.h"
 
 #include <QHash>
 #include <QUrl>
@@ -13,29 +12,6 @@ namespace DirectoryUi {
     Radio::Radio(Config::Global &global_cfg, QObject *parent) :
       QAbstractItemModel(parent), global_conf(global_cfg) {
       root_item = new RadioItem(true, QString());
-
-      connect(&::Radio::LogoCache::instance(), &::Radio::LogoCache::logoAvailable,
-              this, &Radio::onLogoAvailable);
-    }
-
-    void Radio::onLogoAvailable(const QString &station_id) {
-      for (const auto &top : std::as_const(root_item->children)) {
-        if (!top) {
-          continue;
-        }
-        if (!top->is_group && top->station_id == station_id) {
-          const auto idx = createIndex(top->row(), 0, top);
-          emit dataChanged(idx, idx, {RadioRole::Logo});
-          return;
-        }
-        for (const auto &item : std::as_const(top->children)) {
-          if (item && item->station_id == station_id) {
-            const auto idx = createIndex(item->row(), 0, item);
-            emit dataChanged(idx, idx, {RadioRole::Logo});
-            return;
-          }
-        }
-      }
     }
 
     Radio::~Radio() {
@@ -70,11 +46,9 @@ namespace DirectoryUi {
 
         auto *item = new RadioItem(false, st.name, parent_item);
         item->subtitle = st.subtitle();
-        item->description = st.description;
         item->station_id = st.id;
         item->stream_url = st.url;
         item->homepage = st.homepage;
-        item->logo_url = st.logo_url;
         parent_item->children << item;
       }
 
@@ -210,29 +184,17 @@ namespace DirectoryUi {
                  : tr("%1  ·  %2 stations").arg(item->name).arg(count);
       }
       case Qt::ToolTipRole:
-        if (item->is_group) {
-          return none;
-        }
-        return item->description.isEmpty()
-                 ? item->stream_url
-                 : item->description + QStringLiteral("\n") + item->stream_url;
+        return item->is_group ? none : QVariant(item->stream_url);
       case Qt::DecorationRole:
         return item->is_group ? Icons::get(Icons::Icon::Folder) : QVariant();
       case RadioRole::Path:
         return filePath(index);
       case RadioRole::Subtitle:
         return item->subtitle;
-      case RadioRole::Description:
-        return item->description;
       case RadioRole::StreamUrl:
         return item->stream_url;
       case RadioRole::Homepage:
         return item->homepage;
-      case RadioRole::Logo:
-        if (item->is_group) {
-          return none;
-        }
-        return ::Radio::LogoCache::instance().get(item->station_id, item->logo_url);
       case RadioRole::IsStation:
         return !item->is_group;
       default:

@@ -6,6 +6,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QRegularExpression>
+#include <QSet>
 #include <QTextStream>
 #include <QTimer>
 #include <QUrl>
@@ -59,6 +61,38 @@ namespace Radio {
       }
     }
     return QString();
+  }
+
+  void guessStreamFormat(const QString &url, QString *codec, quint16 *bitrate) {
+    const QString path = QUrl(url).path().toLower();
+
+    if (codec) {
+      static const QVector<QPair<QString, QString>> codecs = {
+        {"aacp", "aac"}, {"aac", "aac"}, {"mp3", "mp3"}, {"mpeg", "mp3"},
+        {"opus", "opus"}, {"flac", "flac"}, {"ogg", "ogg"}, {"wav", "wav"}
+      };
+      for (const auto &c : codecs) {
+        if (path.contains(c.first)) {
+          *codec = c.second;
+          break;
+        }
+      }
+    }
+
+    if (bitrate) {
+      static const QSet<int> common = {
+        32, 48, 64, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512
+      };
+      QRegularExpressionMatchIterator it =
+        QRegularExpression(QStringLiteral("\\d+")).globalMatch(path);
+      while (it.hasNext()) {
+        const int n = it.next().captured().toInt();
+        if (common.contains(n)) {
+          *bitrate = static_cast<quint16>(n);
+          break;
+        }
+      }
+    }
   }
 
   QString resolveStreamUrl(const QString &input, QString *error) {

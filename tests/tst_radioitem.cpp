@@ -19,7 +19,6 @@ private slots:
   void matchEmptyFilterAlwaysTrue();
   void matchOnName();
   void matchOnSubtitle();
-  void matchOnDescription();
   void matchNoSubstring();
   void updateVisibilityKeepsGroupForMatchingChild();
   void updateVisibilityHidesGroupWithNoMatches();
@@ -59,15 +58,9 @@ void TestRadioItem::matchOnSubtitle() {
   QVERIFY(s.match(QStringLiteral("mellow")));
 }
 
-void TestRadioItem::matchOnDescription() {
-  RadioItem s(false, QStringLiteral("Lush"));
-  s.description = QStringLiteral("Sensuous and mellow vocals");
-  QVERIFY(s.match(QStringLiteral("sensuous")));
-}
-
 void TestRadioItem::matchNoSubstring() {
   RadioItem s(false, QStringLiteral("Lush"));
-  s.description = QStringLiteral("electronic");
+  s.subtitle = QStringLiteral("MP3 128k");
   QVERIFY(!s.match(QStringLiteral("metal")));
 }
 

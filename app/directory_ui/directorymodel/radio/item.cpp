@@ -13,8 +13,7 @@ namespace DirectoryUi {
     bool RadioItem::match(const QString &filter) const {
       return filter.isEmpty()
           || name.contains(filter, Qt::CaseInsensitive)
-          || subtitle.contains(filter, Qt::CaseInsensitive)
-          || description.contains(filter, Qt::CaseInsensitive);
+          || subtitle.contains(filter, Qt::CaseInsensitive);
     }
 
     bool RadioItem::update_visibility(const QString &filter) {

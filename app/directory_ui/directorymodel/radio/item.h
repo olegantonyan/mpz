@@ -23,11 +23,9 @@ namespace DirectoryUi {
 
       QString name;
       QString subtitle;
-      QString description;
       QString station_id;
       QString stream_url;
       QString homepage;
-      QString logo_url;
 
       bool is_group;
       RadioItem *parent;

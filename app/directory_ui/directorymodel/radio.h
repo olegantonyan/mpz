@@ -17,10 +17,8 @@ namespace DirectoryUi {
       enum {
         Path = Qt::UserRole,
         Subtitle,
-        Description,
         StreamUrl,
         Homepage,
-        Logo,
         IsStation
       };
     }
@@ -50,9 +48,6 @@ namespace DirectoryUi {
       int columnCount(const QModelIndex &parent) const override;
       QVariant data(const QModelIndex &index, int role) const override;
       bool hasChildren(const QModelIndex &parent) const override;
-
-    private slots:
-      void onLogoAvailable(const QString &station_id);
 
     private:
       void rebuild();

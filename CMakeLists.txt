@@ -103,7 +103,6 @@ set(PROJECT_SOURCES
   app/playlist/sorter.cpp
   app/radio/station.cpp
   app/radio/catalog.cpp
-  app/radio/logocache.cpp
   app/radio/resolver.cpp
   app/directory_ui/directorymodel/radio/item.cpp
   app/directory_ui/directorymodel/radio.cpp

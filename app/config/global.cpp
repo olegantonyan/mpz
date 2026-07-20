@@ -63,12 +63,10 @@ namespace Config {
       s.id = m.value("id").get<QString>();
       s.name = m.value("name").get<QString>();
       s.group = m.value("group").get<QString>();
-      s.description = m.value("description").get<QString>();
       s.url = m.value("url").get<QString>();
       s.codec = m.value("codec").get<QString>();
       s.bitrate = static_cast<quint16>(m.value("bitrate").get<int>());
       s.homepage = m.value("homepage").get<QString>();
-      s.logo_url = m.value("logo_url").get<QString>();
       result << s;
     }
     return result;
@@ -87,12 +85,10 @@ namespace Config {
       m.insert("id", Config::Value(s.id));
       m.insert("name", Config::Value(s.name));
       m.insert("group", Config::Value(s.group));
-      m.insert("description", Config::Value(s.description));
       m.insert("url", Config::Value(s.url));
       m.insert("codec", Config::Value(s.codec));
       m.insert("bitrate", Config::Value(static_cast<int>(s.bitrate)));
       m.insert("homepage", Config::Value(s.homepage));
-      m.insert("logo_url", Config::Value(s.logo_url));
       list << Config::Value(m);
     }
     // An empty list carries no element type, so tag it to keep the Map type.

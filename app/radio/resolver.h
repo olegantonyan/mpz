@@ -12,6 +12,9 @@ namespace Radio {
   QString firstStreamUrl(const QByteArray &playlist_body);
 
   bool looksLikePlaylist(const QString &path_or_url);
+
+  // Writes each out-param only when the url path yields a value ("foo-256-mp3").
+  void guessStreamFormat(const QString &url, QString *codec, quint16 *bitrate);
 }
 
 #endif // RADIO_RESOLVER_H

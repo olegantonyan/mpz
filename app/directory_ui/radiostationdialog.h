@@ -21,15 +21,14 @@ namespace DirectoryUi {
 
   private slots:
     void browseForPlaylist();
+    void prefillFormat();
 
   private:
     Radio::Station _station;
     QLineEdit *name_edit;
     QLineEdit *url_edit;
     QLineEdit *group_edit;
-    QLineEdit *description_edit;
     QLineEdit *homepage_edit;
-    QLineEdit *logo_edit;
     QLineEdit *codec_edit;
     QSpinBox *bitrate_spin;
   };
