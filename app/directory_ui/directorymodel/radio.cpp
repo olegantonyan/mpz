@@ -19,7 +19,6 @@ namespace DirectoryUi {
     }
 
     void Radio::onLogoAvailable(const QString &station_id) {
-      // A station sits at the root or one level down under a group folder.
       for (const auto &top : std::as_const(root_item->children)) {
         if (!top) {
           continue;
@@ -44,7 +43,6 @@ namespace DirectoryUi {
     }
 
     void Radio::loadAsync(const QString &path) {
-      // Re-read the config each time so edits in the stations dialog show up.
       beginResetModel();
       rebuild();
       endResetModel();
@@ -57,8 +55,6 @@ namespace DirectoryUi {
 
       const auto stations = global_conf.radioStations();
 
-      // A station renders at the top level unless it names a group; a group
-      // folder is created on first use, in the order the groups appear.
       QHash<QString, RadioItem *> group_items;
 
       for (const auto &st : stations) {
@@ -145,15 +141,12 @@ namespace DirectoryUi {
           continue;
         }
         if (item->is_group) {
-          // A genre folder yields one track per station (its preferred stream),
-          // never the per-quality variants underneath each station.
           for (const auto &child : std::as_const(item->children)) {
             if (child && child->visible && !child->is_group) {
               result << trackFor(child);
             }
           }
         } else {
-          // Station header → its preferred stream; variant → its own stream.
           result << trackFor(item);
         }
       }
@@ -208,8 +201,6 @@ namespace DirectoryUi {
 
       switch (role) {
       case Qt::DisplayRole: {
-        // Group rows render with the default delegate, so the station count
-        // goes in the text rather than a second line.
         if (!item->is_group) {
           return item->name;
         }

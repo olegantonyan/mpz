@@ -19,12 +19,11 @@ namespace Radio {
       return u.scheme() == "http" || u.scheme() == "https";
     }
 
-    // A single .pls/.m3u line -> the stream url it points at, or empty.
     QString streamFromLine(const QString &line) {
-      if (line.startsWith("http", Qt::CaseInsensitive)) { // m3u entry
+      if (line.startsWith("http", Qt::CaseInsensitive)) {
         return line;
       }
-      if (line.startsWith("File", Qt::CaseInsensitive)) { // pls "FileN=url"
+      if (line.startsWith("File", Qt::CaseInsensitive)) {
         int i = 4;
         while (i < line.size() && line.at(i).isDigit()) {
           i++;
@@ -78,7 +77,6 @@ namespace Radio {
       return set_error(QObject::tr("empty url"));
     }
 
-    // Raw stream url -> use as-is.
     if (!looksLikePlaylist(trimmed)) {
       if (!isHttpUrl(trimmed)) {
         return set_error(QObject::tr("not an http or https url: %1").arg(trimmed));
@@ -86,7 +84,6 @@ namespace Radio {
       return trimmed;
     }
 
-    // Local playlist file.
     if (!isHttpUrl(trimmed)) {
       const auto local = QUrl(trimmed).isLocalFile() ? QUrl(trimmed).toLocalFile() : trimmed;
       QFile f(local);
@@ -97,7 +94,6 @@ namespace Radio {
       return url.isEmpty() ? set_error(QObject::tr("no stream url found in %1").arg(local)) : url;
     }
 
-    // Remote playlist url -> fetch and extract.
     QNetworkAccessManager nam;
     nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     QNetworkRequest req{QUrl(trimmed)};
@@ -106,13 +102,17 @@ namespace Radio {
     QEventLoop loop;
     QTimer timeout;
     timeout.setSingleShot(true);
+    bool timed_out = false;
     auto *reply = nam.get(req);
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    QObject::connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
+    QObject::connect(&timeout, &QTimer::timeout, &loop, [&loop, &timed_out] {
+      timed_out = true;
+      loop.quit();
+    });
     timeout.start(kFetchTimeoutMs);
     loop.exec();
 
-    if (!timeout.isActive()) { // timer fired first
+    if (timed_out) {
       reply->abort();
       reply->deleteLater();
       return set_error(QObject::tr("timed out fetching %1").arg(trimmed));

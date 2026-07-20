@@ -39,6 +39,7 @@ namespace DirectoryUi {
     url_row->addWidget(browse);
 
     auto *form = new QFormLayout;
+    form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     form->addRow(tr("Name"), name_edit);
     form->addRow(tr("Stream"), url_row);
     form->addRow(tr("Group"), group_edit);

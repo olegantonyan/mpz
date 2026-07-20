@@ -9,9 +9,6 @@ class QLineEdit;
 class QSpinBox;
 
 namespace DirectoryUi {
-  // Add or edit a single radio station. The url field accepts a raw stream url,
-  // or a .pls/.m3u playlist (local file or remote url) which is resolved to a
-  // stream url on accept.
   class RadioStationDialog : public QDialog {
     Q_OBJECT
   public:

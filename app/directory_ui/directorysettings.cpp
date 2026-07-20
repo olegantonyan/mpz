@@ -14,9 +14,6 @@
 #include <QStyledItemDelegate>
 
 namespace {
-  // Renders the label, not the stored value: the mpd:// password stays hidden
-  // and radio:// reads as "Radio", while the underlying URL is left intact for
-  // persistence and editing.
   class PathDelegate : public QStyledItemDelegate {
   public:
     using QStyledItemDelegate::QStyledItemDelegate;
@@ -92,7 +89,6 @@ void DirectorySettings::on_pushButtonEdit_clicked() {
   auto list = model.stringList();
   const QString current = list.at(idx.row());
 
-  // The radio entry has no path to edit; "Edit" opens its station list instead.
   if (DirectoryUi::isRadioLibraryPath(current)) {
     editRadioStations();
     return;
@@ -127,9 +123,8 @@ void DirectorySettings::on_pushButtonRemove_clicked() {
   if (!current_index.isValid() || current_index.row() >= model.stringList().size()) {
     return;
   }
-  // The radio entry is permanent -- edit its stations instead of removing it.
   if (DirectoryUi::isRadioLibraryPath(model.stringList().at(current_index.row()))) {
-    return;
+    return; // the radio entry is permanent
   }
   model.removeRows(current_index.row(), 1);
 }

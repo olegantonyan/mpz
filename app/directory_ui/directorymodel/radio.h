@@ -25,9 +25,6 @@ namespace DirectoryUi {
       };
     }
 
-    // Two-level tree over Radio::Catalog: group folders holding station leaves.
-    // The catalog is small and fully known up front, so there is no lazy
-    // fetching and no locking -- everything here runs on the GUI thread.
     class Radio : public QAbstractItemModel {
       Q_OBJECT
 
@@ -47,7 +44,6 @@ namespace DirectoryUi {
       QString displayName(const QModelIndex &index) const;
       bool isStation(const QModelIndex &index) const;
 
-      // QAbstractItemModel interface
       QModelIndex index(int row, int column, const QModelIndex &parent) const override;
       QModelIndex parent(const QModelIndex &child) const override;
       int rowCount(const QModelIndex &parent) const override;

@@ -201,8 +201,7 @@ QString Track::album() const {
 }
 
 QString Track::title() const {
-  // Streams check ICY first: _title may hold a station name, which must not
-  // mask the live title once the stream starts reporting one.
+  // A live ICY title wins over _title (which may be a station name).
   if (isStream()) {
     if (!streamMeta().title().isEmpty()) {
       return streamMeta().title();

@@ -9,9 +9,6 @@
 class QTableWidget;
 
 namespace DirectoryUi {
-  // Lists the user's radio stations with full add / edit / remove, plus
-  // "Restore defaults" (re-seed from the built-in list). The edited list is
-  // available via stations() once the dialog is accepted.
   class RadioStationsDialog : public QDialog {
     Q_OBJECT
   public:

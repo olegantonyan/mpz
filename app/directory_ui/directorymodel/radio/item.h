@@ -7,10 +7,6 @@
 
 namespace DirectoryUi {
   namespace DirectoryModel {
-    // Node in the radio library tree: either a group folder or a station leaf.
-    // Unlike the mpd TreeItem this filters recursively -- a group stays visible
-    // while any descendant matches -- and carries the station fields the
-    // delegate paints.
     class RadioItem {
     public:
       RadioItem(bool is_grp, const QString &nm, RadioItem *parent_item = nullptr);

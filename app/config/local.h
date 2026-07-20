@@ -40,8 +40,6 @@ namespace Config {
     QStringList libraryPaths() const;
     bool saveLibraryPaths(const QStringList &arg);
 
-    // Appends the radio:// entry once, on first run after the feature landed.
-    // Appending keeps every existing index -- and currentLibraryPath -- valid.
     void seedRadioLibraryPathOnce(const QString &radio_path);
 
     int currentLibraryPath() const;

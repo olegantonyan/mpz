@@ -25,7 +25,6 @@ namespace {
     return f;
   }
 
-  // Stable per-station colour so each row stays recognisable without a logo.
   QColor badgeColor(const QString &seed) {
     const int hue = static_cast<int>(qHash(seed) % 360);
     return QColor::fromHsl(hue, 140, 130);
@@ -59,8 +58,7 @@ namespace DirectoryUi {
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
 
-    // Draw the platform's background/selection/focus chrome, but none of its
-    // text or icon -- everything below is painted by hand.
+    // Keep the platform's selection/focus chrome but paint text and icon by hand.
     const QString name = opt.text;
     opt.text.clear();
     opt.icon = QIcon();
@@ -95,7 +93,6 @@ namespace DirectoryUi {
                                                   Qt::SmoothTransformation));
       painter->restore();
     } else {
-      // Colour badge stands in until the logo arrives, and forever offline.
       painter->fillPath(badge_path, badgeColor(station_id));
       if (!name.isEmpty()) {
         QFont badge_font = opt.font;

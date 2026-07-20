@@ -88,7 +88,7 @@ namespace DirectoryUi {
       return;
     }
     auto station = dlg.station();
-    while (hasId(station.id, -1)) { // paranoia: keep the id unique
+    while (hasId(station.id, -1)) {
       station.id = QStringLiteral("user-") + QUuid::createUuid().toString(QUuid::Id128);
     }
     _stations << station;

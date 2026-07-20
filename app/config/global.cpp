@@ -95,8 +95,7 @@ namespace Config {
       m.insert("logo_url", Config::Value(s.logo_url));
       list << Config::Value(m);
     }
-    // An empty list would serialise with no element type; tag it so a
-    // subsequent read still sees a Map list (and thus an intentional clear).
+    // An empty list carries no element type, so tag it to keep the Map type.
     Config::Value value(list);
     value.setListType(Config::Value::Map);
     return storage.set("radio_stations", value);

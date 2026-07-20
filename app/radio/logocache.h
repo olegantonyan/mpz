@@ -11,18 +11,12 @@
 #include <QString>
 
 namespace Radio {
-  // Lazily fetches station logos and keeps them in the shared disk cache. The
-  // only network the radio tree does: one request per station, on first paint,
-  // never repeated within a run. Stations without a logo_url, and stations whose
-  // fetch failed, fall back to the delegate's colour badge forever.
   class LogoCache : public QObject {
     Q_OBJECT
 
   public:
     static LogoCache &instance();
 
-    // Returns the logo if already available, otherwise a null pixmap and
-    // schedules a fetch that ends in logoAvailable.
     QPixmap get(const QString &station_id, const QString &logo_url);
 
   signals:

@@ -110,13 +110,7 @@ namespace DirectoryUi {
     }
     model->filter(term);
     if (radioMode()) {
-      // Stations (and any groups) start collapsed for a clean list; while
-      // filtering, expand so matches nested inside them are visible.
-      if (term.isEmpty()) {
-        view->collapseAll();
-      } else {
-        view->expandAll();
-      }
+      term.isEmpty() ? view->collapseAll() : view->expandAll();
     }
   }
 
@@ -137,7 +131,7 @@ namespace DirectoryUi {
     }
     auto tracks = model->tracksAt(indexes);
     if (tracks.isEmpty()) {
-      return true; // radio handled it; the row just had nothing to contribute
+      return true;
     }
     if (append) {
       emit appendTracksToCurrentPlaylist(tracks);
@@ -194,8 +188,6 @@ namespace DirectoryUi {
         libswitch->clear();
         populateLibrarySwitch();
         if (libswitch->count() > 0) {
-          // setCurrentIndex drives the mode switch and the load; loading here
-          // would run under the outgoing mode.
           libswitch->setCurrentIndex(libswitch->count() - 1);
         }
       }

@@ -16,7 +16,7 @@ namespace Radio {
     QString logo_url;
 
     bool isValid() const;
-    QString subtitle() const;   // "MP3 256k · description"
+    QString subtitle() const;
   };
 }
 

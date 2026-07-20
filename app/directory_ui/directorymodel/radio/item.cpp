@@ -24,8 +24,7 @@ namespace DirectoryUi {
           any_child_visible = true;
         }
       }
-      // A group whose own name matches shows all of its children, so that
-      // filtering on "SomaFM" doesn't return an empty folder.
+      // A group whose own name matches keeps all its children visible.
       const bool self_matches = match(filter);
       if (is_group && self_matches && !any_child_visible) {
         for (const auto &item : std::as_const(children)) {

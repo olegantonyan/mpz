@@ -29,8 +29,7 @@ namespace DirectoryUi {
     }
 
     void Proxy::switchTo(ModusOperandi::ActiveMode new_mode) {
-      // Radio overrides the modus source; a modus change (e.g. mpd closing back
-      // to localfs) must not steal it while the radio library is selected.
+      // While radio is shown, a modus change must not swap the source model.
       if (radio_active) {
         return;
       }

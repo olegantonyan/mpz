@@ -4,10 +4,8 @@
 #include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-  // Paints radio station rows as two lines (name + codec/bitrate/description)
-  // with a colour badge for the station. Installed unconditionally on the
-  // library tree: rows that don't answer RadioRole::IsStation -- every localfs
-  // and mpd row, and radio group rows -- fall through to the base delegate.
+  // Rows that don't answer RadioRole::IsStation fall through to the base
+  // delegate, so this is safe to install on the library tree unconditionally.
   class RadioDelegate : public QStyledItemDelegate {
     Q_OBJECT
 
