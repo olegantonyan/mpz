@@ -28,7 +28,7 @@ public:
                  quint8 channels,
                  quint16 bitrate,
                  quint32 samplerate);
-  explicit Track(const QUrl &stream_url, const QString &filepath_reference);
+  explicit Track(const QUrl &stream_url, const QString &filepath_reference, const QString &title = QString());
 
   static QString formattedTime(quint64 tm);
   static AudioProperties audioPropertiesOf(const QString &filepath);

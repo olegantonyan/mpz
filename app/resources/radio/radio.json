@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "stations": [
+    {
+      "id": "somafm-groovesalad",
+      "name": "Groove Salad",
+      "group": "SomaFM",
+      "description": "A nicely chilled plate of ambient/downtempo beats and grooves.",
+      "url": "https://ice.somafm.com/groovesalad-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/groovesalad/",
+      "logo_url": "https://api.somafm.com/logos/256/groovesalad256.png"
+    },
+    {
+      "id": "somafm-dronezone",
+      "name": "Drone Zone",
+      "group": "SomaFM",
+      "description": "Served best chilled, safe with most medications. Atmospheric textures with minimal beats.",
+      "url": "https://ice.somafm.com/dronezone-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/dronezone/",
+      "logo_url": "https://api.somafm.com/logos/256/dronezone256.png"
+    },
+    {
+      "id": "somafm-deepspaceone",
+      "name": "Deep Space One",
+      "group": "SomaFM",
+      "description": "Deep ambient electronic, experimental and space music. For inner and outer space exploration.",
+      "url": "https://ice.somafm.com/deepspaceone-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/deepspaceone/",
+      "logo_url": "https://api.somafm.com/logos/256/deepspaceone256.png"
+    },
+    {
+      "id": "somafm-spacestation",
+      "name": "Space Station Soma",
+      "group": "SomaFM",
+      "description": "Tune in, turn on, space out. Spaced-out ambient and mid-tempo electronica.",
+      "url": "https://ice.somafm.com/spacestation-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/spacestation/",
+      "logo_url": "https://api.somafm.com/logos/256/spacestation256.png"
+    },
+    {
+      "id": "somafm-lush",
+      "name": "Lush",
+      "group": "SomaFM",
+      "description": "Sensuous and mellow female vocals, many with an electronic influence.",
+      "url": "https://ice.somafm.com/lush-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/lush/",
+      "logo_url": "https://api.somafm.com/logos/256/lush256.png"
+    },
+    {
+      "id": "somafm-secretagent",
+      "name": "Secret Agent",
+      "group": "SomaFM",
+      "description": "The soundtrack for your stylish, mysterious, dangerous life. For Spies and PIs too!",
+      "url": "https://ice.somafm.com/secretagent-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/secretagent/",
+      "logo_url": "https://api.somafm.com/logos/256/secretagent256.png"
+    },
+    {
+      "id": "somafm-beatblender",
+      "name": "Beat Blender",
+      "group": "SomaFM",
+      "description": "A late night blend of deep-house and downtempo chill.",
+      "url": "https://ice.somafm.com/beatblender-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/beatblender/",
+      "logo_url": "https://api.somafm.com/logos/256/beatblender256.png"
+    },
+    {
+      "id": "somafm-fluid",
+      "name": "Fluid",
+      "group": "SomaFM",
+      "description": "Drown in the electronic sound of instrumental hiphop, future soul and liquid trap.",
+      "url": "https://ice.somafm.com/fluid-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/fluid/",
+      "logo_url": "https://api.somafm.com/logos/256/fluid256.jpg"
+    },
+    {
+      "id": "somafm-defcon",
+      "name": "DEF CON Radio",
+      "group": "SomaFM",
+      "description": "Music for Hacking. The DEF CON Year-Round Channel.",
+      "url": "https://ice.somafm.com/defcon-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/defcon/",
+      "logo_url": "https://api.somafm.com/logos/256/defcon256.png"
+    },
+    {
+      "id": "somafm-u80s",
+      "name": "Underground 80s",
+      "group": "SomaFM",
+      "description": "Early 80s UK Synthpop and a bit of New Wave.",
+      "url": "https://ice.somafm.com/u80s-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/u80s/",
+      "logo_url": "https://api.somafm.com/logos/256/u80s256.png"
+    },
+    {
+      "id": "somafm-indiepop",
+      "name": "Indie Pop Rocks!",
+      "group": "SomaFM",
+      "description": "New and classic favorite indie pop tracks.",
+      "url": "https://ice.somafm.com/indiepop-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/indiepop/",
+      "logo_url": "https://api.somafm.com/logos/256/indiepop256.png"
+    },
+    {
+      "id": "somafm-seventies",
+      "name": "Left Coast 70s",
+      "group": "SomaFM",
+      "description": "Mellow album rock from the Seventies. Yacht not required.",
+      "url": "https://ice.somafm.com/seventies-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/seventies/",
+      "logo_url": "https://api.somafm.com/logos/256/seventies256.jpg"
+    },
+    {
+      "id": "somafm-bootliquor",
+      "name": "Boot Liquor",
+      "group": "SomaFM",
+      "description": "Americana Roots music for Cowhands, Cowpokes and Cowtippers",
+      "url": "https://ice.somafm.com/bootliquor-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/bootliquor/",
+      "logo_url": "https://api.somafm.com/logos/256/bootliquor256.png"
+    },
+    {
+      "id": "somafm-metal",
+      "name": "Metal Detector",
+      "group": "SomaFM",
+      "description": "From black to doom, prog to sludge, thrash to post, stoner to crossover, punk to industrial.",
+      "url": "https://ice.somafm.com/metal-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/metal/",
+      "logo_url": "https://api.somafm.com/logos/256/metal256.png"
+    },
+    {
+      "id": "somafm-sf1033",
+      "name": "SF 10-33",
+      "group": "SomaFM",
+      "description": "Ambient music mixed with the sounds of San Francisco public safety radio traffic.",
+      "url": "https://ice.somafm.com/sf1033-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/sf1033/",
+      "logo_url": "https://api.somafm.com/logos/256/sf1033256.png"
+    },
+    {
+      "id": "slayradio",
+      "name": "SLAY Radio",
+      "description": "Commodore 64 remixes, chiptunes and demoscene music, hosted live.",
+      "url": "http://relay4.slayradio.org:8000/",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://www.slayradio.org/",
+      "logo_url": ""
+    },
+    {
+      "id": "radioparadise-main",
+      "name": "Radio Paradise",
+      "description": "Eclectic DJ-curated rock, world and electronica, hand-picked and crossfaded.",
+      "url": "https://stream.radioparadise.com/aac-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/",
+      "logo_url": ""
+    },
+    {
+      "id": "radioparadise-mellow",
+      "name": "Radio Paradise Mellow",
+      "description": "The quieter side of Radio Paradise: acoustic, downtempo and ambient.",
+      "url": "https://stream.radioparadise.com/mellow-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/",
+      "logo_url": ""
+    },
+    {
+      "id": "fip",
+      "name": "FIP",
+      "description": "Radio France's genre-hopping station: jazz, rock, world, electronica, no ads.",
+      "url": "https://icecast.radiofrance.fr/fip-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/",
+      "logo_url": ""
+    },
+    {
+      "id": "fip-jazz",
+      "name": "FIP Jazz",
+      "description": "FIP's all-jazz stream, from bebop to contemporary.",
+      "url": "https://icecast.radiofrance.fr/fipjazz-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/jazz/",
+      "logo_url": ""
+    },
+    {
+      "id": "kexp",
+      "name": "KEXP 90.3 FM",
+      "description": "Seattle's legendary listener-supported station, DJ-driven and fiercely independent.",
+      "url": "https://kexp.streamguys1.com/kexp160.aac",
+      "codec": "aac",
+      "bitrate": 160,
+      "homepage": "https://www.kexp.org/",
+      "logo_url": ""
+    },
+    {
+      "id": "wqxr",
+      "name": "WQXR",
+      "description": "New York's classical music station.",
+      "url": "https://stream.wqxr.org/wqxr",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://www.wqxr.org/",
+      "logo_url": ""
+    }
+  ]
+}

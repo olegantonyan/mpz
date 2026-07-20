@@ -6,6 +6,7 @@
 #include <QFont>
 #include <QMimeData>
 #include <QDataStream>
+#include <QTimer>
 
 namespace {
   const QString playlistRowMime = QStringLiteral("application/x-mpz-playlist-row");
@@ -251,6 +252,23 @@ namespace PlaylistsUi {
         names << playlistNameBy(path, libraryDir);
       }
       pl->rename(names.join(", "));
+      emit createPlaylistAsyncFinished(pl);
+    });
+  }
+
+  void Model::createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name) {
+    if (tracks.isEmpty()) {
+      return;
+    }
+
+    auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
+    pl->append(tracks, false);
+    pl->rename(name);
+
+    // createPlaylistAsync emits from a worker thread, so the finished handler
+    // always runs queued. Defer here too, or it would re-enter the view that is
+    // currently dispatching the double-click.
+    QTimer::singleShot(0, this, [this, pl]() {
       emit createPlaylistAsyncFinished(pl);
     });
   }

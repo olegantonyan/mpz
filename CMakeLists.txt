@@ -101,6 +101,13 @@ set(PROJECT_SOURCES
   app/playlist/fileparser.cpp
   app/playlist/loader.cpp
   app/playlist/sorter.cpp
+  app/radio/station.cpp
+  app/radio/catalog.cpp
+  app/radio/logocache.cpp
+  app/directory_ui/directorymodel/radio/item.cpp
+  app/directory_ui/directorymodel/radio.cpp
+  app/directory_ui/radiodelegate.cpp
+  app/directory_ui/radiolibrary.cpp
   app/playlist_ui/columnsconfig.cpp
   app/playlist_ui/playlistcontroller.cpp
   app/playlist_ui/playlistmodel.cpp

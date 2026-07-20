@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="app/resources/radio/radio.json">fixtures/radio/builtin.json</file>
+   </qresource>
+</RCC>

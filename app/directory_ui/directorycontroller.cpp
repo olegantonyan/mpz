@@ -1,7 +1,12 @@
 #include "directorycontroller.h"
 #include "directorysettings.h"
 #include "directorysortmenu.h"
+#include "icons.h"
 #include "modusoperandi.h"
+#include "radio/catalog.h"
+#include "radiodelegate.h"
+#include "radiolibrary.h"
+#include "reveal_in_filemanager.h"
 
 #include <QAction>
 #include <QDebug>
@@ -14,17 +19,20 @@
 #include <QUrl>
 #include <QTimer>
 #include <QtGlobal>
+#include <QFile>
 #include <QFileInfo>
+#include <QMessageBox>
 #include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent) :
+  Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *_libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
     local_conf(local_cfg),
     global_conf(global_cfg),
     libswitch(_libswitch),
+    libsort(_libsort),
     modus_operandi(modus)
     {
     Q_ASSERT(search);
@@ -35,6 +43,8 @@ namespace DirectoryUi {
     restore_scroll_once = true;
 
     model = new DirectoryModel::Proxy(modus_operandi, global_conf, this);
+    view->setItemDelegate(new RadioDelegate(this));
+
     connect(model, &DirectoryUi::DirectoryModel::Proxy::directoryLoaded, this, [=] {
       view->setModel(model);
       view->setRootIndex(model->rootIndex());
@@ -42,25 +52,23 @@ namespace DirectoryUi {
       view->setContextMenuPolicy(Qt::CustomContextMenu);
     });
 
+    local_conf.seedRadioLibraryPathOnce(radioLibraryPath());
+
     if (local_conf.libraryPaths().empty()) {
       model->loadAsync(QDir::homePath());
       libswitch->addItem(QDir::homePath());
     } else {
-      for (const auto &i : local_conf.libraryPaths()) {
-        libswitch->addItem(libraryPathMasked(i), i);
-      }
+      populateLibrarySwitch();
       int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count() - 1);
       libswitch->setCurrentIndex(current_index);
-      auto current_path = local_conf.libraryPaths().at(current_index);
-      model->loadAsync(current_path);
+      selectLibrary(local_conf.libraryPaths().at(current_index));
     }
 
     if (libswitch->count() > 0) {
       connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
         auto path = modus_operandi.onLibraryPathChange(idx);
         if (!path.isEmpty()) {
-          model->switchTo(modus_operandi.get());
-          model->loadAsync(path);
+          selectLibrary(path);
         }
       });
     }
@@ -72,6 +80,13 @@ namespace DirectoryUi {
     context_menu = new DirectoryContextMenu(model, view, search, this);
     connect(context_menu, &DirectoryContextMenu::createNewPlaylist, this, &Controller::on_createNewPlaylist);
     connect(context_menu, &DirectoryContextMenu::appendToCurrentPlaylist, this, &Controller::appendToCurrentPlaylist);
+    connect(context_menu, &DirectoryContextMenu::createNewPlaylistFromTracks, this, &Controller::createNewPlaylistFromTracks);
+    connect(context_menu, &DirectoryContextMenu::appendTracksToCurrentPlaylist, this, &Controller::appendTracksToCurrentPlaylist);
+    connect(context_menu, &DirectoryContextMenu::reloadStations, this, [=]() {
+      model->loadAsync(radioLibraryPath());
+    });
+    connect(context_menu, &DirectoryContextMenu::editStations, this, &Controller::editStations);
+    connect(context_menu, &DirectoryContextMenu::resetStations, this, &Controller::resetStations);
     connect(view, &QTreeView::customContextMenuRequested, context_menu, &DirectoryContextMenu::show);
 
     view->viewport()->installEventFilter(this); // viewport for mouse events, doesn't work otherwise
@@ -99,10 +114,49 @@ namespace DirectoryUi {
       });
     }
     model->filter(term);
+    if (radioMode()) {
+      // Stations (and any groups) start collapsed for a clean list; while
+      // filtering, expand so matches nested inside them are visible.
+      if (term.isEmpty()) {
+        view->collapseAll();
+      } else {
+        view->expandAll();
+      }
+    }
+  }
+
+  bool Controller::radioMode() const {
+    return model->isRadioActive();
+  }
+
+  void Controller::selectLibrary(const QString &path) {
+    const bool radio = isRadioLibraryPath(path);
+    model->setRadioActive(radio);
+    libsort->setEnabled(!radio);
+    model->loadAsync(path);
+  }
+
+  bool Controller::emitRadioTracks(const QModelIndexList &indexes, bool append) {
+    if (!radioMode()) {
+      return false;
+    }
+    auto tracks = model->tracksAt(indexes);
+    if (tracks.isEmpty()) {
+      return true; // radio handled it; the row just had nothing to contribute
+    }
+    if (append) {
+      emit appendTracksToCurrentPlaylist(tracks);
+    } else {
+      emit createNewPlaylistFromTracks(tracks, model->displayName(indexes.first()));
+    }
+    return true;
   }
 
   void Controller::on_doubleclick(const QModelIndex &index) {
     if (!index.isValid()) {
+      return;
+    }
+    if (emitRadioTracks({index}, false)) {
       return;
     }
     auto filepath = model->filePath(index);
@@ -117,7 +171,7 @@ namespace DirectoryUi {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
       if (me->button() == Qt::MiddleButton) {
         auto index = view->indexAt(me->pos());
-        if (index.isValid()) {
+        if (index.isValid() && !emitRadioTracks({index}, false)) {
           auto filepath = QDir(model->filePath(index));
           on_createNewPlaylist({filepath});
         }
@@ -143,24 +197,61 @@ namespace DirectoryUi {
         local_conf.saveLibraryPaths(dlg.libraryPaths());
         local_conf.sync();
         libswitch->clear();
-        for (const auto &i : local_conf.libraryPaths()) {
-          libswitch->addItem(libraryPathMasked(i), i);
-        }
+        populateLibrarySwitch();
         if (libswitch->count() > 0) {
-          model->loadAsync(local_conf.libraryPaths()[libswitch->count() - 1]);
+          // setCurrentIndex drives the mode switch and the load; loading here
+          // would run under the outgoing mode.
           libswitch->setCurrentIndex(libswitch->count() - 1);
         }
       }
     }
   }
 
-  QString Controller::libraryPathMasked(const QString &libraryPath) const {
-    QUrl url(libraryPath);
-    if (url.password().isEmpty()) {
-      return libraryPath;
+  void Controller::populateLibrarySwitch() {
+    for (const auto &i : local_conf.libraryPaths()) {
+      if (isRadioLibraryPath(i)) {
+        libswitch->addItem(Icons::get(Icons::Icon::Radio), libraryPathLabel(i), i);
+      } else {
+        libswitch->addItem(libraryPathLabel(i), i);
+      }
     }
-    url.setPassword("***");
-    return url.toString();
+  }
+
+  void Controller::editStations() {
+    const auto path = Radio::Catalog::userFilePath();
+    if (path.isEmpty()) {
+      return;
+    }
+    // Seed from the built-in list so the user edits a working file rather than
+    // starting from a blank page.
+    if (!QFile::exists(path)) {
+      QDir().mkpath(QFileInfo(path).absolutePath());
+      QFile f(path);
+      if (!f.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(view, tr("Radio"), tr("Cannot create %1").arg(path));
+        return;
+      }
+      f.write(Radio::Catalog::builtinJson());
+    }
+    revealInFileManager({path});
+  }
+
+  void Controller::resetStations() {
+    const auto path = Radio::Catalog::userFilePath();
+    if (path.isEmpty() || !QFile::exists(path)) {
+      return;
+    }
+    const auto answer = QMessageBox::question(
+      view, tr("Radio"),
+      tr("Delete %1 and go back to the built-in station list?").arg(path));
+    if (answer != QMessageBox::Yes) {
+      return;
+    }
+    if (!QFile::remove(path)) {
+      QMessageBox::warning(view, tr("Radio"), tr("Cannot delete %1").arg(path));
+      return;
+    }
+    model->loadAsync(radioLibraryPath());
   }
 
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {

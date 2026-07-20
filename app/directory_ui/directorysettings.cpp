@@ -1,5 +1,6 @@
 #include "directorysettings.h"
 #include "ui_directorysettings.h"
+#include "radiolibrary.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "addmpddialog.h"
 #endif
@@ -12,26 +13,16 @@
 #include <QStyledItemDelegate>
 
 namespace {
-  // Hide the password when rendering an mpd:// entry, while leaving the stored
-  // URL (used for persistence and editing) intact.
-  QString redactMpdPassword(const QString &path) {
-    if (!path.startsWith("mpd://")) {
-      return path;
-    }
-    QUrl url(path);
-    if (url.password().isEmpty()) {
-      return path;
-    }
-    url.setPassword("***");
-    return url.toString();
-  }
-
+  // Renders the label, not the stored value: the mpd:// password stays hidden
+  // and radio:// reads as "Radio", while the underlying URL is left intact for
+  // persistence and editing.
   class PathDelegate : public QStyledItemDelegate {
   public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
     QString displayText(const QVariant &value, const QLocale &locale) const override {
-      return QStyledItemDelegate::displayText(redactMpdPassword(value.toString()), locale);
+      return QStyledItemDelegate::displayText(
+        DirectoryUi::libraryPathLabel(value.toString()), locale);
     }
   };
 }
@@ -79,6 +70,15 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 }
 
 
+void DirectorySettings::on_pushButtonAddRadio_clicked() {
+  auto existing = model.stringList();
+  if (existing.contains(DirectoryUi::radioLibraryPath())) {
+    return;
+  }
+  existing.append(DirectoryUi::radioLibraryPath());
+  model.setStringList(existing);
+}
+
 void DirectorySettings::on_pushButtonEdit_clicked() {
   auto idx = ui->listView->currentIndex();
   if (!idx.isValid()) {
@@ -86,6 +86,10 @@ void DirectorySettings::on_pushButtonEdit_clicked() {
   }
   auto list = model.stringList();
   const QString current = list.at(idx.row());
+
+  if (DirectoryUi::isRadioLibraryPath(current)) {
+    return; // the radio entry has nothing to configure
+  }
 
   QString replacement;
   if (current.startsWith("mpd://")) {

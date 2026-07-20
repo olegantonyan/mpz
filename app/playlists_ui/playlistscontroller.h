@@ -33,6 +33,7 @@ namespace PlaylistsUi {
 
   public slots:
     void on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
+    void on_createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
     void on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist);
     void on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
     void on_start(const Track &t);

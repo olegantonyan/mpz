@@ -20,6 +20,10 @@ private slots:
 
   void streamCtorIsStream();
   void streamCtorHasUid();
+  void streamCtorStoresTitle();
+  void streamTitlePrefersIcyOverStationName();
+  void streamTitleFallsBackToStationName();
+  void streamTitleFallsBackToSanitizedUrl();
 
   void setMpdMakesIsMpdTrue();
   void setMpdEmptyClearsMpd();
@@ -366,6 +370,41 @@ void TestTrack::urlForStreamReturnsStreamUrl() {
 void TestTrack::isStreamWithEmptyUrlIsFalse() {
   Track t(QUrl(), QStringLiteral("ref"));
   QVERIFY(!t.isStream());
+}
+
+void TestTrack::streamCtorStoresTitle() {
+  Track t(QUrl(QStringLiteral("http://e/x")), QStringLiteral("radio://s"),
+          QStringLiteral("Groove Salad"));
+  QVERIFY(t.isStream());
+  QCOMPARE(t.title(), QStringLiteral("Groove Salad"));
+}
+
+// A station name must never mask the live ICY title once one arrives.
+void TestTrack::streamTitlePrefersIcyOverStationName() {
+  Track t(QUrl(QStringLiteral("http://e/x")), QStringLiteral("radio://s"),
+          QStringLiteral("Groove Salad"));
+  StreamMetaData m;
+  m.insert(QStringLiteral("stream"),
+           QStringLiteral("StreamTitle='Bonobo - Kiara';"));
+  t.setStreamMeta(m);
+  // StreamMetaData splits "Artist - Title", so title() is the second half.
+  QCOMPARE(t.artist(), QStringLiteral("Bonobo"));
+  QCOMPARE(t.title(), QStringLiteral("Kiara"));
+}
+
+void TestTrack::streamTitleFallsBackToStationName() {
+  Track t(QUrl(QStringLiteral("http://e/x")), QStringLiteral("radio://s"),
+          QStringLiteral("Groove Salad"));
+  StreamMetaData m;
+  m.insert(QStringLiteral("stream"), QStringLiteral("StreamTitle='';"));
+  t.setStreamMeta(m);
+  QCOMPARE(t.title(), QStringLiteral("Groove Salad"));
+}
+
+// m3u/pls streams carry no station name, so the URL fallback must survive.
+void TestTrack::streamTitleFallsBackToSanitizedUrl() {
+  Track t(QUrl(QStringLiteral("http://user:pass@e:8000/x")), QStringLiteral("ref"));
+  QCOMPARE(t.title(), QStringLiteral("http://e:8000/x"));
 }
 
 QTEST_GUILESS_MAIN(TestTrack)

@@ -186,6 +186,15 @@ namespace PlaylistUi {
     });
   }
 
+  void Model::appendTracks(const QVector<Track> &tracks) {
+    auto pl = playlist();
+    if (!pl || tracks.isEmpty()) {
+      return;
+    }
+    pl->append(tracks, false);
+    emit appendToPlaylistAsyncFinished(pl);
+  }
+
   void Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {
     auto pl = playlist();
     if (!pl) {
