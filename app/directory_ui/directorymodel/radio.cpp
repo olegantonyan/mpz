@@ -100,6 +100,9 @@ namespace DirectoryUi {
       if (!item || item == root_item) {
         return QString();
       }
+      if (!item->is_group && item->parent && item->parent != root_item) {
+        return item->parent->name + QStringLiteral(" ∕ ") + item->name;
+      }
       return item->name;
     }
 
