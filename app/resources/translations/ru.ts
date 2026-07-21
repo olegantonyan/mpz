@@ -220,12 +220,12 @@
 <context>
     <name>DirectoryUi::DirectoryModel::Radio</name>
     <message>
-        <location filename="../../directory_ui/directorymodel/radio.cpp" line="186"/>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="194"/>
         <source>%1  ·  1 station</source>
         <translation>%1  ·  1 станция</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorymodel/radio.cpp" line="187"/>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="195"/>
         <source>%1  ·  %2 stations</source>
         <translation>%1  ·  %2 станций</translation>
     </message>
@@ -321,49 +321,47 @@
 <context>
     <name>DirectoryUi::RadioStationsDialog</name>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="17"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="19"/>
         <source>Radio stations</source>
         <translation>Радиостанции</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
         <source>Stream URL</source>
         <translation>URL потока</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="28"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="30"/>
         <source>Add...</source>
         <translation>Добавить…</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="29"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="31"/>
         <source>Edit...</source>
         <translation>Изменить…</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="30"/>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="32"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="31"/>
         <source>Restore defaults</source>
-        <translation>Восстановить по умолчанию</translation>
+        <translation type="vanished">Восстановить по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/radiostationsdialog.cpp" line="125"/>
         <source>Add missing built-in stations to the list?</source>
-        <translation>Добавить недостающие встроенные станции в список?</translation>
+        <translation type="vanished">Добавить недостающие встроенные станции в список?</translation>
     </message>
 </context>
 <context>
@@ -441,18 +439,18 @@
     </message>
     <message>
         <location filename="../../lyrics/lyricswidget.cpp" line="57"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="82"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="90"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="81"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="89"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="75"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="74"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="96"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="95"/>
         <source>Nothing playing</source>
         <translation>Ничего не воспроизводится</translation>
     </message>
@@ -844,18 +842,18 @@
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="581"/>
-        <location filename="../../mainwindow.cpp" line="585"/>
+        <location filename="../../mainwindow.cpp" line="582"/>
+        <location filename="../../mainwindow.cpp" line="586"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="587"/>
+        <location filename="../../mainwindow.cpp" line="588"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="599"/>
+        <location filename="../../mainwindow.cpp" line="600"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -1010,27 +1008,27 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="26"/>
+        <location filename="../../mpd_client/connection.cpp" line="28"/>
         <source>timeout: %1</source>
         <translation>тайм-аут: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="27"/>
+        <location filename="../../mpd_client/connection.cpp" line="29"/>
         <source>host not found: %1</source>
         <translation>хост не найден: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="28"/>
+        <location filename="../../mpd_client/connection.cpp" line="30"/>
         <source>connection closed by server: %1</source>
         <translation>соединение закрыто сервером: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="31"/>
+        <location filename="../../mpd_client/connection.cpp" line="33"/>
         <source>authentication failed: %1</source>
         <translation>ошибка аутентификации: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="32"/>
+        <location filename="../../mpd_client/connection.cpp" line="34"/>
         <source>permission denied: %1</source>
         <translation>доступ запрещён: %1</translation>
     </message>
@@ -1970,23 +1968,23 @@
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="641"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="640"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="648"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="656"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="647"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="655"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="709"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="708"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="717"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="716"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>
