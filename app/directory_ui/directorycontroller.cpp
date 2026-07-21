@@ -23,6 +23,8 @@
 #include <QMessageBox>
 #include <QStyledItemDelegate>
 
+#include <algorithm>
+
 namespace DirectoryUi {
   Controller::Controller(QTreeView *v, QLineEdit *s, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *_libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
@@ -52,7 +54,11 @@ namespace DirectoryUi {
     });
 
     auto stored_paths = local_conf.libraryPaths();
-    if (stored_paths.removeIf([](const QString &p) { return isRadioLibraryPath(p); }) > 0) {
+    const int paths_before = stored_paths.size();
+    stored_paths.erase(std::remove_if(stored_paths.begin(), stored_paths.end(),
+                                      [](const QString &p) { return isRadioLibraryPath(p); }),
+                       stored_paths.end());
+    if (stored_paths.size() != paths_before) {
       local_conf.saveLibraryPaths(stored_paths);
       local_conf.sync();
     }
