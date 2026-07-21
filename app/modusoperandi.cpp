@@ -4,16 +4,11 @@
 #include <QtConcurrent>
 
 ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QObject *parent) : QObject{parent}, local_config(local_cfg) {
-  if (local_config.libraryPaths().empty()) {
-    active = MODUS_LOCALFS;
-  } else {
-    int current_index = qBound(0, local_config.currentLibraryPath(), local_config.libraryPaths().size() - 1) ;
-    auto current_path = local_config.libraryPaths().at(current_index);
-    if (current_path.startsWith("mpd://")) {
-      active = MODUS_MPD;
-    } else {
-      active = MODUS_LOCALFS;
-    }
+  active = MODUS_LOCALFS;
+  const int idx = local_config.currentLibraryPath();
+  if (idx >= 0 && idx < local_config.libraryPaths().size()
+      && local_config.libraryPaths().at(idx).startsWith("mpd://")) {
+    active = MODUS_MPD;
   }
   qDebug() << "ModusOperandi initilized in" << active;
 #ifdef ENABLE_MPD_SUPPORT

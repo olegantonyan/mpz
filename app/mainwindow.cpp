@@ -103,6 +103,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 
   connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
+  connect(library, &DirectoryUi::Controller::createNewPlaylistFromTracks, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
+  connect(library, &DirectoryUi::Controller::appendTracksToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendTracks);
   connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
@@ -203,7 +205,7 @@ void MainWindow::showWindow() {
 int MainWindow::streamBuffer() {
   int stream_buffer = global_conf.streamBufferSize();
   if (stream_buffer == 0) {
-    stream_buffer = 131072;
+    stream_buffer = 262144;
     global_conf.saveStreamBufferSize(stream_buffer);
   }
   return stream_buffer;

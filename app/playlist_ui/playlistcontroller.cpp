@@ -144,6 +144,12 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::on_appendTracks(const QVector<Track> &tracks) {
+    if (proxy->activeModel()->playlist() != nullptr) {
+      proxy->activeModel()->appendTracks(tracks);
+    }
+  }
+
   void Controller::sortBy(const QString &criteria) {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->sortBy(criteria);

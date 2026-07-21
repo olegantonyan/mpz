@@ -4,9 +4,11 @@
 #include "storage.h"
 #include "sort_ui/sortingpresetsdialog.h"
 #include "playlist_ui/columnsconfig.h"
+#include "radio/station.h"
 
 #include <QPair>
 #include <QList>
+#include <QVector>
 
 namespace Config {
   class Global {
@@ -29,6 +31,10 @@ namespace Config {
 
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
+
+    QVector<Radio::Station> radioStations() const;
+    bool hasRadioStations() const;
+    bool saveRadioStations(const QVector<Radio::Station> &arg);
 
     bool disableGapless() const;
     void saveDisableGapless(bool arg);

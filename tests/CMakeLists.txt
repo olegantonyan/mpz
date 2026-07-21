@@ -36,6 +36,7 @@ mpz_add_test(tst_lyricstextmatch tst_lyricstextmatch.cpp ${APP}/lyrics/textmatch
 mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp)
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)
+mpz_add_test(tst_radioitem      tst_radioitem.cpp      ${APP}/directory_ui/directorymodel/radio/item.cpp)
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
 mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
 
@@ -72,6 +73,25 @@ mpz_add_test(tst_lyricscache tst_lyricscache.cpp
   ${APP}/lyrics/cache.cpp
   ${APP}/diskcache.cpp
   ${APP}/lyrics/textmatch.cpp)
+
+# Radio catalog parsing is pure -- Catalog takes its user-file path from a
+# setter rather than Config::Storage, so these need neither yaml-cpp nor TagLib.
+mpz_add_test(tst_radiocatalog tst_radiocatalog.cpp
+  ${APP}/radio/catalog.cpp
+  ${APP}/radio/station.cpp)
+
+# Guards the shipped station list. Reads the source json directly, so no qrc.
+mpz_add_test(tst_radiocatalogresource tst_radiocatalogresource.cpp
+  ${APP}/radio/catalog.cpp
+  ${APP}/radio/station.cpp)
+target_compile_definitions(tst_radiocatalogresource PRIVATE
+  RADIO_STATIONS_JSON="${CMAKE_SOURCE_DIR}/app/resources/radio/radio.json")
+
+# resolver.cpp includes QtNetwork for the remote fetch; firstStreamUrl/
+# looksLikePlaylist are pure and the unreferenced fetch body is dropped by
+# --gc-sections, so only the include paths are needed.
+mpz_add_test(tst_radioresolver tst_radioresolver.cpp ${APP}/radio/resolver.cpp)
+target_link_libraries(tst_radioresolver PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
 # UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
 # <QApplication> and a QNetworkAccessManager member for its include paths; the
@@ -154,6 +174,7 @@ mpz_add_test(tst_globalconfig tst_globalconfig.cpp
   ${APP}/config/storage.cpp
   ${APP}/config/value.cpp
   ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/radio/station.cpp
   ${APP}/track.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)

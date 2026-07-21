@@ -276,7 +276,7 @@ namespace Config {
       t.setCue(cue);
       return t;
     } else {
-     return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>());
+     return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>(), r["title"].get<QString>());
     }
   }
 

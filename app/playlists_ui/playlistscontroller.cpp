@@ -263,6 +263,11 @@ namespace PlaylistsUi {
     spinner->show();
   }
 
+  void Controller::on_createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name) {
+    // Synchronous: no scan to wait on, so no spinner.
+    proxy->activeModel()->createPlaylistFromTracks(tracks, name);
+  }
+
   void Controller::on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist == nullptr) {
       return;

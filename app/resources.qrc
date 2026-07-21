@@ -10,6 +10,7 @@
         <file alias="app/resources/icons/64x64/mpz.png">resources/icons/64x64/mpz.png</file>
         <file alias="app/resources/icons/256x256/mpz.png">resources/icons/256x256/mpz.png</file>
         <file alias="app/resources/icons/mpz-template.svg">resources/icons/mpz-template.svg</file>
+        <file alias="app/resources/radio/radio.json">resources/radio/radio.json</file>
         <file alias="app/resources/translations/sr.qm">resources/translations/sr.qm</file>
         <file alias="app/resources/translations/ja.qm">resources/translations/ja.qm</file>
    </qresource>
