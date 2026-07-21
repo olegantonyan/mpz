@@ -53,7 +53,7 @@ namespace DirectoryUi {
     auto *layout = new QVBoxLayout(this);
     layout->addLayout(top);
     layout->addWidget(buttons);
-    resize(620, 420);
+    resize(1000, 600);
 
     refreshTable();
   }
@@ -66,6 +66,7 @@ namespace DirectoryUi {
       table->setItem(i, 1, new QTableWidgetItem(s.group));
       table->setItem(i, 2, new QTableWidgetItem(s.url));
     }
+    table->resizeColumnsToContents();
   }
 
   int RadioStationsDialog::currentRow() const {
