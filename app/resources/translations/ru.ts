@@ -143,6 +143,11 @@
         <translation>Вниз</translation>
     </message>
     <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="82"/>
+        <source>Radio stations…</source>
+        <translation>Радиостанции…</translation>
+    </message>
+    <message>
         <location filename="../../directory_ui/directorysettings.ui" line="14"/>
         <source>Library folders</source>
         <translation>Папки с музыкой</translation>

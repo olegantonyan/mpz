@@ -68,6 +68,10 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 }
 
 
+void DirectorySettings::on_pushButtonRadioStations_clicked() {
+  editRadioStations();
+}
+
 bool DirectorySettings::radioStationsEdited() const {
   return stations_edited;
 }

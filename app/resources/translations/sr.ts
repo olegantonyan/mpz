@@ -147,6 +147,11 @@
         <source>Move down</source>
         <translation>Помери доле</translation>
     </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="82"/>
+        <source>Radio stations…</source>
+        <translation>Радио станице…</translation>
+    </message>
 </context>
 <context>
     <name>DirectoryUi::AddMpdDialog</name>

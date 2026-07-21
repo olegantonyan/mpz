@@ -143,6 +143,11 @@
         <translation>下へ</translation>
     </message>
     <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="82"/>
+        <source>Radio stations…</source>
+        <translation>ラジオステーション…</translation>
+    </message>
+    <message>
         <location filename="../../directory_ui/directorysettings.ui" line="14"/>
         <source>Library folders</source>
         <translation>ライブラリフォルダー</translation>
