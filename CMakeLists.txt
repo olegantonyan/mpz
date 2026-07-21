@@ -56,6 +56,7 @@ set(PROJECT_SOURCES
   app/config/value.cpp
   app/diskcache.cpp
   app/coverart/embedded.cpp
+  app/coverart/foldercover.cpp
   app/coverart/coverartwidget.cpp
   app/coverart/online/albummatch.cpp
   app/coverart/online/cache.cpp

@@ -60,6 +60,9 @@ mpz_add_test(tst_coveralbummatch tst_coveralbummatch.cpp
   ${APP}/coverart/online/albummatch.cpp
   ${APP}/lyrics/textmatch.cpp)
 
+# Local folder-cover ranking is pure; QString/QFileInfo/QRegularExpression only.
+mpz_add_test(tst_foldercover tst_foldercover.cpp ${APP}/coverart/foldercover.cpp)
+
 # Both online caches write real files under QStandardPaths::CacheLocation via
 # the shared DiskCache::Store. The cover test builds a sample image, so it also
 # needs Qt::Gui.

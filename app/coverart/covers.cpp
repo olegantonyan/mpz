@@ -10,6 +10,22 @@
 namespace CoverArt {
   static Covers *self = nullptr;
 
+  static FolderCover::Match bestImageIn(const QString &dir) {
+    static const QStringList nmask{"*.jpg", "*.jpeg", "*.png", "*.webp",
+                                   "*.gif", "*.tiff", "*.bmp"};
+    QStringList names;
+    QDirIterator it(dir, nmask, QDir::Files, QDirIterator::NoIteratorFlags);
+    while (it.hasNext()) {
+      it.next();
+      names << it.fileName();
+    }
+    auto match = FolderCover::best(names);
+    if (!match.file.isEmpty()) {
+      match.file = QDir(dir).absoluteFilePath(match.file);
+    }
+    return match;
+  }
+
   Covers &Covers::instance(ModusOperandi &modus) {
     if (self == nullptr) {
       self = new Covers(modus);
@@ -51,13 +67,18 @@ namespace CoverArt {
       }
 #endif
     } else if (modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
-      found = findCoverLocally(key);
-      if (found.isEmpty()) {
-        // Not cached: `cache` is keyed by directory but embedded art is per
-        // file, so caching it here would serve one track's art to the whole dir.
-        found = embedded_covers.get(filepath);
-      } else {
+      const auto local = bestLocalImage(key);
+      if (!local.file.isEmpty() && local.score >= 0) {
+        found = local.file;
         cache.insert(key, found);
+      } else {
+        // Embedded art is per file; the dir-keyed `cache` would serve it to the
+        // whole directory, so it is deliberately left uncached.
+        found = embedded_covers.get(filepath);
+        if (found.isEmpty() && !local.file.isEmpty()) {
+          found = local.file;
+          cache.insert(key, found);
+        }
       }
     }
 
@@ -75,22 +96,22 @@ namespace CoverArt {
     return QFileInfo(filepath).absoluteDir().absolutePath();
   }
 
-  QString Covers::findCoverLocally(const QString &dir) {
-    const auto nmask = QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.gif" << "*.tiff" << "*.bmp";
+  FolderCover::Match Covers::bestLocalImage(const QString &dir) const {
+    const auto top = bestImageIn(dir);
+    if (!top.file.isEmpty()) {
+      return top;
+    }
 
-    QString result;
-    QDirIterator it(dir, nmask, QDir::Files, QDirIterator::NoIteratorFlags);
-    while (it.hasNext()) {
-      auto current_file = it.next();
-      if (result.isEmpty()) {
-        result = current_file; // fallback to first image file found in the dir
-      }
-
-      if (current_file.contains("cover", Qt::CaseInsensitive)) {
-        result = current_file;
-        break;
+    // Descend one level only when the album folder itself holds no image.
+    FolderCover::Match sub;
+    QDirIterator dirs(dir, QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::NoIteratorFlags);
+    while (dirs.hasNext()) {
+      dirs.next();
+      const auto candidate = bestImageIn(dirs.filePath());
+      if (!candidate.file.isEmpty() && (sub.file.isEmpty() || candidate.score > sub.score)) {
+        sub = candidate;
       }
     }
-    return result;
+    return sub;
   }
 }
