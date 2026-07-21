@@ -31,6 +31,7 @@ private slots:
   void defaultAlignsHaveVCenter();
   void valueByFieldName();
   void valueForYearZeroIsEmpty();
+  void valueForLengthZeroIsEmpty();
   void valueForUnknownFieldIsEmpty();
   void settersReplaceContents();
   void serializeRoundTripsThroughDeserialize();
@@ -92,6 +93,14 @@ void TestColumnsConfig::valueForYearZeroIsEmpty() {
                QStringLiteral("L"), QStringLiteral("T"),
                /*year*/ 0);
   QCOMPARE(cfg.value(4, t), QString());
+}
+
+void TestColumnsConfig::valueForLengthZeroIsEmpty() {
+  ColumnsConfig cfg;
+  Track t = mk(QStringLiteral("/p.mp3"), QStringLiteral("A"),
+               QStringLiteral("L"), QStringLiteral("T"),
+               /*year*/ 2024, /*duration*/ 0);
+  QCOMPARE(cfg.value(5, t), QString());
 }
 
 void TestColumnsConfig::valueForUnknownFieldIsEmpty() {

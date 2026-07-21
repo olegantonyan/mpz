@@ -103,7 +103,7 @@ namespace PlaylistUi {
       return track.title();
     } else if (fld == "year" && track.year() > 0) {
       return QString::number(track.year());
-    } else if (fld == "length") {
+    } else if (fld == "length" && track.duration() > 0) {
       return track.formattedDuration();
     } else if (fld == "path") {
       return track.path();
