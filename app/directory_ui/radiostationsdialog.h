@@ -20,7 +20,6 @@ namespace DirectoryUi {
     void addStation();
     void editStation();
     void removeStation();
-    void restoreDefaults();
 
   private:
     void refreshTable();

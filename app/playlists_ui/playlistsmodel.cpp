@@ -72,7 +72,7 @@ namespace PlaylistsUi {
   }
 
   void Model::remove(const QModelIndex &index) {
-    if (index.row() > list.size() - 1) {
+    if (!index.isValid() || index.row() > list.size() - 1) {
       return;
     }
     beginRemoveRows(QModelIndex(), index.row(), index.row());

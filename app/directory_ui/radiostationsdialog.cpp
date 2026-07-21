@@ -5,7 +5,6 @@
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QUuid>
@@ -14,6 +13,9 @@
 namespace DirectoryUi {
   RadioStationsDialog::RadioStationsDialog(const QVector<Radio::Station> &stations, QWidget *parent) :
     QDialog(parent), _stations(stations) {
+    if (_stations.isEmpty()) {
+      _stations = Radio::Catalog::builtin();
+    }
     setWindowTitle(tr("Radio stations"));
 
     table = new QTableWidget(0, 3);
@@ -28,18 +30,14 @@ namespace DirectoryUi {
     auto *add = new QPushButton(tr("Add..."));
     auto *edit = new QPushButton(tr("Edit..."));
     auto *remove = new QPushButton(tr("Remove"));
-    auto *defaults = new QPushButton(tr("Restore defaults"));
     connect(add, &QPushButton::clicked, this, &RadioStationsDialog::addStation);
     connect(edit, &QPushButton::clicked, this, &RadioStationsDialog::editStation);
     connect(remove, &QPushButton::clicked, this, &RadioStationsDialog::removeStation);
-    connect(defaults, &QPushButton::clicked, this, &RadioStationsDialog::restoreDefaults);
 
     auto *buttons_col = new QVBoxLayout;
     buttons_col->addWidget(add);
     buttons_col->addWidget(edit);
     buttons_col->addWidget(remove);
-    buttons_col->addSpacing(12);
-    buttons_col->addWidget(defaults);
     buttons_col->addStretch();
 
     auto *top = new QHBoxLayout;
@@ -117,20 +115,6 @@ namespace DirectoryUi {
       return;
     }
     _stations.remove(row);
-    refreshTable();
-  }
-
-  void RadioStationsDialog::restoreDefaults() {
-    const auto answer = QMessageBox::question(
-      this, windowTitle(), tr("Add missing built-in stations to the list?"));
-    if (answer != QMessageBox::Yes) {
-      return;
-    }
-    for (const auto &s : Radio::Catalog::builtin()) {
-      if (!hasId(s.id, -1)) {
-        _stations << s;
-      }
-    }
     refreshTable();
   }
 

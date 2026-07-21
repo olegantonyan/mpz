@@ -33,7 +33,6 @@ namespace Config {
     void saveStreamBufferSize(int arg);
 
     QVector<Radio::Station> radioStations() const;
-    bool hasRadioStations() const;
     bool saveRadioStations(const QVector<Radio::Station> &arg);
 
     bool disableGapless() const;

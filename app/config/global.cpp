@@ -72,12 +72,6 @@ namespace Config {
     return result;
   }
 
-  bool Global::hasRadioStations() const {
-    bool ok = false;
-    storage.get("radio_stations", &ok);
-    return ok;
-  }
-
   bool Global::saveRadioStations(const QVector<Radio::Station> &arg) {
     QList<Config::Value> list;
     for (const auto &s : arg) {

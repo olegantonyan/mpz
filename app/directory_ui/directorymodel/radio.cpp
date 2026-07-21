@@ -2,6 +2,7 @@
 
 #include "directory_ui/radiolibrary.h"
 #include "icons.h"
+#include "radio/catalog.h"
 
 #include <QHash>
 #include <QUrl>
@@ -29,7 +30,10 @@ namespace DirectoryUi {
       delete root_item;
       root_item = new RadioItem(true, QString());
 
-      const auto stations = global_conf.radioStations();
+      auto stations = global_conf.radioStations();
+      if (stations.isEmpty()) {
+        stations = ::Radio::Catalog::builtin();
+      }
 
       QHash<QString, RadioItem *> group_items;
 

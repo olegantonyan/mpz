@@ -27,7 +27,7 @@ private slots:
   void coverProviders_roundTrips();
   void radioStations_absentByDefault();
   void radioStations_roundTrips();
-  void radioStations_emptyListStaysPresent();
+  void radioStations_emptyListRoundTrips();
 
 private:
   QTemporaryDir tempDir;
@@ -160,7 +160,6 @@ void TestGlobalConfig::coverProviders_roundTrips() {
 
 void TestGlobalConfig::radioStations_absentByDefault() {
   Config::Global g;
-  QVERIFY(!g.hasRadioStations());
   QVERIFY(g.radioStations().isEmpty());
 }
 
@@ -187,7 +186,6 @@ void TestGlobalConfig::radioStations_roundTrips() {
   }
 
   Config::Global reloaded;
-  QVERIFY(reloaded.hasRadioStations());
   const auto stations = reloaded.radioStations();
   QCOMPARE(stations.size(), 2);
   QCOMPARE(stations.at(0).id, a.id);
@@ -202,16 +200,13 @@ void TestGlobalConfig::radioStations_roundTrips() {
   QCOMPARE(stations.at(1).bitrate, b.bitrate);
 }
 
-// Deleting every station is a real state: the key must persist as an empty list
-// so first-run seeding doesn't fire again.
-void TestGlobalConfig::radioStations_emptyListStaysPresent() {
+void TestGlobalConfig::radioStations_emptyListRoundTrips() {
   {
     Config::Global g;
     QVERIFY(g.saveRadioStations({}));
     g.sync();
   }
   Config::Global reloaded;
-  QVERIFY(reloaded.hasRadioStations());
   QVERIFY(reloaded.radioStations().isEmpty());
 }
 

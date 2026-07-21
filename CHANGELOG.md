@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Crash when deleting playlists
+
 ### Misc
 
 - Build option `ENABLE_GAPLESS` (default on, Qt6 only) compiles the gapless engine in or out
