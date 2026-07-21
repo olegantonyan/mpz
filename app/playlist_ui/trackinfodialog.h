@@ -4,6 +4,7 @@
 #include "track.h"
 #include "playlist/playlist.h"
 #include "config/global.h"
+#include "playlist_ui/tageditordialog.h"
 
 #include <QDialog>
 #include <QPixmap>
@@ -14,8 +15,6 @@
 namespace Ui {
   class TrackInfoDialog;
 }
-
-class TagEditorDialog;
 
 class TrackInfoDialog : public QDialog {
   Q_OBJECT

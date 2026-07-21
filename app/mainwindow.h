@@ -23,6 +23,8 @@
 #endif
 #include "modusoperandi.h"
 #include "slidingbanner.h"
+#include "coverart/coverartwidget.h"
+#include "lyrics/lyricswidget.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -49,6 +51,14 @@
   #include "playback/mpd/playbackorder.h"
 #endif
 
+#if defined(ENABLE_UPDATE_CHECK)
+  #include "update_check/updatechecker.h"
+#endif
+
+#if defined(ENABLE_CRASH_HANDLER)
+  #include "feedback_ui/feedbacksender.h"
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -57,16 +67,6 @@ class QDockWidget;
 class QMenu;
 class QToolBar;
 class QAction;
-namespace CoverArt { class Widget; }
-namespace Lyrics { class Widget; }
-
-#if defined(ENABLE_UPDATE_CHECK)
-class UpdateChecker;
-#endif
-
-#if defined(ENABLE_CRASH_HANDLER)
-class FeedbackSender;
-#endif
 
 class MainWindow : public QMainWindow {
   Q_OBJECT

@@ -2,7 +2,9 @@
 #define GAPLESS_ENGINE_H
 
 #include "playback/gapless/pcmcache.h"
+#include "playback/gapless/streamsource.h"
 #include "playback/gapless/timeline.h"
+#include "playback/gapless/trackdecoder.h"
 #include "playback/mediaplayer.h"
 #include "streammetadata.h"
 #include "track.h"
@@ -22,9 +24,6 @@ class QIODevice;
 QT_END_NAMESPACE
 
 namespace Playback::Gapless {
-  class TrackDecoder;
-  class StreamSource;
-
   class Engine : public QObject {
     Q_OBJECT
   public:

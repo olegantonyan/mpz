@@ -1,6 +1,7 @@
 #ifndef GAPLESS_STREAMSOURCE_H
 #define GAPLESS_STREAMSOURCE_H
 
+#include "playback/stream.h"
 #include "streammetadata.h"
 
 #include <QElapsedTimer>
@@ -10,10 +11,6 @@
 #include <QWaitCondition>
 
 #include <atomic>
-
-namespace Playback {
-  class Stream;
-}
 
 namespace Playback::Gapless {
   class StreamSource : public QIODevice {

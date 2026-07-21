@@ -1,21 +1,16 @@
 #ifndef MACMENUBAR_H
 #define MACMENUBAR_H
 
+#include "config/global.h"
+#include "config/local.h"
+#include "playback/playbackcontroller.h"
+#include "sort_ui/sortmenu.h"
+#include "shortcuts.h"
+#include "modusoperandi.h"
+
 #include <QObject>
 
-namespace Config {
-  class Global;
-  class Local;
-}
-namespace Playback {
-  class Controller;
-}
-namespace SortUi {
-  class SortMenu;
-}
 class MainWindow;
-class Shortcuts;
-class ModusOperandi;
 class QAction;
 
 // Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for

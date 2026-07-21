@@ -3,6 +3,7 @@
 
 #include "track.h"
 #include "config/global.h"
+#include "lyrics/providerchain.h"
 
 #include <QWidget>
 
@@ -10,8 +11,6 @@ class QLabel;
 class QPlainTextEdit;
 
 namespace Lyrics {
-  class ProviderChain;
-
   class Widget : public QWidget {
     Q_OBJECT
   public:

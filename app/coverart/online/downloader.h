@@ -11,8 +11,6 @@
 
 namespace CoverArt {
   namespace Online {
-    class ProviderChain;
-
     // Owns every online cover lookup. Driven from the playback signals in
     // MainWindow rather than from Track::artCover(), so "only the current track
     // is searched" is a property of the wiring instead of a rule callers have to
