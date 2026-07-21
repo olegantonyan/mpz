@@ -179,24 +179,186 @@
 <context>
     <name>DirectoryUi::DirectoryContextMenu</name>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="27"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="84"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="29"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="86"/>
         <source>Create new playlist</source>
         <translation>Создать новый плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="36"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="89"/>
         <source>Append to current playlist</source>
         <translation>Добавить в текущий плейлист</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="38"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <source>Open station homepage</source>
+        <translation>Открыть сайт станции</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
+        <source>Edit stations...</source>
+        <translation>Редактировать станции…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="91"/>
         <source>Open in file manager</source>
         <translation>Открыть в файловом менеджере</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::DirectoryModel::Radio</name>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="186"/>
+        <source>%1  ·  1 station</source>
+        <translation>%1  ·  1 станция</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="187"/>
+        <source>%1  ·  %2 stations</source>
+        <translation>%1  ·  %2 станций</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Add radio station</source>
+        <translation>Добавить радиостанцию</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Edit radio station</source>
+        <translation>Изменить радиостанцию</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="22"/>
+        <source>stream url, or a .pls / .m3u link</source>
+        <translation>адрес потока или ссылка .pls / .m3u</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="27"/>
+        <source>mp3, aac, ...</source>
+        <translation>mp3, aac, …</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="30"/>
+        <source>kbps</source>
+        <translation>кбит/с</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="31"/>
+        <source>unspecified</source>
+        <translation>не указан</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="34"/>
+        <source>From file...</source>
+        <translation>Из файла…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="42"/>
+        <source>Name</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="43"/>
+        <source>Stream</source>
+        <translation>Поток</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="44"/>
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="45"/>
+        <source>Homepage</source>
+        <translation>Сайт</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="46"/>
+        <source>Codec</source>
+        <translation>Кодек</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="47"/>
+        <source>Bitrate</source>
+        <translation>Битрейт</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Open playlist</source>
+        <translation>Открыть плейлист</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Playlists (*.pls *.m3u *.m3u8);;All files (*)</source>
+        <translation>Плейлисты (*.pls *.m3u *.m3u8);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="80"/>
+        <source>A name is required.</source>
+        <translation>Необходимо указать название.</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="89"/>
+        <source>Could not use this stream: %1</source>
+        <translation>Не удалось использовать этот поток: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationsDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="17"/>
+        <source>Radio stations</source>
+        <translation>Радиостанции</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Name</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Stream URL</source>
+        <translation>URL потока</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="28"/>
+        <source>Add...</source>
+        <translation>Добавить…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="29"/>
+        <source>Edit...</source>
+        <translation>Изменить…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="30"/>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="31"/>
+        <source>Restore defaults</source>
+        <translation>Восстановить по умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="125"/>
+        <source>Add missing built-in stations to the list?</source>
+        <translation>Добавить недостающие встроенные станции в список?</translation>
     </message>
 </context>
 <context>
@@ -639,56 +801,56 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="285"/>
-        <location filename="../../mainwindow.cpp" line="320"/>
+        <location filename="../../mainwindow.cpp" line="287"/>
+        <location filename="../../mainwindow.cpp" line="322"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="286"/>
-        <location filename="../../mainwindow.cpp" line="319"/>
+        <location filename="../../mainwindow.cpp" line="288"/>
+        <location filename="../../mainwindow.cpp" line="321"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="287"/>
-        <location filename="../../mainwindow.cpp" line="321"/>
+        <location filename="../../mainwindow.cpp" line="289"/>
+        <location filename="../../mainwindow.cpp" line="323"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="318"/>
+        <location filename="../../mainwindow.cpp" line="320"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="420"/>
+        <location filename="../../mainwindow.cpp" line="422"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="438"/>
+        <location filename="../../mainwindow.cpp" line="440"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="444"/>
+        <location filename="../../mainwindow.cpp" line="446"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="579"/>
-        <location filename="../../mainwindow.cpp" line="583"/>
+        <location filename="../../mainwindow.cpp" line="581"/>
+        <location filename="../../mainwindow.cpp" line="585"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="585"/>
+        <location filename="../../mainwindow.cpp" line="587"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="597"/>
+        <location filename="../../mainwindow.cpp" line="599"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -696,12 +858,12 @@
 <context>
     <name>ModusOperandi</name>
     <message>
-        <location filename="../../modusoperandi.cpp" line="27"/>
+        <location filename="../../modusoperandi.cpp" line="22"/>
         <source>mpd error</source>
         <translation>ошибка mpd</translation>
     </message>
     <message>
-        <location filename="../../modusoperandi.cpp" line="31"/>
+        <location filename="../../modusoperandi.cpp" line="26"/>
         <source>mpd connected</source>
         <translation>mpd подключен</translation>
     </message>
@@ -866,6 +1028,77 @@
         <location filename="../../mpd_client/connection.cpp" line="32"/>
         <source>permission denied: %1</source>
         <translation>доступ запрещён: %1</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiolibrary.cpp" line="9"/>
+        <source>Radio</source>
+        <translation>Радио</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="58"/>
+        <source>%1 (at offset %2)</source>
+        <translation>%1 (смещение %2)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="63"/>
+        <source>expected a JSON object at the top level</source>
+        <translation>ожидался объект JSON на верхнем уровне</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="67"/>
+        <source>missing a &quot;stations&quot; array</source>
+        <translation>отсутствует массив &quot;stations&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="75"/>
+        <source>station %1 is not an object</source>
+        <translation>станция %1 не является объектом</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="80"/>
+        <source>station %1 needs a non-empty &quot;id&quot; and &quot;name&quot;</source>
+        <translation>у станции %1 должны быть непустые &quot;id&quot; и &quot;name&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="83"/>
+        <source>duplicate station id &quot;%1&quot;</source>
+        <translation>повторяющийся идентификатор станции &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="86"/>
+        <source>station &quot;%1&quot; needs a &quot;url&quot; that is http or https: %2</source>
+        <translation>у станции &quot;%1&quot; должен быть &quot;url&quot; с http или https: %2</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="87"/>
+        <source>(empty)</source>
+        <translation>(пусто)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="111"/>
+        <source>empty url</source>
+        <translation>пустой адрес</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="116"/>
+        <source>not an http or https url: %1</source>
+        <translation>не http или https адрес: %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="125"/>
+        <source>cannot read %1</source>
+        <translation>не удалось прочитать %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="128"/>
+        <location filename="../../radio/resolver.cpp" line="161"/>
+        <source>no stream url found in %1</source>
+        <translation>не найден адрес потока в %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="152"/>
+        <source>timed out fetching %1</source>
+        <translation>превышено время ожидания %1</translation>
     </message>
 </context>
 <context>

@@ -51,26 +51,31 @@ namespace DirectoryUi {
       view->setContextMenuPolicy(Qt::CustomContextMenu);
     });
 
-    local_conf.seedRadioLibraryPathOnce(radioLibraryPath());
+    auto stored_paths = local_conf.libraryPaths();
+    if (stored_paths.removeIf([](const QString &p) { return isRadioLibraryPath(p); }) > 0) {
+      local_conf.saveLibraryPaths(stored_paths);
+      local_conf.sync();
+    }
 
     if (local_conf.libraryPaths().empty()) {
-      model->loadAsync(QDir::homePath());
-      libswitch->addItem(QDir::homePath());
-    } else {
-      populateLibrarySwitch();
-      int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count() - 1);
-      libswitch->setCurrentIndex(current_index);
-      selectLibrary(local_conf.libraryPaths().at(current_index));
+      libswitch->addItem(QDir::homePath(), QDir::homePath());
     }
+    populateLibrarySwitch();
+    int current_index = qBound(0, local_conf.currentLibraryPath(), libswitch->count() - 1);
+    libswitch->setCurrentIndex(current_index);
+    selectLibrary(libswitch->itemData(current_index).toString());
 
-    if (libswitch->count() > 0) {
-      connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
-        auto path = modus_operandi.onLibraryPathChange(idx);
-        if (!path.isEmpty()) {
-          selectLibrary(path);
-        }
-      });
-    }
+    connect(libswitch, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
+      const QString item_path = libswitch->itemData(idx).toString();
+      if (isRadioLibraryPath(item_path)) {
+        modus_operandi.onLibraryPathChange(item_path);
+        local_conf.saveCurrentLibraryPath(idx);
+        selectLibrary(item_path);
+        return;
+      }
+      auto path = modus_operandi.onLibraryPathChange(idx);
+      selectLibrary(path.isEmpty() ? item_path : path);
+    });
 
     connect(search, &QLineEdit::textChanged, this, &DirectoryUi::Controller::on_search);
 
@@ -187,9 +192,8 @@ namespace DirectoryUi {
         local_conf.sync();
         libswitch->clear();
         populateLibrarySwitch();
-        if (libswitch->count() > 0) {
-          libswitch->setCurrentIndex(libswitch->count() - 1);
-        }
+        const int real = local_conf.libraryPaths().size();
+        libswitch->setCurrentIndex(real > 0 ? real - 1 : libswitch->count() - 1);
       }
       if (dlg.radioStationsEdited() && radioMode()) {
         model->loadAsync(radioLibraryPath());
@@ -200,11 +204,11 @@ namespace DirectoryUi {
   void Controller::populateLibrarySwitch() {
     for (const auto &i : local_conf.libraryPaths()) {
       if (isRadioLibraryPath(i)) {
-        libswitch->addItem(Icons::get(Icons::Icon::Radio), libraryPathLabel(i), i);
-      } else {
-        libswitch->addItem(libraryPathLabel(i), i);
+        continue;
       }
+      libswitch->addItem(libraryPathLabel(i), i);
     }
+    libswitch->addItem(Icons::get(Icons::Icon::Radio), libraryPathLabel(radioLibraryPath()), radioLibraryPath());
   }
 
   void Controller::editStations() {

@@ -92,7 +92,7 @@ void TestRadioCatalog::rejectsNonHttpUrl() {
 void TestRadioCatalog::acceptsHttpUrl() {
   QString error;
   const auto stations = Radio::Catalog::fromJson(
-    oneStation(R"("url":"http://relay4.slayradio.org:8000/","codec":"mp3","bitrate":128)"), &error);
+    oneStation(R"("url":"http://relay4.slayradio.org:8300/","codec":"aac","bitrate":128)"), &error);
   QVERIFY2(error.isEmpty(), qPrintable(error));
   QCOMPARE(stations.size(), 1);
 }

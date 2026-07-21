@@ -33,8 +33,8 @@ void TestRadioResolver::plsSkipsNonHttp() {
 }
 
 void TestRadioResolver::m3uFirstHttpLine() {
-  const QByteArray body = "#EXTM3U\n#EXTINF:-1,SLAY Radio\nhttp://relay4.slayradio.org:8000/\n";
-  QCOMPARE(Radio::firstStreamUrl(body), QStringLiteral("http://relay4.slayradio.org:8000/"));
+  const QByteArray body = "#EXTM3U\n#EXTINF:-1,SLAY Radio\nhttp://relay4.slayradio.org:8300/\n";
+  QCOMPARE(Radio::firstStreamUrl(body), QStringLiteral("http://relay4.slayradio.org:8300/"));
 }
 
 void TestRadioResolver::m3uSkipsComments() {
@@ -58,7 +58,7 @@ void TestRadioResolver::looksLikePlaylistByExtension() {
 
 void TestRadioResolver::rawUrlIsNotPlaylist() {
   QVERIFY(!Radio::looksLikePlaylist("https://ice.somafm.com/groovesalad-256-mp3"));
-  QVERIFY(!Radio::looksLikePlaylist("http://relay4.slayradio.org:8000/"));
+  QVERIFY(!Radio::looksLikePlaylist("http://relay4.slayradio.org:8300/"));
 }
 
 void TestRadioResolver::guessCodecAndBitrateFromUrl() {
@@ -84,7 +84,7 @@ void TestRadioResolver::guessCodecAndBitrateFromUrl() {
 void TestRadioResolver::guessLeavesUnfilledWhenNoHint() {
   QString codec;
   quint16 bitrate = 0;
-  Radio::guessStreamFormat("http://relay4.slayradio.org:8000/", &codec, &bitrate);
+  Radio::guessStreamFormat("http://relay4.slayradio.org:8300/", &codec, &bitrate);
   QVERIFY(codec.isEmpty());
   QCOMPARE(bitrate, quint16{0});
 }
@@ -92,7 +92,7 @@ void TestRadioResolver::guessLeavesUnfilledWhenNoHint() {
 void TestRadioResolver::guessKeepsExistingWhenNoHint() {
   QString codec = QStringLiteral("mp3");
   quint16 bitrate = 128;
-  Radio::guessStreamFormat("http://relay4.slayradio.org:8000/", &codec, &bitrate);
+  Radio::guessStreamFormat("http://relay4.slayradio.org:8300/", &codec, &bitrate);
   QCOMPARE(codec, QStringLiteral("mp3"));
   QCOMPARE(bitrate, quint16{128});
 }

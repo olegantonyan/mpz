@@ -179,24 +179,186 @@
 <context>
     <name>DirectoryUi::DirectoryContextMenu</name>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="27"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="84"/>
         <source>Clear filter</source>
         <translation>フィルターをクリア</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="29"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="86"/>
         <source>Create new playlist</source>
         <translation>新しいプレイリストを作成</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="36"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="89"/>
         <source>Append to current playlist</source>
         <translation>現在のプレイリストに追加</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="38"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <source>Open station homepage</source>
+        <translation>ステーションのホームページを開く</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
+        <source>Edit stations...</source>
+        <translation>ステーションを編集…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="91"/>
         <source>Open in file manager</source>
         <translation>ファイルマネージャで開く</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::DirectoryModel::Radio</name>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="186"/>
+        <source>%1  ·  1 station</source>
+        <translation>%1  ·  1 ステーション</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="187"/>
+        <source>%1  ·  %2 stations</source>
+        <translation>%1  ·  %2 ステーション</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Add radio station</source>
+        <translation>ラジオステーションを追加</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Edit radio station</source>
+        <translation>ラジオステーションを編集</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="22"/>
+        <source>stream url, or a .pls / .m3u link</source>
+        <translation>ストリーム URL、または .pls / .m3u リンク</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="27"/>
+        <source>mp3, aac, ...</source>
+        <translation>mp3, aac, …</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="30"/>
+        <source>kbps</source>
+        <translation>kbps</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="31"/>
+        <source>unspecified</source>
+        <translation>指定なし</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="34"/>
+        <source>From file...</source>
+        <translation>ファイルから…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="42"/>
+        <source>Name</source>
+        <translation>名前</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="43"/>
+        <source>Stream</source>
+        <translation>ストリーム</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="44"/>
+        <source>Group</source>
+        <translation>グループ</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="45"/>
+        <source>Homepage</source>
+        <translation>ホームページ</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="46"/>
+        <source>Codec</source>
+        <translation>コーデック</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="47"/>
+        <source>Bitrate</source>
+        <translation>ビットレート</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Open playlist</source>
+        <translation>プレイリストを開く</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Playlists (*.pls *.m3u *.m3u8);;All files (*)</source>
+        <translation>プレイリスト (*.pls *.m3u *.m3u8);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="80"/>
+        <source>A name is required.</source>
+        <translation>名前が必要です。</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="89"/>
+        <source>Could not use this stream: %1</source>
+        <translation>このストリームを使用できませんでした: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationsDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="17"/>
+        <source>Radio stations</source>
+        <translation>ラジオステーション</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Name</source>
+        <translation>名前</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Group</source>
+        <translation>グループ</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="20"/>
+        <source>Stream URL</source>
+        <translation>ストリーム URL</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="28"/>
+        <source>Add...</source>
+        <translation>追加…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="29"/>
+        <source>Edit...</source>
+        <translation>編集…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="30"/>
+        <source>Remove</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="31"/>
+        <source>Restore defaults</source>
+        <translation>デフォルトに戻す</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="125"/>
+        <source>Add missing built-in stations to the list?</source>
+        <translation>不足している組み込みステーションをリストに追加しますか？</translation>
     </message>
 </context>
 <context>
@@ -639,56 +801,56 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="285"/>
-        <location filename="../../mainwindow.cpp" line="320"/>
+        <location filename="../../mainwindow.cpp" line="287"/>
+        <location filename="../../mainwindow.cpp" line="322"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="286"/>
-        <location filename="../../mainwindow.cpp" line="319"/>
+        <location filename="../../mainwindow.cpp" line="288"/>
+        <location filename="../../mainwindow.cpp" line="321"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="287"/>
-        <location filename="../../mainwindow.cpp" line="321"/>
+        <location filename="../../mainwindow.cpp" line="289"/>
+        <location filename="../../mainwindow.cpp" line="323"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="318"/>
+        <location filename="../../mainwindow.cpp" line="320"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="420"/>
+        <location filename="../../mainwindow.cpp" line="422"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="438"/>
+        <location filename="../../mainwindow.cpp" line="440"/>
         <source>Album cover</source>
         <translation>アルバムアート</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="444"/>
+        <location filename="../../mainwindow.cpp" line="446"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="579"/>
-        <location filename="../../mainwindow.cpp" line="583"/>
+        <location filename="../../mainwindow.cpp" line="581"/>
+        <location filename="../../mainwindow.cpp" line="585"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="585"/>
+        <location filename="../../mainwindow.cpp" line="587"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="597"/>
+        <location filename="../../mainwindow.cpp" line="599"/>
         <source>Update available:</source>
         <translation>アップデートがあります:</translation>
     </message>
@@ -696,12 +858,12 @@
 <context>
     <name>ModusOperandi</name>
     <message>
-        <location filename="../../modusoperandi.cpp" line="27"/>
+        <location filename="../../modusoperandi.cpp" line="22"/>
         <source>mpd error</source>
         <translation>mpd エラー</translation>
     </message>
     <message>
-        <location filename="../../modusoperandi.cpp" line="31"/>
+        <location filename="../../modusoperandi.cpp" line="26"/>
         <source>mpd connected</source>
         <translation>mpd 接続済み</translation>
     </message>
@@ -866,6 +1028,77 @@
         <location filename="../../mpd_client/connection.cpp" line="32"/>
         <source>permission denied: %1</source>
         <translation>アクセスが拒否されました : %1</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiolibrary.cpp" line="9"/>
+        <source>Radio</source>
+        <translation>ラジオ</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="58"/>
+        <source>%1 (at offset %2)</source>
+        <translation>%1 (オフセット %2)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="63"/>
+        <source>expected a JSON object at the top level</source>
+        <translation>トップレベルに JSON オブジェクトが必要です</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="67"/>
+        <source>missing a &quot;stations&quot; array</source>
+        <translation>&quot;stations&quot; 配列がありません</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="75"/>
+        <source>station %1 is not an object</source>
+        <translation>ステーション %1 はオブジェクトではありません</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="80"/>
+        <source>station %1 needs a non-empty &quot;id&quot; and &quot;name&quot;</source>
+        <translation>ステーション %1 には空でない &quot;id&quot; と &quot;name&quot; が必要です</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="83"/>
+        <source>duplicate station id &quot;%1&quot;</source>
+        <translation>ステーション ID &quot;%1&quot; が重複しています</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="86"/>
+        <source>station &quot;%1&quot; needs a &quot;url&quot; that is http or https: %2</source>
+        <translation>ステーション &quot;%1&quot; には http または https の &quot;url&quot; が必要です: %2</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="87"/>
+        <source>(empty)</source>
+        <translation>(空)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="111"/>
+        <source>empty url</source>
+        <translation>空の URL</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="116"/>
+        <source>not an http or https url: %1</source>
+        <translation>http または https の URL ではありません: %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="125"/>
+        <source>cannot read %1</source>
+        <translation>%1 を読み取れません</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="128"/>
+        <location filename="../../radio/resolver.cpp" line="161"/>
+        <source>no stream url found in %1</source>
+        <translation>%1 にストリーム URL が見つかりません</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="152"/>
+        <source>timed out fetching %1</source>
+        <translation>%1 の取得がタイムアウトしました</translation>
     </message>
 </context>
 <context>

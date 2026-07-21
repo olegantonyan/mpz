@@ -176,8 +176,8 @@ void TestGlobalConfig::radioStations_roundTrips() {
   Radio::Station b;
   b.id = "slay";
   b.name = "SLAY Radio";
-  b.url = "http://relay4.slayradio.org:8000/";
-  b.codec = "mp3";
+  b.url = "http://relay4.slayradio.org:8300/";
+  b.codec = "aac";
   b.bitrate = 128;
 
   {

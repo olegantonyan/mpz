@@ -40,8 +40,6 @@ namespace Config {
     QStringList libraryPaths() const;
     bool saveLibraryPaths(const QStringList &arg);
 
-    void seedRadioLibraryPathOnce(const QString &radio_path);
-
     int currentLibraryPath() const;
     bool saveCurrentLibraryPath(int arg);
 

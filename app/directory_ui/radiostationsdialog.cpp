@@ -122,11 +122,16 @@ namespace DirectoryUi {
 
   void RadioStationsDialog::restoreDefaults() {
     const auto answer = QMessageBox::question(
-      this, windowTitle(), tr("Replace the list with the built-in stations?"));
-    if (answer == QMessageBox::Yes) {
-      _stations = Radio::Catalog::builtin();
-      refreshTable();
+      this, windowTitle(), tr("Add missing built-in stations to the list?"));
+    if (answer != QMessageBox::Yes) {
+      return;
     }
+    for (const auto &s : Radio::Catalog::builtin()) {
+      if (!hasId(s.id, -1)) {
+        _stations << s;
+      }
+    }
+    refreshTable();
   }
 
   QVector<Radio::Station> RadioStationsDialog::stations() const {

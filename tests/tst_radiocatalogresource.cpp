@@ -12,7 +12,7 @@ class TestRadioCatalogResource : public QObject {
   Q_OBJECT
 private slots:
   void shippedListParses();
-  void somaFmStationsAreGrouped();
+  void stationsAreGroupedByProvider();
   void idsAreUnique();
   void everyUrlIsHttpAndQueryFree();
   void everyStationHasHomepage();
@@ -35,13 +35,26 @@ void TestRadioCatalogResource::shippedListParses() {
   QVERIFY(stations.size() >= 20);
 }
 
-// SomaFM channels live under one "SomaFM" folder; everything else is top-level.
-void TestRadioCatalogResource::somaFmStationsAreGrouped() {
+// Multi-station providers live under one folder; single stations stay top-level.
+// A station's group is a pure function of its id prefix.
+void TestRadioCatalogResource::stationsAreGroupedByProvider() {
   const auto stations = shipped();
-  QCOMPARE(Radio::Catalog::groups(stations), QStringList({"SomaFM"}));
+  QCOMPARE(Radio::Catalog::groups(stations),
+           QStringList({"SomaFM", "Radio Paradise", "FIP", "France Musique", "Nightride FM"}));
   for (const auto &s : stations) {
-    const bool is_somafm = s.id.startsWith("somafm-");
-    QCOMPARE(s.group == "SomaFM", is_somafm);
+    QString expected;
+    if (s.id.startsWith("somafm-")) {
+      expected = "SomaFM";
+    } else if (s.id.startsWith("radioparadise-")) {
+      expected = "Radio Paradise";
+    } else if (s.id.startsWith("fip")) {
+      expected = "FIP";
+    } else if (s.id.startsWith("francemusique-")) {
+      expected = "France Musique";
+    } else if (s.id.startsWith("nightride-")) {
+      expected = "Nightride FM";
+    }
+    QCOMPARE(s.group, expected);
   }
 }
 

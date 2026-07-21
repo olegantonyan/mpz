@@ -172,20 +172,6 @@ namespace Config {
     return storage.set("library_paths", Config::Value(list));
   }
 
-  void Local::seedRadioLibraryPathOnce(const QString &radio_path) {
-    if (storage.get("radio_seeded").get<bool>()) {
-      return;
-    }
-    storage.set("radio_seeded", Config::Value(true));
-
-    auto paths = libraryPaths();
-    if (paths.contains(radio_path)) {
-      return;
-    }
-    paths.append(radio_path);
-    saveLibraryPaths(paths);
-  }
-
   int Local::currentLibraryPath() const {
     return storage.get("current_library").get<int>();
   }
