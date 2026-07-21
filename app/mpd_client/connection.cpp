@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QEventLoop>
 
+#include <vector>
+
 #define MPD_TIMEOUT 8000
 
 class TimerStarter {
@@ -539,12 +541,12 @@ namespace MpdClient {
       return result;
     }
 
-    static const size_t BUF_SIZE = 1024 * 1024 * 128;
-    static char buffer[BUF_SIZE];
+    const size_t BUF_SIZE = 1024 * 1024;
+    std::vector<char> buffer(BUF_SIZE);
     int offset = 0;
 
     while (true) {
-      int n = mpd_run_albumart(conn, filepath.toUtf8().constData(), offset, buffer, BUF_SIZE);
+      int n = mpd_run_albumart(conn, filepath.toUtf8().constData(), offset, buffer.data(), BUF_SIZE);
       if (n < 0) {
         mpd_connection_clear_error(conn);
         result.clear();
@@ -554,7 +556,7 @@ namespace MpdClient {
         break;
       }
 
-      result.append(buffer, n);
+      result.append(buffer.data(), n);
       offset += n;
       if (result.size() > MAX_COVER_BYTES) {
         qWarning() << "albumArt exceeded" << MAX_COVER_BYTES << "bytes, aborting";
@@ -572,12 +574,12 @@ namespace MpdClient {
       return result;
     }
 
-    static const size_t BUF_SIZE = 1024 * 1024 * 256;
-    static char buffer[BUF_SIZE];
+    const size_t BUF_SIZE = 1024 * 1024;
+    std::vector<char> buffer(BUF_SIZE);
     int offset = 0;
 
     while (true) {
-      int n = mpd_run_readpicture(conn, filepath.toUtf8().constData(), offset, buffer, BUF_SIZE);
+      int n = mpd_run_readpicture(conn, filepath.toUtf8().constData(), offset, buffer.data(), BUF_SIZE);
       if (n < 0) {
         mpd_connection_clear_error(conn);
         result.clear();
@@ -587,7 +589,7 @@ namespace MpdClient {
         break;
       }
 
-      result.append(buffer, n);
+      result.append(buffer.data(), n);
       offset += n;
       if (result.size() > MAX_COVER_BYTES) {
         qWarning() << "readPicture exceeded" << MAX_COVER_BYTES << "bytes, aborting";
@@ -770,6 +772,16 @@ namespace MpdClient {
 
   void Connection::on_idle_readable() {
     enum mpd_idle event = mpd_recv_idle(idle_conn, false);
+    if (event == 0 || mpd_connection_get_error(idle_conn) != MPD_ERROR_SUCCESS) {
+      qWarning() << "idle connection lost:" << formatMpdError(idle_conn);
+      idle_notifier->setEnabled(false);
+      idle_notifier->deleteLater();
+      idle_notifier = nullptr;
+      mpd_connection_free(idle_conn);
+      idle_conn = nullptr;
+      establish_idle(current_connection_url);
+      return;
+    }
     emit idleEvent(event);
     mpd_send_idle(idle_conn);
   }
@@ -778,7 +790,7 @@ namespace MpdClient {
     if (currentUrl().isEmpty()) {
       return;
     }
-    if (!ping()) {
+    if (!ping() || !idle_conn) {
       qWarning() << "mpd connection lost with" << currentUrl();
       emit error(currentUrl(), "mpd connection lost");
       emit disconnected(currentUrl());

@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QObject>
+#include <QVector>
 #include <QString>
 #include <QStringList>
 #if (QT_VERSION <= QT_VERSION_CHECK(5, 14, 0))
@@ -48,7 +49,7 @@ namespace DirectoryUi {
       void onMpdLost();
 
     private:
-      void loadDirectory(TreeItem* parent, const QString& path);
+      QVector<TreeItem*> fetchChildren(TreeItem* parent, const QString& path);
       QModelIndex createIndexForItem(TreeItem* item) const;
       TreeItem *treeItemFromIndex(const QModelIndex &index) const;
       TreeItem *createRootItem();

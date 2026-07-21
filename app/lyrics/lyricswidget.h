@@ -2,6 +2,7 @@
 #define LYRICS_WIDGET_H
 
 #include "track.h"
+#include "config/global.h"
 
 #include <QWidget>
 
@@ -14,7 +15,7 @@ namespace Lyrics {
   class Widget : public QWidget {
     Q_OBJECT
   public:
-    explicit Widget(QWidget *parent = nullptr);
+    explicit Widget(Config::Global &global, QWidget *parent = nullptr);
 
   public slots:
     void setTrack(const Track &track);
@@ -27,6 +28,7 @@ namespace Lyrics {
     void showContextMenu(const QPoint &pos);
 
   private:
+    Config::Global &global_conf;
     QLabel *source_label;
     QPlainTextEdit *text;
     ProviderChain *chain = nullptr;

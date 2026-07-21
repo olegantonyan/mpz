@@ -12,6 +12,7 @@
 #include <QVariant>
 #include <QByteArray>
 #include <QVersionNumber>
+#include <QMutex>
 
 namespace Config {
   class Storage {
@@ -43,6 +44,7 @@ namespace Config {
   private:
     QString filepath;
     QMap<QString, Config::Value> data;
+    mutable QMutex mutex;
 
     Config::Value castScalar(const QString& str) const;
 

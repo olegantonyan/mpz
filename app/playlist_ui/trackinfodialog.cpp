@@ -180,8 +180,8 @@ namespace {
   }
 }
 
-TrackInfoDialog::TrackInfoDialog(const Track &track, std::shared_ptr<Playlist::Playlist> playlist, QWidget *parent) :
-  QDialog(parent), ui(new Ui::TrackInfoDialog), _track(track), _playlist(playlist) {
+TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std::shared_ptr<Playlist::Playlist> playlist, QWidget *parent) :
+  QDialog(parent), ui(new Ui::TrackInfoDialog), _track(track), global_conf(global), _playlist(playlist) {
   ui->setupUi(this);
 
   base_title = windowTitle();
@@ -635,8 +635,7 @@ void TrackInfoDialog::setup_lyrics() {
     return;
   }
 
-  Config::Global global;
-  const auto online = Lyrics::ProviderChain::filterKnown(global.lyricsProviders());
+  const auto online = Lyrics::ProviderChain::filterKnown(global_conf.lyricsProviders());
   if (!online.isEmpty() && !_track.artist().isEmpty() && !_track.title().isEmpty()) {
     render_lyrics_state(tr("Searching lyrics..."));
     auto *chain = new Lyrics::ProviderChain(this);

@@ -18,7 +18,9 @@ namespace CoverArt {
   }
 
   Covers &Covers::instance() {
-    Q_ASSERT(self);
+    if (!self) {
+      qFatal("Covers::instance() used before initialization");
+    }
     return *self;
   }
 

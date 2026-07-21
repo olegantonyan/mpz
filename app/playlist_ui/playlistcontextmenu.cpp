@@ -10,7 +10,7 @@
 #include <QApplication>
 
 namespace PlaylistUi {
-  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), proxy(p), view(v), search(s) {
+  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, Config::Global &global, QObject *parent) : QObject(parent), proxy(p), view(v), search(s), global_conf(global) {
     Q_ASSERT(proxy);
     Q_ASSERT(view);
     Q_ASSERT(search);
@@ -119,7 +119,7 @@ namespace PlaylistUi {
     if (selection.isValid()) {
       auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
       auto pl = proxy->activeModel()->playlist();
-      TrackInfoDialog *dlg = new TrackInfoDialog(track, pl);
+      TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl);
       dlg->setModal(false);
       connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
       connect(dlg, &TrackInfoDialog::tagEditorOpened, this, [this, pl](TagEditorDialog *editor) {

@@ -92,6 +92,9 @@ namespace Playlist {
 
   void Playlist::removeTrack(int position) {
     QMutexLocker lock(&mutex);
+    if (position < 0 || position >= tracks_list.size()) {
+      return;
+    }
     tracks_list.remove(position);
   }
 
