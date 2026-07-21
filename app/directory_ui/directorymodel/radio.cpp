@@ -107,7 +107,11 @@ namespace DirectoryUi {
     }
 
     Track Radio::trackFor(const RadioItem *item) const {
-      return Track(QUrl(item->stream_url), radioLibraryPath() + item->station_id, item->name);
+      QString title = item->name;
+      if (item->parent && item->parent != root_item) {
+        title = item->parent->name + QStringLiteral(" ∕ ") + item->name;
+      }
+      return Track(QUrl(item->stream_url), radioLibraryPath() + item->station_id, title);
     }
 
     QVector<Track> Radio::tracksAt(const QModelIndexList &indexes) const {

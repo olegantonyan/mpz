@@ -205,7 +205,7 @@ void MainWindow::showWindow() {
 int MainWindow::streamBuffer() {
   int stream_buffer = global_conf.streamBufferSize();
   if (stream_buffer == 0) {
-    stream_buffer = 131072;
+    stream_buffer = 262144;
     global_conf.saveStreamBufferSize(stream_buffer);
   }
   return stream_buffer;
