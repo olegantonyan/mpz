@@ -3,7 +3,7 @@
 #include <QDebug>
 
 namespace Config {
-  Global::Global() : storage("global.yml") {
+  Global::Global() : SingleInstanceGuard("Config::Global"), storage("global.yml") {
   }
 
   bool Global::sync() {

@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QtConcurrent>
 
-ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QObject *parent) : QObject{parent}, local_config(local_cfg) {
+ModusOperandi::ModusOperandi(Config::Local &local_cfg, SlidingBanner *banner, QObject *parent) : QObject{parent}, SingleInstanceGuard("ModusOperandi"), local_config(local_cfg) {
   active = MODUS_LOCALFS;
   const int idx = local_config.currentLibraryPath();
   if (idx >= 0 && idx < local_config.libraryPaths().size()

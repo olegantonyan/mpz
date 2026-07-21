@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include "storage.h"
+#include "singleinstanceguard.h"
 #include "sort_ui/sortingpresetsdialog.h"
 #include "playlist_ui/columnsconfig.h"
 #include "radio/station.h"
@@ -11,7 +12,7 @@
 #include <QVector>
 
 namespace Config {
-  class Global {
+  class Global : public SingleInstanceGuard<Global> {
   public:
     explicit Global();
 

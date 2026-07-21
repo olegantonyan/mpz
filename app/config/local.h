@@ -2,12 +2,13 @@
 #define LOCAL_H
 
 #include "storage.h"
+#include "singleinstanceguard.h"
 #include "playlist/playlist.h"
 
 #include <QByteArray>
 
 namespace Config {
-  class Local {
+  class Local : public SingleInstanceGuard<Local> {
   public:
     explicit Local();
 

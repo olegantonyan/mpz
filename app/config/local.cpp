@@ -4,7 +4,7 @@
 #include <QApplication>
 
 namespace Config {
-  Local::Local() : storage("local.yml") {
+  Local::Local() : SingleInstanceGuard("Config::Local"), storage("local.yml") {
     if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 1, 0)) {
       durationSeconds = true;
     } else {
