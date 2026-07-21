@@ -69,7 +69,7 @@ namespace PlaylistUi {
       }
     });
 
-    context_menu = new PlaylistContextMenu(proxy, view, search, this);
+    context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
     connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 

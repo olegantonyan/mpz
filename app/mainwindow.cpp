@@ -442,7 +442,7 @@ void MainWindow::setupDockWidgets() {
   cover_dock->setWidget(cover_widget);
   addDockWidget(Qt::RightDockWidgetArea, cover_dock);
 
-  lyrics_widget = new Lyrics::Widget(this);
+  lyrics_widget = new Lyrics::Widget(global_conf, this);
   lyrics_dock = new QDockWidget(tr("Lyrics"), this);
   lyrics_dock->setObjectName("lyricsDock");
   lyrics_dock->setWidget(lyrics_widget);
@@ -461,6 +461,7 @@ void MainWindow::setupDockWidgets() {
   // The only trigger for online cover lookups: driving it from playback rather
   // than from Track::artCover() is what keeps "current track only" true no
   // matter who reads a cover.
+  CoverArt::Online::Downloader::instance().init(global_conf);
   connect(player, &Playback::Controller::started, &CoverArt::Online::Downloader::instance(),
           &CoverArt::Online::Downloader::request);
   connect(player, &Playback::Controller::trackChanged, &CoverArt::Online::Downloader::instance(),
@@ -476,7 +477,7 @@ void MainWindow::setupDockWidgets() {
 
 void MainWindow::openTrackInfo(const Track &track) {
   auto pl = playlists->playlistByTrackUid(track.uid());
-  TrackInfoDialog *dlg = new TrackInfoDialog(track, pl, this);
+  TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl, this);
   dlg->setModal(false);
   connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
   dlg->show();
