@@ -3,7 +3,7 @@
 ### Added
 
 - Gapless playback: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced. Only Qt6
-- HTTPS streams supoprt
+- HTTPS radio streams supoprt
 - Dedicated "Radio" library with built-in stations. Raw playlists with streams can still be played directly, or imported into radio library
 
 ### Fixed
