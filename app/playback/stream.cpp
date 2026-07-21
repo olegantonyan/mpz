@@ -16,7 +16,7 @@ namespace Playback {
     _next_meta_pos(0),
     _meta_bytes_remaining(0),
     _threshold_bytes(threshold_bytes),
-    _max_bytes(threshold_bytes * threshold_multiplier),
+    _max_bytes(static_cast<quint32>(qMin<quint64>(static_cast<quint64>(threshold_bytes) * threshold_multiplier, 0xFFFFFFFFull))),
     _chunked(false),
     _chunk_state(ChunkState::Size),
     _chunk_remaining(0) {

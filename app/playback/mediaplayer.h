@@ -57,13 +57,15 @@ namespace Playback {
 #endif
 
   private:
-    QMediaPlayer player;
     Stream stream;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QAudioOutput audio_output;
+#endif
+    QMediaPlayer player;
     QByteArray output_device_id;
     bool next_after_stop;
     bool next_after_stop_cue;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QAudioOutput audio_output;
     QMediaDevices media_devices;
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale device-switch timer callbacks during event bursts
