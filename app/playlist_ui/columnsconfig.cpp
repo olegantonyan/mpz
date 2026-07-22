@@ -108,7 +108,7 @@ namespace PlaylistUi {
     } else if (fld == "path") {
       return track.path();
     } else if (fld == "url") {
-      return track.url().toString();
+      return track.url().toDisplayString();
     } else if (fld == "bitrate") {
       return QString::number(track.bitrate());
     } else if (fld == "channels") {

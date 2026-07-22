@@ -201,12 +201,7 @@ QString Track::album() const {
 }
 
 QString Track::displayUrl() const {
-  QUrl displayable_url;
-  displayable_url.setScheme(_stream_url.scheme());
-  displayable_url.setHost(_stream_url.host());
-  displayable_url.setPort(_stream_url.port());
-  displayable_url.setPath(_stream_url.path());
-  return displayable_url.toString();
+  return _stream_url.toDisplayString(QUrl::RemoveUserInfo | QUrl::RemoveQuery | QUrl::RemoveFragment);
 }
 
 QString Track::title() const {
@@ -259,7 +254,7 @@ QString Track::shortText() const {
   } else if (!filename().isEmpty()) {
     return filename();
   }
-  return url().toString();
+  return url().toDisplayString();
 }
 
 bool Track::isMpd() const {
