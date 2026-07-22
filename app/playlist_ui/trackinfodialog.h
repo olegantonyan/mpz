@@ -3,6 +3,8 @@
 
 #include "track.h"
 #include "playlist/playlist.h"
+#include "config/global.h"
+#include "playlist_ui/tageditordialog.h"
 
 #include <QDialog>
 #include <QPixmap>
@@ -14,13 +16,12 @@ namespace Ui {
   class TrackInfoDialog;
 }
 
-class TagEditorDialog;
-
 class TrackInfoDialog : public QDialog {
   Q_OBJECT
 
 public:
   explicit TrackInfoDialog(const Track &track,
+                           Config::Global &global,
                            std::shared_ptr<Playlist::Playlist> playlist = nullptr,
                            QWidget *parent = nullptr);
   ~TrackInfoDialog();
@@ -46,6 +47,7 @@ private:
   QStandardItemModel model_other;
   QPixmap cover_art;
   Track _track;
+  Config::Global &global_conf;
   std::shared_ptr<Playlist::Playlist> _playlist;
   QString base_title;
   QString track_path;

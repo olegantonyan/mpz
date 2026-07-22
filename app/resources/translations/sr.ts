@@ -147,6 +147,11 @@
         <source>Move down</source>
         <translation>Помери доле</translation>
     </message>
+    <message>
+        <location filename="../../directory_ui/directorysettings.ui" line="82"/>
+        <source>Radio stations…</source>
+        <translation>Радио станице…</translation>
+    </message>
 </context>
 <context>
     <name>DirectoryUi::AddMpdDialog</name>
@@ -179,24 +184,184 @@
 <context>
     <name>DirectoryUi::DirectoryContextMenu</name>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="27"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="84"/>
         <source>Clear filter</source>
         <translation>Обриши филтер</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="29"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="86"/>
         <source>Create new playlist</source>
         <translation>Креирајте нову листу песама</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="36"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="31"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="89"/>
         <source>Append to current playlist</source>
         <translation>Додај у тренутну плејлисту</translation>
     </message>
     <message>
-        <location filename="../../directory_ui/directorycontextmenu.cpp" line="38"/>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="33"/>
+        <source>Open station homepage</source>
+        <translation>Отвори веб страницу станице</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
+        <source>Edit stations...</source>
+        <translation>Уреди станице…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorycontextmenu.cpp" line="91"/>
         <source>Open in file manager</source>
         <translation>Отворите у менаџеру датотека</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::DirectoryModel::Radio</name>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="194"/>
+        <source>%1  ·  1 station</source>
+        <translation>%1  ·  1 станица</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/directorymodel/radio.cpp" line="195"/>
+        <source>%1  ·  %2 stations</source>
+        <translation>%1  ·  %2 станица</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Add radio station</source>
+        <translation>Додај радио станицу</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="18"/>
+        <source>Edit radio station</source>
+        <translation>Измени радио станицу</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="22"/>
+        <source>stream url, or a .pls / .m3u link</source>
+        <translation>URL стрима или .pls / .m3u веза</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="27"/>
+        <source>mp3, aac, ...</source>
+        <translation>mp3, aac, …</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="30"/>
+        <source>kbps</source>
+        <translation>kb/s</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="31"/>
+        <source>unspecified</source>
+        <translation>неодређено</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="34"/>
+        <source>From file...</source>
+        <translation>Из фајла…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="42"/>
+        <source>Name</source>
+        <translation>Назив</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="43"/>
+        <source>Stream</source>
+        <translation>Стрим</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="44"/>
+        <source>Group</source>
+        <translation>Група</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="45"/>
+        <source>Homepage</source>
+        <translation>Веб страница</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="46"/>
+        <source>Codec</source>
+        <translation>Кодек</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="47"/>
+        <source>Bitrate</source>
+        <translation>Битрејт</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Open playlist</source>
+        <translation>Отвори плејлисту</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="61"/>
+        <source>Playlists (*.pls *.m3u *.m3u8);;All files (*)</source>
+        <translation>Плејлисте (*.pls *.m3u *.m3u8);;Сви фајлови (*)</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="80"/>
+        <source>A name is required.</source>
+        <translation>Назив је обавезан.</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationdialog.cpp" line="89"/>
+        <source>Could not use this stream: %1</source>
+        <translation>Није могуће користити овај стрим: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DirectoryUi::RadioStationsDialog</name>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="19"/>
+        <source>Radio stations</source>
+        <translation>Радио станице</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
+        <source>Name</source>
+        <translation>Назив</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
+        <source>Group</source>
+        <translation>Група</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="22"/>
+        <source>Stream URL</source>
+        <translation>URL стрима</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="30"/>
+        <source>Add...</source>
+        <translation>Додај…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="31"/>
+        <source>Edit...</source>
+        <translation>Измени…</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiostationsdialog.cpp" line="32"/>
+        <source>Remove</source>
+        <translation>Уклони</translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="vanished">Врати подразумевано</translation>
+    </message>
+    <message>
+        <source>Add missing built-in stations to the list?</source>
+        <translation type="vanished">Додати недостајуће уграђене станице на листу?</translation>
     </message>
 </context>
 <context>
@@ -274,18 +439,18 @@
     </message>
     <message>
         <location filename="../../lyrics/lyricswidget.cpp" line="57"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="82"/>
-        <location filename="../../lyrics/lyricswidget.cpp" line="90"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="81"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="89"/>
         <source>No lyrics found.</source>
         <translation>Није пронађен текст песме.</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="75"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="74"/>
         <source>Searching lyrics...</source>
         <translation>Претрага текста песме...</translation>
     </message>
     <message>
-        <location filename="../../lyrics/lyricswidget.cpp" line="96"/>
+        <location filename="../../lyrics/lyricswidget.cpp" line="95"/>
         <source>Nothing playing</source>
         <translation>Ништа се не репродукује</translation>
     </message>
@@ -639,56 +804,56 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="279"/>
-        <location filename="../../mainwindow.cpp" line="314"/>
+        <location filename="../../mainwindow.cpp" line="287"/>
+        <location filename="../../mainwindow.cpp" line="322"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="280"/>
-        <location filename="../../mainwindow.cpp" line="313"/>
+        <location filename="../../mainwindow.cpp" line="288"/>
+        <location filename="../../mainwindow.cpp" line="321"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="281"/>
-        <location filename="../../mainwindow.cpp" line="315"/>
+        <location filename="../../mainwindow.cpp" line="289"/>
+        <location filename="../../mainwindow.cpp" line="323"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="312"/>
+        <location filename="../../mainwindow.cpp" line="320"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="414"/>
+        <location filename="../../mainwindow.cpp" line="422"/>
         <source>Lock toolbar</source>
         <translation>Закључај траку с алаткама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="432"/>
+        <location filename="../../mainwindow.cpp" line="440"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="438"/>
+        <location filename="../../mainwindow.cpp" line="446"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="571"/>
-        <location filename="../../mainwindow.cpp" line="575"/>
+        <location filename="../../mainwindow.cpp" line="582"/>
+        <location filename="../../mainwindow.cpp" line="586"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="577"/>
+        <location filename="../../mainwindow.cpp" line="588"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="589"/>
+        <location filename="../../mainwindow.cpp" line="600"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
@@ -696,12 +861,12 @@
 <context>
     <name>ModusOperandi</name>
     <message>
-        <location filename="../../modusoperandi.cpp" line="27"/>
+        <location filename="../../modusoperandi.cpp" line="22"/>
         <source>mpd error</source>
         <translation>грешка mpd-а</translation>
     </message>
     <message>
-        <location filename="../../modusoperandi.cpp" line="31"/>
+        <location filename="../../modusoperandi.cpp" line="26"/>
         <source>mpd connected</source>
         <translation>mpd повезан</translation>
     </message>
@@ -843,29 +1008,100 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="26"/>
+        <location filename="../../mpd_client/connection.cpp" line="28"/>
         <source>timeout: %1</source>
         <translation>истек времена: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="27"/>
+        <location filename="../../mpd_client/connection.cpp" line="29"/>
         <source>host not found: %1</source>
         <translation>хост није пронађен: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="28"/>
+        <location filename="../../mpd_client/connection.cpp" line="30"/>
         <source>connection closed by server: %1</source>
         <translation>сервер је затворио везу: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="31"/>
+        <location filename="../../mpd_client/connection.cpp" line="33"/>
         <source>authentication failed: %1</source>
         <translation>аутентификација није успела: %1</translation>
     </message>
     <message>
-        <location filename="../../mpd_client/connection.cpp" line="32"/>
+        <location filename="../../mpd_client/connection.cpp" line="34"/>
         <source>permission denied: %1</source>
         <translation>приступ одбијен: %1</translation>
+    </message>
+    <message>
+        <location filename="../../directory_ui/radiolibrary.cpp" line="9"/>
+        <source>Radio</source>
+        <translation>Радио</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="58"/>
+        <source>%1 (at offset %2)</source>
+        <translation>%1 (на позицији %2)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="63"/>
+        <source>expected a JSON object at the top level</source>
+        <translation>очекиван је JSON објекат на највишем нивоу</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="67"/>
+        <source>missing a &quot;stations&quot; array</source>
+        <translation>недостаје низ &quot;stations&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="75"/>
+        <source>station %1 is not an object</source>
+        <translation>станица %1 није објекат</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="80"/>
+        <source>station %1 needs a non-empty &quot;id&quot; and &quot;name&quot;</source>
+        <translation>станица %1 мора имати непразне &quot;id&quot; и &quot;name&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="83"/>
+        <source>duplicate station id &quot;%1&quot;</source>
+        <translation>дупликат ИД-а станице &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="86"/>
+        <source>station &quot;%1&quot; needs a &quot;url&quot; that is http or https: %2</source>
+        <translation>станица &quot;%1&quot; мора имати &quot;url&quot; који је http или https: %2</translation>
+    </message>
+    <message>
+        <location filename="../../radio/catalog.cpp" line="87"/>
+        <source>(empty)</source>
+        <translation>(празно)</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="111"/>
+        <source>empty url</source>
+        <translation>празан URL</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="116"/>
+        <source>not an http or https url: %1</source>
+        <translation>није http или https URL: %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="125"/>
+        <source>cannot read %1</source>
+        <translation>није могуће прочитати %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="128"/>
+        <location filename="../../radio/resolver.cpp" line="161"/>
+        <source>no stream url found in %1</source>
+        <translation>није пронађен URL стрима у %1</translation>
+    </message>
+    <message>
+        <location filename="../../radio/resolver.cpp" line="152"/>
+        <source>timed out fetching %1</source>
+        <translation>истекло време при преузимању %1</translation>
     </message>
 </context>
 <context>
@@ -985,6 +1221,8 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="452"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
         <source>(requires restart)</source>
         <translation>(захтева поновно покретање)</translation>
     </message>
@@ -1035,13 +1273,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="248"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="530"/>
         <source>Add</source>
         <translation>Додај</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="249"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="493"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
         <source>Remove</source>
         <translation>Уклони</translation>
     </message>
@@ -1062,13 +1300,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="615"/>
         <source>Left</source>
         <translation>Лево</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="286"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="578"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="616"/>
         <source>Right</source>
         <translation>Десно</translation>
     </message>
@@ -1147,47 +1385,67 @@
         <translation>ставки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="485"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
+        <source>Enable gapless playback</source>
+        <translation>Омогући репродукцију без прекида</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="497"/>
+        <source>Gapless memory buffer:</source>
+        <translation>Меморијски бафер за репродукцију без прекида:</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="500"/>
+        <source>MB</source>
+        <translation>МБ</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
+        <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
+        <translation>Декодирани звук се чува у меморији како би прелази између нумера били без прекида, а премотавање унутар нумере тренутно. Већи бафер кешира више (или дуже) нумере; 100 МБ је довољно за већину библиотека.</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
         <source>MPRIS blacklist</source>
         <translation>Црна листа MPRIS-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="488"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнориши имена MPRIS пошиљалаца (нпр. „wireplumber“):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="502"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="540"/>
         <source>Add MPRIS sender</source>
         <translation>Додај MPRIS пошиљаоца</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="503"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
         <source>Sender name:</source>
         <translation>Име пошиљаоца:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="514"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="552"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Заустави MPD репродукцију при затварању mpz-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Crash reports:</source>
         <translation>Извештаји о падовима:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="561"/>
         <source>Send automatically</source>
         <translation>Шаљи аутоматски</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="524"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
         <source>Ask after next crash</source>
         <translation>Питај после следећег пада</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
         <source>Never send</source>
         <translation>Никад не шаљи</translation>
     </message>
@@ -1750,23 +2008,23 @@
         <translation>Нема омота албума</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="641"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="640"/>
         <source>Searching lyrics...</source>
         <translation>Претрага текста песме...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="648"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="656"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="647"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="655"/>
         <source>No lyrics found.</source>
         <translation>Није пронађен текст песме.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="709"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="708"/>
         <source>Copy to clipboard</source>
         <translation>Копирај у међуспремник</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="717"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="716"/>
         <source>Open in external viewer</source>
         <translation>Отвори у спољном прегледнику</translation>
     </message>

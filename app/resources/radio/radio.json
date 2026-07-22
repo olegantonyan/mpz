@@ -1,0 +1,532 @@
+{
+  "version": 1,
+  "stations": [
+    {
+      "id": "somafm-groovesalad",
+      "name": "Groove Salad",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/groovesalad-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/groovesalad/"
+    },
+    {
+      "id": "somafm-dronezone",
+      "name": "Drone Zone",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/dronezone-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/dronezone/"
+    },
+    {
+      "id": "somafm-deepspaceone",
+      "name": "Deep Space One",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/deepspaceone-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/deepspaceone/"
+    },
+    {
+      "id": "somafm-spacestation",
+      "name": "Space Station Soma",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/spacestation-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/spacestation/"
+    },
+    {
+      "id": "somafm-lush",
+      "name": "Lush",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/lush-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/lush/"
+    },
+    {
+      "id": "somafm-secretagent",
+      "name": "Secret Agent",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/secretagent-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/secretagent/"
+    },
+    {
+      "id": "somafm-beatblender",
+      "name": "Beat Blender",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/beatblender-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/beatblender/"
+    },
+    {
+      "id": "somafm-fluid",
+      "name": "Fluid",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/fluid-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/fluid/"
+    },
+    {
+      "id": "somafm-defcon",
+      "name": "DEF CON Radio",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/defcon-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/defcon/"
+    },
+    {
+      "id": "somafm-u80s",
+      "name": "Underground 80s",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/u80s-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/u80s/"
+    },
+    {
+      "id": "somafm-indiepop",
+      "name": "Indie Pop Rocks!",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/indiepop-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/indiepop/"
+    },
+    {
+      "id": "somafm-seventies",
+      "name": "Left Coast 70s",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/seventies-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/seventies/"
+    },
+    {
+      "id": "somafm-bootliquor",
+      "name": "Boot Liquor",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/bootliquor-320-mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://somafm.com/bootliquor/"
+    },
+    {
+      "id": "somafm-metal",
+      "name": "Metal Detector",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/metal-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/metal/"
+    },
+    {
+      "id": "somafm-sf1033",
+      "name": "SF 10-33",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/sf1033-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/sf1033/"
+    },
+    {
+      "id": "somafm-gsclassic",
+      "name": "Groove Salad Classic",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/gsclassic-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/gsclassic/"
+    },
+    {
+      "id": "somafm-synphaera",
+      "name": "Synphaera Radio",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/synphaera-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/synphaera/"
+    },
+    {
+      "id": "somafm-darkzone",
+      "name": "The Dark Zone",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/darkzone-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/darkzone/"
+    },
+    {
+      "id": "somafm-bossa",
+      "name": "Bossa Beyond",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/bossa-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/bossa/"
+    },
+    {
+      "id": "somafm-folkfwd",
+      "name": "Folk Forward",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/folkfwd-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/folkfwd/"
+    },
+    {
+      "id": "somafm-poptron",
+      "name": "PopTron",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/poptron-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/poptron/"
+    },
+    {
+      "id": "somafm-thetrip",
+      "name": "The Trip",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/thetrip-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/thetrip/"
+    },
+    {
+      "id": "somafm-reggae",
+      "name": "Heavyweight Reggae",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/reggae-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/reggae/"
+    },
+    {
+      "id": "somafm-sonicuniverse",
+      "name": "Sonic Universe",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/sonicuniverse-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/sonicuniverse/"
+    },
+    {
+      "id": "somafm-suburbsofgoa",
+      "name": "Suburbs of Goa",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/suburbsofgoa-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/suburbsofgoa/"
+    },
+    {
+      "id": "somafm-illstreet",
+      "name": "Illinois Street Lounge",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/illstreet-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/illstreet/"
+    },
+    {
+      "id": "somafm-7soul",
+      "name": "Seven Inch Soul",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/7soul-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/7soul/"
+    },
+    {
+      "id": "somafm-thistle",
+      "name": "ThistleRadio",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/thistle-128-mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://somafm.com/thistle/"
+    },
+    {
+      "id": "somafm-cliqhop",
+      "name": "cliqhop idm",
+      "group": "SomaFM",
+      "url": "https://ice.somafm.com/cliqhop-256-mp3",
+      "codec": "mp3",
+      "bitrate": 256,
+      "homepage": "https://somafm.com/cliqhop/"
+    },
+    {
+      "id": "radioparadise-main",
+      "name": "Main",
+      "group": "Radio Paradise",
+      "url": "https://stream.radioparadise.com/aac-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/"
+    },
+    {
+      "id": "radioparadise-mellow",
+      "name": "Mellow",
+      "group": "Radio Paradise",
+      "url": "https://stream.radioparadise.com/mellow-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/"
+    },
+    {
+      "id": "radioparadise-rock",
+      "name": "Rock",
+      "group": "Radio Paradise",
+      "url": "https://stream.radioparadise.com/rock-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/"
+    },
+    {
+      "id": "radioparadise-world",
+      "name": "World",
+      "group": "Radio Paradise",
+      "url": "https://stream.radioparadise.com/global-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/"
+    },
+    {
+      "id": "radioparadise-beyond",
+      "name": "Beyond",
+      "group": "Radio Paradise",
+      "url": "https://stream.radioparadise.com/beyond-320",
+      "codec": "aac",
+      "bitrate": 320,
+      "homepage": "https://radioparadise.com/"
+    },
+    {
+      "id": "fip",
+      "name": "FIP",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fip-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-jazz",
+      "name": "Jazz",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipjazz-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/jazz/"
+    },
+    {
+      "id": "fip-rock",
+      "name": "Rock",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fiprock-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-groove",
+      "name": "Groove",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipgroove-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-electro",
+      "name": "Electro",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipelectro-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-reggae",
+      "name": "Reggae",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipreggae-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-monde",
+      "name": "Monde",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipworld-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-nouveautes",
+      "name": "Nouveautés",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipnouveautes-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-pop",
+      "name": "Pop",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fippop-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-metal",
+      "name": "Metal",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fipmetal-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "fip-hiphop",
+      "name": "Hip-Hop",
+      "group": "FIP",
+      "url": "https://icecast.radiofrance.fr/fiphiphop-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.fip.fr/"
+    },
+    {
+      "id": "francemusique-classique-easy",
+      "name": "Classique Easy",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiqueeasyclassique-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-classique-plus",
+      "name": "Classique Plus",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiqueclassiqueplus-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-concerts",
+      "name": "Concerts",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiqueconcertsradiofrance-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-ocora",
+      "name": "Ocora Musiques du Monde",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiqueocoramonde-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-jazz",
+      "name": "La Jazz",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiquelajazz-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-contemporaine",
+      "name": "La Contemporaine",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiquelacontemporaine-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "francemusique-baroque",
+      "name": "La Baroque",
+      "group": "France Musique",
+      "url": "https://icecast.radiofrance.fr/francemusiquebaroque-hifi.aac",
+      "codec": "aac",
+      "bitrate": 192,
+      "homepage": "https://www.francemusique.fr/"
+    },
+    {
+      "id": "nightride-nightride",
+      "name": "Nightride",
+      "group": "Nightride FM",
+      "url": "https://stream.nightride.fm/nightride.mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://nightride.fm/"
+    },
+    {
+      "id": "nightride-chillsynth",
+      "name": "Chillsynth",
+      "group": "Nightride FM",
+      "url": "https://stream.nightride.fm/chillsynth.mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://nightride.fm/"
+    },
+    {
+      "id": "nightride-darksynth",
+      "name": "Darksynth",
+      "group": "Nightride FM",
+      "url": "https://stream.nightride.fm/darksynth.mp3",
+      "codec": "mp3",
+      "bitrate": 320,
+      "homepage": "https://nightride.fm/"
+    },
+    {
+      "id": "slayradio",
+      "name": "SLAY Radio",
+      "url": "http://relay4.slayradio.org:8300/",
+      "codec": "aac",
+      "bitrate": 128,
+      "homepage": "https://www.slayradio.org/"
+    },
+    {
+      "id": "kexp",
+      "name": "KEXP 90.3 FM",
+      "url": "https://kexp.streamguys1.com/kexp160.aac",
+      "codec": "aac",
+      "bitrate": 160,
+      "homepage": "https://www.kexp.org/"
+    },
+    {
+      "id": "wqxr",
+      "name": "WQXR",
+      "url": "https://stream.wqxr.org/wqxr",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://www.wqxr.org/"
+    },
+    {
+      "id": "tsfjazz",
+      "name": "TSF Jazz",
+      "url": "https://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3",
+      "codec": "mp3",
+      "bitrate": 128,
+      "homepage": "https://www.tsfjazz.com/"
+    }
+  ]
+}

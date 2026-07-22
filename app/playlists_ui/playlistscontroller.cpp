@@ -207,16 +207,22 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_removeItem(const QModelIndex &index) {
+    if (!index.isValid()) {
+      return;
+    }
+    const int row = index.row();
+    const bool removing_current = view->currentIndex().row() == row;
+
     proxy->activeModel()->remove(proxy->mapToSource(index));
     emit removed();
-    if (view->selectionModel()->selectedIndexes().size() > 0) {
-      auto selected_idx = view->selectionModel()->selectedIndexes().first();
-      if (selected_idx == index || proxy->activeModel()->listSize() == 1) {
-        on_itemActivated(proxy->activeModel()->buildIndex(0));
-      }
-    }
-    if (proxy->activeModel()->listSize() == 0) {
+
+    const int remaining = proxy->rowCount();
+    if (remaining == 0) {
       emit emptied();
+      return;
+    }
+    if (removing_current) {
+      on_itemActivated(proxy->index(qMin(row, remaining - 1), 0));
     }
   }
 
@@ -261,6 +267,11 @@ namespace PlaylistsUi {
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
     proxy->activeModel()->createPlaylistAsync(filepaths, libraryDir);
     spinner->show();
+  }
+
+  void Controller::on_createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name) {
+    // Synchronous: no scan to wait on, so no spinner.
+    proxy->activeModel()->createPlaylistFromTracks(tracks, name);
   }
 
   void Controller::on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist) {

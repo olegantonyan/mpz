@@ -4,12 +4,23 @@
 #include <QApplication>
 
 namespace Config {
-  Local::Local() : storage("local.yml") {
+  namespace {
+    // Hex is [0-9a-f], so no real device id can collide with the "default" sentinel.
+    QString deviceKey(const QByteArray &device_id) {
+      return device_id.isEmpty() ? QStringLiteral("default") : QString::fromLatin1(device_id.toHex());
+    }
+  }
+
+  Local::Local() : SingleInstanceGuard("Config::Local"), storage("local.yml") {
     if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 1, 0)) {
       durationSeconds = true;
     } else {
       durationSeconds = false;
     }
+
+    storage.remove("eq_enabled");
+    storage.remove("eq_active_profile");
+    storage.remove("eq_device_profiles");
   }
 
   bool Local::sync() {
@@ -220,6 +231,96 @@ namespace Config {
     return storage.set("output_device_id", arg);
   }
 
+  QList<Eq::EqProfile> Local::eqProfiles() const {
+    QList<Eq::EqProfile> result;
+    auto raw = storage.get("eq_profiles");
+    if (raw.listType() != Config::Value::Map) {
+      return result;
+    }
+    for (const auto &i : raw.get<QList<Config::Value>>()) {
+      auto map = i.get<QMap<QString, Config::Value>>();
+      Eq::EqProfile p;
+      p.name = map.value("name").get<QString>();
+      p.preamp_db = map.value("preamp").get<QString>().toDouble();
+      p.auto_preamp = map.value("auto_preamp").get<bool>();
+      for (const auto &bv : map.value("bands").get<QList<Config::Value>>()) {
+        auto bm = bv.get<QMap<QString, Config::Value>>();
+        Eq::Band b;
+        b.type = Eq::bandTypeFromString(bm.value("type").get<QString>());
+        b.freq_hz = bm.value("freq").get<QString>().toDouble();
+        b.gain_db = bm.value("gain").get<QString>().toDouble();
+        b.q = bm.value("q").get<QString>().toDouble();
+        b.enabled = bm.value("enabled").get<bool>();
+        p.bands.push_back(b);
+      }
+      result << p;
+    }
+    return result;
+  }
+
+  bool Local::saveEqProfiles(const QList<Eq::EqProfile> &arg) {
+    QList<Config::Value> list;
+    for (const auto &p : arg) {
+      QMap<QString, Config::Value> pm;
+      pm.insert("name", Config::Value(p.name));
+      pm.insert("preamp", Config::Value(QString::number(p.preamp_db, 'g', 10)));
+      pm.insert("auto_preamp", Config::Value(p.auto_preamp));
+      QList<Config::Value> bands;
+      for (const auto &b : p.bands) {
+        QMap<QString, Config::Value> bm;
+        bm.insert("type", Config::Value(Eq::bandTypeToString(b.type)));
+        bm.insert("freq", Config::Value(QString::number(b.freq_hz, 'g', 10)));
+        bm.insert("gain", Config::Value(QString::number(b.gain_db, 'g', 10)));
+        bm.insert("q", Config::Value(QString::number(b.q, 'g', 10)));
+        bm.insert("enabled", Config::Value(b.enabled));
+        bands << Config::Value(bm);
+      }
+      Config::Value bands_value(bands);
+      bands_value.setListType(Config::Value::Map);
+      pm.insert("bands", bands_value);
+      list << Config::Value(pm);
+    }
+    Config::Value value(list);
+    value.setListType(Config::Value::Map);
+    return storage.set("eq_profiles", value);
+  }
+
+  Eq::DeviceSettings Local::eqDeviceSettings(const QByteArray &device_id) const {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    auto entry = devices.value(deviceKey(device_id)).get<QMap<QString, Config::Value>>();
+    Eq::DeviceSettings result;
+    result.enabled = entry.value("enabled").get<bool>();
+    result.profile = entry.value("profile").get<QString>();
+    return result;
+  }
+
+  bool Local::saveEqDeviceSettings(const QByteArray &device_id, const Eq::DeviceSettings &arg) {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    QMap<QString, Config::Value> entry;
+    entry.insert("enabled", Config::Value(arg.enabled));
+    entry.insert("profile", Config::Value(arg.profile));
+    devices[deviceKey(device_id)] = Config::Value(entry);
+    return storage.set("eq_devices", Config::Value(devices));
+  }
+
+  bool Local::dropEqProfileFromDevices(const QString &profile_name) {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    bool changed = false;
+    for (auto it = devices.begin(); it != devices.end();) {
+      auto entry = it.value().get<QMap<QString, Config::Value>>();
+      if (entry.value("profile").get<QString>() == profile_name) {
+        it = devices.erase(it);
+        changed = true;
+      } else {
+        ++it;
+      }
+    }
+    if (!changed) {
+      return true;
+    }
+    return storage.set("eq_devices", Config::Value(devices));
+  }
+
   QString Local::crashReportConsent() const {
     return storage.get("crash_report_consent").get<QString>();
   }
@@ -276,7 +377,7 @@ namespace Config {
       t.setCue(cue);
       return t;
     } else {
-     return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>());
+     return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>(), r["title"].get<QString>());
     }
   }
 

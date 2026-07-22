@@ -4,6 +4,8 @@
 #include <QtConcurrent>
 #include <QTimer>
 #include <QTcpSocket>
+#include <QSslSocket>
+#include <QSslError>
 #include <QMutexLocker>
 
 namespace Playback {
@@ -12,8 +14,9 @@ namespace Playback {
     _total_bytes_received(0),
     _icy_metaint(0),
     _next_meta_pos(0),
+    _meta_bytes_remaining(0),
     _threshold_bytes(threshold_bytes),
-    _max_bytes(threshold_bytes * threshold_multiplier),
+    _max_bytes(static_cast<quint32>(qMin<quint64>(static_cast<quint64>(threshold_bytes) * threshold_multiplier, 0xFFFFFFFFull))),
     _chunked(false),
     _chunk_state(ChunkState::Size),
     _chunk_remaining(0) {
@@ -28,6 +31,10 @@ namespace Playback {
   bool Stream::start() {
     if (!isValidUrl()) {
       emit error(QString("invalid url: %1").arg(url().toString()));
+      return false;
+    }
+    if (url().scheme() == "https" && !QSslSocket::supportsSsl()) {
+      emit error("TLS not supported by this build");
       return false;
     }
     qDebug() << "starting stream from" << url();
@@ -85,17 +92,17 @@ namespace Playback {
     }
     int bytes_appended = 0;
 
-    int meta_bytes = 0;
-    QByteArray meta;
     for (int i = 0; i < a.size(); i++) {
       if (i + _total_bytes_received == _next_meta_pos) {
-        meta_bytes = a.at(i) * 16;
-        _next_meta_pos += (_icy_metaint + meta_bytes + 1);
-      } else if (meta_bytes > 0) {
-        meta.append(a.at(i));
-        meta_bytes--;
-        if (meta_bytes == 0) {
-          _meta.insert("stream", meta);
+        _meta_bytes_remaining = static_cast<quint8>(a.at(i)) * 16;
+        _next_meta_pos += (_icy_metaint + _meta_bytes_remaining + 1);
+        _meta_pending.clear();
+      } else if (_meta_bytes_remaining > 0) {
+        _meta_pending.append(a.at(i));
+        _meta_bytes_remaining--;
+        if (_meta_bytes_remaining == 0) {
+          _meta.insert("stream", _meta_pending);
+          _meta_pending.clear();
           emit metadataChanged(_meta);
         }
       } else {
@@ -236,6 +243,8 @@ namespace Playback {
     _total_bytes_received = 0;
     _icy_metaint = 0;
     _next_meta_pos = 0;
+    _meta_pending.clear();
+    _meta_bytes_remaining = 0;
     _meta.clear();
     _chunked = false;
     _chunk_state = ChunkState::Size;
@@ -250,7 +259,7 @@ namespace Playback {
     qDebug() << "stream started";
 
     QEventLoop loop;
-    QTcpSocket sock;
+    QSslSocket sock;
     QMap<QString, QString> headers;
     QByteArray header_buf;
     QTimer timer;
@@ -264,6 +273,16 @@ namespace Playback {
 #endif
       qWarning() << "stream network error" << code << sock.errorString();
       emit error(sock.errorString());
+    });
+
+    // no ignoreSslErrors() by design: the request may carry basic auth credentials
+    auto conn_ssl = connect(&sock, QOverload<const QList<QSslError> &>::of(&QSslSocket::sslErrors), &sock, [&](const QList<QSslError> &errors) {
+      QStringList reasons;
+      for (const auto &e : errors) {
+        reasons.append(e.errorString());
+      }
+      qWarning() << "stream TLS certificate rejected for" << url().host() << reasons;
+      emit error(QString("TLS certificate error: %1").arg(reasons.join("; ")));
     });
 
     auto conn_read = connect(&sock, &QTcpSocket::readyRead, &sock, [&]() {
@@ -304,8 +323,15 @@ namespace Playback {
       emit error("timeout");
     });
 
-    sock.connectToHost(url().host(), static_cast<quint16>(url().port(80)));
-    sock.waitForConnected();
+    const QUrl u = url();
+    const bool secure = u.scheme() == "https";
+    const quint16 port = static_cast<quint16>(u.port(secure ? 443 : 80));
+    if (secure) {
+      sock.connectToHostEncrypted(u.host(), port);
+    } else {
+      sock.connectToHost(u.host(), port);
+    }
+    sock.waitForConnected(5000); // cap the GUI-blocking window when tearing down mid-connect against a dead host
     sock.write(buildRequest().toLatin1());
 
     loop.exec();
@@ -314,6 +340,7 @@ namespace Playback {
     disconnect(conn_quit);
     disconnect(conn_fin);
     disconnect(conn_error);
+    disconnect(conn_ssl);
     sock.close();
     clear();
     {

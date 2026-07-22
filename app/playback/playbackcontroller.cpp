@@ -4,24 +4,41 @@
 #include <QDebug>
 
 namespace Playback {
-Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent) :
+Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent) :
   QObject(parent),
   _controls(c),
+#ifdef ENABLE_GAPLESS
+  _player(stream_buffer_size, outdevid, gapless_cache_mb, gapless_enabled),
+#else
   _player(stream_buffer_size, outdevid),
+#endif
   modus_operndi(modus)
 #ifdef ENABLE_MPD_SUPPORT
   , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
 #endif
 {
+#ifndef ENABLE_GAPLESS
+    Q_UNUSED(gapless_cache_mb)
+    Q_UNUSED(gapless_enabled)
+#endif
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
     connect(&_player, &MediaPlayer::nextRequested, this, &Controller::nextRequested);
     connect(&_player, &MediaPlayer::prevRequested, this, &Controller::prevRequested);
+    connect(&_player, &MediaPlayer::aboutToFinish, this, &Controller::aboutToFinish);
+    connect(&_player, &MediaPlayer::error, this, [](const QString &message) {
+      qWarning() << "playback error:" << message;
+    });
 
     connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
+#ifdef ENABLE_GAPLESS
+    connect(&_player, &Gapless::GaplessMediaPlayer::effectiveOutputDeviceChanged,
+            this, &Controller::effectiveOutputDeviceChanged);
+#endif
+
     connect(&_player, &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
@@ -149,6 +166,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     player().stop();
   }
 
+  void Controller::prepareNextTrack(const Track &track) {
+    player().prepareNextTrack(track);
+  }
+
   void Controller::on_controlsPause() {
     player().pause();
   }
@@ -182,6 +203,12 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   void Controller::seek(int seconds) {
     player().setPosition(seconds * 1000);
   }
+
+#ifdef ENABLE_GAPLESS
+  void Controller::setEqualizer(const Eq::EqProfile &profile, bool enabled) {
+    player().setEqualizer(profile, enabled);
+  }
+#endif
 
   void Controller::on_seek(int position) {
     if (player().state() != MediaPlayer::PlayingState)  {

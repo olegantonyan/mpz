@@ -2,6 +2,7 @@
 #define PLAYLIST_COVERS_H
 
 #include "coverart/embedded.h"
+#include "coverart/foldercover.h"
 #include "coverart/online/cache.h"
 #include "modusoperandi.h"
 #ifdef ENABLE_MPD_SUPPORT
@@ -27,7 +28,7 @@ namespace CoverArt {
     explicit Covers(ModusOperandi &modus);
 
     QString keyByFilepath(const QString& filepath) const;
-    QString findCoverLocally(const QString &dir);
+    FolderCover::Match bestLocalImage(const QString &dir) const;
 
     QHash <QString, QString> cache;
     CoverArt::Embedded embedded_covers;

@@ -2,12 +2,16 @@
 #define LOCAL_H
 
 #include "storage.h"
+#include "singleinstanceguard.h"
 #include "playlist/playlist.h"
+#include "eq/eqprofile.h"
+#include "eq/eqdevicesettings.h"
 
 #include <QByteArray>
+#include <QMap>
 
 namespace Config {
-  class Local {
+  class Local : public SingleInstanceGuard<Local> {
   public:
     explicit Local();
 
@@ -57,6 +61,13 @@ namespace Config {
 
     QByteArray outputDeviceId() const;
     bool saveOutputDeviceId(const QByteArray &arg);
+
+    QList<Eq::EqProfile> eqProfiles() const;
+    bool saveEqProfiles(const QList<Eq::EqProfile> &arg);
+
+    Eq::DeviceSettings eqDeviceSettings(const QByteArray &device_id) const;
+    bool saveEqDeviceSettings(const QByteArray &device_id, const Eq::DeviceSettings &arg);
+    bool dropEqProfileFromDevices(const QString &profile_name);
 
     QString crashReportConsent() const;
     void saveCrashReportConsent(const QString &arg);

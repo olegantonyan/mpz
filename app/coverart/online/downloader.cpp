@@ -13,8 +13,12 @@ namespace CoverArt {
     Downloader::Downloader(QObject *parent) : QObject(parent) {
     }
 
+    void Downloader::init(Config::Global &global) {
+      global_conf = &global;
+    }
+
     void Downloader::request(const Track &track) {
-      if (track.isStream()) {
+      if (!global_conf || track.isStream()) {
         return;
       }
       const AlbumQuery query{track.artist(), track.album()};
@@ -29,8 +33,7 @@ namespace CoverArt {
       if (!track.artCover().isEmpty()) {
         return;
       }
-      Config::Global global;
-      const auto providers = ProviderChain::filterKnown(global.coverProviders());
+      const auto providers = ProviderChain::filterKnown(global_conf->coverProviders());
       if (providers.isEmpty()) {
         return;
       }

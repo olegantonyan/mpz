@@ -7,6 +7,7 @@
 #include "directorycontextmenu.h"
 #include "directorysortmenu.h"
 #include "modusoperandi.h"
+#include "track.h"
 
 #include <QObject>
 #include <QTreeView>
@@ -28,6 +29,10 @@ namespace DirectoryUi {
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
+    // Radio bypasses the QDir payload: QDir mangles a stream URL (it drops the
+    // trailing slash) and Playlist::Loader only scans the filesystem.
+    void createNewPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
+    void appendTracksToCurrentPlaylist(const QVector<Track> &tracks);
 
   private slots:
     void on_search(const QString& term);
@@ -44,10 +49,16 @@ namespace DirectoryUi {
     DirectoryContextMenu *context_menu;
     DirectoryUi::SortMenu *sort_menu;
     QComboBox *libswitch;
+    QToolButton *libsort;
     ModusOperandi &modus_operandi;
 
     void settingsDialog(QComboBox *libswitch);
-    QString libraryPathMasked(const QString &libraryPath) const;
+    void populateLibrarySwitch();
+    void selectLibrary(const QString &path);
+    void editStations();
+    bool radioMode() const;
+    // Returns true when the index was handled as a radio station/group.
+    bool emitRadioTracks(const QModelIndexList &indexes, bool append);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

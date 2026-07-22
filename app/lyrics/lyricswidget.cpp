@@ -19,7 +19,7 @@
 #include <QAction>
 
 namespace Lyrics {
-  Widget::Widget(QWidget *parent) : QWidget(parent) {
+  Widget::Widget(Config::Global &global, QWidget *parent) : QWidget(parent), global_conf(global) {
     auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(4, 4, 4, 4);
 
@@ -69,8 +69,7 @@ namespace Lyrics {
       return;
     }
 
-    Config::Global global;
-    const auto online = ProviderChain::filterKnown(global.lyricsProviders());
+    const auto online = ProviderChain::filterKnown(global_conf.lyricsProviders());
     if (!online.isEmpty() && !track.artist().isEmpty() && !track.title().isEmpty()) {
       render_state(tr("Searching lyrics..."));
       chain = new ProviderChain(this);

@@ -17,6 +17,7 @@ private slots:
   void roundTripBoolean();
   void roundTripList();
   void roundTripByteArray();
+  void roundTripNestedMap();
   void getMissingKeyReportsNotOk();
   void removeDeletesAndMarksChanged();
   void persistsAcrossReopen();
@@ -109,6 +110,30 @@ void TestConfigStorage::roundTripByteArray() {
   const QByteArray out = s.getByteArray(QStringLiteral("blob"), &ok);
   QVERIFY(ok);
   QCOMPARE(out, payload);
+}
+
+void TestConfigStorage::roundTripNestedMap() {
+  {
+    QMap<QString, Config::Value> entry;
+    entry.insert(QStringLiteral("enabled"), Config::Value(true));
+    entry.insert(QStringLiteral("profile"), Config::Value(QStringLiteral("HD650")));
+    QMap<QString, Config::Value> devices;
+    devices.insert(QStringLiteral("default"), Config::Value(entry));
+
+    Config::Storage s(QStringLiteral("n.yml"));
+    QVERIFY(s.set(QStringLiteral("eq_devices"), Config::Value(devices)));
+    QVERIFY(s.save());
+  }
+  Config::Storage s(QStringLiteral("n.yml"));
+  bool ok = false;
+  auto v = s.get(QStringLiteral("eq_devices"), &ok);
+  QVERIFY(ok);
+  QCOMPARE(v.type(), Config::Value::Map);
+  auto entry = v.get<QMap<QString, Config::Value>>()
+                 .value(QStringLiteral("default"))
+                 .get<QMap<QString, Config::Value>>();
+  QCOMPARE(entry.value(QStringLiteral("enabled")).get<bool>(), true);
+  QCOMPARE(entry.value(QStringLiteral("profile")).get<QString>(), QStringLiteral("HD650"));
 }
 
 void TestConfigStorage::getMissingKeyReportsNotOk() {

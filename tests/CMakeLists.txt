@@ -36,7 +36,13 @@ mpz_add_test(tst_lyricstextmatch tst_lyricstextmatch.cpp ${APP}/lyrics/textmatch
 mpz_add_test(tst_streammetadata tst_streammetadata.cpp ${APP}/streammetadata.cpp)
 mpz_add_test(tst_configvalue    tst_configvalue.cpp    ${APP}/config/value.cpp)
 mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/directorymodel/mpd/treeitem.cpp)
+mpz_add_test(tst_radioitem      tst_radioitem.cpp      ${APP}/directory_ui/directorymodel/radio/item.cpp)
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
+mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
+mpz_add_test(tst_eqbiquad       tst_eqbiquad.cpp)
+mpz_add_test(tst_equalizer      tst_equalizer.cpp      ${APP}/eq/equalizer.cpp)
+mpz_add_test(tst_autoeqimport   tst_autoeqimport.cpp   ${APP}/eq/autoeqimport.cpp)
+mpz_add_test(tst_eqexport       tst_eqexport.cpp       ${APP}/eq/eqexport.cpp ${APP}/eq/autoeqimport.cpp ${APP}/eq/equalizer.cpp)
 
 # SysInfo needs <QApplication> headers for qApp; pulls in Qt::Widgets for the
 # include path only (the test uses QCoreApplication).
@@ -58,6 +64,9 @@ mpz_add_test(tst_coveralbummatch tst_coveralbummatch.cpp
   ${APP}/coverart/online/albummatch.cpp
   ${APP}/lyrics/textmatch.cpp)
 
+# Local folder-cover ranking is pure; QString/QFileInfo/QRegularExpression only.
+mpz_add_test(tst_foldercover tst_foldercover.cpp ${APP}/coverart/foldercover.cpp)
+
 # Both online caches write real files under QStandardPaths::CacheLocation via
 # the shared DiskCache::Store. The cover test builds a sample image, so it also
 # needs Qt::Gui.
@@ -71,6 +80,25 @@ mpz_add_test(tst_lyricscache tst_lyricscache.cpp
   ${APP}/lyrics/cache.cpp
   ${APP}/diskcache.cpp
   ${APP}/lyrics/textmatch.cpp)
+
+# Radio catalog parsing is pure -- Catalog takes its user-file path from a
+# setter rather than Config::Storage, so these need neither yaml-cpp nor TagLib.
+mpz_add_test(tst_radiocatalog tst_radiocatalog.cpp
+  ${APP}/radio/catalog.cpp
+  ${APP}/radio/station.cpp)
+
+# Guards the shipped station list. Reads the source json directly, so no qrc.
+mpz_add_test(tst_radiocatalogresource tst_radiocatalogresource.cpp
+  ${APP}/radio/catalog.cpp
+  ${APP}/radio/station.cpp)
+target_compile_definitions(tst_radiocatalogresource PRIVATE
+  RADIO_STATIONS_JSON="${CMAKE_SOURCE_DIR}/app/resources/radio/radio.json")
+
+# resolver.cpp includes QtNetwork for the remote fetch; firstStreamUrl/
+# looksLikePlaylist are pure and the unreferenced fetch body is dropped by
+# --gc-sections, so only the include paths are needed.
+mpz_add_test(tst_radioresolver tst_radioresolver.cpp ${APP}/radio/resolver.cpp)
+target_link_libraries(tst_radioresolver PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
 # UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
 # <QApplication> and a QNetworkAccessManager member for its include paths; the
@@ -90,6 +118,26 @@ mpz_add_test(tst_track tst_track.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)
 target_link_libraries(tst_track PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+
+# Timeline stores Track by value, so it compiles track.cpp (TagLib/yaml-cpp
+# include paths only; --gc-sections drops the unreferenced bodies).
+mpz_add_test(tst_gaplesstimeline tst_gaplesstimeline.cpp
+  ${APP}/playback/gapless/timeline.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_gaplesstimeline PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
+
+# PendingNext stores a Track by value, so it compiles track.cpp (same
+# TagLib/yaml-cpp include-path-only shape as tst_gaplesstimeline).
+mpz_add_test(tst_pendingnext tst_pendingnext.cpp
+  ${APP}/playback/pendingnext.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_pendingnext PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
 
 mpz_add_test(tst_sorter tst_sorter.cpp
@@ -133,6 +181,7 @@ mpz_add_test(tst_globalconfig tst_globalconfig.cpp
   ${APP}/config/storage.cpp
   ${APP}/config/value.cpp
   ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/radio/station.cpp
   ${APP}/track.cpp
   ${APP}/rnjesus.cpp
   ${APP}/streammetadata.cpp)

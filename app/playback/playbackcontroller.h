@@ -8,6 +8,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/mediaplayer.h"
 #endif
+#ifdef ENABLE_GAPLESS
+  #include "playback/gapless/gaplessmediaplayer.h"
+#endif
 
 #include <QObject>
 #include <QEvent>
@@ -25,7 +28,7 @@ namespace Playback {
       Paused
     };
 
-    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QByteArray outdevid, ModusOperandi &modus, QObject *parent = nullptr);
+    explicit Controller(const Playback::Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent = nullptr);
 
     Playback::Controls controls() const;
     int volume();
@@ -33,6 +36,9 @@ namespace Playback {
     enum State state();
     int position();
     const Track& currentTrack() const;
+#ifdef ENABLE_GAPLESS
+    QByteArray effectiveOutputDeviceId() const { return _player.effectiveOutputDeviceId(); }
+#endif
 
   signals:
     void started(const Track &track);
@@ -48,12 +54,20 @@ namespace Playback {
     void trackChanged(const Track &track);
     void monotonicPlaybackTimerIncrement(int by);
     void trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
+    void aboutToFinish();
+#ifdef ENABLE_GAPLESS
+    void effectiveOutputDeviceChanged(const QByteArray &device_id);
+#endif
 
   public slots:
     void play(const Track &track);
     void stop();
+    void prepareNextTrack(const Track &track);
     void setVolume(int value);
     void seek(int seconds);
+#ifdef ENABLE_GAPLESS
+    void setEqualizer(const Eq::EqProfile &profile, bool enabled);
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);
 #endif
@@ -67,7 +81,11 @@ namespace Playback {
     MediaPlayer &player();
 
     Playback::Controls _controls;
+#ifdef ENABLE_GAPLESS
+    Gapless::GaplessMediaPlayer _player;
+#else
     MediaPlayer _player;
+#endif
     ModusOperandi &modus_operndi;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::MediaPlayer _mpdplayer;

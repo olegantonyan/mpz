@@ -21,6 +21,11 @@ namespace PlaylistUi {
       Playing,
       Paused
     };
+    enum Roles {
+      IsStreamRole = Qt::UserRole + 1,
+      StationNameRole,
+      StreamNowPlayingRole
+    };
     explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -40,6 +45,7 @@ namespace PlaylistUi {
     QModelIndex buildIndex(int row, int col = 0) const;
     int tracksSize() const;
     void highlight(quint64 uid, enum HighlightState st);
+    void updateStreamMeta(quint64 uid, const StreamMetaData &meta);
     QModelIndex indexOf(quint64 uid) const;
 
     std::shared_ptr<Playlist::Playlist> playlist();
@@ -48,6 +54,7 @@ namespace PlaylistUi {
     virtual void remove(const QList<QModelIndex> &items);
 
     virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
+    void appendTracks(const QVector<Track> &tracks);
     virtual void insertTracksAsync(const QList<QDir> &filepaths, int atRow);
 
     virtual void sortBy(const QString &criteria);

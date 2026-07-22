@@ -2,14 +2,17 @@
 #define GLOBAL_H
 
 #include "storage.h"
+#include "singleinstanceguard.h"
 #include "sort_ui/sortingpresetsdialog.h"
 #include "playlist_ui/columnsconfig.h"
+#include "radio/station.h"
 
 #include <QPair>
 #include <QList>
+#include <QVector>
 
 namespace Config {
-  class Global {
+  class Global : public SingleInstanceGuard<Global> {
   public:
     explicit Global();
 
@@ -29,6 +32,15 @@ namespace Config {
 
     int streamBufferSize() const;
     void saveStreamBufferSize(int arg);
+
+    QVector<Radio::Station> radioStations() const;
+    bool saveRadioStations(const QVector<Radio::Station> &arg);
+
+    bool disableGapless() const;
+    void saveDisableGapless(bool arg);
+
+    int gaplessCacheSizeMb() const;
+    void saveGaplessCacheSizeMb(int arg);
 
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);

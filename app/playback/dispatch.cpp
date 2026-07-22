@@ -21,27 +21,20 @@ namespace Playback {
   }
 
   void Dispatch::playTrack(const Track &t) {
+    pending_next.clear();
     random_trail.add(t.uid());
     emit play(t);
   }
 
-  void Dispatch::on_nextRequested() {
+  Track Dispatch::computeNextTrack(bool &ok, bool &should_stop) const {
+    ok = false;
+    should_stop = false;
+
     auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
-    if (global_conf.playbackFollowCursor()) {
-      if (selected_playlist != nullptr) {
-        auto selected_track = selected_playlist->trackBy(player_state.selectedTrack());
-        if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
-          playTrack(selected_track);
-          return;
-        }
-      }
-    }
-
-
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist == nullptr || current_playlist->tracks().isEmpty()) {
-      return;
+      return Track();
     }
 
     if (isRandomMode(selected_playlist)) {
@@ -68,9 +61,8 @@ namespace Playback {
           chosen = (chosen + 1) % playlist_size;
         }
       }
-      Track t = current_playlist->tracks().at(chosen);
-      playTrack(t);
-      return;
+      ok = true;
+      return current_playlist->tracks().at(chosen);
     }
 
     int current = current_playlist->trackIndex(current_track_uid);
@@ -79,18 +71,94 @@ namespace Playback {
       bool no_loop = (selected_playlist != nullptr && selected_playlist->random() == Playlist::Playlist::SequentialNoLoop) ||
                      global_conf.playbackOrder() == "sequential (no loop)";
       if (no_loop) {
+        should_stop = true;
+        return Track();
+      }
+      ok = true;
+      return current_playlist->tracks().at(0);
+    }
+    ok = true;
+    return current_playlist->tracks().at(next);
+  }
+
+  Track Dispatch::followCursorNext() const {
+    if (!global_conf.playbackFollowCursor()) {
+      return Track();
+    }
+    auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
+    if (selected_playlist == nullptr) {
+      return Track();
+    }
+    Track selected_track = selected_playlist->trackBy(player_state.selectedTrack());
+    if (!player_state.followedCursor() && player_state.playingTrack() != selected_track.uid()) {
+      return selected_track;
+    }
+    return Track();
+  }
+
+  void Dispatch::on_nextRequested() {
+    Track follow = followCursorNext();
+    if (follow.uid() != 0) {
+      playTrack(follow);
+      return;
+    }
+
+    if (pending_next.validFor(player_state.playingTrack())) {
+      bool ok = false;
+      bool should_stop = false;
+      Track fresh = computeNextTrack(ok, should_stop);
+      if (should_stop) {
+        pending_next.clear(); // order changed to no-loop at the very end: end-of-track semantics win
         emit stop();
         return;
       }
-      Track t = current_playlist->tracks().at(0);
-      playTrack(t);
+      auto selected_playlist = playlists->playlistByTrackUid(player_state.selectedTrack());
+      if (isRandomMode(selected_playlist) != pending_random_mode) {
+        pending_next.clear(); // random-mode toggled in the final seconds: use the fresh pick
+        if (ok) {
+          playTrack(fresh);
+        }
+        return;
+      }
+      Track pending_track = pending_next.take();
+      if (playlists->playlistByTrackUid(pending_track.uid()) != nullptr) {
+        playTrack(pending_track);
+        return;
+      }
+    }
+
+    bool ok = false;
+    bool should_stop = false;
+    Track t = computeNextTrack(ok, should_stop);
+    if (should_stop) {
+      emit stop();
+      return;
+    }
+    if (!ok) {
+      return;
+    }
+    playTrack(t);
+  }
+
+  void Dispatch::on_aboutToFinish() {
+    Track candidate = followCursorNext();
+    bool ok = candidate.uid() != 0;
+    bool should_stop = false;
+    if (!ok) {
+      candidate = computeNextTrack(ok, should_stop);
+    }
+    if (ok && !should_stop) {
+      pending_next.set(player_state.playingTrack(), candidate);
+      pending_random_mode = isRandomMode(playlists->playlistByTrackUid(player_state.selectedTrack()));
+      emit prepareNext(candidate);
     } else {
-      Track t = current_playlist->tracks().at(next);
-      playTrack(t);
+      pending_next.clear();
+      emit prepareNext(Track());
     }
   }
 
   void Dispatch::on_prevRequested() {
+    pending_next.clear();
     quint64 current_track_uid = player_state.playingTrack();
     auto current_playlist = playlists->playlistByTrackUid(current_track_uid);
     if (current_playlist == nullptr || current_playlist->tracks().isEmpty()) {
@@ -194,10 +262,13 @@ namespace Playback {
   }
 
   void Dispatch::on_stopped() {
+    pending_next.clear();
     player_state.resetPlaying();
   }
 
   void Dispatch::on_playlistContentChanged() {
+    pending_next.clear();
+    emit prepareNext(Track()); // clear the engine's prepared segment (removed track must not play at the boundary)
     const quint64 uid = player_state.playingTrack();
     if (uid == 0) {
       return;

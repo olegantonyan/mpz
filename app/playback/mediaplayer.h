@@ -3,6 +3,9 @@
 
 #include "playback/stream.h"
 #include "track.h"
+#ifdef ENABLE_GAPLESS
+  #include "eq/eqprofile.h"
+#endif
 
 #include <QObject>
 #include <QMediaPlayer>
@@ -39,6 +42,7 @@ namespace Playback {
     void streamMetaChanged(const StreamMetaData& meta);
     void prevRequested();
     void nextRequested();
+    void aboutToFinish();
 
   public slots:
     virtual void pause();
@@ -50,18 +54,24 @@ namespace Playback {
     virtual void setVolume(int volume);
     virtual void setTrack(const Track &track);
     virtual void clearTrack();
+    virtual void prepareNextTrack(const Track &track) { Q_UNUSED(track) }
+#ifdef ENABLE_GAPLESS
+    virtual void setEqualizer(const Eq::EqProfile &profile, bool enabled) { Q_UNUSED(profile) Q_UNUSED(enabled) }
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void setOutputDevice(QByteArray deviceid);
+    virtual void setOutputDevice(QByteArray deviceid);
 #endif
 
   private:
-    QMediaPlayer player;
     Stream stream;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QAudioOutput audio_output;
+#endif
+    QMediaPlayer player;
     QByteArray output_device_id;
     bool next_after_stop;
     bool next_after_stop_cue;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    QAudioOutput audio_output;
     QMediaDevices media_devices;
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale device-switch timer callbacks during event bursts

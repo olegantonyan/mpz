@@ -15,9 +15,62 @@ namespace DirectoryUi {
     Q_ASSERT(search);
   }
 
+  void DirectoryContextMenu::showRadioMenu(const QPoint &pos, const QModelIndex &index) {
+    QModelIndexList selected = view->selectionModel()->selectedRows();
+    if (!selected.contains(index)) {
+      selected = QModelIndexList{index};
+    }
+    const auto tracks = model->tracksAt(selected);
+    const auto homepage = index.data(DirectoryModel::RadioRole::Homepage).toString();
+
+    QMenu menu;
+    QAction clear_filter(tr("Clear filter"));
+    clear_filter.setIcon(Icons::get(Icons::Icon::Cancel));
+    QAction create_playlist(tr("Create new playlist"));
+    create_playlist.setIcon(Icons::get(Icons::Icon::NewPlaylist));
+    QAction append_to_playlist(tr("Append to current playlist"));
+    append_to_playlist.setIcon(Icons::get(Icons::Icon::AddToPlaylist));
+    QAction open_homepage(tr("Open station homepage"));
+    open_homepage.setIcon(Icons::get(Icons::Icon::Info));
+    QAction edit_stations(tr("Edit stations..."));
+    edit_stations.setIcon(Icons::get(Icons::Icon::Edit));
+
+    connect(&create_playlist, &QAction::triggered, this, [&]() {
+      emit createNewPlaylistFromTracks(tracks, model->displayName(index));
+    });
+    connect(&append_to_playlist, &QAction::triggered, this, [&]() {
+      emit appendTracksToCurrentPlaylist(tracks);
+    });
+    connect(&open_homepage, &QAction::triggered, this, [&]() {
+      QDesktopServices::openUrl(QUrl(homepage));
+    });
+    connect(&edit_stations, &QAction::triggered, this, [&]() { emit editStations(); });
+
+    if (!search->text().isEmpty()) {
+      connect(&clear_filter, &QAction::triggered, this, [&]() { search->clear(); });
+      menu.addAction(&clear_filter);
+      menu.addSeparator();
+    }
+
+    create_playlist.setEnabled(!tracks.isEmpty());
+    append_to_playlist.setEnabled(!tracks.isEmpty());
+    menu.addAction(&create_playlist);
+    menu.addAction(&append_to_playlist);
+    if (!homepage.isEmpty()) {
+      menu.addAction(&open_homepage);
+    }
+    menu.addSeparator();
+    menu.addAction(&edit_stations);
+    menu.exec(view->viewport()->mapToGlobal(pos));
+  }
+
   void DirectoryContextMenu::show(const QPoint &pos) {
     auto index = view->indexAt(pos);
     if (!index.isValid()) {
+      return;
+    }
+    if (model->isRadioActive()) {
+      showRadioMenu(pos, index);
       return;
     }
     QList<QDir> selected_dirs;

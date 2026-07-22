@@ -67,7 +67,7 @@ Track::Track(const QString &fp,
   _format = detectFormat();
 }
 
-Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
+Track::Track(const QUrl &stream_url, const QString &filepath_reference, const QString &title) {
   _begin = 0;
   _duration = 0;
   _channels = 0;
@@ -81,6 +81,7 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   _uid = generateUid();
   _stream_url = stream_url;
   filepath = filepath_reference;
+  _title = title;
 }
 
 QString Track::formattedTime(quint64 tm) {
@@ -199,25 +200,22 @@ QString Track::album() const {
   return _album;
 }
 
+QString Track::displayUrl() const {
+  return _stream_url.toDisplayString(QUrl::RemoveUserInfo | QUrl::RemoveQuery | QUrl::RemoveFragment);
+}
+
 QString Track::title() const {
-  if (_title.isEmpty()) {
-    if (isStream()) {
-      if (streamMeta().title().isEmpty()) {
-        QUrl displayable_url;
-        displayable_url.setScheme(_stream_url.scheme());
-        displayable_url.setHost(_stream_url.host());
-        displayable_url.setPort(_stream_url.port());
-        displayable_url.setPath(_stream_url.path());
-        return displayable_url.toString();
-      } else {
-        return streamMeta().title();
-      }
-    } else {
-      return filename();
+  // A live ICY title wins over _title (which may be a station name).
+  if (isStream()) {
+    if (!streamMeta().title().isEmpty()) {
+      return streamMeta().title();
     }
-  } else {
-    return _title;
+    if (!_title.isEmpty()) {
+      return _title;
+    }
+    return displayUrl();
   }
+  return _title.isEmpty() ? filename() : _title;
 }
 
 quint16 Track::year() const {
@@ -256,7 +254,7 @@ QString Track::shortText() const {
   } else if (!filename().isEmpty()) {
     return filename();
   }
-  return url().toString();
+  return url().toDisplayString();
 }
 
 bool Track::isMpd() const {
@@ -288,6 +286,22 @@ QString Track::formattedTitle() const {
 
 bool Track::isStream() const {
   return !_stream_url.isEmpty();
+}
+
+QString Track::stationName() const {
+  return _title.isEmpty() ? displayUrl() : _title;
+}
+
+QString Track::streamNowPlaying() const {
+  if (!isStream()) {
+    return QString();
+  }
+  const QString a = _stream_meta.artist();
+  const QString t = _stream_meta.title();
+  if (!a.isEmpty() && !t.isEmpty()) {
+    return a + " - " + t;
+  }
+  return a.isEmpty() ? t : a;
 }
 
 void Track::setStreamMeta(const StreamMetaData &meta) {

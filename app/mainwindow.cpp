@@ -25,6 +25,9 @@
 #include <QAbstractItemView>
 
 #include "settings_ui/settingsdialog.h"
+#ifdef ENABLE_GAPLESS
+  #include "equalizer_ui/equalizerdialog.h"
+#endif
 
 namespace {
   // widen popup so long items aren't elided when the combobox is squeezed narrow
@@ -91,13 +94,20 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
   ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
+  bool gapless_on = !global_conf.disableGapless();
+  int gapless_mb = global_conf.gaplessCacheSizeMb();
+  if (gapless_mb <= 0) {
+    gapless_mb = 100;
+  }
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
 
   connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
+  connect(library, &DirectoryUi::Controller::createNewPlaylistFromTracks, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
+  connect(library, &DirectoryUi::Controller::appendTracksToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendTracks);
   connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
@@ -105,6 +115,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(player, &Playback::Controller::started, playlist, &PlaylistUi::Controller::on_start);
   connect(player, &Playback::Controller::paused, playlist, &PlaylistUi::Controller::on_pause);
   connect(player, &Playback::Controller::stopped, playlist, &PlaylistUi::Controller::on_stop);
+  connect(player, &Playback::Controller::trackChanged, playlist, &PlaylistUi::Controller::on_trackMetaChanged);
   connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
@@ -141,6 +152,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupPlaybackLog();
   setupSleepLock();
   setupOutputDevice();
+#ifdef ENABLE_GAPLESS
+  setupEqualizer();
+#endif
+
+  CoverArt::Covers::instance(modus_operandi);
 
   preloadPlaylist(args);
 
@@ -155,7 +171,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef ENABLE_MPD_SUPPORT
   setupMpdOrder();
 #endif
-  CoverArt::Covers::instance(modus_operandi);
 
 #if defined(ENABLE_UPDATE_CHECK)
   setupUpdateChecker();
@@ -197,7 +212,7 @@ void MainWindow::showWindow() {
 int MainWindow::streamBuffer() {
   int stream_buffer = global_conf.streamBufferSize();
   if (stream_buffer == 0) {
-    stream_buffer = 131072;
+    stream_buffer = 262144;
     global_conf.saveStreamBufferSize(stream_buffer);
   }
   return stream_buffer;
@@ -434,7 +449,7 @@ void MainWindow::setupDockWidgets() {
   cover_dock->setWidget(cover_widget);
   addDockWidget(Qt::RightDockWidgetArea, cover_dock);
 
-  lyrics_widget = new Lyrics::Widget(this);
+  lyrics_widget = new Lyrics::Widget(global_conf, this);
   lyrics_dock = new QDockWidget(tr("Lyrics"), this);
   lyrics_dock->setObjectName("lyricsDock");
   lyrics_dock->setWidget(lyrics_widget);
@@ -453,6 +468,7 @@ void MainWindow::setupDockWidgets() {
   // The only trigger for online cover lookups: driving it from playback rather
   // than from Track::artCover() is what keeps "current track only" true no
   // matter who reads a cover.
+  CoverArt::Online::Downloader::instance().init(global_conf);
   connect(player, &Playback::Controller::started, &CoverArt::Online::Downloader::instance(),
           &CoverArt::Online::Downloader::request);
   connect(player, &Playback::Controller::trackChanged, &CoverArt::Online::Downloader::instance(),
@@ -468,7 +484,7 @@ void MainWindow::setupDockWidgets() {
 
 void MainWindow::openTrackInfo(const Track &track) {
   auto pl = playlists->playlistByTrackUid(track.uid());
-  TrackInfoDialog *dlg = new TrackInfoDialog(track, pl, this);
+  TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl, this);
   dlg->setModal(false);
   connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
   dlg->show();
@@ -529,6 +545,8 @@ void MainWindow::setupPlaybackDispatch() {
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
+  connect(player, &Playback::Controller::aboutToFinish, dispatch, &Playback::Dispatch::on_aboutToFinish);
+  connect(dispatch, &Playback::Dispatch::prepareNext, player, &Playback::Controller::prepareNextTrack);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(player, &Playback::Controller::trackChangedQuery, dispatch, &Playback::Dispatch::on_trackChangedQuery);
   connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
@@ -786,6 +804,36 @@ void MainWindow::setupOutputDevice() {
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
 }
+
+#ifdef ENABLE_GAPLESS
+void MainWindow::setupEqualizer() {
+  // The engine owns device resolution, so it also decides which device the EQ is
+  // scoped to: hotplug that drops the configured device re-scopes the EQ to the default.
+  connect(player, &Playback::Controller::effectiveOutputDeviceChanged, this, &MainWindow::applyEqForDevice);
+  applyEqForDevice(player->effectiveOutputDeviceId());
+
+  connect(shortcuts, &Shortcuts::openEqualizer, this, &MainWindow::openEqualizerDialog);
+  connect(main_menu, &MainMenu::openEqualizer, shortcuts, &Shortcuts::openEqualizer);
+}
+
+void MainWindow::openEqualizerDialog() {
+  EqualizerUi::EqualizerDialog dlg(player, local_conf, global_conf, this);
+  dlg.exec();
+}
+
+void MainWindow::applyEqForDevice(const QByteArray &device_id) {
+  const Eq::DeviceSettings settings = local_conf.eqDeviceSettings(device_id);
+  Eq::EqProfile chosen = Eq::defaultGraphicProfile();
+  const QList<Eq::EqProfile> profiles = local_conf.eqProfiles();
+  for (const auto &p : profiles) {
+    if (p.name == settings.profile) {
+      chosen = p;
+      break;
+    }
+  }
+  player->setEqualizer(chosen, settings.enabled);
+}
+#endif
 
 #ifdef ENABLE_MPD_SUPPORT
 void MainWindow::setupMpdOrder() {

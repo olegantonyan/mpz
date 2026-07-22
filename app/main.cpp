@@ -6,6 +6,7 @@
 #include "streammetadata.h"
 #include "config/global.h"
 #include "config/local.h"
+#include "config/storage.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd_client/entity.h"
   #include "mpd_client/song.h"

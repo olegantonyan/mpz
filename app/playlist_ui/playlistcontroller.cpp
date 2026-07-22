@@ -1,5 +1,6 @@
 #include "playlistcontroller.h"
 #include "dropdirs.h"
+#include "streamrowdelegate.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -21,6 +22,7 @@ namespace PlaylistUi {
 
     proxy = new ProxyFilterModel(view->style(), columns_config, modus, this);
     view->setModel(proxy);
+    view->setItemDelegate(new StreamRowDelegate(this));
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -69,7 +71,7 @@ namespace PlaylistUi {
       }
     });
 
-    context_menu = new PlaylistContextMenu(proxy, view, search, this);
+    context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
     connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
@@ -88,6 +90,26 @@ namespace PlaylistUi {
         emit changed(proxy->activeModel()->playlist());
       });
     });
+
+    connect(proxy, &QAbstractItemModel::modelReset, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::layoutChanged, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsInserted, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsRemoved, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsMoved, this, &Controller::updateStreamSpans);
+  }
+
+  void Controller::updateStreamSpans() {
+    view->clearSpans();
+    const int cols = proxy->columnCount();
+    if (cols <= 1) {
+      return;
+    }
+    const int rows = proxy->rowCount();
+    for (int r = 0; r < rows; r++) {
+      if (proxy->index(r, 0).data(Model::IsStreamRole).toBool()) {
+        view->setSpan(r, 1, 1, cols - 1);
+      }
+    }
   }
 
   void PlaylistUi::Controller::loadColumnsConfig() {
@@ -117,11 +139,27 @@ namespace PlaylistUi {
   }
 
   void Controller::on_stop() {
+    if (live_stream_uid != 0) {
+      proxy->activeModel()->updateStreamMeta(live_stream_uid, StreamMetaData());
+      live_stream_uid = 0;
+    }
     proxy->activeModel()->highlight(0, Model::HighlightState::None);
   }
 
   void Controller::on_start(const Track &t) {
+    if (live_stream_uid != 0 && live_stream_uid != t.uid()) {
+      proxy->activeModel()->updateStreamMeta(live_stream_uid, StreamMetaData());
+    }
+    live_stream_uid = t.isStream() ? t.uid() : 0;
     proxy->activeModel()->highlight(t.uid(), Model::HighlightState::Playing);
+  }
+
+  void Controller::on_trackMetaChanged(const Track &t) {
+    if (!t.isStream()) {
+      return;
+    }
+    live_stream_uid = t.uid();
+    proxy->activeModel()->updateStreamMeta(t.uid(), t.streamMeta());
   }
 
   void Controller::on_pause(const Track &t) {
@@ -141,6 +179,12 @@ namespace PlaylistUi {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->appendToPlaylistAsync(filepaths);
       spinner->show();
+    }
+  }
+
+  void Controller::on_appendTracks(const QVector<Track> &tracks) {
+    if (proxy->activeModel()->playlist() != nullptr) {
+      proxy->activeModel()->appendTracks(tracks);
     }
   }
 

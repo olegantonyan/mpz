@@ -22,7 +22,9 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - 3-column UI to quickly create playlists from folders and switch between them;
 - Native C++/Qt UI - fast and responsive;
 - Drag-n-drop files and folders from file manager;
-- Internet radio in `m3u` and `pls` formats;
+- Gapless playback (Qt6 only, version 2.1.0+);
+- Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others (only when gapless mode enabled, version 2.1.0+);
+- Internet radio in `m3u` and `pls` formats, as well as built-in radio library;
 - CUE sheets, with gapless playback of single-file albums;
 - Tag editor;
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
@@ -122,7 +124,22 @@ To build Qt5 version add `-DUSE_QT5=ON` to cmake cli.
 
 You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON` to cmake cli.
 
-Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode, `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys), `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC — the only platforms cpptrace builds on).
+Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode, `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys), `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC — the only platforms cpptrace builds on), `-DENABLE_GAPLESS=OFF` drops the gapless playback engine (on by default, Qt6 only).
+
+## Qt6/Qt5 split
+
+Some features require Qt6:
+
+- gapless playback;
+- audio output switch;
+
+This means win-legacy-qt5 won't have these. As well as old Linux distros.
+
+OmniPackage repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+, Debian 13+, Ubuntu 24.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
+
+Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+.
+
+AppImage, macOS DMG, win-x86_64, win-arm64 are built with Qt6.
 
 ## Configuration
 

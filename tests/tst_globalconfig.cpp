@@ -3,6 +3,7 @@
 #include <QFile>
 
 #include "config/global.h"
+#include "radio/station.h"
 
 class TestGlobalConfig : public QObject {
   Q_OBJECT
@@ -12,6 +13,10 @@ private slots:
   void stopWhenTrackRemoved_defaultsFalse();
   void stopWhenTrackRemoved_readsTrue();
   void stopWhenTrackRemoved_readsFalse();
+  void disableGapless_defaultsFalse();
+  void disableGapless_readsTrue();
+  void gaplessCacheSizeMb_defaultsZero();
+  void gaplessCacheSizeMb_roundTrips();
   void lyricsProviders_defaultsToEmpty();
   void lyricsProviders_ignoresMalformedValue();
   void lyricsProviders_keepsLegacyBuiltinEntries();
@@ -20,6 +25,9 @@ private slots:
   void coverProviders_defaultsToEmpty();
   void coverProviders_readsOrder();
   void coverProviders_roundTrips();
+  void radioStations_absentByDefault();
+  void radioStations_roundTrips();
+  void radioStations_emptyListRoundTrips();
 
 private:
   QTemporaryDir tempDir;
@@ -57,6 +65,34 @@ void TestGlobalConfig::stopWhenTrackRemoved_readsFalse() {
   writeGlobalYaml("stop_when_track_removed: false\n");
   Config::Global g;
   QCOMPARE(g.stopWhenTrackRemoved(), false);
+}
+
+// Absent key means gapless is on (the stored flag is the inverted "disabled").
+void TestGlobalConfig::disableGapless_defaultsFalse() {
+  Config::Global g;
+  QCOMPARE(g.disableGapless(), false);
+}
+
+void TestGlobalConfig::disableGapless_readsTrue() {
+  writeGlobalYaml("disable_gapless: true\n");
+  Config::Global g;
+  QCOMPARE(g.disableGapless(), true);
+}
+
+// Absent key reads 0, which call sites treat as "use the default".
+void TestGlobalConfig::gaplessCacheSizeMb_defaultsZero() {
+  Config::Global g;
+  QCOMPARE(g.gaplessCacheSizeMb(), 0);
+}
+
+void TestGlobalConfig::gaplessCacheSizeMb_roundTrips() {
+  {
+    Config::Global g;
+    g.saveGaplessCacheSizeMb(250);
+    g.sync();
+  }
+  Config::Global reloaded;
+  QCOMPARE(reloaded.gaplessCacheSizeMb(), 250);
 }
 
 // No online provider is enabled until the user picks one; built-in lyrics
@@ -120,6 +156,58 @@ void TestGlobalConfig::coverProviders_roundTrips() {
   }
   Config::Global reloaded;
   QCOMPARE(reloaded.coverProviders(), saved);
+}
+
+void TestGlobalConfig::radioStations_absentByDefault() {
+  Config::Global g;
+  QVERIFY(g.radioStations().isEmpty());
+}
+
+void TestGlobalConfig::radioStations_roundTrips() {
+  Radio::Station a;
+  a.id = "somafm-groovesalad";
+  a.name = "Groove Salad";
+  a.group = "SomaFM";
+  a.url = "https://ice.somafm.com/groovesalad-256-mp3";
+  a.codec = "mp3";
+  a.bitrate = 256;
+  a.homepage = "https://somafm.com/groovesalad/";
+  Radio::Station b;
+  b.id = "slay";
+  b.name = "SLAY Radio";
+  b.url = "http://relay4.slayradio.org:8300/";
+  b.codec = "aac";
+  b.bitrate = 128;
+
+  {
+    Config::Global g;
+    QVERIFY(g.saveRadioStations({a, b}));
+    g.sync();
+  }
+
+  Config::Global reloaded;
+  const auto stations = reloaded.radioStations();
+  QCOMPARE(stations.size(), 2);
+  QCOMPARE(stations.at(0).id, a.id);
+  QCOMPARE(stations.at(0).name, a.name);
+  QCOMPARE(stations.at(0).group, a.group);
+  QCOMPARE(stations.at(0).url, a.url);
+  QCOMPARE(stations.at(0).codec, a.codec);
+  QCOMPARE(stations.at(0).bitrate, a.bitrate);
+  QCOMPARE(stations.at(0).homepage, a.homepage);
+  QCOMPARE(stations.at(1).id, b.id);
+  QCOMPARE(stations.at(1).url, b.url);
+  QCOMPARE(stations.at(1).bitrate, b.bitrate);
+}
+
+void TestGlobalConfig::radioStations_emptyListRoundTrips() {
+  {
+    Config::Global g;
+    QVERIFY(g.saveRadioStations({}));
+    g.sync();
+  }
+  Config::Global reloaded;
+  QVERIFY(reloaded.radioStations().isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestGlobalConfig)

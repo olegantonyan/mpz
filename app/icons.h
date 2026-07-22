@@ -10,7 +10,8 @@ namespace Icons {
     Play, Pause, Stop, Next, Prev,
     Volume, VolumeMuted, Headphones, Settings, Menu, Sort,
     Trash, Folder, FolderReveal, Reload, Save, Info, Details, Help, Cancel,
-    Copy, Edit, OpenFile, NewPlaylist, AddToPlaylist, Spinner
+    Copy, Edit, OpenFile, NewPlaylist, AddToPlaylist, Spinner,
+    Radio
   };
 
   QIcon get(Icon icon);

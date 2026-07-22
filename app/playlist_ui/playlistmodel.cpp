@@ -54,6 +54,16 @@ namespace PlaylistUi {
 
     Track t = tracks.at(index.row());
 
+    if (role == IsStreamRole) {
+      return t.isStream();
+    }
+    if (role == StationNameRole) {
+      return t.stationName();
+    }
+    if (role == StreamNowPlayingRole) {
+      return t.streamNowPlaying();
+    }
+
     if (role == Qt::FontRole) {
       QFont font;
       font.setBold(t.uid() == highlight_uid);
@@ -130,6 +140,16 @@ namespace PlaylistUi {
     }
   }
 
+  void Model::updateStreamMeta(quint64 uid, const StreamMetaData &meta) {
+    for (int i = 0; i < tracks.size(); i++) {
+      if (tracks.at(i).uid() == uid && tracks.at(i).isStream()) {
+        tracks[i].setStreamMeta(meta);
+        emit dataChanged(buildIndex(i, 0), buildIndex(i, columnCount() - 1));
+        return;
+      }
+    }
+  }
+
   QModelIndex Model::indexOf(quint64 uid) const {
     for (int i = 0; i < tracksSize(); i++) {
       if (uid == tracks.at(i).uid()) {
@@ -184,6 +204,15 @@ namespace PlaylistUi {
 
       emit appendToPlaylistAsyncFinished(pl);
     });
+  }
+
+  void Model::appendTracks(const QVector<Track> &tracks) {
+    auto pl = playlist();
+    if (!pl || tracks.isEmpty()) {
+      return;
+    }
+    pl->append(tracks, false);
+    emit appendToPlaylistAsyncFinished(pl);
   }
 
   void Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {

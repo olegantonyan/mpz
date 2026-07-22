@@ -3,7 +3,7 @@
 #include <QDebug>
 
 namespace Config {
-  Global::Global() : storage("global.yml") {
+  Global::Global() : SingleInstanceGuard("Config::Global"), storage("global.yml") {
   }
 
   bool Global::sync() {
@@ -48,6 +48,63 @@ namespace Config {
 
   void Global::saveStreamBufferSize(int arg) {
     storage.set("stream_buffer_size", Config::Value(arg));
+  }
+
+  QVector<Radio::Station> Global::radioStations() const {
+    QVector<Radio::Station> result;
+    auto raw = storage.get("radio_stations");
+    if (raw.listType() != Config::Value::Map) {
+      return result;
+    }
+    const auto list = raw.get<QList<Config::Value>>();
+    for (const auto &i : list) {
+      auto m = i.get<QMap<QString, Config::Value>>();
+      Radio::Station s;
+      s.id = m.value("id").get<QString>();
+      s.name = m.value("name").get<QString>();
+      s.group = m.value("group").get<QString>();
+      s.url = m.value("url").get<QString>();
+      s.codec = m.value("codec").get<QString>();
+      s.bitrate = static_cast<quint16>(m.value("bitrate").get<int>());
+      s.homepage = m.value("homepage").get<QString>();
+      result << s;
+    }
+    return result;
+  }
+
+  bool Global::saveRadioStations(const QVector<Radio::Station> &arg) {
+    QList<Config::Value> list;
+    for (const auto &s : arg) {
+      QMap<QString, Config::Value> m;
+      m.insert("id", Config::Value(s.id));
+      m.insert("name", Config::Value(s.name));
+      m.insert("group", Config::Value(s.group));
+      m.insert("url", Config::Value(s.url));
+      m.insert("codec", Config::Value(s.codec));
+      m.insert("bitrate", Config::Value(static_cast<int>(s.bitrate)));
+      m.insert("homepage", Config::Value(s.homepage));
+      list << Config::Value(m);
+    }
+    // An empty list carries no element type, so tag it to keep the Map type.
+    Config::Value value(list);
+    value.setListType(Config::Value::Map);
+    return storage.set("radio_stations", value);
+  }
+
+  bool Global::disableGapless() const {
+    return storage.get("disable_gapless").get<bool>();
+  }
+
+  void Global::saveDisableGapless(bool arg) {
+    storage.set("disable_gapless", Config::Value(arg));
+  }
+
+  int Global::gaplessCacheSizeMb() const {
+    return storage.get("gapless_cache_size_mb").get<int>();
+  }
+
+  void Global::saveGaplessCacheSizeMb(int arg) {
+    storage.set("gapless_cache_size_mb", Config::Value(arg));
   }
 
   bool Global::minimizeToTray() const {

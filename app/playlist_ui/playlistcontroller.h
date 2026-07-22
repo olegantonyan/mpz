@@ -40,7 +40,9 @@ namespace PlaylistUi {
     void on_start(const Track &t);
     void on_pause(const Track &t);
     void on_scrollTo(const Track &track);
+    void on_trackMetaChanged(const Track &t);
     void on_appendToPlaylist(const QList<QDir> &filepaths);
+    void on_appendTracks(const QVector<Track> &tracks);
     void sortBy(const QString &criteria);
 
   private slots:
@@ -63,7 +65,9 @@ namespace PlaylistUi {
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
     ColumnsConfig columns_config;
+    quint64 live_stream_uid = 0;
 
+    void updateStreamSpans();
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
     bool handleExternalDnd(QEvent *event);
