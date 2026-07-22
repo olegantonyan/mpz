@@ -238,7 +238,12 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
       app/playback/gapless/trackdecoder.cpp
       app/playback/gapless/streamsource.cpp
       app/playback/gapless/engine.cpp
-      app/playback/gapless/gaplessmediaplayer.cpp)
+      app/playback/gapless/gaplessmediaplayer.cpp
+      app/eq/equalizer.cpp
+      app/eq/autoeqimport.cpp
+      app/eq/eqexport.cpp
+      app/equalizer_ui/equalizerdialog.cpp
+      app/equalizer_ui/eqcurvewidget.cpp)
   endif()
 
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})

@@ -6,6 +6,8 @@
 #include "playback/gapless/timeline.h"
 #include "playback/gapless/trackdecoder.h"
 #include "playback/mediaplayer.h"
+#include "eq/equalizer.h"
+#include "eq/eqprofile.h"
 #include "streammetadata.h"
 #include "track.h"
 
@@ -41,6 +43,7 @@ namespace Playback::Gapless {
     void stop();
     void setPositionMs(qint64 ms);
     void setVolume(int pct);
+    void setEqualizer(const Eq::EqProfile &profile);
     void prepareNextTrack(const Track &t);
     void setOutputDevice(QByteArray id);
 
@@ -80,6 +83,7 @@ namespace Playback::Gapless {
     void destroySink();
     void sinkEnsureStarted();
     void feedSink();
+    void applyEq(char *data, qint64 frames);
 
     void onPumpTick();
     void emitPosition();
@@ -137,6 +141,8 @@ namespace Playback::Gapless {
     qint64 prepared_end_frame = -1;
     qint64 prepared_total_frames = 0;
     int volume_pct = 100;
+    Eq::Equalizer eq;
+    qint64 last_filtered_frame = -1; // abs frame the EQ state is contiguous with; mismatch => reset on seek
     QByteArray output_device_id;
     QAudioDevice active_device; // device the current sink is running on
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback

@@ -1,4 +1,4 @@
-#include "sort_ui/sortmenu.h"
+#include "sortmenu.h"
 #include "playlist/sorter.h"
 #include "sort_ui/sortingpresetsdialog.h"
 

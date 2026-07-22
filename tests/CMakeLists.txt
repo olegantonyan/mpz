@@ -39,6 +39,10 @@ mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/direc
 mpz_add_test(tst_radioitem      tst_radioitem.cpp      ${APP}/directory_ui/directorymodel/radio/item.cpp)
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
 mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
+mpz_add_test(tst_eqbiquad       tst_eqbiquad.cpp)
+mpz_add_test(tst_equalizer      tst_equalizer.cpp      ${APP}/eq/equalizer.cpp)
+mpz_add_test(tst_autoeqimport   tst_autoeqimport.cpp   ${APP}/eq/autoeqimport.cpp)
+mpz_add_test(tst_eqexport       tst_eqexport.cpp       ${APP}/eq/eqexport.cpp ${APP}/eq/autoeqimport.cpp ${APP}/eq/equalizer.cpp)
 
 # SysInfo needs <QApplication> headers for qApp; pulls in Qt::Widgets for the
 # include path only (the test uses QCoreApplication).

@@ -214,6 +214,8 @@ namespace Playback::Gapless {
   void Engine::setupPlayback(const QAudioFormat &format) {
     sink_format = format;
     const int rate = format.sampleRate();
+    eq.setSampleRate(rate);
+    last_filtered_frame = -1;
     const qint64 begin_f = current_track.isCue() ? qint64(current_track.begin()) * rate / 1000 : 0;
     const qint64 end_f = (current_track.isCue() && current_track.duration() > 0)
                              ? begin_f + qint64(current_track.duration()) * rate / 1000
@@ -478,6 +480,14 @@ namespace Playback::Gapless {
     if (sink) {
       sink->setVolume(pct / 100.0);
     }
+  }
+
+  void Engine::setEqualizer(const Eq::EqProfile &profile) {
+    eq.setAutoPreamp(profile.auto_preamp);
+    eq.setBands(Eq::toStdBands(profile.bands));
+    eq.setPreampDb(profile.preamp_db);
+    eq.setEnabled(profile.enabled);
+    last_filtered_frame = -1;
   }
 
   void Engine::prepareNextTrack(const Track &t) {
@@ -861,6 +871,13 @@ namespace Playback::Gapless {
       if (got <= 0) {
         break;
       }
+      if (!eq.isIdentity()) {
+        if (read_cursor_frame != last_filtered_frame) {
+          eq.reset();
+        }
+        applyEq(chunk.data(), got);
+        last_filtered_frame = read_cursor_frame + got;
+      }
       const qint64 wrote = sink_io->write(chunk.constData(), got * bpf);
       if (wrote <= 0) {
         break;
@@ -870,6 +887,26 @@ namespace Playback::Gapless {
       if (wrote < got * bpf) {
         break;
       }
+    }
+  }
+
+  void Engine::applyEq(char *data, qint64 frames) {
+    const int ch = sink_format.channelCount();
+    if (frames <= 0 || ch <= 0) {
+      return;
+    }
+    switch (sink_format.sampleFormat()) {
+      case QAudioFormat::Float:
+        eq.processFloat(reinterpret_cast<float *>(data), static_cast<std::size_t>(frames), ch);
+        break;
+      case QAudioFormat::Int16:
+        eq.processInt16(reinterpret_cast<int16_t *>(data), static_cast<std::size_t>(frames), ch);
+        break;
+      case QAudioFormat::Int32:
+        eq.processInt32(reinterpret_cast<int32_t *>(data), static_cast<std::size_t>(frames), ch);
+        break;
+      default:
+        break; // UInt8 / Unknown: leave untouched rather than corrupt samples
     }
   }
 

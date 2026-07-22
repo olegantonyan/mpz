@@ -1,4 +1,4 @@
-#include "radio/catalog.h"
+#include "catalog.h"
 
 #include <QDebug>
 #include <QFile>

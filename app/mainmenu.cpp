@@ -19,6 +19,7 @@ void MainMenu::on_open() {
   QMenu menu;
 
   QAction settings(tr("Settings…"));
+  QAction equalizer(tr("Equalizer…"));
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
@@ -40,6 +41,10 @@ void MainMenu::on_open() {
     FeedbackForm(local_conf).exec();
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
+#ifdef ENABLE_GAPLESS
+  equalizer.setEnabled(!global_conf.disableGapless());
+  connect(&equalizer, &QAction::triggered, this, &MainMenu::openEqualizer);
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   connect(&mpdupdate, &QAction::triggered, this, [=]() {
     modus_operandi.mpd_client.updateDb();
@@ -47,6 +52,9 @@ void MainMenu::on_open() {
 #endif
 
   menu.addAction(&settings);
+#ifdef ENABLE_GAPLESS
+  menu.addAction(&equalizer);
+#endif
   if (!view_actions.isEmpty()) {
     menu.addSeparator();
     for (auto *action : std::as_const(view_actions)) {

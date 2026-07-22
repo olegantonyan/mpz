@@ -81,6 +81,7 @@ signals:
   void volumeUp();
   void volumeDown();
   void openSettings();
+  void openEqualizer();
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();

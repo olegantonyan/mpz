@@ -1,4 +1,4 @@
-#include "radio/resolver.h"
+#include "resolver.h"
 
 #include <QEventLoop>
 #include <QFile>

@@ -1,4 +1,4 @@
-#include "directory_ui/directorysortmenu.h"
+#include "directorysortmenu.h"
 
 #include <QMenu>
 #include <QAction>

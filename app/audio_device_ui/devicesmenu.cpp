@@ -1,4 +1,4 @@
-#include "audio_device_ui/devicesmenu.h"
+#include "devicesmenu.h"
 
 #include <QMediaDevices>
 #include <QAudioDevice>

@@ -175,6 +175,11 @@ private:
   void setupSortMenu();
   void setupSleepLock();
   void setupOutputDevice();
+#ifdef ENABLE_GAPLESS
+  void setupEqualizer();
+  void openEqualizerDialog();
+  void applyEqForDevice(const QByteArray &device_id);
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();
 #endif

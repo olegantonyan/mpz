@@ -4,8 +4,10 @@
 #include "storage.h"
 #include "singleinstanceguard.h"
 #include "playlist/playlist.h"
+#include "eq/eqprofile.h"
 
 #include <QByteArray>
+#include <QMap>
 
 namespace Config {
   class Local : public SingleInstanceGuard<Local> {
@@ -58,6 +60,18 @@ namespace Config {
 
     QByteArray outputDeviceId() const;
     bool saveOutputDeviceId(const QByteArray &arg);
+
+    bool eqEnabled() const;
+    bool saveEqEnabled(bool arg);
+
+    QList<Eq::EqProfile> eqProfiles() const;
+    bool saveEqProfiles(const QList<Eq::EqProfile> &arg);
+
+    QString eqActiveProfile() const;
+    bool saveEqActiveProfile(const QString &arg);
+
+    QMap<QString, QString> eqDeviceProfiles() const;
+    bool saveEqDeviceProfiles(const QMap<QString, QString> &arg);
 
     QString crashReportConsent() const;
     void saveCrashReportConsent(const QString &arg);

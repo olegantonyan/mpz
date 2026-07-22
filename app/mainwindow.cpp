@@ -25,6 +25,9 @@
 #include <QAbstractItemView>
 
 #include "settings_ui/settingsdialog.h"
+#ifdef ENABLE_GAPLESS
+  #include "equalizer_ui/equalizerdialog.h"
+#endif
 
 namespace {
   // widen popup so long items aren't elided when the combobox is squeezed narrow
@@ -148,6 +151,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupPlaybackLog();
   setupSleepLock();
   setupOutputDevice();
+#ifdef ENABLE_GAPLESS
+  setupEqualizer();
+#endif
 
   CoverArt::Covers::instance(modus_operandi);
 
@@ -781,6 +787,9 @@ void MainWindow::setupOutputDevice() {
   connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
     AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
     connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+#ifdef ENABLE_GAPLESS
+    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, this, &MainWindow::applyEqForDevice);
+#endif
     int menu_width = device_menu.sizeHint().width();
     int x = ui->toolButtonOutputDevice->width() - menu_width;
     int y = ui->toolButtonOutputDevice->height();
@@ -797,6 +806,42 @@ void MainWindow::setupOutputDevice() {
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
 }
+
+#ifdef ENABLE_GAPLESS
+void MainWindow::setupEqualizer() {
+  applyEqForDevice(local_conf.outputDeviceId());
+
+  connect(shortcuts, &Shortcuts::openEqualizer, this, &MainWindow::openEqualizerDialog);
+  connect(main_menu, &MainMenu::openEqualizer, shortcuts, &Shortcuts::openEqualizer);
+}
+
+void MainWindow::openEqualizerDialog() {
+  EqualizerUi::EqualizerDialog dlg(player, local_conf, global_conf, this);
+  dlg.exec();
+}
+
+void MainWindow::applyEqForDevice(const QByteArray &device_id) {
+  const QList<Eq::EqProfile> profiles = local_conf.eqProfiles();
+  if (profiles.isEmpty()) {
+    return;
+  }
+  QString name = local_conf.eqActiveProfile();
+  const QString key = QString::fromLatin1(device_id.toHex());
+  const QMap<QString, QString> device_map = local_conf.eqDeviceProfiles();
+  if (!key.isEmpty() && device_map.contains(key)) {
+    name = device_map.value(key);
+  }
+  Eq::EqProfile chosen = profiles.first();
+  for (const auto &p : profiles) {
+    if (p.name == name) {
+      chosen = p;
+      break;
+    }
+  }
+  chosen.enabled = local_conf.eqEnabled();
+  player->setEqualizer(chosen);
+}
+#endif
 
 #ifdef ENABLE_MPD_SUPPORT
 void MainWindow::setupMpdOrder() {

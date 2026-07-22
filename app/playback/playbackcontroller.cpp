@@ -199,6 +199,12 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     player().setPosition(seconds * 1000);
   }
 
+#ifdef ENABLE_GAPLESS
+  void Controller::setEqualizer(const Eq::EqProfile &profile) {
+    player().setEqualizer(profile);
+  }
+#endif
+
   void Controller::on_seek(int position) {
     if (player().state() != MediaPlayer::PlayingState)  {
       return;
