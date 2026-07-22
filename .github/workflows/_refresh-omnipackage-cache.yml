@@ -1,12 +1,6 @@
 on:
   workflow_call:
     inputs:
-      repository:
-        required: true
-        type: string
-      version_extractor:
-        required: true
-        type: string
       arch:
         required: true
         type: string
@@ -34,12 +28,9 @@ jobs:
           all=$(omnipackage info --list-distros . --format json)
           echo "distros=$(jq -cn --argjson all "$all" --argjson skip "$SKIP" '$all - $skip')" >> "$GITHUB_OUTPUT"
 
-  release:
+  image_cache:
     needs: [list-distros]
     runs-on: ${{ inputs.runs_on }}
-    concurrency:
-      group: omnipackage-${{ inputs.repository }}-${{ matrix.distro }}
-      cancel-in-progress: false
     strategy:
       fail-fast: false
       matrix:
@@ -49,5 +40,4 @@ jobs:
       - uses: actions/checkout@v6
       - run: command -v podman >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq podman; }
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-      - name: Release packages for ${{ matrix.distro }}
-        run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache github_${{ inputs.arch }}
+      - run:  omnipackage prime . --image-cache github_${{ inputs.arch }} --distros "${{ matrix.distro }}"
