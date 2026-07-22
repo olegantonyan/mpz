@@ -114,6 +114,7 @@ set(PROJECT_SOURCES
   app/playlist_ui/columnsconfig.cpp
   app/playlist_ui/playlistcontroller.cpp
   app/playlist_ui/playlistmodel.cpp
+  app/playlist_ui/streamrowdelegate.cpp
   app/playlist/playlist.cpp
   app/playback/playerstate.cpp
   app/playlist_ui/playlistproxyfiltermodel.cpp
