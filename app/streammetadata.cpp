@@ -10,15 +10,20 @@ StreamMetaData::StreamMetaData(const QString &title) : title_explicit(title) {
 }
 
 bool StreamMetaData::isEmpty() const {
-  return _data.isEmpty();
+  return _data.isEmpty() && _status_now_playing.isEmpty();
 }
 
 void StreamMetaData::insert(const QString &key, const QString &value) {
   _data.insert(key, value);
 }
 
+void StreamMetaData::setStatusNowPlaying(const QString &raw) {
+  _status_now_playing = raw;
+}
+
 void StreamMetaData::clear() {
   _data.clear();
+  _status_now_playing.clear();
 }
 
 quint16 StreamMetaData::bitrate() const {
@@ -39,30 +44,29 @@ quint32 StreamMetaData::samplerate() const {
   return i;
 }
 
+QString StreamMetaData::nowPlaying() const {
+  static const QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
+  auto match = r.match(_data.value("stream", ""));
+  if (match.hasMatch() && !match.captured(2).isEmpty()) {
+    return match.captured(2);
+  }
+  return _status_now_playing;
+}
+
 QString StreamMetaData::artist() const {
   if (!title_explicit.isEmpty()) {
     return title_explicit;
   }
-  static const QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
-  auto stream = _data.value("stream", "");
-  auto match = r.match(stream);
-  if (match.hasMatch()) {
-    return match.captured(2).split(" - ").first();
-  }
-  return "";
+  auto np = nowPlaying();
+  return np.isEmpty() ? "" : np.split(" - ").first();
 }
 
 QString StreamMetaData::title() const {
   if (!title_explicit.isEmpty()) {
     return title_explicit;
   }
-  static const QRegularExpression r("StreamTitle=('|\")(.*?)('|\");");
-  auto stream = _data.value("stream", "");
-  auto match = r.match(stream);
-  if (match.hasMatch()) {
-    return match.captured(2).split(" - ").last();
-  }
-  return "";
+  auto np = nowPlaying();
+  return np.isEmpty() ? "" : np.split(" - ").last();
 }
 
 QString StreamMetaData::format() const {

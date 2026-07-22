@@ -98,6 +98,7 @@ namespace PlaylistUi {
     if (!t.isEmpty()) {
       beginInsertRows(QModelIndex(), 0, t.size() - 1);
       tracks = t;
+      applyStreamMeta();
       endInsertRows();
     }
 
@@ -141,10 +142,24 @@ namespace PlaylistUi {
   }
 
   void Model::updateStreamMeta(quint64 uid, const StreamMetaData &meta) {
+    stream_meta_uid = uid;
+    stream_meta = meta;
     for (int i = 0; i < tracks.size(); i++) {
       if (tracks.at(i).uid() == uid && tracks.at(i).isStream()) {
         tracks[i].setStreamMeta(meta);
         emit dataChanged(buildIndex(i, 0), buildIndex(i, columnCount() - 1));
+        return;
+      }
+    }
+  }
+
+  void Model::applyStreamMeta() {
+    if (stream_meta_uid == 0 || stream_meta.isEmpty()) {
+      return;
+    }
+    for (int i = 0; i < tracks.size(); i++) {
+      if (tracks.at(i).uid() == stream_meta_uid && tracks.at(i).isStream()) {
+        tracks[i].setStreamMeta(stream_meta);
         return;
       }
     }

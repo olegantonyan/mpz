@@ -23,6 +23,7 @@ private slots:
   void streamCtorStoresTitle();
   void streamTitlePrefersIcyOverStationName();
   void streamTitleFallsBackToStationName();
+  void streamTitleUsesStatusFallbackOverStationName();
   void streamTitleFallsBackToSanitizedUrl();
 
   void setMpdMakesIsMpdTrue();
@@ -399,6 +400,20 @@ void TestTrack::streamTitleFallsBackToStationName() {
   m.insert(QStringLiteral("stream"), QStringLiteral("StreamTitle='';"));
   t.setStreamMeta(m);
   QCOMPARE(t.title(), QStringLiteral("Groove Salad"));
+}
+
+// Icecast servers that send an always-empty inline StreamTitle are recovered from
+// status-json.xsl; that title must outrank the station name just like an ICY one.
+void TestTrack::streamTitleUsesStatusFallbackOverStationName() {
+  Track t(QUrl(QStringLiteral("http://e/x")), QStringLiteral("radio://s"),
+          QStringLiteral("Philosomatika Premium"));
+  StreamMetaData m;
+  m.insert(QStringLiteral("stream"), QStringLiteral("StreamTitle='';"));
+  m.setStatusNowPlaying(QStringLiteral("Vertical Mode - Time Machine"));
+  t.setStreamMeta(m);
+  QCOMPARE(t.artist(), QStringLiteral("Vertical Mode"));
+  QCOMPARE(t.title(), QStringLiteral("Time Machine"));
+  QCOMPARE(t.streamNowPlaying(), QStringLiteral("Vertical Mode - Time Machine"));
 }
 
 // m3u/pls streams carry no station name, so the URL fallback must survive.

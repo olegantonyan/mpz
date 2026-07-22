@@ -105,6 +105,7 @@ set(PROJECT_SOURCES
   app/radio/station.cpp
   app/radio/catalog.cpp
   app/radio/resolver.cpp
+  app/radio/icecaststatus.cpp
   app/directory_ui/directorymodel/radio/item.cpp
   app/directory_ui/directorymodel/radio.cpp
   app/directory_ui/radiodelegate.cpp

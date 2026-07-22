@@ -40,8 +40,16 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #endif
 
     connect(&_player, &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
-      _current_track.setStreamMeta(meta);
-      emit trackChanged(_current_track);
+      _inline_meta = meta;
+      if (!meta.title().isEmpty()) {
+        _icecast_status.stop();
+      }
+      applyStreamMeta();
+    });
+
+    connect(&_icecast_status, &Radio::IcecastStatus::nowPlaying, this, [=](const QString &raw) {
+      _status_now_playing = raw;
+      applyStreamMeta();
     });
 
 #ifdef ENABLE_MPD_SUPPORT
@@ -252,6 +260,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
         emit stopped();
         break;
       case MediaPlayer::PlayingState:
+        if (_current_track.isStream() && _inline_meta.title().isEmpty()) {
+          _icecast_status.start(_current_track.url());
+        }
         emit started(_current_track);
         break;
       case MediaPlayer::PausedState:
@@ -293,6 +304,16 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::setCurrentTrack(const Track &track) {
     _current_track = track;
+    _icecast_status.stop();
+    _inline_meta.clear();
+    _status_now_playing.clear();
+  }
+
+  void Controller::applyStreamMeta() {
+    StreamMetaData m = _inline_meta;
+    m.setStatusNowPlaying(_status_now_playing);
+    _current_track.setStreamMeta(m);
+    emit trackChanged(_current_track);
   }
 
   void Controller::trackChangedQueryComplete(const Track &track) {

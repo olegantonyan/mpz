@@ -66,11 +66,18 @@
     </message>
 </context>
 <context>
-    <name>AudioDeviceUi::DevicesMenu</name>
+    <name>AudioDeviceUi</name>
     <message>
-        <location filename="../../audio_device_ui/devicesmenu.cpp" line="27"/>
+        <location filename="../../audio_device_ui/outputdevicename.cpp" line="25"/>
         <source>Default</source>
         <translation>Подразумевано</translation>
+    </message>
+</context>
+<context>
+    <name>AudioDeviceUi::DevicesMenu</name>
+    <message>
+        <source>Default</source>
+        <translation type="vanished">Подразумевано</translation>
     </message>
 </context>
 <context>
@@ -373,6 +380,235 @@
     </message>
 </context>
 <context>
+    <name>EqualizerUi::EqualizerDialog</name>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
+        <source>Equalizer</source>
+        <translation>Еквилајзер</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="74"/>
+        <source>Everything below applies to this output device only.</source>
+        <translation>Све испод односи се само на овај излазни уређај.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="79"/>
+        <source>Enable equalizer for this device</source>
+        <translation>Омогући еквилајзер за овај уређај</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="83"/>
+        <source>Preset</source>
+        <translation>Пресет</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="99"/>
+        <source>Save As…</source>
+        <translation>Сачувај као…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="102"/>
+        <source>Delete</source>
+        <translation>Обриши</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
+        <source>Import…</source>
+        <translation>Увези…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="107"/>
+        <source>Import an EqualizerAPO / AutoEQ ParametricEQ.txt file</source>
+        <translation>Увези EqualizerAPO / AutoEQ ParametricEQ.txt датотеку</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="111"/>
+        <source>Export…</source>
+        <translation>Извези…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="113"/>
+        <source>Parametric EQ…</source>
+        <translation>Параметарски EQ…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="115"/>
+        <source>Graphic EQ (multiband)…</source>
+        <translation>Графички EQ (вишепојасни)…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
+        <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
+        <translation>Еквилајзер ради само са механизмом репродукције без прекида. Омогућите га у подешавањима.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="130"/>
+        <source>Preamp:</source>
+        <translation>Претпојачање:</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="135"/>
+        <source>dB</source>
+        <translation>dB</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <source>Auto (clip-safe)</source>
+        <translation>Аутоматски (без клиповања)</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="145"/>
+        <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
+        <translation>Подеси претпојачање тако да појачани појасеви никада не пређу 0 dBFS</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <source>Graphic</source>
+        <translation>Графички</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="162"/>
+        <source>Parametric</source>
+        <translation>Параметарски</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="183"/>
+        <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation>Излазни уређај: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="246"/>
+        <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
+        <translation>Овај пресет није 10-појасни графички EQ. Уредите га у параметарском режиму или ресетујте.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="249"/>
+        <source>Reset to 10-band</source>
+        <translation>Ресетуј на 10 појасева</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <source>Freq (Hz)</source>
+        <translation>Фрек. (Hz)</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <source>Gain (dB)</source>
+        <translation>Појачање (dB)</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <source>On</source>
+        <translation>Укљ.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="277"/>
+        <source>Add band</source>
+        <translation>Додај појас</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="289"/>
+        <source>Remove selected</source>
+        <translation>Уклони изабрано</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <source>Peak</source>
+        <translation>Пик</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <source>Low shelf</source>
+        <translation>Ниски шелф</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <source>High shelf</source>
+        <translation>Високи шелф</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <source>Low pass</source>
+        <translation>Нископропусни</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="325"/>
+        <source>High pass</source>
+        <translation>Високопропусни</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <source>Save preset</source>
+        <translation>Сачувај пресет</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <source>Preset name:</source>
+        <translation>Назив пресета:</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="507"/>
+        <source>Import equalizer preset</source>
+        <translation>Увези пресет еквилајзера</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="536"/>
+        <source>Choose file…</source>
+        <translation>Изабери датотеку…</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <source>Import EqualizerAPO / AutoEQ preset</source>
+        <translation>Увези EqualizerAPO / AutoEQ пресет</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="551"/>
+        <source>Parametric EQ (*.txt);;All files (*)</source>
+        <translation>Параметарски EQ (*.txt);;Све датотеке (*)</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <source>Import failed</source>
+        <translation>Увоз није успео</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
+        <source>Could not open the file.</source>
+        <translation>Није могуће отворити датотеку.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <source>No filters found in the file.</source>
+        <translation>У датотеци нису пронађени филтери.</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <source>Export preset</source>
+        <translation>Извези пресет</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <source>Text files (*.txt);;All files (*)</source>
+        <translation>Текстуалне датотеке (*.txt);;Све датотеке (*)</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <source>Export failed</source>
+        <translation>Извоз није успео</translation>
+    </message>
+    <message>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <source>Could not write the file.</source>
+        <translation>Није могуће уписати датотеку.</translation>
+    </message>
+</context>
+<context>
     <name>FeedbackForm</name>
     <message>
         <location filename="../../feedback_ui/feedbackform.ui" line="14"/>
@@ -552,93 +788,98 @@
         <translation>Утишај гласноћу</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="111"/>
+        <location filename="../../macos/macmenubar.cpp" line="109"/>
+        <source>Equalizer…</source>
+        <translation>Еквилајзер…</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="121"/>
         <source>Output Device</source>
         <translation>Излазни уређај</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="123"/>
+        <location filename="../../macos/macmenubar.cpp" line="133"/>
         <source>mpd update</source>
         <translation>Ажурирај mpd базу</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="133"/>
+        <location filename="../../macos/macmenubar.cpp" line="143"/>
         <source>View</source>
         <translation>Приказ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="134"/>
+        <location filename="../../macos/macmenubar.cpp" line="144"/>
         <source>Sort</source>
         <translation>Сортирање</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="145"/>
+        <location filename="../../macos/macmenubar.cpp" line="155"/>
         <source>Jump to Playing Track</source>
         <translation>Пређите на нумеру за репродукцију</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="149"/>
+        <location filename="../../macos/macmenubar.cpp" line="159"/>
         <source>Playback Log</source>
         <translation>Дневник репродукције</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="153"/>
+        <location filename="../../macos/macmenubar.cpp" line="163"/>
         <source>Keyboard Shortcuts</source>
         <translation>Пречице на тастатури</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="159"/>
         <location filename="../../macos/macmenubar.cpp" line="169"/>
+        <location filename="../../macos/macmenubar.cpp" line="179"/>
         <source>Enter Full Screen</source>
         <translation>Пређи у цео екран</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="169"/>
+        <location filename="../../macos/macmenubar.cpp" line="179"/>
         <source>Exit Full Screen</source>
         <translation>Изађи из целог екрана</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="172"/>
+        <location filename="../../macos/macmenubar.cpp" line="182"/>
         <source>Window</source>
         <translation>Прозор</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="174"/>
+        <location filename="../../macos/macmenubar.cpp" line="184"/>
         <source>Minimize</source>
         <translation>Умањи</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="178"/>
+        <location filename="../../macos/macmenubar.cpp" line="188"/>
         <source>Zoom</source>
         <translation>Зумирај</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="189"/>
+        <location filename="../../macos/macmenubar.cpp" line="199"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="193"/>
+        <location filename="../../macos/macmenubar.cpp" line="203"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="195"/>
+        <location filename="../../macos/macmenubar.cpp" line="205"/>
         <source>mpz Website</source>
         <translation>mpz веб-сајт</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="200"/>
+        <location filename="../../macos/macmenubar.cpp" line="210"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="205"/>
+        <location filename="../../macos/macmenubar.cpp" line="215"/>
         <source>Send Feedback…</source>
         <translation>Пошаљи повратне информације…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="208"/>
+        <location filename="../../macos/macmenubar.cpp" line="218"/>
         <source>Report a Bug…</source>
         <translation>Пријави грешку…</translation>
     </message>
@@ -652,31 +893,36 @@
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="22"/>
+        <source>Equalizer…</source>
+        <translation>Еквилајзер…</translation>
+    </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="23"/>
         <source>Playback log</source>
         <translation>Дневник репродукције</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="23"/>
+        <location filename="../../mainmenu.cpp" line="24"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="24"/>
+        <location filename="../../mainmenu.cpp" line="25"/>
         <source>Quit</source>
         <translation>Изађи</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="25"/>
+        <location filename="../../mainmenu.cpp" line="26"/>
         <source>Got feedback?</source>
         <translation>Имате повратне информације?</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="26"/>
+        <location filename="../../mainmenu.cpp" line="27"/>
         <source>Keyboard shortcuts</source>
         <translation>Пречице на тастатури</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="27"/>
+        <location filename="../../mainmenu.cpp" line="28"/>
         <source>mpd update</source>
         <translation>Ажурирај mpd базу</translation>
     </message>
@@ -804,56 +1050,56 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="287"/>
-        <location filename="../../mainwindow.cpp" line="322"/>
+        <location filename="../../mainwindow.cpp" line="294"/>
+        <location filename="../../mainwindow.cpp" line="329"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="288"/>
-        <location filename="../../mainwindow.cpp" line="321"/>
+        <location filename="../../mainwindow.cpp" line="295"/>
+        <location filename="../../mainwindow.cpp" line="328"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="289"/>
-        <location filename="../../mainwindow.cpp" line="323"/>
+        <location filename="../../mainwindow.cpp" line="296"/>
+        <location filename="../../mainwindow.cpp" line="330"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="320"/>
+        <location filename="../../mainwindow.cpp" line="327"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="422"/>
+        <location filename="../../mainwindow.cpp" line="429"/>
         <source>Lock toolbar</source>
         <translation>Закључај траку с алаткама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="440"/>
+        <location filename="../../mainwindow.cpp" line="447"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="446"/>
+        <location filename="../../mainwindow.cpp" line="453"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="582"/>
-        <location filename="../../mainwindow.cpp" line="586"/>
+        <location filename="../../mainwindow.cpp" line="589"/>
+        <location filename="../../mainwindow.cpp" line="593"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="588"/>
+        <location filename="../../mainwindow.cpp" line="595"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="600"/>
+        <location filename="../../mainwindow.cpp" line="607"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>

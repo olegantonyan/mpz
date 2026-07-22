@@ -68,10 +68,13 @@ namespace PlaylistUi {
   private:
     void setTracks(const QVector<Track> &tracks);
     void allDataChanged();
+    void applyStreamMeta();
 
     std::shared_ptr<Playlist::Playlist> _playlist;
     QVector<Track> tracks;
     quint64 highlight_uid = 0;
+    quint64 stream_meta_uid = 0;
+    StreamMetaData stream_meta;
     QStyle *style;
     enum HighlightState highlight_state = None;
     const ColumnsConfig &columns_config;

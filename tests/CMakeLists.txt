@@ -100,6 +100,11 @@ target_compile_definitions(tst_radiocatalogresource PRIVATE
 mpz_add_test(tst_radioresolver tst_radioresolver.cpp ${APP}/radio/resolver.cpp)
 target_link_libraries(tst_radioresolver PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
+# Same deal for icecaststatus.cpp: nowPlayingFromStatusJson/statusJsonUrl are pure and
+# the IcecastStatus poller body is unreferenced by the test.
+mpz_add_test(tst_icecaststatus tst_icecaststatus.cpp ${APP}/radio/icecaststatus.cpp)
+target_link_libraries(tst_icecaststatus PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
 # UpdateChecker::isNewer is a static semver comparison. updatechecker.cpp pulls
 # <QApplication> and a QNetworkAccessManager member for its include paths; the
 # networking/qApp code is unreferenced by the test and dropped by --gc-sections.
