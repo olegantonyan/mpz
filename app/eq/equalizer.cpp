@@ -51,8 +51,8 @@ namespace Eq {
   double Equalizer::autoPreampDb() const {
     double peak_db = 0.0;
     for (double f = 20.0; f <= 20000.0; f *= 1.0594630943592953) {
-      const double w = 2.0 * M_PI * f / fs_;
-      if (w >= M_PI) {
+      const double w = 2.0 * kPi * f / fs_;
+      if (w >= kPi) {
         break;
       }
       double db = 0.0;
@@ -107,9 +107,9 @@ namespace Eq {
   }
 
   double Equalizer::magnitudeResponseDb(double freq_hz) const {
-    const double w = 2.0 * M_PI * freq_hz / fs_;
+    const double w = 2.0 * kPi * freq_hz / fs_;
     double db = effectivePreampDb();
-    if (w > 0.0 && w < M_PI) {
+    if (w > 0.0 && w < kPi) {
       for (const auto &s : coeffs_) {
         const double m = s.magnitude(w);
         if (m > 0.0) {

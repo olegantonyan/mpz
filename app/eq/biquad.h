@@ -7,6 +7,8 @@
 #include <complex>
 
 namespace Eq {
+  constexpr double kPi = 3.14159265358979323846;
+
   struct Biquad {
     double b0 = 1.0, b1 = 0.0, b2 = 0.0, a1 = 0.0, a2 = 0.0;
     double z1 = 0.0, z2 = 0.0;
@@ -37,7 +39,7 @@ namespace Eq {
     }
 
     const double q = band.q > 1e-6 ? band.q : 1e-6;
-    const double w0 = 2.0 * M_PI * std::min(band.freq_hz, fs * 0.5 * 0.999) / fs;
+    const double w0 = 2.0 * kPi * std::min(band.freq_hz, fs * 0.5 * 0.999) / fs;
     const double cw = std::cos(w0);
     const double sw = std::sin(w0);
     const double alpha = sw / (2.0 * q);
