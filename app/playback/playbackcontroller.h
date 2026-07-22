@@ -5,6 +5,7 @@
 #include "track.h"
 #include "playback/mediaplayer.h"
 #include "modusoperandi.h"
+#include "radio/icecaststatus.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/mediaplayer.h"
 #endif
@@ -78,6 +79,7 @@ namespace Playback {
     void on_seek(int position);
     QString time_text(quint64 pos) const;
     void setup_monotonic_timer();
+    void applyStreamMeta();
     MediaPlayer &player();
 
     Playback::Controls _controls;
@@ -92,6 +94,9 @@ namespace Playback {
 #endif
     Track _current_track;
     QTimer monotonic_timer;
+    StreamMetaData _inline_meta;
+    QString _status_now_playing;
+    Radio::IcecastStatus _icecast_status;
 
   private slots:
     void on_controlsPause();
