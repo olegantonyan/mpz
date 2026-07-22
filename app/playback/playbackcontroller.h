@@ -59,6 +59,9 @@ namespace Playback {
     void prepareNextTrack(const Track &track);
     void setVolume(int value);
     void seek(int seconds);
+#ifdef ENABLE_GAPLESS
+    void setEqualizer(const Eq::EqProfile &profile);
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);
 #endif

@@ -60,6 +60,10 @@ namespace Playback::Gapless {
     engine.setVolume(volume);
   }
 
+  void GaplessMediaPlayer::setEqualizer(const Eq::EqProfile &profile) {
+    engine.setEqualizer(profile);
+  }
+
   void GaplessMediaPlayer::setTrack(const Track &track) {
     if (!gapless_enabled) {
       if (backend == Backend::Engine) {

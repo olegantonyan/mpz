@@ -23,6 +23,7 @@ namespace Playback::Gapless {
     void stop() override;
     void setPosition(qint64 position) override;
     void setVolume(int volume) override;
+    void setEqualizer(const Eq::EqProfile &profile) override;
     void setTrack(const Track &track) override;
     void clearTrack() override;
     void prepareNextTrack(const Track &track) override;

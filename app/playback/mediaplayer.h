@@ -3,6 +3,9 @@
 
 #include "playback/stream.h"
 #include "track.h"
+#ifdef ENABLE_GAPLESS
+  #include "eq/eqprofile.h"
+#endif
 
 #include <QObject>
 #include <QMediaPlayer>
@@ -52,6 +55,9 @@ namespace Playback {
     virtual void setTrack(const Track &track);
     virtual void clearTrack();
     virtual void prepareNextTrack(const Track &track) { Q_UNUSED(track) }
+#ifdef ENABLE_GAPLESS
+    virtual void setEqualizer(const Eq::EqProfile &profile) { Q_UNUSED(profile) }
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     virtual void setOutputDevice(QByteArray deviceid);
 #endif

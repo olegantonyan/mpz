@@ -23,6 +23,7 @@ signals:
   void toggleTrayIcon();
   void openPlaybackLog();
   void openShortcuts();
+  void openEqualizer();
 
 public slots:
   void on_open();
