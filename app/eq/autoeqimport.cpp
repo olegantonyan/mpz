@@ -1,4 +1,4 @@
-#include "autoeqimport.h"
+#include "eq/autoeqimport.h"
 
 #include <QRegularExpression>
 #include <QStringList>

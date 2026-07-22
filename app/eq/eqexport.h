@@ -1,7 +1,7 @@
 #ifndef EQ_EQEXPORT_H
 #define EQ_EQEXPORT_H
 
-#include "eqprofile.h"
+#include "eq/eqprofile.h"
 
 #include <QString>
 

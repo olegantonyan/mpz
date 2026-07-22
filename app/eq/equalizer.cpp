@@ -1,4 +1,4 @@
-#include "equalizer.h"
+#include "eq/equalizer.h"
 
 #include <algorithm>
 #include <cmath>

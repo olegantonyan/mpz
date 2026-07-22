@@ -1,8 +1,8 @@
 #ifndef EQ_EQUALIZER_H
 #define EQ_EQUALIZER_H
 
-#include "band.h"
-#include "biquad.h"
+#include "eq/band.h"
+#include "eq/biquad.h"
 
 #include <cstddef>
 #include <cstdint>

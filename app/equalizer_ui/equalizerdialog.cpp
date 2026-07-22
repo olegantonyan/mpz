@@ -1,4 +1,4 @@
-#include "equalizerdialog.h"
+#include "equalizer_ui/equalizerdialog.h"
 
 #include "eq/autoeqimport.h"
 #include "eq/eqexport.h"

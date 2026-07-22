@@ -1,7 +1,7 @@
 #ifndef EQ_AUTOEQIMPORT_H
 #define EQ_AUTOEQIMPORT_H
 
-#include "band.h"
+#include "eq/band.h"
 
 #include <QString>
 

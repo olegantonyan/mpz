@@ -1,7 +1,7 @@
 #ifndef EQ_BIQUAD_H
 #define EQ_BIQUAD_H
 
-#include "band.h"
+#include "eq/band.h"
 
 #include <cmath>
 #include <complex>

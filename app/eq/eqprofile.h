@@ -1,7 +1,7 @@
 #ifndef EQ_EQPROFILE_H
 #define EQ_EQPROFILE_H
 
-#include "band.h"
+#include "eq/band.h"
 
 #include <QString>
 #include <QVector>

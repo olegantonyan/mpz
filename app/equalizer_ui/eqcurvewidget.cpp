@@ -1,4 +1,4 @@
-#include "eqcurvewidget.h"
+#include "equalizer_ui/eqcurvewidget.h"
 
 #include <QPainter>
 #include <QPainterPath>

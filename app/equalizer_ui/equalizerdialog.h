@@ -5,7 +5,7 @@
 #include "config/local.h"
 #include "config/global.h"
 #include "playback/playbackcontroller.h"
-#include "eqcurvewidget.h"
+#include "equalizer_ui/eqcurvewidget.h"
 
 #include <QDialog>
 #include <QList>

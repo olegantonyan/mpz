@@ -1,6 +1,6 @@
-#include "eqexport.h"
+#include "eq/eqexport.h"
 
-#include "equalizer.h"
+#include "eq/equalizer.h"
 
 #include <cmath>
 
