@@ -5,6 +5,7 @@
 #include "singleinstanceguard.h"
 #include "playlist/playlist.h"
 #include "eq/eqprofile.h"
+#include "eq/eqdevicesettings.h"
 
 #include <QByteArray>
 #include <QMap>
@@ -61,17 +62,12 @@ namespace Config {
     QByteArray outputDeviceId() const;
     bool saveOutputDeviceId(const QByteArray &arg);
 
-    bool eqEnabled() const;
-    bool saveEqEnabled(bool arg);
-
     QList<Eq::EqProfile> eqProfiles() const;
     bool saveEqProfiles(const QList<Eq::EqProfile> &arg);
 
-    QString eqActiveProfile() const;
-    bool saveEqActiveProfile(const QString &arg);
-
-    QMap<QString, QString> eqDeviceProfiles() const;
-    bool saveEqDeviceProfiles(const QMap<QString, QString> &arg);
+    Eq::DeviceSettings eqDeviceSettings(const QByteArray &device_id) const;
+    bool saveEqDeviceSettings(const QByteArray &device_id, const Eq::DeviceSettings &arg);
+    bool dropEqProfileFromDevices(const QString &profile_name);
 
     QString crashReportConsent() const;
     void saveCrashReportConsent(const QString &arg);

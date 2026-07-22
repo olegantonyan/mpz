@@ -482,11 +482,11 @@ namespace Playback::Gapless {
     }
   }
 
-  void Engine::setEqualizer(const Eq::EqProfile &profile) {
+  void Engine::setEqualizer(const Eq::EqProfile &profile, bool enabled) {
     eq.setAutoPreamp(profile.auto_preamp);
     eq.setBands(Eq::toStdBands(profile.bands));
     eq.setPreampDb(profile.preamp_db);
-    eq.setEnabled(profile.enabled);
+    eq.setEnabled(enabled);
     last_filtered_frame = -1;
   }
 
@@ -710,7 +710,17 @@ namespace Playback::Gapless {
       preferred_device_missing = !id.isEmpty();
       target = QMediaDevices::defaultAudioOutput();
     }
+    updateEffectiveDevice();
     switchSink(target);
+  }
+
+  void Engine::updateEffectiveDevice() {
+    const QByteArray effective = findPreferredDevice().isNull() ? QByteArray() : output_device_id;
+    if (effective == effective_device_id) {
+      return;
+    }
+    effective_device_id = effective;
+    emit effectiveOutputDeviceChanged(effective);
   }
 
   QAudioDevice Engine::findPreferredDevice() const {
@@ -728,6 +738,7 @@ namespace Playback::Gapless {
 
   void Engine::evaluateAudioDevice() {
     ++device_change_epoch;
+    updateEffectiveDevice();
     const QAudioDevice preferred = findPreferredDevice();
     QAudioDevice target;
     if (preferred.isNull()) {

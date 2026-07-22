@@ -4,12 +4,23 @@
 #include <QApplication>
 
 namespace Config {
+  namespace {
+    // Hex is [0-9a-f], so no real device id can collide with the "default" sentinel.
+    QString deviceKey(const QByteArray &device_id) {
+      return device_id.isEmpty() ? QStringLiteral("default") : QString::fromLatin1(device_id.toHex());
+    }
+  }
+
   Local::Local() : SingleInstanceGuard("Config::Local"), storage("local.yml") {
     if (storage.appVersion().isNull() || storage.appVersion() < QVersionNumber(1, 1, 0)) {
       durationSeconds = true;
     } else {
       durationSeconds = false;
     }
+
+    storage.remove("eq_enabled");
+    storage.remove("eq_active_profile");
+    storage.remove("eq_device_profiles");
   }
 
   bool Local::sync() {
@@ -220,14 +231,6 @@ namespace Config {
     return storage.set("output_device_id", arg);
   }
 
-  bool Local::eqEnabled() const {
-    return storage.get("eq_enabled").get<bool>();
-  }
-
-  bool Local::saveEqEnabled(bool arg) {
-    return storage.set("eq_enabled", Config::Value(arg));
-  }
-
   QList<Eq::EqProfile> Local::eqProfiles() const {
     QList<Eq::EqProfile> result;
     auto raw = storage.get("eq_profiles");
@@ -238,7 +241,6 @@ namespace Config {
       auto map = i.get<QMap<QString, Config::Value>>();
       Eq::EqProfile p;
       p.name = map.value("name").get<QString>();
-      p.enabled = map.value("enabled").get<bool>();
       p.preamp_db = map.value("preamp").get<QString>().toDouble();
       p.auto_preamp = map.value("auto_preamp").get<bool>();
       for (const auto &bv : map.value("bands").get<QList<Config::Value>>()) {
@@ -261,7 +263,6 @@ namespace Config {
     for (const auto &p : arg) {
       QMap<QString, Config::Value> pm;
       pm.insert("name", Config::Value(p.name));
-      pm.insert("enabled", Config::Value(p.enabled));
       pm.insert("preamp", Config::Value(QString::number(p.preamp_db, 'g', 10)));
       pm.insert("auto_preamp", Config::Value(p.auto_preamp));
       QList<Config::Value> bands;
@@ -284,29 +285,40 @@ namespace Config {
     return storage.set("eq_profiles", value);
   }
 
-  QString Local::eqActiveProfile() const {
-    return storage.get("eq_active_profile").get<QString>();
-  }
-
-  bool Local::saveEqActiveProfile(const QString &arg) {
-    return storage.set("eq_active_profile", Config::Value(arg));
-  }
-
-  QMap<QString, QString> Local::eqDeviceProfiles() const {
-    QMap<QString, QString> result;
-    auto mv = storage.get("eq_device_profiles").get<QMap<QString, Config::Value>>();
-    for (auto it = mv.constBegin(); it != mv.constEnd(); ++it) {
-      result[it.key()] = it.value().get<QString>();
-    }
+  Eq::DeviceSettings Local::eqDeviceSettings(const QByteArray &device_id) const {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    auto entry = devices.value(deviceKey(device_id)).get<QMap<QString, Config::Value>>();
+    Eq::DeviceSettings result;
+    result.enabled = entry.value("enabled").get<bool>();
+    result.profile = entry.value("profile").get<QString>();
     return result;
   }
 
-  bool Local::saveEqDeviceProfiles(const QMap<QString, QString> &arg) {
-    QMap<QString, Config::Value> mv;
-    for (auto it = arg.constBegin(); it != arg.constEnd(); ++it) {
-      mv[it.key()] = Config::Value(it.value());
+  bool Local::saveEqDeviceSettings(const QByteArray &device_id, const Eq::DeviceSettings &arg) {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    QMap<QString, Config::Value> entry;
+    entry.insert("enabled", Config::Value(arg.enabled));
+    entry.insert("profile", Config::Value(arg.profile));
+    devices[deviceKey(device_id)] = Config::Value(entry);
+    return storage.set("eq_devices", Config::Value(devices));
+  }
+
+  bool Local::dropEqProfileFromDevices(const QString &profile_name) {
+    auto devices = storage.get("eq_devices").get<QMap<QString, Config::Value>>();
+    bool changed = false;
+    for (auto it = devices.begin(); it != devices.end();) {
+      auto entry = it.value().get<QMap<QString, Config::Value>>();
+      if (entry.value("profile").get<QString>() == profile_name) {
+        it = devices.erase(it);
+        changed = true;
+      } else {
+        ++it;
+      }
     }
-    return storage.set("eq_device_profiles", Config::Value(mv));
+    if (!changed) {
+      return true;
+    }
+    return storage.set("eq_devices", Config::Value(devices));
   }
 
   QString Local::crashReportConsent() const {

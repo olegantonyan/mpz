@@ -5,7 +5,7 @@
 - Gapless playback: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced. Only Qt6
 - HTTPS radio streams supoprt
 - Dedicated "Radio" library with built-in stations. Raw playlists with streams can still be played directly, or imported into radio library
-- Equalizer with 10-band and parametric modes, supports AutoEq presets
+- Equalizer with 10-band and parametric modes, supports AutoEq presets. On/off and preset are per output device ("Default" counts as a device); presets themselves are shared. Follows the device actually in use, so unplugging one switches the EQ along with the audio
 
 ### Fixed
 

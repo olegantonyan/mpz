@@ -12,6 +12,7 @@ namespace Playback::Gapless {
     connect(&engine, &Engine::aboutToFinish, this, &MediaPlayer::aboutToFinish);
     connect(&engine, &Engine::streamBufferfillChanged, this, &MediaPlayer::streamBufferfillChanged);
     connect(&engine, &Engine::streamMetaChanged, this, &MediaPlayer::streamMetaChanged);
+    connect(&engine, &Engine::effectiveOutputDeviceChanged, this, &GaplessMediaPlayer::effectiveOutputDeviceChanged);
     engine.setOutputDevice(outdevid);
   }
 
@@ -60,8 +61,8 @@ namespace Playback::Gapless {
     engine.setVolume(volume);
   }
 
-  void GaplessMediaPlayer::setEqualizer(const Eq::EqProfile &profile) {
-    engine.setEqualizer(profile);
+  void GaplessMediaPlayer::setEqualizer(const Eq::EqProfile &profile, bool enabled) {
+    engine.setEqualizer(profile, enabled);
   }
 
   void GaplessMediaPlayer::setTrack(const Track &track) {

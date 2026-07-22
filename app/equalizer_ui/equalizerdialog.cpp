@@ -1,5 +1,6 @@
 #include "equalizer_ui/equalizerdialog.h"
 
+#include "audio_device_ui/outputdevicename.h"
 #include "eq/autoeqimport.h"
 #include "eq/eqexport.h"
 
@@ -63,18 +64,19 @@ namespace EqualizerUi {
     if (profiles_.isEmpty()) {
       profiles_ << Eq::defaultGraphicProfile();
     }
-    const QString active_name = local_conf.eqActiveProfile();
-    for (int i = 0; i < profiles_.size(); ++i) {
-      if (profiles_[i].name == active_name) {
-        active_index_ = i;
-        break;
-      }
-    }
 
     auto *root = new QVBoxLayout(this);
 
-    enable_check_ = new QCheckBox(tr("Enable equalizer"));
-    enable_check_->setChecked(local_conf.eqEnabled());
+    device_label_ = new QLabel;
+    device_label_->setWordWrap(true);
+    root->addWidget(device_label_);
+
+    auto *device_hint = new QLabel(tr("Everything below applies to this output device only."));
+    device_hint->setWordWrap(true);
+    device_hint->setEnabled(false);
+    root->addWidget(device_hint);
+
+    enable_check_ = new QCheckBox(tr("Enable equalizer for this device"));
     connect(enable_check_, &QCheckBox::toggled, this, [this](bool) { applyCurrent(); });
     root->addWidget(enable_check_);
 
@@ -115,27 +117,6 @@ namespace EqualizerUi {
     export_btn->setMenu(export_menu);
     actions->addWidget(export_btn);
     preset_layout->addLayout(actions);
-
-    assign_device_check_ = new QCheckBox(tr("Use automatically for the current output device"));
-    const QString dev_key = QString::fromLatin1(local_conf.outputDeviceId().toHex());
-    assign_device_check_->setEnabled(!dev_key.isEmpty());
-    connect(assign_device_check_, &QCheckBox::toggled, this, [this](bool on) {
-      if (updating_) {
-        return;
-      }
-      const QString key = QString::fromLatin1(local_conf.outputDeviceId().toHex());
-      if (key.isEmpty()) {
-        return;
-      }
-      auto map = local_conf.eqDeviceProfiles();
-      if (on) {
-        map[key] = active().name;
-      } else if (map.value(key) == active().name) {
-        map.remove(key);
-      }
-      local_conf.saveEqDeviceProfiles(map);
-    });
-    preset_layout->addWidget(assign_device_check_);
 
     root->addWidget(preset_box);
 
@@ -185,12 +166,38 @@ namespace EqualizerUi {
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::accept);
     root->addWidget(buttons);
 
-    rebuildPresetCombo();
-    loadActiveIntoWidgets();
-    applyCurrent();
+    setDevice(player_->effectiveOutputDeviceId());
+    connect(player_, &Playback::Controller::effectiveOutputDeviceChanged,
+            this, &EqualizerDialog::setDevice);
 
     const int line = fontMetrics().height();
     resize(sizeHint().expandedTo(QSize(line * 46, line * 44)));
+  }
+
+  // Also called while the dialog is open: a hotplug can re-scope the engine onto
+  // another device, and the dialog must follow it rather than keep saving to the old one.
+  void EqualizerDialog::setDevice(const QByteArray &device_id) {
+    device_id_ = device_id;
+    const Eq::DeviceSettings settings = local_conf.eqDeviceSettings(device_id_);
+
+    device_label_->setText(tr("Output device: <b>%1</b>")
+                             .arg(AudioDeviceUi::outputDeviceName(device_id_).toHtmlEscaped()));
+
+    active_index_ = 0;
+    for (int i = 0; i < profiles_.size(); ++i) {
+      if (profiles_[i].name == settings.profile) {
+        active_index_ = i;
+        break;
+      }
+    }
+
+    updating_ = true;
+    enable_check_->setChecked(settings.enabled);
+    updating_ = false;
+
+    rebuildPresetCombo();
+    loadActiveIntoWidgets();
+    applyCurrent();
   }
 
   Eq::EqProfile &EqualizerDialog::active() {
@@ -244,7 +251,6 @@ namespace EqualizerUi {
       const QString keep_name = active().name;
       Eq::EqProfile g = Eq::defaultGraphicProfile();
       g.name = keep_name;
-      g.enabled = enable_check_->isChecked();
       g.auto_preamp = auto_preamp_check_->isChecked();
       active() = g;
       loadActiveIntoWidgets();
@@ -425,9 +431,6 @@ namespace EqualizerUi {
     preset_combo_->setCurrentIndex(active_index_);
     auto_preamp_check_->setChecked(active().auto_preamp);
     preamp_spin_->setValue(active().preamp_db);
-    const QString key = QString::fromLatin1(local_conf.outputDeviceId().toHex());
-    assign_device_check_->setChecked(!key.isEmpty() &&
-                                     local_conf.eqDeviceProfiles().value(key) == active().name);
     updating_ = false;
 
     syncGraphicFromProfile();
@@ -450,15 +453,13 @@ namespace EqualizerUi {
     if (updating_) {
       return;
     }
-    Eq::EqProfile p = active();
-    p.enabled = enable_check_->isChecked();
-    player_->setEqualizer(p);
+    const Eq::EqProfile p = active();
+    player_->setEqualizer(p, enable_check_->isChecked());
     curve_->setProfile(p, display_fs_);
     refreshPreampDisplay();
 
     local_conf.saveEqProfiles(profiles_);
-    local_conf.saveEqEnabled(enable_check_->isChecked());
-    local_conf.saveEqActiveProfile(active().name);
+    local_conf.saveEqDeviceSettings(device_id_, {enable_check_->isChecked(), p.name});
   }
 
   void EqualizerDialog::onSaveAs() {
@@ -490,6 +491,7 @@ namespace EqualizerUi {
   }
 
   void EqualizerDialog::onDeletePreset() {
+    local_conf.dropEqProfileFromDevices(active().name);
     profiles_.removeAt(active_index_);
     if (profiles_.isEmpty()) {
       profiles_ << Eq::defaultGraphicProfile();
@@ -563,7 +565,6 @@ namespace EqualizerUi {
 
     Eq::EqProfile p;
     p.name = QFileInfo(path).completeBaseName();
-    p.enabled = true;
     p.auto_preamp = !parsed.preamp_present;
     p.preamp_db = parsed.preamp_present ? parsed.preamp_db : 0.0;
     for (const auto &b : parsed.bands) {

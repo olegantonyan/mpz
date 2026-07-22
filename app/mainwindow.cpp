@@ -788,9 +788,6 @@ void MainWindow::setupOutputDevice() {
   connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
     AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
     connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
-#ifdef ENABLE_GAPLESS
-    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, this, &MainWindow::applyEqForDevice);
-#endif
     int menu_width = device_menu.sizeHint().width();
     int x = ui->toolButtonOutputDevice->width() - menu_width;
     int y = ui->toolButtonOutputDevice->height();
@@ -810,7 +807,10 @@ void MainWindow::setupOutputDevice() {
 
 #ifdef ENABLE_GAPLESS
 void MainWindow::setupEqualizer() {
-  applyEqForDevice(local_conf.outputDeviceId());
+  // The engine owns device resolution, so it also decides which device the EQ is
+  // scoped to: hotplug that drops the configured device re-scopes the EQ to the default.
+  connect(player, &Playback::Controller::effectiveOutputDeviceChanged, this, &MainWindow::applyEqForDevice);
+  applyEqForDevice(player->effectiveOutputDeviceId());
 
   connect(shortcuts, &Shortcuts::openEqualizer, this, &MainWindow::openEqualizerDialog);
   connect(main_menu, &MainMenu::openEqualizer, shortcuts, &Shortcuts::openEqualizer);
@@ -822,25 +822,16 @@ void MainWindow::openEqualizerDialog() {
 }
 
 void MainWindow::applyEqForDevice(const QByteArray &device_id) {
+  const Eq::DeviceSettings settings = local_conf.eqDeviceSettings(device_id);
+  Eq::EqProfile chosen = Eq::defaultGraphicProfile();
   const QList<Eq::EqProfile> profiles = local_conf.eqProfiles();
-  if (profiles.isEmpty()) {
-    return;
-  }
-  QString name = local_conf.eqActiveProfile();
-  const QString key = QString::fromLatin1(device_id.toHex());
-  const QMap<QString, QString> device_map = local_conf.eqDeviceProfiles();
-  if (!key.isEmpty() && device_map.contains(key)) {
-    name = device_map.value(key);
-  }
-  Eq::EqProfile chosen = profiles.first();
   for (const auto &p : profiles) {
-    if (p.name == name) {
+    if (p.name == settings.profile) {
       chosen = p;
       break;
     }
   }
-  chosen.enabled = local_conf.eqEnabled();
-  player->setEqualizer(chosen);
+  player->setEqualizer(chosen, settings.enabled);
 }
 #endif
 

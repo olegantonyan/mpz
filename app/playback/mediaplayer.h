@@ -56,7 +56,7 @@ namespace Playback {
     virtual void clearTrack();
     virtual void prepareNextTrack(const Track &track) { Q_UNUSED(track) }
 #ifdef ENABLE_GAPLESS
-    virtual void setEqualizer(const Eq::EqProfile &profile) { Q_UNUSED(profile) }
+    virtual void setEqualizer(const Eq::EqProfile &profile, bool enabled) { Q_UNUSED(profile) Q_UNUSED(enabled) }
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     virtual void setOutputDevice(QByteArray deviceid);

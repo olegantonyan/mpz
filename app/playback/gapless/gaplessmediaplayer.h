@@ -16,6 +16,10 @@ namespace Playback::Gapless {
 
     MediaPlayer::State state() override;
     qint64 position() override;
+    QByteArray effectiveOutputDeviceId() const { return engine.effectiveOutputDeviceId(); }
+
+  signals:
+    void effectiveOutputDeviceChanged(const QByteArray &device_id);
 
   public slots:
     void pause() override;
@@ -23,7 +27,7 @@ namespace Playback::Gapless {
     void stop() override;
     void setPosition(qint64 position) override;
     void setVolume(int volume) override;
-    void setEqualizer(const Eq::EqProfile &profile) override;
+    void setEqualizer(const Eq::EqProfile &profile, bool enabled) override;
     void setTrack(const Track &track) override;
     void clearTrack() override;
     void prepareNextTrack(const Track &track) override;
