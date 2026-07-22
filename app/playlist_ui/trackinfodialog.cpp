@@ -286,7 +286,7 @@ void TrackInfoDialog::add_general_rows() {
     add_table_row(model, tr("Channels"), QString::number(_track.channels()));
   }
   if (_track.isStream()) {
-    add_table_row(model, tr("Stream url"), _track.url().toString());
+    add_table_row(model, tr("Stream url"), _track.url().toDisplayString());
   }
   if (!_track.path().isEmpty()) {
     if (_track.isMpd()) {

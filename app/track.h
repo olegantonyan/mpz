@@ -72,6 +72,8 @@ public:
   QString formattedTitle() const;
 
   bool isStream() const;
+  QString stationName() const;
+  QString streamNowPlaying() const;
 
   void setStreamMeta(const StreamMetaData& meta);
   void clearStreamMeta();
@@ -111,6 +113,7 @@ private:
   mutable bool _filename_cached = false;
 
   quint64 generateUid() const;
+  QString displayUrl() const;
   QString detectFormat() const;
   bool readMetadata();
 };

@@ -115,6 +115,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(player, &Playback::Controller::started, playlist, &PlaylistUi::Controller::on_start);
   connect(player, &Playback::Controller::paused, playlist, &PlaylistUi::Controller::on_pause);
   connect(player, &Playback::Controller::stopped, playlist, &PlaylistUi::Controller::on_stop);
+  connect(player, &Playback::Controller::trackChanged, playlist, &PlaylistUi::Controller::on_trackMetaChanged);
   connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
