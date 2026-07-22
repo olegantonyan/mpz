@@ -229,7 +229,9 @@ endif()
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
-  list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+  list(APPEND PROJECT_SOURCES
+    app/audio_device_ui/devicesmenu.cpp
+    app/audio_device_ui/outputdevicename.cpp)
 
   if (ENABLE_GAPLESS)
     list(APPEND PROJECT_SOURCES

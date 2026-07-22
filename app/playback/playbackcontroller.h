@@ -36,6 +36,9 @@ namespace Playback {
     enum State state();
     int position();
     const Track& currentTrack() const;
+#ifdef ENABLE_GAPLESS
+    QByteArray effectiveOutputDeviceId() const { return _player.effectiveOutputDeviceId(); }
+#endif
 
   signals:
     void started(const Track &track);
@@ -52,6 +55,9 @@ namespace Playback {
     void monotonicPlaybackTimerIncrement(int by);
     void trackChangedQuery(const QString &track_path, const QString &playlist_name_hint);
     void aboutToFinish();
+#ifdef ENABLE_GAPLESS
+    void effectiveOutputDeviceChanged(const QByteArray &device_id);
+#endif
 
   public slots:
     void play(const Track &track);
@@ -60,7 +66,7 @@ namespace Playback {
     void setVolume(int value);
     void seek(int seconds);
 #ifdef ENABLE_GAPLESS
-    void setEqualizer(const Eq::EqProfile &profile);
+    void setEqualizer(const Eq::EqProfile &profile, bool enabled);
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);

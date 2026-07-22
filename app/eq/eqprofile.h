@@ -11,7 +11,6 @@
 namespace Eq {
   struct EqProfile {
     QString name;
-    bool enabled = false;
     double preamp_db = 0.0;
     bool auto_preamp = true;
     QVector<Band> bands;
@@ -44,7 +43,6 @@ namespace Eq {
     const double freqs[] = {31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
     EqProfile p;
     p.name = "Flat";
-    p.enabled = true;
     p.auto_preamp = true;
     for (int i = 0; i < 10; ++i) {
       Band b;

@@ -35,6 +35,10 @@ namespace Playback::Gapless {
     Playback::MediaPlayer::State state() const;
     qint64 positionMs() const;
 
+    // The device selection actually in effect: the configured id while that device
+    // is plugged in, empty (= system default) whenever it is not.
+    QByteArray effectiveOutputDeviceId() const { return effective_device_id; }
+
   public slots:
     void setTrack(const Track &t);
     void clearTrack();
@@ -43,7 +47,7 @@ namespace Playback::Gapless {
     void stop();
     void setPositionMs(qint64 ms);
     void setVolume(int pct);
-    void setEqualizer(const Eq::EqProfile &profile);
+    void setEqualizer(const Eq::EqProfile &profile, bool enabled);
     void prepareNextTrack(const Track &t);
     void setOutputDevice(QByteArray id);
 
@@ -55,6 +59,7 @@ namespace Playback::Gapless {
     void nextRequested();
     void streamBufferfillChanged(quint32 current, quint32 total);
     void streamMetaChanged(const StreamMetaData &meta);
+    void effectiveOutputDeviceChanged(const QByteArray &device_id);
 
   private:
     void hardSwitchTo(const Track &t);
@@ -113,6 +118,7 @@ namespace Playback::Gapless {
     qint64 inFileFrame(qint64 abs_frame) const;
     QAudioDevice outputDevice() const;
     QAudioDevice findPreferredDevice() const;
+    void updateEffectiveDevice();
     void evaluateAudioDevice();
     void switchSink(const QAudioDevice &device);
     QAudioFormat nearestSupported(const QAudioDevice &device, const QAudioFormat &format) const;
@@ -144,6 +150,7 @@ namespace Playback::Gapless {
     Eq::Equalizer eq;
     qint64 last_filtered_frame = -1; // abs frame the EQ state is contiguous with; mismatch => reset on seek
     QByteArray output_device_id;
+    QByteArray effective_device_id;
     QAudioDevice active_device; // device the current sink is running on
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale queued device switches during event bursts

@@ -34,6 +34,11 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       Q_UNUSED(thresh)
       emit streamFill(_current_track, bytes);
     });
+#ifdef ENABLE_GAPLESS
+    connect(&_player, &Gapless::GaplessMediaPlayer::effectiveOutputDeviceChanged,
+            this, &Controller::effectiveOutputDeviceChanged);
+#endif
+
     connect(&_player, &MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
       _current_track.setStreamMeta(meta);
       emit trackChanged(_current_track);
@@ -200,8 +205,8 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
 #ifdef ENABLE_GAPLESS
-  void Controller::setEqualizer(const Eq::EqProfile &profile) {
-    player().setEqualizer(profile);
+  void Controller::setEqualizer(const Eq::EqProfile &profile, bool enabled) {
+    player().setEqualizer(profile, enabled);
   }
 #endif
 

@@ -7,6 +7,7 @@
 #include "playback/playbackcontroller.h"
 #include "equalizer_ui/eqcurvewidget.h"
 
+#include <QByteArray>
 #include <QDialog>
 #include <QList>
 #include <QVector>
@@ -32,6 +33,7 @@ namespace EqualizerUi {
   private:
     Eq::EqProfile &active();
 
+    void setDevice(const QByteArray &device_id);
     void rebuildPresetCombo();
     void loadActiveIntoWidgets();
     void applyCurrent();
@@ -55,11 +57,13 @@ namespace EqualizerUi {
     Config::Local &local_conf;
     Config::Global &global_conf;
 
+    QByteArray device_id_;
     QList<Eq::EqProfile> profiles_;
     int active_index_ = 0;
     bool updating_ = false;
     int display_fs_ = 48000;
 
+    QLabel *device_label_ = nullptr;
     QCheckBox *enable_check_ = nullptr;
     QComboBox *preset_combo_ = nullptr;
     QDoubleSpinBox *preamp_spin_ = nullptr;
@@ -71,7 +75,6 @@ namespace EqualizerUi {
     QVector<QLabel *> slider_labels_;
     QLabel *graphic_hint_ = nullptr;
     QTableWidget *table_ = nullptr;
-    QCheckBox *assign_device_check_ = nullptr;
   };
 }
 

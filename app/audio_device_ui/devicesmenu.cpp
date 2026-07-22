@@ -1,14 +1,10 @@
 #include "audio_device_ui/devicesmenu.h"
+#include "audio_device_ui/outputdevicename.h"
 
 #include <QMediaDevices>
 #include <QAudioDevice>
-#include <QHash>
 
 namespace AudioDeviceUi {
-  // Remembers descriptions of devices seen plugged in, so the configured but
-  // currently disconnected device can still be shown by name.
-  static QHash<QByteArray, QString> devices_id_description_cache;
-
   DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c) : QMenu(parent), local_conf(local_c) {
     // Rebuild on every open so hot-plugged devices and the current selection
     // stay in sync (matters for a persistent submenu; harmless for the
@@ -24,8 +20,7 @@ namespace AudioDeviceUi {
     auto devices = QMediaDevices::audioOutputs();
     action_group = new QActionGroup(this);
     auto action_default = new QAction(action_group);
-    QString default_text(tr("Default"));
-    action_default->setText(default_text);
+    action_default->setText(outputDeviceName(QByteArray()));
     action_default->setCheckable(true);
     connect(action_default, &QAction::triggered, this, [=](bool checked) {
       if (checked) {
@@ -45,14 +40,7 @@ namespace AudioDeviceUi {
     action_group->setExclusionPolicy(QActionGroup::ExclusionPolicy::ExclusiveOptional);
     for (auto &device : devices) {
       auto action = new QAction(action_group);
-      QString text(device.description());
-      if (device.isDefault()) {
-        default_text.append(" [");
-        default_text.append(device.description());
-        default_text.append("]");
-        action_default->setText(default_text);
-      }
-      action->setText(text);
+      action->setText(device.description());
       action->setCheckable(true);
       action->setData(device.id());
       connect(action, &QAction::triggered, this, [=](bool checked) {
@@ -68,16 +56,12 @@ namespace AudioDeviceUi {
         device_exists = true;
       }
 
-      devices_id_description_cache.insert(device.id(), device.description());
+      rememberOutputDevice(device.id(), device.description());
     }
 
     if (!device_exists) {
       auto action = new QAction(action_group);
-      auto text = devices_id_description_cache.value(
-            currentOutput(),
-            QString::fromStdString(currentOutput().toStdString())
-            );
-      action->setText(text);
+      action->setText(outputDeviceName(currentOutput()));
       action->setDisabled(true);
       action->setCheckable(true);
       action->setChecked(true);
