@@ -12,7 +12,7 @@ jobs:
     with:
       repository: "Linux packages - stable"
       version_extractor: "stable"
-      arch: "x86_64"
+      image_cache: "github_x86_64"
       runs_on: "ubuntu-24.04"
 
   aarch64:
@@ -21,7 +21,7 @@ jobs:
     with:
       repository: "Linux packages AARCH64 - stable"
       version_extractor: "stable"
-      arch: "aarch64"
+      image_cache: "github_aarch64"
       runs_on: "ubuntu-24.04-arm"
       # arch: no arm64 image. manjaro: Manjaro ARM repos frozen ~2024
       skip_distros: '["arch", "manjaro"]'

@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      arch:
+      image_cache:
         required: true
         type: string
       runs_on:
@@ -38,6 +38,5 @@ jobs:
     steps:
       - uses: omnipackage/omnipackage-rs@master
       - uses: actions/checkout@v6
-      - run: command -v podman >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq podman; }
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-      - run:  omnipackage prime . --image-cache github_${{ inputs.arch }} --distros "${{ matrix.distro }}"
+      - run:  omnipackage prime . --image-cache "${{ inputs.image_cache }}" --distros "${{ matrix.distro }}"

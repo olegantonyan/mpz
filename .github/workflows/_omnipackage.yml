@@ -7,7 +7,7 @@ on:
       version_extractor:
         required: true
         type: string
-      arch:
+      image_cache:
         required: true
         type: string
       runs_on:
@@ -47,7 +47,6 @@ jobs:
     steps:
       - uses: omnipackage/omnipackage-rs@master
       - uses: actions/checkout@v6
-      - run: command -v podman >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq podman; }
       - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
       - name: Release packages for ${{ matrix.distro }}
-        run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache github_${{ inputs.arch }}
+        run:  omnipackage release . --build-dir $RUNNER_TEMP --repository "${{ inputs.repository }}" --distros "${{ matrix.distro }}" --version-extractor "${{ inputs.version_extractor }}" --image-cache "${{ inputs.image_cache }}"

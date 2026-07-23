@@ -10,17 +10,17 @@ permissions:
 
 jobs:
   x86_64:
-    uses: ./.github/workflows/_refresh-omnipackage-cache.yml
+    uses: ./.github/workflows/_omnipackage-cache.yml
     secrets: inherit
     with:
-      arch: "x86_64"
+      image_cache: "github_x86_64"
       runs_on: "ubuntu-24.04"
 
   aarch64:
-    uses: ./.github/workflows/_refresh-omnipackage-cache.yml
+    uses: ./.github/workflows/_omnipackage-cache.yml
     secrets: inherit
     with:
-      arch: "aarch64"
+      image_cache: "github_aarch64"
       runs_on: "ubuntu-24.04-arm"
       # arch: no arm64 image. manjaro: Manjaro ARM repos frozen ~2024
       skip_distros: '["arch", "manjaro"]'
