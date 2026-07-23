@@ -149,7 +149,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::play(const Track &track) {
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
     if (track.isStream()) {
       player().stop();
       setCurrentTrack(track);

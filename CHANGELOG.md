@@ -10,6 +10,7 @@
 ### Fixed
 
 - Crash when deleting playlists
+- Windows (legacy Qt5 build): radio streams now play instead of staying stopped right after connecting
 
 ### Misc
 

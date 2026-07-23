@@ -14,7 +14,11 @@
   #include <QAudioOutput>
   #include <QMediaDevices>
   #include <QAudioDevice>
-  #define QT6_STREAM_HACKS
+  #define STREAM_BLOCKING_START
+#elif defined(Q_OS_WIN)
+  #include "playback/seekablestream.h"
+  #define WIN_QT5_SEEKABLE_STREAM
+  #define STREAM_BLOCKING_START
 #endif
 
 namespace Playback {
@@ -64,6 +68,9 @@ namespace Playback {
 
   private:
     Stream stream;
+#ifdef WIN_QT5_SEEKABLE_STREAM
+    SeekableStream seekable_stream;
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     QAudioOutput audio_output;
 #endif
@@ -80,7 +87,7 @@ namespace Playback {
     void evaluateAudioDevice();
     void recoverPlayback();
 #endif
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
     bool suppress_emit_playing_state;
     bool start_stream();
 #endif
