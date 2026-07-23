@@ -5,7 +5,7 @@
         <title>mpz — music player for large local collections</title>
         <meta
             name="description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta name="author" content="Oleg Antonyan" />
         <meta name="application-name" content="mpz" />
@@ -41,7 +41,7 @@
         />
         <meta
             property="og:description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mpz-player.org/" />
@@ -66,7 +66,7 @@
         />
         <meta
             name="twitter:description"
-            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
+            content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
         />
         <meta
             name="twitter:image"
@@ -107,8 +107,8 @@
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
-                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
-                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player",
+                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
+                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
@@ -119,7 +119,11 @@
                 "softwareHelp": "https://github.com/olegantonyan/mpz#readme",
                 "releaseNotes": "https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md",
                 "image": "https://mpz-player.org/images/mpz.png",
-                "screenshot": "https://mpz-player.org/images/breeze-dark.png",
+                "screenshot": [
+                    "https://mpz-player.org/images/breeze-dark.png",
+                    "https://mpz-player.org/images/eq.png",
+                    "https://mpz-player.org/images/radio.png"
+                ],
                 "featureList": [
                     "Folder player — play music straight from your folders, with no global indexing step",
                     "3-column UI: directory tree, playlists, tracks",
@@ -127,18 +131,20 @@
                     "Drag and drop files and folders from the file manager",
                     "Reorder tracks within a playlist by dragging",
                     "Gapless playback — no silence between tracks, with instant in-track seeking (Qt 6)",
+                    "Equalizer — 10-band graphic and full parametric modes, AutoEq presets, on/off and preset per output device (Qt 6, runs on the gapless engine)",
+                    "Internet radio — Radio library with built-in stations, HTTPS, and IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists as before",
                     "CUE sheets, with gapless playback of single-file albums",
                     "OS media integration — MPRIS on Linux, SMTC and taskbar on Windows, Now Playing and Dock on macOS, system tray",
                     "Global media-key hotkeys and a built-in keyboard shortcuts dialog",
                     "Experimental mpd client mode",
-                    "m3u, m3u8, and pls playlist formats including internet radio streams",
+                    "m3u, m3u8 and pls playlists including radio streams — play directly or import into the Radio library",
                     "Playback order per playlist and global — sequential, random, or no-loop",
                     "Track sorting presets",
                     "Cover art (from tags or folder images) and lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB, NetEase, QQ Music, or Lyrics.ovh — in the Track Info dialog or as dockable panels that follow the playing track",
                     "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
                     "Common audio formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, DSD — via system codecs",
                     "Playback log of recently played tracks",
-                    "Update check on Windows and macOS",
+                    "Update check on Windows, macOS, and Linux AppImage",
                     "UI languages: English, Russian, Japanese, Serbian",
                     "Native C++/Qt 6",
                     "Follows your desktop theme",
@@ -212,7 +218,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) or the AUR on Arch. On Windows, download a release from GitHub — builds for 64-bit x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro), built for x86_64 and aarch64 — Arch and Manjaro are x86_64 only — or the AUR on Arch. On Windows, download a release from GitHub — builds for 64-bit x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -236,7 +242,15 @@
                         "name": "Does mpz support streaming services?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "No. mpz focuses on local music files. Internet radio streams in m3u and pls playlist formats are supported, but online streaming services are not."
+                            "text": "No. mpz focuses on local music files. Internet radio works — a Radio library with built-in stations, plus m3u, m3u8 and pls stream playlists — but streaming services are not supported."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz play internet radio?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes, and always has — stream playlists in m3u, m3u8 and pls play like any other playlist. Version 2.1.0 added a dedicated Radio library with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM plus your own, HTTPS, a radio row view, and stream titles from IceCast's status-json.xsl. Stream playlists still play directly, or import into the library."
                         }
                     },
                     {
@@ -252,7 +266,15 @@
                         "name": "Does mpz support gapless playback?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. mpz plays gapless — no silence at track boundaries — across your whole library, so continuous albums, live recordings, and DJ mixes play through without interruption. Decoded audio is buffered in memory (configurable under Settings → Advanced), which also makes seeking within a track instant. Gapless playback is available in Qt 6 builds (since version 2.1.0)."
+                            "text": "Yes. No silence between tracks, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz have an equalizer?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only."
                         }
                     },
                     {
@@ -319,7 +341,7 @@
                         "position": 1,
                         "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro",
                         "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
-                        "text": "Install from the omnipackage stable repositories (recommended), or use the unstable repositories for builds from master."
+                        "text": "Install from the omnipackage stable repositories (recommended): https://repositories.omnipackage.org/mpz/stable/install.html for x86_64, https://repositories.omnipackage.org/mpz/stable-aarch64/install.html for aarch64. Unstable builds from master: https://repositories.omnipackage.org/mpz/next/install.html and https://repositories.omnipackage.org/mpz/next-aarch64/install.html. Arch and Manjaro are x86_64 only."
                     },
                     {
                         "@type": "HowToStep",
@@ -556,6 +578,9 @@
         <nav class="section-nav" aria-label="Sections">
             <div class="container">
                 <a href="#library">Screenshots</a>
+                <a href="#gapless">Gapless</a>
+                <a href="#equalizer">Equalizer</a>
+                <a href="#radio">Radio</a>
                 <a href="#features">Features</a>
                 <a href="#install">Install</a>
                 <a href="#faq">FAQ</a>
@@ -622,7 +647,16 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/stable/badge.svg"
-                            alt="omnipackage stable repositories"
+                            alt="omnipackage stable repositories (x86_64)"
+                            height="20"
+                    /></a>
+                    <a
+                        href="https://repositories.omnipackage.org/mpz/stable-aarch64/install.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        ><img
+                            src="https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg"
+                            alt="omnipackage stable repositories (aarch64)"
                             height="20"
                     /></a>
                     <a
@@ -631,7 +665,16 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/next/badge.svg"
-                            alt="omnipackage unstable repositories"
+                            alt="omnipackage unstable repositories (x86_64)"
+                            height="20"
+                    /></a>
+                    <a
+                        href="https://repositories.omnipackage.org/mpz/next-aarch64/install.html"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        ><img
+                            src="https://repositories.omnipackage.org/mpz/next-aarch64/badge.svg"
+                            alt="omnipackage unstable repositories (aarch64)"
                             height="20"
                     /></a>
                 </div>
@@ -823,6 +866,51 @@
                         </div>
                     </div>
 
+                    <h2 id="gapless" class="title">Gapless playback</h2>
+                    <div class="content">
+                        No silence between tracks, including single-file albums
+                        split by a CUE sheet. Decoded audio is buffered in
+                        memory (100 MB by default, adjustable in
+                        <em>Settings → Advanced</em>), which also makes seeking
+                        instant. Qt 6 only, since 2.1.0.
+                    </div>
+
+                    <h2 id="equalizer" class="title">Equalizer</h2>
+                    <div class="content">
+                        10-band graphic and full parametric modes, importing
+                        presets from
+                        <a
+                            href="https://github.com/jaakkopasanen/AutoEq"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >AutoEq</a
+                        >, SquigLink and similar sources. On/off and preset are
+                        per output device ("Default" counts as one), presets
+                        themselves are shared. The EQ follows the device in use,
+                        so unplugging headphones switches it along with the
+                        audio. Runs on the gapless engine, so gapless has to be
+                        enabled. Qt 6 only, since 2.1.0.
+                    </div>
+
+                    <h2 id="radio" class="title">Internet radio</h2>
+                    <div class="content">
+                        Streams in <code>m3u</code>, <code>m3u8</code> and
+                        <code>pls</code> playlists have always played in mpz.
+                        2.1.0 adds a dedicated Radio library with built-in
+                        stations from
+                        <a
+                            href="https://somafm.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >SomaFM</a
+                        >, Radio Paradise, FIP, France Musique and Nightride FM,
+                        plus your own. Stream playlists still play directly, or
+                        import into the library. Also new: HTTPS, a radio row
+                        view, and stream titles from IceCast's
+                        <code>status-json.xsl</code>. The playback log keeps a
+                        history of what played.
+                    </div>
+
                     <h2 id="mpd" class="title">mpd client mode</h2>
                     <div class="content">
                         Supports
@@ -844,19 +932,9 @@
                         >.
                     </div>
 
-                    <h2 id="features" class="title">Radio streams, lyrics, tags, and more</h2>
+                    <h2 id="features" class="title">Lyrics, tags, formats, and more</h2>
                     <div class="content">
                         <p>
-                            Internet radio streams in <code>m3u</code>,
-                            <code>m3u8</code>, and <code>pls</code> formats.
-                            Gapless playback — no silence between tracks, so
-                            continuous albums, live sets, and DJ mixes flow
-                            uninterrupted; buffering decoded audio in memory
-                            also makes seeking within a track instant (Qt 6,
-                            since 2.1.0). CUE sheets, with gapless single-file
-                            albums.
-                            A playback log keeps a history of what played — handy
-                            when you hear something you like on a radio stream.
                             OS media integration: MPRIS on Linux (remote control,
                             e.g. via
                             <a
@@ -905,8 +983,9 @@
                             sequential, random, or no-loop. Track sorting
                             presets. Global
                             media-key hotkeys and a built-in keyboard shortcuts
-                            dialog. Update check on Windows and macOS. UI in
-                            English, Russian, Japanese, and Serbian.
+                            dialog. Update check on Windows, macOS, and the
+                            Linux AppImage. UI in English, Russian, Japanese,
+                            and Serbian.
                         </p>
                     </div>
 
@@ -924,7 +1003,7 @@
                                                 src="/images/small/feedback-form.png"
                                                 alt="The built-in feedback form dialog"
                                                 width="512"
-                                                height="288"
+                                                height="279"
                                                 loading="lazy"
                                             />
                                         </picture>
@@ -946,7 +1025,7 @@
                                                 src="/images/small/about.png"
                                                 alt="The mpz About window showing version and credits"
                                                 width="512"
-                                                height="288"
+                                                height="279"
                                                 loading="lazy"
                                             />
                                         </picture>
@@ -968,7 +1047,7 @@
                                                 src="/images/small/library-config.png"
                                                 alt="Dialog for configuring library folders"
                                                 width="512"
-                                                height="288"
+                                                height="279"
                                                 loading="lazy"
                                             />
                                         </picture>
@@ -992,13 +1071,57 @@
                                                 src="/images/small/playback-log.png"
                                                 alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
                                                 width="512"
-                                                height="288"
+                                                height="279"
                                                 loading="lazy"
                                             />
                                         </picture>
                                     </a>
                                 </span>
                                 <figcaption>Playback log</figcaption>
+                            </figure>
+                        </div>
+                        <div class="column">
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/eq.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/eq.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/eq.png"
+                                                alt="The mpz equalizer dialog: output device, preset list with import and export, preamp, response curve, and the 10-band graphic sliders"
+                                                width="512"
+                                                height="279"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Equalizer</figcaption>
+                            </figure>
+                        </div>
+                        <div class="column">
+                            <figure class="screenshot">
+                                <span class="image is-16by9">
+                                    <a href="/images/radio.webp">
+                                        <picture>
+                                            <source
+                                                srcset="/images/small/radio.webp"
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                src="/images/small/radio.png"
+                                                alt="The mpz Radio library: station groups on the left, playlists in the middle, and stations on the right with the live stream title of the playing station"
+                                                width="512"
+                                                height="288"
+                                                loading="lazy"
+                                            />
+                                        </picture>
+                                    </a>
+                                </span>
+                                <figcaption>Radio library</figcaption>
                             </figure>
                         </div>
                     </div>
@@ -1015,22 +1138,46 @@
                                     </th>
                                     <td>
                                         Install from the omnipackage
-                                        repositories:
-                                        <a
-                                            href="https://repositories.omnipackage.org/mpz/stable/install.html"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            >stable releases</a
-                                        >
-                                        (recommended) or
-                                        <a
-                                            href="https://repositories.omnipackage.org/mpz/next/install.html"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            >unstable builds from master</a
-                                        >. These are the primary repositories
-                                        going forward; both new and existing
-                                        users are encouraged to use them.
+                                        repositories, for x86_64 and aarch64:
+                                        <ul style="margin-top: 0.5em">
+                                            <li>
+                                                <strong>Stable</strong>
+                                                (recommended):
+                                                <a
+                                                    href="https://repositories.omnipackage.org/mpz/stable/install.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >x86_64</a
+                                                >
+                                                |
+                                                <a
+                                                    href="https://repositories.omnipackage.org/mpz/stable-aarch64/install.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >aarch64</a
+                                                >
+                                            </li>
+                                            <li>
+                                                <strong>Unstable</strong>
+                                                (builds from master):
+                                                <a
+                                                    href="https://repositories.omnipackage.org/mpz/next/install.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >x86_64</a
+                                                >
+                                                |
+                                                <a
+                                                    href="https://repositories.omnipackage.org/mpz/next-aarch64/install.html"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >aarch64</a
+                                                >
+                                            </li>
+                                        </ul>
+                                        Arch and Manjaro are x86_64 only. These
+                                        are the primary repositories going
+                                        forward.
                                         <details style="margin-top: 0.75em">
                                             <summary>
                                                 Already using the old Open Build
@@ -1277,7 +1424,9 @@
                                 Linux, macOS, and Windows. On Linux, install
                                 from the omnipackage repositories (openSUSE,
                                 Debian, Fedora, Ubuntu, RedHat, Mageia, Arch,
-                                Manjaro) or the AUR on Arch. On Windows, download
+                                Manjaro), built for x86_64 and aarch64 — Arch
+                                and Manjaro are x86_64 only — or the AUR on
+                                Arch. On Windows, download
                                 a release from GitHub — builds for 64-bit x64,
                                 native ARM64 (Windows on ARM), and legacy 32-bit.
                                 On macOS, download the
@@ -1323,9 +1472,26 @@
                                     services?</strong
                                 ><br />
                                 No. mpz focuses on local music files. Internet
-                                radio streams in m3u and pls playlist formats
-                                are supported, but online streaming services are
-                                not.
+                                radio works — a Radio library with built-in
+                                stations, plus <code>m3u</code>,
+                                <code>m3u8</code> and <code>pls</code> stream
+                                playlists — but streaming services are not
+                                supported.
+                            </p>
+
+                            <p>
+                                <strong>Does mpz play internet radio?</strong
+                                ><br />
+                                Yes, and always has — stream playlists in
+                                <code>m3u</code>, <code>m3u8</code> and
+                                <code>pls</code> play like any other playlist.
+                                Version 2.1.0 added a dedicated Radio library
+                                with built-in stations from SomaFM, Radio
+                                Paradise, FIP, France Musique and Nightride FM
+                                plus your own, HTTPS, a radio row view, and
+                                stream titles from IceCast's
+                                <code>status-json.xsl</code>. Stream playlists
+                                still play directly, or import into the library.
                             </p>
 
                             <p>
@@ -1348,15 +1514,26 @@
                                     >Does mpz support gapless
                                     playback?</strong
                                 ><br />
-                                Yes. mpz plays gapless — no silence at track
-                                boundaries — across your whole library, so
-                                continuous albums, live recordings, and DJ
-                                mixes play through without interruption.
-                                Decoded audio is buffered in memory
-                                (configurable under Settings → Advanced), which
-                                also makes seeking within a track instant.
-                                Gapless playback is available in Qt 6 builds
-                                (since version 2.1.0).
+                                Yes. No silence between tracks, anywhere in your
+                                library. Decoded audio is buffered in memory
+                                (100 MB by default, configurable in
+                                <em>Settings → Advanced</em>), which also makes
+                                seeking instant. Qt 6 builds only, since version
+                                2.1.0.
+                            </p>
+
+                            <p>
+                                <strong>Does mpz have an equalizer?</strong
+                                ><br />
+                                Yes, since version 2.1.0. 10-band graphic and
+                                full parametric modes, importing presets from
+                                AutoEq, SquigLink and similar sources. On/off
+                                and preset are per output device ("Default"
+                                counts as one), presets themselves are shared.
+                                The EQ follows the device in use, so unplugging
+                                headphones switches it along with the audio. It
+                                runs on the gapless engine, so gapless has to be
+                                enabled. Qt 6 only.
                             </p>
 
                             <p>
