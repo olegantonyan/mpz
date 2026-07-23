@@ -1,7 +1,7 @@
 [![GPLv3 License](https://img.shields.io/badge/license-GPL--3.0-blue)](https://github.com/olegantonyan/mpz/blob/master/license.txt)
 [![tests](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml/badge.svg)](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml)
-[![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
-[![OmniPackage repositories badge](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html)
+[![OmniPackage repositories badge x86_64](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
+[![OmniPackage repositories badge aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
 
 # Folder player for big local music collections
 
@@ -48,10 +48,14 @@ Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format 
 
 #### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
 
-Install from the omnipackage repositories (x86_64 arch):
+Install from the omnipackage repositories:
 
-* [stable releases](https://repositories.omnipackage.org/mpz/stable/install.html) (recommended)
-* [unstable aka "next"](https://repositories.omnipackage.org/mpz/next/install.html)
+| Channel | x86_64 | aarch64 |
+| --- | --- | --- |
+| **Stable** (recommended) | [![stable repository](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html) | [![stable aarch64 repository](https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html) |
+| **Next** (unstable builds from master) | [![next repository](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html) | [![next aarch64 repository](https://repositories.omnipackage.org/mpz/next-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/next-aarch64/install.html) |
+
+Arch and Manjaro are x86_64 only.
 
 <details>
 <summary>Already using the old Open Build Service repositories?</summary>

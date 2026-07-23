@@ -9,26 +9,18 @@ permissions:
   packages: write
 
 jobs:
-  list-distros:
-    runs-on: ubuntu-latest
-    outputs:
-      distros: ${{ steps.get-distros.outputs.distros }}
-    steps:
-      - uses: omnipackage/omnipackage-rs@master
-      - uses: actions/checkout@v6
-      - name: Get distro list
-        id: get-distros
-        run: echo "distros=$(omnipackage info --list-distros . --format json)" >> "$GITHUB_OUTPUT"
+  x86_64:
+    uses: ./.github/workflows/_omnipackage-cache.yml
+    secrets: inherit
+    with:
+      image_cache: "github_x86_64"
+      runs_on: "ubuntu-24.04"
 
-  image_cache:
-    needs: [list-distros]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        distro: ${{ fromJson(needs.list-distros.outputs.distros) }}
-    steps:
-      - uses: omnipackage/omnipackage-rs@master
-      - uses: actions/checkout@v6
-      - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
-      - run:  omnipackage prime . --image-cache github --distros "${{ matrix.distro }}"
+  aarch64:
+    uses: ./.github/workflows/_omnipackage-cache.yml
+    secrets: inherit
+    with:
+      image_cache: "github_aarch64"
+      runs_on: "ubuntu-24.04-arm"
+      # arch: no arm64 image. manjaro: Manjaro ARM repos frozen ~2024
+      skip_distros: '["arch", "manjaro"]'
