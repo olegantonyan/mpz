@@ -20,8 +20,7 @@ mpz is a folder player: it treats your folder structure as the library — there
 - [omnipackage stable repositories, aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html): Same distros, native ARM64 (Arch and Manjaro are x86_64 only)
 - [omnipackage unstable repositories, x86_64](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master
 - [omnipackage unstable repositories, aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html): Builds from master, native ARM64
-- [AUR (Qt6)](https://aur.archlinux.org/packages/mpz/): Arch Linux package, also available if you prefer it over the binary repositories
-- [AUR (Qt5)](https://aur.archlinux.org/packages/mpz-qt5): Arch Linux package built against Qt5
+- [AUR](https://aur.archlinux.org/packages/mpz/): Arch Linux package, also available if you prefer it over the binary repositories
 - [AppImage](https://github.com/olegantonyan/mpz/releases): Linux builds for x86_64 and arm64; prefer the native repositories above if your distro is supported
 - [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries (x64, native ARM64, and legacy 32-bit); macOS .dmg (unsigned — see README for Gatekeeper workaround); tagged source archives
 
