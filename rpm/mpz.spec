@@ -45,6 +45,7 @@ make install
 %license license.txt
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo/org.mpz_player.mpz.metainfo.xml
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
@@ -53,6 +54,7 @@ make install
 %{_datadir}/icons/hicolor/16x16/apps/%{name}.png
 
 %dir %{_datadir}/applications/
+%dir %{_datadir}/metainfo/
 %dir %{_datadir}/icons/hicolor/
 %dir %{_datadir}/icons/hicolor/scalable
 %dir %{_datadir}/icons/hicolor/scalable/apps/

@@ -526,6 +526,19 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
+
+  set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION}")
+  if(PACKAGE_VERSION AND NOT PACKAGE_VERSION STREQUAL PROJECT_VERSION)
+    set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION} [${PACKAGE_VERSION}]")
+  endif()
+  string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/org.mpz_player.mpz.metainfo.xml.in
+    ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml
+    @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
