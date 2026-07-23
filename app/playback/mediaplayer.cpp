@@ -8,7 +8,11 @@
 #include <QTimer>
 
 namespace Playback {
-  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size), output_device_id(outdevid), next_after_stop(true), next_after_stop_cue(true) {
+  MediaPlayer::MediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, QObject *parent) : QObject(parent), stream(stream_buffer_size),
+#ifdef WIN_QT5_SEEKABLE_STREAM
+    seekable_stream(stream),
+#endif
+    output_device_id(outdevid), next_after_stop(true), next_after_stop_cue(true) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     connect(&media_devices, &QMediaDevices::audioOutputsChanged, this, &MediaPlayer::onAudioDevicesChanged);
     devices_changed_debounce.setSingleShot(true);
@@ -61,7 +65,7 @@ namespace Playback {
           }
           break;
         case QMediaPlayer::PlayingState:
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
           if (suppress_emit_playing_state) {
             suppress_emit_playing_state = false;
             break;
@@ -91,7 +95,7 @@ namespace Playback {
     });
     offset_begin = 0;
     offset_end = 0;
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
     suppress_emit_playing_state = false;
 #endif
   }
@@ -186,7 +190,7 @@ namespace Playback {
       return;
     }
     next_after_stop = false;
-#ifndef QT6_STREAM_HACKS
+#ifndef STREAM_BLOCKING_START
     if (!stream.isRunning() && stream.isValidUrl()) {
       if (!stream.start()) {
         qWarning() << "error starting stream form" << stream.url();
@@ -275,17 +279,24 @@ namespace Playback {
     offset_begin = 0;
     offset_end = 0;
     stream.stop();
+#ifdef WIN_QT5_SEEKABLE_STREAM
+    seekable_stream.clear();
+#endif
     if (track.isStream()) {
       current_source_url = QUrl();
       stream.setUrl(track.url());
       unpause_workaround_needed_on_playing_state_change = false;
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
       // optimistic state update b/c start_stream will block
       // also prevent double emit playing state after player starts playing
       suppress_emit_playing_state = true;
       emitStateChanged(MediaPlayer::PlayingState);
       if (start_stream()) {
+  #ifdef WIN_QT5_SEEKABLE_STREAM
+        player.setMedia(track.url(), &seekable_stream);
+  #else
         player.setSourceDevice(&stream);
+  #endif
       } else {
         emitStateChanged(MediaPlayer::StoppedState);
       }
@@ -306,7 +317,7 @@ namespace Playback {
       }
     }
   }
-#ifdef QT6_STREAM_HACKS
+#ifdef STREAM_BLOCKING_START
   bool MediaPlayer::start_stream() {
     if (stream.isValidUrl()) {
       if (!stream.start()) {
@@ -323,7 +334,13 @@ namespace Playback {
     connect(&stream, &Stream::error, &loop, &QEventLoop::quit);
     timer.start();
     loop.exec();
+#ifdef WIN_QT5_SEEKABLE_STREAM
+    // readyRead can quit the loop before the queued fillChanged that would drain it
+    seekable_stream.drain();
+    return seekable_stream.size() > 0;
+#else
     return stream.bytesAvailable() > 0;
+#endif
   }
 #endif
   void MediaPlayer::clearTrack() {
