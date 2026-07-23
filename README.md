@@ -50,10 +50,8 @@ Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format 
 
 Install from the omnipackage repositories:
 
-| Channel | x86_64 | aarch64 |
-| --- | --- | --- |
-| **Stable** (recommended) | [![stable repository](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html) | [![stable aarch64 repository](https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html) |
-| **Next** (unstable builds from master) | [![next repository](https://repositories.omnipackage.org/mpz/next/badge.svg)](https://repositories.omnipackage.org/mpz/next/install.html) | [![next aarch64 repository](https://repositories.omnipackage.org/mpz/next-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/next-aarch64/install.html) |
+- **Stable** (recommended): [x86_64](https://repositories.omnipackage.org/mpz/stable/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
+- **Next** (unstable builds from master): [x86_64](https://repositories.omnipackage.org/mpz/next/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html)
 
 Arch and Manjaro are x86_64 only.
 
@@ -89,8 +87,6 @@ Grab the installer or portable binary from the [releases page](https://github.co
 * win-x86_64-qt6 - x86 64-bit build (recommended)
 * win-arm64-qt6 - native ARM 64-bit build
 * win-legacy-qt5 - legacy version for x86 32-bit systems (Windows below 10)
-
-win-x86_64 build should also work on ARM64 systems thanks to Windows' emulation layer, but the performance may suffer. Use win-arm64 if you have an ARM64 Windows PC.
 
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
 
@@ -134,8 +130,9 @@ Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPP
 
 Some features require Qt6:
 
-- gapless playback;
-- audio output switch;
+- gapless playback
+- equalizer
+- audio output switch
 
 This means win-legacy-qt5 won't have these. As well as old Linux distros.
 
@@ -143,7 +140,7 @@ OmniPackage repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+
 
 Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+.
 
-AppImage, macOS DMG, win-x86_64, win-arm64 are built with Qt6.
+AppImage, macOS DMG, win-x86_64, win-arm64 are all built with Qt6.
 
 ## Configuration
 
