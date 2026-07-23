@@ -136,7 +136,7 @@ Some features require Qt6:
 
 This means win-legacy-qt5 won't have these. As well as old Linux distros.
 
-OmniPackage repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+, Debian 13+, Ubuntu 24.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
+OmniPackage repositories contain binaries with Qt6 for: openSUSE Tumbleweed & Leap 15.4+, Fedora 38+, Debian 12+, Ubuntu 22.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
 
 Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+.
 

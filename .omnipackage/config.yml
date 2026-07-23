@@ -128,6 +128,14 @@ opensuse_qt6: &opensuse_qt6
   runtime_dependencies: [hicolor-icon-theme, libQt6Svg6]
   <<: *rpm
 
+# Leap 15.x defaults to gcc 7, too old for Qt6 headers
+opensuse_qt6_leap: &opensuse_qt6_leap
+  build_dependencies:
+    [gcc13, gcc13-c++, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel, Mesa-libGL-devel]
+  runtime_dependencies: [hicolor-icon-theme, libQt6Svg6]
+  CMAKE_EXTRA_CLI: "-DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13"
+  <<: *rpm
+
 mageia_qt5: &mageia_qt5
   build_dependencies:
     [gcc, make, cmake, qtbase5-common-devel, lib64qt5core-devel, lib64qt5gui-devel, lib64qt5widgets-devel, lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel, lib64qt5svg-devel]
@@ -158,7 +166,7 @@ debian_qt5: &debian_qt5
   <<: *deb
 
 debian_qt6: &debian_qt6
-  build_dependencies: [gcc, make, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev, libqt6svg6-dev]
+  build_dependencies: [gcc, make, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev, libqt6svg6-dev, libgl-dev]
   runtime_dependencies: [hicolor-icon-theme, libqt6svg6]
   <<: *deb
 
@@ -175,13 +183,13 @@ builds:
     <<: *opensuse_qt5
 
   - distro: "opensuse_15.4"
-    <<: *opensuse_qt5
+    <<: *opensuse_qt6_leap
 
   - distro: "opensuse_15.5"
-    <<: *opensuse_qt5
+    <<: *opensuse_qt6_leap
 
   - distro: "opensuse_15.6"
-    <<: *opensuse_qt5
+    <<: *opensuse_qt6_leap
 
   - distro: "opensuse_16.0"
     <<: *opensuse_qt6
@@ -195,7 +203,7 @@ builds:
     <<: *debian_qt5
 
   - distro: "debian_12"
-    <<: *debian_qt5
+    <<: *debian_qt6
 
   - distro: "debian_13"
     <<: *debian_qt6
@@ -210,7 +218,7 @@ builds:
     <<: *debian_qt5
 
   - distro: "ubuntu_22.04"
-    <<: *debian_qt5
+    <<: *debian_qt6
 
   - distro: "ubuntu_24.04"
     <<: *debian_qt6
@@ -225,10 +233,10 @@ builds:
     <<: *debian_qt6
 
   - distro: "fedora_38"
-    <<: *readhat_qt5
+    <<: *readhat_qt6
 
   - distro: "fedora_39"
-    <<: *readhat_qt5
+    <<: *readhat_qt6
 
   - distro: "fedora_40"
     <<: *readhat_qt6
