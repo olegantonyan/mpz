@@ -14,7 +14,7 @@
 ### Misc
 
 - Build option `ENABLE_GAPLESS` (default on, Qt6 only) compiles the gapless engine in or out
-
+- Native Linux aarch64 repositories
 
 ## [2.0.17] - 2026-07-16
 
