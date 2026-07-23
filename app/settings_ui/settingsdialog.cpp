@@ -1,6 +1,13 @@
 #include "settings_ui/settingsdialog.h"
 #include "playlist_ui/columnsconfig.h"
 #include "config/storage.h"
+#include "coverart/online/cache.h"
+#include "coverart/online/providerchain.h"
+#include "lyrics/cache.h"
+#include "lyrics/providerchain.h"
+#ifdef ENABLE_CRASH_HANDLER
+  #include "crash_handler.h"
+#endif
 
 #include <algorithm>
 
@@ -9,6 +16,7 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
+#include <QFileInfo>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -17,8 +25,11 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QMessageBox>
+#include <QPalette>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QSystemTrayIcon>
 #include <QTabWidget>
 #include <QTableWidget>
 #include <QUrl>
@@ -44,9 +55,6 @@ namespace {
     "artist", "album", "title", "year", "length", "track_number",
     "path", "url", "filename", "format", "bitrate", "channels", "sample_rate",
   };
-
-  // Online names must match Lyrics::ProviderChain::knownProviders().
-  const QStringList kLyricsProviders = {"embedded", "sidecar", "lrclib", "netease", "qq", "lyrics.ovh"};
 }
 
 SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) :
@@ -57,32 +65,47 @@ SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c,
 
   auto *tabs = new QTabWidget(this);
   tabs->addTab(buildGeneralTab(),  tr("General"));
-  tabs->addTab(buildLyricsTab(),   tr("Lyrics"));
+  // "&&" so the ampersand renders instead of being eaten as a mnemonic.
+  tabs->addTab(buildOnlineTab(),   tr("Online lyrics && covers"));
   tabs->addTab(buildAdvancedTab(), tr("Advanced"));
 
   button_box = new QDialogButtonBox(
     QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel,
     this);
-  auto *open_config_dir_btn = button_box->addButton(
-    tr("Open config directory"), QDialogButtonBox::ActionRole);
+
+  auto *folder_buttons = new QHBoxLayout;
+  auto *open_config_dir_btn = new QPushButton(tr("Open config directory"), this);
   connect(open_config_dir_btn, &QPushButton::clicked, this, []() {
     QDesktopServices::openUrl(QUrl::fromLocalFile(Config::Storage::configPath()));
   });
+  folder_buttons->addWidget(open_config_dir_btn);
+#ifdef ENABLE_CRASH_HANDLER
+  auto *open_crash_log_dir_btn = new QPushButton(tr("Open crash log directory"), this);
+  connect(open_crash_log_dir_btn, &QPushButton::clicked, this, []() {
+    const QString dir = QFileInfo(QString::fromStdString(mpz::crash_log_path())).absolutePath();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+  });
+  folder_buttons->addWidget(open_crash_log_dir_btn);
+#endif
+  folder_buttons->addStretch();
 
   auto *root = new QVBoxLayout(this);
   root->addWidget(tabs);
+  root->addLayout(folder_buttons);
   root->addWidget(button_box);
 
   populateLanguages();
   populateColumns();
   populateLyrics();
+  populateCovers();
   populateMprisBlacklist();
   fitColumnsTableHeight();
 
-  // Minimize-to-tray depends on tray-icon being enabled.
-  check_minimize_to_tray->setEnabled(check_tray_icon->isChecked());
-  connect(check_tray_icon, &QCheckBox::toggled,
-          check_minimize_to_tray, &QCheckBox::setEnabled);
+  if (check_minimize_to_tray) {
+    check_minimize_to_tray->setEnabled(check_tray_icon->isChecked());
+    connect(check_tray_icon, &QCheckBox::toggled,
+            check_minimize_to_tray, &QCheckBox::setEnabled);
+  }
 
   tray_was_enabled = check_tray_icon->isChecked();
 
@@ -109,32 +132,41 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_inhibit_sleep->setChecked(global_conf.inhibitSleepWhilePlaying());
   pv->addWidget(check_inhibit_sleep);
 
-  spin_buffer_kib = new QSpinBox;
-  spin_buffer_kib->setRange(16, 4096);
-  spin_buffer_kib->setSuffix(" " + tr("KiB"));
-  // streamBufferSize() is in bytes; default 131072 = 128 KiB.
-  int bytes = global_conf.streamBufferSize();
-  if (bytes <= 0) bytes = 128 * BUFFER_BYTES_PER_KIB;
-  spin_buffer_kib->setValue(bytes / BUFFER_BYTES_PER_KIB);
-  auto *buf_row = new QHBoxLayout;
-  buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
-  buf_row->addWidget(spin_buffer_kib);
-  buf_row->addStretch();
-  pv->addLayout(buf_row);
-
   vbox->addWidget(gb_playback);
 
   // Interface
   auto *gb_iface = new QGroupBox(tr("Interface"));
   auto *iv = new QVBoxLayout(gb_iface);
 
+#ifdef Q_OS_MACOS
+  check_tray_icon = new QCheckBox(tr("Show icon in the menu bar"));
+#else
   check_tray_icon = new QCheckBox(tr("Show system tray icon"));
+#endif
   check_tray_icon->setChecked(global_conf.trayIconEnabled());
   iv->addWidget(check_tray_icon);
+
+#ifndef Q_OS_MACOS
+  if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+    auto *tray_warning = new QLabel(
+      tr("No system tray detected. On GNOME, install the "
+         "\"AppIndicator and KStatusNotifierItem Support\" extension "
+         "for the tray icon to appear."));
+    tray_warning->setWordWrap(true);
+    tray_warning->setStyleSheet("color: #d35400;");
+    iv->addWidget(tray_warning);
+  }
 
   check_minimize_to_tray = new QCheckBox(tr("Close to tray instead of quitting"));
   check_minimize_to_tray->setChecked(global_conf.minimizeToTray());
   iv->addWidget(check_minimize_to_tray);
+#endif
+
+#if defined(ENABLE_UPDATE_CHECK)
+  check_auto_update = new QCheckBox(tr("Check for updates on startup"));
+  check_auto_update->setChecked(!global_conf.disableAutoUpdateCheck());
+  iv->addWidget(check_auto_update);
+#endif
 
   check_row_height = new QCheckBox(tr("Override theme's playlist row height:"));
   spin_row_height = new QSpinBox;
@@ -330,18 +362,69 @@ QWidget *SettingsDialog::buildGeneralTab() {
   return page;
 }
 
-QWidget *SettingsDialog::buildLyricsTab() {
+QWidget *SettingsDialog::buildOnlineTab() {
   auto *page = new QWidget;
   auto *vbox = new QVBoxLayout(page);
-  vbox->addWidget(new QLabel(
-    tr("Provider order (drag to reorder, uncheck to disable):")));
 
+  auto *hint = new QLabel(
+    tr("Embedded tags and files next to the music are always used first. "
+       "These are the online sources tried when nothing is found locally."));
+  hint->setWordWrap(true);
+  hint->setForegroundRole(QPalette::PlaceholderText);
+  vbox->addWidget(hint);
+
+  auto *gb_lyrics = new QGroupBox(tr("Lyrics"));
+  auto *lv = new QVBoxLayout(gb_lyrics);
+  lv->addWidget(new QLabel(tr("Drag to reorder, uncheck to disable:")));
   list_lyrics = new QListWidget;
   list_lyrics->setDragDropMode(QAbstractItemView::InternalMove);
   list_lyrics->setSelectionMode(QAbstractItemView::SingleSelection);
-  vbox->addWidget(list_lyrics);
+  lv->addWidget(list_lyrics);
+  lv->addLayout(buildCacheButtons(tr("Open lyrics folder"), tr("Clear downloaded lyrics"),
+                                  tr("Delete all lyrics downloaded from online providers?"),
+                                  []() { return Lyrics::Cache::instance().dir(); },
+                                  []() { return Lyrics::Cache::instance().clear(); }));
+  vbox->addWidget(gb_lyrics);
+
+  auto *gb_covers = new QGroupBox(tr("Album covers"));
+  auto *cv = new QVBoxLayout(gb_covers);
+  cv->addWidget(new QLabel(tr("Download missing covers from (drag to reorder, uncheck to disable):")));
+  list_covers = new QListWidget;
+  list_covers->setDragDropMode(QAbstractItemView::InternalMove);
+  list_covers->setSelectionMode(QAbstractItemView::SingleSelection);
+  cv->addWidget(list_covers);
+  cv->addLayout(buildCacheButtons(tr("Open covers folder"), tr("Clear downloaded covers"),
+                                  tr("Delete all covers downloaded from online providers?"),
+                                  []() { return CoverArt::Online::Cache::instance().dir(); },
+                                  []() { return CoverArt::Online::Cache::instance().clear(); }));
+  vbox->addWidget(gb_covers);
 
   return page;
+}
+
+QLayout *SettingsDialog::buildCacheButtons(const QString &open_text, const QString &clear_text,
+                                           const QString &confirm_text,
+                                           std::function<QString()> dir,
+                                           std::function<int()> clear) {
+  auto *row = new QHBoxLayout;
+  auto *open_btn = new QPushButton(open_text);
+  auto *clear_btn = new QPushButton(clear_text);
+  row->addWidget(open_btn);
+  row->addWidget(clear_btn);
+  row->addStretch();
+
+  connect(open_btn, &QPushButton::clicked, this, [dir]() {
+    // The cache constructor creates the directory, so this works before the
+    // first download too.
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir()));
+  });
+  connect(clear_btn, &QPushButton::clicked, this, [this, clear, clear_text, confirm_text]() {
+    if (QMessageBox::question(this, clear_text, confirm_text) != QMessageBox::Yes) {
+      return;
+    }
+    QMessageBox::information(this, clear_text, tr("Removed %n file(s).", nullptr, clear()));
+  });
+  return row;
 }
 
 QWidget *SettingsDialog::buildAdvancedTab() {
@@ -372,6 +455,20 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   port_row->addStretch();
   vbox->addLayout(port_row);
 
+  // Stream buffer size
+  auto *buf_row = new QHBoxLayout;
+  buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
+  spin_buffer_kib = new QSpinBox;
+  spin_buffer_kib->setRange(16, 4096);
+  spin_buffer_kib->setSuffix(" " + tr("KiB"));
+  // streamBufferSize() is in bytes; default 131072 = 128 KiB.
+  int bytes = global_conf.streamBufferSize();
+  if (bytes <= 0) bytes = 128 * BUFFER_BYTES_PER_KIB;
+  spin_buffer_kib->setValue(bytes / BUFFER_BYTES_PER_KIB);
+  buf_row->addWidget(spin_buffer_kib);
+  buf_row->addStretch();
+  vbox->addLayout(buf_row);
+
   // Playback log size
   auto *plog_row = new QHBoxLayout;
   plog_row->addWidget(new QLabel(tr("Playback log size:")));
@@ -384,7 +481,45 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   plog_row->addStretch();
   vbox->addLayout(plog_row);
 
-#ifdef Q_OS_LINUX
+#ifdef ENABLE_GAPLESS
+  // Gapless playback
+  auto *gapless_row = new QHBoxLayout;
+  check_gapless = new QCheckBox(tr("Enable gapless playback"));
+  check_gapless->setChecked(!global_conf.disableGapless());
+  gapless_row->addWidget(check_gapless);
+  auto *gapless_hint = new QLabel(tr("(requires restart)"));
+  gapless_hint->setStyleSheet("color: gray;");
+  gapless_row->addWidget(gapless_hint);
+  gapless_row->addStretch();
+  vbox->addLayout(gapless_row);
+
+  auto *gcache_row = new QHBoxLayout;
+  gcache_row->addWidget(new QLabel(tr("Gapless memory buffer:")));
+  spin_gapless_cache_mb = new QSpinBox;
+  spin_gapless_cache_mb->setRange(1, 8192);
+  spin_gapless_cache_mb->setSuffix(" " + tr("MB"));
+  int gcache_mb = global_conf.gaplessCacheSizeMb();
+  spin_gapless_cache_mb->setValue(gcache_mb > 0 ? gcache_mb : 100);
+  spin_gapless_cache_mb->setEnabled(check_gapless->isChecked());
+  gcache_row->addWidget(spin_gapless_cache_mb);
+  auto *gcache_hint = new QLabel(tr("(requires restart)"));
+  gcache_hint->setStyleSheet("color: gray;");
+  gcache_row->addWidget(gcache_hint);
+  gcache_row->addStretch();
+  vbox->addLayout(gcache_row);
+
+  auto *gcache_desc = new QLabel(tr(
+    "Decoded audio kept in memory so track transitions are gapless and seeking "
+    "within a track is instant. A larger buffer caches more (or longer) tracks; "
+    "100 MB suits most libraries."));
+  gcache_desc->setWordWrap(true);
+  gcache_desc->setStyleSheet("color: gray;");
+  vbox->addWidget(gcache_desc);
+
+  connect(check_gapless, &QCheckBox::toggled, spin_gapless_cache_mb, &QWidget::setEnabled);
+#endif
+
+#ifdef MPRIS_ENABLE
   auto *gb_mpris = new QGroupBox(tr("MPRIS blacklist"));
   auto *mv = new QVBoxLayout(gb_mpris);
   mv->addWidget(new QLabel(
@@ -417,6 +552,20 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   check_mpd_stop_on_close = new QCheckBox(tr("Stop MPD playback when closing mpz"));
   check_mpd_stop_on_close->setChecked(global_conf.mpdStopPlayerOnClose());
   vbox->addWidget(check_mpd_stop_on_close);
+#endif
+
+#ifdef ENABLE_CRASH_HANDLER
+  auto *crash_row = new QHBoxLayout;
+  crash_row->addWidget(new QLabel(tr("Crash reports:")));
+  combo_crash_reports = new QComboBox;
+  combo_crash_reports->addItem(tr("Send automatically"), QStringLiteral("enabled"));
+  combo_crash_reports->addItem(tr("Ask after next crash"), QString());
+  combo_crash_reports->addItem(tr("Never send"), QStringLiteral("disabled"));
+  const int crash_idx = combo_crash_reports->findData(local_conf.crashReportConsent());
+  combo_crash_reports->setCurrentIndex(crash_idx >= 0 ? crash_idx : 1);
+  crash_row->addWidget(combo_crash_reports);
+  crash_row->addStretch();
+  vbox->addLayout(crash_row);
 #endif
 
   vbox->addStretch();
@@ -477,30 +626,35 @@ void SettingsDialog::populateColumns() {
 }
 
 void SettingsDialog::populateLyrics() {
-  const QStringList configured = global_conf.lyricsProviders();
-  // Configured ones first (in order), then any known-but-disabled providers as unchecked.
+  populateProviders(list_lyrics, Lyrics::ProviderChain::knownProviders(),
+                    global_conf.lyricsProviders(), &Lyrics::ProviderChain::displayName);
+}
+
+void SettingsDialog::populateCovers() {
+  populateProviders(list_covers, CoverArt::Online::ProviderChain::knownProviders(),
+                    global_conf.coverProviders(), &CoverArt::Online::ProviderChain::displayName);
+}
+
+void SettingsDialog::populateProviders(QListWidget *list, const QStringList &known,
+                                       const QStringList &configured,
+                                       QString (*display_name)(const QString &)) {
+  // Configured ones first (in order), then any known-but-disabled providers as
+  // unchecked. Names the chain doesn't know are dropped, which is how legacy
+  // built-in entries retire themselves on the next save.
   QStringList all;
   for (const auto &p : configured) {
-    if (kLyricsProviders.contains(p) && !all.contains(p)) all << p;
+    if (known.contains(p) && !all.contains(p)) all << p;
   }
-  for (const auto &p : kLyricsProviders) {
+  for (const auto &p : known) {
     if (!all.contains(p)) all << p;
   }
   for (const auto &p : all) {
-    QString label;
-    if      (p == "embedded")   label = "Embedded (tags)";
-    else if (p == "sidecar")    label = "Sidecar (.lrc, .txt)";
-    else if (p == "lrclib")     label = "LRCLIB (online)";
-    else if (p == "netease")    label = "NetEase Cloud Music (online)";
-    else if (p == "qq")         label = "QQ Music (online)";
-    else if (p == "lyrics.ovh") label = "Lyrics.ovh (online)";
-    else                        label = p;
-    auto *item = new QListWidgetItem(label);
+    auto *item = new QListWidgetItem(display_name(p));
     item->setData(Qt::UserRole, p);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable |
                    Qt::ItemIsEnabled | Qt::ItemIsDragEnabled);
     item->setCheckState(configured.contains(p) ? Qt::Checked : Qt::Unchecked);
-    list_lyrics->addItem(item);
+    list->addItem(item);
   }
 }
 
@@ -550,10 +704,12 @@ PlaylistUi::ColumnsConfig SettingsDialog::collectColumns() const {
   return result;
 }
 
-QStringList SettingsDialog::collectLyrics() const {
+QStringList SettingsDialog::collectProviders(const QListWidget *list) const {
   QStringList result;
-  for (int i = 0; i < list_lyrics->count(); ++i) {
-    auto *item = list_lyrics->item(i);
+  if (!list) return result;
+  // Row order is the fallback order; unchecked means absent.
+  for (int i = 0; i < list->count(); ++i) {
+    auto *item = list->item(i);
     if (item->checkState() == Qt::Checked) {
       result << item->data(Qt::UserRole).toString();
     }
@@ -574,11 +730,15 @@ void SettingsDialog::apply() {
   // Playback
   global_conf.saveStopWhenTrackRemoved(check_stop_when_track_removed->isChecked());
   global_conf.saveInhibitSleepWhilePlaying(check_inhibit_sleep->isChecked());
-  global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
 
   // Interface
   global_conf.saveTrayIconEnabled(check_tray_icon->isChecked());
-  global_conf.saveMinimizeToTray(check_minimize_to_tray->isChecked());
+  if (check_minimize_to_tray) {
+    global_conf.saveMinimizeToTray(check_minimize_to_tray->isChecked());
+  }
+  if (check_auto_update) {
+    global_conf.saveDisableAutoUpdateCheck(!check_auto_update->isChecked());
+  }
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());
@@ -590,16 +750,35 @@ void SettingsDialog::apply() {
   global_conf.saveColumnsConfig(collectColumns());
 
   // Lyrics
-  global_conf.saveLyricsProviders(collectLyrics());
+  global_conf.saveLyricsProviders(collectProviders(list_lyrics));
+  global_conf.saveCoverProviders(collectProviders(list_covers));
 
   // Advanced
   global_conf.saveSingleInstance(check_single_instance->isChecked());
   global_conf.saveIpcPort(spin_ipc_port->value());
+  global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
-  global_conf.saveMprisBlacklist(collectMprisBlacklist());
+#ifdef ENABLE_GAPLESS
+  if (check_gapless) {
+    global_conf.saveDisableGapless(!check_gapless->isChecked());
+  }
+  if (spin_gapless_cache_mb) {
+    global_conf.saveGaplessCacheSizeMb(spin_gapless_cache_mb->value());
+  }
+#endif
+#ifdef MPRIS_ENABLE
+  if (list_mpris_blacklist) {
+    global_conf.saveMprisBlacklist(collectMprisBlacklist());
+  }
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   if (check_mpd_stop_on_close) {
     global_conf.saveMpdStopPlayerOnClose(check_mpd_stop_on_close->isChecked());
+  }
+#endif
+#ifdef ENABLE_CRASH_HANDLER
+  if (combo_crash_reports) {
+    local_conf.saveCrashReportConsent(combo_crash_reports->currentData().toString());
   }
 #endif
 

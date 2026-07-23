@@ -6,6 +6,7 @@
 #include "streammetadata.h"
 #include "config/global.h"
 #include "config/local.h"
+#include "config/storage.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd_client/entity.h"
   #include "mpd_client/song.h"
@@ -14,11 +15,17 @@
 #endif
 #ifdef ENABLE_CRASH_HANDLER
   #include "crash_handler.h"
+  #include "sysinfo.h"
+#endif
+#ifdef Q_OS_WIN
+  #include "windows/windowstaskbar.h"
 #endif
 
 #include <QDebug>
 #include <QTranslator>
 #include <QLocale>
+#include <QStandardPaths>
+#include <QDir>
 #include <iostream>
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
@@ -82,8 +89,27 @@ int main(int argc, char *argv[]) {
   registerMetaTypes();
   RNJesus::seed();
 
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
+
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
+#ifdef ENABLE_CRASH_HANDLER
+  const QString crashDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  QDir().mkpath(crashDir);
+  mpz::set_crash_log_path((crashDir + "/crash.log").toStdString());
+#endif
+#ifdef Q_OS_WIN
+  WindowsTaskbar::setAppUserModelId();
+#endif
+#ifdef Q_OS_MACOS
+  // The main window hides (not quits) on close, so don't let the app exit when
+  // the last visible window — e.g. a dialog while the window is hidden — closes.
+  // MainWindow::requestQuit() quits explicitly on Cmd-Q / menu Quit.
+  a.setQuitOnLastWindowClosed(false);
+#endif
   QString version = VERSION;
 #ifdef PACKAGE_VERSION
   if (QStringLiteral(PACKAGE_VERSION) != version) {
@@ -92,6 +118,9 @@ int main(int argc, char *argv[]) {
 #endif
   a.setApplicationVersion(version);
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::set_system_info(SysInfo::get().join("\n").toStdString());
+#endif
 
   auto arguments = args(argc, argv);
   if (arguments.size() == 1 && arguments.first() == "--version") {

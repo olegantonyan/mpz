@@ -19,6 +19,9 @@ bool MpzApplication::event(QEvent *event) {
     emit activated();
   }
 #endif
+  if (event->type() == QEvent::ApplicationPaletteChange) {
+    emit paletteChanged();
+  }
   if (event->type() == QEvent::FileOpen) {
     auto *foe = static_cast<QFileOpenEvent *>(event);
     QString path = foe->file();

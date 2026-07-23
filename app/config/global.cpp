@@ -3,7 +3,7 @@
 #include <QDebug>
 
 namespace Config {
-  Global::Global() : storage("global.yml") {
+  Global::Global() : SingleInstanceGuard("Config::Global"), storage("global.yml") {
   }
 
   bool Global::sync() {
@@ -34,12 +34,77 @@ namespace Config {
     storage.set("tray_icon_enabled", Config::Value(arg));
   }
 
+  bool Global::disableAutoUpdateCheck() const {
+    return storage.get("disable_auto_update_check").get<bool>();
+  }
+
+  void Global::saveDisableAutoUpdateCheck(bool arg) {
+    storage.set("disable_auto_update_check", Config::Value(arg));
+  }
+
   int Global::streamBufferSize() const {
     return storage.get("stream_buffer_size").get<int>();
   }
 
   void Global::saveStreamBufferSize(int arg) {
     storage.set("stream_buffer_size", Config::Value(arg));
+  }
+
+  QVector<Radio::Station> Global::radioStations() const {
+    QVector<Radio::Station> result;
+    auto raw = storage.get("radio_stations");
+    if (raw.listType() != Config::Value::Map) {
+      return result;
+    }
+    const auto list = raw.get<QList<Config::Value>>();
+    for (const auto &i : list) {
+      auto m = i.get<QMap<QString, Config::Value>>();
+      Radio::Station s;
+      s.id = m.value("id").get<QString>();
+      s.name = m.value("name").get<QString>();
+      s.group = m.value("group").get<QString>();
+      s.url = m.value("url").get<QString>();
+      s.codec = m.value("codec").get<QString>();
+      s.bitrate = static_cast<quint16>(m.value("bitrate").get<int>());
+      s.homepage = m.value("homepage").get<QString>();
+      result << s;
+    }
+    return result;
+  }
+
+  bool Global::saveRadioStations(const QVector<Radio::Station> &arg) {
+    QList<Config::Value> list;
+    for (const auto &s : arg) {
+      QMap<QString, Config::Value> m;
+      m.insert("id", Config::Value(s.id));
+      m.insert("name", Config::Value(s.name));
+      m.insert("group", Config::Value(s.group));
+      m.insert("url", Config::Value(s.url));
+      m.insert("codec", Config::Value(s.codec));
+      m.insert("bitrate", Config::Value(static_cast<int>(s.bitrate)));
+      m.insert("homepage", Config::Value(s.homepage));
+      list << Config::Value(m);
+    }
+    // An empty list carries no element type, so tag it to keep the Map type.
+    Config::Value value(list);
+    value.setListType(Config::Value::Map);
+    return storage.set("radio_stations", value);
+  }
+
+  bool Global::disableGapless() const {
+    return storage.get("disable_gapless").get<bool>();
+  }
+
+  void Global::saveDisableGapless(bool arg) {
+    storage.set("disable_gapless", Config::Value(arg));
+  }
+
+  int Global::gaplessCacheSizeMb() const {
+    return storage.get("gapless_cache_size_mb").get<int>();
+  }
+
+  void Global::saveGaplessCacheSizeMb(int arg) {
+    storage.set("gapless_cache_size_mb", Config::Value(arg));
   }
 
   bool Global::minimizeToTray() const {
@@ -176,34 +241,51 @@ namespace Config {
   }
 
   QStringList Global::lyricsProviders() const {
-    const QStringList defaults = { "embedded", "sidecar", "lrclib" };
-    auto raw = storage.get("lyrics");
-    if (raw.type() != Config::Value::Map) {
-      return defaults;
-    }
-    auto map = raw.get<QMap<QString, Config::Value>>();
-    if (!map.contains("providers")) {
-      return defaults;
-    }
-    auto list = map.value("providers");
-    if (list.type() != Config::Value::List || list.listType() != Config::Value::String) {
-      return defaults;
-    }
-    QStringList result;
-    for (const auto &i : list.get<QList<Config::Value>>()) {
-      result << i.get<QString>();
-    }
-    return result.isEmpty() ? defaults : result;
+    return providersUnder("lyrics");
   }
 
   bool Global::saveLyricsProviders(const QStringList &arg) {
+    return saveProvidersUnder("lyrics", arg);
+  }
+
+  QStringList Global::coverProviders() const {
+    return providersUnder("covers");
+  }
+
+  bool Global::saveCoverProviders(const QStringList &arg) {
+    return saveProvidersUnder("covers", arg);
+  }
+
+  // Online providers only, and there are no defaults: anything missing or
+  // malformed is simply "no online providers". Built-in sources are not
+  // configurable and never appear here. Legacy entries naming them are returned
+  // as-is and dropped downstream by ProviderChain::filterKnown.
+  QStringList Global::providersUnder(const QString &key) const {
+    auto raw = storage.get(key);
+    if (raw.type() != Config::Value::Map) {
+      return {};
+    }
+    auto list = raw.get<QMap<QString, Config::Value>>().value("providers");
+    if (list.type() != Config::Value::List) {
+      return {};
+    }
+    QStringList result;
+    for (const auto &i : list.get<QList<Config::Value>>()) {
+      if (i.type() == Config::Value::String) {
+        result << i.get<QString>();
+      }
+    }
+    return result;
+  }
+
+  bool Global::saveProvidersUnder(const QString &key, const QStringList &arg) {
     QList<Config::Value> list;
     for (const auto &i : std::as_const(arg)) {
       list << Config::Value(i);
     }
     QMap<QString, Config::Value> map;
     map.insert("providers", Config::Value(list));
-    return storage.set("lyrics", Config::Value(map));
+    return storage.set(key, Config::Value(map));
   }
 
   QString Global::libraryFilterScope() const {

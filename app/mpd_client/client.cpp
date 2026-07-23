@@ -11,13 +11,13 @@ namespace MpdClient {
     connect(conn, &Connection::error, this, &Client::error);
     connect(conn, &Connection::idleEvent, this, &Client::on_idleEvent);
     conn->moveToThread(thread);
+    connect(thread, &QThread::finished, conn, &QObject::deleteLater);
     thread->start();
   }
 
   Client::~Client() {
     thread->quit();
     thread->wait();
-    conn->deleteLater();
     thread->deleteLater();
   }
 

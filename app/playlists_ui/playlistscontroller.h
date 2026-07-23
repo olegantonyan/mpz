@@ -18,6 +18,8 @@
 #include <memory>
 #include <QLineEdit>
 
+class QDropEvent;
+
 namespace PlaylistsUi {
   class Controller : public QObject {
     Q_OBJECT
@@ -31,6 +33,7 @@ namespace PlaylistsUi {
 
   public slots:
     void on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
+    void on_createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
     void on_jumpTo(const std::shared_ptr<Playlist::Playlist> playlist);
     void on_playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
     void on_start(const Track &t);
@@ -57,11 +60,14 @@ namespace PlaylistsUi {
     QListView *view;
     QLineEdit *search;
     BusySpinner *spinner;
+    ModusOperandi &modus_operandi;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
+    bool handleExternalDnd(QEvent *event);
+    void onExternalDrop(QDropEvent *event);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

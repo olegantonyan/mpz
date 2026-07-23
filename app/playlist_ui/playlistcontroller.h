@@ -18,6 +18,8 @@
 #include <QLineEdit>
 #include <QHash>
 
+class QDropEvent;
+
 namespace PlaylistUi {
   class Controller : public QObject {
     Q_OBJECT
@@ -29,6 +31,7 @@ namespace PlaylistUi {
     void selected(const Track &track);
     void changed(const std::shared_ptr<Playlist::Playlist> pl);
     void durationOfSelectedChanged(quint32 total_duration);
+    void createPlaylistRequested(const QList<QDir> &filepaths, const QString &libraryDir);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist::Playlist> pi);
@@ -37,7 +40,9 @@ namespace PlaylistUi {
     void on_start(const Track &t);
     void on_pause(const Track &t);
     void on_scrollTo(const Track &track);
+    void on_trackMetaChanged(const Track &t);
     void on_appendToPlaylist(const QList<QDir> &filepaths);
+    void on_appendTracks(const QVector<Track> &tracks);
     void sortBy(const QString &criteria);
 
   private slots:
@@ -53,15 +58,20 @@ namespace PlaylistUi {
     BusySpinner *spinner;
     Config::Local &local_conf;
     Config::Global &global_conf;
+    ModusOperandi &modus_operandi;
     bool restore_scroll_once;
     bool persist_pending = false;
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
     ColumnsConfig columns_config;
+    quint64 live_stream_uid = 0;
 
+    void updateStreamSpans();
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
+    bool handleExternalDnd(QEvent *event);
+    void onExternalDrop(QDropEvent *event);
 
     void loadColumnsConfig();
 

@@ -1,26 +1,34 @@
 #include "trayicon.h"
+#include "icons.h"
 
 #include <QAction>
 #include <QDebug>
 #include <QStyle>
 
-TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(parent), global_conf(global_c) {
+TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
+#ifdef Q_OS_MACOS
+  QIcon icon(QStringLiteral(":/app/resources/icons/mpz-template.svg"));
+  icon.setIsMask(true);
+  trayicon = new QSystemTrayIcon(icon, parent);
+#else
   trayicon = new QSystemTrayIcon(parent->windowIcon(), parent);
+#endif
   trayicon->setToolTip(tr("Stopped"));
   menu = new QMenu(parent);
 
   quit = new QAction(tr("Quit"), this);
+  show_window = new QAction(tr("Show mpz"), this);
 
   play = new QAction(tr("Play"), this);
-  play->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPlay));
+  play->setIcon(Icons::get(Icons::Icon::Play));
   pause = new QAction(tr("Pause"), this);
-  pause->setIcon(parent->style()->standardIcon(QStyle::SP_MediaPause));
+  pause->setIcon(Icons::get(Icons::Icon::Pause));
   stop = new QAction(tr("Stop"), this);
-  stop->setIcon(parent->style()->standardIcon(QStyle::SP_MediaStop));
+  stop->setIcon(Icons::get(Icons::Icon::Stop));
   next = new QAction(tr("Next"), this);
-  next->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekForward));
+  next->setIcon(Icons::get(Icons::Icon::Next));
   prev = new QAction(tr("Previous"), this);
-  prev->setIcon(parent->style()->standardIcon(QStyle::SP_MediaSeekBackward));
+  prev->setIcon(Icons::get(Icons::Icon::Prev));
   now_playing = new QAction("", this);
   now_playing->setEnabled(false);
   connect(play, &QAction::triggered, this, &TrayIcon::startTriggered);
@@ -29,6 +37,7 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   connect(next, &QAction::triggered, this, &TrayIcon::nextTriggered);
   connect(prev, &QAction::triggered, this, &TrayIcon::prevTriggered);
   connect(quit, &QAction::triggered, this, &TrayIcon::quitTriggered);
+  connect(show_window, &QAction::triggered, this, &TrayIcon::showWindowTriggered);
 
   menu->addAction(now_playing);
   menu->addSeparator();
@@ -38,6 +47,7 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
   menu->addAction(next);
   menu->addAction(prev);
   menu->addSeparator();
+  menu->addAction(show_window);
   menu->addAction(quit);
   trayicon->setContextMenu(menu);
   trayicon->show();
@@ -47,10 +57,8 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
     // Popping our QMenu on top would stack two menus.
     Q_UNUSED(reason)
 #else
-    if (global_conf.minimizeToTray()) {
+    if (reason == QSystemTrayIcon::Trigger) {
       emit clicked();
-    } else if (reason == QSystemTrayIcon::Trigger) {
-      menu->popup(QCursor::pos());
     }
 #endif
   });
@@ -58,6 +66,14 @@ TrayIcon::TrayIcon(QMainWindow *parent, Config::Global &global_c) : QObject(pare
 
 void TrayIcon::hide() {
   trayicon->hide();
+}
+
+void TrayIcon::refreshIcons() {
+  play->setIcon(Icons::get(Icons::Icon::Play));
+  pause->setIcon(Icons::get(Icons::Icon::Pause));
+  stop->setIcon(Icons::get(Icons::Icon::Stop));
+  next->setIcon(Icons::get(Icons::Icon::Next));
+  prev->setIcon(Icons::get(Icons::Icon::Prev));
 }
 
 void TrayIcon::on_playerStarted(const Track &track) {

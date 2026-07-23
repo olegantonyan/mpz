@@ -23,6 +23,8 @@
 #endif
 #include "modusoperandi.h"
 #include "slidingbanner.h"
+#include "coverart/coverartwidget.h"
+#include "lyrics/lyricswidget.h"
 
 #include <QMainWindow>
 #include <QtGlobal>
@@ -34,15 +36,37 @@
 #ifdef Q_OS_MACOS
   #include "macos/macmediacontrols.h"
   #include "macos/macdockmenu.h"
+  #include "macos/macmenubar.h"
+#endif
+
+#ifdef SMTC_ENABLE
+  #include "windows/windowsmediacontrols.h"
+#endif
+
+#ifdef Q_OS_WIN
+  #include "windows/windowstaskbar.h"
 #endif
 
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
 
+#if defined(ENABLE_UPDATE_CHECK)
+  #include "update_check/updatechecker.h"
+#endif
+
+#if defined(ENABLE_CRASH_HANDLER)
+  #include "feedback_ui/feedbacksender.h"
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+class QDockWidget;
+class QMenu;
+class QToolBar;
+class QAction;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -53,6 +77,7 @@ public:
 
 public slots:
   void toggleHidden();
+  void showWindow();
   void requestQuit();
 #ifdef Q_OS_MACOS
   void onAppActivated();
@@ -73,18 +98,38 @@ private:
   MainMenu *main_menu = nullptr;
   StatusBarLabel *status_label = nullptr;
   QLabel *status_label_right = nullptr;
+#if defined(ENABLE_UPDATE_CHECK)
+  QLabel *status_label_update = nullptr;
+  UpdateChecker *update_checker = nullptr;
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  FeedbackSender *crash_sender = nullptr;
+#endif
 #if defined(MPRIS_ENABLE)
   Mpris *mpris = nullptr;
 #endif
 #ifdef Q_OS_MACOS
   MacMediaControls *mac_media = nullptr;
   MacDockMenu *mac_dock = nullptr;
+  MacMenuBar *mac_menubar = nullptr;
+#endif
+#ifdef SMTC_ENABLE
+  WindowsMediaControls *win_media = nullptr;
+#endif
+#ifdef Q_OS_WIN
+  WindowsTaskbar *win_taskbar = nullptr;
 #endif
   Shortcuts *shortcuts = nullptr;
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
+  QToolBar *controls_toolbar = nullptr;
+  QAction *lock_toolbar_action = nullptr;
+  QDockWidget *cover_dock = nullptr;
+  QDockWidget *lyrics_dock = nullptr;
+  CoverArt::Widget *cover_widget = nullptr;
+  Lyrics::Widget *lyrics_widget = nullptr;
   ModusOperandi modus_operandi;
 #ifdef ENABLE_MPD_SUPPORT
   Playback::Mpd::PlaybackOrder *mpd_order = nullptr;
@@ -97,9 +142,18 @@ private:
   void setupPerPlaylistOrderCombobox();
   void setupFollowCursorCheckbox();
   void setupVolumeControl();
+  void setupControlsToolBar();
+  void setupDockWidgets();
+  void openTrackInfo(const Track &track);
   void setupTrayIcon();
   void setupPlaybackDispatch();
   void setupStatusBar();
+#if defined(ENABLE_UPDATE_CHECK)
+  void setupUpdateChecker();
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  void setupCrashReporter();
+#endif
 #if defined(MPRIS_ENABLE)
   void setupMpris();
 #endif
@@ -110,11 +164,22 @@ private:
   void setupMacMediaControls();
   void setupMacDockMenu();
 #endif
+#ifdef SMTC_ENABLE
+  void setupWindowsMediaControls();
+#endif
+#ifdef Q_OS_WIN
+  void setupWindowsTaskbar();
+#endif
   void setupWindowTitle();
   void setupPlaybackLog();
   void setupSortMenu();
   void setupSleepLock();
   void setupOutputDevice();
+#ifdef ENABLE_GAPLESS
+  void setupEqualizer();
+  void openEqualizerDialog();
+  void applyEqForDevice(const QByteArray &device_id);
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();
 #endif
@@ -123,5 +188,6 @@ private:
 
 protected:
   void closeEvent(QCloseEvent *event) override;
+  QMenu *createPopupMenu() override;
 };
 #endif // MAINWINDOW_H

@@ -8,6 +8,13 @@
 
 class Track {
 public:
+  struct AudioProperties {
+    quint64 duration = 0;
+    quint8 channels = 0;
+    quint16 bitrate = 0;
+    quint32 sample_rate = 0;
+  };
+
   explicit Track();
   explicit Track(const QString &filepath, quint32 begin = 0);
   explicit Track(const QString &filepath,
@@ -21,14 +28,13 @@ public:
                  quint8 channels,
                  quint16 bitrate,
                  quint32 samplerate);
-  explicit Track(const QUrl &stream_url, const QString &filepath_reference);
+  explicit Track(const QUrl &stream_url, const QString &filepath_reference, const QString &title = QString());
 
   static QString formattedTime(quint64 tm);
+  static AudioProperties audioPropertiesOf(const QString &filepath);
 
   bool isValid() const;
 
-  bool fillAudioProperties();
-  bool fillTags();
   bool reload();
   void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
@@ -66,6 +72,8 @@ public:
   QString formattedTitle() const;
 
   bool isStream() const;
+  QString stationName() const;
+  QString streamNowPlaying() const;
 
   void setStreamMeta(const StreamMetaData& meta);
   void clearStreamMeta();
@@ -81,13 +89,13 @@ private:
   QString _artist;
   QString _album;
   QString _title;
-  quint16 _year;
-  quint64 _duration;
-  quint32 _sample_rate;
-  quint8 _channels;
-  quint16 _bitrate;
+  quint16 _year = 0;
+  quint64 _duration = 0;
+  quint32 _sample_rate = 0;
+  quint8 _channels = 0;
+  quint16 _bitrate = 0;
   QString _format;
-  quint16 _track_number;
+  quint16 _track_number = 0;
   QUrl _stream_url;
   quint64 _begin;
   QString _playlist_name;
@@ -105,7 +113,9 @@ private:
   mutable bool _filename_cached = false;
 
   quint64 generateUid() const;
+  QString displayUrl() const;
   QString detectFormat() const;
+  bool readMetadata();
 };
 
 #endif // TRACK_H

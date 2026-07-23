@@ -1,15 +1,131 @@
-## [2.0.12] - next
+## [2.1.1] - next
+
+### Added
+
+### Fixed
+
+### Misc
+
+## [2.1.0] - 2026-07-23
+
+### Added
+
+- Gapless playback: no silence at track boundaries. Toggle it and set its decoded-audio memory buffer (default 100 MB) under Settings → Advanced. Only Qt6
+- Radio streams improvements: HTTPS support, new playlist row view, IceCast's new status-json.xsl support for stream title
+- Dedicated "Radio" library with built-in stations. Raw playlists with streams can still be played directly, or imported into radio library
+- Equalizer with 10-band and parametric modes, supports AutoEq presets. On/off and preset are per output device ("Default" counts as a device); presets themselves are shared. Follows the device actually in use, so unplugging one switches the EQ along with the audio
+
+### Fixed
+
+- Crash when deleting playlists
+
+### Misc
+
+- Build option `ENABLE_GAPLESS` (default on, Qt6 only) compiles the gapless engine in or out
+- Native Linux aarch64 repositories
+
+## [2.0.17] - 2026-07-16
+
+### Added
+
+- Controls bar (buttons, seekbar, menu) now spans the full window width, with cover and lyrics panels below it
+- Controls bar can be moved to the top or bottom and locked in place from the menu
+- macOS: optional menu bar icon
+- Tray menu: "Show mpz"
+- Track info: tabs with all tags, file and audio metadata
+- Download missing album covers online (off by default)
+
+### Fixed
+
+- Unchecking all lyrics providers no longer re-enables them
+
+- Tray click hides the window only if "close to tray" is enabled
+- Linux: tray click switches to the window's desktop instead of hiding it
+- Windows (legacy Qt5 build): the media play/pause key can now pause playback, not only start it
+- Windows: media play/pause key now pauses while the window is minimized
+
+### Misc
+
+- Faster playlist creation: fewer tag reads per file, scanning runs on all cores
+- Vendored libmpdclient updated to 2.26
+- New build options: `ENABLE_QHOTKEY` (default on, off on macOS and Windows MSVC where the OS owns media keys), `USE_SYSTEM_QHOTKEY` (default off), `ENABLE_CRASH_HANDLER` (default on for Linux, macOS and MSVC), `USE_SYSTEM_CPPTRACE` (default off)
+
+## [2.0.16] - 2026-07-13
+
+### Added
+
+- Dockable album cover and lyrics panels (hidden by default, toggled from the menu)
+- Crash stack traces saved to a log file, openable from Settings (Linux, macOS, Windows)
+- Opt-in automatic crash reporting
+
+### Fixed
+
+- Playback order combobox width truncation on some platforms/themes (https://github.com/olegantonyan/mpz/issues/202)
+
+## [2.0.15] - 2026-07-10
+
+### Added
+
+- Drag-and-drop files/folders from the file manager into the playlists list (empty space creates a new playlist, dropping onto a playlist asks to create or append) and into the track list (inserts at the drop position)
+- Bootstrap Icons for in-app icons (play/pause/context menus/etc)
+- On systems without tray show warning under tray icon checkbox in settings
+- macOS menu bar: live Playback menu, Jump to Playing Track, Full Screen
+- macOS: show in-window hamburger menu again (alongside the native menu bar)
+- Windows: "Uninstall mpz" Start Menu shortcut (Settings → Apps uninstall may not work)
+
+### Fixed
+
+- Windows installer: uninstalling/updating via the maintenance tool no longer tries to remove itself
+
+### Misc
+
+- experimental Linux AppImage build (x86_64 and arm64)
+
+## [2.0.14] - 2026-07-07
+
+### Added
+
+- New icon (feat. @Hacker-Planet)
+- Windows native media controls (SMTC): title/artist/album, cover art and play/pause/stop/next/prev in the system media overlay
+- Windows taskbar: thumbnail buttons, progress bar and play/pause overlay
+
+### Fixed
+
+- Windows installer: removes the previous version automatically
+- tray icon: left-click now shows/hides the window; the menu opens on right-click (previously left-click opened the menu)
+- Windows Qt5 legacy build: high-DPI scaling (no longer tiny on scaled displays)
+
+### Misc
+
+- Windows Qt6 build switch to MSVC toolchain
+
+## [2.0.13] - 2026-07-04
+
+### Added
+
+- macOS DMG contains link to /Applicaions for simplifying the installation
+- hide hamburger icon on macOS in favor of native menubar
+- on macOS closing the window hides it and keeps playing (Cmd+Q to quit); tray icon removed in favor of native Control Center/Dock controls
+
+### Fixed
+
+- on macOS "Show in Finder" for multiple selected tracks now opens a single Finder window per folder with all items selected, instead of one window per file
+
+### Misc
+
+- experimental Windows ARM64 build
+
+## [2.0.12] - 2026-07-02
 
 ### Added
 
 - macOS global media controls
 - macOS dock menu
+- update check on macOS and Windows;
 
 ### Fixed
 
 - fix multi-file CUE (EAC gaps-appended) playing silence for every track after the first
-
-### Misc
 
 ## [2.0.11] - 2026-06-24
 

@@ -4,7 +4,6 @@
 #include "track.h"
 
 #include <QDir>
-#include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QVector>
@@ -31,7 +30,6 @@ namespace Playlist {
     bool is_single_file() const;
     QStringList files_filter() const;
     bool is_cue(const QString &current_path) const;
-    void remove_tracks_added_from_cue(const QSet<QString> &cue_audio_paths, QVector<Track> &tracks) const;
   };
 }
 

@@ -1,0 +1,150 @@
+name: Release AppImage
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
+      - run.sh
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing release tag to upload the AppImage to (leave empty for a normal CI build)'
+        required: false
+        type: string
+        default: ''
+  release:
+    types: [published]
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
+
+jobs:
+  appimage:
+    name: Qt6 ${{ matrix.ld_arch }}
+    runs-on: ${{ matrix.runs_on }}
+    container:
+      image: debian:11.6-slim
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runs_on: ubuntu-latest,    aqt_host: linux,       aqt_arch: linux_gcc_64,    qt_bindir: gcc_64,    ld_arch: x86_64,  tag: linux-x86_64 }
+          - { runs_on: ubuntu-24.04-arm, aqt_host: linux_arm64, aqt_arch: linux_gcc_arm64, qt_bindir: gcc_arm64, ld_arch: aarch64, tag: linux-arm64 }
+    steps:
+      - name: Install toolchain, Qt runtime libs, ffmpeg and gh
+        run: |
+          set -euo pipefail
+          apt-get update
+          # qtbase5-dev drags in the transitive X/xcb/fontconfig/freetype/dbus/glib stack
+          # linuxdeploy needs to bundle the Qt6 xcb platform plugin; the explicit lib*
+          # extras cover Qt6-specific bits. libav*/libsw* = Debian 11 ffmpeg 4.3, matching
+          # Qt 6.7.3's ffmpeg plugin ABI so linuxdeploy can bundle a self-contained backend.
+          apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build git curl ca-certificates file patchelf gnupg \
+            python3 python3-venv python3-pip \
+            qtbase5-dev libgl1-mesa-dev libxcb-cursor0 libxkbcommon-x11-0 libpulse0 libxrandr2 \
+            libavcodec58 libavformat58 libavutil56 libswscale5 libswresample3
+          # GitHub CLI is not in the slim base; needed by the release-upload step.
+          install -d -m0755 /etc/apt/keyrings
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /etc/apt/keyrings/gh.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/gh.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/gh.list
+          apt-get update && apt-get install -y --no-install-recommends gh
+          # Root in the container vs. workspace uid otherwise trips git's ownership check.
+          git config --global --add safe.directory '*'
+
+      - uses: actions/checkout@v6
+
+      - name: Install Qt6
+        run: |
+          set -euo pipefail
+          python3 -m venv /opt/aqt
+          /opt/aqt/bin/pip install -q aqtinstall
+          /opt/aqt/bin/aqt install-qt ${{ matrix.aqt_host }} desktop 6.7.3 ${{ matrix.aqt_arch }} \
+            -m qtmultimedia --outputdir /opt/Qt
+          echo "QTDIR=/opt/Qt/6.7.3/${{ matrix.qt_bindir }}" >> "$GITHUB_ENV"
+
+      - name: Fetch AppImage tooling
+        run: |
+          TOOLS_DIR="$RUNNER_TEMP/appimage-tools"
+          mkdir -p "$TOOLS_DIR"
+          base=https://github.com/linuxdeploy
+          for tool in linuxdeploy linuxdeploy-plugin-qt; do
+            url="$base/$tool/releases/download/continuous/$tool-${{ matrix.ld_arch }}.AppImage"
+            echo "downloading $url"
+            curl -fsSL -o "$TOOLS_DIR/$tool-${{ matrix.ld_arch }}.AppImage" "$url"
+            chmod +x "$TOOLS_DIR/$tool-${{ matrix.ld_arch }}.AppImage"
+          done
+          echo "$TOOLS_DIR" >> "$GITHUB_PATH"
+
+      - name: Extract version
+        id: ver
+        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute PACKAGE_VERSION (non-release builds)
+        if: env.RELEASE_TAG == ''
+        run: |
+          PV=$(printf 'next.%s.%s' $(git log -1 --format='%cd %h' --date=format:'%Y%m%d%H%M%S'))
+          echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
+
+      - name: Build AppImage
+        run: |
+          set -euo pipefail
+          VERSION=${{ steps.ver.outputs.version }}
+          SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
+          ARTIFACT="mpz-$VERSION$SUFFIX-${{ matrix.tag }}"
+
+          # ENABLE_UPDATE_CHECK is OFF by default on Linux (distro packages self-update);
+          # the AppImage is a manually-downloaded binary like the win/mac ones, so opt in.
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -GNinja \
+            -DCMAKE_PREFIX_PATH="$QTDIR" \
+            -DENABLE_UPDATE_CHECK=ON \
+            ${PACKAGE_VERSION:+-DPACKAGE_VERSION=$PACKAGE_VERSION}
+          cmake --build build
+          test -f build/mpz || { echo "ERROR: build failed, mpz was not produced" >&2; exit 1; }
+
+          DESTDIR="$PWD/AppDir" cmake --install build --prefix /usr
+
+          # Drop Qt's GStreamer backend so linuxdeploy bundles only the self-contained
+          # ffmpeg backend (Qt 6.7 links system ffmpeg 4.x, provided by libav* above).
+          rm -f "$QTDIR/plugins/multimedia/libgstreamermediaplugin.so"
+
+          export QMAKE="$QTDIR/bin/qmake6"
+          # Qt lives in /opt/Qt (non-standard), so linuxdeploy can't resolve mpz's
+          # libQt6*.so deps without this on the search path.
+          export LD_LIBRARY_PATH="$QTDIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export EXTRA_QT_PLUGINS="multimedia;svg"
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          export OUTPUT="dist/$ARTIFACT.AppImage"
+          mkdir -p dist
+          linuxdeploy-${{ matrix.ld_arch }}.AppImage \
+            --appdir AppDir \
+            --executable AppDir/usr/bin/mpz \
+            --desktop-file AppDir/usr/share/applications/mpz.desktop \
+            --icon-file app/resources/icons/256x256/mpz.png \
+            --plugin qt \
+            --output appimage
+
+      - name: Upload as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-${{ matrix.tag }}.AppImage
+          archive: false
+
+      - name: Upload to GitHub release
+        if: env.RELEASE_TAG != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-${{ matrix.tag }}.AppImage" --repo "${{ github.repository }}" --clobber

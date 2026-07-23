@@ -16,7 +16,26 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <widget class="QWidget" name="topControls" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
       <item>
        <widget class="QToolButton" name="stopButton">
         <property name="toolTip">
@@ -64,11 +83,6 @@
       </item>
       <item>
        <widget class="QLabel" name="timeLabel">
-        <property name="font">
-         <font>
-          <family>Monospace</family>
-         </font>
-        </property>
         <property name="toolTip">
          <string>Track duration</string>
         </property>
@@ -122,7 +136,7 @@
       <item>
        <widget class="QToolButton" name="toolButtonOutputDevice">
         <property name="text">
-         <string>🎧 Output</string>
+         <string>Output</string>
         </property>
        </widget>
       </item>
@@ -133,7 +147,8 @@
         </property>
        </widget>
       </item>
-     </layout>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QSplitter" name="splitter">
@@ -153,7 +168,7 @@
              <string>Configure library folders</string>
             </property>
             <property name="text">
-             <string>⚙</string>
+             <string/>
             </property>
            </widget>
           </item>

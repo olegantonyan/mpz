@@ -2,6 +2,7 @@
 #define DIRECTORYCONTEXTMENU_H
 
 #include "directorymodel/proxy.h"
+#include "track.h"
 #include "playlist/playlist.h"
 
 #include <QObject>
@@ -24,8 +25,13 @@ namespace DirectoryUi {
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths);
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
+    void createNewPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
+    void appendTracksToCurrentPlaylist(const QVector<Track> &tracks);
+    void editStations();
 
   private:
+    void showRadioMenu(const QPoint &pos, const QModelIndex &index);
+
     DirectoryModel::Proxy *model;
     QTreeView *view;
     QLineEdit *search;

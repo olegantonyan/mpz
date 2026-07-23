@@ -1,4 +1,5 @@
 #include "volumecontrol.h"
+#include "icons.h"
 
 #include <QtGlobal>
 #include <QWheelEvent>
@@ -16,9 +17,9 @@ void VolumeControl::setValue(int value) {
   menu.setValue(value);
   button->setText(QString("%1%").arg(value));
   if (value == 0) {
-    button->setIcon(button->style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+    button->setIcon(Icons::get(Icons::Icon::VolumeMuted));
   } else {
-    button->setIcon(button->style()->standardIcon(QStyle::SP_MediaVolume));
+    button->setIcon(Icons::get(Icons::Icon::Volume));
   }
 }
 

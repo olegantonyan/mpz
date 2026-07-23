@@ -3,6 +3,12 @@ name: Release macOS dmg
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
+      - run.sh
   workflow_dispatch:
     inputs:
       release_tag:
@@ -32,7 +38,7 @@ jobs:
       - name: Install Qt6
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.10.3
+          version: 6.11.1
           host: mac
           target: desktop
           arch: clang_64
@@ -75,7 +81,7 @@ jobs:
           echo "--- linked libs (non-system) ---"
           otool -L "$APP/Contents/MacOS/mpz" | grep -vE '^\s*(/System/|/usr/lib/)' || true
           echo "--- codesign verify ---"
-          codesign --verify --deep --strict --verbose=2 "$APP" || true
+          codesign --verify --deep --strict --verbose=2 "$APP"
         env:
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
 
@@ -83,7 +89,7 @@ jobs:
         if: env.RELEASE_TAG == ''
         uses: actions/upload-artifact@v7
         with:
-          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal-qt6.dmg
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-macos-universal.dmg
           archive: false
 
       - name: Upload to GitHub release
@@ -91,4 +97,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-macos-universal-qt6.dmg" --repo "${{ github.repository }}" --clobber
+          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-macos-universal.dmg" --repo "${{ github.repository }}" --clobber

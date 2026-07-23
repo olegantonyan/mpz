@@ -30,8 +30,7 @@ Track::Track(const QString &fp, quint32 bgn) {
 
   filepath = fp;
 
-  fillAudioProperties();
-  fillTags();
+  readMetadata();
   setCue(false);
 
   _format = detectFormat();
@@ -68,7 +67,7 @@ Track::Track(const QString &fp,
   _format = detectFormat();
 }
 
-Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
+Track::Track(const QUrl &stream_url, const QString &filepath_reference, const QString &title) {
   _begin = 0;
   _duration = 0;
   _channels = 0;
@@ -82,6 +81,7 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference) {
   _uid = generateUid();
   _stream_url = stream_url;
   filepath = filepath_reference;
+  _title = title;
 }
 
 QString Track::formattedTime(quint64 tm) {
@@ -103,50 +103,58 @@ bool Track::isValid() const {
   return uid() != 0 && (isMpd() || QFile::exists(path()) || isStream());
 }
 
-bool Track::fillAudioProperties() {
-  if (isMpd() || !isValid()) {
-    return false;
+Track::AudioProperties Track::audioPropertiesOf(const QString &filepath) {
+  AudioProperties result;
+  const QByteArray encoded = filepath.toUtf8();
+  TagLib::FileRef f(encoded.constData());
+  if (f.isNull()) {
+    return result;
   }
-  TagLib::FileRef f(path().toUtf8().constData());
-  if(!f.isNull()) {
-    if (f.audioProperties()) {
-      _duration = static_cast<quint64>(f.audioProperties()->lengthInMilliseconds());
-      _channels = static_cast<quint8>(f.audioProperties()->channels());
-      _bitrate = static_cast<quint16>(f.audioProperties()->bitrate());
-      _sample_rate = static_cast<quint32>(f.audioProperties()->sampleRate());
-      return true;
-    }
+  if (const auto *props = f.audioProperties()) {
+    result.duration = static_cast<quint64>(props->lengthInMilliseconds());
+    result.channels = static_cast<quint8>(props->channels());
+    result.bitrate = static_cast<quint16>(props->bitrate());
+    result.sample_rate = static_cast<quint32>(props->sampleRate());
   }
-  return false;
+  return result;
 }
 
-bool Track::fillTags() {
+bool Track::readMetadata() {
   if (isMpd() || !isValid()) {
     return false;
   }
-  TagLib::FileRef f(path().toUtf8().constData());
-  if(!f.isNull()) {
-    if (f.tag()) {
-      TagLib::Tag *tag = f.tag();
-      _artist = QString(tag->artist().toCString(true));
-      if (_artist.isEmpty()) {
-        const TagLib::StringList aa = tag->properties().value("ALBUMARTIST");
-        if (!aa.isEmpty()) {
-          _artist = QString(aa.front().toCString(true));
-        }
-      }
-      _album = QString(tag->album().toCString(true));
-      _title = QString(tag->title().toCString(true));
-      _year = static_cast<quint16>(tag->year());
-      _track_number = static_cast<quint16>(tag->track());
-      return true;
-    }
+  const QByteArray encoded = path().toUtf8();
+  TagLib::FileRef f(encoded.constData());
+  if (f.isNull()) {
+    return false;
   }
-  return false;
+
+  if (const auto *props = f.audioProperties()) {
+    _duration = static_cast<quint64>(props->lengthInMilliseconds());
+    _channels = static_cast<quint8>(props->channels());
+    _bitrate = static_cast<quint16>(props->bitrate());
+    _sample_rate = static_cast<quint32>(props->sampleRate());
+  }
+
+  if (TagLib::Tag *tag = f.tag()) {
+    _artist = QString(tag->artist().toCString(true));
+    if (_artist.isEmpty()) {
+      const TagLib::StringList aa = tag->properties().value("ALBUMARTIST");
+      if (!aa.isEmpty()) {
+        _artist = QString(aa.front().toCString(true));
+      }
+    }
+    _album = QString(tag->album().toCString(true));
+    _title = QString(tag->title().toCString(true));
+    _year = static_cast<quint16>(tag->year());
+    _track_number = static_cast<quint16>(tag->track());
+  }
+
+  return true;
 }
 
 bool Track::reload() {
-  return fillAudioProperties() && fillTags();
+  return readMetadata();
 }
 
 void Track::generateUidByHashing(const QString &prefix) {
@@ -192,25 +200,22 @@ QString Track::album() const {
   return _album;
 }
 
+QString Track::displayUrl() const {
+  return _stream_url.toDisplayString(QUrl::RemoveUserInfo | QUrl::RemoveQuery | QUrl::RemoveFragment);
+}
+
 QString Track::title() const {
-  if (_title.isEmpty()) {
-    if (isStream()) {
-      if (streamMeta().title().isEmpty()) {
-        QUrl displayable_url;
-        displayable_url.setScheme(_stream_url.scheme());
-        displayable_url.setHost(_stream_url.host());
-        displayable_url.setPort(_stream_url.port());
-        displayable_url.setPath(_stream_url.path());
-        return displayable_url.toString();
-      } else {
-        return streamMeta().title();
-      }
-    } else {
-      return filename();
+  // A live ICY title wins over _title (which may be a station name).
+  if (isStream()) {
+    if (!streamMeta().title().isEmpty()) {
+      return streamMeta().title();
     }
-  } else {
-    return _title;
+    if (!_title.isEmpty()) {
+      return _title;
+    }
+    return displayUrl();
   }
+  return _title.isEmpty() ? filename() : _title;
 }
 
 quint16 Track::year() const {
@@ -249,7 +254,7 @@ QString Track::shortText() const {
   } else if (!filename().isEmpty()) {
     return filename();
   }
-  return url().toString();
+  return url().toDisplayString();
 }
 
 bool Track::isMpd() const {
@@ -283,6 +288,22 @@ bool Track::isStream() const {
   return !_stream_url.isEmpty();
 }
 
+QString Track::stationName() const {
+  return _title.isEmpty() ? displayUrl() : _title;
+}
+
+QString Track::streamNowPlaying() const {
+  if (!isStream()) {
+    return QString();
+  }
+  const QString a = _stream_meta.artist();
+  const QString t = _stream_meta.title();
+  if (!a.isEmpty() && !t.isEmpty()) {
+    return a + " - " + t;
+  }
+  return a.isEmpty() ? t : a;
+}
+
 void Track::setStreamMeta(const StreamMetaData &meta) {
   _stream_meta = meta;
 }
@@ -296,7 +317,7 @@ const StreamMetaData &Track::streamMeta() const {
 }
 
 QString Track::artCover() const {
-  return CoverArt::Covers::instance().get(filepath);
+  return CoverArt::Covers::instance().get(filepath, artist(), album());
 }
 
 void Track::setAudioFormat(quint32 sample_rate, quint8 channels, quint16 bitrate) {

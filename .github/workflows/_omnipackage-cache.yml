@@ -1,0 +1,42 @@
+on:
+  workflow_call:
+    inputs:
+      image_cache:
+        required: true
+        type: string
+      runs_on:
+        required: true
+        type: string
+      skip_distros:
+        required: false
+        type: string
+        default: '[]'
+
+jobs:
+  list-distros:
+    runs-on: ubuntu-latest
+    outputs:
+      distros: ${{ steps.get-distros.outputs.distros }}
+    steps:
+      - uses: omnipackage/omnipackage-rs@master
+      - uses: actions/checkout@v6
+      - name: Get distro list
+        id: get-distros
+        env:
+          SKIP: ${{ inputs.skip_distros }}
+        run: |
+          all=$(omnipackage info --list-distros . --format json)
+          echo "distros=$(jq -cn --argjson all "$all" --argjson skip "$SKIP" '$all - $skip')" >> "$GITHUB_OUTPUT"
+
+  image_cache:
+    needs: [list-distros]
+    runs-on: ${{ inputs.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: ${{ fromJson(needs.list-distros.outputs.distros) }}
+    steps:
+      - uses: omnipackage/omnipackage-rs@master
+      - uses: actions/checkout@v6
+      - run: echo "${{ secrets.OMNIPACKAGE_MPZ_DOTENV }}" > .env
+      - run:  omnipackage prime . --image-cache "${{ inputs.image_cache }}" --distros "${{ matrix.distro }}"

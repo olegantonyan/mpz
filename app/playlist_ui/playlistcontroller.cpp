@@ -1,4 +1,6 @@
 #include "playlistcontroller.h"
+#include "dropdirs.h"
+#include "streamrowdelegate.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -7,9 +9,11 @@
 #include <QThread>
 #include <QTimer>
 #include <QMouseEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 namespace PlaylistUi {
-  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg) {
+  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg), modus_operandi(modus) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
@@ -18,6 +22,7 @@ namespace PlaylistUi {
 
     proxy = new ProxyFilterModel(view->style(), columns_config, modus, this);
     view->setModel(proxy);
+    view->setItemDelegate(new StreamRowDelegate(this));
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -66,7 +71,7 @@ namespace PlaylistUi {
       }
     });
 
-    context_menu = new PlaylistContextMenu(proxy, view, search, this);
+    context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
     connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
@@ -85,6 +90,26 @@ namespace PlaylistUi {
         emit changed(proxy->activeModel()->playlist());
       });
     });
+
+    connect(proxy, &QAbstractItemModel::modelReset, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::layoutChanged, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsInserted, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsRemoved, this, &Controller::updateStreamSpans);
+    connect(proxy, &QAbstractItemModel::rowsMoved, this, &Controller::updateStreamSpans);
+  }
+
+  void Controller::updateStreamSpans() {
+    view->clearSpans();
+    const int cols = proxy->columnCount();
+    if (cols <= 1) {
+      return;
+    }
+    const int rows = proxy->rowCount();
+    for (int r = 0; r < rows; r++) {
+      if (proxy->index(r, 0).data(Model::IsStreamRole).toBool()) {
+        view->setSpan(r, 1, 1, cols - 1);
+      }
+    }
   }
 
   void PlaylistUi::Controller::loadColumnsConfig() {
@@ -114,11 +139,27 @@ namespace PlaylistUi {
   }
 
   void Controller::on_stop() {
+    if (live_stream_uid != 0) {
+      proxy->activeModel()->updateStreamMeta(live_stream_uid, StreamMetaData());
+      live_stream_uid = 0;
+    }
     proxy->activeModel()->highlight(0, Model::HighlightState::None);
   }
 
   void Controller::on_start(const Track &t) {
+    if (live_stream_uid != 0 && live_stream_uid != t.uid()) {
+      proxy->activeModel()->updateStreamMeta(live_stream_uid, StreamMetaData());
+    }
+    live_stream_uid = t.isStream() ? t.uid() : 0;
     proxy->activeModel()->highlight(t.uid(), Model::HighlightState::Playing);
+  }
+
+  void Controller::on_trackMetaChanged(const Track &t) {
+    if (!t.isStream()) {
+      return;
+    }
+    live_stream_uid = t.uid();
+    proxy->activeModel()->updateStreamMeta(t.uid(), t.streamMeta());
   }
 
   void Controller::on_pause(const Track &t) {
@@ -138,6 +179,12 @@ namespace PlaylistUi {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->appendToPlaylistAsync(filepaths);
       spinner->show();
+    }
+  }
+
+  void Controller::on_appendTracks(const QVector<Track> &tracks) {
+    if (proxy->activeModel()->playlist() != nullptr) {
+      proxy->activeModel()->appendTracks(tracks);
     }
   }
 
@@ -170,6 +217,9 @@ namespace PlaylistUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
+      if (handleExternalDnd(event)) {
+        return true;
+      }
       eventFilterViewport(event);
     } else if (obj == view) {
       eventFilterTableView(event);
@@ -177,11 +227,63 @@ namespace PlaylistUi {
     return QObject::eventFilter(obj, event);
   }
 
+  bool Controller::handleExternalDnd(QEvent *event) {
+    const auto type = event->type();
+    if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
+      return false;
+    }
+    if (modus_operandi.get() != ModusOperandi::MODUS_LOCALFS) {
+      return false;
+    }
+    auto *drop_event = static_cast<QDropEvent *>(event);
+    if (!drop_event->mimeData()->hasUrls()) {
+      return false;
+    }
+    if (type == QEvent::Drop) {
+      onExternalDrop(drop_event);
+    }
+    drop_event->acceptProposedAction();
+    return true;
+  }
+
+  void Controller::onExternalDrop(QDropEvent *event) {
+    const auto dirs = DropUtil::droppedDirs(event->mimeData());
+    if (dirs.isEmpty()) {
+      return;
+    }
+
+    auto model = proxy->activeModel();
+    if (model->playlist() == nullptr) {
+      emit createPlaylistRequested(dirs, DropUtil::commonParentDir(dirs));
+      return;
+    }
+
+    const QPoint pos = DropUtil::dropPosition(event);
+    const auto index = view->indexAt(pos);
+    int at_row;
+    if (!index.isValid()) {
+      at_row = model->rowCount();
+    } else {
+      const QRect rect = view->visualRect(index);
+      const bool below = pos.y() > rect.center().y();
+      at_row = proxy->mapToSource(index).row() + (below ? 1 : 0);
+    }
+
+    model->insertTracksAsync(dirs, at_row);
+    spinner->show();
+  }
+
   void Controller::eventFilterTableView(QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
       QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
-      if (keyevent->key() == Qt::Key_Delete) {
+      if (keyevent->key() == Qt::Key_Delete
+#ifdef Q_OS_MACOS
+          || keyevent->key() == Qt::Key_Backspace
+#endif
+         ) {
         context_menu->on_remove();
+      } else if (keyevent->key() == Qt::Key_I && keyevent->modifiers().testFlag(Qt::ControlModifier)) {
+        context_menu->on_trackInfo();
       }
     }
   }

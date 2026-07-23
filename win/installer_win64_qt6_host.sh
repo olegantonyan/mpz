@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 source `dirname $0`/_env.sh
 
@@ -13,7 +14,7 @@ mkdir installer/packages/mpz/data
 
 ARTIFACT_PATH=installer/packages/mpz/data/
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
-ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win64-qt6-installer.exe
+ARTIFACT_NAME=mpz-$VERSION$SUFFIX-win-x86_64-qt6-installer.exe
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
@@ -25,9 +26,16 @@ if [ -n "${PACKAGE_VERSION:-}" ]; then
 fi
 
 cmake -DCMAKE_BUILD_TYPE=Release -GNinja $EXTRA_CMAKE_ARGS $SRC_DIR && ninja
-windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --compiler-runtime --release
+# set -e misses a cmake-configure failure hidden inside `cmake && ninja`.
+test -f ./mpz.exe || { echo "ERROR: build failed, mpz.exe was not produced" >&2; exit 1; }
+# --no-compiler-runtime: suppress windeployqt's vc_redist.<arch>.exe installer;
+# copy_vc_runtime below deploys the CRT DLLs app-local instead.
+windeployqt6.exe ./mpz.exe --dir $ARTIFACT_PATH --no-compiler-runtime --release
 cp ./mpz.exe $ARTIFACT_PATH
+# Ship the PDB so the crash handler can symbolize crash.log via dbghelp at runtime.
+cp ./mpz.pdb $ARTIFACT_PATH
 cp -R $QTDIR/plugins/multimedia $ARTIFACT_PATH
+copy_vc_runtime "$ARTIFACT_PATH" x64
 
 cd installer
 cp $SRC_DIR/license.txt packages/mpz/meta/

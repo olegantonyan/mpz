@@ -1,7 +1,7 @@
 #ifndef BUSYSPINNER_H
 #define BUSYSPINNER_H
 
-#include "waitingspinnerwidget.h"
+#include "loadingspinner.h"
 
 #include <QObject>
 #include <QWidget>
@@ -19,7 +19,7 @@ public slots:
 
 private:
   QWidget *widget;
-  WaitingSpinnerWidget *spinner;
+  LoadingSpinner *spinner;
   quint16 show_count;
 };
 

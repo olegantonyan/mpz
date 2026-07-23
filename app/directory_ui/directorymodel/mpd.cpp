@@ -1,4 +1,5 @@
 #include "mpd.h"
+#include "icons.h"
 
 #include <QDebug>
 #include <QUrl>
@@ -37,7 +38,9 @@ namespace DirectoryUi {
     void Mpd::onDatabaseUpdated() {
       QMutexLocker locker(&loading_mutex);
       beginResetModel();
-      loadDirectory(createRootItem(), "");
+      TreeItem *root = createRootItem();
+      root->children.append(fetchChildren(root, ""));
+      root->loaded = true;
       endResetModel();
       sort(last_sort_column, last_sort_order);
       filter(last_filter_term);
@@ -149,7 +152,7 @@ namespace DirectoryUi {
         return item->path;
       case Qt::DecorationRole:
         if (item->is_directory) {
-          return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+          return Icons::get(Icons::Icon::Folder);
         } else {
           return QFileIconProvider().icon(QFileInfo(item->name));
         }
@@ -158,35 +161,13 @@ namespace DirectoryUi {
       return none;
     }
 
-    void Mpd::loadDirectory(TreeItem *parent, const QString &path) {
-      if (!client.ping()) {
-        qWarning() << "mpd connection does not exist";
-        return;
-      }
-
-      QVector<TreeItem*> new_items;
-      auto songs = client.lsDir(path);
+    QVector<TreeItem*> Mpd::fetchChildren(TreeItem *parent, const QString &path) {
+      QVector<TreeItem*> items;
+      const auto songs = client.lsDir(path);
       for (const auto &it : std::as_const(songs)) {
-        auto item = new TreeItem(
-          it.isDir(),
-          it.path(),
-          it.modified_at(),
-          parent
-        );
-        new_items.append(item);
+        items.append(new TreeItem(it.isDir(), it.path(), it.modified_at(), parent));
       }
-
-      if (!new_items.isEmpty()) {
-        int first = parent->children.size();
-        int last = first + new_items.size() - 1;
-
-        QModelIndex parentIndex = parent == root_item ? QModelIndex() : createIndexForItem(parent);
-        beginInsertRows(parentIndex, first, last);
-        parent->children.append(new_items);
-        endInsertRows();
-      }
-
-      parent->loaded = true;
+      return items;
     }
 
     QModelIndex Mpd::createIndexForItem(TreeItem *item) const {
@@ -194,11 +175,10 @@ namespace DirectoryUi {
       if (!item || !item->parent) {
         return QModelIndex();
       }
-      int row = item->parent->children.indexOf(item);
-      if (row < 0) {
+      if (item->parent->children.indexOf(item) < 0) {
         return QModelIndex();
       }
-      return createIndex(row, 0, item);
+      return createIndex(item->row(), 0, item);
     }
 
     bool Mpd::hasChildren(const QModelIndex &parent) const {
@@ -228,8 +208,16 @@ namespace DirectoryUi {
       if (!item->is_directory || item->loaded) {
         return;
       }
-      loadDirectory(item, item->path);
+      const QVector<TreeItem*> new_items = fetchChildren(item, item->path);
       item->loaded = true;
+      if (new_items.isEmpty()) {
+        return;
+      }
+      const int first = item->children.size();
+      const int last = first + new_items.size() - 1;
+      beginInsertRows(createIndexForItem(item), first, last);
+      item->children.append(new_items);
+      endInsertRows();
     }
 
     TreeItem *Mpd::treeItemFromIndex(const QModelIndex &index) const {
@@ -239,6 +227,8 @@ namespace DirectoryUi {
 
     void Mpd::sort(int column, Qt::SortOrder order) {
       QMutexLocker locker(&loading_mutex);
+      emit layoutAboutToBeChanged();
+      const QModelIndexList old_indexes = persistentIndexList();
       std::sort(root_item->children.begin(), root_item->children.end(), [column, order](const TreeItem *a, const TreeItem *b) {
         switch (column) {
         case 0: {
@@ -265,6 +255,13 @@ namespace DirectoryUi {
           return false;
         }
       });
+
+      QModelIndexList new_indexes;
+      new_indexes.reserve(old_indexes.size());
+      for (const auto &idx : old_indexes) {
+        new_indexes << createIndexForItem(static_cast<TreeItem*>(idx.internalPointer()));
+      }
+      changePersistentIndexList(old_indexes, new_indexes);
 
       last_sort_column = column;
       last_sort_order = order;

@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFile>
+#include <QSaveFile>
 #include <QStandardPaths>
 #include <QDir>
 
@@ -41,6 +42,7 @@ namespace Config {
   }
 
   Value Storage::get(const QString &key, bool *ok) const {
+    QMutexLocker lock(&mutex);
     if (!data.contains(key)) {
       if (ok) {
         *ok = false;
@@ -54,6 +56,7 @@ namespace Config {
   }
 
   bool Storage::set(const QString &key, const Config::Value &value) {
+    QMutexLocker lock(&mutex);
     data[key] = value;
     changed = true;
     return true;
@@ -99,6 +102,7 @@ namespace Config {
   }
 
   void Storage::remove(const QString &key) {
+    QMutexLocker lock(&mutex);
     if (data.remove(key) > 0) {
       changed = true;
     }
@@ -108,19 +112,19 @@ namespace Config {
     if (appVersion().isNull() || appVersion() != QVersionNumber::fromString(QString(VERSION))) {
       set("__app_version__", QString(VERSION));
     }
+    QMutexLocker lock(&mutex);
     if (!changed) {
       return true;
     }
-    QFile file(filepath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+    QSaveFile file(filepath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
       qWarning() << "error opening file for writing" << filepath << ":" << file.errorString();
       return false;
     }
 
     YAML::Emitter emitter;
     emitter << serialize(data);
-    //qDebug() << emitter.c_str();
-    bool ok = file.write(emitter.c_str()) == static_cast<qint64>(emitter.size());
+    bool ok = file.write(emitter.c_str()) == static_cast<qint64>(emitter.size()) && file.commit();
     changed = !ok;
     return ok;
   }
@@ -131,10 +135,22 @@ namespace Config {
       qWarning() << "error opening file for reading" << filepath << ":" << file.errorString();
       return false;
     }
-    YAML::Node config = YAML::Load(file.readAll().toStdString());
 
-    for (const auto &i : parse(config).toStdMap()) {
-      data.insert(i.first, i.second);
+    try {
+      YAML::Node config = YAML::Load(file.readAll().toStdString());
+      QMutexLocker lock(&mutex);
+      for (const auto &i : parse(config).toStdMap()) {
+        data.insert(i.first, i.second);
+      }
+    } catch (const std::exception &e) {
+      qWarning() << "malformed config" << filepath << ":" << e.what();
+      file.close();
+      auto broken = filepath + ".broken";
+      QFile::remove(broken);
+      QFile::rename(filepath, broken);
+      QMutexLocker lock(&mutex);
+      data.clear();
+      return false;
     }
 
     return true;
@@ -239,6 +255,10 @@ namespace Config {
             for (const auto &i : value.get<QList<Config::Value>>()) {
               result[key].push_back(serialize(i.get<QMap<QString, Config::Value>>()));
             }
+          } else {
+            // An empty list has no element type to dispatch on. Without this the
+            // key would be dropped entirely and reload would fall back to defaults.
+            result[key] = std::vector<std::string>();
           }
           break;
         case Config::Value::Type::Map:

@@ -3,6 +3,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileInfo>
+#include <QMap>
 #include <QProcess>
 #include <QString>
 #include <QUrl>
@@ -17,7 +18,7 @@
 #include <shlobj.h>
 #endif
 
-#if defined(Q_OS_LINUX) && defined(MPZ_ENABLE_DBUS)
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && defined(MPZ_ENABLE_DBUS)
 #include <QDBusConnection>
 #include <QDBusMessage>
 #endif
@@ -85,10 +86,47 @@ void revealInFileManager(const QStringList &absolute_file_paths) {
     CoUninitialize();
   }
 #elif defined(Q_OS_MACOS)
+  // Group by directory so each Finder window shows all of that folder's
+  // selected items at once, mirroring the Windows branch above. Driving Finder
+  // via osascript is the only way to multi-select; `open -R` reveals a single
+  // item per invocation and opens a fresh window each time.
+  QMap<QString, QStringList> by_dir;
   for (const auto &p : absolute_file_paths) {
+    by_dir[QFileInfo(p).absolutePath()] << p;
+  }
+
+  // Escape for an AppleScript string literal. No shell is involved (startDetached
+  // passes args straight to osascript), so only backslash and double-quote matter.
+  const auto escape = [](const QString &s) {
+    QString out = s;
+    out.replace('\\', QStringLiteral("\\\\"));
+    out.replace('"', QStringLiteral("\\\""));
+    return out;
+  };
+
+  QStringList fallback;
+  for (auto it = by_dir.cbegin(); it != by_dir.cend(); ++it) {
+    QStringList items;
+    for (const auto &p : it.value()) {
+      items << QStringLiteral("POSIX file \"%1\"").arg(escape(p));
+    }
+    const QStringList args = {
+      QStringLiteral("-e"), QStringLiteral("tell application \"Finder\""),
+      QStringLiteral("-e"), QStringLiteral("activate"),
+      QStringLiteral("-e"), QStringLiteral("open (POSIX file \"%1\")").arg(escape(it.key())),
+      QStringLiteral("-e"), QStringLiteral("select {%1}").arg(items.join(QStringLiteral(", "))),
+      QStringLiteral("-e"), QStringLiteral("end tell")
+    };
+    if (!QProcess::startDetached(QStringLiteral("osascript"), args)) {
+      fallback << it.value();
+    }
+  }
+
+  // osascript could not be launched at all — fall back to the old per-file reveal.
+  for (const auto &p : fallback) {
     QProcess::startDetached(QStringLiteral("open"), { QStringLiteral("-R"), p });
   }
-#elif defined(Q_OS_LINUX) && defined(MPZ_ENABLE_DBUS)
+#elif defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && defined(MPZ_ENABLE_DBUS)
   QStringList uris;
   uris.reserve(absolute_file_paths.size());
   for (const auto &p : absolute_file_paths) {

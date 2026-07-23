@@ -2,6 +2,7 @@
 #include "trackinfodialog.h"
 #include "tageditordialog.h"
 #include "reveal_in_filemanager.h"
+#include "icons.h"
 
 #include <QMenu>
 #include <QAction>
@@ -9,33 +10,34 @@
 #include <QApplication>
 
 namespace PlaylistUi {
-  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), proxy(p), view(v), search(s) {
+  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, Config::Global &global, QObject *parent) : QObject(parent), proxy(p), view(v), search(s), global_conf(global) {
     Q_ASSERT(proxy);
     Q_ASSERT(view);
     Q_ASSERT(search);
 
     remove.setText(tr("Remove"));
     connect(&remove, &QAction::triggered, this, &PlaylistContextMenu::on_remove);
-    remove.setIcon(view->style()->standardIcon(QStyle::SP_TrashIcon));
+    remove.setIcon(Icons::get(Icons::Icon::Trash));
 
     show_in_filemanager.setText(tr("Show in file manager"));
     connect(&show_in_filemanager, &QAction::triggered, this, &PlaylistContextMenu::on_showInFilemanager);
-    show_in_filemanager.setIcon(view->style()->standardIcon(QStyle::SP_DirLinkIcon));
+    show_in_filemanager.setIcon(Icons::get(Icons::Icon::FolderReveal));
 
     copy_name.setText(tr("Copy name"));
     connect(&copy_name, &QAction::triggered, this, &PlaylistContextMenu::on_copyName);
+    copy_name.setIcon(Icons::get(Icons::Icon::Copy));
 
     clear_filter.setText(tr("Clear filter"));
     connect(&clear_filter, &QAction::triggered, this, &PlaylistContextMenu::on_clearFilter);
-    clear_filter.setIcon(view->style()->standardIcon(QStyle::SP_DialogCancelButton));
+    clear_filter.setIcon(Icons::get(Icons::Icon::Cancel));
 
     info.setText(tr("Track info"));
     connect(&info, &QAction::triggered, this, &PlaylistContextMenu::on_trackInfo);
-    info.setIcon(view->style()->standardIcon(QStyle::SP_MessageBoxInformation));
+    info.setIcon(Icons::get(Icons::Icon::Info));
 
     edit_tags.setText(tr("Edit tags…"));
     connect(&edit_tags, &QAction::triggered, this, &PlaylistContextMenu::on_editTags);
-    edit_tags.setIcon(view->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+    edit_tags.setIcon(Icons::get(Icons::Icon::Details));
   }
 
   void PlaylistContextMenu::show(const QPoint &pos) {
@@ -117,7 +119,7 @@ namespace PlaylistUi {
     if (selection.isValid()) {
       auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
       auto pl = proxy->activeModel()->playlist();
-      TrackInfoDialog *dlg = new TrackInfoDialog(track, pl);
+      TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl);
       dlg->setModal(false);
       connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
       connect(dlg, &TrackInfoDialog::tagEditorOpened, this, [this, pl](TagEditorDialog *editor) {

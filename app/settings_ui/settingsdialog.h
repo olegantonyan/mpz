@@ -6,6 +6,9 @@
 
 #include <QDialog>
 
+#include <functional>
+
+class QLayout;
 class QCheckBox;
 class QComboBox;
 class QSpinBox;
@@ -33,6 +36,7 @@ private:
 
   QCheckBox *check_tray_icon = nullptr;
   QCheckBox *check_minimize_to_tray = nullptr;
+  QCheckBox *check_auto_update = nullptr;
   QCheckBox *check_row_height = nullptr;
   QSpinBox *spin_row_height = nullptr;
   QComboBox *combo_language = nullptr;
@@ -41,31 +45,44 @@ private:
 
   QTableWidget *table_columns = nullptr;
   QListWidget *list_lyrics = nullptr;
+  QListWidget *list_covers = nullptr;
 
   QCheckBox *check_single_instance = nullptr;
   QSpinBox *spin_ipc_port = nullptr;
   QSpinBox *spin_playback_log_size = nullptr;
+#ifdef ENABLE_GAPLESS
+  QCheckBox *check_gapless = nullptr;
+  QSpinBox *spin_gapless_cache_mb = nullptr;
+#endif
 
   QListWidget *list_mpris_blacklist = nullptr;
   QCheckBox *check_mpd_stop_on_close = nullptr;
+  QComboBox *combo_crash_reports = nullptr;
 
   QDialogButtonBox *button_box = nullptr;
 
   bool tray_was_enabled = false;
 
   QWidget *buildGeneralTab();
-  QWidget *buildLyricsTab();
+  QWidget *buildOnlineTab();
   QWidget *buildAdvancedTab();
+  QLayout *buildCacheButtons(const QString &open_text, const QString &clear_text,
+                             const QString &confirm_text,
+                             std::function<QString()> dir, std::function<int()> clear);
 
   void populateLanguages();
   void populateColumns();
   void populateLyrics();
+  void populateCovers();
+  void populateProviders(QListWidget *list, const QStringList &known,
+                         const QStringList &configured,
+                         QString (*display_name)(const QString &));
   void populateMprisBlacklist();
 
   void fitColumnsTableHeight();
 
   PlaylistUi::ColumnsConfig collectColumns() const;
-  QStringList collectLyrics() const;
+  QStringList collectProviders(const QListWidget *list) const;
   QStringList collectMprisBlacklist() const;
 
   void apply();

@@ -4,11 +4,35 @@ on:
   workflow_dispatch:
   push:
     branches: [master]
+    paths-ignore:
+      - README.md
+      - CHANGELOG.md
+      - CODE_OF_CONDUCT.md
+      - license.txt
+      - run.sh
+      - 'rpm/**'
+      - 'deb/**'
+      - 'win/**'
+      - 'mac/**'
+      - 'tests/**'
 
 jobs:
-  run:
+  x86_64:
     uses: ./.github/workflows/_omnipackage.yml
     secrets: inherit
     with:
       repository: "Linux packages - next"
       version_extractor: "git"
+      image_cache: "github_x86_64"
+      runs_on: "ubuntu-24.04"
+
+  aarch64:
+    uses: ./.github/workflows/_omnipackage.yml
+    secrets: inherit
+    with:
+      repository: "Linux packages AARCH64 - next"
+      version_extractor: "git"
+      image_cache: "github_aarch64"
+      runs_on: "ubuntu-24.04-arm"
+      # arch: no arm64 image. manjaro: Manjaro ARM repos frozen ~2024
+      skip_distros: '["arch", "manjaro"]'

@@ -1,4 +1,4 @@
-build*/
+/build*/
 *.user*
 .qtcreator/
 .env

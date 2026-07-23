@@ -2,6 +2,7 @@
 #define MODUSOPERANDI_H
 
 #include "config/local.h"
+#include "singleinstanceguard.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd_client/client.h"
 #endif
@@ -9,7 +10,7 @@
 
 #include <QObject>
 
-class ModusOperandi : public QObject {
+class ModusOperandi : public QObject, public SingleInstanceGuard<ModusOperandi> {
   Q_OBJECT
 
 public:

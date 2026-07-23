@@ -3,12 +3,45 @@
 #include "playeradaptor.h" // generated
 #include "mediaplayer2adaptor.h" // generated
 
+#include "coverart/online/downloader.h"
+
 #include <QDebug>
 #include <QHostInfo>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusReply>
 #include <QFile>
+
+#ifdef Q_OS_FREEBSD
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <vector>
+#endif
+
+namespace {
+  // NUL-separated argv, same format as /proc/<pid>/cmdline
+  QString processCmdline(uint pid) {
+#ifdef Q_OS_FREEBSD
+    // procfs is deprecated and unmounted by default on FreeBSD
+    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_ARGS, static_cast<int>(pid) };
+    size_t len = 0;
+    if (sysctl(mib, 4, nullptr, &len, nullptr, 0) != 0 || len == 0) {
+      return {};
+    }
+    std::vector<char> buf(len);
+    if (sysctl(mib, 4, buf.data(), &len, nullptr, 0) != 0) {
+      return {};
+    }
+    return QString::fromUtf8(buf.data(), static_cast<int>(len));
+#else
+    QFile cmd_line(QString("/proc/%1/cmdline").arg(pid));
+    if (!cmd_line.open(QIODevice::ReadOnly)) {
+      return {};
+    }
+    return QString::fromUtf8(cmd_line.readAll());
+#endif
+  }
+}
 
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
 static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
@@ -43,6 +76,17 @@ Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QOb
   connect(player, &Playback::Controller::trackChanged, this, [=](const Track &t) {
     Q_UNUSED(t)
     notify("Metadata", Metadata());
+  });
+
+  // A cover downloaded mid-track changes artUrl without any playback event, so
+  // republish rather than leave the art blank until the next pause.
+  connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
+          this, [=](const QString &artist, const QString &album, const QString &path) {
+    Q_UNUSED(path)
+    const Track current = player->currentTrack();
+    if (current.isValid() && current.artist() == artist && current.album() == album) {
+      notify("Metadata", Metadata());
+    }
   });
 
   connect(player, &Playback::Controller::volumeChanged, this, [=](int val) {
@@ -319,9 +363,8 @@ bool Mpris::isBlacklistedSender() {
   QDBusReply<uint> pid_reply = QDBusConnection::sessionBus().call(pid_msg);
 
   if (pid_reply.isValid()) {
-    QFile cmd_line(QString("/proc/%1/cmdline").arg(pid_reply.value()));
-    if (cmd_line.open(QIODevice::ReadOnly)) {
-      auto line = QString::fromUtf8(cmd_line.readAll());
+    const auto line = processCmdline(pid_reply.value());
+    if (!line.isEmpty()) {
       for (const auto &item : std::as_const(balcklist)) {
         if (line.contains(item)) {
           qDebug() << "MPRIS: ignoring blacklisted sender " << line << sender;

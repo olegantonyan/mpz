@@ -2,6 +2,12 @@
 #include "ui_mainwindow.h"
 #include "shortcuts_ui/shortcutsdialog.h"
 #include "coverart/covers.h"
+#include "coverart/coverartwidget.h"
+#include "coverart/online/downloader.h"
+#include "lyrics/lyricswidget.h"
+#include "playlist_ui/trackinfodialog.h"
+#include "icons.h"
+#include "mpzapplication.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -11,15 +17,38 @@
 #include <QTableWidgetItem>
 #include <QHash>
 #include <QTimer>
+#include <QDockWidget>
+#include <QToolBar>
+#include <QAction>
+#include <QFontDatabase>
+#include <QComboBox>
+#include <QAbstractItemView>
 
 #include "settings_ui/settingsdialog.h"
+#ifdef ENABLE_GAPLESS
+  #include "equalizer_ui/equalizerdialog.h"
+#endif
 
-#ifdef Q_OS_MACOS
-  #include "about_ui/aboutdialog.h"
+namespace {
+  // widen popup so long items aren't elided when the combobox is squeezed narrow
+  void fitComboBoxPopupToContents(QComboBox *combo) {
+    int width = combo->view()->sizeHintForColumn(0);
+    width += combo->style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+    combo->view()->setMinimumWidth(width);
+  }
+}
+
+#if defined(ENABLE_UPDATE_CHECK)
+  #include "update_check/updatechecker.h"
+#endif
+
+#if defined(ENABLE_CRASH_HANDLER)
+  #include "crash_handler.h"
+  #include "crash_report/crashreport.h"
+  #include "feedback_ui/feedbacksender.h"
   #include "feedback_ui/feedbackform.h"
-  #include <QMenuBar>
-  #include <QDesktopServices>
-  #include <QUrl>
+  #include "sysinfo.h"
+  #include <QFile>
 #endif
 
 MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config::Local &local_c, Config::Global &global_c, QWidget *parent) :
@@ -36,7 +65,10 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #endif
   ui->setupUi(this);
   ui->verticalLayout->insertWidget(1, banner);
-  setWindowIcon(QIcon(":/app/resources/icons/64x64/mpz.png"));
+  QIcon app_icon;
+  for (const QString &size : {"16x16", "22x22", "24x24", "32x32", "48x48", "64x64", "256x256"})
+    app_icon.addFile(":/app/resources/icons/" + size + "/mpz.png");
+  setWindowIcon(app_icon);
 
   spinner = new BusySpinner(ui->widgetSpinner, this);
 
@@ -44,13 +76,15 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
   playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, modus_operandi, this);
 
-  ui->toolButtonLibrarySort->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
+  ui->toolButtonLibrarySort->setIcon(Icons::get(Icons::Icon::Sort));
+  ui->toolButtonLibraries->setIcon(Icons::get(Icons::Icon::Settings));
+  ui->toolButtonLibraries->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-  ui->stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-  ui->playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-  ui->pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-  ui->nextButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-  ui->prevButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+  ui->stopButton->setIcon(Icons::get(Icons::Icon::Stop));
+  ui->playButton->setIcon(Icons::get(Icons::Icon::Play));
+  ui->pauseButton->setIcon(Icons::get(Icons::Icon::Pause));
+  ui->nextButton->setIcon(Icons::get(Icons::Icon::Next));
+  ui->prevButton->setIcon(Icons::get(Icons::Icon::Prev));
   Playback::Controls pc;
   pc.next = ui->nextButton;
   pc.prev = ui->prevButton;
@@ -59,23 +93,35 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.pause = ui->pauseButton;
   pc.seekbar = ui->progressBar;
   pc.time = ui->timeLabel;
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), modus_operandi, this);
+  ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  bool gapless_on = !global_conf.disableGapless();
+  int gapless_mb = global_conf.gaplessCacheSizeMb();
+  if (gapless_mb <= 0) {
+    gapless_mb = 100;
+  }
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
 
   connect(library, &DirectoryUi::Controller::createNewPlaylist, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(library, &DirectoryUi::Controller::appendToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendToPlaylist);
+  connect(library, &DirectoryUi::Controller::createNewPlaylistFromTracks, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
+  connect(library, &DirectoryUi::Controller::appendTracksToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendTracks);
+  connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
   connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);
   connect(player, &Playback::Controller::started, playlist, &PlaylistUi::Controller::on_start);
   connect(player, &Playback::Controller::paused, playlist, &PlaylistUi::Controller::on_pause);
   connect(player, &Playback::Controller::stopped, playlist, &PlaylistUi::Controller::on_stop);
+  connect(player, &Playback::Controller::trackChanged, playlist, &PlaylistUi::Controller::on_trackMetaChanged);
   connect(playlist, &PlaylistUi::Controller::changed, playlists, &PlaylistsUi::Controller::on_playlistChanged);
   connect(player, &Playback::Controller::started, playlists, &PlaylistsUi::Controller::on_start);
   connect(player, &Playback::Controller::stopped, playlists, &PlaylistsUi::Controller::on_stop);
 
+  setupControlsToolBar();
+  setupDockWidgets();
   setupUiSettings();
 
   setupPlaybackDispatch();
@@ -93,6 +139,12 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupMacMediaControls();
   setupMacDockMenu();
 #endif
+#ifdef SMTC_ENABLE
+  setupWindowsMediaControls();
+#endif
+#ifdef Q_OS_WIN
+  setupWindowsTaskbar();
+#endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -100,6 +152,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupPlaybackLog();
   setupSleepLock();
   setupOutputDevice();
+#ifdef ENABLE_GAPLESS
+  setupEqualizer();
+#endif
+
+  CoverArt::Covers::instance(modus_operandi);
 
   preloadPlaylist(args);
 
@@ -114,7 +171,13 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef ENABLE_MPD_SUPPORT
   setupMpdOrder();
 #endif
-  CoverArt::Covers::instance(modus_operandi);
+
+#if defined(ENABLE_UPDATE_CHECK)
+  setupUpdateChecker();
+#endif
+#if defined(ENABLE_CRASH_HANDLER)
+  setupCrashReporter();
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -122,20 +185,34 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::toggleHidden() {
-  if (isHidden()) {
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    show();
-    raise();
-    activateWindow();
-  } else {
-    hide();
+  if (!global_conf.minimizeToTray()) {
+    showWindow();
+    return;
   }
+#ifdef Q_OS_WIN
+  // Clicking the tray icon deactivates the app on Windows, so isActiveWindow() is never true here.
+  const bool hideable = !isHidden() && !isMinimized();
+#else
+  const bool hideable = !isHidden() && !isMinimized() && isActiveWindow();
+#endif
+  if (hideable) {
+    hide();
+  } else {
+    showWindow();
+  }
+}
+
+void MainWindow::showWindow() {
+  setWindowState(windowState() & ~Qt::WindowMinimized);
+  show();
+  raise();
+  activateWindow();
 }
 
 int MainWindow::streamBuffer() {
   int stream_buffer = global_conf.streamBufferSize();
   if (stream_buffer == 0) {
-    stream_buffer = 131072;
+    stream_buffer = 262144;
     global_conf.saveStreamBufferSize(stream_buffer);
   }
   return stream_buffer;
@@ -162,11 +239,21 @@ void MainWindow::setupUiSettings() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+#ifdef Q_OS_MACOS
+  // Native Mac idiom for a media player: the red button / Cmd-W hides the
+  // window and playback keeps going; only Cmd-Q (requestQuit) really quits.
+  if (!quitting) {
+    hide();
+    event->ignore();
+    return;
+  }
+#else
   if (!quitting && trayicon != nullptr && global_conf.trayIconEnabled() && global_conf.minimizeToTray()) {
     hide();
     event->ignore();
     return;
   }
+#endif
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
@@ -184,6 +271,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 void MainWindow::requestQuit() {
   quitting = true;
   close();
+#ifdef Q_OS_MACOS
+  // quitOnLastWindowClosed is off on macOS (see main.cpp) so closing windows
+  // no longer ends the event loop — quit explicitly.
+  qApp->quit();
+#endif
 }
 
 #ifdef Q_OS_MACOS
@@ -209,6 +301,7 @@ void MainWindow::setupOrderCombobox() {
   combobox_item_position.insert("sequential (no loop)", 2);
 
   ui->orderComboBox->setCurrentIndex(combobox_item_position.value(global_conf.playbackOrder(), 0));
+  fitComboBoxPopupToContents(ui->orderComboBox);
 
   connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
     QString order_name = combobox_item_position.key(idx, "sequential");
@@ -235,6 +328,7 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
   ui->perPlaylistOrdercomboBox->addItem(tr("random"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential"));
   ui->perPlaylistOrdercomboBox->addItem(tr("sequential (no loop)"));
+  fitComboBoxPopupToContents(ui->perPlaylistOrdercomboBox);
   connect(playlists, &PlaylistsUi::Controller::selected, this, [=](const std::shared_ptr<Playlist::Playlist> playlist) {
     if (playlist != nullptr) {
       if (playlist->random() == Playlist::Playlist::Random) {
@@ -282,6 +376,19 @@ void MainWindow::setupMacDockMenu() {
 }
 #endif
 
+#ifdef SMTC_ENABLE
+void MainWindow::setupWindowsMediaControls() {
+  win_media = new WindowsMediaControls(player, this, this);
+}
+#endif
+
+#ifdef Q_OS_WIN
+void MainWindow::setupWindowsTaskbar() {
+  win_taskbar = new WindowsTaskbar(player, this, this);
+  connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, win_taskbar, &WindowsTaskbar::refresh);
+}
+#endif
+
 void MainWindow::setupFollowCursorCheckbox() {
   ui->followCursorCheckBox->setCheckState(global_conf.playbackFollowCursor() ? Qt::Checked : Qt::Unchecked);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
@@ -307,26 +414,103 @@ void MainWindow::setupVolumeControl() {
   connect(player, &Playback::Controller::volumeChanged, volume, &VolumeControl::setValue);
 }
 
+void MainWindow::setupControlsToolBar() {
+  controls_toolbar = new QToolBar(this);
+  controls_toolbar->setObjectName("controlsToolBar");
+  controls_toolbar->setFloatable(false);
+  controls_toolbar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+  controls_toolbar->setMovable(local_conf.toolbarMovable());
+  controls_toolbar->addWidget(ui->topControls);
+  addToolBar(Qt::TopToolBarArea, controls_toolbar);
+#ifdef Q_OS_MACOS
+  setUnifiedTitleAndToolBarOnMac(true);
+#endif
+
+  lock_toolbar_action = new QAction(tr("Lock toolbar"), this);
+  lock_toolbar_action->setCheckable(true);
+  lock_toolbar_action->setChecked(!local_conf.toolbarMovable());
+  connect(lock_toolbar_action, &QAction::toggled, this, [this](bool locked) {
+    controls_toolbar->setMovable(!locked);
+    local_conf.saveToolbarMovable(!locked);
+    local_conf.sync();
+  });
+}
+
+QMenu *MainWindow::createPopupMenu() {
+  return nullptr;
+}
+
+void MainWindow::setupDockWidgets() {
+  setDockNestingEnabled(true);
+
+  cover_widget = new CoverArt::Widget(this);
+  cover_dock = new QDockWidget(tr("Album cover"), this);
+  cover_dock->setObjectName("coverArtDock");
+  cover_dock->setWidget(cover_widget);
+  addDockWidget(Qt::RightDockWidgetArea, cover_dock);
+
+  lyrics_widget = new Lyrics::Widget(global_conf, this);
+  lyrics_dock = new QDockWidget(tr("Lyrics"), this);
+  lyrics_dock->setObjectName("lyricsDock");
+  lyrics_dock->setWidget(lyrics_widget);
+  addDockWidget(Qt::RightDockWidgetArea, lyrics_dock);
+
+  splitDockWidget(cover_dock, lyrics_dock, Qt::Vertical);
+
+  // first run: hidden; later, restoreState() restores visibility
+  cover_dock->hide();
+  lyrics_dock->hide();
+
+  connect(player, &Playback::Controller::started, cover_widget, &CoverArt::Widget::setTrack);
+  connect(player, &Playback::Controller::trackChanged, cover_widget, &CoverArt::Widget::setTrack);
+  connect(player, &Playback::Controller::stopped, cover_widget, &CoverArt::Widget::clear);
+
+  // The only trigger for online cover lookups: driving it from playback rather
+  // than from Track::artCover() is what keeps "current track only" true no
+  // matter who reads a cover.
+  CoverArt::Online::Downloader::instance().init(global_conf);
+  connect(player, &Playback::Controller::started, &CoverArt::Online::Downloader::instance(),
+          &CoverArt::Online::Downloader::request);
+  connect(player, &Playback::Controller::trackChanged, &CoverArt::Online::Downloader::instance(),
+          &CoverArt::Online::Downloader::request);
+
+  connect(player, &Playback::Controller::started, lyrics_widget, &Lyrics::Widget::setTrack);
+  connect(player, &Playback::Controller::trackChanged, lyrics_widget, &Lyrics::Widget::setTrack);
+  connect(player, &Playback::Controller::stopped, lyrics_widget, &Lyrics::Widget::clear);
+
+  connect(cover_widget, &CoverArt::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
+  connect(lyrics_widget, &Lyrics::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
+}
+
+void MainWindow::openTrackInfo(const Track &track) {
+  auto pl = playlists->playlistByTrackUid(track.uid());
+  TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl, this);
+  dlg->setModal(false);
+  connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
+  dlg->show();
+}
+
 void MainWindow::setupMainMenu() {
-  //ui->menuButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-  ui->menuButton->setText(QString::fromUtf8("\u2630"));
+  ui->menuButton->setIcon(Icons::get(Icons::Icon::Menu));
   ui->menuButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
+  main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action });
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
 }
 
 void MainWindow::setupTrayIcon() {
-  if (!global_conf.trayIconEnabled()) {
-    if (trayicon != nullptr) {
-      trayicon->hide();
-      trayicon->deleteLater();
-    }
+  if (trayicon != nullptr) {
+    trayicon->hide();
+    trayicon->deleteLater();
     trayicon = nullptr;
+  }
+  if (!global_conf.trayIconEnabled()) {
     return;
   }
-  trayicon = new TrayIcon(this, global_conf);
+  trayicon = new TrayIcon(this);
+  connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, trayicon, &TrayIcon::refreshIcons);
   connect(player, &Playback::Controller::started, trayicon, &TrayIcon::on_playerStarted);
   connect(player, &Playback::Controller::stopped, trayicon, &TrayIcon::on_playerStopped);
   connect(player, &Playback::Controller::paused, trayicon, &TrayIcon::on_playerPaused);
@@ -339,6 +523,7 @@ void MainWindow::setupTrayIcon() {
   connect(trayicon, &TrayIcon::prevTriggered, player->controls().prev, &QToolButton::click);
 
   connect(trayicon, &TrayIcon::clicked, this, &MainWindow::toggleHidden);
+  connect(trayicon, &TrayIcon::showWindowTriggered, this, &MainWindow::showWindow);
   connect(trayicon, &TrayIcon::quitTriggered, this, &MainWindow::requestQuit);
 }
 
@@ -360,6 +545,8 @@ void MainWindow::setupPlaybackDispatch() {
 
   connect(player, &Playback::Controller::prevRequested, dispatch, &Playback::Dispatch::on_prevRequested);
   connect(player, &Playback::Controller::nextRequested, dispatch, &Playback::Dispatch::on_nextRequested);
+  connect(player, &Playback::Controller::aboutToFinish, dispatch, &Playback::Dispatch::on_aboutToFinish);
+  connect(dispatch, &Playback::Dispatch::prepareNext, player, &Playback::Controller::prepareNextTrack);
   connect(player, &Playback::Controller::startRequested, dispatch, &Playback::Dispatch::on_startRequested);
   connect(player, &Playback::Controller::trackChangedQuery, dispatch, &Playback::Dispatch::on_trackChangedQuery);
   connect(dispatch, &Playback::Dispatch::trackChangedQueryComplete, player, &Playback::Controller::trackChangedQueryComplete);
@@ -388,6 +575,17 @@ void MainWindow::setupStatusBar() {
     }
   });
 
+#if defined(ENABLE_UPDATE_CHECK)
+  ui->statusbar->addWidget(new QWidget(this), 1);
+  status_label_update = new QLabel(this);
+  status_label_update->setTextFormat(Qt::RichText);
+  status_label_update->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  status_label_update->setOpenExternalLinks(true);
+  status_label_update->hide();
+  ui->statusbar->addWidget(status_label_update, 0);
+  ui->statusbar->addWidget(new QWidget(this), 1);
+#endif
+
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -398,6 +596,64 @@ void MainWindow::setupStatusBar() {
     }
   });
 }
+
+#if defined(ENABLE_UPDATE_CHECK)
+void MainWindow::setupUpdateChecker() {
+  if (global_conf.disableAutoUpdateCheck()) {
+    return;
+  }
+  update_checker = new UpdateChecker(this);
+  connect(update_checker, &UpdateChecker::updateAvailable, this, [this](const QString &version, const QString &url) {
+    status_label_update->setText(tr("Update available:") + QString(" <a href=\"%1\">v%2</a>").arg(url, version));
+    status_label_update->show();
+  });
+  QTimer::singleShot(0, this, [this]() { update_checker->check(); });
+}
+#endif
+
+#if defined(ENABLE_CRASH_HANDLER)
+void MainWindow::setupCrashReporter() {
+  const QString path = QString::fromStdString(mpz::crash_log_path());
+  if (path.isEmpty()) {
+    return;
+  }
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    return;
+  }
+  const CrashEntry entry = lastCrash(QString::fromUtf8(file.readAll()));
+  file.close();
+
+  if (!entry.valid || entry.id == local_conf.lastReportedCrash()) {
+    return;
+  }
+
+  const QString consent = local_conf.crashReportConsent();
+  if (consent == QStringLiteral("disabled")) {
+    return;
+  }
+
+  if (consent == QStringLiteral("enabled")) {
+    crash_sender = new FeedbackSender(this);
+    const QString id = entry.id;
+    connect(crash_sender, &FeedbackSender::finished, this, [this, id](bool ok, const QString &) {
+      if (ok) {
+        local_conf.saveLastReportedCrash(id);
+        local_conf.sync();
+      }
+    });
+    crash_sender->submit(entry.text, QStringLiteral("auto-crash-report"), SysInfo::get().join(" | "));
+    return;
+  }
+
+  QTimer::singleShot(0, this, [this, entry]() {
+    auto *form = new FeedbackForm(local_conf, this);
+    form->setAttribute(Qt::WA_DeleteOnClose);
+    form->setCrashReport(entry.text, entry.id);
+    form->exec();
+  });
+}
+#endif
 
 void MainWindow::setupShortcuts() {
   shortcuts = new Shortcuts(this);
@@ -502,7 +758,7 @@ void MainWindow::setupPlaybackLog() {
 void MainWindow::setupSortMenu() {
   sort_menu = new SortUi::SortMenu(ui->sortButton, global_conf);
 
-  ui->sortButton->setIcon(style()->standardIcon(QStyle::SP_FileDialogListView));
+  ui->sortButton->setIcon(Icons::get(Icons::Icon::Sort));
 
   connect(sort_menu, &SortUi::SortMenu::triggered, playlist, &PlaylistUi::Controller::sortBy);
 }
@@ -542,10 +798,42 @@ void MainWindow::setupOutputDevice() {
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
   });
   ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
+  ui->toolButtonOutputDevice->setIcon(Icons::get(Icons::Icon::Headphones));
+  ui->toolButtonOutputDevice->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
 }
+
+#ifdef ENABLE_GAPLESS
+void MainWindow::setupEqualizer() {
+  // The engine owns device resolution, so it also decides which device the EQ is
+  // scoped to: hotplug that drops the configured device re-scopes the EQ to the default.
+  connect(player, &Playback::Controller::effectiveOutputDeviceChanged, this, &MainWindow::applyEqForDevice);
+  applyEqForDevice(player->effectiveOutputDeviceId());
+
+  connect(shortcuts, &Shortcuts::openEqualizer, this, &MainWindow::openEqualizerDialog);
+  connect(main_menu, &MainMenu::openEqualizer, shortcuts, &Shortcuts::openEqualizer);
+}
+
+void MainWindow::openEqualizerDialog() {
+  EqualizerUi::EqualizerDialog dlg(player, local_conf, global_conf, this);
+  dlg.exec();
+}
+
+void MainWindow::applyEqForDevice(const QByteArray &device_id) {
+  const Eq::DeviceSettings settings = local_conf.eqDeviceSettings(device_id);
+  Eq::EqProfile chosen = Eq::defaultGraphicProfile();
+  const QList<Eq::EqProfile> profiles = local_conf.eqProfiles();
+  for (const auto &p : profiles) {
+    if (p.name == settings.profile) {
+      chosen = p;
+      break;
+    }
+  }
+  player->setEqualizer(chosen, settings.enabled);
+}
+#endif
 
 #ifdef ENABLE_MPD_SUPPORT
 void MainWindow::setupMpdOrder() {
@@ -585,98 +873,7 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
 
 #ifdef Q_OS_MACOS
 void MainWindow::setupMacMenuBar() {
-  auto *bar = menuBar();
-
-  auto *app_menu = bar->addMenu(tr("mpz"));
-
-  auto *about = app_menu->addAction(tr("About mpz"));
-  about->setMenuRole(QAction::AboutRole);
-  connect(about, &QAction::triggered, this, []() { AboutDialog().exec(); });
-
-  auto *prefs = app_menu->addAction(tr("Settings…"));
-  prefs->setMenuRole(QAction::PreferencesRole);
-  prefs->setShortcut(QKeySequence::Preferences);
-  connect(prefs, &QAction::triggered, shortcuts, &Shortcuts::openSettings);
-
-  auto *quit = app_menu->addAction(tr("Quit mpz"));
-  quit->setMenuRole(QAction::QuitRole);
-  quit->setShortcut(QKeySequence::Quit);
-  connect(quit, &QAction::triggered, this, &MainWindow::requestQuit);
-
-  auto *playback = bar->addMenu(tr("Playback"));
-
-  auto *play_pause = playback->addAction(tr("Play / Pause"));
-  play_pause->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::PlayPause));
-  connect(play_pause, &QAction::triggered, shortcuts, &Shortcuts::playPause);
-
-  auto *stop_action = playback->addAction(tr("Stop"));
-  connect(stop_action, &QAction::triggered, shortcuts, &Shortcuts::stop);
-
-  playback->addSeparator();
-
-  auto *next_action = playback->addAction(tr("Next Track"));
-  next_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Next));
-  connect(next_action, &QAction::triggered, shortcuts, &Shortcuts::next);
-
-  auto *prev_action = playback->addAction(tr("Previous Track"));
-  prev_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Prev));
-  connect(prev_action, &QAction::triggered, shortcuts, &Shortcuts::prev);
-
-  playback->addSeparator();
-
-  auto *vol_up = playback->addAction(tr("Volume Up"));
-  vol_up->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeUp));
-  connect(vol_up, &QAction::triggered, shortcuts, &Shortcuts::volumeUp);
-
-  auto *vol_down = playback->addAction(tr("Volume Down"));
-  vol_down->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeDown));
-  connect(vol_down, &QAction::triggered, shortcuts, &Shortcuts::volumeDown);
-
-#ifdef ENABLE_DEVICES_MENU
-  playback->addSeparator();
-
-  auto *output = new AudioDeviceUi::DevicesMenu(this, local_conf);
-  output->setTitle(tr("Output Device"));
-  connect(output, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
-  playback->addMenu(output);
-  output->menuAction()->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
-  connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
-    output->menuAction()->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
-  });
-#endif
-
-  auto *view = bar->addMenu(tr("View"));
-  auto *sort_submenu = view->addMenu(tr("Sort"));
-  sort_menu->attachToMenu(sort_submenu);
-
-  view->addSeparator();
-
-  auto *playback_log_action = view->addAction(tr("Playback Log"));
-  playback_log_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenPlaybackLog));
-  connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
-
-  auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
-  shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
-  connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
-
-  auto *help = bar->addMenu(tr("Help"));
-
-  auto *website = help->addAction(tr("mpz Website"));
-  connect(website, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://mpz-player.org"));
-  });
-
-  auto *github = help->addAction(tr("mpz GitHub"));
-  connect(github, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz"));
-  });
-
-  auto *feedback = help->addAction(tr("Send Feedback…"));
-  connect(feedback, &QAction::triggered, this, []() { FeedbackForm().exec(); });
-
-  auto *bug_report = help->addAction(tr("Report a Bug…"));
-  connect(bug_report, &QAction::triggered, this, []() {
-    QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz/issues"));
-  });
+  mac_menubar = new MacMenuBar(this, global_conf, local_conf, shortcuts, player, modus_operandi, sort_menu,
+                               cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action);
 }
 #endif

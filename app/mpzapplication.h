@@ -14,6 +14,7 @@ public:
 signals:
   void filesOpened(const QStringList &files);
   void activated();
+  void paletteChanged();
 
 protected:
   bool event(QEvent *event) override;

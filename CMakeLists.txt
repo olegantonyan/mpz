@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.0.12 LANGUAGES CXX C)
+project(mpz VERSION 2.1.1 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(QT_COMPONENTS Core Gui Widgets Multimedia Concurrent Network)
+set(QT_COMPONENTS Core Gui Widgets Multimedia Concurrent Network Svg)
 
 if(UNIX AND NOT APPLE)
   set(DEFAULT_ENABLE_DBUS ON)
@@ -22,6 +22,13 @@ if (ENABLE_DBUS)
 else()
   message(STATUS "DBus support OFF")
 endif()
+
+if(WIN32 OR APPLE)
+  set(DEFAULT_ENABLE_UPDATE_CHECK ON)
+else()
+  set(DEFAULT_ENABLE_UPDATE_CHECK OFF)
+endif()
+option(ENABLE_UPDATE_CHECK "Enable builtin update checker (checks GitHub for new releases)" ${DEFAULT_ENABLE_UPDATE_CHECK})
 
 option(BUILD_TESTING "Build unit tests" OFF)
 
@@ -37,13 +44,29 @@ endif()
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 
 set(PROJECT_SOURCES
+  app/icons.cpp
+  app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
+  app/about_ui/area51dialog.cpp
   app/busyspinner.cpp
+  app/loadingspinner.cpp
   app/config/global.cpp
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/diskcache.cpp
   app/coverart/embedded.cpp
+  app/coverart/foldercover.cpp
+  app/coverart/coverartwidget.cpp
+  app/coverart/online/albummatch.cpp
+  app/coverart/online/cache.cpp
+  app/coverart/online/coverartarchiveclient.cpp
+  app/coverart/online/deezerclient.cpp
+  app/coverart/online/downloader.cpp
+  app/coverart/online/itunesclient.cpp
+  app/coverart/online/provider.cpp
+  app/coverart/online/providerchain.cpp
+  app/lyrics/lyricswidget.cpp
   app/lyrics/cache.cpp
   app/lyrics/lrclibclient.cpp
   app/lyrics/lrcparser.cpp
@@ -56,6 +79,8 @@ set(PROJECT_SOURCES
   app/directory_ui/directorycontroller.cpp
   app/directory_ui/directorysettings.cpp
   app/feedback_ui/feedbackform.cpp
+  app/feedback_ui/feedbacksender.cpp
+  app/crash_report/crashreport.cpp
   app/ipc/instance.cpp
   app/main.cpp
   app/mainmenu.cpp
@@ -65,6 +90,7 @@ set(PROJECT_SOURCES
   app/directory_ui/directorymodel/localfs.cpp
   app/playback/controls.cpp
   app/playback/dispatch.cpp
+  app/playback/pendingnext.cpp
   app/playback/mediaplayer.cpp
   app/playback/playbackcontroller.cpp
   app/playback/randomtrail.cpp
@@ -76,9 +102,20 @@ set(PROJECT_SOURCES
   app/playlist/fileparser.cpp
   app/playlist/loader.cpp
   app/playlist/sorter.cpp
+  app/radio/station.cpp
+  app/radio/catalog.cpp
+  app/radio/resolver.cpp
+  app/radio/icecaststatus.cpp
+  app/directory_ui/directorymodel/radio/item.cpp
+  app/directory_ui/directorymodel/radio.cpp
+  app/directory_ui/radiodelegate.cpp
+  app/directory_ui/radiolibrary.cpp
+  app/directory_ui/radiostationdialog.cpp
+  app/directory_ui/radiostationsdialog.cpp
   app/playlist_ui/columnsconfig.cpp
   app/playlist_ui/playlistcontroller.cpp
   app/playlist_ui/playlistmodel.cpp
+  app/playlist_ui/streamrowdelegate.cpp
   app/playlist/playlist.cpp
   app/playback/playerstate.cpp
   app/playlist_ui/playlistproxyfiltermodel.cpp
@@ -139,6 +176,12 @@ if (ENABLE_MPD_SUPPORT)
   list(APPEND PROJECT_SOURCES app/directory_ui/addmpddialog.cpp)
 endif()
 
+option(ENABLE_GAPLESS "Enable gapless playback engine for local files (Qt6 only)" ON)
+
+if (ENABLE_UPDATE_CHECK)
+  list(APPEND PROJECT_SOURCES app/update_check/updatechecker.cpp)
+endif()
+
 if (ENABLE_DBUS)
   list(APPEND PROJECT_SOURCES app/dbus/mpris.cpp)
   if(QT_VERSION_MAJOR GREATER_EQUAL 6)
@@ -151,28 +194,67 @@ if (ENABLE_DBUS)
 endif()
 
 if (WIN32)
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
+  if(MINGW AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
     # Force MinGW's windres; CMake 3.28+ may otherwise pick up llvm-rc / rc.exe,
     # whose flags differ from the ones below. CMAKE_RC_COMPILER_INIT must be
     # set BEFORE enable_language("RC") to influence the compiler search.
+    # MSVC (used for the ARM64 build) uses rc.exe with CMake's default handling.
     set(CMAKE_RC_COMPILER_INIT windres)
     set(CMAKE_RC_FLAGS "--input-format=rc --output-format=coff")
     set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> --input-format=rc --output-format=coff -i <SOURCE> -o <OBJECT>")
   endif()
   enable_language("RC")
-  list(APPEND PROJECT_SOURCES app/resources/icons/mpz.rc)
+  string(TIMESTAMP MPZ_BUILD_YEAR "%Y")
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.rc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc
+    @ONLY)
+  list(APPEND PROJECT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc)
+  list(APPEND PROJECT_SOURCES app/windows/windowstaskbar.cpp)
 endif()
 
 if (APPLE)
-  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp)
+  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp app/macos/macmenubar.cpp)
   set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+endif()
+
+# NOT MINGW: SMTC is C++/WinRT, which the MinGW Qt5 build can't compile.
+if (WIN32 AND NOT MINGW)
+  list(APPEND PROJECT_SOURCES app/windows/windowsmediacontrols.cpp)
+  # C++/WinRT under C++17 pulls <experimental/coroutine>, which the newest MSVC STL
+  # rejects (STL1011). Build this TU as C++20; the _SILENCE define is a fallback if
+  # that flag is ever overridden back to C++17.
+  set_source_files_properties(app/windows/windowsmediacontrols.cpp PROPERTIES
+    COMPILE_OPTIONS "/std:c++20"
+    COMPILE_DEFINITIONS "_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS")
 endif()
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
-  list(APPEND PROJECT_SOURCES app/audio_device_ui/devicesmenu.cpp)
+  list(APPEND PROJECT_SOURCES
+    app/audio_device_ui/devicesmenu.cpp
+    app/audio_device_ui/outputdevicename.cpp)
+
+  if (ENABLE_GAPLESS)
+    list(APPEND PROJECT_SOURCES
+      app/playback/gapless/pcmcache.cpp
+      app/playback/gapless/timeline.cpp
+      app/playback/gapless/trackdecoder.cpp
+      app/playback/gapless/streamsource.cpp
+      app/playback/gapless/engine.cpp
+      app/playback/gapless/gaplessmediaplayer.cpp
+      app/eq/equalizer.cpp
+      app/eq/autoeqimport.cpp
+      app/eq/eqexport.cpp
+      app/equalizer_ui/equalizerdialog.cpp
+      app/equalizer_ui/eqcurvewidget.cpp)
+  endif()
+
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
+  if (ENABLE_GAPLESS)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
+  endif()
 else()
   message(STATUS "using Qt5")
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
@@ -184,6 +266,11 @@ endforeach()
 
 if (WIN32)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+endif()
+
+if (WIN32 AND NOT MINGW)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE SMTC_ENABLE)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE runtimeobject) # C++/WinRT activation factory
 endif()
 
 if (APPLE)
@@ -202,6 +289,9 @@ endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
 endif()
+if (ENABLE_UPDATE_CHECK)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_UPDATE_CHECK)
+endif()
 
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
@@ -213,31 +303,7 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
 )
 
 if(APPLE)
-  set(_iconset_dir ${CMAKE_CURRENT_BINARY_DIR}/mpz.iconset)
-  set(_icns_file ${CMAKE_CURRENT_BINARY_DIR}/mpz.icns)
-  set(_icon_src ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons)
-  add_custom_command(
-    OUTPUT ${_icns_file}
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${_iconset_dir}
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/16x16/mpz.png   ${_iconset_dir}/icon_16x16.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/32x32/mpz.png   ${_iconset_dir}/icon_16x16@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/32x32/mpz.png   ${_iconset_dir}/icon_32x32.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/64x64/mpz.png   ${_iconset_dir}/icon_32x32@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/128x128/mpz.png ${_iconset_dir}/icon_128x128.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/256x256/mpz.png ${_iconset_dir}/icon_128x128@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/256x256/mpz.png ${_iconset_dir}/icon_256x256.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/512x512/mpz.png ${_iconset_dir}/icon_256x256@2x.png
-    COMMAND ${CMAKE_COMMAND} -E copy ${_icon_src}/512x512/mpz.png ${_iconset_dir}/icon_512x512.png
-    COMMAND iconutil -c icns ${_iconset_dir} -o ${_icns_file}
-    DEPENDS
-      ${_icon_src}/16x16/mpz.png
-      ${_icon_src}/32x32/mpz.png
-      ${_icon_src}/64x64/mpz.png
-      ${_icon_src}/128x128/mpz.png
-      ${_icon_src}/256x256/mpz.png
-      ${_icon_src}/512x512/mpz.png
-    VERBATIM
-  )
+  set(_icns_file ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.icns)
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${_icns_file})
   set_source_files_properties(${_icns_file} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
   set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
@@ -310,8 +376,10 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/dsf>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/flac>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/it>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/matroska>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mod>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mp4>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/mpc>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v1>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/mpeg/id3v2>
@@ -325,6 +393,7 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/aiff>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/riff/wav>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/s3m>
+    $<BUILD_INTERFACE:${_taglib_root}/taglib/shorten>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/toolkit>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/trueaudio>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/wavpack>
@@ -335,19 +404,34 @@ endif()
 # ENDOF TAGLIB
 
 # QHOTKEY
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
-set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
-add_subdirectory(${QHOTKEY_DIR})
-message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+# macOS (MPRemoteCommandCenter) and the SMTC build own the media keys; QHotkey would be dead weight.
+if(APPLE OR (WIN32 AND NOT MINGW))
+  set(DEFAULT_ENABLE_QHOTKEY OFF)
+else()
+  set(DEFAULT_ENABLE_QHOTKEY ON)
+endif()
+option(ENABLE_QHOTKEY "Enable global media-key hotkeys via QHotkey" ${DEFAULT_ENABLE_QHOTKEY})
+if (ENABLE_QHOTKEY)
+  message(STATUS "global hotkeys ON")
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_QHOTKEY)
+  option(USE_SYSTEM_QHOTKEY "Use QHotkey provided by the OS" OFF)
+  if (USE_SYSTEM_QHOTKEY)
+    find_library(QHOTKEY_LIB qhotkey REQUIRED)
+    message(STATUS "using system-wide qhotkey")
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${QHOTKEY_LIB})
+  else()
+    set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
+    message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
+    # QHotkey declares cmake_minimum_required(3.1), which CMake >= 4 rejects outright
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+    add_subdirectory(${QHOTKEY_DIR})
+    unset(CMAKE_POLICY_VERSION_MINIMUM)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
+  endif()
+else()
+  message(STATUS "global hotkeys OFF")
+endif()
 # ENDOF QHOTKEY
-
-# QTWAITINGSPINNER
-set(QTWAITINGSPINNER_DIR 3rdparty/qtwaitingspinner)
-add_library(qtwaitingspinner ${QTWAITINGSPINNER_DIR}/waitingspinnerwidget.cpp)
-target_include_directories(qtwaitingspinner PUBLIC ${QTWAITINGSPINNER_DIR})
-target_link_libraries(qtwaitingspinner PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qtwaitingspinner)
-# ENDOF QTWAITINGSPINNER
 
 # LIBMPDCLIENT
 if (ENABLE_MPD_SUPPORT)
@@ -364,22 +448,58 @@ endif()
 # ENDOF LIBMPDCLIENT
 
 # CPPTRACE
-# Linux-only crash handler. cpptrace + libdl + dladdr + -rdynamic gives
-# demangled function names from STRIPPED release binaries (no DWARF shipped).
-# Skipped on Windows: PE has no .dynsym equivalent for executables, so the
-# same trick can't work there without shipping DWARF or PDBs.
-if(UNIX AND NOT APPLE)
-  set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
-  set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
-  set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
-  set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
-  set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
-  add_subdirectory(${CPPTRACE_DIR})
+# Crash handler with cpptrace. On Linux + macOS libdl + dladdr gives demangled
+# function names from stripped release binaries with no DWARF shipped: on Linux
+# -rdynamic exports symbols into .dynsym; on macOS dladdr reads the retained
+# Mach-O symbol table. On MSVC/Windows PE has no .dynsym equivalent, so symbols
+# come from mpz.pdb shipped next to mpz.exe, read at runtime via dbghelp.
+# The legacy Qt5 x86 MinGW build is excluded.
+# cpptrace itself only builds on these three platforms; anywhere else it #errors out.
+if(CMAKE_SYSTEM_NAME MATCHES "Linux|Darwin" OR (WIN32 AND NOT MINGW))
+  set(DEFAULT_ENABLE_CRASH_HANDLER ON)
+else()
+  set(DEFAULT_ENABLE_CRASH_HANDLER OFF)
+endif()
+option(ENABLE_CRASH_HANDLER "Enable builtin crash handler (backtrace on fatal signals)" ${DEFAULT_ENABLE_CRASH_HANDLER})
+if(ENABLE_CRASH_HANDLER)
+  message(STATUS "crash handler ON")
+  option(USE_SYSTEM_CPPTRACE "Use cpptrace provided by the OS" OFF)
+  if(USE_SYSTEM_CPPTRACE)
+    find_package(cpptrace 1.0 REQUIRED)
+    message(STATUS "using system-wide cpptrace ${cpptrace_VERSION}")
+  else()
+    set(CPPTRACE_DIR 3rdparty/cpptrace-1.0.4)
+    message(STATUS "using vendored cpptrace from ${CPPTRACE_DIR}")
+    set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+    if(UNIX)
+      set(CPPTRACE_GET_SYMBOLS_WITH_LIBDL ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF OFF CACHE BOOL "" FORCE)
+      set(CPPTRACE_UNWIND_WITH_UNWIND ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_DEMANGLE_WITH_CXXABI ON CACHE BOOL "" FORCE)
+    else()
+      set(CPPTRACE_GET_SYMBOLS_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_UNWIND_WITH_DBGHELP ON CACHE BOOL "" FORCE)
+      set(CPPTRACE_DEMANGLE_WITH_WINAPI ON CACHE BOOL "" FORCE)
+    endif()
+    add_subdirectory(${CPPTRACE_DIR})
+  endif()
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
-  target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+  if(UNIX AND NOT APPLE)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
+  elseif(WIN32 AND NOT MINGW)
+    # Emit a PDB from the optimized Release build so dbghelp symbolizes at runtime.
+    # /OPT:REF /OPT:ICF restore the folding /DEBUG disables; /O2 stays untouched.
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE $<$<CONFIG:Release>:/Zi>)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+      $<$<CONFIG:Release>:/DEBUG>
+      $<$<CONFIG:Release>:/OPT:REF>
+      $<$<CONFIG:Release>:/OPT:ICF>)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dbghelp)
+  endif()
+else()
+  message(STATUS "crash handler OFF")
 endif()
 # ENDOF CPPTRACE
 
@@ -406,11 +526,16 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
 if(NOT APPLE AND NOT WIN32)
   install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
+  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
   foreach(icon IN LISTS ICON_FILES)
     get_filename_component(size_dir "${icon}" DIRECTORY)
     get_filename_component(size_dir "${size_dir}" NAME)
-    install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps)
+    string(REGEX MATCH "^[0-9]+" icon_size "${size_dir}")
+    if(icon_size LESS_EQUAL 48)
+      install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps)
+    endif()
   endforeach()
 endif()
 

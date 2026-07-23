@@ -2,17 +2,7 @@
 
 BusySpinner::BusySpinner(QWidget *_widget, QObject *parent) : QObject(parent), widget(_widget), show_count(0) {
 
-  spinner = new WaitingSpinnerWidget(widget);
-
-  spinner->setRoundness(70.0);
-  spinner->setMinimumTrailOpacity(15.0);
-  spinner->setTrailFadePercentage(70.0);
-  spinner->setNumberOfLines(7);
-  spinner->setLineLength(6);
-  spinner->setLineWidth(3);
-  spinner->setInnerRadius(3);
-  spinner->setRevolutionsPerSecond(1);
-  spinner->setColor(QColor(120, 120, 120));
+  spinner = new LoadingSpinner(widget);
 
   spinner->start(); // gets the show on the road!
   spinner->setToolTip(tr("Background operation running"));

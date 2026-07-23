@@ -1,5 +1,6 @@
 #include "playlistmodel.h"
 #include "playlist/loader.h"
+#include "icons.h"
 
 #include <QDebug>
 #include <QFont>
@@ -53,6 +54,16 @@ namespace PlaylistUi {
 
     Track t = tracks.at(index.row());
 
+    if (role == IsStreamRole) {
+      return t.isStream();
+    }
+    if (role == StationNameRole) {
+      return t.stationName();
+    }
+    if (role == StreamNowPlayingRole) {
+      return t.streamNowPlaying();
+    }
+
     if (role == Qt::FontRole) {
       QFont font;
       font.setBold(t.uid() == highlight_uid);
@@ -63,9 +74,9 @@ namespace PlaylistUi {
        if (index.column() == 0) {
          if (highlight_uid == t.uid()) {
            if (highlight_state == Playing) {
-             return style->standardIcon(QStyle::SP_MediaPlay);
+             return Icons::get(Icons::Icon::Play);
            } else if (highlight_state == Paused) {
-             return style->standardIcon(QStyle::SP_MediaPause);
+             return Icons::get(Icons::Icon::Pause);
            }
          }
        }
@@ -129,6 +140,16 @@ namespace PlaylistUi {
     }
   }
 
+  void Model::updateStreamMeta(quint64 uid, const StreamMetaData &meta) {
+    for (int i = 0; i < tracks.size(); i++) {
+      if (tracks.at(i).uid() == uid && tracks.at(i).isStream()) {
+        tracks[i].setStreamMeta(meta);
+        emit dataChanged(buildIndex(i, 0), buildIndex(i, columnCount() - 1));
+        return;
+      }
+    }
+  }
+
   QModelIndex Model::indexOf(quint64 uid) const {
     for (int i = 0; i < tracksSize(); i++) {
       if (uid == tracks.at(i).uid()) {
@@ -180,6 +201,40 @@ namespace PlaylistUi {
         Playlist::Loader loader(path);
         pl->append(loader.tracks(), !loader.is_playlist_file());
       }
+
+      emit appendToPlaylistAsyncFinished(pl);
+    });
+  }
+
+  void Model::appendTracks(const QVector<Track> &tracks) {
+    auto pl = playlist();
+    if (!pl || tracks.isEmpty()) {
+      return;
+    }
+    pl->append(tracks, false);
+    emit appendToPlaylistAsyncFinished(pl);
+  }
+
+  void Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {
+    auto pl = playlist();
+    if (!pl) {
+      return;
+    }
+
+    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, atRow, pl]() -> void {
+      Playlist::Playlist batch;
+      for (const auto &path : std::as_const(filepaths)) {
+        Playlist::Loader loader(path);
+        batch.append(loader.tracks(), !loader.is_playlist_file());
+      }
+
+      auto merged = pl->tracks();
+      const int pos = qBound(0, atRow, static_cast<int>(merged.size()));
+      const auto incoming = batch.tracks();
+      for (int i = 0; i < incoming.size(); ++i) {
+        merged.insert(pos + i, incoming.at(i));
+      }
+      pl->load(merged);
 
       emit appendToPlaylistAsyncFinished(pl);
     });

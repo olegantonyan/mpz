@@ -1,6 +1,6 @@
 %global __brp_check_rpaths %{nil}
 Name:       mpz
-Version:    2.0.12
+Version:    2.1.1
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
@@ -9,9 +9,9 @@ Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
 %if %{with qt6}
-BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel
+BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel qt6-svg-devel
 %else
-BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel
+BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel libqt5-qtsvg-devel
 %endif
 
 
@@ -29,9 +29,9 @@ Similar to "album list" in Foobar2000.
 mkdir build
 cd build
 %if %{with qt6}
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
 %else
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DUSE_QT5=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DUSE_QT5=ON ..
 %endif
 make %{?_smp_mflags}
 
@@ -45,13 +45,7 @@ make install
 %license license.txt
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
-%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
-%{_datadir}/icons/hicolor/192x192/apps/%{name}.png
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-%{_datadir}/icons/hicolor/96x96/apps/%{name}.png
-%{_datadir}/icons/hicolor/72x72/apps/%{name}.png
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 %{_datadir}/icons/hicolor/24x24/apps/%{name}.png
@@ -60,20 +54,8 @@ make install
 
 %dir %{_datadir}/applications/
 %dir %{_datadir}/icons/hicolor/
-%dir %{_datadir}/icons/hicolor/512x512
-%dir %{_datadir}/icons/hicolor/512x512/apps/
-%dir %{_datadir}/icons/hicolor/256x256
-%dir %{_datadir}/icons/hicolor/256x256/apps/
-%dir %{_datadir}/icons/hicolor/192x192
-%dir %{_datadir}/icons/hicolor/192x192/apps/
-%dir %{_datadir}/icons/hicolor/128x128
-%dir %{_datadir}/icons/hicolor/128x128/apps/
-%dir %{_datadir}/icons/hicolor/96x96
-%dir %{_datadir}/icons/hicolor/96x96/apps/
-%dir %{_datadir}/icons/hicolor/72x72
-%dir %{_datadir}/icons/hicolor/72x72/apps/
-%dir %{_datadir}/icons/hicolor/64x64
-%dir %{_datadir}/icons/hicolor/64x64/apps/
+%dir %{_datadir}/icons/hicolor/scalable
+%dir %{_datadir}/icons/hicolor/scalable/apps/
 %dir %{_datadir}/icons/hicolor/48x48
 %dir %{_datadir}/icons/hicolor/48x48/apps/
 %dir %{_datadir}/icons/hicolor/32x32

@@ -2,7 +2,6 @@
 #define TRAYICON_H
 
 #include "track.h"
-#include "config/global.h"
 
 #include <QObject>
 #include <QIcon>
@@ -13,7 +12,7 @@
 class TrayIcon : public QObject {
   Q_OBJECT
 public:
-  explicit TrayIcon(QMainWindow *parent, Config::Global &global_c);
+  explicit TrayIcon(QMainWindow *parent);
 
 signals:
   void startTriggered();
@@ -22,11 +21,13 @@ signals:
   void prevTriggered();
   void pauseTriggered();
   void quitTriggered();
+  void showWindowTriggered();
 
   void clicked();
 
 public slots:
   void hide();
+  void refreshIcons();
   void on_playerStarted(const Track &track);
   void on_playerStopped();
   void on_playerPaused(const Track &track);
@@ -36,9 +37,8 @@ private:
   QSystemTrayIcon *trayicon;
   QMenu *menu;
 
-  Config::Global &global_conf;
-
   QAction *quit;
+  QAction *show_window;
   QAction *play;
   QAction *pause;
   QAction *stop;
