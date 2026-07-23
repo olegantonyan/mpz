@@ -94,12 +94,12 @@
         <location filename="../../coverart/coverartwidget.cpp" line="46"/>
         <location filename="../../coverart/coverartwidget.cpp" line="71"/>
         <source>Searching cover art...</source>
-        <translation>アルバムアートを検索中...</translation>
+        <translation>カバーアートの検索中...</translation>
     </message>
     <message>
         <location filename="../../coverart/coverartwidget.cpp" line="71"/>
         <source>No cover art</source>
-        <translation>アルバムアートがありません</translation>
+        <translation>カバーアートがありません</translation>
     </message>
     <message>
         <location filename="../../coverart/coverartwidget.cpp" line="83"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../../directory_ui/directorysettings.ui" line="14"/>
         <source>Library folders</source>
-        <translation>ライブラリフォルダー</translation>
+        <translation>ライブラリ フォルダー</translation>
     </message>
 </context>
 <context>
@@ -216,7 +216,7 @@
     <message>
         <location filename="../../directory_ui/directorycontextmenu.cpp" line="35"/>
         <source>Edit stations...</source>
-        <translation>ステーションを編集…</translation>
+        <translation>ステーションの編集…</translation>
     </message>
     <message>
         <location filename="../../directory_ui/directorycontextmenu.cpp" line="91"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../../directory_ui/radiostationdialog.cpp" line="89"/>
         <source>Could not use this stream: %1</source>
-        <translation>このストリームを使用できませんでした: %1</translation>
+        <translation>このストリームを使用できませんでした : %1</translation>
     </message>
 </context>
 <context>
@@ -376,7 +376,7 @@
     <message>
         <location filename="../../directory_ui/directorysortmenu.cpp" line="17"/>
         <source>Default (Name)</source>
-        <translation>デフォルト(名前)</translation>
+        <translation>デフォルト (名前)</translation>
     </message>
 </context>
 <context>
@@ -429,12 +429,12 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="113"/>
         <source>Parametric EQ…</source>
-        <translation>パラメトリックEQ…</translation>
+        <translation>パラメトリック EQ…</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="115"/>
         <source>Graphic EQ (multiband)…</source>
-        <translation>グラフィックEQ（マルチバンド）…</translation>
+        <translation>グラフィック EQ (マルチバンド)…</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
@@ -444,7 +444,7 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="130"/>
         <source>Preamp:</source>
-        <translation>プリアンプ:</translation>
+        <translation>プリアンプ :</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="135"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
         <source>Auto (clip-safe)</source>
-        <translation>自動（クリップ回避）</translation>
+        <translation>自動 (クリップ回避)</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="145"/>
@@ -474,12 +474,12 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="183"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>出力デバイス: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>出力デバイス : &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="246"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
-        <translation>このプリセットは10バンドのグラフィックEQではありません。パラメトリックで編集するか、リセットしてください。</translation>
+        <translation>このプリセットは10バンドのグラフィック EQ ではありません。パラメトリックで編集するか、リセットしてください。</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="249"/>
@@ -549,7 +549,7 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
         <source>Preset name:</source>
-        <translation>プリセット名:</translation>
+        <translation>プリセット名 :</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="507"/>
@@ -569,7 +569,7 @@
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="551"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
-        <translation>パラメトリックEQ (*.txt);;すべてのファイル (*)</translation>
+        <translation>パラメトリック EQ (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
@@ -825,7 +825,7 @@
     <message>
         <location filename="../../macos/macmenubar.cpp" line="163"/>
         <source>Keyboard Shortcuts</source>
-        <translation>キーボードショートカット</translation>
+        <translation>キーボード ショートカット</translation>
     </message>
     <message>
         <location filename="../../macos/macmenubar.cpp" line="169"/>
@@ -846,7 +846,7 @@
     <message>
         <location filename="../../macos/macmenubar.cpp" line="184"/>
         <source>Minimize</source>
-        <translation>しまう</translation>
+        <translation>最小化</translation>
     </message>
     <message>
         <location filename="../../macos/macmenubar.cpp" line="188"/>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../../mainmenu.cpp" line="27"/>
         <source>Keyboard shortcuts</source>
-        <translation>キーボードショートカット</translation>
+        <translation>キーボード ショートカット</translation>
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="28"/>
@@ -987,7 +987,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="168"/>
         <source>Configure library folders</source>
-        <translation>ライブラリフォルダーを設定</translation>
+        <translation>ライブラリ フォルダーの設定</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="139"/>
@@ -997,7 +997,7 @@
     <message>
         <location filename="../../mainwindow.ui" line="178"/>
         <source>Select library folder</source>
-        <translation>ライブラリフォルダーを選択</translation>
+        <translation>ライブラリ フォルダーを選択</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="194"/>
@@ -1080,7 +1080,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="447"/>
         <source>Album cover</source>
-        <translation>アルバムアート</translation>
+        <translation>アルバムカバー</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="453"/>
@@ -1101,7 +1101,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="607"/>
         <source>Update available:</source>
-        <translation>アップデートがあります:</translation>
+        <translation>アップデートがあります :</translation>
     </message>
 </context>
 <context>
@@ -1186,7 +1186,7 @@
     <message>
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
         <source>Edit tags…</source>
-        <translation>タグを編集…</translation>
+        <translation>タグの編集…</translation>
     </message>
 </context>
 <context>
@@ -1380,7 +1380,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="69"/>
         <source>Online lyrics &amp;&amp; covers</source>
-        <translation>オンライン歌詞とアルバムアート</translation>
+        <translation>オンライン歌詞とカバー</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="77"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="83"/>
         <source>Open crash log directory</source>
-        <translation>クラッシュログディレクトリを開く</translation>
+        <translation>クラッシュログ ディレクトリを開く</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="123"/>
@@ -1415,7 +1415,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="460"/>
         <source>Stream buffer size:</source>
-        <translation>ストリームバッファサイズ :</translation>
+        <translation>ストリームバッファ サイズ :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="138"/>
@@ -1430,7 +1430,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="144"/>
         <source>Show system tray icon</source>
-        <translation>システムトレイアイコンを表示</translation>
+        <translation>システムトレイ アイコンを表示</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="152"/>
@@ -1559,7 +1559,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="378"/>
         <source>Drag to reorder, uncheck to disable:</source>
-        <translation>ドラッグして並べ替え、チェックを外すと無効:</translation>
+        <translation>ドラッグして並べ替え、チェックを外すと無効 :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="383"/>
@@ -1579,27 +1579,27 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="389"/>
         <source>Album covers</source>
-        <translation>アルバムアート</translation>
+        <translation>アルバムカバー</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="391"/>
         <source>Download missing covers from (drag to reorder, uncheck to disable):</source>
-        <translation>アルバムアートの取得元 (ドラッグして並べ替え、チェックを外すと無効):</translation>
+        <translation>アルバムカバーの取得元 (ドラッグして並べ替え、チェックを外すと無効):</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
         <source>Open covers folder</source>
-        <translation>アルバムアートフォルダーを開く</translation>
+        <translation>カバーフォルダーを開く</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
         <source>Clear downloaded covers</source>
-        <translation>ダウンロードしたアルバムアートを削除</translation>
+        <translation>ダウンロードしたカバーを削除</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="397"/>
         <source>Delete all covers downloaded from online providers?</source>
-        <translation>オンラインプロバイダーからダウンロードしたすべてのアルバムアートを削除しますか?</translation>
+        <translation>オンラインプロバイダーからダウンロードしたすべてのカバーを削除しますか?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../settings_ui/settingsdialog.cpp" line="425"/>
@@ -1611,7 +1611,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="436"/>
         <source>Single instance mode</source>
-        <translation>シングルインスタンスモード</translation>
+        <translation>シングルインスタンス モード</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
-        <translation>デコードした音声をメモリに保持することで、トラック間の移行がギャップレスになり、トラック内のシークが瞬時に行えます。バッファが大きいほど、より多くの（または長い）トラックをキャッシュできます。ほとんどのライブラリでは100 MBで十分です。</translation>
+        <translation>デコードした音声をメモリに保持することで、トラック間の移行がギャップレスになり、トラック内のシークが瞬時に行えます。バッファが大きいほど、より多くの (または長い) トラックをキャッシュできます。ほとんどのライブラリでは 100MBで十分です。</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
@@ -1656,7 +1656,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
-        <translation>MPRIS の送信者名を無視 (例: &quot;wireplumber&quot;):</translation>
+        <translation>MPRIS の送信者名を無視 (例 : &quot;wireplumber&quot;):</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="540"/>
@@ -1676,7 +1676,7 @@
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Crash reports:</source>
-        <translation>クラッシュレポート:</translation>
+        <translation>クラッシュレポート :</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="561"/>
@@ -1700,7 +1700,7 @@
         <location filename="../../shortcuts.cpp" line="55"/>
         <location filename="../../shortcuts.cpp" line="80"/>
         <source>Open shortcuts dialog</source>
-        <translation>ショートカットダイアログを開く</translation>
+        <translation>ショートカット ダイアログを開く</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="56"/>
@@ -1760,7 +1760,7 @@
         <location filename="../../shortcuts.cpp" line="46"/>
         <location filename="../../shortcuts.cpp" line="71"/>
         <source>Focus on library filter</source>
-        <translation>ライブラリフィルターにフォーカス</translation>
+        <translation>ライブラリ フィルターにフォーカス</translation>
     </message>
     <message>
         <location filename="../../shortcuts.cpp" line="47"/>
@@ -1831,7 +1831,7 @@
     <message>
         <location filename="../../shortcuts_ui/shortcutsdialog.ui" line="14"/>
         <source>Keyboard shortcuts</source>
-        <translation>キーボードショートカット</translation>
+        <translation>キーボード ショートカット</translation>
     </message>
 </context>
 <context>
@@ -2056,7 +2056,7 @@
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="267"/>
         <source>TagLib refused to save (file not writable?)</source>
-        <translation>TagLib が保存を拒否しました（ファイルが書き込み不可？）</translation>
+        <translation>TagLib が保存を拒否しました (ファイルが書き込み不可？)</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.cpp" line="294"/>
@@ -2207,7 +2207,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="566"/>
         <source>No cover art</source>
-        <translation>アルバムアートがありません</translation>
+        <translation>カバーアートがありません</translation>
     </message>
     <message>
         <location filename="../../playlist_ui/trackinfodialog.cpp" line="640"/>
@@ -2268,7 +2268,7 @@
     <message>
         <location filename="../../playlist_ui/trackinfodialog.ui" line="220"/>
         <source>Edit tags…</source>
-        <translation>タグを編集…</translation>
+        <translation>タグの編集…</translation>
     </message>
 </context>
 <context>
