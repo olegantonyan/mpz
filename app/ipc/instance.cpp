@@ -8,14 +8,28 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QApplication>
+#include <QLocalSocket>
+#include <QAbstractSocket>
+#include <QStandardPaths>
+#include <QDir>
 
 namespace IPC {
   static const auto STATUS_LINE_RESPONSE_OK = "HTTP/1.1 257 R U OK\r\n\r\n";
   static const auto STATUS_LINE_REQUEST = "POST / HTTP/1.1\r\n\r\n";
   static const qint64 MAX_PAYLOAD_BYTES = 64 * 1024;
 
-  Instance::Instance(int prt, int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), port(prt) {
-    connect(&server, &QTcpServer::newConnection, this, &Instance::on_server_connection);
+  Instance::Instance(int timeo, QObject *parent) : QObject(parent), timeout_ms(timeo), socket_name(socketName()) {
+    connect(&server, &QLocalServer::newConnection, this, &Instance::on_server_connection);
+  }
+
+  QString Instance::socketName() {
+#ifdef Q_OS_WIN
+    return QStringLiteral("org.mpz_player.mpz");
+#else
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QDir().mkpath(dir);
+    return dir + QStringLiteral("/single_instance");
+#endif
   }
 
   int Instance::anotherPid() const {
@@ -23,53 +37,48 @@ namespace IPC {
   }
 
   int Instance::send(const QVariantMap &data) const {
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.setInterval(timeout_ms);
-
-    QTcpSocket socket;
+    QLocalSocket socket;
 
     int pid = -1;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-    auto conn_error = connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred), [&](QAbstractSocket::SocketError code) {
-#else
-    auto conn_error = connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), [&](QAbstractSocket::SocketError code) {
-#endif
-      Q_UNUSED(code);
-      pid = -1;
-    });
-
-    socket.connectToHost(QHostAddress::LocalHost, port);
+    socket.connectToServer(socket_name);
     if (socket.waitForConnected(timeout_ms)) {
-      if (socket.state() == QTcpSocket::ConnectedState) {
-        socket.write(STATUS_LINE_REQUEST);
-        socket.write("\r\n");
-        socket.write(QJsonDocument::fromVariant(data).toJson(QJsonDocument::Compact));
-        socket.waitForBytesWritten(timeout_ms);
-        if (socket.waitForReadyRead(timeout_ms)) {
-          auto recvd_data = QString::fromUtf8(socket.readAll());
-          if (recvd_data.startsWith(STATUS_LINE_RESPONSE_OK)) {
-            auto body = QJsonDocument::fromJson(recvd_data.split("\r\n").last().toUtf8());
-            if (body.isObject()) {
-              pid = body.object()["pid"].toInt();
-            }
+      socket.write(STATUS_LINE_REQUEST);
+      socket.write("\r\n");
+      socket.write(QJsonDocument::fromVariant(data).toJson(QJsonDocument::Compact));
+      socket.waitForBytesWritten(timeout_ms);
+      if (socket.waitForReadyRead(timeout_ms)) {
+        auto recvd_data = QString::fromUtf8(socket.readAll());
+        if (recvd_data.startsWith(STATUS_LINE_RESPONSE_OK)) {
+          auto body = QJsonDocument::fromJson(recvd_data.split("\r\n").last().toUtf8());
+          if (body.isObject()) {
+            pid = body.object()["pid"].toInt();
           }
         }
       }
     }
-    socket.close();
-    disconnect(conn_error);
+    socket.disconnectFromServer();
 
     return pid;
   }
 
   bool Instance::start() {
-    if (!server.listen(QHostAddress::LocalHost, port)) {
-      qWarning() << "error starting tcp server instance" << server.errorString();
-      return false;
+    server.setSocketOptions(QLocalServer::UserAccessOption);
+    if (server.listen(socket_name)) {
+      qDebug() << "first instance started, listening on" << server.fullServerName() << "pid" << qApp->applicationPid();
+      return true;
     }
-    qDebug() << "first instance started, listen tcp port" << port << "pid" << qApp->applicationPid();
-    return true;
+    if (server.serverError() == QAbstractSocket::AddressInUseError) {
+      if (anotherPid() > 0) {
+        return false;
+      }
+      QLocalServer::removeServer(socket_name);
+      if (server.listen(socket_name)) {
+        qDebug() << "first instance started after clearing stale socket, listening on" << server.fullServerName();
+        return true;
+      }
+    }
+    qWarning() << "error starting local server instance" << server.errorString();
+    return false;
   }
 
   bool Instance::load_files_send(const QStringList &list) {
@@ -101,13 +110,8 @@ namespace IPC {
     return response;
   }
 
-  QUrl Instance::url() const {
-    auto i = QString("http://%1:%2").arg(QHostAddress(QHostAddress::LocalHost).toString()).arg(port);
-    return QUrl(i);
-  }
-
   void Instance::on_server_connection() {
-    QTcpSocket *socket = server.nextPendingConnection();
+    QLocalSocket *socket = server.nextPendingConnection();
     if (!socket) {
       return;
     }
@@ -118,7 +122,7 @@ namespace IPC {
     timer.setSingleShot(true);
     timer.setInterval(timeout_ms);
     timer.start();
-    auto conn_read = connect(socket, &QTcpSocket::readyRead, this, [&, buffer]() {
+    auto conn_read = connect(socket, &QLocalSocket::readyRead, this, [&, buffer]() {
       buffer->append(socket->readAll());
       if (buffer->size() > MAX_PAYLOAD_BYTES) {
         qWarning() << "ipc payload exceeds" << MAX_PAYLOAD_BYTES << "bytes, dropping";
@@ -132,7 +136,7 @@ namespace IPC {
       socket->write(process_received(*buffer));
       socket->waitForBytesWritten(timeout_ms);
       socket->flush();
-      socket->disconnectFromHost();
+      socket->disconnectFromServer();
       loop.quit();
     });
     auto conn_timer = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);

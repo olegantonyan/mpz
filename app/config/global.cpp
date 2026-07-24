@@ -154,14 +154,6 @@ namespace Config {
     storage.set("language", Config::Value(arg));
   }
 
-  int Global::ipcPort() const {
-    return storage.get("single_instance_ipc_port").get<int>();
-  }
-
-  bool Global::saveIpcPort(int arg) {
-    return storage.set("single_instance_ipc_port", Config::Value(arg));
-  }
-
   bool Global::singleInstance() const {
     return storage.get("single_instance").get<bool>();
   }

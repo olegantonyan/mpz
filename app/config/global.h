@@ -51,9 +51,6 @@ namespace Config {
     QString language() const;
     void saveLanguage(const QString &arg);
 
-    int ipcPort() const;
-    bool saveIpcPort(int arg);
-
     bool singleInstance() const;
     void saveSingleInstance(bool arg);
 

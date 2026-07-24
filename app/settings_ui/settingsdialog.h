@@ -48,7 +48,6 @@ private:
   QListWidget *list_covers = nullptr;
 
   QCheckBox *check_single_instance = nullptr;
-  QSpinBox *spin_ipc_port = nullptr;
   QSpinBox *spin_playback_log_size = nullptr;
 #ifdef ENABLE_GAPLESS
   QCheckBox *check_gapless = nullptr;

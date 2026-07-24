@@ -75,13 +75,6 @@ void load_locale(MpzApplication &a, const QString &conf_language) {
   }
 }
 
-int ipc_port(Config::Global &global_conf) {
-  if (global_conf.ipcPort() == 0) {
-    global_conf.saveIpcPort(31341);
-  }
-  return global_conf.ipcPort();
-}
-
 int main(int argc, char *argv[]) {
 #ifdef ENABLE_CRASH_HANDLER
   mpz::install_crash_handler();
@@ -136,7 +129,7 @@ int main(int argc, char *argv[]) {
 
   load_locale(a, global_conf.language());
 
-  IPC::Instance instance(ipc_port(global_conf));
+  IPC::Instance instance;
   if (global_conf.singleInstance()) {
     int another_pid = instance.anotherPid();
     if (another_pid > 0) {

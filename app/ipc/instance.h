@@ -2,20 +2,17 @@
 #define IPC_INSTANCE_H
 
 #include <QObject>
-#include <QVariant>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QList>
-#include <QUrl>
+#include <QString>
+#include <QStringList>
 #include <QVariantMap>
-#include <QDir>
-#include <QList>
+#include <QByteArray>
+#include <QLocalServer>
 
 namespace IPC {
   class Instance : public QObject {
     Q_OBJECT
   public:
-    explicit Instance(int port, int timeout_ms = 500, QObject *parent = nullptr);
+    explicit Instance(int timeout_ms = 500, QObject *parent = nullptr);
 
     int anotherPid() const;
 
@@ -29,11 +26,11 @@ namespace IPC {
 
   private:
     const int timeout_ms;
-    const int port;
-    QTcpServer server;
+    const QString socket_name;
+    QLocalServer server;
 
+    static QString socketName();
     QByteArray process_received(const QByteArray &request);
-    QUrl url() const;
 
   private slots:
     void on_server_connection();

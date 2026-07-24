@@ -442,19 +442,6 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   si_row->addStretch();
   vbox->addLayout(si_row);
 
-  // IPC port
-  auto *port_row = new QHBoxLayout;
-  port_row->addWidget(new QLabel(tr("IPC port:")));
-  spin_ipc_port = new QSpinBox;
-  spin_ipc_port->setRange(1024, 65535);
-  spin_ipc_port->setValue(global_conf.ipcPort() > 0 ? global_conf.ipcPort() : 31341);
-  port_row->addWidget(spin_ipc_port);
-  auto *port_hint = new QLabel(tr("(requires restart)"));
-  port_hint->setStyleSheet("color: gray;");
-  port_row->addWidget(port_hint);
-  port_row->addStretch();
-  vbox->addLayout(port_row);
-
   // Stream buffer size
   auto *buf_row = new QHBoxLayout;
   buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
@@ -755,7 +742,6 @@ void SettingsDialog::apply() {
 
   // Advanced
   global_conf.saveSingleInstance(check_single_instance->isChecked());
-  global_conf.saveIpcPort(spin_ipc_port->value());
   global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
 #ifdef ENABLE_GAPLESS
