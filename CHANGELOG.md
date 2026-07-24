@@ -8,6 +8,7 @@
 
 - Linux: AppStream metainfo added
 - Linux: mpz.desktop file rename to org.mpz_player.mpz.desktop - modern freedesktop's convention - may break pinned to favorites app, desktop link, etc, fix by re-pinning
+- Linux: experimental Flatpak
 
 ## [2.1.0] - 2026-07-23
 

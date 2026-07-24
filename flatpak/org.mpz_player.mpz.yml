@@ -1,0 +1,50 @@
+id: org.mpz_player.mpz
+runtime: org.kde.Platform
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+command: mpz
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --socket=pulseaudio
+  - --share=network
+  - --own-name=org.mpris.MediaPlayer2.mpz
+  - --talk-name=org.freedesktop.FileManager1
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --filesystem=host
+
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    version: '24.08'
+    add-ld-path: .
+    no-autodownload: false
+    autodelete: false
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
+modules:
+  - name: mpz
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_UPDATE_CHECK=OFF
+      - -DENABLE_QHOTKEY=OFF
+    sources:
+      - type: dir
+        path: ..
+
+      # - type: git
+      #   url: https://github.com/olegantonyan/mpz.git
+      #   tag: '2.1.0'
+      #   commit: 66f531f66e1d6ead02912a99eea9e2ef0f760dc8
+      #   x-checker-data:
+      #     type: git
+      #     tag-pattern: '^([\d.]+)$'
+
+# flatpak-builder --user --install --force-clean build-flatpak flatpak/org.mpz_player.mpz.yml
+# flatpak run org.mpz_player.mpz
