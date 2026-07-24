@@ -130,8 +130,9 @@ jobs:
           linuxdeploy-${{ matrix.ld_arch }}.AppImage \
             --appdir AppDir \
             --executable AppDir/usr/bin/mpz \
-            --desktop-file AppDir/usr/share/applications/mpz.desktop \
+            --desktop-file AppDir/usr/share/applications/org.mpz_player.mpz.desktop \
             --icon-file app/resources/icons/256x256/mpz.png \
+            --icon-filename org.mpz_player.mpz \
             --plugin qt \
             --output appimage
 

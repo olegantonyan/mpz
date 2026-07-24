@@ -10,7 +10,7 @@
   <summary xml:lang="ja">大規模なローカルコレクション向けの音楽プレーヤー</summary>
   <summary xml:lang="sr">Музички плејер за велике локалне колекције</summary>
 
-  <launchable type="desktop-id">mpz.desktop</launchable>
+  <launchable type="desktop-id">org.mpz_player.mpz.desktop</launchable>
 
   <description>
     <p>

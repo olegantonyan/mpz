@@ -96,6 +96,9 @@ int main(int argc, char *argv[]) {
 
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
+  a.setDesktopFileName(QStringLiteral("org.mpz_player.mpz"));
+#endif
 #ifdef ENABLE_CRASH_HANDLER
   const QString crashDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   QDir().mkpath(crashDir);

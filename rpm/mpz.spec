@@ -44,14 +44,14 @@ make install
 %files
 %license license.txt
 %{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/org.mpz_player.mpz.desktop
 %{_datadir}/metainfo/org.mpz_player.mpz.metainfo.xml
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-%{_datadir}/icons/hicolor/24x24/apps/%{name}.png
-%{_datadir}/icons/hicolor/22x22/apps/%{name}.png
-%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/org.mpz_player.mpz.svg
+%{_datadir}/icons/hicolor/48x48/apps/org.mpz_player.mpz.png
+%{_datadir}/icons/hicolor/32x32/apps/org.mpz_player.mpz.png
+%{_datadir}/icons/hicolor/24x24/apps/org.mpz_player.mpz.png
+%{_datadir}/icons/hicolor/22x22/apps/org.mpz_player.mpz.png
+%{_datadir}/icons/hicolor/16x16/apps/org.mpz_player.mpz.png
 
 %dir %{_datadir}/applications/
 %dir %{_datadir}/metainfo/

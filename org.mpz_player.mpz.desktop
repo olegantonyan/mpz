@@ -1,6 +1,6 @@
 [Desktop Entry]
 Terminal=false
-Icon=mpz
+Icon=org.mpz_player.mpz
 Type=Application
 Categories=AudioVideo;Audio;Player;
 Exec=mpz %F
