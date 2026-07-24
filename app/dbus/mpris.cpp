@@ -7,6 +7,7 @@
 
 #include <QDebug>
 #include <QHostInfo>
+#include <QGuiApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDBusReply>
@@ -118,7 +119,7 @@ QString Mpris::Identity() const {
 }
 
 QString Mpris::DesktopEntry() const {
-  return qApp->applicationName();
+  return QGuiApplication::desktopFileName();
 }
 
 QStringList Mpris::SupportedUriSchemes() const {
