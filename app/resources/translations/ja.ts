@@ -1408,12 +1408,12 @@
         <translation>再生中はシステムのスリープを抑制</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="450"/>
         <source>KiB</source>
         <translation>KiB</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="460"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
         <source>Stream buffer size:</source>
         <translation>ストリームバッファ サイズ :</translation>
     </message>
@@ -1466,9 +1466,8 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="194"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="452"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="477"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
         <source>(requires restart)</source>
         <translation>(再起動が必要)</translation>
     </message>
@@ -1519,13 +1518,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="248"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="530"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="517"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="249"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
@@ -1546,13 +1545,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="615"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="602"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="286"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="616"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="603"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
@@ -1614,82 +1613,81 @@
         <translation>シングルインスタンス モード</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
         <source>IPC port:</source>
-        <translation>IPC ポート :</translation>
+        <translation type="vanished">IPC ポート :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="461"/>
         <source>Playback log size:</source>
         <translation>再生ログのサイズ :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="477"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
         <source>entries</source>
         <translation>件</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
         <source>Enable gapless playback</source>
         <translation>ギャップレス再生を有効にする</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="497"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="484"/>
         <source>Gapless memory buffer:</source>
         <translation>ギャップレス用メモリバッファ :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="500"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="498"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>デコードした音声をメモリに保持することで、トラック間の移行がギャップレスになり、トラック内のシークが瞬時に行えます。バッファが大きいほど、より多くの (または長い) トラックをキャッシュできます。ほとんどのライブラリでは 100MBで十分です。</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="510"/>
         <source>MPRIS blacklist</source>
         <translation>MPRIS ブラックリスト</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="513"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>MPRIS の送信者名を無視 (例 : &quot;wireplumber&quot;):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="540"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="527"/>
         <source>Add MPRIS sender</source>
         <translation>MPRIS 送信者を追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="528"/>
         <source>Sender name:</source>
         <translation>送信者名 :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="552"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="539"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>mpz 終了時に MPD の再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="546"/>
         <source>Crash reports:</source>
         <translation>クラッシュレポート :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="561"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
         <source>Send automatically</source>
         <translation>自動的に送信</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Ask after next crash</source>
         <translation>次回のクラッシュ後に確認</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="550"/>
         <source>Never send</source>
         <translation>送信しない</translation>
     </message>
@@ -1980,91 +1978,91 @@
         <translation>タグの編集</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="32"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="35"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="42"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="45"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="52"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="55"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="62"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="65"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="72"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="75"/>
         <source>Track number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="82"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="85"/>
         <source>Genre</source>
         <translation>ジャンル</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="92"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="95"/>
         <source>Comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="119"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="122"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="107"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="139"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="142"/>
         <source>Auto-save on navigation</source>
         <translation>切り替え時に自動保存</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="162"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="165"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="108"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="180"/>
         <source>Editing %n track(s)</source>
         <translation>
             <numerusform>%n 個のトラックを編集</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="151"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="153"/>
         <source>&lt;multiple values&gt;</source>
         <translation>&lt;複数の値&gt;</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="167"/>
-        <source>Track %1 of %2 — %3</source>
-        <translation>トラック %1 / %2 — %3</translation>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="176"/>
+        <source>Track %1 of %2</source>
+        <translation>トラック %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="237"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="246"/>
         <source>Could not open file</source>
         <translation>ファイルを開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="267"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="276"/>
         <source>TagLib refused to save (file not writable?)</source>
         <translation>TagLib が保存を拒否しました (ファイルが書き込み不可？)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="294"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="303"/>
         <source>Save failed</source>
         <translation>保存に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="295"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="304"/>
         <source>Could not write tags for the following files:
 %1</source>
         <translation>次のファイルにタグを書き込めませんでした :

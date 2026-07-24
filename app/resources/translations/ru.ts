@@ -1408,12 +1408,12 @@
         <translation>Не давать системе уснуть во время воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="463"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="450"/>
         <source>KiB</source>
         <translation>КиБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="460"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
         <source>Stream buffer size:</source>
         <translation>Размер буфера потока:</translation>
     </message>
@@ -1466,9 +1466,8 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="194"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="260"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="439"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="452"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="490"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="505"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="477"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
@@ -1519,13 +1518,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="248"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="530"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="517"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="249"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
@@ -1546,13 +1545,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="615"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="602"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="286"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="616"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="603"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
@@ -1616,82 +1615,81 @@
         <translation>Один экземпляр приложения</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="447"/>
         <source>IPC port:</source>
-        <translation>IPC порт:</translation>
+        <translation type="vanished">IPC порт:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="461"/>
         <source>Playback log size:</source>
         <translation>Размер лога воспроизведения:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="477"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
         <source>entries</source>
         <translation>записей</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
         <source>Enable gapless playback</source>
         <translation>Включить воспроизведение без пауз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="497"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="484"/>
         <source>Gapless memory buffer:</source>
         <translation>Буфер памяти для воспроизведения без пауз:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="500"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="487"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="498"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>Декодированный звук хранится в памяти, чтобы переходы между треками были без пауз, а перемотка внутри трека — мгновенной. Чем больше буфер, тем больше (и более длинных) треков помещается в кэш; 100 МБ достаточно для большинства библиотек.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="510"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="513"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="540"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="527"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="528"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="552"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="539"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="546"/>
         <source>Crash reports:</source>
         <translation>Отчёты о сбоях:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="561"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
         <source>Send automatically</source>
         <translation>Отправлять автоматически</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Ask after next crash</source>
         <translation>Спрашивать после сбоя</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="550"/>
         <source>Never send</source>
         <translation>Не отправлять</translation>
     </message>
@@ -1982,59 +1980,59 @@
         <translation>Редактирование тегов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="32"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="35"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="42"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="45"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="52"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="55"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="62"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="65"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="72"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="75"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="82"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="85"/>
         <source>Genre</source>
         <translation>Жанр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="92"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="95"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="119"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="105"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="122"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="107"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="139"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="142"/>
         <source>Auto-save on navigation</source>
         <translation>Автосохранение при переходе</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.ui" line="162"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="106"/>
+        <location filename="../../playlist_ui/tageditordialog.ui" line="165"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="108"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="171"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="180"/>
         <source>Editing %n track(s)</source>
         <translation>
             <numerusform>Редактирование %n трека</numerusform>
@@ -2043,32 +2041,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="151"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="153"/>
         <source>&lt;multiple values&gt;</source>
         <translation>&lt;несколько значений&gt;</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="167"/>
-        <source>Track %1 of %2 — %3</source>
-        <translation>Трек %1 из %2 — %3</translation>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="176"/>
+        <source>Track %1 of %2</source>
+        <translation>Трек %1 из %2</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="237"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="246"/>
         <source>Could not open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="267"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="276"/>
         <source>TagLib refused to save (file not writable?)</source>
         <translation>TagLib отказался сохранить (файл недоступен для записи?)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="294"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="303"/>
         <source>Save failed</source>
         <translation>Ошибка сохранения</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="295"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="304"/>
         <source>Could not write tags for the following files:
 %1</source>
         <translation>Не удалось записать теги в следующие файлы:
