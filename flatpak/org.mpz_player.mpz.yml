@@ -28,8 +28,8 @@ modules:
 
       # - type: git
       #   url: https://github.com/olegantonyan/mpz.git
-      #   tag: '2.1.1'
-      #   commit: acb3fc3fdf76564c04d68948b97ff8c11c494db7
+      #   tag: '2.1.0'
+      #   commit: 66f531f66e1d6ead02912a99eea9e2ef0f760dc8
       #   x-checker-data:
       #     type: git
       #     tag-pattern: '^([\d.]+)$'
