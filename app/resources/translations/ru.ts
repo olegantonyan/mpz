@@ -1192,14 +1192,20 @@
 <context>
     <name>PlaylistsUi::Controller</name>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="147"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="157"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="190"/>
         <source>Create new playlist</source>
         <translation>Создать новый плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="148"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="158"/>
         <source>Append to &quot;%1&quot;</source>
         <translation>Добавить в «%1»</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="160"/>
+        <source>Move to &quot;%1&quot;</source>
+        <translation>Переместить в «%1»</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,7 @@
 #include "playlistcontroller.h"
 #include "dropdirs.h"
 #include "streamrowdelegate.h"
+#include "tracksmimedata.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -188,6 +189,30 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks) {
+    auto model = proxy->activeModel();
+    if (model->playlist() == nullptr || model->playlist()->uid() != playlist_uid) {
+      return;
+    }
+    QList<quint64> wanted;
+    for (const auto &track : tracks) {
+      wanted << track.uid();
+    }
+    QList<QModelIndex> items;
+    for (int row = 0; row < model->tracksSize(); row++) {
+      const int at = wanted.indexOf(model->trackAt(row).uid());
+      if (at >= 0) {
+        wanted.removeAt(at);
+        items << model->buildIndex(row);
+      }
+    }
+    if (items.isEmpty()) {
+      return;
+    }
+    model->remove(items);
+    emit changed(model->playlist());
+  }
+
   void Controller::sortBy(const QString &criteria) {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->sortBy(criteria);
@@ -217,7 +242,7 @@ namespace PlaylistUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
-      if (handleExternalDnd(event)) {
+      if (handleDnd(event)) {
         return true;
       }
       eventFilterViewport(event);
@@ -227,7 +252,14 @@ namespace PlaylistUi {
     return QObject::eventFilter(obj, event);
   }
 
-  bool Controller::handleExternalDnd(QEvent *event) {
+  const TracksMimeData *Controller::droppedTracks(QDropEvent *event) const {
+    if (event->source() == view) { // an internal reorder, not a cross-view drop
+      return nullptr;
+    }
+    return TracksMimeData::from(event->mimeData());
+  }
+
+  bool Controller::handleDnd(QEvent *event) {
     const auto type = event->type();
     if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
       return false;
@@ -236,25 +268,36 @@ namespace PlaylistUi {
       return false;
     }
     auto *drop_event = static_cast<QDropEvent *>(event);
-    if (!drop_event->mimeData()->hasUrls()) {
+    const bool tracks = droppedTracks(drop_event) != nullptr;
+    if (!tracks && !drop_event->mimeData()->hasUrls()) {
       return false;
     }
     if (type == QEvent::Drop) {
-      onExternalDrop(drop_event);
+      onDrop(drop_event);
     }
-    drop_event->acceptProposedAction();
+    if (tracks) {
+      drop_event->setDropAction(Qt::CopyAction);
+      drop_event->accept();
+    } else {
+      drop_event->acceptProposedAction();
+    }
     return true;
   }
 
-  void Controller::onExternalDrop(QDropEvent *event) {
-    const auto dirs = DropUtil::droppedDirs(event->mimeData());
-    if (dirs.isEmpty()) {
+  void Controller::onDrop(QDropEvent *event) {
+    const auto *tracks_mime = droppedTracks(event);
+    const auto dirs = tracks_mime != nullptr ? QList<QDir>() : DropUtil::droppedDirs(event->mimeData());
+    if (tracks_mime == nullptr && dirs.isEmpty()) {
       return;
     }
 
     auto model = proxy->activeModel();
     if (model->playlist() == nullptr) {
-      emit createPlaylistRequested(dirs, DropUtil::commonParentDir(dirs));
+      if (tracks_mime != nullptr) {
+        emit createPlaylistFromTracksRequested(tracks_mime->tracks(), tracks_mime->suggestedName());
+      } else {
+        emit createPlaylistRequested(dirs, DropUtil::libraryRoot(event->mimeData(), dirs));
+      }
       return;
     }
 
@@ -269,6 +312,10 @@ namespace PlaylistUi {
       at_row = proxy->mapToSource(index).row() + (below ? 1 : 0);
     }
 
+    if (tracks_mime != nullptr) {
+      model->insertTracks(tracks_mime->tracks(), at_row);
+      return;
+    }
     model->insertTracksAsync(dirs, at_row);
     spinner->show();
   }

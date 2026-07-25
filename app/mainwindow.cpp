@@ -109,6 +109,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(library, &DirectoryUi::Controller::createNewPlaylistFromTracks, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
   connect(library, &DirectoryUi::Controller::appendTracksToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendTracks);
   connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
+  connect(playlist, &PlaylistUi::Controller::createPlaylistFromTracksRequested, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
+  connect(playlists, &PlaylistsUi::Controller::removeTracksRequested, playlist, &PlaylistUi::Controller::on_removeTracks);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
   connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);

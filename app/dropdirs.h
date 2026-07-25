@@ -13,6 +13,8 @@
 #include <QUrl>
 
 namespace DropUtil {
+  inline const QString libraryRootFormat = QStringLiteral("application/x-mpz-library-root");
+
   inline QList<QDir> droppedDirs(const QMimeData *mime) {
     QList<QDir> dirs;
     if (!mime || !mime->hasUrls()) {
@@ -44,6 +46,13 @@ namespace DropUtil {
       }
     }
     return common;
+  }
+
+  inline QString libraryRoot(const QMimeData *mime, const QList<QDir> &dirs) {
+    if (mime && mime->hasFormat(libraryRootFormat)) {
+      return QString::fromUtf8(mime->data(libraryRootFormat));
+    }
+    return commonParentDir(dirs);
   }
 
   inline QPoint dropPosition(QDropEvent *event) {

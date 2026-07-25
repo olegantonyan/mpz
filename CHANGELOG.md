@@ -2,6 +2,8 @@
 
 ### Added
 
+- Drag folders, radio stations and tracks between the library, playlist and playlists panels
+
 ### Fixed
 
 ### Misc
