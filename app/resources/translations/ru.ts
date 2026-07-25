@@ -1050,56 +1050,56 @@
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="294"/>
-        <location filename="../../mainwindow.cpp" line="329"/>
+        <location filename="../../mainwindow.cpp" line="296"/>
+        <location filename="../../mainwindow.cpp" line="331"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="295"/>
-        <location filename="../../mainwindow.cpp" line="328"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="330"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="330"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="332"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="327"/>
+        <location filename="../../mainwindow.cpp" line="329"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="429"/>
+        <location filename="../../mainwindow.cpp" line="431"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="447"/>
+        <location filename="../../mainwindow.cpp" line="449"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="453"/>
+        <location filename="../../mainwindow.cpp" line="455"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="589"/>
-        <location filename="../../mainwindow.cpp" line="593"/>
+        <location filename="../../mainwindow.cpp" line="591"/>
+        <location filename="../../mainwindow.cpp" line="595"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="595"/>
+        <location filename="../../mainwindow.cpp" line="597"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="607"/>
+        <location filename="../../mainwindow.cpp" line="609"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>

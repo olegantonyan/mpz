@@ -1050,56 +1050,56 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="294"/>
-        <location filename="../../mainwindow.cpp" line="329"/>
+        <location filename="../../mainwindow.cpp" line="296"/>
+        <location filename="../../mainwindow.cpp" line="331"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="295"/>
-        <location filename="../../mainwindow.cpp" line="328"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="330"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="330"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="332"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="327"/>
+        <location filename="../../mainwindow.cpp" line="329"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="429"/>
+        <location filename="../../mainwindow.cpp" line="431"/>
         <source>Lock toolbar</source>
         <translation>Закључај траку с алаткама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="447"/>
+        <location filename="../../mainwindow.cpp" line="449"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="453"/>
+        <location filename="../../mainwindow.cpp" line="455"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="589"/>
-        <location filename="../../mainwindow.cpp" line="593"/>
+        <location filename="../../mainwindow.cpp" line="591"/>
+        <location filename="../../mainwindow.cpp" line="595"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="595"/>
+        <location filename="../../mainwindow.cpp" line="597"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="607"/>
+        <location filename="../../mainwindow.cpp" line="609"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
