@@ -90,7 +90,14 @@ int main(int argc, char *argv[]) {
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
-  a.setDesktopFileName(QStringLiteral("org.mpz_player.mpz"));
+  const QByteArray desktop_file_name = "org.mpz_player.mpz";
+  a.setDesktopFileName(QString::fromLatin1(desktop_file_name));
+  // Qt has no API for audio stream metadata; volume mixers look these up as theme icon names
+  qputenv("PULSE_PROP_application.icon_name", desktop_file_name);
+  qputenv("PULSE_PROP_application.id", desktop_file_name);
+  if (!qEnvironmentVariableIsSet("PIPEWIRE_PROPS")) {
+    qputenv("PIPEWIRE_PROPS", "{ application.icon-name = " + desktop_file_name + ", application.id = " + desktop_file_name + " }");
+  }
 #endif
 #ifdef ENABLE_CRASH_HANDLER
   const QString crashDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);

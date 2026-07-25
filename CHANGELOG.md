@@ -5,6 +5,7 @@
 ### Fixed
 
 - Playback follows cursor: removing the selected track no longer jumps to the first track or leaves playback silent
+- Linux: app icon shows again in PulseAudio/PipeWire volume mixers, broken by the .desktop rename in 2.1.1
 
 ### Misc
 
