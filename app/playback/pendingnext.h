@@ -11,6 +11,7 @@ namespace Playback {
     void set(quint64 boundary_track_uid, const Track &next);
     void clear();
     bool validFor(quint64 playing_track_uid) const;
+    Track peek() const;
     Track take();
     quint64 boundaryUid() const;
 

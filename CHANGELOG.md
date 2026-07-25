@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Playback follows cursor: removing the selected track no longer jumps to the first track or leaves playback silent
+
 ### Misc
 
 ## [2.1.1] - 2026-07-24

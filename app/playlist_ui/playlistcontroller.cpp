@@ -72,7 +72,7 @@ namespace PlaylistUi {
     });
 
     context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
-    connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
+    connect(context_menu, &PlaylistContextMenu::removeRequested, this, &Controller::removeSelectedTracks);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -281,7 +281,7 @@ namespace PlaylistUi {
           || keyevent->key() == Qt::Key_Backspace
 #endif
          ) {
-        context_menu->on_remove();
+        removeSelectedTracks();
       } else if (keyevent->key() == Qt::Key_I && keyevent->modifiers().testFlag(Qt::ControlModifier)) {
         context_menu->on_trackInfo();
       }
@@ -344,8 +344,55 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::removeSelectedTracks() {
+    const auto rows = view->selectionModel()->selectedRows();
+    if (rows.isEmpty()) {
+      return;
+    }
+
+    QList<QModelIndex> source_rows;
+    int fallback_row = proxy->rowCount();
+    for (const auto &i : rows) {
+      source_rows << proxy->mapToSource(i);
+      fallback_row = qMin(fallback_row, i.row());
+    }
+    const quint64 cursor_uid = proxy->activeModel()->itemAt(proxy->mapToSource(view->currentIndex())).uid();
+
+    proxy->activeModel()->remove(source_rows);
+    emit changed(proxy->activeModel()->playlist());
+    restoreCursor(cursor_uid, fallback_row);
+  }
+
+  // removal rebuilds the model and drops the cursor; left invalid, Qt moves it to the first row on
+  // the next focus-in, which would hijack "playback follows cursor"
+  void Controller::restoreCursor(quint64 cursor_uid, int fallback_row) {
+    if (proxy->rowCount() == 0) {
+      return;
+    }
+
+    QModelIndex index = proxy->mapFromSource(proxy->activeModel()->indexOf(cursor_uid));
+    const bool cursor_survived = index.isValid();
+    if (!cursor_survived) {
+      index = proxy->index(qBound(0, fallback_row, proxy->rowCount() - 1), 0);
+      if (!index.isValid()) {
+        return;
+      }
+    }
+
+    restoring_cursor = true;
+    view->setCurrentIndex(index);
+    restoring_cursor = false;
+
+    if (!cursor_survived) {
+      emit cursorRestored(proxy->activeModel()->itemAt(proxy->mapToSource(index)));
+    }
+  }
+
   void Controller::on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev) {
     Q_UNUSED(prev)
+    if (restoring_cursor) {
+      return;
+    }
     auto source_index = proxy->mapToSource(index);
     if (index.isValid() && source_index.isValid() && source_index.row() < proxy->activeModel()->rowCount()) {
       emit selected(proxy->activeModel()->itemAt(source_index));
