@@ -47,6 +47,7 @@ namespace PlaylistUi {
     void on_appendToPlaylist(const QList<QDir> &filepaths);
     void on_appendTracks(const QVector<Track> &tracks);
     void on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks);
+    void on_tracksAppended(const std::shared_ptr<Playlist::Playlist> pl);
     void sortBy(const QString &criteria);
 
   private slots:

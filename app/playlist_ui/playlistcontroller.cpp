@@ -213,6 +213,12 @@ namespace PlaylistUi {
     emit changed(model->playlist());
   }
 
+  void Controller::on_tracksAppended(const std::shared_ptr<Playlist::Playlist> pl) {
+    if (pl != nullptr && pl == proxy->activeModel()->playlist()) {
+      proxy->activeModel()->reload();
+    }
+  }
+
   void Controller::sortBy(const QString &criteria) {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->sortBy(criteria);

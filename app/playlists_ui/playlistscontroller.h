@@ -47,6 +47,7 @@ namespace PlaylistsUi {
     void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
     void asyncLoadFinished();
     void removeTracksRequested(quint64 playlist_uid, const QVector<Track> &tracks);
+    void tracksAppended(const std::shared_ptr<Playlist::Playlist> pl);
 
   private slots:
     void on_itemActivated(const QModelIndex &index);
