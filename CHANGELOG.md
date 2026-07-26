@@ -2,6 +2,8 @@
 
 ### Added
 
+- macOS: animated dock icon while playing, can be disabled in settings
+
 ### Fixed
 
 ### Misc

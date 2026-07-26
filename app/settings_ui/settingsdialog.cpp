@@ -146,6 +146,12 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_tray_icon->setChecked(global_conf.trayIconEnabled());
   iv->addWidget(check_tray_icon);
 
+#ifdef Q_OS_MACOS
+  check_dock_icon_animation = new QCheckBox(tr("Animate the dock icon while playing"));
+  check_dock_icon_animation->setChecked(!global_conf.disableDockIconAnimation());
+  iv->addWidget(check_dock_icon_animation);
+#endif
+
 #ifndef Q_OS_MACOS
   if (!QSystemTrayIcon::isSystemTrayAvailable()) {
     auto *tray_warning = new QLabel(
@@ -726,6 +732,9 @@ void SettingsDialog::apply() {
   if (check_auto_update) {
     global_conf.saveDisableAutoUpdateCheck(!check_auto_update->isChecked());
   }
+#ifdef Q_OS_MACOS
+  global_conf.saveDisableDockIconAnimation(!check_dock_icon_animation->isChecked());
+#endif
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());

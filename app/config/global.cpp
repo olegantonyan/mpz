@@ -115,6 +115,14 @@ namespace Config {
     storage.set("minimize_to_tray", Config::Value(arg));
   }
 
+  bool Global::disableDockIconAnimation() const {
+    return storage.get("disable_dock_icon_animation").get<bool>();
+  }
+
+  void Global::saveDisableDockIconAnimation(bool arg) {
+    storage.set("disable_dock_icon_animation", Config::Value(arg));
+  }
+
   QList<SortingPreset> Global::sortPresets() const {
     QList<SortingPreset> result;
 
