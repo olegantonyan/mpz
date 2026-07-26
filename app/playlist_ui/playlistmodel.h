@@ -34,6 +34,7 @@ namespace PlaylistUi {
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     Qt::DropActions supportedDropActions() const override;
+    Qt::DropActions supportedDragActions() const override;
     QStringList mimeTypes() const override;
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
@@ -56,6 +57,7 @@ namespace PlaylistUi {
     virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
     void appendTracks(const QVector<Track> &tracks);
     virtual void insertTracksAsync(const QList<QDir> &filepaths, int atRow);
+    void insertTracks(const QVector<Track> &new_tracks, int atRow);
 
     virtual void sortBy(const QString &criteria);
 

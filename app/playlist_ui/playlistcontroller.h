@@ -19,6 +19,7 @@
 #include <QHash>
 
 class QDropEvent;
+class TracksMimeData;
 
 namespace PlaylistUi {
   class Controller : public QObject {
@@ -33,6 +34,7 @@ namespace PlaylistUi {
     void changed(const std::shared_ptr<Playlist::Playlist> pl);
     void durationOfSelectedChanged(quint32 total_duration);
     void createPlaylistRequested(const QList<QDir> &filepaths, const QString &libraryDir);
+    void createPlaylistFromTracksRequested(const QVector<Track> &tracks, const QString &name);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist::Playlist> pi);
@@ -44,6 +46,7 @@ namespace PlaylistUi {
     void on_trackMetaChanged(const Track &t);
     void on_appendToPlaylist(const QList<QDir> &filepaths);
     void on_appendTracks(const QVector<Track> &tracks);
+    void on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks);
     void sortBy(const QString &criteria);
 
   private slots:
@@ -74,8 +77,9 @@ namespace PlaylistUi {
     void restoreCursor(quint64 cursor_uid, int fallback_row);
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
-    bool handleExternalDnd(QEvent *event);
-    void onExternalDrop(QDropEvent *event);
+    bool handleDnd(QEvent *event);
+    void onDrop(QDropEvent *event);
+    const TracksMimeData *droppedTracks(QDropEvent *event) const;
 
     void loadColumnsConfig();
 

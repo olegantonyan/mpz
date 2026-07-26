@@ -42,7 +42,6 @@ namespace PlaylistsUi {
       return;
     }
     playlist->append(tracks, false);
-    emit asyncTracksLoadFinished(playlist);
   }
 
   void Model::higlight(std::shared_ptr<Playlist::Playlist> playlist) {

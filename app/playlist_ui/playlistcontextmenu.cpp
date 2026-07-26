@@ -51,15 +51,6 @@ namespace PlaylistUi {
        menu.addSeparator();
     }
 
-    /*QMenu move_to;
-    move_to.setTitle("Move to playlist");
-    move_to.addAction(&clear_filter);
-    QMenu copy_to;
-    copy_to.setTitle("Copy to playlist");
-    copy_to.addAction(&clear_filter);
-    menu.addMenu(&move_to);
-    menu.addMenu(&copy_to);*/
-
     menu.addAction(&info);
     menu.addAction(&copy_name);
     if (proxy->modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {

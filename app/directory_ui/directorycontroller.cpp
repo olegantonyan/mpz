@@ -40,6 +40,8 @@ namespace DirectoryUi {
     Q_ASSERT(view);
 
     view->setSelectionMode(QTreeView::ExtendedSelection);
+    view->setDragDropMode(QTreeView::DragOnly);
+    view->setDefaultDropAction(Qt::CopyAction);
 
     restore_scroll_once = true;
 
@@ -178,6 +180,15 @@ namespace DirectoryUi {
       }
       if (me->button() == Qt::BackButton) {
         search->clear();
+      }
+      if (event->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
+        const auto index = view->indexAt(me->pos());
+        view->setDragEnabled(index.isValid() && view->selectionModel()->isSelected(index));
+      }
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+      QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
+      if (me->button() == Qt::LeftButton) {
+        view->setDragEnabled(true);
       }
     } else if (event->type() == QEvent::WindowActivate) {
       if (restore_scroll_once) {

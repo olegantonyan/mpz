@@ -1,4 +1,6 @@
 #include "proxy.h"
+#include "dropdirs.h"
+#include "tracksmimedata.h"
 
 #include <QDebug>
 
@@ -51,6 +53,7 @@ namespace DirectoryUi {
         radio->loadAsync(path);
         return;
       }
+      library_root = path;
       switch (modus_operandi.get()) {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
@@ -195,6 +198,39 @@ namespace DirectoryUi {
         return false;
       }
       return radio->isStation(mapToSource(index));
+    }
+
+    Qt::ItemFlags Proxy::flags(const QModelIndex &index) const {
+      auto result = QSortFilterProxyModel::flags(index);
+      if (radio_active && index.isValid()) {
+        result |= Qt::ItemIsDragEnabled;
+      }
+      return result;
+    }
+
+    QMimeData *Proxy::mimeData(const QModelIndexList &indexes) const {
+      if (indexes.isEmpty()) {
+        return nullptr;
+      }
+      if (radio_active) {
+        const auto tracks = tracksAt(indexes);
+        if (tracks.isEmpty()) {
+          return nullptr;
+        }
+        return new TracksMimeData(tracks, displayName(indexes.first()));
+      }
+      if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+        return nullptr;
+      }
+      auto *data = QSortFilterProxyModel::mimeData(indexes);
+      if (data != nullptr && !library_root.isEmpty()) {
+        data->setData(DropUtil::libraryRootFormat, library_root.toUtf8());
+      }
+      return data;
+    }
+
+    Qt::DropActions Proxy::supportedDragActions() const {
+      return Qt::CopyAction;
     }
 
     void Proxy::sortBy(const QString &direction) {

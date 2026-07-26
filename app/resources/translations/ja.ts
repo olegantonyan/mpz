@@ -1050,56 +1050,56 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="295"/>
-        <location filename="../../mainwindow.cpp" line="330"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="332"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="329"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="331"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
-        <location filename="../../mainwindow.cpp" line="331"/>
+        <location filename="../../mainwindow.cpp" line="299"/>
+        <location filename="../../mainwindow.cpp" line="333"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="328"/>
+        <location filename="../../mainwindow.cpp" line="330"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="437"/>
+        <location filename="../../mainwindow.cpp" line="439"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="455"/>
+        <location filename="../../mainwindow.cpp" line="457"/>
         <source>Album cover</source>
         <translation>アルバムカバー</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="461"/>
+        <location filename="../../mainwindow.cpp" line="463"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="602"/>
-        <location filename="../../mainwindow.cpp" line="606"/>
+        <location filename="../../mainwindow.cpp" line="604"/>
+        <location filename="../../mainwindow.cpp" line="608"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="608"/>
+        <location filename="../../mainwindow.cpp" line="610"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="620"/>
+        <location filename="../../mainwindow.cpp" line="622"/>
         <source>Update available:</source>
         <translation>アップデートがあります :</translation>
     </message>
@@ -1192,14 +1192,20 @@
 <context>
     <name>PlaylistsUi::Controller</name>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="147"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="157"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="190"/>
         <source>Create new playlist</source>
         <translation>新しいプレイリストを作成</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="148"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="158"/>
         <source>Append to &quot;%1&quot;</source>
         <translation>&quot;%1&quot; に追加</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="160"/>
+        <source>Move to &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; に移動</translation>
     </message>
 </context>
 <context>
