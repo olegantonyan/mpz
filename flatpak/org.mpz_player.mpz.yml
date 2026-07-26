@@ -10,21 +10,9 @@ finish-args:
   - --share=ipc
   - --socket=pulseaudio
   - --share=network
-  - --own-name=org.mpris.MediaPlayer2.mpz
   - --talk-name=org.freedesktop.FileManager1
   - --talk-name=org.kde.StatusNotifierWatcher
   - --filesystem=host
-
-add-extensions:
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg
-    version: '24.08'
-    add-ld-path: .
-    no-autodownload: false
-    autodelete: false
-
-cleanup-commands:
-  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
 modules:
   - name: mpz

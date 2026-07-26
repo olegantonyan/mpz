@@ -130,11 +130,8 @@ namespace Playback {
     bool ok = false;
     bool should_stop = false;
     Track t = computeNextTrack(ok, should_stop);
-    if (should_stop) {
-      emit stop();
-      return;
-    }
-    if (!ok) {
+    if (should_stop || !ok) {
+      emit stop(); // nothing left to play: stopping beats sitting silent in a playing state
       return;
     }
     playTrack(t);
@@ -267,19 +264,28 @@ namespace Playback {
   }
 
   void Dispatch::on_playlistContentChanged() {
-    pending_next.clear();
-    emit prepareNext(Track()); // clear the engine's prepared segment (removed track must not play at the boundary)
     const quint64 uid = player_state.playingTrack();
+    const bool was_prepared = pending_next.validFor(uid);
+    const bool prepared_survived =
+        was_prepared && playlists->playlistByTrackUid(pending_next.peek().uid()) != nullptr;
+    if (!prepared_survived) {
+      pending_next.clear();
+      emit prepareNext(Track()); // clear the engine's prepared segment (removed track must not play at the boundary)
+    }
     if (uid == 0) {
       return;
     }
-    if (playlists->playlistByTrackUid(uid) != nullptr) {
+    if (playlists->playlistByTrackUid(uid) == nullptr) {
+      if (global_conf.stopWhenTrackRemoved()) {
+        emit stop();
+        emit unloadPlaylistView();
+      }
       return;
     }
-    if (!global_conf.stopWhenTrackRemoved()) {
-      return;
+    if (was_prepared && !prepared_survived) {
+      // the engine is already past aboutToFinish and will not ask again: re-arm the
+      // boundary with a fresh pick, or it reaches the end of the track with nothing queued
+      on_aboutToFinish();
     }
-    emit stop();
-    emit unloadPlaylistView();
   }
 }

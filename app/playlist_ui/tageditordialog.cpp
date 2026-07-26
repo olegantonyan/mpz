@@ -87,9 +87,11 @@ TagEditorDialog::TagEditorDialog(const QVector<Track> &tracks,
 
   ui->lineEditYear->setValidator(new QIntValidator(0, 9999, this));
   ui->lineEditTrackNumber->setValidator(new QIntValidator(0, 9999, this));
+  ui->lineEditFilename->setReadOnly(true);
 
   populate_fields();
   update_header();
+  ui->lineEditArtist->setFocus();
 
   const bool navigable = _playlist && _tracks.size() == 1;
   ui->navContainer->setVisible(navigable);
@@ -160,11 +162,18 @@ void TagEditorDialog::populate_fields() {
 }
 
 void TagEditorDialog::update_header() {
-  if (_playlist && _tracks.size() == 1) {
+  const bool single = _tracks.size() == 1;
+  ui->lineEditFilename->setVisible(single);
+  if (single) {
+    ui->lineEditFilename->setText(_tracks.first().filename());
+    ui->lineEditFilename->setCursorPosition(0);
+  }
+
+  if (_playlist && single) {
     const int idx = _playlist->trackIndex(_tracks.first().uid());
     const int total = _playlist->tracks().size();
     if (idx >= 0) {
-      ui->labelHeader->setText(tr("Track %1 of %2 — %3").arg(idx + 1).arg(total).arg(_tracks.first().filename()));
+      ui->labelHeader->setText(tr("Track %1 of %2").arg(idx + 1).arg(total));
       return;
     }
   }

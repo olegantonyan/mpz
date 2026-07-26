@@ -17,6 +17,10 @@ namespace Playback {
     return has_pending && boundary_uid == playing_track_uid;
   }
 
+  Track PendingNext::peek() const {
+    return next_track;
+  }
+
   Track PendingNext::take() {
     Track t = next_track;
     clear();

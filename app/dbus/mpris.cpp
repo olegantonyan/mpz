@@ -45,7 +45,7 @@ namespace {
 }
 
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
-static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.mpz";
+static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.org.mpz_player.mpz";
 static const auto MPRIS_ENTRY = "org.mpris.MediaPlayer2.Player";
 static const auto FREEDESKTOP_PATH = "org.freedesktop.DBus.Properties";
 
