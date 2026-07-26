@@ -3,6 +3,8 @@
 #include "playlistsmodel.h"
 #include "playlist/loader.h"
 #include "dropdirs.h"
+#include "tracksmimedata.h"
+#include "icons.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -96,7 +98,7 @@ namespace PlaylistsUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
-      if (handleExternalDnd(event)) {
+      if (handleDnd(event)) {
         return true;
       }
       eventFilterViewport(event);
@@ -106,7 +108,7 @@ namespace PlaylistsUi {
     return QObject::eventFilter(obj, event);
   }
 
-  bool Controller::handleExternalDnd(QEvent *event) {
+  bool Controller::handleDnd(QEvent *event) {
     const auto type = event->type();
     if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
       return false;
@@ -115,48 +117,85 @@ namespace PlaylistsUi {
       return false;
     }
     auto *drop_event = static_cast<QDropEvent *>(event);
-    if (!drop_event->mimeData()->hasUrls()) {
+    const bool tracks = TracksMimeData::from(drop_event->mimeData()) != nullptr;
+    if (!tracks && !drop_event->mimeData()->hasUrls()) {
       return false;
     }
     if (type == QEvent::Drop) {
-      onExternalDrop(drop_event);
+      onDrop(drop_event);
     }
-    drop_event->acceptProposedAction();
+    if (tracks) {
+      drop_event->setDropAction(Qt::CopyAction);
+      drop_event->accept();
+    } else {
+      drop_event->acceptProposedAction();
+    }
     return true;
   }
 
-  void Controller::onExternalDrop(QDropEvent *event) {
-    const auto dirs = DropUtil::droppedDirs(event->mimeData());
-    if (dirs.isEmpty()) {
+  void Controller::onDrop(QDropEvent *event) {
+    const auto *tracks_mime = TracksMimeData::from(event->mimeData());
+    const auto dirs = tracks_mime != nullptr ? QList<QDir>() : DropUtil::droppedDirs(event->mimeData());
+    if (tracks_mime == nullptr && dirs.isEmpty()) {
       return;
     }
 
-    const QString libraryDir = DropUtil::commonParentDir(dirs);
     const auto index = view->indexAt(DropUtil::dropPosition(event));
-    if (!index.isValid()) {
-      on_createPlaylist(dirs, libraryDir);
-      return;
-    }
-
-    auto playlist = proxy->itemAt(index);
-    if (!playlist) {
-      return;
-    }
-
-    QMenu menu(view);
-    auto *create_action = menu.addAction(tr("Create new playlist"));
-    auto *append_action = menu.addAction(tr("Append to \"%1\"").arg(playlist->name()));
-    auto *chosen = menu.exec(view->viewport()->mapToGlobal(DropUtil::dropPosition(event)));
-
-    if (chosen == create_action) {
-      on_createPlaylist(dirs, libraryDir);
-    } else if (chosen == append_action) {
-      QStringList paths;
-      for (const auto &dir : std::as_const(dirs)) {
-        paths << dir.absolutePath();
+    std::shared_ptr<Playlist::Playlist> playlist;
+    if (index.isValid()) {
+      playlist = proxy->itemAt(index);
+      if (!playlist) {
+        return;
       }
-      on_importPlayistFiles(index, paths);
+      if (tracks_mime != nullptr && tracks_mime->sourcePlaylistUid() == playlist->uid()) { // appending tracks to their own playlist is a no-op
+        playlist = nullptr;
+      }
     }
+
+    if (playlist) {
+      QMenu menu(view);
+      auto *create_action = menu.addAction(Icons::get(Icons::Icon::NewPlaylist), tr("Create new playlist"));
+      auto *append_action = menu.addAction(Icons::get(Icons::Icon::AddToPlaylist), tr("Append to \"%1\"").arg(playlist->name()));
+      auto *move_action = tracks_mime != nullptr && tracks_mime->sourcePlaylistUid() != 0
+        ? menu.addAction(Icons::get(Icons::Icon::MoveToPlaylist), tr("Move to \"%1\"").arg(playlist->name()))
+        : nullptr;
+      auto *chosen = menu.exec(view->viewport()->mapToGlobal(DropUtil::dropPosition(event)));
+      if (chosen == nullptr) {
+        return;
+      }
+
+      if (chosen == append_action || chosen == move_action) {
+        if (tracks_mime != nullptr) {
+          proxy->activeModel()->appendTracksToPlaylist(playlist, tracks_mime->tracks());
+          on_playlistChanged(playlist);
+          if (chosen == move_action) {
+            emit removeTracksRequested(tracks_mime->sourcePlaylistUid(), tracks_mime->tracks());
+          }
+        } else {
+          QStringList paths;
+          for (const auto &dir : std::as_const(dirs)) {
+            paths << dir.absolutePath();
+          }
+          importFilesInto(index, paths);
+        }
+        return;
+      }
+      if (chosen != create_action) {
+        return;
+      }
+    }
+
+    if (tracks_mime != nullptr) {
+      bool ok = false;
+      const QString name = QInputDialog::getText(view, tr("Create new playlist"), "", QLineEdit::Normal, tracks_mime->suggestedName(), &ok, Qt::Widget);
+      if (!ok || name.isEmpty()) {
+        return;
+      }
+      on_createPlaylistFromTracks(tracks_mime->tracks(), name);
+      return;
+    }
+
+    on_createPlaylist(dirs, DropUtil::libraryRoot(event->mimeData(), dirs));
   }
 
   void Controller::eventFilterTableView(QEvent *event) {
@@ -235,8 +274,15 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_importPlayistFiles(const QModelIndex &index, const QStringList &filespaths) {
+    auto playlist = importFilesInto(index, filespaths);
+    if (playlist) {
+      emit selected(playlist);
+    }
+  }
+
+  std::shared_ptr<Playlist::Playlist> Controller::importFilesInto(const QModelIndex &index, const QStringList &filespaths) {
     if (proxy->activeModel()->listSize() <= 0 || !index.isValid()) {
-      return;
+      return nullptr;
     }
     auto playlist = proxy->itemAt(index);
 
@@ -245,7 +291,7 @@ namespace PlaylistsUi {
     for (const auto &it : std::as_const(filespaths)) {
       Playlist::Loader ldr(it);
       for (const auto &track : ldr.tracks()) {
-        const auto key = track.url().toString();
+        const auto key = track.url().toString() + QChar('@') + QString::number(track.begin());
         if (!keys.contains(key)) {
           tracks.append(track);
           keys << key;
@@ -254,6 +300,7 @@ namespace PlaylistsUi {
     }
     proxy->activeModel()->appendTracksToPlaylist(playlist, tracks);
     on_playlistChanged(playlist);
+    return playlist;
   }
 
   void Controller::on_start(const Track &t) {

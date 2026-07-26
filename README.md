@@ -82,11 +82,11 @@ Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https
 
 #### Windows
 
-Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Legacy Qt5 can probably run on earlier versions, only use it if you run old 32-bit OS below Windows 10.
+Grab the installer or portable binary from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Qt6 builds require Windows 10+. Legacy Qt5 can probably run on earlier versions, only use it if you run old 32-bit OS below Windows 10, this build has issues playing radio streams, lacks some features, and provided only as a fallback option for very old systems.
 
 * win-x86_64-qt6 - x86 64-bit build (recommended)
-* win-arm64-qt6 - native ARM 64-bit build
-* win-legacy-qt5 - legacy version for x86 32-bit systems (Windows below 10)
+* win-arm64-qt6 - native ARM 64-bit build (only ARM CPU)
+* win-legacy-qt5 - legacy version for x86 32-bit systems (only Windows below 10)
 
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
 
@@ -136,7 +136,7 @@ Some features require Qt6:
 
 This means win-legacy-qt5 won't have these. As well as old Linux distros.
 
-OmniPackage repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+, Debian 13+, Ubuntu 24.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
+OmniPackage repositories contain binaries with Qt6 for: openSUSE Tumbleweed & Leap 15.4+, Fedora 38+, Debian 12+, Ubuntu 22.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
 
 Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+.
 

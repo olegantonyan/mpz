@@ -39,6 +39,7 @@ namespace {
       case Icons::Icon::OpenFile:     return QStringLiteral(":/icons/ui/open-file.svg");
       case Icons::Icon::NewPlaylist:  return QStringLiteral(":/icons/ui/new-playlist.svg");
       case Icons::Icon::AddToPlaylist:return QStringLiteral(":/icons/ui/add-to-playlist.svg");
+      case Icons::Icon::MoveToPlaylist:return QStringLiteral(":/icons/ui/move-to-playlist.svg");
       case Icons::Icon::Spinner:      return QStringLiteral(":/icons/ui/spinner.svg");
       case Icons::Icon::Radio:        return QStringLiteral(":/icons/ui/radio.svg");
     }

@@ -1,6 +1,7 @@
 #include "playlistcontroller.h"
 #include "dropdirs.h"
 #include "streamrowdelegate.h"
+#include "tracksmimedata.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -72,7 +73,7 @@ namespace PlaylistUi {
     });
 
     context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
-    connect(context_menu, &PlaylistContextMenu::playlistChanged, this, &Controller::changed);
+    connect(context_menu, &PlaylistContextMenu::removeRequested, this, &Controller::removeSelectedTracks);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -188,6 +189,30 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks) {
+    auto model = proxy->activeModel();
+    if (model->playlist() == nullptr || model->playlist()->uid() != playlist_uid) {
+      return;
+    }
+    QList<quint64> wanted;
+    for (const auto &track : tracks) {
+      wanted << track.uid();
+    }
+    QList<QModelIndex> items;
+    for (int row = 0; row < model->tracksSize(); row++) {
+      const int at = wanted.indexOf(model->trackAt(row).uid());
+      if (at >= 0) {
+        wanted.removeAt(at);
+        items << model->buildIndex(row);
+      }
+    }
+    if (items.isEmpty()) {
+      return;
+    }
+    model->remove(items);
+    emit changed(model->playlist());
+  }
+
   void Controller::sortBy(const QString &criteria) {
     if (proxy->activeModel()->playlist() != nullptr) {
       proxy->activeModel()->sortBy(criteria);
@@ -217,7 +242,7 @@ namespace PlaylistUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
-      if (handleExternalDnd(event)) {
+      if (handleDnd(event)) {
         return true;
       }
       eventFilterViewport(event);
@@ -227,7 +252,14 @@ namespace PlaylistUi {
     return QObject::eventFilter(obj, event);
   }
 
-  bool Controller::handleExternalDnd(QEvent *event) {
+  const TracksMimeData *Controller::droppedTracks(QDropEvent *event) const {
+    if (event->source() == view) { // an internal reorder, not a cross-view drop
+      return nullptr;
+    }
+    return TracksMimeData::from(event->mimeData());
+  }
+
+  bool Controller::handleDnd(QEvent *event) {
     const auto type = event->type();
     if (type != QEvent::DragEnter && type != QEvent::DragMove && type != QEvent::Drop) {
       return false;
@@ -236,25 +268,36 @@ namespace PlaylistUi {
       return false;
     }
     auto *drop_event = static_cast<QDropEvent *>(event);
-    if (!drop_event->mimeData()->hasUrls()) {
+    const bool tracks = droppedTracks(drop_event) != nullptr;
+    if (!tracks && !drop_event->mimeData()->hasUrls()) {
       return false;
     }
     if (type == QEvent::Drop) {
-      onExternalDrop(drop_event);
+      onDrop(drop_event);
     }
-    drop_event->acceptProposedAction();
+    if (tracks) {
+      drop_event->setDropAction(Qt::CopyAction);
+      drop_event->accept();
+    } else {
+      drop_event->acceptProposedAction();
+    }
     return true;
   }
 
-  void Controller::onExternalDrop(QDropEvent *event) {
-    const auto dirs = DropUtil::droppedDirs(event->mimeData());
-    if (dirs.isEmpty()) {
+  void Controller::onDrop(QDropEvent *event) {
+    const auto *tracks_mime = droppedTracks(event);
+    const auto dirs = tracks_mime != nullptr ? QList<QDir>() : DropUtil::droppedDirs(event->mimeData());
+    if (tracks_mime == nullptr && dirs.isEmpty()) {
       return;
     }
 
     auto model = proxy->activeModel();
     if (model->playlist() == nullptr) {
-      emit createPlaylistRequested(dirs, DropUtil::commonParentDir(dirs));
+      if (tracks_mime != nullptr) {
+        emit createPlaylistFromTracksRequested(tracks_mime->tracks(), tracks_mime->suggestedName());
+      } else {
+        emit createPlaylistRequested(dirs, DropUtil::libraryRoot(event->mimeData(), dirs));
+      }
       return;
     }
 
@@ -269,6 +312,10 @@ namespace PlaylistUi {
       at_row = proxy->mapToSource(index).row() + (below ? 1 : 0);
     }
 
+    if (tracks_mime != nullptr) {
+      model->insertTracks(tracks_mime->tracks(), at_row);
+      return;
+    }
     model->insertTracksAsync(dirs, at_row);
     spinner->show();
   }
@@ -281,7 +328,7 @@ namespace PlaylistUi {
           || keyevent->key() == Qt::Key_Backspace
 #endif
          ) {
-        context_menu->on_remove();
+        removeSelectedTracks();
       } else if (keyevent->key() == Qt::Key_I && keyevent->modifiers().testFlag(Qt::ControlModifier)) {
         context_menu->on_trackInfo();
       }
@@ -344,8 +391,55 @@ namespace PlaylistUi {
     }
   }
 
+  void Controller::removeSelectedTracks() {
+    const auto rows = view->selectionModel()->selectedRows();
+    if (rows.isEmpty()) {
+      return;
+    }
+
+    QList<QModelIndex> source_rows;
+    int fallback_row = proxy->rowCount();
+    for (const auto &i : rows) {
+      source_rows << proxy->mapToSource(i);
+      fallback_row = qMin(fallback_row, i.row());
+    }
+    const quint64 cursor_uid = proxy->activeModel()->itemAt(proxy->mapToSource(view->currentIndex())).uid();
+
+    proxy->activeModel()->remove(source_rows);
+    emit changed(proxy->activeModel()->playlist());
+    restoreCursor(cursor_uid, fallback_row);
+  }
+
+  // removal rebuilds the model and drops the cursor; left invalid, Qt moves it to the first row on
+  // the next focus-in, which would hijack "playback follows cursor"
+  void Controller::restoreCursor(quint64 cursor_uid, int fallback_row) {
+    if (proxy->rowCount() == 0) {
+      return;
+    }
+
+    QModelIndex index = proxy->mapFromSource(proxy->activeModel()->indexOf(cursor_uid));
+    const bool cursor_survived = index.isValid();
+    if (!cursor_survived) {
+      index = proxy->index(qBound(0, fallback_row, proxy->rowCount() - 1), 0);
+      if (!index.isValid()) {
+        return;
+      }
+    }
+
+    restoring_cursor = true;
+    view->setCurrentIndex(index);
+    restoring_cursor = false;
+
+    if (!cursor_survived) {
+      emit cursorRestored(proxy->activeModel()->itemAt(proxy->mapToSource(index)));
+    }
+  }
+
   void Controller::on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev) {
     Q_UNUSED(prev)
+    if (restoring_cursor) {
+      return;
+    }
     auto source_index = proxy->mapToSource(index);
     if (index.isValid() && source_index.isValid() && source_index.row() < proxy->activeModel()->rowCount()) {
       emit selected(proxy->activeModel()->itemAt(source_index));

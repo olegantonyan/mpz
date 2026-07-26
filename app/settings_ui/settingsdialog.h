@@ -36,6 +36,9 @@ private:
 
   QCheckBox *check_tray_icon = nullptr;
   QCheckBox *check_minimize_to_tray = nullptr;
+#ifdef Q_OS_MACOS
+  QCheckBox *check_dock_icon_animation = nullptr;
+#endif
   QCheckBox *check_auto_update = nullptr;
   QCheckBox *check_row_height = nullptr;
   QSpinBox *spin_row_height = nullptr;
@@ -48,7 +51,6 @@ private:
   QListWidget *list_covers = nullptr;
 
   QCheckBox *check_single_instance = nullptr;
-  QSpinBox *spin_ipc_port = nullptr;
   QSpinBox *spin_playback_log_size = nullptr;
 #ifdef ENABLE_GAPLESS
   QCheckBox *check_gapless = nullptr;

@@ -1,0 +1,38 @@
+id: org.mpz_player.mpz
+runtime: org.kde.Platform
+runtime-version: '6.11'
+sdk: org.kde.Sdk
+command: mpz
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --socket=pulseaudio
+  - --share=network
+  - --talk-name=org.freedesktop.FileManager1
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --filesystem=host
+
+modules:
+  - name: mpz
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_UPDATE_CHECK=OFF
+      - -DENABLE_QHOTKEY=OFF
+    sources:
+      - type: dir
+        path: ..
+
+      # - type: git
+      #   url: https://github.com/olegantonyan/mpz.git
+      #   tag: '2.1.1'
+      #   commit: acb3fc3fdf76564c04d68948b97ff8c11c494db7
+      #   x-checker-data:
+      #     type: git
+      #     tag-pattern: '^([\d.]+)$'
+
+# flatpak-builder --user --install --force-clean build-flatpak flatpak/org.mpz_player.mpz.yml
+# flatpak run org.mpz_player.mpz

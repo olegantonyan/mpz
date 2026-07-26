@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QString>
 #include <QAbstractItemModel>
+#include <QMimeData>
 #include <QModelIndexList>
 #include <QSortFilterProxyModel>
 #include <QVector>
@@ -34,6 +35,10 @@ namespace DirectoryUi {
       QVector<Track> tracksAt(const QModelIndexList &indexes) const;
       QString displayName(const QModelIndex &index) const;
       bool isStation(const QModelIndex &index) const;
+
+      Qt::ItemFlags flags(const QModelIndex &index) const override;
+      QMimeData *mimeData(const QModelIndexList &indexes) const override;
+      Qt::DropActions supportedDragActions() const override;
 
       // Radio is a view state of the library tree, orthogonal to the app mode:
       // the underlying ModusOperandi stays LOCALFS while radio is shown.
@@ -61,6 +66,7 @@ namespace DirectoryUi {
 #endif
       Config::Global &global_conf;
       QString filter_term;
+      QString library_root;
       bool radio_active = false;
     };
   }

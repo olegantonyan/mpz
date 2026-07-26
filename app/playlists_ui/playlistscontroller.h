@@ -46,6 +46,7 @@ namespace PlaylistsUi {
     void removed();
     void doubleclicked(const std::shared_ptr<Playlist::Playlist> item);
     void asyncLoadFinished();
+    void removeTracksRequested(quint64 playlist_uid, const QVector<Track> &tracks);
 
   private slots:
     void on_itemActivated(const QModelIndex &index);
@@ -66,8 +67,9 @@ namespace PlaylistsUi {
 
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
-    bool handleExternalDnd(QEvent *event);
-    void onExternalDrop(QDropEvent *event);
+    bool handleDnd(QEvent *event);
+    void onDrop(QDropEvent *event);
+    std::shared_ptr<Playlist::Playlist> importFilesInto(const QModelIndex &index, const QStringList &filespaths);
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

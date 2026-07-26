@@ -109,6 +109,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(library, &DirectoryUi::Controller::createNewPlaylistFromTracks, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
   connect(library, &DirectoryUi::Controller::appendTracksToCurrentPlaylist, playlist, &PlaylistUi::Controller::on_appendTracks);
   connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
+  connect(playlist, &PlaylistUi::Controller::createPlaylistFromTracksRequested, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
+  connect(playlists, &PlaylistsUi::Controller::removeTracksRequested, playlist, &PlaylistUi::Controller::on_removeTracks);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
   connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);
@@ -138,6 +140,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupMacMenuBar();
   setupMacMediaControls();
   setupMacDockMenu();
+  setupMacDockIcon();
 #endif
 #ifdef SMTC_ENABLE
   setupWindowsMediaControls();
@@ -374,6 +377,13 @@ void MainWindow::setupMacMediaControls() {
 void MainWindow::setupMacDockMenu() {
   mac_dock = new MacDockMenu(player, this);
 }
+
+void MainWindow::setupMacDockIcon() {
+  mac_dock_icon = new MacDockIcon(global_conf, this);
+  connect(player, &Playback::Controller::started, mac_dock_icon, &MacDockIcon::start);
+  connect(player, &Playback::Controller::paused, mac_dock_icon, &MacDockIcon::pause);
+  connect(player, &Playback::Controller::stopped, mac_dock_icon, &MacDockIcon::stop);
+}
 #endif
 
 #ifdef SMTC_ENABLE
@@ -536,6 +546,11 @@ void MainWindow::setupPlaybackDispatch() {
 #ifdef ENABLE_MPD_SUPPORT
     mpd_order->onTrackSelected(track);
 #endif
+  });
+
+  connect(playlist, &PlaylistUi::Controller::cursorRestored, this, [=](const Track &track) {
+    dispatch->state().setSelected(track.uid());
+    dispatch->state().setFollowedCursor();
   });
 
   connect(player, &Playback::Controller::started, dispatch, &Playback::Dispatch::on_started);

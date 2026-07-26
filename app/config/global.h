@@ -45,14 +45,14 @@ namespace Config {
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
 
+    bool disableDockIconAnimation() const;
+    void saveDisableDockIconAnimation(bool arg);
+
     QList<SortingPreset> sortPresets() const;
     bool saveSortPresets(const QList<SortingPreset> &arg);
 
     QString language() const;
     void saveLanguage(const QString &arg);
-
-    int ipcPort() const;
-    bool saveIpcPort(int arg);
 
     bool singleInstance() const;
     void saveSingleInstance(bool arg);

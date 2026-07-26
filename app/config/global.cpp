@@ -115,6 +115,14 @@ namespace Config {
     storage.set("minimize_to_tray", Config::Value(arg));
   }
 
+  bool Global::disableDockIconAnimation() const {
+    return storage.get("disable_dock_icon_animation").get<bool>();
+  }
+
+  void Global::saveDisableDockIconAnimation(bool arg) {
+    storage.set("disable_dock_icon_animation", Config::Value(arg));
+  }
+
   QList<SortingPreset> Global::sortPresets() const {
     QList<SortingPreset> result;
 
@@ -152,14 +160,6 @@ namespace Config {
 
   void Global::saveLanguage(const QString &arg) {
     storage.set("language", Config::Value(arg));
-  }
-
-  int Global::ipcPort() const {
-    return storage.get("single_instance_ipc_port").get<int>();
-  }
-
-  bool Global::saveIpcPort(int arg) {
-    return storage.set("single_instance_ipc_port", Config::Value(arg));
   }
 
   bool Global::singleInstance() const {

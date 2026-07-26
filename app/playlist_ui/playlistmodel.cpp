@@ -1,6 +1,7 @@
 #include "playlistmodel.h"
 #include "playlist/loader.h"
 #include "icons.h"
+#include "tracksmimedata.h"
 
 #include <QDebug>
 #include <QFont>
@@ -11,6 +12,16 @@
 
 namespace {
   const QString playlistTracksMime = QStringLiteral("application/x-mpz-playlist-tracks");
+
+  QString commonAlbum(const QVector<Track> &tracks) {
+    const QString album = tracks.first().album();
+    for (const auto &i : tracks) {
+      if (i.album() != album) {
+        return QString();
+      }
+    }
+    return album;
+  }
 }
 
 namespace PlaylistUi {
@@ -240,6 +251,22 @@ namespace PlaylistUi {
     });
   }
 
+  void Model::insertTracks(const QVector<Track> &new_tracks, int atRow) {
+    auto pl = playlist();
+    if (!pl || new_tracks.isEmpty()) {
+      return;
+    }
+
+    auto merged = pl->tracks();
+    const int pos = qBound(0, atRow, static_cast<int>(merged.size()));
+    for (int i = 0; i < new_tracks.size(); i++) {
+      merged.insert(pos + i, new_tracks.at(i));
+    }
+    pl->load(merged);
+
+    emit appendToPlaylistAsyncFinished(pl);
+  }
+
   void Model::sortBy(const QString &criteria) {
     playlist()->sortBy(criteria);
     reload();
@@ -255,6 +282,10 @@ namespace PlaylistUi {
 
   Qt::DropActions Model::supportedDropActions() const {
     return Qt::MoveAction;
+  }
+
+  Qt::DropActions Model::supportedDragActions() const {
+    return Qt::CopyAction | Qt::MoveAction;
   }
 
   QStringList Model::mimeTypes() const {
@@ -274,7 +305,17 @@ namespace PlaylistUi {
     QList<int> rows = unique.values();
     std::sort(rows.begin(), rows.end());
 
-    auto *data = new QMimeData;
+    QVector<Track> selected;
+    selected.reserve(rows.size());
+    for (int r : rows) {
+      selected << tracks.at(r);
+    }
+    QString name = commonAlbum(selected);
+    if (name.isEmpty() && _playlist) {
+      name = _playlist->name();
+    }
+
+    auto *data = new TracksMimeData(selected, name, _playlist ? _playlist->uid() : 0);
     QByteArray bytes;
     QDataStream stream(&bytes, QIODevice::WriteOnly);
     stream << static_cast<qint32>(rows.size());

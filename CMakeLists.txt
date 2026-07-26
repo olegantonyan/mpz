@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.0 LANGUAGES CXX C)
+project(mpz VERSION 2.1.1 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -217,7 +217,7 @@ if (WIN32)
 endif()
 
 if (APPLE)
-  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp app/macos/macmenubar.cpp)
+  list(APPEND PROJECT_SOURCES app/macos/macmediacontrols.mm app/macos/macdockmenu.cpp app/macos/macdockicon.cpp app/macos/macmenubar.cpp)
   set_source_files_properties(app/macos/macmediacontrols.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 
@@ -527,17 +527,32 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 if(NOT APPLE AND NOT WIN32)
-  install(FILES mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+  install(FILES org.mpz_player.mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
+
+  set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION}")
+  if(PACKAGE_VERSION AND NOT PACKAGE_VERSION STREQUAL PROJECT_VERSION)
+    set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION} [${PACKAGE_VERSION}]")
+  endif()
+  string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/org.mpz_player.mpz.metainfo.xml.in
+    ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml
+    @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+    RENAME org.mpz_player.mpz.svg)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
   foreach(icon IN LISTS ICON_FILES)
     get_filename_component(size_dir "${icon}" DIRECTORY)
     get_filename_component(size_dir "${size_dir}" NAME)
     string(REGEX MATCH "^[0-9]+" icon_size "${size_dir}")
     if(icon_size LESS_EQUAL 48)
-      install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps)
+      install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps
+        RENAME org.mpz_player.mpz.png)
     endif()
   endforeach()
 endif()

@@ -1,4 +1,26 @@
-## [2.1.0] - next
+## [2.1.2] - next
+
+### Added
+
+- Drag folders, radio stations and tracks between the library, playlist and playlists panels
+- macOS: animated dock icon while playing, can be disabled in settings
+
+### Fixed
+
+- Playback follows cursor: removing the selected track no longer jumps to the first track or leaves playback silent
+- Linux: app icon shows again in PulseAudio/PipeWire volume mixers, broken by the .desktop rename in 2.1.1
+
+### Misc
+
+## [2.1.1] - 2026-07-24
+
+### Misc
+
+- Linux: AppStream metainfo added
+- Linux: mpz.desktop file rename to org.mpz_player.mpz.desktop - modern freedesktop's convention - may break pinned to favorites app, desktop link, etc, fix by re-pinning
+- Linux: experimental Flatpak
+
+## [2.1.0] - 2026-07-23
 
 ### Added
 

@@ -19,6 +19,7 @@
 #include <QHash>
 
 class QDropEvent;
+class TracksMimeData;
 
 namespace PlaylistUi {
   class Controller : public QObject {
@@ -29,9 +30,11 @@ namespace PlaylistUi {
   signals:
     void activated(const Track &track);
     void selected(const Track &track);
+    void cursorRestored(const Track &track);
     void changed(const std::shared_ptr<Playlist::Playlist> pl);
     void durationOfSelectedChanged(quint32 total_duration);
     void createPlaylistRequested(const QList<QDir> &filepaths, const QString &libraryDir);
+    void createPlaylistFromTracksRequested(const QVector<Track> &tracks, const QString &name);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist::Playlist> pi);
@@ -43,9 +46,11 @@ namespace PlaylistUi {
     void on_trackMetaChanged(const Track &t);
     void on_appendToPlaylist(const QList<QDir> &filepaths);
     void on_appendTracks(const QVector<Track> &tracks);
+    void on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks);
     void sortBy(const QString &criteria);
 
   private slots:
+    void removeSelectedTracks();
     void on_appendAsyncFinished(std::shared_ptr<Playlist::Playlist> pl);
     void on_search(const QString &term);
     void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
@@ -66,12 +71,15 @@ namespace PlaylistUi {
     PlaylistContextMenu *context_menu;
     ColumnsConfig columns_config;
     quint64 live_stream_uid = 0;
+    bool restoring_cursor = false;
 
     void updateStreamSpans();
+    void restoreCursor(quint64 cursor_uid, int fallback_row);
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
-    bool handleExternalDnd(QEvent *event);
-    void onExternalDrop(QDropEvent *event);
+    bool handleDnd(QEvent *event);
+    void onDrop(QDropEvent *event);
+    const TracksMimeData *droppedTracks(QDropEvent *event) const;
 
     void loadColumnsConfig();
 
