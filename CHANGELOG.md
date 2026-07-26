@@ -3,6 +3,7 @@
 ### Added
 
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
+- macOS: animated dock icon while playing, can be disabled in settings
 
 ### Fixed
 

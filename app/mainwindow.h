@@ -36,6 +36,7 @@
 #ifdef Q_OS_MACOS
   #include "macos/macmediacontrols.h"
   #include "macos/macdockmenu.h"
+  #include "macos/macdockicon.h"
   #include "macos/macmenubar.h"
 #endif
 
@@ -111,6 +112,7 @@ private:
 #ifdef Q_OS_MACOS
   MacMediaControls *mac_media = nullptr;
   MacDockMenu *mac_dock = nullptr;
+  MacDockIcon *mac_dock_icon = nullptr;
   MacMenuBar *mac_menubar = nullptr;
 #endif
 #ifdef SMTC_ENABLE
@@ -163,6 +165,7 @@ private:
   void setupMacMenuBar();
   void setupMacMediaControls();
   void setupMacDockMenu();
+  void setupMacDockIcon();
 #endif
 #ifdef SMTC_ENABLE
   void setupWindowsMediaControls();

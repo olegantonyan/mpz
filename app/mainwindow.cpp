@@ -140,6 +140,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupMacMenuBar();
   setupMacMediaControls();
   setupMacDockMenu();
+  setupMacDockIcon();
 #endif
 #ifdef SMTC_ENABLE
   setupWindowsMediaControls();
@@ -375,6 +376,13 @@ void MainWindow::setupMacMediaControls() {
 
 void MainWindow::setupMacDockMenu() {
   mac_dock = new MacDockMenu(player, this);
+}
+
+void MainWindow::setupMacDockIcon() {
+  mac_dock_icon = new MacDockIcon(global_conf, this);
+  connect(player, &Playback::Controller::started, mac_dock_icon, &MacDockIcon::start);
+  connect(player, &Playback::Controller::paused, mac_dock_icon, &MacDockIcon::pause);
+  connect(player, &Playback::Controller::stopped, mac_dock_icon, &MacDockIcon::stop);
 }
 #endif
 

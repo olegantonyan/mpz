@@ -45,6 +45,9 @@ namespace Config {
     bool minimizeToTray() const;
     void saveMinimizeToTray(bool arg);
 
+    bool disableDockIconAnimation() const;
+    void saveDisableDockIconAnimation(bool arg);
+
     QList<SortingPreset> sortPresets() const;
     bool saveSortPresets(const QList<SortingPreset> &arg);
 
