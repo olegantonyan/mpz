@@ -672,7 +672,7 @@ void MainWindow::setupCrashReporter() {
 #endif
 
 void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(this);
+  shortcuts = new Shortcuts(local_conf, this);
 
   connect(shortcuts, &Shortcuts::quit, this, &MainWindow::requestQuit);
   connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {

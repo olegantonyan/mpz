@@ -19,6 +19,7 @@
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QGroupBox>
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QInputDialog>
@@ -448,6 +449,31 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   si_row->addStretch();
   vbox->addLayout(si_row);
 
+#if defined(ENABLE_QHOTKEY) && !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
+  // Global media keys
+  const bool wayland = QGuiApplication::platformName() == "wayland";
+
+  auto *hotkeys_row = new QHBoxLayout;
+  check_global_hotkeys = new QCheckBox(tr("Grab global media keys"));
+  check_global_hotkeys->setChecked(!wayland && !local_conf.disableQhotkey());
+  check_global_hotkeys->setEnabled(!wayland);
+  hotkeys_row->addWidget(check_global_hotkeys);
+  auto *hotkeys_hint = new QLabel(tr("(requires restart)"));
+  hotkeys_hint->setStyleSheet("color: gray;");
+  hotkeys_row->addWidget(hotkeys_hint);
+  hotkeys_row->addStretch();
+  vbox->addLayout(hotkeys_row);
+
+  if (wayland) {
+    auto *hotkeys_note = new QLabel(tr(
+      "Wayland does not let applications grab global keys. Assign the media keys "
+      "in your desktop environment's keyboard settings instead - they reach mpz over MPRIS."));
+    hotkeys_note->setWordWrap(true);
+    hotkeys_note->setStyleSheet("color: #d35400;");
+    vbox->addWidget(hotkeys_note);
+  }
+#endif
+
   // Stream buffer size
   auto *buf_row = new QHBoxLayout;
   buf_row->addWidget(new QLabel(tr("Stream buffer size:")));
@@ -751,6 +777,12 @@ void SettingsDialog::apply() {
 
   // Advanced
   global_conf.saveSingleInstance(check_single_instance->isChecked());
+#if defined(ENABLE_QHOTKEY) && !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
+  // Disabled on wayland, where the checkbox reflects the platform, not the stored value.
+  if (check_global_hotkeys && check_global_hotkeys->isEnabled()) {
+    local_conf.saveDisableQhotkey(!check_global_hotkeys->isChecked());
+  }
+#endif
   global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
 #ifdef ENABLE_GAPLESS

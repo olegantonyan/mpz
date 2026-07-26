@@ -2,8 +2,9 @@
 
 #include <QGuiApplication>
 
-Shortcuts::Shortcuts(QWidget *parent) : QObject(parent)
+Shortcuts::Shortcuts(Config::Local &local_c, QWidget *parent) : QObject(parent)
   , _parent(parent)
+  , local_conf(local_c)
 #ifdef ENABLE_QHOTKEY
 #ifdef Q_OS_WIN
   , _playpause_global(parent)
@@ -111,6 +112,9 @@ void Shortcuts::setupGlobal() {
   if (QGuiApplication::platformName() == "wayland") {
     // wayland not supported and results in crash
     // https://github.com/olegantonyan/mpz/issues/129
+    return;
+  }
+  if (local_conf.disableQhotkey()) {
     return;
   }
   // Skip where the OS owns the media keys — macOS (MPRemoteCommandCenter) and the

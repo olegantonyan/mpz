@@ -163,6 +163,7 @@ The available config options are:
 - `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 - `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
+- `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all; on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
 

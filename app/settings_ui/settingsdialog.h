@@ -51,6 +51,9 @@ private:
   QListWidget *list_covers = nullptr;
 
   QCheckBox *check_single_instance = nullptr;
+#if defined(ENABLE_QHOTKEY) && !defined(Q_OS_MACOS) && !defined(SMTC_ENABLE)
+  QCheckBox *check_global_hotkeys = nullptr;
+#endif
   QSpinBox *spin_playback_log_size = nullptr;
 #ifdef ENABLE_GAPLESS
   QCheckBox *check_gapless = nullptr;

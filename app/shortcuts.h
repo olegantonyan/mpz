@@ -1,7 +1,7 @@
 #ifndef SHORTCUTS_H
 #define SHORTCUTS_H
 
-#include "config/global.h"
+#include "config/local.h"
 
 #ifdef ENABLE_QHOTKEY
 #include <qhotkey.h>
@@ -56,7 +56,7 @@ public:
     bool registerLocal;
   };
 
-  explicit Shortcuts(QWidget *parent);
+  explicit Shortcuts(Config::Local &local_c, QWidget *parent);
 
   QVector<QPair<QString, QString>> describe() const;
 
@@ -96,6 +96,7 @@ private:
   void emitFor(Action action);
 
   QWidget *_parent;
+  Config::Local &local_conf;
 
 #ifdef ENABLE_QHOTKEY
 #ifdef Q_OS_WIN

@@ -59,6 +59,14 @@ namespace Config {
     return storage.set("toolbar_movable", Config::Value(v));
   }
 
+  bool Local::disableQhotkey() const {
+    return storage.get("disable_qhotkey").get<bool>();
+  }
+
+  bool Local::saveDisableQhotkey(bool v) {
+    return storage.set("disable_qhotkey", Config::Value(v));
+  }
+
   QList<std::shared_ptr<Playlist::Playlist> > Local::playlists() const {
     auto raw = storage.get("playlists");
     if (raw.listType() != Config::Value::Map) {
