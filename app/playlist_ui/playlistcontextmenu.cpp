@@ -16,7 +16,7 @@ namespace PlaylistUi {
     Q_ASSERT(search);
 
     remove.setText(tr("Remove"));
-    connect(&remove, &QAction::triggered, this, &PlaylistContextMenu::on_remove);
+    connect(&remove, &QAction::triggered, this, &PlaylistContextMenu::removeRequested);
     remove.setIcon(Icons::get(Icons::Icon::Trash));
 
     show_in_filemanager.setText(tr("Show in file manager"));
@@ -70,15 +70,6 @@ namespace PlaylistUi {
     menu.addSeparator();
     menu.addAction(&remove);
     menu.exec(view->viewport()->mapToGlobal(pos));
-  }
-
-  void PlaylistContextMenu::on_remove() {
-    QList <QModelIndex> lst;
-    for (const auto &i : view->selectionModel()->selectedRows()) {
-      lst << proxy->mapToSource(i);
-    }
-    proxy->activeModel()->remove(lst);
-    emit playlistChanged(proxy->activeModel()->playlist());
   }
 
   void PlaylistContextMenu::on_clearFilter() {

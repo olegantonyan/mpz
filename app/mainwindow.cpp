@@ -540,6 +540,11 @@ void MainWindow::setupPlaybackDispatch() {
 #endif
   });
 
+  connect(playlist, &PlaylistUi::Controller::cursorRestored, this, [=](const Track &track) {
+    dispatch->state().setSelected(track.uid());
+    dispatch->state().setFollowedCursor();
+  });
+
   connect(player, &Playback::Controller::started, dispatch, &Playback::Dispatch::on_started);
   connect(player, &Playback::Controller::stopped, dispatch, &Playback::Dispatch::on_stopped);
   connect(playlist, &PlaylistUi::Controller::changed, dispatch, &Playback::Dispatch::on_playlistContentChanged);

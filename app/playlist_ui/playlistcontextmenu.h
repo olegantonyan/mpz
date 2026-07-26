@@ -21,11 +21,10 @@ namespace PlaylistUi {
 
   public slots:
     void show(const QPoint &pos);
-    void on_remove();
     void on_trackInfo();
 
   signals:
-    void playlistChanged(const std::shared_ptr<Playlist::Playlist> pl);
+    void removeRequested();
     void tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private:
