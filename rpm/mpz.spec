@@ -6,11 +6,11 @@ License:    GPL-3.0-or-later
 URL:        https://github.com/olegantonyan/mpz
 Source0:    %{name}-%{version}.tar.gz
 
-%bcond_with qt6
-%if %{with qt6}
-BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel qt6-svg-devel
-%else
+%bcond_with qt5
+%if %{with qt5}
 BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libqt5-qtx11extras-devel libqt5-qtsvg-devel
+%else
+BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel qt6-svg-devel
 %endif
 
 
@@ -25,10 +25,10 @@ Similar to "album list" in Foobar2000.
 
 
 %build
-%if %{with qt6}
-cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{_prefix}
-%else
+%if %{with qt5}
 cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{_prefix} -DUSE_QT5=ON
+%else
+cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %endif
 cmake --build _build %{?_smp_mflags}
 
