@@ -5,8 +5,10 @@
         <file alias="icons/ui/stop.svg">../../../../3rdparty/icons-1.13.1/icons/stop-fill.svg</file>
         <file alias="icons/ui/next.svg">../../../../3rdparty/icons-1.13.1/icons/skip-end-fill.svg</file>
         <file alias="icons/ui/prev.svg">../../../../3rdparty/icons-1.13.1/icons/skip-start-fill.svg</file>
-        <file alias="icons/ui/volume.svg">../../../../3rdparty/icons-1.13.1/icons/volume-up.svg</file>
         <file alias="icons/ui/volume-muted.svg">../../../../3rdparty/icons-1.13.1/icons/volume-mute.svg</file>
+        <file alias="icons/ui/volume-low.svg">../../../../3rdparty/icons-1.13.1/icons/volume-off.svg</file>
+        <file alias="icons/ui/volume-medium.svg">../../../../3rdparty/icons-1.13.1/icons/volume-down.svg</file>
+        <file alias="icons/ui/volume-high.svg">../../../../3rdparty/icons-1.13.1/icons/volume-up.svg</file>
         <file alias="icons/ui/headphones.svg">../../../../3rdparty/icons-1.13.1/icons/headphones.svg</file>
         <file alias="icons/ui/settings.svg">../../../../3rdparty/icons-1.13.1/icons/gear.svg</file>
         <file alias="icons/ui/menu.svg">../../../../3rdparty/icons-1.13.1/icons/list.svg</file>

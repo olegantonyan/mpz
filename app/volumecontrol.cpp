@@ -5,6 +5,15 @@
 #include <QWheelEvent>
 #include <QStyle>
 
+namespace {
+  Icons::Icon iconForVolume(int value) {
+    if (value == 0)  return Icons::Icon::VolumeMuted;
+    if (value <= 33) return Icons::Icon::VolumeLow;
+    if (value <= 66) return Icons::Icon::VolumeMedium;
+    return Icons::Icon::VolumeHigh;
+  }
+}
+
 VolumeControl::VolumeControl(QToolButton *btn, int initial_value, QObject *parent) : QObject(parent), button(btn), menu(this) {
   connect(&menu, &PrivateVolumeControl::Menu::changed, this, &VolumeControl::changed);
   connect(button, &QToolButton::clicked, this, &VolumeControl::on_buttonClicked);
@@ -16,11 +25,7 @@ void VolumeControl::setValue(int value) {
   value = qBound(0, value, 100);
   menu.setValue(value);
   button->setText(QString("%1%").arg(value));
-  if (value == 0) {
-    button->setIcon(Icons::get(Icons::Icon::VolumeMuted));
-  } else {
-    button->setIcon(Icons::get(Icons::Icon::Volume));
-  }
+  button->setIcon(Icons::get(iconForVolume(value)));
 }
 
 void VolumeControl::on_buttonClicked() {

@@ -19,8 +19,10 @@ namespace {
       case Icons::Icon::Stop:         return QStringLiteral(":/icons/ui/stop.svg");
       case Icons::Icon::Next:         return QStringLiteral(":/icons/ui/next.svg");
       case Icons::Icon::Prev:         return QStringLiteral(":/icons/ui/prev.svg");
-      case Icons::Icon::Volume:       return QStringLiteral(":/icons/ui/volume.svg");
       case Icons::Icon::VolumeMuted:  return QStringLiteral(":/icons/ui/volume-muted.svg");
+      case Icons::Icon::VolumeLow:    return QStringLiteral(":/icons/ui/volume-low.svg");
+      case Icons::Icon::VolumeMedium: return QStringLiteral(":/icons/ui/volume-medium.svg");
+      case Icons::Icon::VolumeHigh:   return QStringLiteral(":/icons/ui/volume-high.svg");
       case Icons::Icon::Headphones:   return QStringLiteral(":/icons/ui/headphones.svg");
       case Icons::Icon::Settings:     return QStringLiteral(":/icons/ui/settings.svg");
       case Icons::Icon::Menu:         return QStringLiteral(":/icons/ui/menu.svg");
