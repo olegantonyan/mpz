@@ -9,6 +9,11 @@ on:
       - CODE_OF_CONDUCT.md
       - license.txt
       - run.sh
+      - 'rpm/**'
+      - 'deb/**'
+      - 'win/**'
+      - 'tests/**'
+      - 'flatpak/**'
   workflow_dispatch:
     inputs:
       release_tag:
