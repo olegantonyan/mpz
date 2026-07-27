@@ -2,11 +2,11 @@ Source: mpz
 Section: sound
 Priority: optional
 Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), build-essential, cmake, qtbase5-dev-tools, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev, libqt5svg5-dev
+Build-Depends: debhelper (>= 10), build-essential, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev, libqt6svg6-dev, libgl-dev
 Standards-Version: 3.9.4
 Homepage: https://github.com/olegantonyan/mpz
 
 Package: mpz
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5multimedia5-plugins
+Depends: ${shlibs:Depends}, ${misc:Depends}, hicolor-icon-theme
 Description: Music player for big local collections. Treats your folders with music as a library. Features 3-column UI: directory tree viewer, playlists list and tracks from current playlist. Similar to "album list" in Foobar2000.

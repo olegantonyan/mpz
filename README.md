@@ -60,7 +60,7 @@ Arch and Manjaro are x86_64 only.
 
 The previous [Open Build Service repositories](https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz) still exist and existing installations will keep working, but existing users are also encouraged to switch — future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).
 
-Note: on Debian-based distros (Debian, Ubuntu) the OBS builds were always built against Qt5, even on releases that ship a recent enough Qt6 — making OBS produce working `.deb` packages with Qt6 turned out to be very painful. The omnipackage builds use Qt6 where the distro supports it.
+Note: the OBS `.deb` builds are now Qt6-only. OBS has no per-distro configuration for Debian packaging, so releases without Qt6 (Debian 11 and older, Ubuntu 21.10 and older) no longer build there.
 
 </details>
 
@@ -138,7 +138,7 @@ This means win-legacy-qt5 won't have these. As well as old Linux distros.
 
 OmniPackage repositories contain binaries with Qt6 for: openSUSE Tumbleweed & Leap 15.4+, Fedora 38+, Debian 12+, Ubuntu 22.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
 
-Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+.
+Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+, Debian 12+, Ubuntu 22.04+.
 
 AppImage, macOS DMG, win-x86_64, win-arm64 are all built with Qt6.
 
