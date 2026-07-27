@@ -9,6 +9,12 @@ on:
       - CODE_OF_CONDUCT.md
       - license.txt
       - run.sh
+      - 'rpm/**'
+      - 'deb/**'
+      - 'win/**'
+      - 'mac/**'
+      - 'flatpak/**'
+      - '.omnipackage/**'
   pull_request:
     paths-ignore:
       - README.md
@@ -16,6 +22,12 @@ on:
       - CODE_OF_CONDUCT.md
       - license.txt
       - run.sh
+      - 'rpm/**'
+      - 'deb/**'
+      - 'win/**'
+      - 'mac/**'
+      - 'flatpak/**'
+      - '.omnipackage/**'
   workflow_dispatch:
 
 jobs:
