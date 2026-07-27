@@ -1,10 +1,9 @@
-%global __brp_check_rpaths %{nil}
 Name:       mpz
 Version:    2.1.1
 Release:    1%{?dist}
 Summary:    Music player for the large local collections
 License:    GPL-3.0-or-later
-URL:        https://github.com/olegantonyan/%{name}
+URL:        https://github.com/olegantonyan/mpz
 Source0:    %{name}-%{version}.tar.gz
 
 %bcond_with qt6
@@ -26,19 +25,16 @@ Similar to "album list" in Foobar2000.
 
 
 %build
-mkdir build
-cd build
 %if %{with qt6}
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %else
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr -DUSE_QT5=ON ..
+cmake -S . -B _build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%{_prefix} -DUSE_QT5=ON
 %endif
-make %{?_smp_mflags}
+cmake --build _build %{?_smp_mflags}
 
 
 %install
-cd build
-make install
+DESTDIR=%{buildroot} cmake --install _build
 
 
 %files
@@ -47,27 +43,7 @@ make install
 %{_datadir}/applications/org.mpz_player.mpz.desktop
 %{_datadir}/metainfo/org.mpz_player.mpz.metainfo.xml
 %{_datadir}/icons/hicolor/scalable/apps/org.mpz_player.mpz.svg
-%{_datadir}/icons/hicolor/48x48/apps/org.mpz_player.mpz.png
-%{_datadir}/icons/hicolor/32x32/apps/org.mpz_player.mpz.png
-%{_datadir}/icons/hicolor/24x24/apps/org.mpz_player.mpz.png
-%{_datadir}/icons/hicolor/22x22/apps/org.mpz_player.mpz.png
-%{_datadir}/icons/hicolor/16x16/apps/org.mpz_player.mpz.png
-
-%dir %{_datadir}/applications/
-%dir %{_datadir}/metainfo/
-%dir %{_datadir}/icons/hicolor/
-%dir %{_datadir}/icons/hicolor/scalable
-%dir %{_datadir}/icons/hicolor/scalable/apps/
-%dir %{_datadir}/icons/hicolor/48x48
-%dir %{_datadir}/icons/hicolor/48x48/apps/
-%dir %{_datadir}/icons/hicolor/32x32
-%dir %{_datadir}/icons/hicolor/32x32/apps/
-%dir %{_datadir}/icons/hicolor/24x24
-%dir %{_datadir}/icons/hicolor/24x24/apps/
-%dir %{_datadir}/icons/hicolor/22x22
-%dir %{_datadir}/icons/hicolor/22x22/apps/
-%dir %{_datadir}/icons/hicolor/16x16
-%dir %{_datadir}/icons/hicolor/16x16/apps/
+%{_datadir}/icons/hicolor/*/apps/org.mpz_player.mpz.png
 
 
 %changelog
