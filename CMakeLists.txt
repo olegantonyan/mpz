@@ -236,6 +236,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES
     app/audio_device_ui/devicesmenu.cpp
+    app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp)
 
   if (ENABLE_GAPLESS)
@@ -362,7 +363,7 @@ if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib ${TagLib_VERSION}")
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
 else()
-  set(TAGLIB_DIR 3rdparty/taglib-2.3)
+  set(TAGLIB_DIR 3rdparty/taglib-2.3.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
 

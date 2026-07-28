@@ -178,6 +178,7 @@ namespace PlaylistsUi {
           }
           importFilesInto(index, paths);
         }
+        emit tracksAppended(playlist);
         return;
       }
       if (chosen != create_action) {

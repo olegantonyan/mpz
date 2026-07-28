@@ -6,4 +6,4 @@ Maintainer: Oleg Antonyan  <oleg.b.antonyan@gmail.com>
 Architecture: amd64
 Homepage: https://github.com/olegantonyan/mpz
 Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 8.0.0), build-essential, cmake, qt5-qmake, qtbase5-dev-tools, qtchooser, qtbase5-dev, qtmultimedia5-dev, libqt5x11extras5-dev, libqt5svg5-dev
+Build-Depends: debhelper (>= 10), build-essential, cmake, qt6-tools-dev, qt6-base-dev, qt6-multimedia-dev, libqt6svg6-dev, libgl-dev

@@ -29,6 +29,9 @@ namespace Config {
     bool toolbarMovable() const;
     bool saveToolbarMovable(bool v);
 
+    bool disableQhotkey() const;
+    bool saveDisableQhotkey(bool v);
+
     QList<std::shared_ptr<Playlist::Playlist>> playlists() const;
     bool savePlaylists(QList<std::shared_ptr<Playlist::Playlist>> &list);
 

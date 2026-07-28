@@ -111,6 +111,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   connect(playlist, &PlaylistUi::Controller::createPlaylistRequested, playlists, &PlaylistsUi::Controller::on_createPlaylist);
   connect(playlist, &PlaylistUi::Controller::createPlaylistFromTracksRequested, playlists, &PlaylistsUi::Controller::on_createPlaylistFromTracks);
   connect(playlists, &PlaylistsUi::Controller::removeTracksRequested, playlist, &PlaylistUi::Controller::on_removeTracks);
+  connect(playlists, &PlaylistsUi::Controller::tracksAppended, playlist, &PlaylistUi::Controller::on_tracksAppended);
   connect(playlists, &PlaylistsUi::Controller::selected, playlist, &PlaylistUi::Controller::on_load);
   connect(playlists, &PlaylistsUi::Controller::emptied, playlist, &PlaylistUi::Controller::on_unload);
   connect(playlist, &PlaylistUi::Controller::activated, player, &Playback::Controller::play);
@@ -671,7 +672,7 @@ void MainWindow::setupCrashReporter() {
 #endif
 
 void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(this);
+  shortcuts = new Shortcuts(local_conf, this);
 
   connect(shortcuts, &Shortcuts::quit, this, &MainWindow::requestQuit);
   connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {
@@ -800,21 +801,14 @@ void MainWindow::setupSleepLock() {
 
 void MainWindow::setupOutputDevice() {
 #ifdef ENABLE_DEVICES_MENU
-  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
-    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
-    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
-    int menu_width = device_menu.sizeHint().width();
-    int x = ui->toolButtonOutputDevice->width() - menu_width;
-    int y = ui->toolButtonOutputDevice->height();
-    QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
-    device_menu.exec(pos);
-  });
+  output_device_button = new AudioDeviceUi::OutputDeviceButton(ui->toolButtonOutputDevice, local_conf);
+
+  connect(output_device_button, &AudioDeviceUi::OutputDeviceButton::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+  connect(player, &Playback::Controller::outputDeviceChanged, output_device_button, &AudioDeviceUi::OutputDeviceButton::refresh);
   connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
   });
   ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
-  ui->toolButtonOutputDevice->setIcon(Icons::get(Icons::Icon::Headphones));
-  ui->toolButtonOutputDevice->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif

@@ -8,7 +8,7 @@
 namespace Icons {
   enum class Icon {
     Play, Pause, Stop, Next, Prev,
-    Volume, VolumeMuted, Headphones, Settings, Menu, Sort,
+    VolumeMuted, VolumeLow, VolumeMedium, VolumeHigh, Headphones, Settings, Menu, Sort,
     Trash, Folder, FolderReveal, Reload, Save, Info, Details, Help, Cancel,
     Copy, Edit, OpenFile, NewPlaylist, AddToPlaylist, MoveToPlaylist, Spinner,
     Radio
