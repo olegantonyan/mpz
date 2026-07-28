@@ -34,6 +34,7 @@ DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &mo
   ui->sandboxNoticeLabel->setTextFormat(Qt::RichText);
   ui->sandboxNoticeLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->sandboxNoticeLabel->setOpenExternalLinks(true);
+  ui->sandboxNoticeLabel->setStyleSheet("color: #d35400;");
   ui->sandboxNoticeLabel->setText(sandboxNoticeText());
 
   model.setStringList(paths);
