@@ -20,10 +20,15 @@ namespace AudioDeviceUi {
   public slots:
     void refresh();
 
+  protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
   private slots:
     void on_buttonClicked();
 
   private:
+    void updateSize();
+
     QToolButton *button;
     Config::Local &local_conf;
     int text_width = 0;
