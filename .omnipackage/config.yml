@@ -295,3 +295,4 @@ ignore_source_files:
   - .DS_Store
   - "*.log"
   - /build
+  - /.flatpak-builder
