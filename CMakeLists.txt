@@ -137,6 +137,7 @@ set(PROJECT_SOURCES
   app/sort_ui/sortmenu.cpp
   app/statusbarlabel.cpp
   app/sysinfo.cpp
+  app/sandboxnotice.cpp
   app/track.cpp
   app/reveal_in_filemanager.cpp
   app/trayicon.cpp

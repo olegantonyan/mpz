@@ -1,6 +1,7 @@
 #include "about_ui/aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "sysinfo.h"
+#include "sandboxnotice.h"
 #include "feedback_ui/feedbackform.h"
 
 #include "about_ui/area51dialog.h"
@@ -74,6 +75,12 @@ AboutDialog::AboutDialog(Config::Global &global_c, Config::Local &local_c, QWidg
   os << libraryInfo("cpptrace", "https://github.com/jeremy-rifkin/cpptrace");
 #endif
   ui->opensourceLabel->setText(os.join(" &middot; "));
+
+  ui->sandboxLabel->setVisible(SysInfo::sandboxed());
+  ui->sandboxLabel->setTextFormat(Qt::RichText);
+  ui->sandboxLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  ui->sandboxLabel->setOpenExternalLinks(true);
+  ui->sandboxLabel->setText(sandboxNoticeText());
 
   ui->sysinfo->setText(SysInfo::get().join("<br />"));
 }

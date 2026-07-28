@@ -2,6 +2,7 @@
 
 #include <QSysInfo>
 #include <QApplication>
+#include <QFile>
 
 QStringList SysInfo::get() {
   QStringList si;
@@ -13,5 +14,12 @@ QStringList SysInfo::get() {
   si << "Kernel type: " + QSysInfo::kernelType();
   si << "Kernel version: " + QSysInfo::kernelVersion();
   si << "Product name: " + QSysInfo::prettyProductName();
+  if (sandboxed()) {
+    si << "Sandbox: flatpak";
+  }
   return si;
+}
+
+bool SysInfo::sandboxed() {
+  return QFile::exists("/.flatpak-info") || qEnvironmentVariableIsSet("FLATPAK_ID");
 }

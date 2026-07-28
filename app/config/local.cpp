@@ -67,6 +67,14 @@ namespace Config {
     return storage.set("disable_qhotkey", Config::Value(v));
   }
 
+  bool Local::sandboxNoticeDismissed() const {
+    return storage.get("sandbox_notice_dismissed").get<bool>();
+  }
+
+  bool Local::saveSandboxNoticeDismissed(bool v) {
+    return storage.set("sandbox_notice_dismissed", Config::Value(v));
+  }
+
   QList<std::shared_ptr<Playlist::Playlist> > Local::playlists() const {
     auto raw = storage.get("playlists");
     if (raw.listType() != Config::Value::Map) {
