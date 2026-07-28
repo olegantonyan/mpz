@@ -360,7 +360,7 @@ if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib ${TagLib_VERSION}")
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
 else()
-  set(TAGLIB_DIR 3rdparty/taglib-2.3)
+  set(TAGLIB_DIR 3rdparty/taglib-2.3.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
 

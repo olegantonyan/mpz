@@ -14,6 +14,8 @@
 
 ### Misc
 
+- update vendored TagLib to 2.3.1
+
 ## [2.1.1] - 2026-07-24
 
 ### Misc
