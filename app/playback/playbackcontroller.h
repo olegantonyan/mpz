@@ -59,6 +59,9 @@ namespace Playback {
 #ifdef ENABLE_GAPLESS
     void effectiveOutputDeviceChanged(const QByteArray &device_id);
 #endif
+#ifdef ENABLE_DEVICES_MENU
+    void outputDeviceChanged(const QByteArray &device_id);
+#endif
 
   public slots:
     void play(const Track &track);
@@ -69,7 +72,7 @@ namespace Playback {
 #ifdef ENABLE_GAPLESS
     void setEqualizer(const Eq::EqProfile &profile, bool enabled);
 #endif
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#ifdef ENABLE_DEVICES_MENU
     void setOutputDevice(QByteArray deviceid);
 #endif
     void setCurrentTrack(const Track &track);

@@ -801,21 +801,14 @@ void MainWindow::setupSleepLock() {
 
 void MainWindow::setupOutputDevice() {
 #ifdef ENABLE_DEVICES_MENU
-  connect(ui->toolButtonOutputDevice, &QToolButton::clicked, this, [=]() {
-    AudioDeviceUi::DevicesMenu device_menu(this, local_conf);
-    connect(&device_menu, &AudioDeviceUi::DevicesMenu::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
-    int menu_width = device_menu.sizeHint().width();
-    int x = ui->toolButtonOutputDevice->width() - menu_width;
-    int y = ui->toolButtonOutputDevice->height();
-    QPoint pos(ui->toolButtonOutputDevice->mapToGlobal(QPoint(x, y)));
-    device_menu.exec(pos);
-  });
+  output_device_button = new AudioDeviceUi::OutputDeviceButton(ui->toolButtonOutputDevice, local_conf);
+
+  connect(output_device_button, &AudioDeviceUi::OutputDeviceButton::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
+  connect(player, &Playback::Controller::outputDeviceChanged, output_device_button, &AudioDeviceUi::OutputDeviceButton::refresh);
   connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
   });
   ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
-  ui->toolButtonOutputDevice->setIcon(Icons::get(Icons::Icon::Headphones));
-  ui->toolButtonOutputDevice->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif
