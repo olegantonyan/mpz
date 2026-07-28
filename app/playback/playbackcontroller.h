@@ -68,6 +68,8 @@ namespace Playback {
     void seek(int seconds);
 #ifdef ENABLE_GAPLESS
     void setEqualizer(const Eq::EqProfile &profile, bool enabled);
+    void setReplayGainResolver(ReplayGainResolver fn);
+    void refreshReplayGain();
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     void setOutputDevice(QByteArray deviceid);

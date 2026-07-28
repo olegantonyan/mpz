@@ -87,6 +87,21 @@ namespace Config {
     QString libraryFilterScope() const;
     void saveLibraryFilterScope(const QString &arg);
 
+    QString replayGainMode() const;
+    void saveReplayGainMode(const QString &arg);
+
+    QString replayGainStorage() const;
+    void saveReplayGainStorage(const QString &arg);
+
+    double replayGainPreampDb() const;
+    void saveReplayGainPreampDb(double arg);
+
+    double replayGainFallbackDb() const;
+    void saveReplayGainFallbackDb(double arg);
+
+    bool replayGainAllowClipping() const;
+    void saveReplayGainAllowClipping(bool arg);
+
   private:
     QStringList providersUnder(const QString &key) const;
     bool saveProvidersUnder(const QString &key, const QStringList &arg);

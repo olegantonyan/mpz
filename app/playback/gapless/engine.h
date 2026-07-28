@@ -18,6 +18,8 @@
 #include <QMediaDevices>
 #include <QObject>
 #include <QTimer>
+
+#include <functional>
 #include <QUrl>
 
 QT_BEGIN_NAMESPACE
@@ -38,6 +40,9 @@ namespace Playback::Gapless {
     // The device selection actually in effect: the configured id while that device
     // is plugged in, empty (= system default) whenever it is not.
     QByteArray effectiveOutputDeviceId() const { return effective_device_id; }
+
+    void setReplayGainResolver(std::function<double(const Track &)> fn);
+    void refreshReplayGain();
 
   public slots:
     void setTrack(const Track &t);
@@ -89,6 +94,7 @@ namespace Playback::Gapless {
     void sinkEnsureStarted();
     void feedSink();
     void applyEq(char *data, qint64 frames);
+    double resolveReplayGain(const Track &t) const;
 
     void onPumpTick();
     void emitPosition();
@@ -148,6 +154,7 @@ namespace Playback::Gapless {
     qint64 prepared_total_frames = 0;
     int volume_pct = 100;
     Eq::Equalizer eq;
+    std::function<double(const Track &)> rg_resolver;
     qint64 last_filtered_frame = -1; // abs frame the EQ state is contiguous with; mismatch => reset on seek
     QByteArray output_device_id;
     QByteArray effective_device_id;

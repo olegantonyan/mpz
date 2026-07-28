@@ -27,6 +27,9 @@ namespace PlaylistUi {
   public:
     explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
 
+    QVector<Track> currentTracks() const;
+    QVector<Track> selectedTracks() const;
+
   signals:
     void activated(const Track &track);
     void selected(const Track &track);

@@ -18,10 +18,14 @@ namespace Eq {
     void setBands(const std::vector<Band> &bands);
     void setSampleRate(int fs);
 
+    void setExtraGainDb(double db);
+    double extraGainDb() const { return extra_gain_db_; }
+
     bool enabled() const { return enabled_; }
     double effectivePreampDb() const;
     double autoPreampDb() const;
     bool isIdentity() const;
+    bool isPassthrough() const;
     double magnitudeResponseDb(double freq_hz) const;
 
     void processFloat(float *interleaved, std::size_t frames, int channels);
@@ -45,6 +49,8 @@ namespace Eq {
     std::vector<std::vector<Biquad>> channel_state_;
     int channel_count_ = 0;
     double preamp_lin_ = 1.0;
+    double extra_gain_db_ = 0.0;
+    double extra_gain_lin_ = 1.0;
 
     uint32_t rng_ = 0x9e3779b9u;
   };

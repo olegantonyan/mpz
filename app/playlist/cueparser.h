@@ -34,6 +34,8 @@ namespace Playlist {
       QString title;
       QString artist;
       QString composer;
+      QString rg_gain;
+      QString rg_peak;
     };
 
     QString path_;

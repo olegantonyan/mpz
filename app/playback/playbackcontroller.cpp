@@ -216,6 +216,14 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   void Controller::setEqualizer(const Eq::EqProfile &profile, bool enabled) {
     player().setEqualizer(profile, enabled);
   }
+
+  void Controller::setReplayGainResolver(ReplayGainResolver fn) {
+    player().setReplayGainResolver(std::move(fn));
+  }
+
+  void Controller::refreshReplayGain() {
+    player().refreshReplayGain();
+  }
 #endif
 
   void Controller::on_seek(int position) {

@@ -296,4 +296,44 @@ namespace Config {
     storage.set("library_filter_scope", Config::Value(arg));
   }
 
+  QString Global::replayGainMode() const {
+    return storage.get("replay_gain_mode").get<QString>();
+  }
+
+  void Global::saveReplayGainMode(const QString &arg) {
+    storage.set("replay_gain_mode", Config::Value(arg));
+  }
+
+  QString Global::replayGainStorage() const {
+    return storage.get("replay_gain_storage").get<QString>();
+  }
+
+  void Global::saveReplayGainStorage(const QString &arg) {
+    storage.set("replay_gain_storage", Config::Value(arg));
+  }
+
+  double Global::replayGainPreampDb() const {
+    return storage.get("replay_gain_preamp_db").get<QString>().toDouble();
+  }
+
+  void Global::saveReplayGainPreampDb(double arg) {
+    storage.set("replay_gain_preamp_db", Config::Value(QString::number(arg, 'g', 10)));
+  }
+
+  double Global::replayGainFallbackDb() const {
+    return storage.get("replay_gain_fallback_db").get<QString>().toDouble();
+  }
+
+  void Global::saveReplayGainFallbackDb(double arg) {
+    storage.set("replay_gain_fallback_db", Config::Value(QString::number(arg, 'g', 10)));
+  }
+
+  bool Global::replayGainAllowClipping() const {
+    return storage.get("replay_gain_allow_clipping").get<bool>();
+  }
+
+  void Global::saveReplayGainAllowClipping(bool arg) {
+    storage.set("replay_gain_allow_clipping", Config::Value(arg));
+  }
+
 }

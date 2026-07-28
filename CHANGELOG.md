@@ -2,6 +2,7 @@
 
 ### Added
 
+- ReplayGain: track and album loudness normalization. Scans the library, playlist or selection; stores gains in a sidecar database or in the files' tags. Existing tags from other taggers are used as-is
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
 - macOS: animated dock icon while playing, can be disabled in settings
 - Settings: ability to turn off global media key grabbing. Only X11 and legacy Windows builds grab keys; elsewhere the OS integration (MPRIS, SMTC, macOS) handles them, and Wayland forbids grabs

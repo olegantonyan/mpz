@@ -588,6 +588,23 @@ void TestCueParserFixtures::multifileChapuisNoel_gapsAppendedCrossFile() {
   QCOMPARE(tracks.first().artist(), QStringLiteral("Michel Chapuis"));
   QCOMPARE(tracks.first().year(),   quint16{1968});
   QVERIFY(tracks.first().album().contains(QStringLiteral("Organ Music for Christmas")));
+
+  const ReplayGain::Gain first = tracks.first().replayGain();
+  QVERIFY(first.has_track);
+  QVERIFY(first.has_album);
+  QCOMPARE(first.track_db,   -5.57);
+  QCOMPARE(first.track_peak, 0.910858);
+  QCOMPARE(first.album_db,   -2.48);
+  QCOMPARE(first.album_peak, 0.977203);
+
+  const ReplayGain::Gain second = tracks.at(1).replayGain();
+  QCOMPARE(second.track_db,   -0.63);
+  QCOMPARE(second.track_peak, 0.734650);
+  QCOMPARE(second.album_db,   -2.48);
+
+  const ReplayGain::Gain fourth = tracks.at(3).replayGain();
+  QCOMPARE(fourth.track_db,   10.06);
+  QCOMPARE(fourth.track_peak, 0.166443);
 }
 
 // ---------- MP3-as-WAVE cues ----------
