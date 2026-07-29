@@ -5,6 +5,7 @@
     <Title>mpz music player installer</Title>
     <Publisher>Oleg Antonyan</Publisher>
     <StartMenuDir>mpz music player</StartMenuDir>
-    <TargetDir>@ApplicationsDirX64@/mpz-player</TargetDir>
+    <!-- Correct only while installerbase is 64-bit; a 32-bit one resolves this to Program Files (x86). -->
+    <TargetDir>@ApplicationsDir@/mpz-player</TargetDir>
     <ControlScript>controlscript.qs</ControlScript>
 </Installer>
