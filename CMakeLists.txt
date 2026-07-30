@@ -42,6 +42,8 @@ else()
 endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
+# keep the default: flatpak requires the MPRIS name to match the app id. snap needs an override, it forbids dots
+set(MPRIS_SERVICE_SUFFIX "org.mpz_player.mpz" CACHE STRING "Suffix appended to org.mpris.MediaPlayer2. for the MPRIS bus name")
 
 set(PROJECT_SOURCES
   app/icons.cpp
@@ -286,6 +288,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERS
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_SERVICE_SUFFIX="${MPRIS_SERVICE_SUFFIX}")
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
