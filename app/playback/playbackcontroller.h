@@ -103,6 +103,7 @@ namespace Playback {
     Waveform::Analyzer waveform;
     QString _waveform_path;
     bool _waveform_enabled = false;
+    bool _gapless_enabled = false;
 #endif
     QTimer monotonic_timer;
     StreamMetaData _inline_meta;
