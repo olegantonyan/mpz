@@ -177,7 +177,7 @@ QWidget *SettingsDialog::buildGeneralTab() {
 
 #ifdef ENABLE_GAPLESS
   check_waveform = new QCheckBox(tr("Show waveform in the seekbar"));
-  check_waveform->setChecked(global_conf.waveformEnabled());
+  check_waveform->setChecked(!global_conf.waveformDisabled());
   auto *wf_hint = new QLabel(tr("(gapless playback, local files only)"));
   wf_hint->setStyleSheet("color: gray;");
   auto *wf_row = new QHBoxLayout;
@@ -774,8 +774,8 @@ void SettingsDialog::apply() {
   global_conf.saveDisableDockIconAnimation(!check_dock_icon_animation->isChecked());
 #endif
 #ifdef ENABLE_GAPLESS
-  if (global_conf.waveformEnabled() != check_waveform->isChecked()) {
-    global_conf.saveWaveformEnabled(check_waveform->isChecked());
+  if (global_conf.waveformDisabled() == check_waveform->isChecked()) {
+    global_conf.saveWaveformDisabled(!check_waveform->isChecked());
     emit waveformToggled(check_waveform->isChecked());
   }
 #endif

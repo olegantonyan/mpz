@@ -100,7 +100,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     gapless_mb = 100;
   }
   player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
-  player->setWaveformEnabled(global_conf.waveformEnabled());
+  player->setWaveformEnabled(!global_conf.waveformDisabled());
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }

@@ -72,8 +72,8 @@ namespace Config {
     int playlistRowHeight() const;
     void savePlaylistRowHeight(int arg);
 
-    bool waveformEnabled() const;
-    void saveWaveformEnabled(bool arg);
+    bool waveformDisabled() const;
+    void saveWaveformDisabled(bool arg);
 
     QStringList mprisBlacklist() const;
     bool saveMprisBlacklist(const QStringList &arg);
