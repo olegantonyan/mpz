@@ -96,6 +96,8 @@ set(PROJECT_SOURCES
   app/playback/mediaplayer.cpp
   app/playback/playbackcontroller.cpp
   app/playback/randomtrail.cpp
+  app/playback/seekbar.cpp
+  app/waveform/peaks.cpp
   app/playback_log_ui/playbacklogdialog.cpp
   app/playback_log_ui/playbackloguicontroller.cpp
   app/playback_log_ui/playbackloguimodel.cpp
@@ -251,7 +253,8 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
       app/eq/autoeqimport.cpp
       app/eq/eqexport.cpp
       app/equalizer_ui/equalizerdialog.cpp
-      app/equalizer_ui/eqcurvewidget.cpp)
+      app/equalizer_ui/eqcurvewidget.cpp
+      app/waveform/analyzer.cpp)
   endif()
 
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})

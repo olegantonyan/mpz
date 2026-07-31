@@ -175,6 +175,18 @@ QWidget *SettingsDialog::buildGeneralTab() {
   iv->addWidget(check_auto_update);
 #endif
 
+#ifdef ENABLE_GAPLESS
+  check_waveform = new QCheckBox(tr("Show waveform in the seekbar"));
+  check_waveform->setChecked(!global_conf.waveformDisabled());
+  auto *wf_hint = new QLabel(tr("(gapless playback, local files only)"));
+  wf_hint->setStyleSheet("color: gray;");
+  auto *wf_row = new QHBoxLayout;
+  wf_row->addWidget(check_waveform);
+  wf_row->addWidget(wf_hint);
+  wf_row->addStretch();
+  iv->addLayout(wf_row);
+#endif
+
   check_row_height = new QCheckBox(tr("Override theme's playlist row height:"));
   spin_row_height = new QSpinBox;
   spin_row_height->setRange(8, 48);
@@ -760,6 +772,12 @@ void SettingsDialog::apply() {
   }
 #ifdef Q_OS_MACOS
   global_conf.saveDisableDockIconAnimation(!check_dock_icon_animation->isChecked());
+#endif
+#ifdef ENABLE_GAPLESS
+  if (global_conf.waveformDisabled() == check_waveform->isChecked()) {
+    global_conf.saveWaveformDisabled(!check_waveform->isChecked());
+    emit waveformToggled(check_waveform->isChecked());
+  }
 #endif
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);

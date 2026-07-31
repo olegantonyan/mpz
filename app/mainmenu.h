@@ -21,6 +21,7 @@ public:
 signals:
   void exit();
   void toggleTrayIcon();
+  void waveformToggled(bool enabled);
   void openPlaybackLog();
   void openShortcuts();
   void openEqualizer();

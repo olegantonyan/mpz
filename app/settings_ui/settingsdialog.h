@@ -25,6 +25,7 @@ public:
 
 signals:
   void trayIconToggled();
+  void waveformToggled(bool enabled);
 
 private:
   Config::Global &global_conf;
@@ -35,6 +36,7 @@ private:
   QSpinBox *spin_buffer_kib = nullptr;
 
   QCheckBox *check_tray_icon = nullptr;
+  QCheckBox *check_waveform = nullptr;
   QCheckBox *check_minimize_to_tray = nullptr;
 #ifdef Q_OS_MACOS
   QCheckBox *check_dock_icon_animation = nullptr;

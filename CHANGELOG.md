@@ -2,6 +2,7 @@
 
 ### Added
 
+- Seekbar can show the track waveform, off by default (Settings → Interface)
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
 - macOS: animated dock icon while playing, can be disabled in settings
 - Settings: ability to turn off global media key grabbing. Only X11 and legacy Windows builds grab keys; elsewhere the OS integration (MPRIS, SMTC, macOS) handles them, and Wayland forbids grabs

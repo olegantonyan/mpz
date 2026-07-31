@@ -30,6 +30,7 @@ void MainMenu::on_open() {
   connect(&settings, &QAction::triggered, this, [this]() {
     SettingsDialog dlg(global_conf, local_conf, button->parentWidget());
     connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainMenu::toggleTrayIcon);
+    connect(&dlg, &SettingsDialog::waveformToggled, this, &MainMenu::waveformToggled);
     dlg.exec();
   });
   connect(&about, &QAction::triggered, [=]() {

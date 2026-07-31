@@ -17,10 +17,6 @@ namespace Config {
     } else {
       durationSeconds = false;
     }
-
-    storage.remove("eq_enabled");
-    storage.remove("eq_active_profile");
-    storage.remove("eq_device_profiles");
   }
 
   bool Local::sync() {
