@@ -32,6 +32,8 @@ private slots:
   void albumArtistOrdering();
   void discNumberOrdering();
   void discNumberOrderingIsNumeric();
+  void discNumberOrderingIgnoresLocale();
+  void discNumberUntaggedSortsFirst();
   void discNumberOutranksTrackNumberInDefault();
   void sortVectorEndToEnd();
 };
@@ -151,6 +153,36 @@ void TestSorter::discNumberOrderingIsNumeric() {
   ten.setDiscNumber(QStringLiteral("10"));
   QVERIFY(s.condition(two, ten));
   QVERIFY(!s.condition(ten, two));
+
+  Track two_of_ten = mk({}, {}, {}, {}, 0, 0);
+  Track ten_of_ten = mk({}, {}, {}, {}, 0, 0);
+  two_of_ten.setDiscNumber(QStringLiteral("2/10"));
+  ten_of_ten.setDiscNumber(QStringLiteral("10/10"));
+  QVERIFY(s.condition(two_of_ten, ten_of_ten));
+}
+
+void TestSorter::discNumberOrderingIgnoresLocale() {
+  const QLocale saved = QLocale();
+  QLocale::setDefault(QLocale::c());
+
+  Sorter s(QStringLiteral("DISCNUMBER"));
+  Track two = mk({}, {}, {}, {}, 0, 0);
+  Track ten = mk({}, {}, {}, {}, 0, 0);
+  two.setDiscNumber(QStringLiteral("2"));
+  ten.setDiscNumber(QStringLiteral("10"));
+  const bool ordered = s.condition(two, ten);
+
+  QLocale::setDefault(saved);
+  QVERIFY(ordered);
+}
+
+void TestSorter::discNumberUntaggedSortsFirst() {
+  Sorter s(QStringLiteral("DISCNUMBER"));
+  Track untagged = mk({}, {}, {}, {}, 0, 0);
+  Track first = mk({}, {}, {}, {}, 0, 0);
+  first.setDiscNumber(QStringLiteral("1"));
+  QVERIFY(s.condition(untagged, first));
+  QVERIFY(!s.condition(first, untagged));
 }
 
 void TestSorter::discNumberOutranksTrackNumberInDefault() {

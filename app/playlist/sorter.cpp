@@ -1,8 +1,17 @@
 #include "sorter.h"
 
 namespace Playlist {
+  namespace {
+    int leading_number(const QString &s) {
+      int digits = 0;
+      while (digits < s.size() && s.at(digits).isDigit()) {
+        digits++;
+      }
+      return s.left(digits).toInt();
+    }
+  }
+
   Sorter::Sorter(const QString &c) {
-    collator.setNumericMode(true);
     for (const auto &i : c.split("/")) {
       if (!i.isEmpty()) {
         criteria << i.simplified().toUpper();
@@ -83,7 +92,14 @@ namespace Playlist {
   }
 
   int Sorter::compare_disc_number(const Track &t1, const Track &t2) const {
-    return -collator.compare(t1.disc_number(), t2.disc_number());
+    const int n1 = leading_number(t1.disc_number());
+    const int n2 = leading_number(t2.disc_number());
+    if (n1 < n2) {
+      return 1;
+    } else if (n1 > n2) {
+      return -1;
+    }
+    return -QString::localeAwareCompare(t1.disc_number(), t2.disc_number());
   }
 
   int Sorter::compare_filename(const Track &t1, const Track &t2) const {

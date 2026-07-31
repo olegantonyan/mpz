@@ -2058,7 +2058,7 @@
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="142"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="131"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="130"/>
         <source>Previous</source>
         <translation>Претходна</translation>
     </message>
@@ -2069,12 +2069,12 @@
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="185"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="132"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="131"/>
         <source>Next</source>
         <translation>Следећа</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="208"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="207"/>
         <source>Editing %n track(s)</source>
         <translation>
             <numerusform>Уређивање %n нумере</numerusform>
@@ -2083,32 +2083,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="179"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="178"/>
         <source>&lt;multiple values&gt;</source>
         <translation>&lt;више вредности&gt;</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="204"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="203"/>
         <source>Track %1 of %2</source>
         <translation>Нумера %1 од %2</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="276"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="275"/>
         <source>Could not open file</source>
         <translation>Није могуће отворити фајл</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="321"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="316"/>
         <source>TagLib refused to save (file not writable?)</source>
         <translation>TagLib је одбио да сачува (фајл није уписив?)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="349"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="344"/>
         <source>Save failed</source>
         <translation>Чување није успело</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="350"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="345"/>
         <source>Could not write tags for the following files:
 %1</source>
         <translation>Није могуће уписати ознаке у следеће фајлове:

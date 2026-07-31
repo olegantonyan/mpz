@@ -3,7 +3,6 @@
 
 #include "track.h"
 
-#include <QCollator>
 #include <QStringList>
 #include <QDebug>
 
@@ -18,7 +17,6 @@ namespace Playlist {
 
   private:
     QStringList criteria;
-    QCollator collator;
 
     int compare(const Track &t1, const Track &t2, QString attr) const;
     int compare_year(const Track &t1, const Track &t2) const;

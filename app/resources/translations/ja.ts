@@ -2056,7 +2056,7 @@
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="142"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="131"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="130"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
@@ -2067,44 +2067,44 @@
     </message>
     <message>
         <location filename="../../playlist_ui/tageditordialog.ui" line="185"/>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="132"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="131"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="208"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="207"/>
         <source>Editing %n track(s)</source>
         <translation>
             <numerusform>%n 個のトラックを編集</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="179"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="178"/>
         <source>&lt;multiple values&gt;</source>
         <translation>&lt;複数の値&gt;</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="204"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="203"/>
         <source>Track %1 of %2</source>
         <translation>トラック %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="276"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="275"/>
         <source>Could not open file</source>
         <translation>ファイルを開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="321"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="316"/>
         <source>TagLib refused to save (file not writable?)</source>
         <translation>TagLib が保存を拒否しました (ファイルが書き込み不可？)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="349"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="344"/>
         <source>Save failed</source>
         <translation>保存に失敗しました</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/tageditordialog.cpp" line="350"/>
+        <location filename="../../playlist_ui/tageditordialog.cpp" line="345"/>
         <source>Could not write tags for the following files:
 %1</source>
         <translation>次のファイルにタグを書き込めませんでした :
