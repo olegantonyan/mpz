@@ -11,6 +11,7 @@
 #endif
 #ifdef ENABLE_GAPLESS
   #include "playback/gapless/gaplessmediaplayer.h"
+  #include "waveform/analyzer.h"
 #endif
 
 #include <QObject>
@@ -79,9 +80,11 @@ namespace Playback {
 #endif
     void setCurrentTrack(const Track &track);
     void trackChangedQueryComplete(const Track &track);
+    void setWaveformEnabled(bool enabled);
 
   private:
     void on_seek(int position);
+    void updateWaveform(const Track &track);
     QString time_text(quint64 pos) const;
     void setup_monotonic_timer();
     void applyStreamMeta();
@@ -98,6 +101,12 @@ namespace Playback {
     Mpd::MediaPlayer _mpdplayer;
 #endif
     Track _current_track;
+#ifdef ENABLE_GAPLESS
+    Waveform::Analyzer waveform;
+    QString _waveform_path;
+    bool _waveform_enabled = false;
+    bool _gapless_enabled = false;
+#endif
     QTimer monotonic_timer;
     StreamMetaData _inline_meta;
     QString _status_now_playing;

@@ -2,6 +2,7 @@
 #include "streammetadata.h"
 
 #include <QDebug>
+#include <QFileInfo>
 
 namespace Playback {
 Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent) :
@@ -88,6 +89,15 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(_controls.next, &QToolButton::clicked, this, &Controller::on_controlsNext);
 
     _controls.seekbar->installEventFilter(this);
+
+#ifdef ENABLE_GAPLESS
+    _gapless_enabled = gapless_enabled;
+    connect(&waveform, &Waveform::Analyzer::ready, this, [this](const QString &path, const Waveform::Peaks &peaks) {
+      if (path == _current_track.path()) {
+        _controls.seekbar->setPeaks(peaks);
+      }
+    });
+#endif
 
     setup_monotonic_timer();
   }
@@ -316,6 +326,47 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     _icecast_status.stop();
     _inline_meta.clear();
     _status_now_playing.clear();
+    updateWaveform(track);
+  }
+
+  void Controller::updateWaveform(const Track &track) {
+#ifdef ENABLE_GAPLESS
+    if (track.isCue()) {
+      _controls.seekbar->setSlice(track.begin(), track.duration());
+    } else {
+      _controls.seekbar->setSlice(0, 0);
+    }
+    if (_waveform_path != track.path()) {
+      _waveform_path = track.path();
+      _controls.seekbar->setPeaks(Waveform::Peaks());
+    }
+    if (_waveform_enabled && _gapless_enabled && !track.isStream() && QFileInfo::exists(track.path())) {
+      waveform.request(track.path());
+    } else {
+      waveform.cancel();
+    }
+#else
+    Q_UNUSED(track)
+#endif
+  }
+
+  void Controller::setWaveformEnabled(bool enabled) {
+#ifdef ENABLE_GAPLESS
+    if (_waveform_enabled == enabled) {
+      return;
+    }
+    _waveform_enabled = enabled;
+    if (!enabled) {
+      waveform.cancel();
+      _controls.seekbar->setPeaks(Waveform::Peaks());
+      _waveform_path.clear();
+      return;
+    }
+    _waveform_path.clear();
+    updateWaveform(_current_track);
+#else
+    Q_UNUSED(enabled)
+#endif
   }
 
   void Controller::applyStreamMeta() {
