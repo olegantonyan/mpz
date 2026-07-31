@@ -72,14 +72,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QProgressBar" name="progressBar">
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="textVisible">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="Playback::Seekbar" name="seekBar"/>
       </item>
       <item>
        <widget class="QLabel" name="timeLabel">
@@ -287,6 +280,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Playback::Seekbar</class>
+   <extends>QProgressBar</extends>
+   <header>playback/seekbar.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
