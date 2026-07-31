@@ -130,7 +130,11 @@ QString AboutDialog::libraryInfo(const QString &name, const QString &url) const 
 }
 
 void AboutDialog::on_buttonAboutQt_clicked() const {
+  // https://qt-project.atlassian.net/browse/QTBUG-148568 aboutQt's box is WA_DeleteOnClose, and destroying a native message box segfaults on Qt 6.11
+  const bool previous = QApplication::testAttribute(Qt::AA_DontUseNativeDialogs);
+  QApplication::setAttribute(Qt::AA_DontUseNativeDialogs, true);
   qApp->aboutQt();
+  QApplication::setAttribute(Qt::AA_DontUseNativeDialogs, previous);
 }
 
 void AboutDialog::on_buttonContact_clicked() const {

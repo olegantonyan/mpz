@@ -19,7 +19,7 @@
 #include "ipc/instance.h"
 #include "sleeplock.h"
 #ifdef ENABLE_DEVICES_MENU
-  #include "audio_device_ui/devicesmenu.h"
+  #include "audio_device_ui/outputdevicebutton.h"
 #endif
 #ifdef ENABLE_GAPLESS
   #include "replaygain/manager.h"
@@ -131,6 +131,9 @@ private:
 #endif
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
+#ifdef ENABLE_DEVICES_MENU
+  AudioDeviceUi::OutputDeviceButton *output_device_button = nullptr;
+#endif
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
   QToolBar *controls_toolbar = nullptr;

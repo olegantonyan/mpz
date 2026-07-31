@@ -6,13 +6,17 @@
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
 - macOS: animated dock icon while playing, can be disabled in settings
 - Settings: ability to turn off global media key grabbing. Only X11 and legacy Windows builds grab keys; elsewhere the OS integration (MPRIS, SMTC, macOS) handles them, and Wayland forbids grabs
+- Output device button shows the selected device name
 
 ### Fixed
 
 - Playback follows cursor: removing the selected track no longer jumps to the first track or leaves playback silent
+- Windows: duplicate Apps & Features entries after reinstall
 - Linux: app icon shows again in PulseAudio/PipeWire volume mixers, broken by the .desktop rename in 2.1.1
 
 ### Misc
+
+- update vendored TagLib to 2.3.1
 
 ## [2.1.1] - 2026-07-24
 

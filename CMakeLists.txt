@@ -42,6 +42,8 @@ else()
 endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
+# keep the default: flatpak requires the MPRIS name to match the app id. snap needs an override, it forbids dots
+set(MPRIS_SERVICE_SUFFIX "org.mpz_player.mpz" CACHE STRING "Suffix appended to org.mpris.MediaPlayer2. for the MPRIS bus name")
 
 set(PROJECT_SOURCES
   app/icons.cpp
@@ -237,6 +239,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   message(STATUS "using Qt6")
   list(APPEND PROJECT_SOURCES
     app/audio_device_ui/devicesmenu.cpp
+    app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp
     app/replaygain/jobrunner.cpp
     app/replaygain/manager.cpp
@@ -293,6 +296,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERS
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_SERVICE_SUFFIX="${MPRIS_SERVICE_SUFFIX}")
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
@@ -367,7 +371,7 @@ if (USE_SYSTEM_TAGLIB)
   message(STATUS "using system-wide taglib ${TagLib_VERSION}")
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
 else()
-  set(TAGLIB_DIR 3rdparty/taglib-2.3)
+  set(TAGLIB_DIR 3rdparty/taglib-2.3.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
   add_subdirectory(${TAGLIB_DIR})
 

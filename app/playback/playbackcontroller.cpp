@@ -304,9 +304,10 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     return QObject::eventFilter(obj, event);
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#ifdef ENABLE_DEVICES_MENU
   void Controller::setOutputDevice(QByteArray deviceid) {
     player().setOutputDevice(deviceid);
+    emit outputDeviceChanged(deviceid);
   }
 #endif
 
