@@ -87,11 +87,13 @@ void SortingPresetsDialog::on_buttonHelp_clicked() {
   static const QString HELP_TEXT = (
         "Fields available to sort (case insensitive):<br />"
         " * Artist<br />"
+        " * AlbumArtist<br />"
         " * Album<br />"
         " * Title<br />"
         " * Year<br />"
         " * Filename<br />"
         " * TrackNumber<br />"
+        " * DiscNumber<br />"
         " * Directory</br />"
         "<br />"
         "By default sort in ascending order. Add - before the field name to change to descending order.<br />"

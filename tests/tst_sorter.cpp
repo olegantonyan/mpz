@@ -29,6 +29,10 @@ private slots:
   void whitespaceCriterionIsParsed();
   void unknownCriterionIsIgnored();
   void titleArtistAlbumFilenameOrderings();
+  void albumArtistOrdering();
+  void discNumberOrdering();
+  void discNumberOrderingIsNumeric();
+  void discNumberOutranksTrackNumberInDefault();
   void sortVectorEndToEnd();
 };
 
@@ -37,6 +41,7 @@ void TestSorter::defaultCriteriaIsCanonical() {
   QVERIFY(def.contains(QStringLiteral("YEAR")));
   QVERIFY(def.contains(QStringLiteral("ALBUM")));
   QVERIFY(def.contains(QStringLiteral("DIRECTORY")));
+  QVERIFY(def.contains(QStringLiteral("DISCNUMBER")));
   QVERIFY(def.contains(QStringLiteral("TRACKNUMBER")));
   QVERIFY(def.contains(QStringLiteral("FILENAME")));
   QVERIFY(def.contains(QStringLiteral("TITLE")));
@@ -112,8 +117,54 @@ void TestSorter::titleArtistAlbumFilenameOrderings() {
   QVERIFY(byFilename.condition(fa, fz));
 }
 
+void TestSorter::albumArtistOrdering() {
+  Sorter s(QStringLiteral("ALBUMARTIST"));
+  Track a = mk({}, QStringLiteral("Zulu"), {}, {}, 0, 0);
+  Track z = mk({}, QStringLiteral("Alpha"), {}, {}, 0, 0);
+  a.setAlbumArtist(QStringLiteral("Aurora"));
+  z.setAlbumArtist(QStringLiteral("Zenith"));
+  QVERIFY(s.condition(a, z));
+  QVERIFY(!s.condition(z, a));
+
+  Sorter desc(QStringLiteral("-ALBUMARTIST"));
+  QVERIFY(desc.condition(z, a));
+}
+
+void TestSorter::discNumberOrdering() {
+  Sorter s(QStringLiteral("DISCNUMBER"));
+  Track one = mk({}, {}, {}, {}, 0, 0);
+  Track two = mk({}, {}, {}, {}, 0, 0);
+  one.setDiscNumber(QStringLiteral("1/3"));
+  two.setDiscNumber(QStringLiteral("2/3"));
+  QVERIFY(s.condition(one, two));
+  QVERIFY(!s.condition(two, one));
+
+  Sorter desc(QStringLiteral("-DISCNUMBER"));
+  QVERIFY(desc.condition(two, one));
+}
+
+void TestSorter::discNumberOrderingIsNumeric() {
+  Sorter s(QStringLiteral("DISCNUMBER"));
+  Track two = mk({}, {}, {}, {}, 0, 0);
+  Track ten = mk({}, {}, {}, {}, 0, 0);
+  two.setDiscNumber(QStringLiteral("2"));
+  ten.setDiscNumber(QStringLiteral("10"));
+  QVERIFY(s.condition(two, ten));
+  QVERIFY(!s.condition(ten, two));
+}
+
+void TestSorter::discNumberOutranksTrackNumberInDefault() {
+  Sorter s;
+  Track disc1_track9 = mk(QStringLiteral("/a.flac"), {}, QStringLiteral("A"), {}, 9, 2024);
+  Track disc2_track1 = mk(QStringLiteral("/a.flac"), {}, QStringLiteral("A"), {}, 1, 2024);
+  disc1_track9.setDiscNumber(QStringLiteral("1"));
+  disc2_track1.setDiscNumber(QStringLiteral("2"));
+  QVERIFY(s.condition(disc1_track9, disc2_track1));
+  QVERIFY(!s.condition(disc2_track1, disc1_track9));
+}
+
 void TestSorter::sortVectorEndToEnd() {
-  Sorter s; // default criteria: YEAR / ALBUM / DIRECTORY / TRACKNUMBER / FILENAME / TITLE
+  Sorter s;
   QVector<Track> v;
   v << mk(QStringLiteral("/a.flac"), {}, QStringLiteral("Z"), {}, 0, 2010);
   v << mk(QStringLiteral("/b.flac"), {}, QStringLiteral("A"), {}, 0, 1990);

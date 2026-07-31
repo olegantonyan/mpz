@@ -399,7 +399,6 @@ namespace Playlist {
 
     Q_UNUSED(album_composer);
     Q_UNUSED(album_genre);
-    Q_UNUSED(album_disc);
 
     const quint16 year = parse_year(album_date);
 
@@ -430,6 +429,8 @@ namespace Playlist {
                   props.bitrate,
                   props.sample_rate);
       track.setCue();
+      track.setAlbumArtist(album_artist);
+      track.setDiscNumber(album_disc);
 
       qint64 duration_ms = -1;
       if (i + 1 < entries.size() && entries.at(i + 1).file == e.file) {

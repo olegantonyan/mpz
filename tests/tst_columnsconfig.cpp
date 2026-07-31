@@ -33,6 +33,8 @@ private slots:
   void valueForYearZeroIsEmpty();
   void valueForLengthZeroIsEmpty();
   void valueForUnknownFieldIsEmpty();
+  void valueForAlbumArtistAndDiscNumber();
+  void valueForUntaggedDiscNumberIsEmpty();
   void settersReplaceContents();
   void serializeRoundTripsThroughDeserialize();
   void vaidateThrowsOnMismatchedVectorSizes();
@@ -112,6 +114,30 @@ void TestColumnsConfig::valueForUnknownFieldIsEmpty() {
                                   QStringLiteral("length") });
   Track t = mk();
   QCOMPARE(cfg.value(1, t), QString());
+}
+
+void TestColumnsConfig::valueForAlbumArtistAndDiscNumber() {
+  ColumnsConfig cfg;
+  cfg.setFields(QVector<QString>{ QStringLiteral("album_artist"),
+                                  QStringLiteral("disc_number"),
+                                  QStringLiteral("title"),
+                                  QStringLiteral("year"),
+                                  QStringLiteral("length") });
+  Track t = mk();
+  t.setAlbumArtist(QStringLiteral("Various Artists"));
+  t.setDiscNumber(QStringLiteral("2/3"));
+  QCOMPARE(cfg.value(1, t), QStringLiteral("Various Artists"));
+  QCOMPARE(cfg.value(2, t), QStringLiteral("2/3"));
+}
+
+void TestColumnsConfig::valueForUntaggedDiscNumberIsEmpty() {
+  ColumnsConfig cfg;
+  cfg.setFields(QVector<QString>{ QStringLiteral("disc_number"),
+                                  QStringLiteral("album"),
+                                  QStringLiteral("title"),
+                                  QStringLiteral("year"),
+                                  QStringLiteral("length") });
+  QCOMPARE(cfg.value(1, mk()), QString());
 }
 
 void TestColumnsConfig::settersReplaceContents() {

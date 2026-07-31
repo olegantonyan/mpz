@@ -41,10 +41,12 @@ private:
   std::shared_ptr<Playlist::Playlist> _playlist;
 
   FieldState _artist;
+  FieldState _album_artist;
   FieldState _album;
   FieldState _title;
   FieldState _year;
   FieldState _track_number;
+  FieldState _disc_number;
   FieldState _genre;
   FieldState _comment;
 

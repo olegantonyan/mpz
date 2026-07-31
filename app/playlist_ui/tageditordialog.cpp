@@ -3,6 +3,7 @@
 
 #include <fileref.h>
 #include <tag.h>
+#include <tpropertymap.h>
 #include <tstring.h>
 
 #include <QCheckBox>
@@ -20,13 +21,23 @@
 namespace {
   struct InitialValues {
     QString artist;
+    QString album_artist;
     QString album;
     QString title;
     QString year;
     QString track_number;
+    QString disc_number;
     QString genre;
     QString comment;
   };
+
+  QString first_property(const TagLib::PropertyMap &props, const char *key) {
+    const TagLib::StringList values = props.value(key);
+    if (values.isEmpty()) {
+      return QString();
+    }
+    return QString::fromUtf8(values.front().toCString(true));
+  }
 
   InitialValues read_initial(const Track &t) {
     InitialValues v;
@@ -46,6 +57,10 @@ namespace {
       if (tag->track() > 0) {
         v.track_number = QString::number(tag->track());
       }
+
+      const TagLib::PropertyMap props = f.properties();
+      v.album_artist = first_property(props, "ALBUMARTIST");
+      v.disc_number = first_property(props, "DISCNUMBER");
     }
     return v;
   }
@@ -76,6 +91,14 @@ namespace {
   TagLib::String to_taglib(const QString &s) {
     const QByteArray utf8 = s.toUtf8();
     return TagLib::String(utf8.constData(), TagLib::String::UTF8);
+  }
+
+  void set_property(TagLib::PropertyMap &props, const char *key, const QString &value) {
+    if (value.isEmpty()) {
+      props.erase(key);
+    } else {
+      props.replace(key, to_taglib(value));
+    }
   }
 }
 
@@ -123,10 +146,12 @@ TagEditorDialog::TagEditorDialog(const QVector<Track> &tracks,
   }
 
   connect(ui->lineEditArtist, &QLineEdit::textEdited, this, [this](const QString &) { _artist.dirty = true; });
+  connect(ui->lineEditAlbumArtist, &QLineEdit::textEdited, this, [this](const QString &) { _album_artist.dirty = true; });
   connect(ui->lineEditAlbum, &QLineEdit::textEdited, this, [this](const QString &) { _album.dirty = true; });
   connect(ui->lineEditTitle, &QLineEdit::textEdited, this, [this](const QString &) { _title.dirty = true; });
   connect(ui->lineEditYear, &QLineEdit::textEdited, this, [this](const QString &) { _year.dirty = true; });
   connect(ui->lineEditTrackNumber, &QLineEdit::textEdited, this, [this](const QString &) { _track_number.dirty = true; });
+  connect(ui->lineEditDiscNumber, &QLineEdit::textEdited, this, [this](const QString &) { _disc_number.dirty = true; });
   connect(ui->lineEditGenre, &QLineEdit::textEdited, this, [this](const QString &) { _genre.dirty = true; });
   // QPlainTextEdit has no textEdited; populate_fields() uses QSignalBlocker
   // so this connection is safe to make before or after the initial fill.
@@ -153,10 +178,12 @@ void TagEditorDialog::populate_fields() {
   const QString multi = tr("<multiple values>");
 
   apply_text(ui->lineEditArtist, values, [](const InitialValues &v) { return v.artist; }, multi);
+  apply_text(ui->lineEditAlbumArtist, values, [](const InitialValues &v) { return v.album_artist; }, multi);
   apply_text(ui->lineEditAlbum, values, [](const InitialValues &v) { return v.album; }, multi);
   apply_text(ui->lineEditTitle, values, [](const InitialValues &v) { return v.title; }, multi);
   apply_text(ui->lineEditYear, values, [](const InitialValues &v) { return v.year; }, multi);
   apply_text(ui->lineEditTrackNumber, values, [](const InitialValues &v) { return v.track_number; }, multi);
+  apply_text(ui->lineEditDiscNumber, values, [](const InitialValues &v) { return v.disc_number; }, multi);
   apply_text(ui->lineEditGenre, values, [](const InitialValues &v) { return v.genre; }, multi);
   apply_plain(ui->plainTextComment, values, multi);
 }
@@ -194,10 +221,12 @@ void TagEditorDialog::update_nav_state() {
 
 void TagEditorDialog::clear_dirty() {
   _artist.dirty = false;
+  _album_artist.dirty = false;
   _album.dirty = false;
   _title.dirty = false;
   _year.dirty = false;
   _track_number.dirty = false;
+  _disc_number.dirty = false;
   _genre.dirty = false;
   _comment.dirty = false;
 }
@@ -249,6 +278,17 @@ bool TagEditorDialog::save_one(const Track &t, QString *error) const {
   }
   TagLib::Tag *tag = f.tag();
 
+  if (_album_artist.dirty || _disc_number.dirty) {
+    TagLib::PropertyMap props = f.properties();
+    if (_album_artist.dirty) {
+      set_property(props, "ALBUMARTIST", ui->lineEditAlbumArtist->text());
+    }
+    if (_disc_number.dirty) {
+      set_property(props, "DISCNUMBER", ui->lineEditDiscNumber->text());
+    }
+    f.setProperties(props);
+  }
+
   if (_artist.dirty) {
     tag->setArtist(to_taglib(ui->lineEditArtist->text()));
   }
@@ -281,8 +321,9 @@ bool TagEditorDialog::save_one(const Track &t, QString *error) const {
 }
 
 bool TagEditorDialog::commit_dirty() {
-  const bool any_dirty = _artist.dirty || _album.dirty || _title.dirty || _year.dirty
-                         || _track_number.dirty || _genre.dirty || _comment.dirty;
+  const bool any_dirty = _artist.dirty || _album_artist.dirty || _album.dirty || _title.dirty
+                         || _year.dirty || _track_number.dirty || _disc_number.dirty
+                         || _genre.dirty || _comment.dirty;
   if (!any_dirty) {
     return true;
   }

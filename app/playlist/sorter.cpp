@@ -2,6 +2,7 @@
 
 namespace Playlist {
   Sorter::Sorter(const QString &c) {
+    collator.setNumericMode(true);
     for (const auto &i : c.split("/")) {
       if (!i.isEmpty()) {
         criteria << i.simplified().toUpper();
@@ -11,7 +12,7 @@ namespace Playlist {
   }
 
   QString Sorter::defaultCriteria() {
-    return "YEAR / ALBUM / DIRECTORY / TRACKNUMBER / FILENAME / TITLE";
+    return "YEAR / ALBUM / DIRECTORY / DISCNUMBER / TRACKNUMBER / FILENAME / TITLE";
   }
 
   bool Sorter::condition(const Track &t1, const Track &t2) const {
@@ -38,12 +39,16 @@ namespace Playlist {
 
     if (attr == "ARTIST") {
       result = compare_artist(t1, t2);
+    } else if (attr == "ALBUMARTIST") {
+      result = compare_album_artist(t1, t2);
     } else if (attr == "ALBUM") {
       result = compare_album(t1, t2);
     } else if (attr == "YEAR") {
       result = compare_year(t1, t2);
     } else if (attr == "TRACKNUMBER") {
       result = compare_track_number(t1, t2);
+    } else if (attr == "DISCNUMBER") {
+      result = compare_disc_number(t1, t2);
     } else if (attr == "FILENAME") {
       result = compare_filename(t1, t2);
     } else if (attr == "TITLE") {
@@ -77,6 +82,10 @@ namespace Playlist {
     return 0;
   }
 
+  int Sorter::compare_disc_number(const Track &t1, const Track &t2) const {
+    return -collator.compare(t1.disc_number(), t2.disc_number());
+  }
+
   int Sorter::compare_filename(const Track &t1, const Track &t2) const {
     return -QString::localeAwareCompare(t1.filename(), t2.filename());
   }
@@ -87,6 +96,10 @@ namespace Playlist {
 
   int Sorter::compare_artist(const Track &t1, const Track &t2) const {
     return -QString::localeAwareCompare(t1.artist(), t2.artist());
+  }
+
+  int Sorter::compare_album_artist(const Track &t1, const Track &t2) const {
+    return -QString::localeAwareCompare(t1.album_artist(), t2.album_artist());
   }
 
   int Sorter::compare_dir(const Track &t1, const Track &t2) const {
