@@ -31,6 +31,7 @@ private slots:
   void isSupportedFileExactExtensions();
   void isSupportedFileIsCaseInsensitive();
   void isSupportedFileRejectsUnknownExtension();
+  void isSupportedFileRejectsNameEndingInExtension();
   void isSupportedFileRejectsEmptyString();
   void isSupportedFileAcceptsCueExtension();
 
@@ -55,6 +56,10 @@ void TestLoader::supportedFileFormatsIncludesCommonAudio() {
                               QStringLiteral("m4a"),
                               QStringLiteral("opus"),
                               QStringLiteral("wav"),
+                              QStringLiteral("wv"),
+                              QStringLiteral("aiff"),
+                              QStringLiteral("mka"),
+                              QStringLiteral("dff"),
                               QStringLiteral("cue") }) {
     QVERIFY2(f.contains(ext), qPrintable(QStringLiteral("missing %1").arg(ext)));
   }
@@ -71,6 +76,9 @@ void TestLoader::isSupportedFileExactExtensions() {
   QVERIFY(Loader::is_supported_file(QStringLiteral("song.mp3")));
   QVERIFY(Loader::is_supported_file(QStringLiteral("song.flac")));
   QVERIFY(Loader::is_supported_file(QStringLiteral("song.opus")));
+  QVERIFY(Loader::is_supported_file(QStringLiteral("song.wv")));
+  QVERIFY(Loader::is_supported_file(QStringLiteral("song.aiff")));
+  QVERIFY(Loader::is_supported_file(QStringLiteral("song.mka")));
   QVERIFY(Loader::is_supported_file(QStringLiteral("a/long/path/song.dsf")));
 }
 
@@ -84,6 +92,12 @@ void TestLoader::isSupportedFileRejectsUnknownExtension() {
   QVERIFY(!Loader::is_supported_file(QStringLiteral("readme.txt")));
   QVERIFY(!Loader::is_supported_file(QStringLiteral("cover.jpg")));
   QVERIFY(!Loader::is_supported_file(QStringLiteral("song")));  // no ext
+}
+
+void TestLoader::isSupportedFileRejectsNameEndingInExtension() {
+  QVERIFY(!Loader::is_supported_file(QStringLiteral("rescue")));
+  QVERIFY(!Loader::is_supported_file(QStringLiteral("song.mp3.bak")));
+  QVERIFY(!Loader::is_supported_file(QStringLiteral("notes.wav.txt")));
 }
 
 void TestLoader::isSupportedFileRejectsEmptyString() {

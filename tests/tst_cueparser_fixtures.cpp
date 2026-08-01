@@ -588,6 +588,10 @@ void TestCueParserFixtures::multifileChapuisNoel_gapsAppendedCrossFile() {
   QCOMPARE(tracks.first().artist(), QStringLiteral("Michel Chapuis"));
   QCOMPARE(tracks.first().year(),   quint16{1968});
   QVERIFY(tracks.first().album().contains(QStringLiteral("Organ Music for Christmas")));
+  for (const auto &t : tracks) {
+    QCOMPARE(t.disc_number(),  QStringLiteral("1"));
+    QCOMPARE(t.album_artist(), QStringLiteral("Michel Chapuis"));
+  }
 
   const ReplayGain::Gain first = tracks.first().replayGain();
   QVERIFY(first.has_track);

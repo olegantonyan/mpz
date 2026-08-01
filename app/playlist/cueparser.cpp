@@ -231,8 +231,9 @@ namespace Playlist {
     }
 
     static const QStringList kAudioExt = {
-      "flac", "ape", "wav", "wv", "mp3", "m4a", "mp4", "ogg",
-      "opus", "dsf", "aac", "wma", "tta", "tak", "alac"
+      "flac", "ape", "wav", "wv", "mp3", "m4a", "m4b", "mp4", "ogg", "oga",
+      "opus", "spx", "dsf", "dff", "aac", "wma", "asf", "tta", "tak", "alac",
+      "aiff", "aif", "aifc", "mpc", "mka", "shn"
     };
 
     auto find_in_dir = [](const QDir& dir, const QString& want_name) -> QString {
@@ -438,7 +439,6 @@ namespace Playlist {
 
     Q_UNUSED(album_composer);
     Q_UNUSED(album_genre);
-    Q_UNUSED(album_disc);
 
     const quint16 year = parse_year(album_date);
 
@@ -470,6 +470,8 @@ namespace Playlist {
                   props.sample_rate);
       track.setCue();
       track.setReplayGain(cue_replay_gain(e.rg_gain, e.rg_peak, album_rg_gain, album_rg_peak));
+      track.setAlbumArtist(album_artist);
+      track.setDiscNumber(album_disc);
 
       qint64 duration_ms = -1;
       if (i + 1 < entries.size() && entries.at(i + 1).file == e.file) {

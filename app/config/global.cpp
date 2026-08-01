@@ -211,12 +211,12 @@ namespace Config {
     storage.set("playlist_row_height", Config::Value(arg));
   }
 
-  bool Global::waveformEnabled() const {
-    return storage.get("waveform_enabled").get<bool>();
+  bool Global::waveformDisabled() const {
+    return storage.get("waveform_disabled").get<bool>();
   }
 
-  void Global::saveWaveformEnabled(bool arg) {
-    storage.set("waveform_enabled", Config::Value(arg));
+  void Global::saveWaveformDisabled(bool arg) {
+    storage.set("waveform_disabled", Config::Value(arg));
   }
 
   QStringList Global::mprisBlacklist() const {

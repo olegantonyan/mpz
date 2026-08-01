@@ -39,7 +39,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Supported formats
 
-- Audio: mp3, flac, ogg, opus, m4a/mp4, aac, wav, wma, ape, dsf, and CUE sheets;
+- Audio: mp3, flac, ogg/oga, opus, spx, m4a/m4b/mp4, aac, wav, aiff/aif/aifc, wma, asf, ape, wv, mpc, tta, mka, dsf, dff, shn, and CUE sheets;
 - Playlists and radio: m3u, m3u8, pls.
 
 Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format support depends on what is installed.
@@ -78,7 +78,7 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ##### AppImage
 
-Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+Experimental AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
 
 #### Windows
 
@@ -195,7 +195,7 @@ columns_config:
     width_percent: 0
 ```
 
-Available fields: artist, album, title, year, length, path, url, sample_rate, bitrate, channels, track_number, format, filename.
+Available fields: artist, album_artist, album, title, year, length, path, url, sample_rate, bitrate, channels, track_number, disc_number, format, filename.
 
 Available alignments: left, right.
 

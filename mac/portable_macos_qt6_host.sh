@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SRC_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
-VERSION=$("$SRC_DIR/win/_extract_version.sh")
+VERSION=$("$SRC_DIR/scripts/extract_version.sh")
 OUTPUT_DIR=${MPZ_OUTPUT_DIR:-$HOME/Desktop}
 TMP_DIR=$(mktemp -d -t mpz-build-macos-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd "$TMP_DIR"

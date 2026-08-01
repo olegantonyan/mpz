@@ -1,4 +1,4 @@
-## [2.1.2] - next
+## [2.1.2] - 2026-08-01
 
 ### Added
 
@@ -8,6 +8,7 @@
 - macOS: animated dock icon while playing, can be disabled in settings
 - Settings: ability to turn off global media key grabbing. Only X11 and legacy Windows builds grab keys; elsewhere the OS integration (MPRIS, SMTC, macOS) handles them, and Wayland forbids grabs
 - Output device button shows the selected device name
+- Album artist and disc number tags: columns, sorting, tag editor. Default sort now respects disc number
 
 ### Fixed
 
