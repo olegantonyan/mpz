@@ -78,7 +78,7 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ##### AppImage
 
-Experimental AppImage builds (x86_64 and arm64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+Experimental AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
 
 #### Windows
 
