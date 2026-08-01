@@ -95,23 +95,26 @@ cp AppDir/usr/share/metainfo/org.mpz_player.mpz.metainfo.xml \
 export QMAKE
 # Lets linuxdeploy find the Qt libs when Qt is not in a system path.
 export LD_LIBRARY_PATH="${QTDIR:+$QTDIR/lib:}${LD_LIBRARY_PATH:-}"
-export EXTRA_QT_PLUGINS="multimedia;svg"
+export EXTRA_QT_PLUGINS="svg"
 export APPIMAGE_EXTRACT_AND_RUN=1
 
+# Qt's multimedia backends, minus gstreamer: its codecs load at runtime, so it
+# cannot be bundled. Copied here rather than via the qt plugin, which has no way
+# to skip a backend and would fail on the gstreamer libs.
+mkdir -p AppDir/usr/plugins
+cp -r "$("$QMAKE" -query QT_INSTALL_PLUGINS)/multimedia" AppDir/usr/plugins/
+rm -f AppDir/usr/plugins/multimedia/libgstreamermediaplugin.so
+
 # Icon comes from the source tree: cmake installs sizes up to 48px only.
-"$LINUXDEPLOY" \
+LDAI_OUTPUT="$ARTIFACT_NAME.AppImage" "$LINUXDEPLOY" \
     --appdir AppDir \
     --executable AppDir/usr/bin/mpz \
     --desktop-file AppDir/usr/share/applications/org.mpz_player.mpz.desktop \
     --icon-file "$SRC_DIR/app/resources/icons/256x256/mpz.png" \
     --icon-filename org.mpz_player.mpz \
-    --plugin qt
-
-# GStreamer codecs load at runtime, so linuxdeploy misses them. Keep ffmpeg only.
-rm -f AppDir/usr/plugins/multimedia/libgstreamermediaplugin.so
-rm -f AppDir/usr/lib/libgst*.so*
-
-LDAI_OUTPUT="$ARTIFACT_NAME.AppImage" "$LINUXDEPLOY" --appdir AppDir --output appimage
+    --deploy-deps-only AppDir/usr/plugins/multimedia \
+    --plugin qt \
+    --output appimage
 
 mkdir -p "$OUTPUT_DIR"
 rm -f "$OUTPUT_DIR/$ARTIFACT_NAME.AppImage"
