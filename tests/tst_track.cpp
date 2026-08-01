@@ -17,6 +17,7 @@ private slots:
   void fullCtorPopulatesFields();
   void fullCtorGeneratesNonZeroUid();
   void fullCtorWithNonexistentPathIsInvalid();
+  void setAlbumArtistAndDiscNumberRoundTrip();
 
   void streamCtorIsStream();
   void streamCtorHasUid();
@@ -71,6 +72,8 @@ void TestTrack::defaultTrackIsZeroed() {
   QCOMPARE(t.sample_rate(),  quint32{0});
   QCOMPARE(t.year(),         quint16{0});
   QCOMPARE(t.track_number(), quint16{0});
+  QVERIFY(t.disc_number().isEmpty());
+  QVERIFY(t.album_artist().isEmpty());
   QVERIFY(!t.isCue());
   QVERIFY(!t.isMpd());
   QVERIFY(!t.isStream());
@@ -140,6 +143,16 @@ void TestTrack::fullCtorPopulatesFields() {
   QCOMPARE(t.bitrate(),      quint16{320});
   QCOMPARE(t.sample_rate(),  quint32{44100});
   QCOMPARE(t.format(),       QStringLiteral("FLAC"));
+  QVERIFY(t.album_artist().isEmpty());
+  QVERIFY(t.disc_number().isEmpty());
+}
+
+void TestTrack::setAlbumArtistAndDiscNumberRoundTrip() {
+  Track t(QStringLiteral("/no/such.mp3"), 0, {}, {}, {}, 0, 0, 0, 0, 0, 0);
+  t.setAlbumArtist(QStringLiteral("Various Artists"));
+  t.setDiscNumber(QStringLiteral("2/3"));
+  QCOMPARE(t.album_artist(), QStringLiteral("Various Artists"));
+  QCOMPARE(t.disc_number(),  QStringLiteral("2/3"));
 }
 
 void TestTrack::fullCtorGeneratesNonZeroUid() {

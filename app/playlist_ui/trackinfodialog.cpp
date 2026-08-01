@@ -262,6 +262,9 @@ void TrackInfoDialog::add_general_rows() {
   if (!_track.artist().isEmpty()) {
     add_table_row(model, tr("Artist"), _track.artist());
   }
+  if (!_track.album_artist().isEmpty()) {
+    add_table_row(model, tr("Album artist"), _track.album_artist());
+  }
   if (!_track.album().isEmpty()) {
     add_table_row(model, tr("Album"), _track.album());
   }
@@ -273,6 +276,9 @@ void TrackInfoDialog::add_general_rows() {
   }
   if (!_track.isStream()) {
     add_table_row(model, tr("Track number"), QString::number(_track.track_number()));
+    if (!_track.disc_number().isEmpty()) {
+      add_table_row(model, tr("Disc number"), _track.disc_number());
+    }
     add_table_row(model, tr("Duration"), _track.formattedDuration());
   }
   add_table_row(model, tr("Format"), _track.format());

@@ -359,6 +359,12 @@ namespace Config {
     r["title"] = t.title();
     r["track_number"] = static_cast<int>(t.track_number());
     r["year"] = static_cast<int>(t.year());
+    if (!t.album_artist().isEmpty()) {
+      r["album_artist"] = t.album_artist();
+    }
+    if (!t.disc_number().isEmpty()) {
+      r["disc_number"] = t.disc_number();
+    }
     r["duration"] = static_cast<int>(t.duration());
     r["channels"] = static_cast<int>(t.channels());
     r["bitrate"] = static_cast<int>(t.bitrate());
@@ -387,6 +393,8 @@ namespace Config {
             static_cast<quint32>(r["samplerate"].get<int>())
           );
       t.setCue(cue);
+      t.setAlbumArtist(r["album_artist"].get<QString>());
+      t.setDiscNumber(r["disc_number"].get<QString>());
       return t;
     } else {
      return Track(QUrl(r["url"].get<QString>()), r["path"].get<QString>(), r["title"].get<QString>());

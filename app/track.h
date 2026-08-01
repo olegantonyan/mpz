@@ -38,6 +38,8 @@ public:
   bool reload();
   void setDuration(quint64 dur);
   void setCue(bool is_cue = true);
+  void setAlbumArtist(const QString &aa);
+  void setDiscNumber(const QString &disc);
   void generateUidByHashing(const QString &prefix);
   void setPlaylistName(const QString &pln);
   void setMpd(const QUrl &mpd_server_url);
@@ -45,6 +47,7 @@ public:
   QString path() const;
   QUrl url() const;
   QString artist() const;
+  QString album_artist() const;
   QString album() const;
   QString title() const;
   quint16 year() const;
@@ -55,6 +58,7 @@ public:
   QString format() const;
   QString filename() const;
   quint16 track_number() const;
+  QString disc_number() const;
   quint32 begin() const;
   QString playlist_name() const;
 
@@ -87,6 +91,7 @@ public:
 private:
   QString filepath;
   QString _artist;
+  QString _album_artist;
   QString _album;
   QString _title;
   quint16 _year = 0;
@@ -96,6 +101,7 @@ private:
   quint16 _bitrate = 0;
   QString _format;
   quint16 _track_number = 0;
+  QString _disc_number;
   QUrl _stream_url;
   quint64 _begin;
   QString _playlist_name;

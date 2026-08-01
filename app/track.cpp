@@ -137,12 +137,17 @@ bool Track::readMetadata() {
   }
 
   if (TagLib::Tag *tag = f.tag()) {
+    const TagLib::PropertyMap props = tag->properties();
+
+    const TagLib::StringList album_artist = props.value("ALBUMARTIST");
+    _album_artist = album_artist.isEmpty() ? QString() : QString(album_artist.front().toCString(true));
+
+    const TagLib::StringList disc = props.value("DISCNUMBER");
+    _disc_number = disc.isEmpty() ? QString() : QString(disc.front().toCString(true));
+
     _artist = QString(tag->artist().toCString(true));
     if (_artist.isEmpty()) {
-      const TagLib::StringList aa = tag->properties().value("ALBUMARTIST");
-      if (!aa.isEmpty()) {
-        _artist = QString(aa.front().toCString(true));
-      }
+      _artist = _album_artist;
     }
     _album = QString(tag->album().toCString(true));
     _title = QString(tag->title().toCString(true));
@@ -178,6 +183,14 @@ void Track::setCue(bool is_cue) {
   _cue = is_cue;
 }
 
+void Track::setAlbumArtist(const QString &aa) {
+  _album_artist = aa;
+}
+
+void Track::setDiscNumber(const QString &disc) {
+  _disc_number = disc;
+}
+
 QString Track::path() const {
   return filepath;
 }
@@ -194,6 +207,10 @@ QString Track::artist() const {
     return _stream_meta.artist();
   }
   return _artist;
+}
+
+QString Track::album_artist() const {
+  return _album_artist;
 }
 
 QString Track::album() const {
@@ -361,6 +378,10 @@ QString Track::filename() const {
 
 quint16 Track::track_number() const {
   return _track_number;
+}
+
+QString Track::disc_number() const {
+  return _disc_number;
 }
 
 quint32 Track::begin() const {

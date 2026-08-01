@@ -8,10 +8,12 @@ on:
       - CHANGELOG.md
       - CODE_OF_CONDUCT.md
       - license.txt
-      - run.sh
+      - 'scripts/run_linux.sh'
+      - 'scripts/run_macos.sh'
       - 'rpm/**'
       - 'deb/**'
       - 'mac/**'
+      - 'appimage/**'
       - 'tests/**'
       - 'flatpak/**'
   workflow_dispatch:
@@ -57,7 +59,7 @@ jobs:
 
       - name: Extract version
         id: ver
-        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(./scripts/extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
         if: env.RELEASE_TAG == ''
@@ -115,7 +117,7 @@ jobs:
 
       - name: Extract version
         id: ver
-        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(./scripts/extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
         if: env.RELEASE_TAG == ''
@@ -182,7 +184,7 @@ jobs:
 
       - name: Extract version
         id: ver
-        run: echo "version=$(./win/_extract_version.sh)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(./scripts/extract_version.sh)" >> "$GITHUB_OUTPUT"
 
       - name: Compute PACKAGE_VERSION (non-release builds)
         if: env.RELEASE_TAG == ''

@@ -4,7 +4,7 @@ set -e
 source `dirname $0`/_env.sh
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(`dirname $0`/_extract_version.sh)
+VERSION=$("$SRC_DIR/scripts/extract_version.sh")
 OUTPUT_DIR=${MPZ_OUTPUT_DIR:-$HOME/Desktop}
 TMP_DIR=$(mktemp -d -t mpz-build-winarm64-qt6-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR

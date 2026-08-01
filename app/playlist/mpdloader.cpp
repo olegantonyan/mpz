@@ -60,6 +60,10 @@ namespace Playlist {
         0,
         0
       );
+      track.setAlbumArtist(song.albumArtist);
+      if (song.discNumber > 0) {
+        track.setDiscNumber(QString::number(song.discNumber));
+      }
     }
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);

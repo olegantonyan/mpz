@@ -97,6 +97,8 @@ namespace PlaylistUi {
     auto fld = field(col);
     if (fld == "artist") {
       return track.artist();
+    } else if (fld == "album_artist") {
+      return track.album_artist();
     } else if (fld == "album") {
       return track.album();
     } else if (fld == "title") {
@@ -117,6 +119,8 @@ namespace PlaylistUi {
       return QString::number(track.sample_rate());
     } else if (fld == "track_number") {
       return QString::number(track.track_number());
+    } else if (fld == "disc_number") {
+      return track.disc_number();
     } else if (fld == "format") {
       return track.format();
     } else if (fld == "filename") {
