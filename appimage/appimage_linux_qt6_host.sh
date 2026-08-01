@@ -98,6 +98,15 @@ export LD_LIBRARY_PATH="${QTDIR:+$QTDIR/lib:}${LD_LIBRARY_PATH:-}"
 export EXTRA_QT_PLUGINS="multimedia;svg"
 export APPIMAGE_EXTRACT_AND_RUN=1
 
+# linuxdeploy deploys every multimedia backend and fails when one's libs are
+# absent (CI has no gstreamer), so hide it while it runs and put it back after.
+QT_MULTIMEDIA_DIR=$("$QMAKE" -query QT_INSTALL_PLUGINS)/multimedia
+GST_BACKEND="$QT_MULTIMEDIA_DIR/libgstreamermediaplugin.so"
+if [ -f "$GST_BACKEND" ] && [ -w "$QT_MULTIMEDIA_DIR" ]; then
+    mv "$GST_BACKEND" "$TMP_DIR"
+    trap 'mv -f "$TMP_DIR/libgstreamermediaplugin.so" "$GST_BACKEND"' EXIT
+fi
+
 # Icon comes from the source tree: cmake installs sizes up to 48px only.
 "$LINUXDEPLOY" \
     --appdir AppDir \
@@ -107,7 +116,7 @@ export APPIMAGE_EXTRACT_AND_RUN=1
     --icon-filename org.mpz_player.mpz \
     --plugin qt
 
-# GStreamer codecs load at runtime, so linuxdeploy misses them. Keep ffmpeg only.
+# Same again for a read-only Qt dir, where it got deployed regardless.
 rm -f AppDir/usr/plugins/multimedia/libgstreamermediaplugin.so
 rm -f AppDir/usr/lib/libgst*.so*
 
