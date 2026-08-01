@@ -206,8 +206,9 @@ namespace Playlist {
     }
 
     static const QStringList kAudioExt = {
-      "flac", "ape", "wav", "wv", "mp3", "m4a", "mp4", "ogg",
-      "opus", "dsf", "aac", "wma", "tta", "tak", "alac"
+      "flac", "ape", "wav", "wv", "mp3", "m4a", "m4b", "mp4", "ogg", "oga",
+      "opus", "spx", "dsf", "dff", "aac", "wma", "asf", "tta", "tak", "alac",
+      "aiff", "aif", "aifc", "mpc", "mka", "shn"
     };
 
     auto find_in_dir = [](const QDir& dir, const QString& want_name) -> QString {

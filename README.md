@@ -39,7 +39,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Supported formats
 
-- Audio: mp3, flac, ogg, opus, m4a/mp4, aac, wav, wma, ape, dsf, and CUE sheets;
+- Audio: mp3, flac, ogg/oga, opus, spx, m4a/m4b/mp4, aac, wav, aiff/aif/aifc, wma, asf, ape, wv, mpc, tta, mka, dsf, dff, shn, and CUE sheets;
 - Playlists and radio: m3u, m3u8, pls.
 
 Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format support depends on what is installed.
