@@ -9,11 +9,12 @@ on:
       - CHANGELOG.md
       - CODE_OF_CONDUCT.md
       - license.txt
-      - run.sh
+      - 'scripts/run_linux.sh'
       - 'rpm/**'
       - 'deb/**'
       - 'win/**'
       - 'mac/**'
+      - 'appimage/**'
       - 'tests/**'
       - 'flatpak/**'
 

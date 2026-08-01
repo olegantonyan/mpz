@@ -8,11 +8,12 @@ on:
       - CHANGELOG.md
       - CODE_OF_CONDUCT.md
       - license.txt
-      - run.sh
+      - 'scripts/run_linux.sh'
       - 'rpm/**'
       - 'deb/**'
       - 'win/**'
       - 'mac/**'
+      - 'appimage/**'
       - 'flatpak/**'
       - '.omnipackage/**'
   pull_request:
@@ -21,11 +22,12 @@ on:
       - CHANGELOG.md
       - CODE_OF_CONDUCT.md
       - license.txt
-      - run.sh
+      - 'scripts/run_linux.sh'
       - 'rpm/**'
       - 'deb/**'
       - 'win/**'
       - 'mac/**'
+      - 'appimage/**'
       - 'flatpak/**'
       - '.omnipackage/**'
   workflow_dispatch:

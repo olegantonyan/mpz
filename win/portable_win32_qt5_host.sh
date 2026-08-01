@@ -21,7 +21,7 @@ if [ -z "${QTDIR:-}" ]; then
 fi
 
 SRC_DIR=$(cd `dirname $0` && cd .. && pwd)
-VERSION=$(`dirname $0`/_extract_version.sh)
+VERSION=$("$SRC_DIR/scripts/extract_version.sh")
 OUTPUT_DIR=${MPZ_OUTPUT_DIR:-$HOME/Desktop}
 TMP_DIR=$(mktemp -d -t mpz-build-win32-$(date +%Y-%m-%d-%H-%M-%S)-XXXXX)
 cd $TMP_DIR
