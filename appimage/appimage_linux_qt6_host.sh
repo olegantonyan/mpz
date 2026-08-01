@@ -89,21 +89,15 @@ test -f ./mpz || { echo "ERROR: build failed, mpz was not produced" >&2; exit 1;
 DESTDIR="$TMP_DIR/AppDir" cmake --install . --prefix /usr
 
 # appimagetool only looks for the old .appdata.xml name.
-cp AppDir/usr/share/metainfo/org.mpz_player.mpz.metainfo.xml \
-   AppDir/usr/share/metainfo/org.mpz_player.mpz.appdata.xml
+cp AppDir/usr/share/metainfo/org.mpz_player.mpz.metainfo.xml AppDir/usr/share/metainfo/org.mpz_player.mpz.appdata.xml
 
 export QMAKE
 # Lets linuxdeploy find the Qt libs when Qt is not in a system path.
 export LD_LIBRARY_PATH="${QTDIR:+$QTDIR/lib:}${LD_LIBRARY_PATH:-}"
-export EXTRA_QT_PLUGINS="svg"
 export APPIMAGE_EXTRACT_AND_RUN=1
 
-# Qt's multimedia backends, minus gstreamer: its codecs load at runtime, so it
-# cannot be bundled. Copied here rather than via the qt plugin, which has no way
-# to skip a backend and would fail on the gstreamer libs.
-mkdir -p AppDir/usr/plugins
-cp -r "$("$QMAKE" -query QT_INSTALL_PLUGINS)/multimedia" AppDir/usr/plugins/
-rm -f AppDir/usr/plugins/multimedia/libgstreamermediaplugin.so
+# GStreamer codecs load at runtime, so linuxdeploy misses them. Keep ffmpeg only.
+rm -f "$("$QMAKE" -query QT_INSTALL_PLUGINS)/multimedia/libgstreamermediaplugin.so" || true
 
 # Icon comes from the source tree: cmake installs sizes up to 48px only.
 LDAI_OUTPUT="$ARTIFACT_NAME.AppImage" "$LINUXDEPLOY" \
@@ -112,7 +106,6 @@ LDAI_OUTPUT="$ARTIFACT_NAME.AppImage" "$LINUXDEPLOY" \
     --desktop-file AppDir/usr/share/applications/org.mpz_player.mpz.desktop \
     --icon-file "$SRC_DIR/app/resources/icons/256x256/mpz.png" \
     --icon-filename org.mpz_player.mpz \
-    --deploy-deps-only AppDir/usr/plugins/multimedia \
     --plugin qt \
     --output appimage
 
