@@ -44,6 +44,7 @@ namespace {
       case Icons::Icon::MoveToPlaylist:return QStringLiteral(":/icons/ui/move-to-playlist.svg");
       case Icons::Icon::Spinner:      return QStringLiteral(":/icons/ui/spinner.svg");
       case Icons::Icon::Radio:        return QStringLiteral(":/icons/ui/radio.svg");
+      case Icons::Icon::DynamicRange: return QStringLiteral(":/icons/ui/dynamic-range.svg");
     }
     return QString();
   }

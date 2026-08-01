@@ -40,6 +40,8 @@ mpz_add_test(tst_radioitem      tst_radioitem.cpp      ${APP}/directory_ui/direc
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
 mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
 mpz_add_test(tst_waveformpeaks  tst_waveformpeaks.cpp  ${APP}/waveform/peaks.cpp)
+mpz_add_test(tst_dynamicrange   tst_dynamicrange.cpp   ${APP}/dynamic_range/dr.cpp)
+mpz_add_test(tst_drlogformat    tst_drlogformat.cpp    ${APP}/dynamic_range/logformat.cpp ${APP}/dynamic_range/dr.cpp)
 mpz_add_test(tst_eqbiquad       tst_eqbiquad.cpp)
 mpz_add_test(tst_equalizer      tst_equalizer.cpp      ${APP}/eq/equalizer.cpp)
 mpz_add_test(tst_autoeqimport   tst_autoeqimport.cpp   ${APP}/eq/autoeqimport.cpp)

@@ -13,6 +13,7 @@ public:
     quint8 channels = 0;
     quint16 bitrate = 0;
     quint32 sample_rate = 0;
+    quint16 bits_per_sample = 0;
   };
 
   explicit Track();
