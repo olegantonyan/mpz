@@ -27,6 +27,9 @@
 #include "settings_ui/settingsdialog.h"
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
+  #include "replaygain_ui/replaygaindialog.h"
+  #include "playlist/loader.h"
+  #include <QtConcurrent>
 #endif
 
 namespace {
@@ -159,6 +162,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupOutputDevice();
 #ifdef ENABLE_GAPLESS
   setupEqualizer();
+  setupReplayGain();
 #endif
 
   CoverArt::Covers::instance(modus_operandi);
@@ -604,6 +608,12 @@ void MainWindow::setupStatusBar() {
   ui->statusbar->addWidget(new QWidget(this), 1);
 #endif
 
+#ifdef ENABLE_GAPLESS
+  status_label_replaygain = new QLabel(this);
+  status_label_replaygain->hide();
+  ui->statusbar->addWidget(status_label_replaygain, 0);
+#endif
+
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -831,6 +841,84 @@ void MainWindow::setupEqualizer() {
 void MainWindow::openEqualizerDialog() {
   EqualizerUi::EqualizerDialog dlg(player, local_conf, global_conf, this);
   dlg.exec();
+}
+
+void MainWindow::setupReplayGain() {
+  replay_gain = new ReplayGain::Manager(global_conf, this);
+
+  player->setReplayGainResolver([this](const Track &t) { return replay_gain->gainDbFor(t); });
+  connect(replay_gain, &ReplayGain::Manager::gainsChanged, this, [this]() {
+    player->refreshReplayGain();
+  });
+
+  connect(replay_gain, &ReplayGain::Manager::progress, this,
+          [this](int done, int total, const QString &path) {
+            Q_UNUSED(path)
+            if (total <= 0) {
+              status_label_replaygain->hide();
+              return;
+            }
+            status_label_replaygain->setText(tr("ReplayGain: %1 / %2").arg(done).arg(total));
+            status_label_replaygain->show();
+          });
+  connect(replay_gain, &ReplayGain::Manager::scanFinished, this,
+          [this](int analysed, int failed, bool cancelled) {
+            status_label_replaygain->hide();
+            if (cancelled) {
+              return;
+            }
+            const QString text = failed > 0
+                                     ? tr("ReplayGain: %1 analysed, %2 failed").arg(analysed).arg(failed)
+                                     : tr("ReplayGain: %1 analysed").arg(analysed);
+            banner->showMessage(text, SlidingBanner::BannerType::Success, 3456);
+          });
+
+  connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
+  connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
+}
+
+void MainWindow::openReplayGainDialog() {
+  QString reason;
+  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
+                       !global_conf.disableGapless();
+  if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+    reason = tr("Gains are not applied in mpd mode — mpd has its own replay_gain setting. "
+                "Analysing and tagging still work.");
+  } else if (global_conf.disableGapless()) {
+    reason = tr("Gains are applied only by the gapless engine. Enable it in Settings. "
+                "Analysing and tagging still work.");
+  }
+
+  auto *dlg = new ReplayGainUi::ReplayGainDialog(*replay_gain, global_conf, applies, reason, this);
+  dlg->setAttribute(Qt::WA_DeleteOnClose);
+  dlg->setModal(false);
+  dlg->setPlaylistTracks(playlist->currentTracks());
+  dlg->setSelectedTracks(playlist->selectedTracks());
+  dlg->setLibraryPaths(local_conf.libraryPaths());
+  connect(dlg, &ReplayGainUi::ReplayGainDialog::scanLibraryRequested,
+          this, &MainWindow::scanLibraryForReplayGain);
+  dlg->show();
+}
+
+void MainWindow::scanLibraryForReplayGain(ReplayGain::Mode mode, bool force) {
+  const QStringList roots = local_conf.libraryPaths();
+  spinner->show();
+  auto *watcher = new QFutureWatcher<QVector<Track>>(this);
+  connect(watcher, &QFutureWatcher<QVector<Track>>::finished, this, [this, watcher, mode, force]() {
+    spinner->hide();
+    replay_gain->scanTracks(watcher->result(), mode, force);
+    watcher->deleteLater();
+  });
+  watcher->setFuture(QtConcurrent::run([roots]() {
+    QVector<Track> all;
+    for (const auto &root : roots) {
+      if (root.startsWith(QLatin1String("mpd://"))) {
+        continue;
+      }
+      all += Playlist::Loader(QDir(root)).tracks();
+    }
+    return all;
+  }));
 }
 
 void MainWindow::applyEqForDevice(const QByteArray &device_id) {

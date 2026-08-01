@@ -24,7 +24,8 @@ namespace Playback::Gapless {
     }
   }
 
-  int Timeline::appendSegment(const Track &t, const QUrl &url, qint64 begin_frame, qint64 end_frame) {
+  int Timeline::appendSegment(const Track &t, const QUrl &url, qint64 begin_frame, qint64 end_frame,
+                              double gain_db) {
     if (!segments.isEmpty() && length(segments.last()) < 0) {
       return -1;
     }
@@ -33,6 +34,7 @@ namespace Playback::Gapless {
     s.url = url;
     s.begin_frame = begin_frame;
     s.end_frame = end_frame;
+    s.gain_db = gain_db;
     segments.append(s);
     recomputeAbs();
     return segments.size() - 1;
@@ -113,9 +115,20 @@ namespace Playback::Gapless {
     return valid(idx) ? segments.at(idx).begin_frame : 0;
   }
 
-  void Timeline::reset(const Track &t, const QUrl &url, qint64 begin_frame, qint64 end_frame) {
+  double Timeline::segmentGainDb(int idx) const {
+    return valid(idx) ? segments.at(idx).gain_db : 0.0;
+  }
+
+  void Timeline::setSegmentGainDb(int idx, double gain_db) {
+    if (valid(idx)) {
+      segments[idx].gain_db = gain_db;
+    }
+  }
+
+  void Timeline::reset(const Track &t, const QUrl &url, qint64 begin_frame, qint64 end_frame,
+                       double gain_db) {
     segments.clear();
-    appendSegment(t, url, begin_frame, end_frame);
+    appendSegment(t, url, begin_frame, end_frame, gain_db);
   }
 
   void Timeline::clear() {

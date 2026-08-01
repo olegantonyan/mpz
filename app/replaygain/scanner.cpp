@@ -1,0 +1,144 @@
+#include "replaygain/scanner.h"
+
+#include "replaygain/jobrunner.h"
+
+#include <QThread>
+
+namespace ReplayGain {
+  namespace {
+    const int kMaxWorkers = 4;
+    const int kProgressIntervalMs = 100;
+  }
+
+  Scanner::Scanner(QObject *parent) : QObject(parent) {
+    qRegisterMetaType<ReplayGain::Job>();
+    qRegisterMetaType<ReplayGain::SliceResult>();
+    qRegisterMetaType<ReplayGain::JobResult>();
+  }
+
+  Scanner::~Scanner() {
+    cancel();
+    for (auto *thread : threads) {
+      thread->quit();
+      thread->wait();
+      delete thread;
+    }
+  }
+
+  int Scanner::defaultWorkerCount() {
+    // A starved GUI thread underruns the engine's sink, so leave a core free.
+    return qBound(1, QThread::idealThreadCount() - 1, kMaxWorkers);
+  }
+
+  void Scanner::ensureWorkers(int count) {
+    while (threads.size() < count) {
+      auto *thread = new QThread;
+      auto *runner = new JobRunner;
+      runner->moveToThread(thread);
+      connect(thread, &QThread::finished, runner, &QObject::deleteLater);
+      connect(runner, &JobRunner::jobFinished, this, &Scanner::onJobFinished);
+      connect(runner, &JobRunner::fileStarted, this, [this](int job_epoch, const QString &path) {
+        if (job_epoch == epoch) {
+          emitProgress(path, false);
+        }
+      });
+      thread->start();
+
+      threads.append(thread);
+      runners.append(runner);
+      busy.append(false);
+    }
+  }
+
+  void Scanner::start(const QVector<Job> &jobs, int worker_count) {
+    cancel();
+
+    epoch++;
+    cancelling = false;
+    total_slices = 0;
+    done_slices = 0;
+    analysed = 0;
+    failed = 0;
+    throttle.invalidate();
+
+    for (Job job : jobs) {
+      if (job.files.isEmpty()) {
+        continue;
+      }
+      job.epoch = epoch;
+      total_slices += job.sliceCount();
+      pending.enqueue(job);
+    }
+
+    if (pending.isEmpty()) {
+      emit progress(0, 0, QString());
+      emit finished(0, 0, false);
+      return;
+    }
+
+    ensureWorkers(qMin(worker_count > 0 ? worker_count : defaultWorkerCount(), pending.size()));
+    emitProgress(QString(), true);
+    dispatch();
+  }
+
+  void Scanner::dispatch() {
+    for (int i = 0; i < runners.size() && !pending.isEmpty(); i++) {
+      if (busy.at(i)) {
+        continue;
+      }
+      busy[i] = true;
+      in_flight++;
+      QMetaObject::invokeMethod(runners.at(i), "run", Qt::QueuedConnection,
+                                Q_ARG(ReplayGain::Job, pending.dequeue()));
+    }
+  }
+
+  void Scanner::onJobFinished(const ReplayGain::JobResult &result) {
+    auto *runner = qobject_cast<JobRunner *>(sender());
+    const int index = runners.indexOf(runner);
+    if (index >= 0) {
+      busy[index] = false;
+    }
+    in_flight--;
+
+    if (result.epoch == epoch) {
+      for (const auto &slice : result.slices) {
+        done_slices++;
+        if (slice.ok) {
+          analysed++;
+        } else {
+          failed++;
+        }
+        emit sliceAnalyzed(slice);
+      }
+      emitProgress(QString(), false);
+      dispatch();
+    }
+
+    if (in_flight == 0 && pending.isEmpty()) {
+      emitProgress(QString(), true);
+      emit finished(analysed, failed, cancelling);
+      cancelling = false;
+    }
+  }
+
+  void Scanner::emitProgress(const QString &path, bool force) {
+    if (!force && throttle.isValid() && throttle.elapsed() < kProgressIntervalMs) {
+      return;
+    }
+    throttle.start();
+    emit progress(done_slices, total_slices, path);
+  }
+
+  void Scanner::cancel() {
+    if (!isScanning()) {
+      return;
+    }
+    cancelling = true;
+    epoch++;
+    pending.clear();
+    for (auto *runner : runners) {
+      QMetaObject::invokeMethod(runner, "cancel", Qt::QueuedConnection);
+    }
+  }
+}

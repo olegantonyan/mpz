@@ -1,6 +1,7 @@
 #ifndef TRACK_H
 #define TRACK_H
 
+#include "replaygain/gain.h"
 #include "streammetadata.h"
 
 #include <QString>
@@ -88,6 +89,10 @@ public:
 
   void setAudioFormat(quint32 sample_rate, quint8 channels, quint16 bitrate);
 
+  // Cue REM REPLAYGAIN_* only: not recoverable from the container file.
+  void setReplayGain(const ReplayGain::Gain &g);
+  const ReplayGain::Gain &replayGain() const;
+
 private:
   QString filepath;
   QString _artist;
@@ -112,6 +117,7 @@ private:
   QUrl _mpd_server_url;
 
   StreamMetaData _stream_meta;
+  ReplayGain::Gain _replay_gain;
 
   mutable QString _dir_cache;
   mutable bool _dir_cached = false;

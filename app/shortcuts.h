@@ -82,6 +82,7 @@ signals:
   void volumeDown();
   void openSettings();
   void openEqualizer();
+  void openReplayGain();
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();

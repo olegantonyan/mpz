@@ -28,6 +28,8 @@ namespace Playback::Gapless {
     void setPosition(qint64 position) override;
     void setVolume(int volume) override;
     void setEqualizer(const Eq::EqProfile &profile, bool enabled) override;
+    void setReplayGainResolver(ReplayGainResolver fn) override;
+    void refreshReplayGain() override;
     void setTrack(const Track &track) override;
     void clearTrack() override;
     void prepareNextTrack(const Track &track) override;

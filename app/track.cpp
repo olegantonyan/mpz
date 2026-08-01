@@ -158,6 +158,14 @@ bool Track::readMetadata() {
   return true;
 }
 
+void Track::setReplayGain(const ReplayGain::Gain &g) {
+  _replay_gain = g;
+}
+
+const ReplayGain::Gain &Track::replayGain() const {
+  return _replay_gain;
+}
+
 bool Track::reload() {
   return readMetadata();
 }

@@ -21,6 +21,9 @@
 #ifdef ENABLE_DEVICES_MENU
   #include "audio_device_ui/outputdevicebutton.h"
 #endif
+#ifdef ENABLE_GAPLESS
+  #include "replaygain/manager.h"
+#endif
 #include "modusoperandi.h"
 #include "slidingbanner.h"
 #include "coverart/coverartwidget.h"
@@ -122,6 +125,10 @@ private:
   WindowsTaskbar *win_taskbar = nullptr;
 #endif
   Shortcuts *shortcuts = nullptr;
+#ifdef ENABLE_GAPLESS
+  ReplayGain::Manager *replay_gain = nullptr;
+  QLabel *status_label_replaygain = nullptr;
+#endif
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
 #ifdef ENABLE_DEVICES_MENU
@@ -185,6 +192,9 @@ private:
   void setupEqualizer();
   void openEqualizerDialog();
   void applyEqForDevice(const QByteArray &device_id);
+  void setupReplayGain();
+  void openReplayGainDialog();
+  void scanLibraryForReplayGain(ReplayGain::Mode mode, bool force);
 #endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();

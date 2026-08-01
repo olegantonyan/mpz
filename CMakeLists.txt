@@ -56,6 +56,10 @@ set(PROJECT_SOURCES
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/replaygain/analyzer.cpp
+  app/replaygain/resolver.cpp
+  app/replaygain/store.cpp
+  app/replaygain/tags.cpp
   app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/foldercover.cpp
@@ -238,7 +242,11 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   list(APPEND PROJECT_SOURCES
     app/audio_device_ui/devicesmenu.cpp
     app/audio_device_ui/outputdevicebutton.cpp
-    app/audio_device_ui/outputdevicename.cpp)
+    app/audio_device_ui/outputdevicename.cpp
+    app/replaygain/jobrunner.cpp
+    app/replaygain/manager.cpp
+    app/replaygain/scanner.cpp
+    app/replaygain_ui/replaygaindialog.cpp)
 
   if (ENABLE_GAPLESS)
     list(APPEND PROJECT_SOURCES
@@ -409,6 +417,34 @@ else()
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
 endif()
 # ENDOF TAGLIB
+
+# LIBEBUR128
+option(USE_SYSTEM_LIBEBUR128 "Use libebur128 provided by the OS" OFF)
+if (USE_SYSTEM_LIBEBUR128)
+  find_library(EBUR128_LIBRARY ebur128 REQUIRED)
+  find_path(EBUR128_INCLUDE_DIR ebur128.h REQUIRED)
+  message(STATUS "using system-wide libebur128")
+  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_INCLUDE_DIR})
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_LIBRARY})
+else()
+  set(EBUR128_DIR 3rdparty/libebur128-1.2.6)
+  message(STATUS "using vendored libebur128 from ${EBUR128_DIR}")
+  # libebur128 declares cmake_minimum_required(2.8.12), which CMake >= 4 rejects outright.
+  # CMP0077 NEW makes its option() honour the BUILD_SHARED_LIBS set here.
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+  set(BUILD_SHARED_LIBS OFF)
+  add_subdirectory(${EBUR128_DIR} EXCLUDE_FROM_ALL)
+  unset(BUILD_SHARED_LIBS)
+  unset(CMAKE_POLICY_DEFAULT_CMP0077)
+  unset(CMAKE_POLICY_VERSION_MINIMUM)
+
+  # Upstream attaches no include dirs to the target at all, so consumers see nothing.
+  target_include_directories(ebur128 INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128>)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
+endif()
+# ENDOF LIBEBUR128
 
 # QHOTKEY
 # macOS (MPRemoteCommandCenter) and the SMTC build own the media keys; QHotkey would be dead weight.
