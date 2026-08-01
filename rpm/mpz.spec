@@ -12,6 +12,7 @@ BuildRequires: gcc make cmake libqt5-qtbase-devel libqt5-qtmultimedia-devel libq
 %else
 BuildRequires: gcc make cmake qt6-base-common-devel qt6-multimedia-devel qt6-widgets-devel qt6-concurrent-devel qt6-svg-devel
 %endif
+BuildRequires: hicolor-icon-theme
 
 Requires: hicolor-icon-theme
 
