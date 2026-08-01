@@ -380,6 +380,60 @@
     </message>
 </context>
 <context>
+    <name>DynamicRangeDialog</name>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="14"/>
+        <source>Dynamic range</source>
+        <translation>Динамички опсег</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="50"/>
+        <source>Copy</source>
+        <translation>Копирај</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="60"/>
+        <source>Save as…</source>
+        <translation>Сачувај као…</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="83"/>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="155"/>
+        <source>Close</source>
+        <translation>Затвори</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="77"/>
+        <source>Audio decoding is not available</source>
+        <translation>Декодирање звука није доступно</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="88"/>
+        <source>Cancel</source>
+        <translation>Откажи</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="120"/>
+        <source>Save dynamic range log</source>
+        <translation>Сачувај извештај о динамичком опсегу</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="121"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстуалне датотеке (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="127"/>
+        <source>Save failed</source>
+        <translation>Чување није успело</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="163"/>
+        <source>Analyzing %1/%2: %3</source>
+        <translation>Анализа %1/%2: %3</translation>
+    </message>
+</context>
+<context>
     <name>EqualizerUi::EqualizerDialog</name>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
@@ -1159,34 +1213,39 @@
 <context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="18"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="23"/>
         <source>Remove</source>
         <translation>Уклони</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="22"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
         <source>Show in file manager</source>
         <translation>Прикажи у менаџеру датотека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="26"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="31"/>
         <source>Copy name</source>
         <translation>Копирај име</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="30"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="35"/>
         <source>Clear filter</source>
         <translation>Обриши филтер</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="34"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="39"/>
         <source>Track info</source>
         <translation>Информације о нумери</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="43"/>
         <source>Edit tags…</source>
         <translation>Уреди ознаке…</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="48"/>
+        <source>Dynamic range…</source>
+        <translation>Динамички опсег…</translation>
     </message>
 </context>
 <context>
@@ -2158,169 +2217,169 @@
         <translation>Уреди ознаке…</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="263"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="259"/>
         <source>Artist</source>
         <translation>Извођач</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="266"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="262"/>
         <source>Album artist</source>
         <translation>Извођач албума</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="269"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="265"/>
         <source>Album</source>
         <translation>Албум</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="272"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="268"/>
         <source>Title</source>
         <translation>Наслов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="275"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="271"/>
         <source>Year</source>
         <translation>Година</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="274"/>
         <source>Track number</source>
         <translation>Број нумере</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="276"/>
         <source>Disc number</source>
         <translation>Број диска</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
         <source>Duration</source>
         <translation>Трајање</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="284"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="286"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
         <source>Bitrate</source>
         <translation>Битрејт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="285"/>
         <source>Sample rate</source>
         <translation>Стопа узорковања</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="292"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="288"/>
         <source>Channels</source>
         <translation>Канали</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="295"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="291"/>
         <source>Stream url</source>
         <translation>URL стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="303"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="305"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="299"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="301"/>
         <source>File path</source>
         <translation>Путања до датотеке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="309"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="305"/>
         <source>CUE start at</source>
         <translation>CUE почиње у</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="327"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="323"/>
         <source>Unsupported tags</source>
         <translation>Неподржане ознаке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="336"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="332"/>
         <source>File name</source>
         <translation>Име датотеке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="333"/>
         <source>Directory</source>
         <translation>Фасцикла</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="334"/>
         <source>Size</source>
         <translation>Величина</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="334"/>
         <source>%1 (%2 bytes)</source>
         <translation>%1 (%2 бајтова)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="341"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
         <source>Modified</source>
         <translation>Измењено</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="344"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="340"/>
         <source>Created</source>
         <translation>Направљено</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="346"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="342"/>
         <source>Read-only</source>
         <translation>Само за читање</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="348"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="344"/>
         <source>Symlink target</source>
         <translation>Циљ симболичке везе</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="500"/>
         <source>yes</source>
         <translation>да</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="500"/>
         <source>no</source>
         <translation>не</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="532"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="528"/>
         <source>Copy</source>
         <translation>Копирај</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="536"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="532"/>
         <source>Search on web</source>
         <translation>Претражите на вебу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="572"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="568"/>
         <source>No cover art</source>
         <translation>Нема омота албума</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="646"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="642"/>
         <source>Searching lyrics...</source>
         <translation>Претрага текста песме...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="653"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="661"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="649"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="657"/>
         <source>No lyrics found.</source>
         <translation>Није пронађен текст песме.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="714"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="710"/>
         <source>Copy to clipboard</source>
         <translation>Копирај у међуспремник</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="722"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="718"/>
         <source>Open in external viewer</source>
         <translation>Отвори у спољном прегледнику</translation>
     </message>

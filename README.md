@@ -27,6 +27,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Internet radio in `m3u` and `pls` formats, as well as built-in radio library;
 - CUE sheets, with gapless playback of single-file albums;
 - Tag editor;
+- Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt6 only);
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
 - Playback order per playlist and global: sequential, random, or no-loop;
 - Track sorting presets;
@@ -133,6 +134,7 @@ Some features require Qt6:
 - gapless playback
 - equalizer
 - audio output switch
+- dynamic range meter
 
 This means win-legacy-qt5 won't have these. As well as old Linux distros.
 

@@ -238,7 +238,13 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   list(APPEND PROJECT_SOURCES
     app/audio_device_ui/devicesmenu.cpp
     app/audio_device_ui/outputdevicebutton.cpp
-    app/audio_device_ui/outputdevicename.cpp)
+    app/audio_device_ui/outputdevicename.cpp
+    app/dynamic_range/dr.cpp
+    app/dynamic_range/logformat.cpp
+    app/dynamic_range/analyzer.cpp
+    app/dynamic_range/scanner.cpp
+    app/dynamic_range_ui/dynamicrangedialog.cpp
+    app/dynamic_range_ui/dynamicrangedialog.ui)
 
   if (ENABLE_GAPLESS)
     list(APPEND PROJECT_SOURCES
@@ -257,7 +263,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   endif()
 
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU ENABLE_DR_METER)
   if (ENABLE_GAPLESS)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
   endif()

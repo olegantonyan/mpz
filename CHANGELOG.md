@@ -1,3 +1,13 @@
+## [2.1.3] - next
+
+### Added
+
+- Dynamic range analyzer (select tracks -> context menu), in Foobar's text format
+
+### Fixed
+
+### Misc
+
 ## [2.1.2] - 2026-08-01
 
 ### Added

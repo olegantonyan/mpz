@@ -380,6 +380,60 @@
     </message>
 </context>
 <context>
+    <name>DynamicRangeDialog</name>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="14"/>
+        <source>Dynamic range</source>
+        <translation>Динамический диапазон</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="50"/>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="60"/>
+        <source>Save as…</source>
+        <translation>Сохранить как…</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="83"/>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="155"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="77"/>
+        <source>Audio decoding is not available</source>
+        <translation>Декодирование аудио недоступно</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="88"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="120"/>
+        <source>Save dynamic range log</source>
+        <translation>Сохранить лог динамического диапазона</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="121"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстовые файлы (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="127"/>
+        <source>Save failed</source>
+        <translation>Ошибка сохранения</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="163"/>
+        <source>Analyzing %1/%2: %3</source>
+        <translation>Анализ %1/%2: %3</translation>
+    </message>
+</context>
+<context>
     <name>EqualizerUi::EqualizerDialog</name>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
@@ -1159,34 +1213,39 @@
 <context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="18"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="23"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="22"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
         <source>Show in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="26"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="31"/>
         <source>Copy name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="30"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="35"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="34"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="39"/>
         <source>Track info</source>
         <translation>Информация о треке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="43"/>
         <source>Edit tags…</source>
         <translation>Редактировать теги…</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="48"/>
+        <source>Dynamic range…</source>
+        <translation>Динамический диапазон…</translation>
     </message>
 </context>
 <context>
@@ -2118,169 +2177,169 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="263"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="259"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="266"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="262"/>
         <source>Album artist</source>
         <translation>Исполнитель альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="269"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="265"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="272"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="268"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="275"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="271"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="274"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="276"/>
         <source>Disc number</source>
         <translation>Номер диска</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="284"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="286"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="285"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="292"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="288"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="295"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="291"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="303"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="305"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="299"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="301"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="309"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="305"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="327"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="323"/>
         <source>Unsupported tags</source>
         <translation>Неподдерживаемые теги</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="336"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="332"/>
         <source>File name</source>
         <translation>Имя файла</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="333"/>
         <source>Directory</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="334"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="334"/>
         <source>%1 (%2 bytes)</source>
         <translation>%1 (%2 байт)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="341"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
         <source>Modified</source>
         <translation>Изменён</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="344"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="340"/>
         <source>Created</source>
         <translation>Создан</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="346"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="342"/>
         <source>Read-only</source>
         <translation>Только для чтения</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="348"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="344"/>
         <source>Symlink target</source>
         <translation>Цель символьной ссылки</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="500"/>
         <source>yes</source>
         <translation>да</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="500"/>
         <source>no</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="532"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="528"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="536"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="532"/>
         <source>Search on web</source>
         <translation>Искать в интернете</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="572"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="568"/>
         <source>No cover art</source>
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="646"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="642"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="653"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="661"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="649"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="657"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="714"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="710"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="722"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="718"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>

@@ -8,11 +8,7 @@
 #include "lyrics/lrcparser.h"
 #include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
-
-#include <taglib.h>
-
-#define MPZ_TAGLIB_SINCE(major, minor) \
-  (TAGLIB_MAJOR_VERSION > (major) || (TAGLIB_MAJOR_VERSION == (major) && TAGLIB_MINOR_VERSION >= (minor)))
+#include "taglib_compat.h"
 
 #include <fileref.h>
 #include <tag.h>
