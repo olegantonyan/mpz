@@ -9,6 +9,7 @@ on:
       - CODE_OF_CONDUCT.md
       - license.txt
       - 'scripts/run_linux.sh'
+      - 'scripts/run_macos.sh'
       - 'rpm/**'
       - 'deb/**'
       - 'win/**'
