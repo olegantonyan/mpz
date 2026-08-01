@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PRESET="${1:-release-qt6}"
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+PRESET="${1:-release-qt6-syslibs}"
 
 LAST_LINE=""
 while IFS= read -r line; do

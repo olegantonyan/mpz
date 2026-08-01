@@ -51,6 +51,10 @@ namespace Playlist {
 
       return out;
     }
+
+    bool has_suffix(const QString &name, const QStringList &formats) {
+      return formats.contains(QFileInfo(name).suffix(), Qt::CaseInsensitive);
+    }
   }
 
   Loader::Loader(const QDir &p) : path(p) {
@@ -59,9 +63,14 @@ namespace Playlist {
   const QStringList &Loader::supportedFileFormats() {
     static const QStringList formats = {
       QStringLiteral("mp3"), QStringLiteral("flac"), QStringLiteral("ogg"),
-      QStringLiteral("m4a"), QStringLiteral("mp4"), QStringLiteral("wav"),
-      QStringLiteral("wma"), QStringLiteral("aac"), QStringLiteral("ape"),
-      QStringLiteral("cue"), QStringLiteral("opus"), QStringLiteral("dsf")
+      QStringLiteral("oga"), QStringLiteral("opus"), QStringLiteral("spx"),
+      QStringLiteral("m4a"), QStringLiteral("m4b"), QStringLiteral("mp4"),
+      QStringLiteral("aac"), QStringLiteral("wav"), QStringLiteral("aiff"),
+      QStringLiteral("aif"), QStringLiteral("aifc"), QStringLiteral("wma"),
+      QStringLiteral("asf"), QStringLiteral("ape"), QStringLiteral("wv"),
+      QStringLiteral("mpc"), QStringLiteral("tta"), QStringLiteral("mka"),
+      QStringLiteral("dsf"), QStringLiteral("dff"), QStringLiteral("shn"),
+      QStringLiteral("cue")
     };
     return formats;
   }
@@ -74,12 +83,7 @@ namespace Playlist {
   }
 
   bool Loader::is_supported_file(const QString &name) {
-    for (const auto &i : Loader::supportedFileFormats()) {
-      if (name.endsWith(i, Qt::CaseInsensitive)) {
-        return true;
-      }
-    }
-    return false;
+    return has_suffix(name, Loader::supportedFileFormats());
   }
 
   QVector<Track> Loader::tracks() const {
@@ -154,12 +158,7 @@ namespace Playlist {
   }
 
   bool Loader::is_playlist_file() const {
-    for (const auto &i : Loader::supportedPlaylistFileFormats()) {
-      if (path.dirName().endsWith(i, Qt::CaseInsensitive)) {
-        return true;
-      }
-    }
-    return false;
+    return has_suffix(path.dirName(), Loader::supportedPlaylistFileFormats());
   }
 
   QStringList Loader::files_filter() const {

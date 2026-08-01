@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.1 LANGUAGES CXX C)
+project(mpz VERSION 2.1.2 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -42,6 +42,8 @@ else()
 endif()
 
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
+# keep the default: flatpak requires the MPRIS name to match the app id. snap needs an override, it forbids dots
+set(MPRIS_SERVICE_SUFFIX "org.mpz_player.mpz" CACHE STRING "Suffix appended to org.mpris.MediaPlayer2. for the MPRIS bus name")
 
 set(PROJECT_SOURCES
   app/icons.cpp
@@ -94,6 +96,8 @@ set(PROJECT_SOURCES
   app/playback/mediaplayer.cpp
   app/playback/playbackcontroller.cpp
   app/playback/randomtrail.cpp
+  app/playback/seekbar.cpp
+  app/waveform/peaks.cpp
   app/playback_log_ui/playbacklogdialog.cpp
   app/playback_log_ui/playbackloguicontroller.cpp
   app/playback_log_ui/playbackloguimodel.cpp
@@ -251,7 +255,8 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
       app/eq/autoeqimport.cpp
       app/eq/eqexport.cpp
       app/equalizer_ui/equalizerdialog.cpp
-      app/equalizer_ui/eqcurvewidget.cpp)
+      app/equalizer_ui/eqcurvewidget.cpp
+      app/waveform/analyzer.cpp)
   endif()
 
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
@@ -289,6 +294,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERS
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_SERVICE_SUFFIX="${MPRIS_SERVICE_SUFFIX}")
 endif()
 if (ENABLE_MPD_SUPPORT)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
@@ -334,8 +340,8 @@ endif()
 
 
 # 3RDPARTY
-include(disable_installation.cmake)
-set(_DISABLE_INSTALLATION TRUE)
+# add_subdirectory(EXCLUDE_FROM_ALL) drops the vendored deps' install() rules;
+# they still build because mpz links them.
 
 # YAML-CPP
 option(USE_SYSTEM_YAMLCPP "Use Yaml-cpp provided by the OS" OFF)
@@ -351,7 +357,7 @@ if(USE_SYSTEM_YAMLCPP)
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.9.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
-  add_subdirectory(${YAMLCPP_DIR})
+  add_subdirectory(${YAMLCPP_DIR} EXCLUDE_FROM_ALL)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp::yaml-cpp)
 endif()
 # ENDOF YAML-CPP
@@ -365,7 +371,7 @@ if (USE_SYSTEM_TAGLIB)
 else()
   set(TAGLIB_DIR 3rdparty/taglib-2.3.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
-  add_subdirectory(${TAGLIB_DIR})
+  add_subdirectory(${TAGLIB_DIR} EXCLUDE_FROM_ALL)
 
   # Upstream taglib only sets INSTALL_INTERFACE include dirs, so nothing
   # propagates to add_subdirectory consumers. Attach BUILD_INTERFACE dirs to
@@ -428,7 +434,7 @@ if (ENABLE_QHOTKEY)
     message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
     # QHotkey declares cmake_minimum_required(3.1), which CMake >= 4 rejects outright
     set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
-    add_subdirectory(${QHOTKEY_DIR})
+    add_subdirectory(${QHOTKEY_DIR} EXCLUDE_FROM_ALL)
     unset(CMAKE_POLICY_VERSION_MINIMUM)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
   endif()
@@ -485,7 +491,7 @@ if(ENABLE_CRASH_HANDLER)
       set(CPPTRACE_UNWIND_WITH_DBGHELP ON CACHE BOOL "" FORCE)
       set(CPPTRACE_DEMANGLE_WITH_WINAPI ON CACHE BOOL "" FORCE)
     endif()
-    add_subdirectory(${CPPTRACE_DIR})
+    add_subdirectory(${CPPTRACE_DIR} EXCLUDE_FROM_ALL)
   endif()
   target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
@@ -507,7 +513,6 @@ else()
 endif()
 # ENDOF CPPTRACE
 
-set(_DISABLE_INSTALLATION FALSE)
 # ENDOF 3RDPARTY
 
 

@@ -45,7 +45,7 @@ namespace {
 }
 
 static const auto MPRIS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
-static const auto SERVICE_NAME = "org.mpris.MediaPlayer2.org.mpz_player.mpz";
+static const auto SERVICE_NAME = "org.mpris.MediaPlayer2." MPRIS_SERVICE_SUFFIX;
 static const auto MPRIS_ENTRY = "org.mpris.MediaPlayer2.Player";
 static const auto FREEDESKTOP_PATH = "org.freedesktop.DBus.Properties";
 
@@ -130,34 +130,48 @@ QStringList Mpris::SupportedUriSchemes() const {
 }
 
 QStringList Mpris::SupportedMimeTypes() const {
+  // Keep in sync with MimeType= in org.mpz_player.mpz.desktop
   static QStringList res = QStringList() << "x-content/audio-player"
                                          << "application/ogg"
+                                         << "application/vnd.ms-asf"
+                                         << "application/x-cue"
                                          << "application/x-ogg"
                                          << "application/x-ogm-audio"
-                                         << "audio/flac"
-                                         << "audio/ogg"
-                                         << "audio/vorbis"
+                                         << "application/x-shorten"
                                          << "audio/aac"
+                                         << "audio/flac"
                                          << "audio/mp4"
                                          << "audio/mpeg"
                                          << "audio/mpegurl"
-                                         << "audio/vnd.rn-realaudio"
-                                         << "audio/x-flac"
-                                         << "audio/x-oggflac"
-                                         << "audio/x-vorbis"
-                                         << "audio/x-vorbis+ogg"
-                                         << "audio/x-speex"
-                                         << "audio/x-wav"
-                                         << "audio/x-wavpack"
+                                         << "audio/ogg"
+                                         << "audio/opus"
+                                         << "audio/vorbis"
+                                         << "audio/wav"
+                                         << "audio/x-aifc"
+                                         << "audio/x-aiff"
                                          << "audio/x-ape"
+                                         << "audio/x-dff"
+                                         << "audio/x-dsf"
+                                         << "audio/x-flac"
+                                         << "audio/x-flac+ogg"
+                                         << "audio/x-m4a"
+                                         << "audio/x-m4b"
+                                         << "audio/x-matroska"
                                          << "audio/x-mp3"
                                          << "audio/x-mpeg"
                                          << "audio/x-mpegurl"
                                          << "audio/x-ms-wma"
                                          << "audio/x-musepack"
-                                         << "audio/x-pn-realaudio"
+                                         << "audio/x-oggflac"
+                                         << "audio/x-opus+ogg"
                                          << "audio/x-scpls"
-                                         << "video/x-ms-asf";
+                                         << "audio/x-speex"
+                                         << "audio/x-speex+ogg"
+                                         << "audio/x-tta"
+                                         << "audio/x-vorbis"
+                                         << "audio/x-vorbis+ogg"
+                                         << "audio/x-wav"
+                                         << "audio/x-wavpack";
 
   return res;
 }

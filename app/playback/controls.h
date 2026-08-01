@@ -1,8 +1,9 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
+#include "playback/seekbar.h"
+
 #include <QToolButton>
-#include <QProgressBar>
 #include <QLabel>
 
 namespace Playback {
@@ -15,7 +16,7 @@ namespace Playback {
     QToolButton *pause = nullptr;
     QToolButton *prev = nullptr;
     QToolButton *next = nullptr;
-    QProgressBar *seekbar = nullptr;
+    Seekbar *seekbar = nullptr;
     QLabel *time = nullptr;
   };
 }

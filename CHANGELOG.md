@@ -1,15 +1,18 @@
-## [2.1.2] - next
+## [2.1.2] - 2026-08-01
 
 ### Added
 
+- Seekbar can show the track waveform, off by default (Settings → Interface)
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
 - macOS: animated dock icon while playing, can be disabled in settings
 - Settings: ability to turn off global media key grabbing. Only X11 and legacy Windows builds grab keys; elsewhere the OS integration (MPRIS, SMTC, macOS) handles them, and Wayland forbids grabs
 - Output device button shows the selected device name
+- Album artist and disc number tags: columns, sorting, tag editor. Default sort now respects disc number
 
 ### Fixed
 
 - Playback follows cursor: removing the selected track no longer jumps to the first track or leaves playback silent
+- Windows: duplicate Apps & Features entries after reinstall
 - Linux: app icon shows again in PulseAudio/PipeWire volume mixers, broken by the .desktop rename in 2.1.1
 
 ### Misc

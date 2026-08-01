@@ -53,7 +53,8 @@ namespace {
   };
 
   const QStringList kColumnFields = {
-    "artist", "album", "title", "year", "length", "track_number",
+    "artist", "album_artist", "album", "title", "year", "length",
+    "track_number", "disc_number",
     "path", "url", "filename", "format", "bitrate", "channels", "sample_rate",
   };
 }
@@ -173,6 +174,18 @@ QWidget *SettingsDialog::buildGeneralTab() {
   check_auto_update = new QCheckBox(tr("Check for updates on startup"));
   check_auto_update->setChecked(!global_conf.disableAutoUpdateCheck());
   iv->addWidget(check_auto_update);
+#endif
+
+#ifdef ENABLE_GAPLESS
+  check_waveform = new QCheckBox(tr("Show waveform in the seekbar"));
+  check_waveform->setChecked(!global_conf.waveformDisabled());
+  auto *wf_hint = new QLabel(tr("(gapless playback, local files only)"));
+  wf_hint->setStyleSheet("color: gray;");
+  auto *wf_row = new QHBoxLayout;
+  wf_row->addWidget(check_waveform);
+  wf_row->addWidget(wf_hint);
+  wf_row->addStretch();
+  iv->addLayout(wf_row);
 #endif
 
   check_row_height = new QCheckBox(tr("Override theme's playlist row height:"));
@@ -760,6 +773,12 @@ void SettingsDialog::apply() {
   }
 #ifdef Q_OS_MACOS
   global_conf.saveDisableDockIconAnimation(!check_dock_icon_animation->isChecked());
+#endif
+#ifdef ENABLE_GAPLESS
+  if (global_conf.waveformDisabled() == check_waveform->isChecked()) {
+    global_conf.saveWaveformDisabled(!check_waveform->isChecked());
+    emit waveformToggled(check_waveform->isChecked());
+  }
 #endif
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);

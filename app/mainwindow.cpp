@@ -91,7 +91,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.stop = ui->stopButton;
   pc.play = ui->playButton;
   pc.pause = ui->pauseButton;
-  pc.seekbar = ui->progressBar;
+  pc.seekbar = ui->seekBar;
   pc.time = ui->timeLabel;
   ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
   bool gapless_on = !global_conf.disableGapless();
@@ -100,6 +100,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     gapless_mb = 100;
   }
   player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
+  player->setWaveformEnabled(!global_conf.waveformDisabled());
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
   }
@@ -509,6 +510,7 @@ void MainWindow::setupMainMenu() {
   main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action });
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
+  connect(main_menu, &MainMenu::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
 }
 
 void MainWindow::setupTrayIcon() {
@@ -738,6 +740,7 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::openSettings, this, [this]() {
     SettingsDialog dlg(global_conf, local_conf, this);
     connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+    connect(&dlg, &SettingsDialog::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
     dlg.exec();
   });
 }
