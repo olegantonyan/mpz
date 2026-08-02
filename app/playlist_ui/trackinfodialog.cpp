@@ -9,6 +9,9 @@
 #include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
 #include "taglib_compat.h"
+#ifdef ENABLE_DR_METER
+  #include "dynamic_range_ui/dynamicrangedialog.h"
+#endif
 
 #include <fileref.h>
 #include <tag.h>
@@ -210,6 +213,11 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std
   }
   ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
   ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isMpd() && !track.isStream());
+#ifdef ENABLE_DR_METER
+  ui->toolButtonDynamicRange->setVisible(!track.isMpd() && !track.isStream());
+#else
+  ui->toolButtonDynamicRange->setVisible(false);
+#endif
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -602,6 +610,15 @@ void TrackInfoDialog::on_toolButtonEditTags_clicked() {
   emit tagEditorOpened(dlg);
   dlg->show();
 }
+
+#ifdef ENABLE_DR_METER
+void TrackInfoDialog::on_toolButtonDynamicRange_clicked() {
+  DynamicRangeDialog *dlg = new DynamicRangeDialog({_track});
+  dlg->setModal(false);
+  connect(dlg, &DynamicRangeDialog::finished, dlg, &DynamicRangeDialog::deleteLater);
+  dlg->show();
+}
+#endif
 
 void TrackInfoDialog::refresh_track(const QList<quint64> &uids) {
   if (!_playlist || !uids.contains(_track.uid())) {

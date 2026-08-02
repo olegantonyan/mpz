@@ -35,6 +35,9 @@ protected:
 private slots:
   void on_toolButtonOpenFileManager_clicked();
   void on_toolButtonEditTags_clicked();
+#ifdef ENABLE_DR_METER
+  void on_toolButtonDynamicRange_clicked();
+#endif
   void on_labelCoverArt_customContextMenuRequested(const QPoint &pos);
   void refresh_track(const QList<quint64> &uids);
 

@@ -2,7 +2,7 @@
 
 ### Added
 
-- Dynamic range analyzer (select tracks -> context menu), in Foobar's text format
+- Dynamic range analyzer (playlist context menu or track info dialog), in Foobar's text format
 
 ### Fixed
 
