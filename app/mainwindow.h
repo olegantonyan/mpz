@@ -26,7 +26,11 @@
 #include "coverart/coverartwidget.h"
 #include "lyrics/lyricswidget.h"
 
+#include <QAction>
+#include <QDockWidget>
 #include <QMainWindow>
+#include <QMenu>
+#include <QToolBar>
 #include <QtGlobal>
 
 #if defined(MPRIS_ENABLE)
@@ -52,6 +56,10 @@
   #include "playback/mpd/playbackorder.h"
 #endif
 
+#ifdef ENABLE_GAPLESS
+  #include "equalizer_ui/equalizerdialog.h"
+#endif
+
 #if defined(ENABLE_UPDATE_CHECK)
   #include "update_check/updatechecker.h"
 #endif
@@ -63,11 +71,6 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-
-class QDockWidget;
-class QMenu;
-class QToolBar;
-class QAction;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -126,6 +129,9 @@ private:
   SortUi::SortMenu *sort_menu = nullptr;
 #ifdef ENABLE_DEVICES_MENU
   AudioDeviceUi::OutputDeviceButton *output_device_button = nullptr;
+#endif
+#ifdef ENABLE_GAPLESS
+  EqualizerUi::EqualizerDialog *eq_dialog = nullptr;
 #endif
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;

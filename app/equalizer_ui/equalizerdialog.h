@@ -8,17 +8,16 @@
 #include "equalizer_ui/eqcurvewidget.h"
 
 #include <QByteArray>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
+#include <QDoubleSpinBox>
+#include <QLabel>
 #include <QList>
+#include <QSlider>
+#include <QTabWidget>
+#include <QTableWidget>
 #include <QVector>
-
-class QCheckBox;
-class QComboBox;
-class QDoubleSpinBox;
-class QLabel;
-class QSlider;
-class QTabWidget;
-class QTableWidget;
 
 namespace EqualizerUi {
   class EqualizerDialog : public QDialog {
@@ -27,8 +26,7 @@ namespace EqualizerUi {
     EqualizerDialog(Playback::Controller *player, Config::Local &local_c,
                     Config::Global &global_c, QWidget *parent = nullptr);
 
-  protected:
-    void closeEvent(QCloseEvent *event) override;
+    void done(int result) override;
 
   private:
     Eq::EqProfile &active();

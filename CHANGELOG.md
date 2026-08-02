@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- Equalizer dialog no longer modal, can control player underneath it while open
+
 ### Misc
 
 ## [2.1.2] - 2026-08-01
