@@ -47,7 +47,10 @@ function removePreviousInstall() {
     if (!cli)
         installer.gainAdminRights();
 
-    var result = installer.execute(maintenanceTool, ["purge", "--confirm-command"], "y\n");
+    // QtIFW only parses options that precede the command; after it they are dropped
+    // and the tool prompts instead.
+    var result = installer.execute(maintenanceTool,
+        ["--confirm-command", "--accept-messages", "purge"], "y\n");
     if (result[1] == 0 && cli && !waitForRemoval(maintenanceTool))
         result[1] = 1;
 
