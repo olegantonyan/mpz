@@ -130,7 +130,7 @@ QStringList Mpris::SupportedUriSchemes() const {
 }
 
 QStringList Mpris::SupportedMimeTypes() const {
-  // Keep in sync with MimeType= in org.mpz_player.mpz.desktop
+  // Keep in sync with MimeType= in mpz.desktop.in
   static QStringList res = QStringList() << "x-content/audio-player"
                                          << "application/ogg"
                                          << "application/vnd.ms-asf"

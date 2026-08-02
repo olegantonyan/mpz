@@ -44,6 +44,9 @@ endif()
 set(PACKAGE_VERSION "" CACHE STRING "An additional version info passed from packaging step")
 # keep the default: flatpak requires the MPRIS name to match the app id. snap needs an override, it forbids dots
 set(MPRIS_SERVICE_SUFFIX "org.mpz_player.mpz" CACHE STRING "Suffix appended to org.mpris.MediaPlayer2. for the MPRIS bus name")
+# snap needs overrides here too: snapd prefixes the desktop id and requires snap.<snap-name>.* icons
+set(DESKTOP_FILE_ID "org.mpz_player.mpz" CACHE STRING "Desktop entry id, without the .desktop suffix")
+set(ICON_NAME "org.mpz_player.mpz" CACHE STRING "Themed icon name")
 
 set(PROJECT_SOURCES
   app/icons.cpp
@@ -294,6 +297,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+  DESKTOP_FILE_ID="${DESKTOP_FILE_ID}" ICON_NAME="${ICON_NAME}")
 if (ENABLE_DBUS)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
@@ -536,7 +541,12 @@ install(TARGETS ${CMAKE_PROJECT_NAME}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 if(NOT APPLE AND NOT WIN32)
-  install(FILES org.mpz_player.mpz.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/mpz.desktop.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_ID}.desktop
+    @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_ID}.desktop
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install(FILES license.txt DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${CMAKE_PROJECT_NAME})
 
   set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION}")
@@ -553,7 +563,7 @@ if(NOT APPLE AND NOT WIN32)
 
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
-    RENAME org.mpz_player.mpz.svg)
+    RENAME ${ICON_NAME}.svg)
   file(GLOB ICON_FILES "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/*x*/mpz.png")
   foreach(icon IN LISTS ICON_FILES)
     get_filename_component(size_dir "${icon}" DIRECTORY)
@@ -561,7 +571,7 @@ if(NOT APPLE AND NOT WIN32)
     string(REGEX MATCH "^[0-9]+" icon_size "${size_dir}")
     if(icon_size LESS_EQUAL 48)
       install(FILES "${icon}" DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${size_dir}/apps
-        RENAME org.mpz_player.mpz.png)
+        RENAME ${ICON_NAME}.png)
     endif()
   endforeach()
 endif()
