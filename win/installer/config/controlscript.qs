@@ -22,7 +22,8 @@ function removePreviousInstall() {
 
     var cli = installer.isCommandLineInstance();
 
-    // TargetDir may not be resolved yet this early in the headless run.
+    // This early, TargetDir is still the config.xml default: a headless --root
+    // override is not visible here, so it purges the default location instead.
     var targetDir = installer.value("TargetDir");
     if (targetDir === "")
         targetDir = installer.value("ApplicationsDir") + "/mpz-player";
