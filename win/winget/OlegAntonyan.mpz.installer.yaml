@@ -27,8 +27,6 @@ AppsAndFeaturesEntries:
   DisplayVersion: 2.1.2
   Publisher: Oleg Antonyan
   ProductCode: '{CB3FB4C2-AC12-4EAB-A0D3-CB6C62752B47}'
-InstallationMetadata:
-  DefaultInstallLocation: '%ProgramFiles%\mpz-player'
 ReleaseDate: 2026-08-01
 Installers:
 - Architecture: x64
