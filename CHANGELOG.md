@@ -4,7 +4,6 @@
 
 - Dynamic range analyzer (playlist context menu or track info dialog), in Foobar's text format
 - Editable keyboard shortcuts
-- Windows: dark title bar
 
 ### Fixed
 

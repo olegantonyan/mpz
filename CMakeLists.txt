@@ -218,10 +218,6 @@ if (WIN32)
     @ONLY)
   list(APPEND PROJECT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc)
   list(APPEND PROJECT_SOURCES app/windows/windowstaskbar.cpp)
-  if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-    # needs Windows 10 1809+, and only Qt6 follows the system dark theme at all
-    list(APPEND PROJECT_SOURCES app/windows/windowsdarktitlebar.cpp)
-  endif()
 endif()
 
 if (APPLE)
@@ -285,9 +281,6 @@ endforeach()
 
 if (WIN32)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
-  if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dwmapi)
-  endif()
 endif()
 
 if (WIN32 AND NOT MINGW)

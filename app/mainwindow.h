@@ -52,11 +52,6 @@
   #include "windows/windowstaskbar.h"
 #endif
 
-#if defined(Q_OS_WIN) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  #define DARK_TITLEBAR_ENABLE
-  #include "windows/windowsdarktitlebar.h"
-#endif
-
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/playbackorder.h"
 #endif
@@ -186,9 +181,6 @@ private:
 #endif
 #ifdef Q_OS_WIN
   void setupWindowsTaskbar();
-#endif
-#ifdef DARK_TITLEBAR_ENABLE
-  void setupWindowsDarkTitleBar();
 #endif
   void setupWindowTitle();
   void setupPlaybackLog();
