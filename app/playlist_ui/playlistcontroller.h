@@ -10,6 +10,7 @@
 #include "playlist_ui/playlistcontextmenu.h"
 #include "busyspinner.h"
 #include "playlist_ui/columnsconfig.h"
+#include "playlist_ui/floatingheader.h"
 
 #include <QObject>
 #include <QTableView>
@@ -49,6 +50,7 @@ namespace PlaylistUi {
     void on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks);
     void on_tracksAppended(const std::shared_ptr<Playlist::Playlist> pl);
     void sortBy(const QString &criteria);
+    void setFloatingHeaderEnabled(bool enabled);
 
   private slots:
     void removeSelectedTracks();
@@ -70,9 +72,11 @@ namespace PlaylistUi {
     QHash<quint64,int> scroll_positions;
     ProxyFilterModel *proxy;
     PlaylistContextMenu *context_menu;
+    FloatingHeader *floating_header = nullptr;
     ColumnsConfig columns_config;
     quint64 live_stream_uid = 0;
     bool restoring_cursor = false;
+    int last_saved_scroll = -1;
 
     void updateStreamSpans();
     void restoreCursor(quint64 cursor_uid, int fallback_row);
@@ -83,6 +87,7 @@ namespace PlaylistUi {
     const TracksMimeData *droppedTracks(QDropEvent *event) const;
 
     void loadColumnsConfig();
+    void setupFloatingHeader();
 
   protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

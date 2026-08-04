@@ -175,6 +175,13 @@ mpz_add_test(tst_columnsconfig tst_columnsconfig.cpp
 target_link_libraries(tst_columnsconfig PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
 
+# Only the pure reveal-zone policy is exercised; the widget is never constructed,
+# so this stays guiless and needs Widgets for the include path alone.
+mpz_add_test(tst_floatingheader tst_floatingheader.cpp
+  ${APP}/playlist_ui/floatingheader.cpp)
+target_link_libraries(tst_floatingheader PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui)
+
 # Config::Storage YAML round-trips need yaml-cpp and the VERSION macro.
 mpz_add_test(tst_configstorage tst_configstorage.cpp
   ${APP}/config/storage.cpp

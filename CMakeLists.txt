@@ -120,6 +120,7 @@ set(PROJECT_SOURCES
   app/directory_ui/radiostationdialog.cpp
   app/directory_ui/radiostationsdialog.cpp
   app/playlist_ui/columnsconfig.cpp
+  app/playlist_ui/floatingheader.cpp
   app/playlist_ui/playlistcontroller.cpp
   app/playlist_ui/playlistmodel.cpp
   app/playlist_ui/streamrowdelegate.cpp

@@ -64,6 +64,9 @@ namespace Config {
     PlaylistUi::ColumnsConfig columnsConfig() const;
     bool saveColumnsConfig(const PlaylistUi::ColumnsConfig &arg);
 
+    bool playlistHeaderEnabled() const;
+    void savePlaylistHeaderEnabled(bool arg);
+
     bool inhibitSleepWhilePlaying() const;
     void saveInhibitSleepWhilePlaying(bool arg);
 

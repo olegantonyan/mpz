@@ -281,6 +281,10 @@ QWidget *SettingsDialog::buildGeneralTab() {
   cols_hint->setStyleSheet("color: gray;");
   cv->addWidget(cols_hint);
 
+  check_playlist_header = new QCheckBox(tr("Show column names when hovering the top of the playlist"));
+  check_playlist_header->setChecked(global_conf.playlistHeaderEnabled());
+  cv->addWidget(check_playlist_header);
+
   auto add_column_row = [this](const QString &field, int width_pct,
                                const QString &align, bool stretch) {
     int r = table_columns->rowCount();
@@ -789,6 +793,10 @@ void SettingsDialog::apply() {
 
   // Columns
   global_conf.saveColumnsConfig(collectColumns());
+  if (global_conf.playlistHeaderEnabled() != check_playlist_header->isChecked()) {
+    global_conf.savePlaylistHeaderEnabled(check_playlist_header->isChecked());
+    emit playlistHeaderToggled(check_playlist_header->isChecked());
+  }
 
   // Lyrics
   global_conf.saveLyricsProviders(collectProviders(list_lyrics));

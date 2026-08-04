@@ -53,6 +53,9 @@ namespace PlaylistUi {
       view->horizontalHeader()->setSectionResizeMode(c, QHeaderView::Fixed);
     }
 
+    view->viewport()->setMouseTracking(true);
+    setupFloatingHeader();
+
     view->viewport()->installEventFilter(this);
     view->installEventFilter(this);
 
@@ -120,6 +123,33 @@ namespace PlaylistUi {
     } else {
       columns_config = global_conf.columnsConfig();
     }
+  }
+
+  void Controller::setupFloatingHeader() {
+    QStringList labels;
+    QVector<Qt::Alignment> aligns;
+    labels << QString();
+    aligns << (Qt::AlignLeft | Qt::AlignVCenter);
+    for (int col = 1; col <= columns_config.count(); col++) {
+      labels << columns_config.field(col);
+      aligns << columns_config.align(col);
+    }
+
+    floating_header = new FloatingHeader(view);
+    floating_header->setColumns(labels, aligns);
+    floating_header->setActive(global_conf.playlistHeaderEnabled());
+
+    auto *header = view->horizontalHeader();
+    connect(header, &QHeaderView::sectionResized, floating_header, &FloatingHeader::invalidateCache);
+    connect(header, &QHeaderView::geometriesChanged, floating_header, &FloatingHeader::invalidateCache);
+    connect(header, &QHeaderView::sectionCountChanged, floating_header, &FloatingHeader::syncGeometry);
+    connect(proxy, &QAbstractItemModel::modelReset, floating_header, &FloatingHeader::syncGeometry);
+    connect(view->horizontalScrollBar(), &QScrollBar::valueChanged, floating_header, &FloatingHeader::invalidateCache);
+    connect(view, &QTableView::customContextMenuRequested, floating_header, &FloatingHeader::hideNow);
+  }
+
+  void Controller::setFloatingHeaderEnabled(bool enabled) {
+    floating_header->setActive(enabled);
   }
 
   void Controller::on_load(const std::shared_ptr<Playlist::Playlist> pi) {
@@ -248,11 +278,13 @@ namespace PlaylistUi {
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {
     if (obj == view->viewport()) {
+      floating_header->onViewportEvent(event);
       if (handleDnd(event)) {
         return true;
       }
       eventFilterViewport(event);
     } else if (obj == view) {
+      floating_header->onViewEvent(event);
       eventFilterTableView(event);
     }
     return QObject::eventFilter(obj, event);
@@ -356,6 +388,7 @@ namespace PlaylistUi {
           view->horizontalHeader()->setSectionResizeMode(col, QHeaderView::Stretch);
         }
       }
+      floating_header->syncGeometry();
 
     } else if (event->type() == QEvent::WindowActivate) {
       if (restore_scroll_once) {
@@ -363,7 +396,11 @@ namespace PlaylistUi {
         view->verticalScrollBar()->setValue(local_conf.playlistViewScrollPosition());
       }
     } else if (event->type() == QEvent::MouseMove || event->type() == QEvent::MouseButtonPress) {
-      local_conf.savePlaylistViewScrollPosition(view->verticalScrollBar()->value());
+      const int scroll = view->verticalScrollBar()->value();
+      if (scroll != last_saved_scroll) {
+        last_saved_scroll = scroll;
+        local_conf.savePlaylistViewScrollPosition(scroll);
+      }
     }
 
     if (event->type() == QEvent::MouseButtonPress) {

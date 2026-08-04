@@ -26,6 +26,7 @@ public:
 signals:
   void trayIconToggled();
   void waveformToggled(bool enabled);
+  void playlistHeaderToggled(bool enabled);
 
 private:
   Config::Global &global_conf;
@@ -49,6 +50,7 @@ private:
   QComboBox *combo_library_filter_scope = nullptr;
 
   QTableWidget *table_columns = nullptr;
+  QCheckBox *check_playlist_header = nullptr;
   QListWidget *list_lyrics = nullptr;
   QListWidget *list_covers = nullptr;
 

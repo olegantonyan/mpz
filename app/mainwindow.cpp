@@ -511,6 +511,7 @@ void MainWindow::setupMainMenu() {
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
   connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
   connect(main_menu, &MainMenu::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
+  connect(main_menu, &MainMenu::playlistHeaderToggled, playlist, &PlaylistUi::Controller::setFloatingHeaderEnabled);
 }
 
 void MainWindow::setupTrayIcon() {
@@ -739,6 +740,7 @@ void MainWindow::setupShortcuts() {
     SettingsDialog dlg(global_conf, local_conf, this);
     connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
     connect(&dlg, &SettingsDialog::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
+    connect(&dlg, &SettingsDialog::playlistHeaderToggled, playlist, &PlaylistUi::Controller::setFloatingHeaderEnabled);
     dlg.exec();
   });
 }

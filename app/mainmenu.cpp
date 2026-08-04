@@ -31,6 +31,7 @@ void MainMenu::on_open() {
     SettingsDialog dlg(global_conf, local_conf, button->parentWidget());
     connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainMenu::toggleTrayIcon);
     connect(&dlg, &SettingsDialog::waveformToggled, this, &MainMenu::waveformToggled);
+    connect(&dlg, &SettingsDialog::playlistHeaderToggled, this, &MainMenu::playlistHeaderToggled);
     dlg.exec();
   });
   connect(&about, &QAction::triggered, [=]() {

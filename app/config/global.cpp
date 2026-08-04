@@ -187,6 +187,14 @@ namespace Config {
     return storage.set("columns_config", arg.serialize());
   }
 
+  bool Global::playlistHeaderEnabled() const {
+    return storage.get("playlist_header_enabled").get<bool>();
+  }
+
+  void Global::savePlaylistHeaderEnabled(bool arg) {
+    storage.set("playlist_header_enabled", Config::Value(arg));
+  }
+
   bool Global::inhibitSleepWhilePlaying() const {
     return storage.get("inhibit_sleep_while_playing").get<bool>();
   }
