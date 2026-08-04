@@ -89,6 +89,12 @@ Grab the installer or portable binary from the [releases page](https://github.co
 * win-arm64-qt6 - native ARM 64-bit build (only ARM CPU)
 * win-legacy-qt5 - legacy version for x86 32-bit systems (only Windows below 10)
 
+The build is not signed, so Windows blocks it on first launch.
+
+**Microsoft Defender SmartScreen** - "Windows protected your PC". Click *More info*, then *Run anyway*. No *Run anyway*? Right-click the file → *Properties* → tick *Unblock* → *Apply*.
+
+**Smart App Control** - "cannot be verified", with nothing to click; it has no exception list. Turn it off in *Windows Security → App & browser control → Smart App Control*, install, turn it back on. Older Windows 11 builds made that switch one-way, so check you can re-enable it first. Only clean installs of Windows 11 have it on.
+
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
 
 #### macOS
