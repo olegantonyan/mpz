@@ -4,10 +4,12 @@
 
 - Dynamic range analyzer (playlist context menu or track info dialog), in Foobar's text format
 - Editable keyboard shortcuts
+- Windows: dark title bar
 
 ### Fixed
 
 - Equalizer dialog no longer modal, can control player underneath it while open
+- Seek while paused
 
 ### Misc
 

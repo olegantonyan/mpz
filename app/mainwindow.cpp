@@ -150,6 +150,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 #ifdef Q_OS_WIN
   setupWindowsTaskbar();
 #endif
+#ifdef DARK_TITLEBAR_ENABLE
+  setupWindowsDarkTitleBar();
+#endif
 #if defined(MPRIS_ENABLE)
   setupMpris();
 #endif
@@ -398,6 +401,15 @@ void MainWindow::setupWindowsMediaControls() {
 void MainWindow::setupWindowsTaskbar() {
   win_taskbar = new WindowsTaskbar(player, this, this);
   connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, win_taskbar, &WindowsTaskbar::refresh);
+}
+#endif
+
+#ifdef DARK_TITLEBAR_ENABLE
+void MainWindow::setupWindowsDarkTitleBar() {
+  WindowsDarkTitleBar::apply(this);
+  connect(static_cast<MpzApplication *>(qApp), &MpzApplication::paletteChanged, this, [this]() {
+    WindowsDarkTitleBar::apply(this);
+  });
 }
 #endif
 

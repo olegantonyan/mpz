@@ -160,7 +160,6 @@ The available config options are:
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB;
 - `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist;
-- `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
