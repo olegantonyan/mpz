@@ -214,6 +214,27 @@ target_link_libraries(tst_localconfig PRIVATE
   Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
 target_compile_definitions(tst_localconfig PRIVATE VERSION="${PROJECT_VERSION}")
 
+mpz_add_test(tst_shortcuts tst_shortcuts.cpp
+  ${APP}/shortcuts.cpp
+  ${APP}/config/global.cpp
+  ${APP}/config/local.cpp
+  ${APP}/config/storage.cpp
+  ${APP}/config/value.cpp
+  ${APP}/playlist/playlist.cpp
+  ${APP}/playlist/sorter.cpp
+  ${APP}/playlist/loader.cpp
+  ${APP}/playlist/fileparser.cpp
+  ${APP}/playlist/cueparser.cpp
+  ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/radio/station.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_shortcuts PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
+target_compile_definitions(tst_shortcuts PRIVATE VERSION="${PROJECT_VERSION}")
+
 # MPD data classes — testable for defaults + nullptr update guard.
 # Constructing real mpd_status/mpd_song/mpd_output structs requires
 # libmpdclient internals, so deeper coverage would need a live mpd server.

@@ -166,8 +166,23 @@ The available config options are:
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 - `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 - `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all; on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead;
+- `shortcuts` in `global.yml` - rebound keyboard shortcuts, more on this below;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
+
+#### Shortcuts config
+
+Usually edited in the app, but writable by hand:
+
+```
+shortcuts:
+  next: Ctrl+Alt+N
+  open_sort_menu: ''
+```
+
+Only changed shortcuts are stored; the rest follow the platform defaults, so `global.yml` stays portable. Empty string means unbound. Unparseable values are ignored. On a collision the rebound action wins and the other is unset.
+
+Sequences use portable spelling (`Ctrl`, `Alt`, `Shift`, `Meta`). On macOS `Ctrl+` is ⌘, `Meta+` is ⌃ and `Alt+` is ⌥.
 
 #### Columns config
 
@@ -238,6 +253,8 @@ This will ignore commands issued by Wireplumber. Starting around version 0.5, it
 The full, platform-aware list is in the app: press Alt+S (Linux/Windows) or ⌘+/ (macOS), or open the main menu → "Keyboard shortcuts".
 
 Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - playback log; Ctrl+J - jump to the playing track.
+
+All of them are editable in that dialog: click a key field, press the new combination, OK. Global media keys are not rebindable.
 
 ## Limitations
 

@@ -1,10 +1,13 @@
 #include "shortcuts.h"
 
 #include <QGuiApplication>
+#include <QDebug>
 
-Shortcuts::Shortcuts(Config::Local &local_c, QWidget *parent) : QObject(parent)
+Shortcuts::Shortcuts(Config::Global &global_c, Config::Local &local_c, QWidget *parent) : QObject(parent)
   , _parent(parent)
+  , global_conf(global_c)
   , local_conf(local_c)
+  , _specs(resolve(global_c.shortcuts()))
 #ifdef ENABLE_QHOTKEY
 #ifdef Q_OS_WIN
   , _playpause_global(parent)
@@ -21,74 +24,122 @@ Shortcuts::Shortcuts(Config::Local &local_c, QWidget *parent) : QObject(parent)
   setupGlobal();
 }
 
-const QVector<Shortcuts::Spec> &Shortcuts::specs() {
-  // The one place every key sequence and dialog label lives. Each entry is
-  // resolved for the current platform at first use. registerLocal is false for
-  // actions the macOS native menu bar owns (Play/Pause, Stop, Prev, Next,
-  // Volume, Settings, Quit) so we do not register a QShortcut that would fire
-  // alongside the menu action.
+const QVector<Shortcuts::Spec> &Shortcuts::defaults() {
+  // keys must stay identical across platforms, global.yml is portable
   static const QVector<Spec> table = []() {
     QVector<Spec> t;
 #ifdef Q_OS_MACOS
-    t << Spec{Action::PlayPause, tr("Play / Pause"), QKeySequence(Qt::Key_Space), false};
-    t << Spec{Action::Play, QString(), QKeySequence(), false};
-    t << Spec{Action::Pause, QString(), QKeySequence(), false};
-    t << Spec{Action::Stop, QString(), QKeySequence(), false};
-    t << Spec{Action::Next, tr("Next"), QKeySequence(Qt::CTRL | Qt::Key_Right), false};
-    t << Spec{Action::Prev, tr("Previous"), QKeySequence(Qt::CTRL | Qt::Key_Left), false};
-    t << Spec{Action::VolumeUp, tr("Volume up"), QKeySequence(Qt::CTRL | Qt::Key_Up), false};
-    t << Spec{Action::VolumeDown, tr("Volume down"), QKeySequence(Qt::CTRL | Qt::Key_Down), false};
-    t << Spec{Action::Settings, tr("Settings"), QKeySequence(QKeySequence::Preferences), false};
-    t << Spec{Action::FocusLibrary, tr("Focus on library"), QKeySequence(Qt::CTRL | Qt::Key_1), true};
-    t << Spec{Action::FocusPlaylists, tr("Focus on playlists"), QKeySequence(Qt::CTRL | Qt::Key_2), true};
-    t << Spec{Action::FocusPlaylist, tr("Focus on playlist"), QKeySequence(Qt::CTRL | Qt::Key_3), true};
+    t << Spec{Action::PlayPause, "play_pause", tr("Play / Pause"), QKeySequence(Qt::Key_Space), false};
+    t << Spec{Action::Play, "play", QString(), QKeySequence(), false};
+    t << Spec{Action::Pause, "pause", QString(), QKeySequence(), false};
+    t << Spec{Action::Stop, "stop", QString(), QKeySequence(), false};
+    t << Spec{Action::Next, "next", tr("Next"), QKeySequence(Qt::CTRL | Qt::Key_Right), false};
+    t << Spec{Action::Prev, "prev", tr("Previous"), QKeySequence(Qt::CTRL | Qt::Key_Left), false};
+    t << Spec{Action::VolumeUp, "volume_up", tr("Volume up"), QKeySequence(Qt::CTRL | Qt::Key_Up), false};
+    t << Spec{Action::VolumeDown, "volume_down", tr("Volume down"), QKeySequence(Qt::CTRL | Qt::Key_Down), false};
+    t << Spec{Action::Settings, "settings", tr("Settings"), QKeySequence(QKeySequence::Preferences), false};
+    t << Spec{Action::FocusLibrary, "focus_library", tr("Focus on library"), QKeySequence(Qt::CTRL | Qt::Key_1), true};
+    t << Spec{Action::FocusPlaylists, "focus_playlists", tr("Focus on playlists"), QKeySequence(Qt::CTRL | Qt::Key_2), true};
+    t << Spec{Action::FocusPlaylist, "focus_playlist", tr("Focus on playlist"), QKeySequence(Qt::CTRL | Qt::Key_3), true};
     // Cmd+Option+digit, not Cmd+Shift+digit: the latter clashes with macOS
     // system screenshot shortcuts (⌘⇧3/⌘⇧4/⌘⇧5).
-    t << Spec{Action::FocusFilterLibrary, tr("Focus on library filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_1), true};
-    t << Spec{Action::FocusFilterPlaylists, tr("Focus on playlists filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_2), true};
-    t << Spec{Action::FocusFilterPlaylist, tr("Focus on playlist filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_3), true};
-    t << Spec{Action::OpenMainMenu, tr("Open main menu"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), true};
-    t << Spec{Action::OpenPlaybackLog, tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
-    t << Spec{Action::OpenSortMenu, tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
+    t << Spec{Action::FocusFilterLibrary, "focus_filter_library", tr("Focus on library filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_1), true};
+    t << Spec{Action::FocusFilterPlaylists, "focus_filter_playlists", tr("Focus on playlists filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_2), true};
+    t << Spec{Action::FocusFilterPlaylist, "focus_filter_playlist", tr("Focus on playlist filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_3), true};
+    t << Spec{Action::OpenMainMenu, "open_main_menu", tr("Open main menu"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), true};
+    t << Spec{Action::OpenPlaybackLog, "open_playback_log", tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
+    t << Spec{Action::OpenSortMenu, "open_sort_menu", tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
 #ifdef ENABLE_DEVICES_MENU
-    t << Spec{Action::OpenOutputMenu, tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
+    t << Spec{Action::OpenOutputMenu, "open_output_menu", tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
 #endif
-    t << Spec{Action::OpenShortcutsMenu, tr("Open shortcuts dialog"), QKeySequence(Qt::CTRL | Qt::Key_Slash), true};
-    t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), false};
-    t << Spec{Action::Quit, tr("Quit"), QKeySequence(QKeySequence::Quit), false};
+    t << Spec{Action::OpenShortcutsMenu, "open_shortcuts_dialog", tr("Open shortcuts dialog"), QKeySequence(Qt::CTRL | Qt::Key_Slash), true};
+    t << Spec{Action::JumpToPlayingTrack, "jump_to_playing_track", tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), false};
+    t << Spec{Action::Quit, "quit", tr("Quit"), QKeySequence(QKeySequence::Quit), false};
 #else
-    t << Spec{Action::PlayPause, tr("Play / Pause"), QKeySequence(Qt::Key_Space), true};
-    t << Spec{Action::Play, tr("Play"), QKeySequence(Qt::ALT | Qt::Key_E), true};
-    t << Spec{Action::Pause, tr("Pause"), QKeySequence(Qt::ALT | Qt::Key_W), true};
-    t << Spec{Action::Stop, tr("Stop"), QKeySequence(Qt::ALT | Qt::Key_Q), true};
-    t << Spec{Action::Next, tr("Next"), QKeySequence(Qt::ALT | Qt::Key_T), true};
-    t << Spec{Action::Prev, tr("Previous"), QKeySequence(Qt::ALT | Qt::Key_R), true};
-    t << Spec{Action::VolumeUp, tr("Volume up"), QKeySequence(Qt::CTRL | Qt::Key_Up), true};
-    t << Spec{Action::VolumeDown, tr("Volume down"), QKeySequence(Qt::CTRL | Qt::Key_Down), true};
-    t << Spec{Action::Settings, tr("Settings"), QKeySequence(Qt::CTRL | Qt::Key_Comma), true};
-    t << Spec{Action::FocusLibrary, tr("Focus on library"), QKeySequence(Qt::CTRL | Qt::Key_1), true};
-    t << Spec{Action::FocusPlaylists, tr("Focus on playlists"), QKeySequence(Qt::CTRL | Qt::Key_2), true};
-    t << Spec{Action::FocusPlaylist, tr("Focus on playlist"), QKeySequence(Qt::CTRL | Qt::Key_3), true};
-    t << Spec{Action::FocusFilterLibrary, tr("Focus on library filter"), QKeySequence(Qt::ALT | Qt::Key_1), true};
-    t << Spec{Action::FocusFilterPlaylists, tr("Focus on playlists filter"), QKeySequence(Qt::ALT | Qt::Key_2), true};
-    t << Spec{Action::FocusFilterPlaylist, tr("Focus on playlist filter"), QKeySequence(Qt::ALT | Qt::Key_3), true};
-    t << Spec{Action::OpenMainMenu, tr("Open main menu"), QKeySequence(Qt::ALT | Qt::Key_M), true};
-    t << Spec{Action::OpenPlaybackLog, tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
-    t << Spec{Action::OpenSortMenu, tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
+    t << Spec{Action::PlayPause, "play_pause", tr("Play / Pause"), QKeySequence(Qt::Key_Space), true};
+    t << Spec{Action::Play, "play", tr("Play"), QKeySequence(Qt::ALT | Qt::Key_E), true};
+    t << Spec{Action::Pause, "pause", tr("Pause"), QKeySequence(Qt::ALT | Qt::Key_W), true};
+    t << Spec{Action::Stop, "stop", tr("Stop"), QKeySequence(Qt::ALT | Qt::Key_Q), true};
+    t << Spec{Action::Next, "next", tr("Next"), QKeySequence(Qt::ALT | Qt::Key_T), true};
+    t << Spec{Action::Prev, "prev", tr("Previous"), QKeySequence(Qt::ALT | Qt::Key_R), true};
+    t << Spec{Action::VolumeUp, "volume_up", tr("Volume up"), QKeySequence(Qt::CTRL | Qt::Key_Up), true};
+    t << Spec{Action::VolumeDown, "volume_down", tr("Volume down"), QKeySequence(Qt::CTRL | Qt::Key_Down), true};
+    t << Spec{Action::Settings, "settings", tr("Settings"), QKeySequence(Qt::CTRL | Qt::Key_Comma), true};
+    t << Spec{Action::FocusLibrary, "focus_library", tr("Focus on library"), QKeySequence(Qt::CTRL | Qt::Key_1), true};
+    t << Spec{Action::FocusPlaylists, "focus_playlists", tr("Focus on playlists"), QKeySequence(Qt::CTRL | Qt::Key_2), true};
+    t << Spec{Action::FocusPlaylist, "focus_playlist", tr("Focus on playlist"), QKeySequence(Qt::CTRL | Qt::Key_3), true};
+    t << Spec{Action::FocusFilterLibrary, "focus_filter_library", tr("Focus on library filter"), QKeySequence(Qt::ALT | Qt::Key_1), true};
+    t << Spec{Action::FocusFilterPlaylists, "focus_filter_playlists", tr("Focus on playlists filter"), QKeySequence(Qt::ALT | Qt::Key_2), true};
+    t << Spec{Action::FocusFilterPlaylist, "focus_filter_playlist", tr("Focus on playlist filter"), QKeySequence(Qt::ALT | Qt::Key_3), true};
+    t << Spec{Action::OpenMainMenu, "open_main_menu", tr("Open main menu"), QKeySequence(Qt::ALT | Qt::Key_M), true};
+    t << Spec{Action::OpenPlaybackLog, "open_playback_log", tr("Open playback log"), QKeySequence(Qt::CTRL | Qt::Key_L), true};
+    t << Spec{Action::OpenSortMenu, "open_sort_menu", tr("Open sort menu"), QKeySequence(Qt::CTRL | Qt::Key_S), true};
 #ifdef ENABLE_DEVICES_MENU
-    t << Spec{Action::OpenOutputMenu, tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
+    t << Spec{Action::OpenOutputMenu, "open_output_menu", tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
 #endif
-    t << Spec{Action::OpenShortcutsMenu, tr("Open shortcuts dialog"), QKeySequence(Qt::ALT | Qt::Key_S), true};
-    t << Spec{Action::JumpToPlayingTrack, tr("Jump to playing track"), QKeySequence(Qt::ALT | Qt::Key_J), true};
-    t << Spec{Action::Quit, tr("Quit"), QKeySequence(Qt::CTRL | Qt::Key_Q), true};
+    t << Spec{Action::OpenShortcutsMenu, "open_shortcuts_dialog", tr("Open shortcuts dialog"), QKeySequence(Qt::ALT | Qt::Key_S), true};
+    t << Spec{Action::JumpToPlayingTrack, "jump_to_playing_track", tr("Jump to playing track"), QKeySequence(Qt::ALT | Qt::Key_J), true};
+    t << Spec{Action::Quit, "quit", tr("Quit"), QKeySequence(Qt::CTRL | Qt::Key_Q), true};
 #endif
     return t;
   }();
   return table;
 }
 
-QKeySequence Shortcuts::sequenceFor(Action action) {
-  for (const auto &spec : specs()) {
+QVector<Shortcuts::Spec> Shortcuts::resolve(const QMap<QString, QString> &overrides) {
+  QVector<Spec> table = defaults();
+
+  QVector<bool> overridden(table.size(), false);
+  for (int i = 0; i < table.size(); i++) {
+    auto it = overrides.constFind(table[i].key);
+    if (it == overrides.constEnd()) {
+      continue;
+    }
+    if (it->isEmpty()) {
+      table[i].sequence = QKeySequence();
+      overridden[i] = true;
+      continue;
+    }
+    // garbage parses to Key_unknown, which is not isEmpty() but stringifies to nothing
+    auto seq = QKeySequence::fromString(*it, QKeySequence::PortableText);
+    if (seq.isEmpty() || seq.toString(QKeySequence::PortableText).isEmpty()) {
+      qWarning() << "ignoring unparseable shortcut for" << table[i].key << *it;
+      continue;
+    }
+    table[i].sequence = seq;
+    overridden[i] = true;
+  }
+
+  // shared sequences fire activatedAmbiguously() and nothing else, killing both keys
+  for (int i = 0; i < table.size(); i++) {
+    if (table[i].sequence.isEmpty()) {
+      continue;
+    }
+    for (int j = i + 1; j < table.size(); j++) {
+      if (table[j].sequence != table[i].sequence) {
+        continue;
+      }
+      int loser = (overridden[j] && !overridden[i]) ? i : j;
+      int winner = loser == i ? j : i;
+      qWarning() << "shortcut" << table[loser].sequence.toString(QKeySequence::PortableText)
+                 << "claimed by both" << table[winner].key << "and" << table[loser].key
+                 << "- unbinding" << table[loser].key;
+      table[loser].sequence = QKeySequence();
+      if (loser == i) {
+        break;
+      }
+    }
+  }
+
+  return table;
+}
+
+const QVector<Shortcuts::Spec> &Shortcuts::specs() const {
+  return _specs;
+}
+
+QKeySequence Shortcuts::sequenceFor(Action action) const {
+  for (const auto &spec : _specs) {
     if (spec.action == action) {
       return spec.sequence;
     }
@@ -96,15 +147,28 @@ QKeySequence Shortcuts::sequenceFor(Action action) {
   return QKeySequence();
 }
 
-QVector<QPair<QString, QString> > Shortcuts::describe() const {
-  QVector<QPair<QString, QString> > r;
-  for (const auto &spec : specs()) {
-    if (spec.description.isEmpty()) {
-      continue;
-    }
-    r << QPair<QString, QString>(spec.description, spec.sequence.toString(QKeySequence::NativeText));
+void Shortcuts::applyOverrides(const QMap<QString, QString> &overrides) {
+  // merge, not replace: keys unknown to this build must survive
+  auto stored = global_conf.shortcuts();
+  const auto &table = defaults();
+  for (const auto &spec : table) {
+    stored.remove(spec.key);
   }
-  return r;
+  for (auto i = overrides.cbegin(); i != overrides.cend(); ++i) {
+    stored.insert(i.key(), i.value());
+  }
+
+  _specs = resolve(stored);
+  for (int i = 0; i < _specs.size() && i < _local.size(); i++) {
+    if (_local[i] != nullptr) {
+      _local[i]->setKey(_specs[i].sequence);
+    }
+  }
+
+  global_conf.saveShortcuts(stored);
+  global_conf.sync();
+
+  emit changed();
 }
 
 void Shortcuts::setupGlobal() {
@@ -144,12 +208,15 @@ void Shortcuts::setupGlobal() {
 }
 
 void Shortcuts::setupLocal() {
-  for (const auto &spec : specs()) {
-    if (!spec.registerLocal || spec.sequence.isEmpty()) {
+  _local.reserve(_specs.size());
+  for (const auto &spec : _specs) {
+    if (!spec.registerLocal) {
+      _local << nullptr;
       continue;
     }
     auto *sc = new QShortcut(spec.sequence, _parent);
     connect(sc, &QShortcut::activated, this, [this, action = spec.action]() { emitFor(action); });
+    _local << sc;
   }
 }
 

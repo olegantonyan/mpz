@@ -28,6 +28,13 @@ private slots:
   void radioStations_absentByDefault();
   void radioStations_roundTrips();
   void radioStations_emptyListRoundTrips();
+  void shortcuts_absentByDefault();
+  void shortcuts_roundTrips();
+  void shortcuts_emptyStringIsAnUnbind();
+  void shortcuts_survivesScalarTypeSniffing();
+  void shortcuts_ignoresNonScalarValues();
+  void shortcuts_ignoresNonMapValue();
+  void shortcuts_emptyMapRemovesTheKey();
 
 private:
   QTemporaryDir tempDir;
@@ -208,6 +215,79 @@ void TestGlobalConfig::radioStations_emptyListRoundTrips() {
   }
   Config::Global reloaded;
   QVERIFY(reloaded.radioStations().isEmpty());
+}
+
+void TestGlobalConfig::shortcuts_absentByDefault() {
+  Config::Global g;
+  QVERIFY(g.shortcuts().isEmpty());
+}
+
+void TestGlobalConfig::shortcuts_roundTrips() {
+  QMap<QString, QString> saved;
+  saved.insert("next", "Ctrl+Alt+N");
+  saved.insert("not_an_action", "Ctrl+K");
+  {
+    Config::Global g;
+    QVERIFY(g.saveShortcuts(saved));
+    g.sync();
+  }
+  Config::Global reloaded;
+  QCOMPARE(reloaded.shortcuts(), saved);
+}
+
+void TestGlobalConfig::shortcuts_emptyStringIsAnUnbind() {
+  writeGlobalYaml("shortcuts:\n  open_sort_menu: ''\n");
+  Config::Global g;
+  const auto sc = g.shortcuts();
+  QVERIFY(sc.contains("open_sort_menu"));
+  QVERIFY(sc.value("open_sort_menu").isEmpty());
+}
+
+void TestGlobalConfig::shortcuts_survivesScalarTypeSniffing() {
+  QMap<QString, QString> saved;
+  saved.insert("next", "Y");
+  saved.insert("prev", "N");
+  saved.insert("stop", "5");
+  {
+    Config::Global g;
+    QVERIFY(g.saveShortcuts(saved));
+    g.sync();
+  }
+  Config::Global reloaded;
+  QCOMPARE(reloaded.shortcuts(), saved);
+}
+
+void TestGlobalConfig::shortcuts_ignoresNonScalarValues() {
+  writeGlobalYaml("shortcuts:\n  next: Ctrl+K\n  prev:\n    nested: nonsense\n");
+  Config::Global g;
+  const auto sc = g.shortcuts();
+  QCOMPARE(sc.value("next"), QString("Ctrl+K"));
+  QVERIFY(!sc.contains("prev"));
+}
+
+void TestGlobalConfig::shortcuts_ignoresNonMapValue() {
+  writeGlobalYaml("shortcuts:\n  - Ctrl+K\n");
+  Config::Global g;
+  QVERIFY(g.shortcuts().isEmpty());
+}
+
+void TestGlobalConfig::shortcuts_emptyMapRemovesTheKey() {
+  {
+    Config::Global g;
+    QVERIFY(g.saveShortcuts({{"next", "Ctrl+K"}}));
+    g.sync();
+  }
+  {
+    Config::Global g;
+    QVERIFY(g.saveShortcuts({}));
+    g.sync();
+  }
+  QFile f(tempDir.filePath(QStringLiteral("global.yml")));
+  QVERIFY(f.open(QIODevice::ReadOnly | QIODevice::Text));
+  QVERIFY(!f.readAll().contains("shortcuts"));
+
+  Config::Global reloaded;
+  QVERIFY(reloaded.shortcuts().isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestGlobalConfig)
