@@ -2,6 +2,8 @@
 #include "ui_directorysettings.h"
 #include "radiolibrary.h"
 #include "radiostationsdialog.h"
+#include "sysinfo.h"
+#include "sandboxnotice.h"
 #ifdef ENABLE_MPD_SUPPORT
   #include "addmpddialog.h"
 #endif
@@ -25,8 +27,15 @@ namespace {
   };
 }
 
-DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, Config::Global &global_cfg, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus), global_conf(global_cfg) {
+DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &modus, Config::Global &global_cfg, Config::Local &local_cfg, QWidget *parent) : QDialog(parent), ui(new Ui::DirectorySettings), modus_operandi(modus), global_conf(global_cfg), local_conf(local_cfg) {
   ui->setupUi(this);
+
+  ui->sandboxNotice->setVisible(SysInfo::sandboxed() && !local_conf.sandboxNoticeDismissed());
+  ui->sandboxNoticeLabel->setTextFormat(Qt::RichText);
+  ui->sandboxNoticeLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  ui->sandboxNoticeLabel->setOpenExternalLinks(true);
+  ui->sandboxNoticeLabel->setStyleSheet("color: #d35400;");
+  ui->sandboxNoticeLabel->setText(sandboxNoticeText());
 
   model.setStringList(paths);
   ui->listView->setModel(&model);
@@ -70,6 +79,11 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 
 void DirectorySettings::on_pushButtonRadioStations_clicked() {
   editRadioStations();
+}
+
+void DirectorySettings::on_sandboxNoticeDismiss_clicked() {
+  ui->sandboxNotice->hide();
+  local_conf.saveSandboxNoticeDismissed(true);
 }
 
 bool DirectorySettings::radioStationsEdited() const {
