@@ -4,6 +4,8 @@ project(mpz VERSION 2.1.2 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Sources carry UTF-8 literals; MSVC otherwise reads them as the active codepage.
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

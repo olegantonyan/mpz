@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="107"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="114"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -45,22 +45,22 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="26"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="27"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="43"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -1925,7 +1925,7 @@
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="72"/>
+        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="75"/>
         <source>%1 taken from &quot;%2&quot;</source>
         <translation>%1 отобрано у «%2»</translation>
     </message>
@@ -2339,12 +2339,12 @@
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="727"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="724"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="735"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="732"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>

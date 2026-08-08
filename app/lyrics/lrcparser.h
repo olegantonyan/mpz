@@ -8,6 +8,8 @@ namespace Lyrics {
   public:
     static bool looksLikeLrc(const QString &raw);
     static QString stripTimestamps(const QString &raw);
+    static QString toPlainLyrics(const QString &raw);
+    static bool hasLyricContent(const QString &raw);
   };
 }
 

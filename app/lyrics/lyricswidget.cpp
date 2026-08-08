@@ -59,12 +59,12 @@ namespace Lyrics {
     }
 
     QString embedded = fetch_embedded_lyrics(track);
-    if (!embedded.isEmpty()) {
+    if (LrcParser::hasLyricContent(embedded)) {
       render_lyrics("embedded", embedded);
       return;
     }
     QString sidecar = fetch_sidecar_lyrics(track);
-    if (!sidecar.isEmpty()) {
+    if (LrcParser::hasLyricContent(sidecar)) {
       render_lyrics("sidecar", sidecar);
       return;
     }
@@ -139,10 +139,7 @@ namespace Lyrics {
 
   void Widget::render_lyrics(const QString &source, const QString &raw) {
     source_label->setText(QString("(%1)").arg(source));
-    const QString body = LrcParser::looksLikeLrc(raw)
-                           ? LrcParser::stripTimestamps(raw)
-                           : raw.trimmed();
-    text->setPlainText(body);
+    text->setPlainText(LrcParser::toPlainLyrics(raw));
   }
 
   void Widget::render_state(const QString &message) {
