@@ -380,230 +380,284 @@
     </message>
 </context>
 <context>
+    <name>DynamicRangeDialog</name>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="14"/>
+        <source>Dynamic range</source>
+        <translation>Динамический диапазон</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="50"/>
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="60"/>
+        <source>Save as…</source>
+        <translation>Сохранить как…</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.ui" line="83"/>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="155"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="77"/>
+        <source>Audio decoding is not available</source>
+        <translation>Декодирование аудио недоступно</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="88"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="120"/>
+        <source>Save dynamic range log</source>
+        <translation>Сохранить лог динамического диапазона</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="121"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстовые файлы (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="127"/>
+        <source>Save failed</source>
+        <translation>Ошибка сохранения</translation>
+    </message>
+    <message>
+        <location filename="../../dynamic_range_ui/dynamicrangedialog.cpp" line="163"/>
+        <source>Analyzing %1/%2: %3</source>
+        <translation>Анализ %1/%2: %3</translation>
+    </message>
+</context>
+<context>
     <name>EqualizerUi::EqualizerDialog</name>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="60"/>
         <source>Equalizer</source>
         <translation>Эквалайзер</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="74"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="73"/>
         <source>Everything below applies to this output device only.</source>
         <translation>Всё, что ниже, применяется только к этому устройству вывода.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="79"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="78"/>
         <source>Enable equalizer for this device</source>
         <translation>Включить эквалайзер для этого устройства</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="83"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="82"/>
         <source>Preset</source>
         <translation>Пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="99"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="98"/>
         <source>Save As…</source>
         <translation>Сохранить как…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="102"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="101"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="105"/>
         <source>Import…</source>
         <translation>Импорт…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="107"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
         <source>Import an EqualizerAPO / AutoEQ ParametricEQ.txt file</source>
         <translation>Импортировать файл EqualizerAPO / AutoEQ ParametricEQ.txt</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="111"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="110"/>
         <source>Export…</source>
         <translation>Экспорт…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="113"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="112"/>
         <source>Parametric EQ…</source>
         <translation>Параметрический EQ…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="115"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="114"/>
         <source>Graphic EQ (multiband)…</source>
         <translation>Графический EQ (многополосный)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="122"/>
         <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
         <translation>Эквалайзер работает только с движком воспроизведения без пауз. Включите его в настройках.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="130"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
         <source>Preamp:</source>
         <translation>Предусиление:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="135"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="134"/>
         <source>dB</source>
         <translation>дБ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="143"/>
         <source>Auto (clip-safe)</source>
         <translation>Авто (без клиппинга)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="145"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
         <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
         <translation>Установить предусиление так, чтобы усиленные полосы не превышали 0 dBFS</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="160"/>
         <source>Graphic</source>
         <translation>Графический</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="162"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
         <source>Parametric</source>
         <translation>Параметрический</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="183"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="182"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Устройство вывода: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="246"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="245"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
         <translation>Этот пресет не является 10-полосным графическим EQ. Отредактируйте его в параметрическом режиме или сбросьте.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="249"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="248"/>
         <source>Reset to 10-band</source>
         <translation>Сбросить до 10 полос</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Freq (Hz)</source>
         <translation>Частота (Гц)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Gain (dB)</source>
         <translation>Усиление (дБ)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>On</source>
         <translation>Вкл.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="277"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="276"/>
         <source>Add band</source>
         <translation>Добавить полосу</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="289"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="288"/>
         <source>Remove selected</source>
         <translation>Удалить выбранное</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="320"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
         <source>Low shelf</source>
         <translation>Нижний шельф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
         <source>High shelf</source>
         <translation>Верхний шельф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
         <source>Low pass</source>
         <translation>Низкочастотный</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="325"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
         <source>High pass</source>
         <translation>Высокочастотный</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
         <source>Preset name:</source>
         <translation>Название пресета:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="507"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="506"/>
         <source>Import equalizer preset</source>
         <translation>Импортировать пресет эквалайзера</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="536"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="535"/>
         <source>Choose file…</source>
         <translation>Выбрать файл…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="549"/>
         <source>Import EqualizerAPO / AutoEQ preset</source>
         <translation>Импортировать пресет EqualizerAPO / AutoEQ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="551"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
         <translation>Параметрический EQ (*.txt);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
         <source>Import failed</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
         <source>Could not open the file.</source>
         <translation>Не удалось открыть файл.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
         <source>No filters found in the file.</source>
         <translation>В файле не найдено фильтров.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
         <source>Export preset</source>
         <translation>Экспортировать пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
         <source>Text files (*.txt);;All files (*)</source>
         <translation>Текстовые файлы (*.txt);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
         <source>Export failed</source>
         <translation>Ошибка экспорта</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
         <source>Could not write the file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
@@ -1159,34 +1213,39 @@
 <context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="18"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="23"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="22"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="27"/>
         <source>Show in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="26"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="31"/>
         <source>Copy name</source>
         <translation>Копировать имя</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="30"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="35"/>
         <source>Clear filter</source>
         <translation>Сбросить фильтр</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="34"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="39"/>
         <source>Track info</source>
         <translation>Информация о треке</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="38"/>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="43"/>
         <source>Edit tags…</source>
         <translation>Редактировать теги…</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="48"/>
+        <source>Dynamic range…</source>
+        <translation>Динамический диапазон…</translation>
     </message>
 </context>
 <context>
@@ -1729,131 +1788,131 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="56"/>
-        <location filename="../../shortcuts.cpp" line="81"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="80"/>
         <source>Open shortcuts dialog</source>
         <translation>Открыть диалог клавиатурных сочетаний</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="57"/>
-        <location filename="../../shortcuts.cpp" line="82"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="81"/>
         <source>Jump to playing track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="58"/>
-        <location filename="../../shortcuts.cpp" line="83"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="82"/>
         <source>Quit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
-        <location filename="../../shortcuts.cpp" line="69"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Focus on library</source>
         <translation>Фокус на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
-        <location filename="../../shortcuts.cpp" line="60"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Play / Pause</source>
         <translation>Воспроизведение / Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
-        <location filename="../../shortcuts.cpp" line="66"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Volume up</source>
         <translation>Увеличить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
-        <location filename="../../shortcuts.cpp" line="67"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Volume down</source>
         <translation>Уменьшить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
-        <location filename="../../shortcuts.cpp" line="68"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
-        <location filename="../../shortcuts.cpp" line="70"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Focus on playlists</source>
         <translation>Фокус на плейлисты</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
-        <location filename="../../shortcuts.cpp" line="71"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Focus on playlist</source>
         <translation>Фокус на плейлист</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
-        <location filename="../../shortcuts.cpp" line="72"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="71"/>
         <source>Focus on library filter</source>
         <translation>Фокус на фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="48"/>
-        <location filename="../../shortcuts.cpp" line="73"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="72"/>
         <source>Focus on playlists filter</source>
         <translation>Фокус на фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
-        <location filename="../../shortcuts.cpp" line="74"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="73"/>
         <source>Focus on playlist filter</source>
         <translation>Фокус на фильтр плейлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
-        <location filename="../../shortcuts.cpp" line="75"/>
+        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="74"/>
         <source>Open main menu</source>
         <translation>Открыть главное меню</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="51"/>
-        <location filename="../../shortcuts.cpp" line="76"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="75"/>
         <source>Open playback log</source>
         <translation>Открыть лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="52"/>
-        <location filename="../../shortcuts.cpp" line="77"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
+        <location filename="../../shortcuts.cpp" line="76"/>
         <source>Open sort menu</source>
         <translation>Открыть меню сортировок</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="54"/>
-        <location filename="../../shortcuts.cpp" line="79"/>
+        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="78"/>
         <source>Open output device menu</source>
         <translation>Открыть меню устройства вывода</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="61"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="63"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="62"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
-        <location filename="../../shortcuts.cpp" line="64"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
-        <location filename="../../shortcuts.cpp" line="65"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
@@ -1864,6 +1923,11 @@
         <location filename="../../shortcuts_ui/shortcutsdialog.ui" line="14"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="72"/>
+        <source>%1 taken from &quot;%2&quot;</source>
+        <translation>%1 отобрано у «%2»</translation>
     </message>
 </context>
 <context>
@@ -2118,169 +2182,169 @@
 <context>
     <name>TrackInfoDialog</name>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="263"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="267"/>
         <source>Artist</source>
         <translation>Исполнитель</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="266"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="270"/>
         <source>Album artist</source>
         <translation>Исполнитель альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="269"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="273"/>
         <source>Album</source>
         <translation>Альбом</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="272"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="276"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="275"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="279"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="278"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
         <source>Track number</source>
         <translation>Номер трека</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="280"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="284"/>
         <source>Disc number</source>
         <translation>Номер диска</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="282"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="286"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="284"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="288"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="286"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="290"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="289"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="293"/>
         <source>Sample rate</source>
         <translation>Частота сэмплов</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="292"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="296"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="295"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="299"/>
         <source>Stream url</source>
         <translation>Адрес стрима</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="303"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="305"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="307"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="309"/>
         <source>File path</source>
         <translation>Путь к файлу</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="309"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="313"/>
         <source>CUE start at</source>
         <translation>Время начала в CUE</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="327"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="331"/>
         <source>Unsupported tags</source>
         <translation>Неподдерживаемые теги</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="336"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="340"/>
         <source>File name</source>
         <translation>Имя файла</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="337"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="341"/>
         <source>Directory</source>
         <translation>Папка</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="342"/>
         <source>Size</source>
         <translation>Размер</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="338"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="342"/>
         <source>%1 (%2 bytes)</source>
         <translation>%1 (%2 байт)</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="341"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="345"/>
         <source>Modified</source>
         <translation>Изменён</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="344"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="348"/>
         <source>Created</source>
         <translation>Создан</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="346"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="350"/>
         <source>Read-only</source>
         <translation>Только для чтения</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="348"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="352"/>
         <source>Symlink target</source>
         <translation>Цель символьной ссылки</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="508"/>
         <source>yes</source>
         <translation>да</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="504"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="508"/>
         <source>no</source>
         <translation>нет</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="532"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="536"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="536"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="540"/>
         <source>Search on web</source>
         <translation>Искать в интернете</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="572"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="576"/>
         <source>No cover art</source>
         <translation>Нет обложки альбома</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="646"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="659"/>
         <source>Searching lyrics...</source>
         <translation>Поиск текста песни...</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="653"/>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="661"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="666"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="674"/>
         <source>No lyrics found.</source>
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="714"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="727"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="722"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="735"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>
@@ -2323,6 +2387,11 @@
         <location filename="../../playlist_ui/trackinfodialog.ui" line="220"/>
         <source>Edit tags…</source>
         <translation>Редактировать теги…</translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/trackinfodialog.ui" line="227"/>
+        <source>Dynamic range…</source>
+        <translation>Динамический диапазон…</translation>
     </message>
 </context>
 <context>

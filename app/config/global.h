@@ -10,6 +10,7 @@
 #include <QPair>
 #include <QList>
 #include <QVector>
+#include <QMap>
 
 namespace Config {
   class Global : public SingleInstanceGuard<Global> {
@@ -89,6 +90,9 @@ namespace Config {
 
     QString libraryFilterScope() const;
     void saveLibraryFilterScope(const QString &arg);
+
+    QMap<QString, QString> shortcuts() const;
+    bool saveShortcuts(const QMap<QString, QString> &arg);
 
   private:
     QStringList providersUnder(const QString &key) const;

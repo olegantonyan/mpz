@@ -222,6 +222,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="toolButtonDynamicRange">
+       <property name="text">
+        <string>Dynamic range…</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="buttonsSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

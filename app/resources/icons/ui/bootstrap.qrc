@@ -30,5 +30,6 @@
         <file alias="icons/ui/move-to-playlist.svg">../../../../3rdparty/icons-1.13.1/icons/arrow-left.svg</file>
         <file alias="icons/ui/spinner.svg">../../../../3rdparty/icons-1.13.1/icons/arrow-repeat.svg</file>
         <file alias="icons/ui/radio.svg">../../../../3rdparty/icons-1.13.1/icons/broadcast-pin.svg</file>
+        <file alias="icons/ui/dynamic-range.svg">../../../../3rdparty/icons-1.13.1/icons/speedometer2.svg</file>
     </qresource>
 </RCC>

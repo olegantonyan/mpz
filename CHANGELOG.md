@@ -1,3 +1,17 @@
+## [2.1.3] - next
+
+### Added
+
+- Dynamic range analyzer (playlist context menu or track info dialog), in Foobar's text format
+- Editable keyboard shortcuts
+
+### Fixed
+
+- Equalizer dialog no longer modal, can control player underneath it while open
+- Seek while paused
+
+### Misc
+
 ## [2.1.2] - 2026-08-01
 
 ### Added

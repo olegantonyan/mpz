@@ -39,12 +39,20 @@ namespace PlaylistUi {
     QAction copy_name;
     QAction info;
     QAction edit_tags;
+#ifdef ENABLE_DR_METER
+    QAction dynamic_range;
+#endif
+
+    QVector<Track> selectedTracks() const;
 
   private slots:
     void on_clearFilter();
     void on_copyName();
     void on_showInFilemanager();
     void on_editTags();
+#ifdef ENABLE_DR_METER
+    void on_dynamicRange();
+#endif
   };
 }
 
