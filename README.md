@@ -89,6 +89,12 @@ Grab the installer or portable binary from the [releases page](https://github.co
 * win-arm64-qt6 - native ARM 64-bit build (only ARM CPU)
 * win-legacy-qt5 - legacy version for x86 32-bit systems (only Windows below 10)
 
+The build is not signed, so Windows blocks it on first launch.
+
+**Microsoft Defender SmartScreen** - "Windows protected your PC". Click *More info*, then *Run anyway*. No *Run anyway*? Right-click the file → *Properties* → tick *Unblock* → *Apply*.
+
+**Smart App Control** - "cannot be verified", with nothing to click; it has no exception list. Turn it off in *Windows Security → App & browser control → Smart App Control*, install, turn it back on. Older Windows 11 builds made that switch one-way, so check you can re-enable it first. Only clean installs of Windows 11 have it on.
+
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
 
 #### macOS
@@ -160,14 +166,28 @@ The available config options are:
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB;
 - `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist;
-- `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 - `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 - `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all; on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead;
+- `shortcuts` in `global.yml` - rebound keyboard shortcuts, more on this below;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
+
+#### Shortcuts config
+
+Usually edited in the app, but writable by hand:
+
+```
+shortcuts:
+  next: Ctrl+Alt+N
+  open_sort_menu: ''
+```
+
+Only changed shortcuts are stored; the rest follow the platform defaults, so `global.yml` stays portable. Empty string means unbound. Unparseable values are ignored. On a collision the rebound action wins and the other is unset.
+
+Sequences use portable spelling (`Ctrl`, `Alt`, `Shift`, `Meta`). On macOS `Ctrl+` is ⌘, `Meta+` is ⌃ and `Alt+` is ⌥.
 
 #### Columns config
 
@@ -238,6 +258,8 @@ This will ignore commands issued by Wireplumber. Starting around version 0.5, it
 The full, platform-aware list is in the app: press Alt+S (Linux/Windows) or ⌘+/ (macOS), or open the main menu → "Keyboard shortcuts".
 
 Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - playback log; Ctrl+J - jump to the playing track.
+
+All of them are editable in that dialog: click a key field, press the new combination, OK. Global media keys are not rebindable.
 
 ## Limitations
 

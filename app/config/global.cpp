@@ -304,4 +304,49 @@ namespace Config {
     storage.set("library_filter_scope", Config::Value(arg));
   }
 
+  // castScalar turns a bare "Y" into a boolean and "5" into an integer
+  static bool shortcutScalar(const Config::Value &value, QString &out) {
+    switch (value.type()) {
+      case Config::Value::String:
+        out = value.get<QString>();
+        return true;
+      case Config::Value::Integer:
+        out = QString::number(value.get<int>());
+        return true;
+      case Config::Value::Boolean:
+        out = value.get<bool>() ? QStringLiteral("Y") : QStringLiteral("N");
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  QMap<QString, QString> Global::shortcuts() const {
+    QMap<QString, QString> result;
+    auto raw = storage.get("shortcuts");
+    if (raw.type() != Config::Value::Map) {
+      return result;
+    }
+    const auto map = raw.get<QMap<QString, Config::Value>>();
+    for (auto i = map.cbegin(); i != map.cend(); ++i) {
+      QString value;
+      if (shortcutScalar(i.value(), value)) {
+        result.insert(i.key(), value);
+      }
+    }
+    return result;
+  }
+
+  bool Global::saveShortcuts(const QMap<QString, QString> &arg) {
+    if (arg.isEmpty()) {
+      storage.remove("shortcuts");
+      return true;
+    }
+    QMap<QString, Config::Value> map;
+    for (auto i = arg.cbegin(); i != arg.cend(); ++i) {
+      map.insert(i.key(), Config::Value(i.value()));
+    }
+    return storage.set("shortcuts", Config::Value(map));
+  }
+
 }

@@ -436,228 +436,228 @@
 <context>
     <name>EqualizerUi::EqualizerDialog</name>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="60"/>
         <source>Equalizer</source>
         <translation>イコライザー</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="74"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="73"/>
         <source>Everything below applies to this output device only.</source>
         <translation>以下の設定は、この出力デバイスにのみ適用されます。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="79"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="78"/>
         <source>Enable equalizer for this device</source>
         <translation>このデバイスでイコライザーを有効にする</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="83"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="82"/>
         <source>Preset</source>
         <translation>プリセット</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="99"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="98"/>
         <source>Save As…</source>
         <translation>名前を付けて保存…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="102"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="101"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="105"/>
         <source>Import…</source>
         <translation>インポート…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="107"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
         <source>Import an EqualizerAPO / AutoEQ ParametricEQ.txt file</source>
         <translation>EqualizerAPO / AutoEQ の ParametricEQ.txt ファイルをインポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="111"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="110"/>
         <source>Export…</source>
         <translation>エクスポート…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="113"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="112"/>
         <source>Parametric EQ…</source>
         <translation>パラメトリック EQ…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="115"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="114"/>
         <source>Graphic EQ (multiband)…</source>
         <translation>グラフィック EQ (マルチバンド)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="122"/>
         <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
         <translation>イコライザーはギャップレスエンジンでのみ動作します。設定で有効にしてください。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="130"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
         <source>Preamp:</source>
         <translation>プリアンプ :</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="135"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="134"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="143"/>
         <source>Auto (clip-safe)</source>
         <translation>自動 (クリップ回避)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="145"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
         <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
         <translation>ブーストされたバンドが 0 dBFS を超えないようにプリアンプを設定します</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="160"/>
         <source>Graphic</source>
         <translation>グラフィック</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="162"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
         <source>Parametric</source>
         <translation>パラメトリック</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="183"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="182"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>出力デバイス : &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="246"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="245"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
         <translation>このプリセットは10バンドのグラフィック EQ ではありません。パラメトリックで編集するか、リセットしてください。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="249"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="248"/>
         <source>Reset to 10-band</source>
         <translation>10バンドにリセット</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Freq (Hz)</source>
         <translation>周波数 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>Gain (dB)</source>
         <translation>ゲイン (dB)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
         <source>On</source>
         <translation>オン</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="277"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="276"/>
         <source>Add band</source>
         <translation>バンドを追加</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="289"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="288"/>
         <source>Remove selected</source>
         <translation>選択項目を削除</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="320"/>
         <source>Peak</source>
         <translation>ピーク</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
         <source>Low shelf</source>
         <translation>ローシェルフ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
         <source>High shelf</source>
         <translation>ハイシェルフ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
         <source>Low pass</source>
         <translation>ローパス</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="325"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
         <source>High pass</source>
         <translation>ハイパス</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
         <source>Save preset</source>
         <translation>プリセットを保存</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
         <source>Preset name:</source>
         <translation>プリセット名 :</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="507"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="506"/>
         <source>Import equalizer preset</source>
         <translation>イコライザープリセットをインポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="536"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="535"/>
         <source>Choose file…</source>
         <translation>ファイルを選択…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="549"/>
         <source>Import EqualizerAPO / AutoEQ preset</source>
         <translation>EqualizerAPO / AutoEQ プリセットをインポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="551"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
         <translation>パラメトリック EQ (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
         <source>Import failed</source>
         <translation>インポートに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
         <source>Could not open the file.</source>
         <translation>ファイルを開けませんでした。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
         <source>No filters found in the file.</source>
         <translation>ファイルにフィルターが見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
         <source>Export preset</source>
         <translation>プリセットをエクスポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
         <source>Text files (*.txt);;All files (*)</source>
         <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
         <source>Export failed</source>
         <translation>エクスポートに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
         <source>Could not write the file.</source>
         <translation>ファイルを書き込めませんでした。</translation>
     </message>
@@ -1786,131 +1786,131 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="56"/>
-        <location filename="../../shortcuts.cpp" line="81"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="80"/>
         <source>Open shortcuts dialog</source>
         <translation>ショートカット ダイアログを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="57"/>
-        <location filename="../../shortcuts.cpp" line="82"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="81"/>
         <source>Jump to playing track</source>
         <translation>再生中のトラックにジャンプ</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="58"/>
-        <location filename="../../shortcuts.cpp" line="83"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="82"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
-        <location filename="../../shortcuts.cpp" line="69"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Focus on library</source>
         <translation>ライブラリにフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
-        <location filename="../../shortcuts.cpp" line="60"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Play / Pause</source>
         <translation>再生 / 一時停止</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
-        <location filename="../../shortcuts.cpp" line="66"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Volume up</source>
         <translation>音量を上げる</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
-        <location filename="../../shortcuts.cpp" line="67"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Volume down</source>
         <translation>音量を下げる</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
-        <location filename="../../shortcuts.cpp" line="68"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
-        <location filename="../../shortcuts.cpp" line="70"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Focus on playlists</source>
         <translation>プレイリスト一覧にフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
-        <location filename="../../shortcuts.cpp" line="71"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Focus on playlist</source>
         <translation>プレイリスト内容にフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
-        <location filename="../../shortcuts.cpp" line="72"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="71"/>
         <source>Focus on library filter</source>
         <translation>ライブラリ フィルターにフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="48"/>
-        <location filename="../../shortcuts.cpp" line="73"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="72"/>
         <source>Focus on playlists filter</source>
         <translation>プレイリスト一覧フィルターにフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
-        <location filename="../../shortcuts.cpp" line="74"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="73"/>
         <source>Focus on playlist filter</source>
         <translation>プレイリスト内容フィルターにフォーカス</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
-        <location filename="../../shortcuts.cpp" line="75"/>
+        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="74"/>
         <source>Open main menu</source>
         <translation>メインメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="51"/>
-        <location filename="../../shortcuts.cpp" line="76"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="75"/>
         <source>Open playback log</source>
         <translation>再生ログを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="52"/>
-        <location filename="../../shortcuts.cpp" line="77"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
+        <location filename="../../shortcuts.cpp" line="76"/>
         <source>Open sort menu</source>
         <translation>並び替えメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="54"/>
-        <location filename="../../shortcuts.cpp" line="79"/>
+        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="78"/>
         <source>Open output device menu</source>
         <translation>出力デバイスメニューを開く</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="61"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Play</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="63"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="62"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Pause</source>
         <translation>一時停止</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
-        <location filename="../../shortcuts.cpp" line="64"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Next</source>
         <translation>次へ</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
-        <location filename="../../shortcuts.cpp" line="65"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Previous</source>
         <translation>前へ</translation>
     </message>
@@ -1921,6 +1921,11 @@
         <location filename="../../shortcuts_ui/shortcutsdialog.ui" line="14"/>
         <source>Keyboard shortcuts</source>
         <translation>キーボード ショートカット</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="72"/>
+        <source>%1 taken from &quot;%2&quot;</source>
+        <translation>%1 を「%2」から解除しました</translation>
     </message>
 </context>
 <context>
