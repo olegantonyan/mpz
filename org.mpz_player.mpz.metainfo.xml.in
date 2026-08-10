@@ -78,10 +78,7 @@
 
   <releases>
     <release version="@APPSTREAM_RELEASE_VERSION@" date="@APPSTREAM_RELEASE_DATE@">
-      <url type="details">https://github.com/olegantonyan/mpz/releases/tag/@PROJECT_VERSION@</url>
-      <description>
-        <p>Full release notes on GitHub.</p>
-      </description>
+      @APPSTREAM_RELEASE_DESCRIPTION@
     </release>
   </releases>
 </component>
