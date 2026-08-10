@@ -5,10 +5,10 @@
   <project_license>GPL-3.0-or-later</project_license>
 
   <name>mpz Music Player</name>
-  <summary>Music player for large local collections</summary>
-  <summary xml:lang="ru">Музыкальный проигрыватель для больших локальных коллекций</summary>
+  <summary>Play local music by folder</summary>
+  <summary xml:lang="ru">Локальная музыка по папкам</summary>
   <summary xml:lang="ja">大規模なローカルコレクション向けの音楽プレーヤー</summary>
-  <summary xml:lang="sr">Музички плејер за велике локалне колекције</summary>
+  <summary xml:lang="sr">Локална музика по фасциклама</summary>
 
   <launchable type="desktop-id">@DESKTOP_FILE_ID@.desktop</launchable>
 
