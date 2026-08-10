@@ -79,7 +79,13 @@ For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ##### AppImage
 
-Experimental AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+
+##### Flatpak
+
+Available on Flathub: https://flathub.org/apps/org.mpz_player.mpz. Prefer the native repositories above if your distro is supported.
+
+**NOTE: limited filesystem access** - Flatpak apps are sandboxed. Paths within `$HOME`, `/mnt`, `/media`, `/run/media` have full unsandboxed access. Paths outside of them can still be added as library folders, but won't refresh automatically when files are added while mpz is running - a limitation of desktop portals.
 
 #### Windows
 
