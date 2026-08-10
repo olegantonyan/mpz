@@ -1,16 +1,16 @@
 # mpz
 
-> A folder player for large local music collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), built-in tag editor (since 2.0.8), OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS, and Windows.
+> A folder player for large local music collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), tag editor (since 2.0.8), waveform seekbar, dynamic range meter in the foobar2000 DR format, editable keyboard shortcuts, OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS and Windows.
 
-mpz is a folder player: it treats your folder structure as the library — there is no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks for the selected playlist. The design is inspired by Foobar2000's "Album list" but is not an attempt to clone Foobar.
+mpz is a folder player: your folder structure is the library, with no global indexing step. Middle-clicking a folder in the directory tree creates a playlist from it. The UI has three columns: directory tree (library), playlists, and tracks of the selected playlist. The design is inspired by Foobar2000's "Album list", but is not an attempt to clone Foobar.
 
 ## Full content
 
-- [llms-full.txt](https://mpz-player.org/llms-full.txt): Self-contained version of this page with the full feature list, install instructions, and FAQ inlined — single fetch, no link-following required
+- [llms-full.txt](https://mpz-player.org/llms-full.txt): Self-contained version of this page with the full feature list, install instructions and FAQ inlined, so a single fetch is enough
 
 ## Documentation
 
-- [README](https://github.com/olegantonyan/mpz#readme): Project README — features, installation, configuration, lyrics, MPRIS, limitations
+- [README](https://github.com/olegantonyan/mpz#readme): Project README with features, installation, configuration, lyrics, MPRIS, limitations
 - [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md): Version history
 - [mpd impedance mismatch](https://github.com/olegantonyan/mpz#mpd-impedance-mismatch): Caveats of mpz's mpd client mode
 
@@ -20,9 +20,10 @@ mpz is a folder player: it treats your folder structure as the library — there
 - [omnipackage stable repositories, aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html): Same distros, native ARM64 (Arch and Manjaro are x86_64 only)
 - [omnipackage unstable repositories, x86_64](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master
 - [omnipackage unstable repositories, aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html): Builds from master, native ARM64
-- [AUR](https://aur.archlinux.org/packages/mpz/): Arch Linux package, also available if you prefer it over the binary repositories
-- [AppImage](https://github.com/olegantonyan/mpz/releases): Linux builds for x86_64 and arm64; prefer the native repositories above if your distro is supported
-- [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries (x64, native ARM64, and legacy 32-bit); macOS .dmg (unsigned — see README for Gatekeeper workaround); tagged source archives
+- [AUR](https://aur.archlinux.org/packages/mpz/): Arch Linux package, if you prefer it over the binary repositories
+- [AppImage](https://github.com/olegantonyan/mpz/releases): Linux builds for x86_64 and aarch64; prefer the native repositories if your distro is supported
+- [Flathub](https://flathub.org/apps/org.mpz_player.mpz): Flatpak build (`flatpak install flathub org.mpz_player.mpz`) for any distro; prefer the native repositories if your distro is supported
+- [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries (x64, native ARM64, legacy 32-bit); macOS .dmg (unsigned, see the README for the Gatekeeper workaround); tagged source archives
 
 ## Source and feedback
 

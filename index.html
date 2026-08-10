@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>mpz — music player for large local collections</title>
+        <title>mpz - music player for large local collections</title>
         <meta
             name="description"
             content="A folder player for large local music collections. Open-source, native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing. Linux, macOS, Windows."
@@ -37,7 +37,7 @@
 
         <meta
             property="og:title"
-            content="mpz — music player for large local collections"
+            content="mpz - music player for large local collections"
         />
         <meta
             property="og:description"
@@ -56,13 +56,13 @@
         <meta property="og:image:height" content="630" />
         <meta
             property="og:image:alt"
-            content="mpz — free and open-source folder player for large local music collections on Linux, macOS, and Windows"
+            content="mpz, free and open-source folder player for large local music collections on Linux, macOS and Windows"
         />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta
             name="twitter:title"
-            content="mpz — music player for large local collections"
+            content="mpz - music player for large local collections"
         />
         <meta
             name="twitter:description"
@@ -74,7 +74,7 @@
         />
         <meta
             name="twitter:image:alt"
-            content="mpz — free and open-source folder player for large local music collections on Linux, macOS, and Windows"
+            content="mpz, free and open-source folder player for large local music collections on Linux, macOS and Windows"
         />
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -106,12 +106,13 @@
                 "operatingSystem": "Linux, macOS, Windows",
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
-                "softwareRequirements": "Qt 6 — Qt 5 builds also available for older Linux distributions",
-                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
-                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player",
+                "softwareRequirements": "Qt 6 (Qt 5 builds available for older Linux distributions)",
+                "description": "A folder player for large local collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
+                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player, flatpak music player, dynamic range meter",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
+                    "https://flathub.org/apps/org.mpz_player.mpz",
                     "https://www.producthunt.com/products/mpz-desktop-music-player"
                 ],
                 "downloadUrl": "https://github.com/olegantonyan/mpz/releases",
@@ -125,24 +126,27 @@
                     "https://mpz-player.org/images/radio.png"
                 ],
                 "featureList": [
-                    "Folder player — play music straight from your folders, with no global indexing step",
+                    "Folder player: plays music straight from your folders, no global indexing step",
                     "3-column UI: directory tree, playlists, tracks",
                     "Middle-click a folder to create a playlist from it",
                     "Drag and drop files and folders from the file manager",
-                    "Reorder tracks within a playlist by dragging",
-                    "Gapless playback — no silence between tracks, with instant in-track seeking (Qt 6)",
-                    "Equalizer — 10-band graphic and full parametric modes, AutoEq presets, on/off and preset per output device (Qt 6, runs on the gapless engine)",
-                    "Internet radio — Radio library with built-in stations, HTTPS, and IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists as before",
+                    "Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels",
+                    "Gapless playback, with instant in-track seeking (Qt 6)",
+                    "Equalizer: 10-band graphic and full parametric modes, AutoEq presets, on/off and preset per output device (Qt 6, runs on the gapless engine)",
+                    "Output device switch, showing the selected device name (Qt 6)",
+                    "Internet radio: radio library with built-in stations, HTTPS and IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists",
                     "CUE sheets, with gapless playback of single-file albums",
-                    "OS media integration — MPRIS on Linux, SMTC and taskbar on Windows, Now Playing and Dock on macOS, system tray",
-                    "Global media-key hotkeys and a built-in keyboard shortcuts dialog",
+                    "Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt 6)",
+                    "Waveform in the seekbar, off by default",
+                    "OS media integration: MPRIS on Linux, SMTC and taskbar on Windows, Now Playing and Dock on macOS, system tray",
+                    "Global media-key hotkeys and a keyboard shortcuts dialog, every shortcut editable",
                     "Experimental mpd client mode",
-                    "m3u, m3u8 and pls playlists including radio streams — play directly or import into the Radio library",
-                    "Playback order per playlist and global — sequential, random, or no-loop",
+                    "m3u, m3u8 and pls playlists including radio streams: play directly or import into the radio library",
+                    "Playback order per playlist and global: sequential, random, or no-loop",
                     "Track sorting presets",
-                    "Cover art (from tags or folder images) and lyrics — embedded tags, .lrc/.txt sidecar files, or fetched from LRCLIB, NetEase, QQ Music, or Lyrics.ovh — in the Track Info dialog or as dockable panels that follow the playing track",
-                    "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE)",
-                    "Common audio formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, DSD — via system codecs",
+                    "Cover art (from tags or folder images) and lyrics from embedded tags, .lrc/.txt sidecar files, LRCLIB, NetEase, QQ Music or Lyrics.ovh, in the Track Info dialog or as dockable panels that follow the playing track",
+                    "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE), album artist and disc number included",
+                    "Common audio formats via system codecs: FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF), Shorten",
                     "Playback log of recently played tracks",
                     "Update check on Windows, macOS, and Linux AppImage",
                     "UI languages: English, Russian, Japanese, Serbian",
@@ -172,7 +176,7 @@
                 "@type": "WebSite",
                 "name": "mpz",
                 "url": "https://mpz-player.org/",
-                "description": "A folder player for large local collections — plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode."
+                "description": "A folder player for large local collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode."
             }
         </script>
 
@@ -186,7 +190,7 @@
                         "name": "What is mpz?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "mpz is a free and open-source folder player for large local music collections, built with C++ and Qt. It treats your folder structure as the library and offers a 3-column UI for the directory tree, playlists, and tracks."
+                            "text": "A free and open-source folder player for large local music collections, built with C++ and Qt. It treats your folder structure as the library, with a 3-column UI for the directory tree, playlists and tracks."
                         }
                     },
                     {
@@ -194,7 +198,7 @@
                         "name": "Is mpz a folder player?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. mpz is a folder player: it plays music straight from your folder structure instead of importing it into a database. Middle-click any folder to turn it into a playlist — your directory tree is the library, with no global indexing step."
+                            "text": "Yes. It plays music straight from your folder structure instead of importing it into a database. Middle-click any folder to turn it into a playlist. Your directory tree is the library, with no global indexing step."
                         }
                     },
                     {
@@ -202,7 +206,7 @@
                         "name": "Is mpz a Foobar2000 alternative?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Sort of. mpz is inspired by Foobar2000 — especially its 'Album list' — but it isn't a Foobar2000 clone; a faithful cross-platform clone isn't feasible and isn't the goal. It keeps the features the author has used daily for years, in a native, folder-based player that runs on Linux, macOS, and Windows, whereas Foobar2000 is Windows-only. If you organize your music in folders and want a Foobar2000-style workflow on Linux or macOS, mpz may suit you."
+                            "text": "Partly. mpz is inspired by Foobar2000, especially its 'Album list', but it is not a clone: a faithful cross-platform clone is neither feasible nor the goal. It keeps the features the author has used daily for years, in a native folder-based player for Linux, macOS and Windows, where Foobar2000 is Windows-only."
                         }
                     },
                     {
@@ -210,7 +214,7 @@
                         "name": "Can mpz handle very large music collections?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes — that's what it's built for. mpz treats your folder structure as the library, with no global indexing step, so it doesn't scan a whole collection into a database before you can play anything."
+                            "text": "Yes, that is what it is built for. Your folder structure is the library, so nothing gets scanned into a database before you can play anything."
                         }
                     },
                     {
@@ -218,7 +222,15 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS, and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro), built for x86_64 and aarch64 — Arch and Manjaro are x86_64 only — or the AUR on Arch. On Windows, download a release from GitHub — builds for 64-bit x64, native ARM64 (Windows on ARM), and legacy 32-bit. On macOS, download the .dmg from GitHub releases — the build is unsigned, so Gatekeeper blocks it on first launch; either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security after the first blocked launch. Building from source is supported on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) for x86_64 and aarch64, Arch and Manjaro x86_64 only, or from the AUR, Flathub (flatpak install flathub org.mpz_player.mpz) or an AppImage. On Windows, take a release from GitHub: 64-bit x64, native ARM64 (Windows on ARM) or legacy 32-bit. On macOS, take the .dmg from GitHub releases. That build is unsigned, so Gatekeeper blocks it on first launch: either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security. Building from source works on any platform with Qt and a C++ compiler."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Is mpz available as a Flatpak?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes, on Flathub as org.mpz_player.mpz. Install it with flatpak install flathub org.mpz_player.mpz, or from your desktop's software centre. It works on any distribution, but prefer the native omnipackage repositories if your distro is supported."
                         }
                     },
                     {
@@ -226,7 +238,7 @@
                         "name": "Does mpz have a mobile app (Android or iOS)?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "No. mpz is a desktop music player for Linux, macOS, and Windows only; there is no Android or iOS version. On Linux, you can control desktop playback from a phone over MPRIS — for example via KDE Connect."
+                            "text": "No. mpz is a desktop player for Linux, macOS and Windows; there is no Android or iOS version. On Linux you can control playback from a phone over MPRIS, for example via KDE Connect."
                         }
                     },
                     {
@@ -242,7 +254,7 @@
                         "name": "Does mpz support streaming services?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "No. mpz focuses on local music files. Internet radio works — a Radio library with built-in stations, plus m3u, m3u8 and pls stream playlists — but streaming services are not supported."
+                            "text": "No, mpz focuses on local music files. Internet radio works (a radio library with built-in stations, plus m3u, m3u8 and pls stream playlists), but streaming services are not supported."
                         }
                     },
                     {
@@ -250,7 +262,7 @@
                         "name": "Does mpz play internet radio?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes, and always has — stream playlists in m3u, m3u8 and pls play like any other playlist. Version 2.1.0 added a dedicated Radio library with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM plus your own, HTTPS, a radio row view, and stream titles from IceCast's status-json.xsl. Stream playlists still play directly, or import into the library."
+                            "text": "Yes, and always has: stream playlists in m3u, m3u8 and pls play like any other playlist. Version 2.1.0 added a radio library with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM plus your own, HTTPS, a radio row view, and stream titles from IceCast's status-json.xsl. Stream playlists still play directly, or import into the library."
                         }
                     },
                     {
@@ -258,7 +270,7 @@
                         "name": "What audio formats does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Common formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD — played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Because playback uses system codecs, exact format availability depends on what's installed on your machine."
+                            "text": "FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF) and Shorten, played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Playlists and radio streams: m3u, m3u8, pls. Since playback uses system codecs, exact format availability depends on what is installed."
                         }
                     },
                     {
@@ -266,7 +278,7 @@
                         "name": "Does mpz support gapless playback?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. No silence between tracks, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0."
+                            "text": "Yes, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0."
                         }
                     },
                     {
@@ -274,7 +286,7 @@
                         "name": "Does mpz have an equalizer?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only."
+                            "text": "Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only."
                         }
                     },
                     {
@@ -287,10 +299,18 @@
                     },
                     {
                         "@type": "Question",
+                        "name": "Does mpz measure dynamic range (DR)?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. Select tracks and pick \"Dynamic range\" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format. Qt 6 only."
+                        }
+                    },
+                    {
+                        "@type": "Question",
                         "name": "What languages is mpz available in?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "The interface is translated into English, Russian, Japanese, and Serbian, and follows your system language by default."
+                            "text": "The interface is translated into English, Russian, Japanese and Serbian, and follows your system language by default."
                         }
                     },
                     {
@@ -298,7 +318,7 @@
                         "name": "Can mpz act as an mpd client?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes, mpz has an experimental mpd client mode (since version 2.0.0). You can add an mpd server as a library folder. There are some caveats — see the mpd impedance mismatch section of the README for details."
+                            "text": "Yes, as an experimental mode since version 2.0.0. You can add an mpd server as a library folder. There are caveats: see the mpd impedance mismatch section of the README."
                         }
                     },
                     {
@@ -306,7 +326,7 @@
                         "name": "Does mpz support lyrics?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They are shown in the Track Info dialog, or in a dockable Lyrics panel."
+                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They show up in the Track Info dialog or in a dockable Lyrics panel."
                         }
                     },
                     {
@@ -314,7 +334,7 @@
                         "name": "Can mpz edit tags?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. Since version 2.0.8, mpz includes a built-in tag editor dialog for editing track metadata (title, artist, album, etc.) on common formats supported by TagLib — ID3v2, Vorbis Comment, MP4, and APE."
+                            "text": "Yes. Since version 2.0.8 there is a built-in tag editor for track metadata (title, artist, album and so on) on the formats TagLib supports: ID3v2, Vorbis Comment, MP4 and APE."
                         }
                     },
                     {
@@ -322,7 +342,7 @@
                         "name": "Why is it called mpz?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "The \"z\" reflects a no-nonsense approach — no clutter, no distractions."
+                            "text": "The \"z\" reflects a no-nonsense approach: no clutter, no distractions."
                         }
                     }
                 ]
@@ -353,20 +373,34 @@
                     {
                         "@type": "HowToStep",
                         "position": 3,
-                        "name": "Windows",
+                        "name": "AppImage",
                         "url": "https://github.com/olegantonyan/mpz/releases",
-                        "text": "Download the latest installer or portable binaries from the GitHub releases page. Builds are available for 64-bit x64 (recommended), native ARM64 for Windows on ARM devices, and legacy 32-bit systems."
+                        "text": "AppImage builds for x86_64 and aarch64 are on the GitHub releases page. Prefer the native repositories above if your distro is supported."
                     },
                     {
                         "@type": "HowToStep",
                         "position": 4,
-                        "name": "macOS",
-                        "url": "https://github.com/olegantonyan/mpz/releases",
-                        "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch — after dragging mpz music player.app to /Applications, either run: xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or open System Settings → Privacy & Security and click Open Anyway after the first blocked launch."
+                        "name": "Flatpak (Flathub)",
+                        "url": "https://flathub.org/apps/org.mpz_player.mpz",
+                        "text": "Install from Flathub: flatpak install flathub org.mpz_player.mpz, or find mpz in your desktop's software centre. Works on any distribution, but prefer the native repositories above if your distro is supported."
                     },
                     {
                         "@type": "HowToStep",
                         "position": 5,
+                        "name": "Windows",
+                        "url": "https://github.com/olegantonyan/mpz/releases",
+                        "text": "Download the installer or portable binaries from the GitHub releases page. Builds are available for 64-bit x64 (recommended), native ARM64 for Windows on ARM, and legacy 32-bit systems. The build is not signed, so Windows blocks it on first launch: in SmartScreen click More info, then Run anyway, or right-click the file → Properties → Unblock → Apply."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "position": 6,
+                        "name": "macOS",
+                        "url": "https://github.com/olegantonyan/mpz/releases",
+                        "text": "Download the .dmg from the GitHub releases page. Universal binary for Apple Silicon and Intel Macs (macOS 11 Big Sur or later). The build is not signed with an Apple Developer ID, so Gatekeeper blocks it on first launch: after dragging mpz music player.app to /Applications, either run xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or open System Settings → Privacy & Security and click Open Anyway."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "position": 7,
                         "name": "From source",
                         "url": "https://github.com/olegantonyan/mpz/",
                         "text": "Clone the repository and follow the README to build with Qt and a C++ compiler on any supported platform."
@@ -380,7 +414,7 @@
                 "@context": "https://schema.org",
                 "@type": "VideoObject",
                 "name": "mpz workflow: middle-click a folder to create a playlist",
-                "description": "Animated demonstration of the mpz music player: middle-clicking a folder in the directory tree creates a playlist from it, and switching between playlists in the playlists column.",
+                "description": "Animated demonstration: middle-clicking a folder in the directory tree creates a playlist from it, then switching between playlists in the playlists column.",
                 "thumbnailUrl": "https://mpz-player.org/images/mpz-workflow-poster.webp",
                 "uploadDate": "2026-05-15T00:00:00+00:00",
                 "contentUrl": "https://mpz-player.org/images/mpz-workflow.mp4",
@@ -677,6 +711,15 @@
                             alt="omnipackage unstable repositories (aarch64)"
                             height="20"
                     /></a>
+                    <a
+                        href="https://flathub.org/apps/org.mpz_player.mpz"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        ><img
+                            src="https://img.shields.io/flathub/v/org.mpz_player.mpz?logo=flathub&amp;label=flathub"
+                            alt="mpz on Flathub"
+                            height="20"
+                    /></a>
                 </div>
             </section>
 
@@ -689,15 +732,13 @@
                             letting an app index a "library", mpz is the folder
                             player for you. A free, open-source, native C++/Qt 6
                             music player for large local collections on Linux,
-                            macOS, and Windows. No library indexing step — just
-                            folders, and playlists you build from them by
-                            middle-clicking.
+                            macOS and Windows. No indexing step: just folders,
+                            and playlists you build from them by middle-clicking.
                         </p>
                         <p>
                             The 3-column UI shows the directory tree, the list
                             of playlists, and tracks from the selected playlist.
-                            Middle-click a folder and it becomes a playlist;
-                            switch between playlists quickly.
+                            Middle-click a folder and it becomes a playlist.
                         </p>
                     </div>
 
@@ -850,17 +891,17 @@
                     </div>
 
                     <h2 id="qt" class="title">
-                        Native C++/Qt — fast and responsive UI
+                        Fast and responsive native C++/Qt UI
                     </h2>
                     <div class="columns">
                         <div class="column">
                             <div class="content">
-                                Built with C++ and Qt 6 — lightweight and fast.
-                                Open source (GPL-3.0) and cross-platform. Uses
+                                Built with C++ and Qt 6: lightweight, fast,
+                                cross-platform, open source (GPL-3.0). Uses the
                                 audio codecs installed on your system (GStreamer
-                                through QtMultimedia on Linux). Follows your
-                                desktop theme. The "z" in the name reflects a
-                                no-nonsense approach — no clutter, no
+                                or ffmpeg through QtMultimedia on Linux) and
+                                follows your desktop theme. The "z" in the name
+                                reflects a no-nonsense approach: no clutter, no
                                 distractions.
                             </div>
                         </div>
@@ -885,7 +926,7 @@
                             rel="noopener noreferrer"
                             >AutoEq</a
                         >, SquigLink and similar sources. On/off and preset are
-                        per output device ("Default" counts as one), presets
+                        per output device ("Default" counts as one), the presets
                         themselves are shared. The EQ follows the device in use,
                         so unplugging headphones switches it along with the
                         audio. Runs on the gapless engine, so gapless has to be
@@ -907,7 +948,7 @@
                         plus your own. Stream playlists still play directly, or
                         import into the library. Also new: HTTPS, a radio row
                         view, and stream titles from IceCast's
-                        <code>status-json.xsl</code>. The playback log keeps a
+                        <code>status-json.xsl</code>. The playback log keeps the
                         history of what played.
                     </div>
 
@@ -923,7 +964,7 @@
                         (Music Player Daemon). You can add an mpd server as a
                         library folder, browsing and playing remote music as if
                         it were local. This is an experimental feature, and
-                        there is an mpd impedance mismatch — see more in the
+                        there is an mpd impedance mismatch, see more in the
                         <a
                             href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch"
                             target="_blank"
@@ -947,8 +988,8 @@
                             playback controls.
                         </p>
                         <p>
-                            Cover art (from tags or folder images) and lyrics
-                            — embedded in tags, in
+                            Cover art (from tags or folder images) and lyrics,
+                            the latter embedded in tags, in
                             <code>.lrc</code>/<code>.txt</code> sidecar files,
                             or fetched online from
                             <a
@@ -957,35 +998,46 @@
                                 rel="noopener noreferrer"
                                 >LRCLIB</a
                             >
-                            (with NetEase, QQ Music, and Lyrics.ovh available too)
-                            — shown in the Track Info dialog or as dockable
-                            panels that follow the playing track. Tag reading
-                            and editing via
+                            (NetEase, QQ Music and Lyrics.ovh available too).
+                            Both show in the Track Info dialog or in dockable
+                            panels that follow the playing track. Tags are read
+                            and written via
                             <a
                                 href="https://taglib.org/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 >TagLib</a
                             >
-                            (ID3v2, Vorbis Comment, MP4, APE) — edit track
-                            metadata directly from the built-in tag editor
-                            dialog (since 2.0.8). Common audio
-                            formats — FLAC, MP3, Ogg Vorbis, Opus, AAC, ALAC,
-                            M4A/MP4, WAV, WMA, APE, DSD — through your system's
-                            codecs (QtMultimedia with the GStreamer or ffmpeg
-                            backend on Linux, native backends on macOS and
-                            Windows).
+                            (ID3v2, Vorbis Comment, MP4, APE), editable in the
+                            built-in tag editor since 2.0.8, album artist and
+                            disc number included, as columns and sort keys too.
+                            Audio formats go through your system's codecs
+                            (QtMultimedia with the GStreamer or ffmpeg backend
+                            on Linux, native backends on macOS and Windows):
+                            FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC,
+                            M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack,
+                            Musepack, TTA, MKA, DSD, Shorten.
+                        </p>
+                        <p>
+                            The dynamic range meter gives a per-track and album
+                            DR log for the selected tracks in the foobar2000
+                            Dynamic Range Meter format, from the playlist
+                            context menu or the track info dialog (Qt 6 only).
+                            The seekbar can show the track waveform (off by
+                            default in <em>Settings → Interface</em>), and the
+                            output device button shows the selected device name.
                         </p>
                         <p>
                             Drag and drop files and folders from your file
-                            manager, and reorder tracks within a playlist by
-                            dragging. Playback order per playlist and global —
-                            sequential, random, or no-loop. Track sorting
-                            presets. Global
-                            media-key hotkeys and a built-in keyboard shortcuts
-                            dialog. Update check on Windows, macOS, and the
-                            Linux AppImage. UI in English, Russian, Japanese,
-                            and Serbian.
+                            manager, reorder tracks within a playlist by
+                            dragging, and drag folders, radio stations and
+                            tracks between the three panels. Playback order per
+                            playlist and global: sequential, random, or no-loop.
+                            Track sorting presets. Global media-key hotkeys and
+                            a keyboard shortcuts dialog where every shortcut is
+                            editable. Update check on Windows, macOS and the
+                            Linux AppImage. UI in English, Russian, Japanese and
+                            Serbian.
                         </p>
                     </div>
 
@@ -1069,7 +1121,7 @@
                                             />
                                             <img
                                                 src="/images/small/playback-log.png"
-                                                alt="Playback log showing recently played tracks — useful when listening to internet radio streams"
+                                                alt="Playback log showing recently played tracks, useful when listening to internet radio streams"
                                                 width="512"
                                                 height="279"
                                                 loading="lazy"
@@ -1175,16 +1227,18 @@
                                                 >
                                             </li>
                                         </ul>
-                                        Arch and Manjaro are x86_64 only. These
-                                        are the primary repositories going
-                                        forward.
+                                        Arch and Manjaro are x86_64 only.
+                                        These are the primary repositories going
+                                        forward, and they hold a single package,
+                                        mpz, so they can't break anything else
+                                        on your system.
                                         <details style="margin-top: 0.75em">
                                             <summary>
-                                                Already using the old Open Build
-                                                Service repositories?
+                                                Already using Open Build Service
+                                                repositories?
                                             </summary>
                                             <p>
-                                                The previous
+                                                The
                                                 <a
                                                     href="https://software.opensuse.org/download.html?project=home%3Aoleg_antonyan&package=mpz"
                                                     target="_blank"
@@ -1192,31 +1246,16 @@
                                                     >Open Build Service
                                                     repositories</a
                                                 >
-                                                still exist and existing
-                                                installations will keep working,
-                                                but existing users are also
-                                                encouraged to switch — future
-                                                packaging effort is focused on
-                                                omnipackage. The new
+                                                still exist, but existing users
+                                                are encouraged to switch, since
+                                                future packaging effort is
+                                                focused on omnipackage. The new
                                                 repositories are signed with
                                                 different GPG keys, so switching
                                                 means removing the old
                                                 repository and adding the new
                                                 one (the install pages linked
                                                 above walk through this).
-                                            </p>
-                                            <p>
-                                                Note: on Debian-based distros
-                                                (Debian, Ubuntu) the OBS builds
-                                                were always built against Qt5,
-                                                even on releases that ship a
-                                                recent enough Qt6 — making OBS
-                                                produce working
-                                                <code>.deb</code> packages with
-                                                Qt6 turned out to be very
-                                                painful. The omnipackage builds
-                                                use Qt6 where the distro
-                                                supports it.
                                             </p>
                                         </details>
                                     </td>
@@ -1238,7 +1277,7 @@
                                     <th scope="row">AppImage</th>
                                     <td>
                                         AppImage builds (x86_64
-                                        and arm64) are on the
+                                        and aarch64) are on the
                                         <a
                                             href="https://github.com/olegantonyan/mpz/releases"
                                             target="_blank"
@@ -1246,6 +1285,22 @@
                                             >GitHub releases page</a
                                         >. Prefer the native repositories above
                                         if your distro is supported.
+                                    </td>
+                                </tr>
+                                <tr data-os="linux">
+                                    <th scope="row">Flatpak</th>
+                                    <td>
+                                        Available on
+                                        <a
+                                            href="https://flathub.org/apps/org.mpz_player.mpz"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            >Flathub</a
+                                        >, or from your desktop's software
+                                        centre:
+                                        <pre><code>flatpak install flathub org.mpz_player.mpz</code></pre>
+                                        Prefer the native repositories above if
+                                        your distro is supported.
                                     </td>
                                 </tr>
                                 <tr data-os="windows">
@@ -1261,6 +1316,55 @@
                                         >. Builds are available for 64-bit x64
                                         (recommended), native ARM64 (Windows on
                                         ARM), and legacy 32-bit systems.
+                                        <details style="margin-top: 0.75em">
+                                            <summary>
+                                                The build is not signed, so
+                                                Windows blocks it on first
+                                                launch
+                                            </summary>
+                                            <p>
+                                                <strong
+                                                    >Microsoft Defender
+                                                    SmartScreen</strong
+                                                >: "Windows protected your PC".
+                                                Click <em>More info</em>, then
+                                                <em>Run anyway</em>. No
+                                                <em>Run anyway</em>? Right-click
+                                                the file →
+                                                <em>Properties</em> → tick
+                                                <em>Unblock</em> →
+                                                <em>Apply</em>.
+                                            </p>
+                                            <p>
+                                                <strong>Smart App Control</strong>:
+                                                "cannot be verified", with
+                                                nothing to click, and it has no
+                                                exception list. Turn it off in
+                                                <em
+                                                    >Windows Security → App &
+                                                    browser control → Smart App
+                                                    Control</em
+                                                >, install, turn it back on.
+                                                Older Windows 11 builds made
+                                                that switch one-way, so check
+                                                you can re-enable it first. Only
+                                                clean installs of Windows 11
+                                                have it on.
+                                            </p>
+                                            <p>
+                                                To uninstall, use the "Uninstall
+                                                mpz" Start Menu shortcut or
+                                                Control Panel. Settings → Apps
+                                                may not work on Windows 11 (a
+                                                <a
+                                                    href="https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    >known Qt Installer
+                                                    Framework bug</a
+                                                >).
+                                            </p>
+                                        </details>
                                     </td>
                                 </tr>
                                 <tr data-os="macos">
@@ -1305,7 +1409,7 @@
                                                     >System Settings → Privacy &
                                                     Security</em
                                                 >. Near the bottom you'll see a
-                                                message that mpz was blocked —
+                                                message that mpz was blocked,
                                                 click
                                                 <em>Open Anyway</em> and confirm.
                                                 The app launches normally from
@@ -1344,14 +1448,13 @@
                     <div class="content">
                         Inspired by Foobar2000 and especially its "Album list"
                         feature, mpz isn't trying to be a cross-platform
-                        Foobar2000 clone — that's not feasible, and not the
-                        goal. Instead, mpz has all the features I've been using
-                        for many years (quite literally the same unchanged
-                        Foobar2000 config since 2005 or so). So if you're
-                        looking for a Foobar2000-style alternative on Linux,
-                        macOS, or Windows, mpz may be it — or it may not fit
-                        your taste. Either way,
-                        I'd love to hear from you — use the built-in feedback
+                        Foobar2000 clone. That's not feasible, and not the goal.
+                        Instead it has the features I've been using for many
+                        years (quite literally the same unchanged Foobar2000
+                        config since 2005 or so). If you're looking for a
+                        Foobar2000-style alternative on Linux, macOS or Windows,
+                        mpz may be it, or it may not fit your taste. Either way
+                        I'd love to hear from you: use the built-in feedback
                         form or
                         <a
                             href="https://github.com/olegantonyan/mpz/issues"
@@ -1366,37 +1469,33 @@
                         <div class="content is-small mt-3">
                             <p>
                                 <strong>What is mpz?</strong><br />
-                                mpz is a free and open-source folder player for
-                                large local music collections, built with C++
-                                and Qt. It treats your folder structure as the
-                                library and offers a 3-column UI for the
-                                directory tree, playlists, and tracks.
+                                A free and open-source folder player for large
+                                local music collections, built with C++ and Qt.
+                                It treats your folder structure as the library,
+                                with a 3-column UI for the directory tree,
+                                playlists and tracks.
                             </p>
 
                             <p>
                                 <strong>Is mpz a folder player?</strong><br />
-                                Yes. mpz is a folder player: it plays music
-                                straight from your folder structure instead of
-                                importing it into a database. Middle-click any
-                                folder to turn it into a playlist — your
-                                directory tree is the library, with no global
-                                indexing step.
+                                Yes. It plays music straight from your folder
+                                structure instead of importing it into a
+                                database. Middle-click any folder to turn it
+                                into a playlist. Your directory tree is the
+                                library, with no global indexing step.
                             </p>
 
                             <p>
                                 <strong
                                     >Is mpz a Foobar2000 alternative?</strong
                                 ><br />
-                                Sort of. mpz is inspired by Foobar2000 —
-                                especially its "Album list" — but it isn't a
-                                Foobar2000 clone; a faithful cross-platform clone
-                                isn't feasible and isn't the goal. It keeps the
+                                Partly. mpz is inspired by Foobar2000,
+                                especially its "Album list", but it is not a
+                                clone: a faithful cross-platform clone is
+                                neither feasible nor the goal. It keeps the
                                 features the author has used daily for years, in
-                                a native, folder-based player that runs on Linux,
-                                macOS, and Windows, whereas Foobar2000 is
-                                Windows-only. If you organize your music in
-                                folders and want a Foobar2000-style workflow on
-                                Linux or macOS, mpz may suit you.
+                                a native folder-based player for Linux, macOS
+                                and Windows, where Foobar2000 is Windows-only.
                             </p>
 
                             <p>
@@ -1404,35 +1503,53 @@
                                     >Can mpz handle very large music
                                     collections?</strong
                                 ><br />
-                                Yes — that's what it's built for. mpz treats your
-                                folder structure as the library, with no global
-                                indexing step, so it doesn't scan a whole
-                                collection into a database before you can play
+                                Yes, that is what it is built for. Your folder
+                                structure is the library, so nothing gets
+                                scanned into a database before you can play
                                 anything.
                             </p>
 
                             <p>
                                 <strong>What platforms does mpz support?</strong
                                 ><br />
-                                Linux, macOS, and Windows. On Linux, install
+                                Linux, macOS and Windows. On Linux, install
                                 from the omnipackage repositories (openSUSE,
                                 Debian, Fedora, Ubuntu, RedHat, Mageia, Arch,
-                                Manjaro), built for x86_64 and aarch64 — Arch
-                                and Manjaro are x86_64 only — or the AUR on
-                                Arch. On Windows, download
-                                a release from GitHub — builds for 64-bit x64,
-                                native ARM64 (Windows on ARM), and legacy 32-bit.
-                                On macOS, download the
-                                <code>.dmg</code> from GitHub releases — the
+                                Manjaro) for x86_64 and aarch64, Arch and
+                                Manjaro x86_64 only, or from the AUR, Flathub
+                                (<code>flatpak install flathub org.mpz_player.mpz</code>)
+                                or an AppImage. On Windows, take a release from
+                                GitHub: 64-bit x64, native ARM64 (Windows on
+                                ARM) or legacy 32-bit.
+                                On macOS, take the
+                                <code>.dmg</code> from GitHub releases. That
                                 build is unsigned, so Gatekeeper blocks it on
-                                first launch — either remove the quarantine flag
+                                first launch: either remove the quarantine flag
                                 with
                                 <code>xattr -dr com.apple.quarantine "/Applications/mpz music player.app"</code>,
                                 or click <em>Open Anyway</em> under <em>System
-                                Settings → Privacy & Security</em> after the
-                                first blocked launch. Building from source is
-                                supported on any platform with Qt and a C++
-                                compiler.
+                                Settings → Privacy & Security</em>. Building
+                                from source works on any platform with Qt and a
+                                C++ compiler.
+                            </p>
+
+                            <p>
+                                <strong>Is mpz available as a Flatpak?</strong
+                                ><br />
+                                Yes, on
+                                <a
+                                    href="https://flathub.org/apps/org.mpz_player.mpz"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Flathub</a
+                                >
+                                as <code>org.mpz_player.mpz</code>. Install it
+                                with
+                                <code>flatpak install flathub org.mpz_player.mpz</code>,
+                                or from your desktop's software centre. It works
+                                on any distribution, but prefer the native
+                                omnipackage repositories if your distro is
+                                supported.
                             </p>
 
                             <p>
@@ -1440,11 +1557,10 @@
                                     >Does mpz have a mobile app (Android or
                                     iOS)?</strong
                                 ><br />
-                                No. mpz is a desktop music player for Linux,
-                                macOS, and Windows only; there is no Android or
-                                iOS version. On Linux, you can control desktop
-                                playback from a phone over MPRIS — for example
-                                via
+                                No. mpz is a desktop player for Linux, macOS
+                                and Windows; there is no Android or iOS
+                                version. On Linux you can control playback from
+                                a phone over MPRIS, for example via
                                 <a
                                     href="https://kdeconnect.kde.org/"
                                     target="_blank"
@@ -1464,21 +1580,21 @@
                                     >Does mpz support streaming
                                     services?</strong
                                 ><br />
-                                No. mpz focuses on local music files. Internet
-                                radio works — a Radio library with built-in
+                                No, mpz focuses on local music files. Internet
+                                radio works (a radio library with built-in
                                 stations, plus <code>m3u</code>,
                                 <code>m3u8</code> and <code>pls</code> stream
-                                playlists — but streaming services are not
+                                playlists), but streaming services are not
                                 supported.
                             </p>
 
                             <p>
                                 <strong>Does mpz play internet radio?</strong
                                 ><br />
-                                Yes, and always has — stream playlists in
+                                Yes, and always has: stream playlists in
                                 <code>m3u</code>, <code>m3u8</code> and
                                 <code>pls</code> play like any other playlist.
-                                Version 2.1.0 added a dedicated Radio library
+                                Version 2.1.0 added a radio library
                                 with built-in stations from SomaFM, Radio
                                 Paradise, FIP, France Musique and Nightride FM
                                 plus your own, HTTPS, a radio row view, and
@@ -1492,14 +1608,17 @@
                                     >What audio formats does mpz
                                     support?</strong
                                 ><br />
-                                Common formats — FLAC, MP3, Ogg Vorbis, Opus,
-                                AAC, ALAC, M4A/MP4, WAV, WMA, APE, and DSD —
+                                FLAC, MP3, Ogg Vorbis, Opus,
+                                Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF,
+                                WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD
+                                (DSF/DFF) and Shorten,
                                 played through your system's codecs (QtMultimedia
                                 with the GStreamer or ffmpeg backend on Linux,
-                                native backends on macOS and Windows). Because
+                                native backends on macOS and Windows).
+                                Playlists and radio streams: <code>m3u</code>,
+                                <code>m3u8</code>, <code>pls</code>. Since
                                 playback uses system codecs, exact format
-                                availability depends on what's installed on your
-                                machine.
+                                availability depends on what is installed.
                             </p>
 
                             <p>
@@ -1507,7 +1626,7 @@
                                     >Does mpz support gapless
                                     playback?</strong
                                 ><br />
-                                Yes. No silence between tracks, anywhere in your
+                                Yes, anywhere in your
                                 library. Decoded audio is buffered in memory
                                 (100 MB by default, configurable in
                                 <em>Settings → Advanced</em>), which also makes
@@ -1522,7 +1641,8 @@
                                 full parametric modes, importing presets from
                                 AutoEq, SquigLink and similar sources. On/off
                                 and preset are per output device ("Default"
-                                counts as one), presets themselves are shared.
+                                counts as one), the presets themselves are
+                                shared.
                                 The EQ follows the device in use, so unplugging
                                 headphones switches it along with the audio. It
                                 runs on the gapless engine, so gapless has to be
@@ -1538,28 +1658,38 @@
 
                             <p>
                                 <strong
+                                    >Does mpz measure dynamic range
+                                    (DR)?</strong
+                                ><br />
+                                Yes. Select tracks and pick
+                                "Dynamic range" in the playlist context menu,
+                                or open it from the track info dialog, to get a
+                                per-track and album DR log in the foobar2000
+                                Dynamic Range Meter format. Qt 6 only.
+                            </p>
+
+                            <p>
+                                <strong
                                     >What languages is mpz available
                                     in?</strong
                                 ><br />
                                 The interface is translated into English,
-                                Russian, Japanese, and Serbian, and follows your
+                                Russian, Japanese and Serbian, and follows your
                                 system language by default.
                             </p>
 
                             <p>
                                 <strong>Can mpz act as an mpd client?</strong
                                 ><br />
-                                Yes, mpz has an experimental mpd client mode
-                                (since version 2.0.0). You can add an mpd server
-                                as a library folder. There are some caveats —
-                                see the
+                                Yes, as an experimental mode since version
+                                2.0.0. You can add an mpd server
+                                as a library folder. There are caveats: see the
                                 <a
                                     href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >README</a
-                                >
-                                for details.
+                                >.
                             </p>
 
                             <p>
@@ -1572,22 +1702,21 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >LRCLIB</a
-                                >. They are shown in the Track Info dialog, or
-                                in a dockable Lyrics panel.
+                                >. They show up in the Track Info dialog or in
+                                a dockable Lyrics panel.
                             </p>
 
                             <p>
                                 <strong>Can mpz edit tags?</strong><br />
-                                Yes. Since version 2.0.8, mpz includes a
-                                built-in tag editor dialog for editing track
-                                metadata (title, artist, album, etc.) on common
-                                formats supported by TagLib — ID3v2, Vorbis
-                                Comment, MP4, and APE.
+                                Yes. Since version 2.0.8 there is a built-in tag
+                                editor for track metadata (title, artist, album
+                                and so on) on the formats TagLib supports:
+                                ID3v2, Vorbis Comment, MP4 and APE.
                             </p>
 
                             <p>
                                 <strong>Why is it called mpz?</strong><br />
-                                The "z" reflects a no-nonsense approach — no
+                                The "z" reflects a no-nonsense approach: no
                                 clutter, no distractions.
                             </p>
                         </div>
@@ -1599,8 +1728,8 @@
         <footer class="footer">
             <div class="container">
                 <p class="footer-tagline">
-                    mpz — free, open-source music player for large local
-                    collections. Native C++/Qt for Linux, macOS, and Windows.
+                    mpz, a free and open-source music player for large local
+                    collections. Native C++/Qt for Linux, macOS and Windows.
                 </p>
 
                 <div class="columns footer-columns">
