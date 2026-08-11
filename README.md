@@ -140,7 +140,7 @@ sudo cmake --install build
 You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON` to cmake cli.
 
 Other options: 
-- `-DUSE_QT5=ON` builds Qt version (legacy)
+- `-DUSE_QT5=ON` builds Qt5 legacy version
 - `-DENABLE_DBUS=OFF` drops Linux MPRIS support
 - `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode
 - `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys) 
