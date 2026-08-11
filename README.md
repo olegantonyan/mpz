@@ -2,6 +2,7 @@
 [![tests](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml/badge.svg)](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml)
 [![OmniPackage repositories badge x86_64](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
 [![OmniPackage repositories badge aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
+[![Flathub](https://img.shields.io/flathub/v/org.mpz_player.mpz?logo=flathub&label=flathub)](https://flathub.org/apps/org.mpz_player.mpz)
 
 # Folder player for big local music collections
 
@@ -72,8 +73,6 @@ git clone https://aur.archlinux.org/mpz.git
 cd mpz
 makepkg -si
 ```
-
-For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
 
 ##### AppImage
 
