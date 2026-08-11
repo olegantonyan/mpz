@@ -38,6 +38,54 @@
     <p xml:lang="sr">Такође су подржани: репродукција без прекида, 10-појасни и параметарски еквилајзер са AutoEq пресетима, интернет радио, CUE листови, уређивач ознака, омоти албума и текстови песама, MPRIS контрола медија и експериментални режим MPD клијента.</p>
   </description>
 
+  <keywords>
+    <keyword>music</keyword>
+    <keyword>audio</keyword>
+    <keyword>player</keyword>
+    <keyword>folder</keyword>
+    <keyword>folders</keyword>
+    <keyword>playlist</keyword>
+    <keyword>collection</keyword>
+    <keyword>library</keyword>
+    <keyword>gapless</keyword>
+    <keyword>equalizer</keyword>
+    <keyword>flac</keyword>
+    <keyword>cue</keyword>
+    <keyword>radio</keyword>
+    <keyword>mpd</keyword>
+    <keyword>foobar2000</keyword>
+    <keyword xml:lang="ru">музыка</keyword>
+    <keyword xml:lang="ru">аудио</keyword>
+    <keyword xml:lang="ru">плеер</keyword>
+    <keyword xml:lang="ru">папка</keyword>
+    <keyword xml:lang="ru">папки</keyword>
+    <keyword xml:lang="ru">плейлист</keyword>
+    <keyword xml:lang="ru">коллекция</keyword>
+    <keyword xml:lang="ru">библиотека</keyword>
+    <keyword xml:lang="ru">эквалайзер</keyword>
+    <keyword xml:lang="ru">радио</keyword>
+    <keyword xml:lang="ja">音楽</keyword>
+    <keyword xml:lang="ja">オーディオ</keyword>
+    <keyword xml:lang="ja">プレーヤー</keyword>
+    <keyword xml:lang="ja">フォルダー</keyword>
+    <keyword xml:lang="ja">プレイリスト</keyword>
+    <keyword xml:lang="ja">コレクション</keyword>
+    <keyword xml:lang="ja">ライブラリ</keyword>
+    <keyword xml:lang="ja">ギャップレス</keyword>
+    <keyword xml:lang="ja">イコライザー</keyword>
+    <keyword xml:lang="ja">ラジオ</keyword>
+    <keyword xml:lang="sr">музика</keyword>
+    <keyword xml:lang="sr">аудио</keyword>
+    <keyword xml:lang="sr">плејер</keyword>
+    <keyword xml:lang="sr">фасцикла</keyword>
+    <keyword xml:lang="sr">фасцикле</keyword>
+    <keyword xml:lang="sr">плејлиста</keyword>
+    <keyword xml:lang="sr">колекција</keyword>
+    <keyword xml:lang="sr">библиотека</keyword>
+    <keyword xml:lang="sr">еквилајзер</keyword>
+    <keyword xml:lang="sr">радио</keyword>
+  </keywords>
+
   <developer id="org.mpz_player">
     <name>Oleg Antonyan</name>
   </developer>
