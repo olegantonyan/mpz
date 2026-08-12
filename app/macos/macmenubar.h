@@ -9,6 +9,8 @@
 #include "modusoperandi.h"
 
 #include <QObject>
+#include <QVector>
+#include <QPair>
 
 class MainWindow;
 class QAction;
@@ -28,6 +30,9 @@ private:
   Config::Global &global_conf;
   Config::Local &local_conf;
   ModusOperandi &modus_operandi;
+
+  QVector<QPair<Shortcuts::Action, QAction *>> shortcut_actions;
+  void applyShortcuts(const Shortcuts *shortcuts);
 };
 
 #endif // MACMENUBAR_H

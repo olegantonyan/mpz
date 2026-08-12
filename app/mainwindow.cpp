@@ -684,7 +684,7 @@ void MainWindow::setupCrashReporter() {
 #endif
 
 void MainWindow::setupShortcuts() {
-  shortcuts = new Shortcuts(local_conf, this);
+  shortcuts = new Shortcuts(global_conf, local_conf, this);
 
   connect(shortcuts, &Shortcuts::quit, this, &MainWindow::requestQuit);
   connect(shortcuts, &Shortcuts::focusLibrary, this, [=]() {
@@ -725,10 +725,8 @@ void MainWindow::setupShortcuts() {
 #endif
 
   auto open_dialog = [=] {
-    auto dlg = new ShortcutsDialog(shortcuts, this);
-    dlg->setModal(false);
-    connect(dlg, &ShortcutsDialog::finished, dlg, &ShortcutsDialog::deleteLater);
-    dlg->show();
+    ShortcutsDialog dlg(shortcuts, this);
+    dlg.exec();
   };
   connect(main_menu, &MainMenu::openShortcuts, open_dialog);
   connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
@@ -839,8 +837,13 @@ void MainWindow::setupEqualizer() {
 }
 
 void MainWindow::openEqualizerDialog() {
-  EqualizerUi::EqualizerDialog dlg(player, local_conf, global_conf, this);
-  dlg.exec();
+  if (!eq_dialog) {
+    eq_dialog = new EqualizerUi::EqualizerDialog(player, local_conf, global_conf, this);
+    eq_dialog->setModal(false);
+  }
+  eq_dialog->show();
+  eq_dialog->raise();
+  eq_dialog->activateWindow();
 }
 
 void MainWindow::setupReplayGain() {

@@ -1,0 +1,39 @@
+name: Release Flathub
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing release tag to push to Flathub'
+        required: false
+        type: string
+        default: ''
+  release:
+    types: [published]
+
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
+
+jobs:
+  release_flathub:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        ref: ${{ github.event.release.tag_name || github.event.inputs.release_tag }}
+        fetch-depth: 0
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 4.0
+
+    - name: Run release script
+      env:
+        FLATHUB_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
+      run: ./.github/release-flathub-github-action.rb

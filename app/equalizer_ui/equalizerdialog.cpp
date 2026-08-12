@@ -5,7 +5,6 @@
 #include "eq/eqexport.h"
 
 #include <QCheckBox>
-#include <QCloseEvent>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
@@ -609,8 +608,8 @@ namespace EqualizerUi {
     f.write(text.toUtf8());
   }
 
-  void EqualizerDialog::closeEvent(QCloseEvent *event) {
+  void EqualizerDialog::done(int result) {
     local_conf.sync();
-    QDialog::closeEvent(event);
+    QDialog::done(result);
   }
 }

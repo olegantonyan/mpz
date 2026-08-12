@@ -1,5 +1,4 @@
 #include "lyrics/neteaseclient.h"
-#include "lyrics/lrcparser.h"
 #include "lyrics/textmatch.h"
 
 #include <QJsonArray>
@@ -116,14 +115,13 @@ namespace Lyrics {
       return;
     }
     const auto obj = doc.object();
-    if (obj.value("nolyric").toBool() || obj.value("uncollected").toBool()) {
+    if (obj.value("nolyric").toBool() || obj.value("uncollected").toBool()
+        || obj.value("pureMusic").toBool()) {
       emit notFound();
       return;
     }
     const QString lyric = obj.value("lrc").toObject().value("lyric").toString().trimmed();
-    // Reject empty or metadata-only LRC bodies.
-    if (lyric.isEmpty()
-        || (LrcParser::looksLikeLrc(lyric) && LrcParser::stripTimestamps(lyric).isEmpty())) {
+    if (lyric.isEmpty()) {
       emit notFound();
       return;
     }

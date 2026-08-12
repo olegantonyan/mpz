@@ -237,7 +237,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #endif
 
   void Controller::on_seek(int position) {
-    if (player().state() != MediaPlayer::PlayingState)  {
+    if (player().state() == MediaPlayer::StoppedState)  {
       return;
     }
     if (_current_track.isStream()) {

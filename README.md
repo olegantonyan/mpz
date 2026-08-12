@@ -2,6 +2,7 @@
 [![tests](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml/badge.svg)](https://github.com/olegantonyan/mpz/actions/workflows/tests.yml)
 [![OmniPackage repositories badge x86_64](https://repositories.omnipackage.org/mpz/stable/badge.svg)](https://repositories.omnipackage.org/mpz/stable/install.html)
 [![OmniPackage repositories badge aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg)](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
+[![Flathub](https://img.shields.io/flathub/v/org.mpz_player.mpz?logo=flathub&label=flathub)](https://flathub.org/apps/org.mpz_player.mpz)
 
 # Folder player for big local music collections
 
@@ -19,23 +20,24 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 
 ## Features
 
-- 3-column UI to quickly create playlists from folders and switch between them;
-- Native C++/Qt UI - fast and responsive;
-- Drag-n-drop files and folders from file manager;
-- Gapless playback (Qt6 only, version 2.1.0+);
-- Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others (only when gapless mode enabled, version 2.1.0+);
-- Internet radio in `m3u` and `pls` formats, as well as built-in radio library;
+- 3-column UI to quickly create playlists from folders and switch between them
+- Native C++/Qt UI - fast and responsive
+- Drag-n-drop files and folders from file manager
+- Gapless playback (Qt6 only, version 2.1.0+)
+- Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others (only when gapless mode enabled, version 2.1.0+)
+- Internet radio in `m3u` and `pls` formats, as well as built-in radio library
 - CUE sheets, with gapless playback of single-file albums;
-- Tag editor;
-- Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track;
-- Playback order per playlist and global: sequential, random, or no-loop;
-- Track sorting presets;
-- Global media-key hotkeys and a built-in keyboard shortcuts dialog;
+- Tag editor
+- Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt6 only)
+- Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track
+- Playback order per playlist and global: sequential, random, or no-loop
+- Track sorting presets
+- Global media-key hotkeys and a built-in keyboard shortcuts dialog
 - Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar;
-- Update check on Windows, macOS, and Linux AppImage;
-- UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation));
-- Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation);
-- [mpd](https://musicpd.org) client mode (version 2.0.0+).
+- Update check on Windows, macOS, and Linux AppImage
+- UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
+- Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation)
+- [mpd](https://musicpd.org) client mode (version 2.0.0+)
 
 ## Supported formats
 
@@ -53,14 +55,12 @@ Install from the repositories:
 - **Stable** (recommended): [x86_64](https://repositories.omnipackage.org/mpz/stable/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
 - **Next** (unstable builds from master): [x86_64](https://repositories.omnipackage.org/mpz/next/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html)
 
-Arch and Manjaro are x86_64 only.
+Arch and Manjaro are x86_64 only. These repos contain only one package - mpz - and bring no risk of breaking anything else on your system.
 
 <details>
-<summary>Already using the old Open Build Service repositories?</summary>
+<summary>Already using Open Build Service repositories?</summary>
 
-The previous [Open Build Service repositories](https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz) still exist and existing installations will keep working, but existing users are also encouraged to switch - future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).
-
-Note: the OBS `.deb` builds are now Qt6-only. OBS has no per-distro configuration for Debian packaging, so releases without Qt6 (Debian 11 and older, Ubuntu 21.10 and older) no longer build there.
+[Open Build Service repositories](https://software.opensuse.org//download.html?project=home%3Aoleg_antonyan&package=mpz) still exist, but existing users are encouraged to switch - future packaging effort is focused on omnipackage. The new repositories are signed with different GPG keys, so switching means removing the old repository and adding the new one (the install pages linked above walk through this).
 
 </details>
 
@@ -74,11 +74,15 @@ cd mpz
 makepkg -si
 ```
 
-For Qt5 version use this package: https://aur.archlinux.org/packages/mpz-qt5
-
 ##### AppImage
 
-Experimental AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+AppImage builds (x86_64 and aarch64) are on the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Prefer the native repositories above if your distro is supported.
+
+##### Flatpak
+
+Available on Flathub: https://flathub.org/apps/org.mpz_player.mpz. Prefer the native repositories above if your distro is supported.
+
+**NOTE: limited filesystem access** - Flatpak apps are sandboxed. Paths within `$HOME`, `/mnt`, `/media`, `/run/media` have full unsandboxed access. Paths outside of them can still be added as library folders, but won't refresh automatically when files are added while mpz is running - a limitation of desktop portals.
 
 #### Windows
 
@@ -88,13 +92,25 @@ Grab the installer or portable binary from the [releases page](https://github.co
 * win-arm64-qt6 - native ARM 64-bit build (only ARM CPU)
 * win-legacy-qt5 - legacy version for x86 32-bit systems (only Windows below 10)
 
+<details>
+<summary>The build is not signed, so Windows blocks it on first launch.</summary>
+
+**Microsoft Defender SmartScreen** - "Windows protected your PC". Click *More info*, then *Run anyway*. No *Run anyway*? Right-click the file → *Properties* → tick *Unblock* → *Apply*.
+
+**Smart App Control** - "cannot be verified", with nothing to click; it has no exception list. Turn it off in *Windows Security → App & browser control → Smart App Control*, install, turn it back on. Older Windows 11 builds made that switch one-way, so check you can re-enable it first. Only clean installs of Windows 11 have it on.
+
 To uninstall, use the "Uninstall mpz" Start Menu shortcut or Control Panel. Settings → Apps may not work on Windows 11 ([a known Qt Installer Framework bug](https://bugreports.qt.io/projects/QTIFW/issues/QTIFW-3336)).
+
+</details>
 
 #### macOS
 
 Grab the `.dmg` from the [releases page](https://github.com/olegantonyan/mpz/releases/latest). Universal binary, runs on Apple Silicon and Intel Macs (macOS 11 Big Sur or later).
 
-The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch. After dragging `mpz music player.app` to `/Applications`, use either method below.
+<details>
+<summary>The build is not signed with an Apple Developer ID, so macOS Gatekeeper blocks it on first launch.</summary>
+
+After dragging `mpz music player.app` to `/Applications`, use either method below.
 
 **Terminal:** remove the quarantine flag, then open the app normally:
 
@@ -106,10 +122,11 @@ xattr -dr com.apple.quarantine "/Applications/mpz music player.app"
 
 The app will then launch normally.
 
+</details>
+
 #### From sources
 
-Dependencies: gcc, make, cmake, qt development headers (libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel for Qt5 and qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel for Qt6 on openSUSE).
-Package names may differ between distros.
+Dependencies: gcc, make, cmake, Qt development headers (Multimedia, Widgets, Concurrent, Svg)
 
 ```
 cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -120,11 +137,15 @@ cmake --build build --parallel
 sudo cmake --install build
 ```
 
-To build Qt5 version add `-DUSE_QT5=ON` to cmake cli.
-
 You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON` to cmake cli.
 
-Other options: `-DENABLE_DBUS=OFF` drops Linux MPRIS support, `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode, `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys), `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC — the only platforms cpptrace builds on), `-DENABLE_GAPLESS=OFF` drops the gapless playback engine (on by default, Qt6 only).
+Other options: 
+- `-DUSE_QT5=ON` builds Qt5 legacy version
+- `-DENABLE_DBUS=OFF` drops Linux MPRIS support
+- `-DENABLE_MPD_SUPPORT=OFF` drops mpd client mode
+- `-DENABLE_QHOTKEY=OFF` drops global media-key hotkeys (on by default, except macOS and Windows MSVC where the OS owns media keys) 
+- `-DENABLE_CRASH_HANDLER=OFF` drops the builtin crash handler (on by default on Linux, macOS and Windows MSVC - the only platforms cpptrace builds on)
+- `-DENABLE_GAPLESS=OFF` drops the gapless playback engine (on by default, Qt6 only).
 
 ## Qt6/Qt5 split
 
@@ -133,14 +154,13 @@ Some features require Qt6:
 - gapless playback
 - equalizer
 - audio output switch
+- dynamic range meter
 
-This means win-legacy-qt5 won't have these. As well as old Linux distros.
+This means win-legacy-qt5 won't have these. As well as old Linux distros. Qt5 support will be dropped at some point in future.
 
 OmniPackage repositories contain binaries with Qt6 for: openSUSE Tumbleweed & Leap 15.4+, Fedora 38+, Debian 12+, Ubuntu 22.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
 
-Legacy OBS repositories contain binaries with Qt6 for: openSUSE 16+, Fedora 40+, Debian 12+, Ubuntu 22.04+.
-
-AppImage, macOS DMG, win-x86_64, win-arm64 are all built with Qt6.
+AppImage, macOS DMG, win-x86_64, win-arm64, Faltpak are all built with Qt6.
 
 ## Configuration
 
@@ -158,14 +178,28 @@ The available config options are:
 - `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`);
 - `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB;
 - `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist;
-- `single_instance_ipc_port` in `global.yml` - single instance functionality uses TCP socket, this option allows you to specify a port;
 - `playback_log_size` in `global.yml` - max size of playback log, default is 100;
 - `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
 - `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
 - `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
 - `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all; on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead;
+- `shortcuts` in `global.yml` - rebound keyboard shortcuts, more on this below;
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
+
+#### Shortcuts config
+
+Usually edited in the app, but writable by hand:
+
+```
+shortcuts:
+  next: Ctrl+Alt+N
+  open_sort_menu: ''
+```
+
+Only changed shortcuts are stored; the rest follow the platform defaults, so `global.yml` stays portable. Empty string means unbound. Unparseable values are ignored. On a collision the rebound action wins and the other is unset.
+
+Sequences use portable spelling (`Ctrl`, `Alt`, `Shift`, `Meta`). On macOS `Ctrl+` is ⌘, `Meta+` is ⌃ and `Alt+` is ⌥.
 
 #### Columns config
 
@@ -236,6 +270,8 @@ This will ignore commands issued by Wireplumber. Starting around version 0.5, it
 The full, platform-aware list is in the app: press Alt+S (Linux/Windows) or ⌘+/ (macOS), or open the main menu → "Keyboard shortcuts".
 
 Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - playback log; Ctrl+J - jump to the playing track.
+
+All of them are editable in that dialog: click a key field, press the new combination, OK. Global media keys are not rebindable.
 
 ## Limitations
 

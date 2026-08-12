@@ -8,11 +8,10 @@
 #include "lyrics/lrcparser.h"
 #include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
-
-#include <taglib.h>
-
-#define MPZ_TAGLIB_SINCE(major, minor) \
-  (TAGLIB_MAJOR_VERSION > (major) || (TAGLIB_MAJOR_VERSION == (major) && TAGLIB_MINOR_VERSION >= (minor)))
+#include "taglib_compat.h"
+#ifdef ENABLE_DR_METER
+  #include "dynamic_range_ui/dynamicrangedialog.h"
+#endif
 
 #include <fileref.h>
 #include <tag.h>
@@ -214,6 +213,11 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std
   }
   ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
   ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isMpd() && !track.isStream());
+#ifdef ENABLE_DR_METER
+  ui->toolButtonDynamicRange->setVisible(!track.isMpd() && !track.isStream());
+#else
+  ui->toolButtonDynamicRange->setVisible(false);
+#endif
 }
 
 TrackInfoDialog::~TrackInfoDialog() {
@@ -607,6 +611,15 @@ void TrackInfoDialog::on_toolButtonEditTags_clicked() {
   dlg->show();
 }
 
+#ifdef ENABLE_DR_METER
+void TrackInfoDialog::on_toolButtonDynamicRange_clicked() {
+  DynamicRangeDialog *dlg = new DynamicRangeDialog({_track});
+  dlg->setModal(false);
+  connect(dlg, &DynamicRangeDialog::finished, dlg, &DynamicRangeDialog::deleteLater);
+  dlg->show();
+}
+#endif
+
 void TrackInfoDialog::refresh_track(const QList<quint64> &uids) {
   if (!_playlist || !uids.contains(_track.uid())) {
     return;
@@ -631,12 +644,12 @@ void TrackInfoDialog::setup_lyrics() {
   }
 
   QString embedded = fetch_embedded_lyrics();
-  if (!embedded.isEmpty()) {
+  if (Lyrics::LrcParser::hasLyricContent(embedded)) {
     render_lyrics("embedded", embedded);
     return;
   }
   QString sidecar = fetch_sidecar_lyrics();
-  if (!sidecar.isEmpty()) {
+  if (Lyrics::LrcParser::hasLyricContent(sidecar)) {
     render_lyrics("sidecar", sidecar);
     return;
   }
@@ -697,10 +710,7 @@ QString TrackInfoDialog::fetch_sidecar_lyrics() const {
 
 void TrackInfoDialog::render_lyrics(const QString &source, const QString &raw) {
   ui->labelLyricsSource->setText(QString("(%1)").arg(source));
-  const QString text = Lyrics::LrcParser::looksLikeLrc(raw)
-                         ? Lyrics::LrcParser::stripTimestamps(raw)
-                         : raw.trimmed();
-  ui->plainTextLyrics->setPlainText(text);
+  ui->plainTextLyrics->setPlainText(Lyrics::LrcParser::toPlainLyrics(raw));
 }
 
 void TrackInfoDialog::render_lyrics_state(const QString &message) {

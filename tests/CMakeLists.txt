@@ -44,6 +44,8 @@ mpz_add_test(tst_replaygainstore tst_replaygainstore.cpp ${APP}/replaygain/store
 mpz_add_test(tst_replaygainanalyzer tst_replaygainanalyzer.cpp ${APP}/replaygain/analyzer.cpp)
 target_link_libraries(tst_replaygainanalyzer PRIVATE ebur128)
 mpz_add_test(tst_waveformpeaks  tst_waveformpeaks.cpp  ${APP}/waveform/peaks.cpp)
+mpz_add_test(tst_dynamicrange   tst_dynamicrange.cpp   ${APP}/dynamic_range/dr.cpp)
+mpz_add_test(tst_drlogformat    tst_drlogformat.cpp    ${APP}/dynamic_range/logformat.cpp ${APP}/dynamic_range/dr.cpp)
 mpz_add_test(tst_eqbiquad       tst_eqbiquad.cpp)
 mpz_add_test(tst_equalizer      tst_equalizer.cpp      ${APP}/eq/equalizer.cpp)
 mpz_add_test(tst_autoeqimport   tst_autoeqimport.cpp   ${APP}/eq/autoeqimport.cpp)
@@ -215,6 +217,27 @@ target_link_libraries(tst_localconfig PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
   Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
 target_compile_definitions(tst_localconfig PRIVATE VERSION="${PROJECT_VERSION}")
+
+mpz_add_test(tst_shortcuts tst_shortcuts.cpp
+  ${APP}/shortcuts.cpp
+  ${APP}/config/global.cpp
+  ${APP}/config/local.cpp
+  ${APP}/config/storage.cpp
+  ${APP}/config/value.cpp
+  ${APP}/playlist/playlist.cpp
+  ${APP}/playlist/sorter.cpp
+  ${APP}/playlist/loader.cpp
+  ${APP}/playlist/fileparser.cpp
+  ${APP}/playlist/cueparser.cpp
+  ${APP}/playlist_ui/columnsconfig.cpp
+  ${APP}/radio/station.cpp
+  ${APP}/track.cpp
+  ${APP}/rnjesus.cpp
+  ${APP}/streammetadata.cpp)
+target_link_libraries(tst_shortcuts PRIVATE
+  Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
+target_compile_definitions(tst_shortcuts PRIVATE VERSION="${PROJECT_VERSION}")
 
 # MPD data classes — testable for defaults + nullptr update guard.
 # Constructing real mpd_status/mpd_song/mpd_output structs requires

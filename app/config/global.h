@@ -10,6 +10,7 @@
 #include <QPair>
 #include <QList>
 #include <QVector>
+#include <QMap>
 
 namespace Config {
   class Global : public SingleInstanceGuard<Global> {
@@ -104,6 +105,9 @@ namespace Config {
 
     bool replayGainAllowClipping() const;
     void saveReplayGainAllowClipping(bool arg);
+
+    QMap<QString, QString> shortcuts() const;
+    bool saveShortcuts(const QMap<QString, QString> &arg);
 
   private:
     QStringList providersUnder(const QString &key) const;

@@ -2,15 +2,84 @@
 #include "rnjesus.h"
 #include "coverart/covers.h"
 
+#include "taglib_compat.h"
+
 #include "fileref.h"
 #include "tag.h"
 #include "tpropertymap.h"
+
+#include <aiffproperties.h>
+#include <apeproperties.h>
+#include <asfproperties.h>
+#include <flacproperties.h>
+#include <mp4properties.h>
+#include <trueaudioproperties.h>
+#include <wavpackproperties.h>
+#include <wavproperties.h>
+#if MPZ_TAGLIB_SINCE(2, 0)
+  #include <dsdiffproperties.h>
+  #include <dsfproperties.h>
+#endif
+#if MPZ_TAGLIB_SINCE(2, 1)
+  #include <shortenproperties.h>
+#endif
+#if MPZ_TAGLIB_SINCE(2, 2)
+  #include <matroskaproperties.h>
+#endif
 
 #include <QDateTime>
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
 #include <QHash>
+
+namespace {
+  quint16 bitsPerSampleOf(TagLib::AudioProperties *p) {
+    if (auto *x = dynamic_cast<TagLib::FLAC::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::RIFF::WAV::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::RIFF::AIFF::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::APE::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::WavPack::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::TrueAudio::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::MP4::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::ASF::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+#if MPZ_TAGLIB_SINCE(2, 0)
+    if (auto *x = dynamic_cast<TagLib::DSF::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+    if (auto *x = dynamic_cast<TagLib::DSDIFF::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+#endif
+#if MPZ_TAGLIB_SINCE(2, 1)
+    if (auto *x = dynamic_cast<TagLib::Shorten::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+#endif
+#if MPZ_TAGLIB_SINCE(2, 2)
+    if (auto *x = dynamic_cast<TagLib::Matroska::Properties *>(p)) {
+      return quint16(x->bitsPerSample());
+    }
+#endif
+    return 0;
+  }
+}
 
 Track::Track() {
   _uid = 0;
@@ -115,6 +184,7 @@ Track::AudioProperties Track::audioPropertiesOf(const QString &filepath) {
     result.channels = static_cast<quint8>(props->channels());
     result.bitrate = static_cast<quint16>(props->bitrate());
     result.sample_rate = static_cast<quint32>(props->sampleRate());
+    result.bits_per_sample = bitsPerSampleOf(f.audioProperties());
   }
   return result;
 }

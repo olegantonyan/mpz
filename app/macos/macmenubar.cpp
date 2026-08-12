@@ -35,12 +35,12 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
 
   auto *prefs = app_menu->addAction(tr("Settings…"));
   prefs->setMenuRole(QAction::PreferencesRole);
-  prefs->setShortcut(QKeySequence::Preferences);
+  shortcut_actions << qMakePair(Shortcuts::Action::Settings, prefs);
   connect(prefs, &QAction::triggered, shortcuts, &Shortcuts::openSettings);
 
   auto *quit = app_menu->addAction(tr("Quit mpz"));
   quit->setMenuRole(QAction::QuitRole);
-  quit->setShortcut(QKeySequence::Quit);
+  shortcut_actions << qMakePair(Shortcuts::Action::Quit, quit);
   connect(quit, &QAction::triggered, window, &MainWindow::requestQuit);
 
   auto *playback = bar->addMenu(tr("Playback"));
@@ -50,7 +50,7 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   auto *now_playing_sep = playback->addSeparator();
 
   auto *play_pause = playback->addAction(tr("Play / Pause"));
-  play_pause->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::PlayPause));
+  shortcut_actions << qMakePair(Shortcuts::Action::PlayPause, play_pause);
   connect(play_pause, &QAction::triggered, shortcuts, &Shortcuts::playPause);
 
   auto *stop_action = playback->addAction(tr("Stop"));
@@ -59,11 +59,11 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   playback->addSeparator();
 
   auto *next_action = playback->addAction(tr("Next Track"));
-  next_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Next));
+  shortcut_actions << qMakePair(Shortcuts::Action::Next, next_action);
   connect(next_action, &QAction::triggered, shortcuts, &Shortcuts::next);
 
   auto *prev_action = playback->addAction(tr("Previous Track"));
-  prev_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::Prev));
+  shortcut_actions << qMakePair(Shortcuts::Action::Prev, prev_action);
   connect(prev_action, &QAction::triggered, shortcuts, &Shortcuts::prev);
 
   auto update_now_playing = [now_playing, now_playing_sep](const Track &track) {
@@ -97,11 +97,11 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   playback->addSeparator();
 
   auto *vol_up = playback->addAction(tr("Volume Up"));
-  vol_up->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeUp));
+  shortcut_actions << qMakePair(Shortcuts::Action::VolumeUp, vol_up);
   connect(vol_up, &QAction::triggered, shortcuts, &Shortcuts::volumeUp);
 
   auto *vol_down = playback->addAction(tr("Volume Down"));
-  vol_down->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::VolumeDown));
+  shortcut_actions << qMakePair(Shortcuts::Action::VolumeDown, vol_down);
   connect(vol_down, &QAction::triggered, shortcuts, &Shortcuts::volumeDown);
 
 #ifdef ENABLE_GAPLESS
@@ -155,15 +155,15 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   view->addSeparator();
 
   auto *jump = view->addAction(tr("Jump to Playing Track"));
-  jump->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::JumpToPlayingTrack));
+  shortcut_actions << qMakePair(Shortcuts::Action::JumpToPlayingTrack, jump);
   connect(jump, &QAction::triggered, shortcuts, &Shortcuts::jumpToPLayingTrack);
 
   auto *playback_log_action = view->addAction(tr("Playback Log"));
-  playback_log_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenPlaybackLog));
+  shortcut_actions << qMakePair(Shortcuts::Action::OpenPlaybackLog, playback_log_action);
   connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
 
   auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
-  shortcuts_action->setShortcut(Shortcuts::sequenceFor(Shortcuts::Action::OpenShortcutsMenu));
+  shortcut_actions << qMakePair(Shortcuts::Action::OpenShortcutsMenu, shortcuts_action);
   connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
 
   view->addSeparator();
@@ -221,4 +221,13 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   connect(bug_report, &QAction::triggered, this, []() {
     QDesktopServices::openUrl(QUrl("https://github.com/olegantonyan/mpz/issues"));
   });
+
+  applyShortcuts(shortcuts);
+  connect(shortcuts, &Shortcuts::changed, this, [this, shortcuts]() { applyShortcuts(shortcuts); });
+}
+
+void MacMenuBar::applyShortcuts(const Shortcuts *shortcuts) {
+  for (const auto &i : shortcut_actions) {
+    i.second->setShortcut(shortcuts->sequenceFor(i.first));
+  }
 }

@@ -90,13 +90,14 @@ int main(int argc, char *argv[]) {
   MpzApplication a(argc, argv);
   a.setApplicationName("mpz");
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
-  const QByteArray desktop_file_name = "org.mpz_player.mpz";
-  a.setDesktopFileName(QString::fromLatin1(desktop_file_name));
+  const QByteArray desktop_file_id = DESKTOP_FILE_ID;
+  const QByteArray icon_name = ICON_NAME;
+  a.setDesktopFileName(QString::fromLatin1(desktop_file_id));
   // Qt has no API for audio stream metadata; volume mixers look these up as theme icon names
-  qputenv("PULSE_PROP_application.icon_name", desktop_file_name);
-  qputenv("PULSE_PROP_application.id", desktop_file_name);
+  qputenv("PULSE_PROP_application.icon_name", icon_name);
+  qputenv("PULSE_PROP_application.id", desktop_file_id);
   if (!qEnvironmentVariableIsSet("PIPEWIRE_PROPS")) {
-    qputenv("PIPEWIRE_PROPS", "{ application.icon-name = " + desktop_file_name + ", application.id = " + desktop_file_name + " }");
+    qputenv("PIPEWIRE_PROPS", "{ application.icon-name = " + icon_name + ", application.id = " + desktop_file_id + " }");
   }
 #endif
 #ifdef ENABLE_CRASH_HANDLER
