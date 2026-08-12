@@ -26,14 +26,14 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Gapless playback (Qt6 only, version 2.1.0+)
 - Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others (only when gapless mode enabled, version 2.1.0+)
 - Internet radio in `m3u` and `pls` formats, as well as built-in radio library
-- CUE sheets, with gapless playback of single-file albums;
+- CUE sheets, with gapless playback of single-file albums
 - Tag editor
 - Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt6 only)
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track
 - Playback order per playlist and global: sequential, random, or no-loop
 - Track sorting presets
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog
-- Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar;
+- Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar
 - Update check on Windows, macOS, and Linux AppImage
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation)
@@ -170,20 +170,20 @@ Starting from version 2.0.8 there is a settings dialog where all these options c
 <summary>Manual yaml configuration</summary>
 
 The default config location on Linux is `~/.config/mpz`, on Windows - `C:/Users/$USERNAME/AppData/Local/mpz/mpz`. There are 2 files:
-- `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc;
-- `global.yml` - for portable settings that make sense to share between computers.
+- `local.yml` - for the settings specific to this computer, like windows' sizes, playlists, etc
+- `global.yml` - for portable settings that make sense to share between computers
 
 The available config options are:
 
-- `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`);
-- `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB;
-- `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist;
-- `playback_log_size` in `global.yml` - max size of playback log, default is 100;
-- `columns_config` in `global.yml` - configure columns in the playlist section, more on this below;
-- `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs;
-- `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view;
-- `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all; on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead;
-- `shortcuts` in `global.yml` - rebound keyboard shortcuts, more on this below;
+- `inhibit_sleep_while_playing` in `global.yml` - when `true` the player will prevent your OS from sleeping automatically while playing (on Linux requires `systemd-inhibit`)
+- `stream_buffer_size` in `global.yml` - minimum stream buffer size in bytes. The default is 128KB
+- `single_instance` in `global.yml` - when `true` the player will reuse a single instance — launching another instance with files as command-line arguments will send these files to the running instance as a new playlist
+- `playback_log_size` in `global.yml` - max size of playback log, default is 100
+- `columns_config` in `global.yml` - configure columns in the playlist section, more on this below
+- `playlist_row_height` in `global.yml` - sets playlist's row height in pixels, by default it comes from your desktop theme, but in KDE Plasma 5.27 this height was increased for no apparent reason, can be useful in other DEs
+- `stop_when_track_removed` in `global.yml` - when `true` removing the currently playing track (or the playlist that contains it) stops playback and clears the playlist view
+- `disable_qhotkey` in `local.yml` - when `true` mpz does not grab the global media keys. Only X11 and legacy Windows builds grab them at all on Wayland grabbing is impossible, and elsewhere the OS integration delivers media keys instead
+- `shortcuts` in `global.yml` - rebound keyboard shortcuts, more on this below
 
 If you messed up any of the config options you can remove it completely (or even remove the whole file) and it will reset to default.
 
@@ -241,9 +241,9 @@ The sum of `width_percent` of all columns must add up to 100 or less. Sometimes 
 
 The track info dialog (right-click a track → "Track info") shows lyrics next to the metadata. Providers are tried in order until one returns lyrics:
 
-1. `embedded` - lyrics stored in tags (ID3v2 USLT, Vorbis Comment LYRICS, MP4 ©lyr, APE LYRICS);
-2. `sidecar` - a `<filename>.lrc` or `<filename>.txt` file next to the audio file. LRC timestamps are stripped for plain-text rendering;
-3. `lrclib` - online lookup via [LRCLIB](https://lrclib.net) (open, no API key required).
+1. `embedded` - lyrics stored in tags (ID3v2 USLT, Vorbis Comment LYRICS, MP4 ©lyr, APE LYRICS)
+2. `sidecar` - a `<filename>.lrc` or `<filename>.txt` file next to the audio file. LRC timestamps are stripped for plain-text rendering
+3. `lrclib` - online lookup via [LRCLIB](https://lrclib.net) (open, no API key required)
 
 Additional online providers, off by default: `netease` (NetEase), `qq` (QQ Music), `lyrics.ovh` (Lyrics.ovh).
 
@@ -275,8 +275,8 @@ All of them are editable in that dialog: click a key field, press the new combin
 
 ## Limitations
 
-- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux);
-- Global hotkeys don't work in Wayland (https://github.com/olegantonyan/mpz/issues/129, but in KDE Plasma, for example, global media keys work and send MPRIS commands to the player).
+- Uses external codecs installed on your OS (through QtMultimedia, using ffmpeg or GStreamer backend on Linux)
+- Global hotkeys don't work in Wayland (https://github.com/olegantonyan/mpz/issues/129, but in KDE Plasma, for example, global media keys work and send MPRIS commands to the player)
 
 Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems like they are heading towards enabling it by default. You can set the multimedia backend via the environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz` or `QT_MEDIA_BACKEND=gstreamer mpz`.
 
@@ -284,9 +284,9 @@ Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems 
 When used as an [mpd](https://musicpd.org) client, there is a fundamental difference that can lead to some weird behavior. By design mpz does not have an explicit playback queue - the playlist itself is the queue. In mpd, there's an explicit playback queue and playlists are merely lists of tracks that can be loaded into the queue to play.
 
 Known issues:
-- when another client modifies the playback queue, mpz cannot pick up these changes;
-- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from the last selected playlist, i.e. the one loaded at startup;
-- "playback follows cursor" cannot follow into a different playlist;
+- when another client modifies the playback queue, mpz cannot pick up these changes
+- upon start, if mpd is already playing a song, mpz can recognize it only if this song is from the last selected playlist, i.e. the one loaded at startup
+- "playback follows cursor" cannot follow into a different playlist
 
 ## Contributing
 
@@ -299,13 +299,13 @@ Translations live in `app/resources/translations/` as `.ts` (source) and `.qm` (
    ```
    lupdate app -ts app/resources/translations/<lang>.ts
    ```
-2. Translate the strings in Qt Linguist;
+2. Translate the strings in Qt Linguist
 3. Compile it to `.qm` (written next to the `.ts`):
 
    ```
    lrelease app/resources/translations/<lang>.ts
    ```
-4. Add `<lang>.qm` to `app/resources.qrc`.
+4. Add `<lang>.qm` to `app/resources.qrc`
 
 ### Running tests
 
