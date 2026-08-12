@@ -310,12 +310,15 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/config/global.cpp
     ${APP}/config/storage.cpp
     ${APP}/config/value.cpp
+    ${APP}/playlist/loader.cpp
+    ${APP}/playlist/fileparser.cpp
+    ${APP}/playlist/cueparser.cpp
     ${APP}/track.cpp
     ${APP}/rnjesus.cpp
     ${APP}/streammetadata.cpp)
   target_link_libraries(tst_replaygainmanager PRIVATE
     Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets
-    ebur128 tag yaml-cpp::yaml-cpp)
+    Qt${QT_VERSION_MAJOR}::Concurrent ebur128 tag yaml-cpp::yaml-cpp)
   target_compile_definitions(tst_replaygainmanager PRIVATE VERSION="${PROJECT_VERSION}")
 endif()
 

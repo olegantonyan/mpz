@@ -33,6 +33,7 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QMenu>
+#include <QPointer>
 #include <QToolBar>
 #include <QtGlobal>
 
@@ -61,6 +62,7 @@
 
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
+  #include "replaygain_ui/replaygaindialog.h"
 #endif
 
 #if defined(ENABLE_UPDATE_CHECK)
@@ -139,6 +141,7 @@ private:
 #endif
 #ifdef ENABLE_GAPLESS
   EqualizerUi::EqualizerDialog *eq_dialog = nullptr;
+  QPointer<ReplayGainUi::ReplayGainDialog> rg_dialog;
 #endif
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
@@ -200,7 +203,7 @@ private:
   void applyEqForDevice(const QByteArray &device_id);
   void setupReplayGain();
   void openReplayGainDialog();
-  void scanLibraryForReplayGain(ReplayGain::Mode mode, bool force);
+  void scanLibraryForReplayGain(bool force);
 #endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();

@@ -28,8 +28,8 @@ namespace ReplayGain {
     double gainDbFor(const Track &track) { return resolver_.gainDbFor(track); }
 
     bool isScanning() const { return scanner.isScanning(); }
-    QVector<Job> planScan(const QVector<Track> &tracks, Mode scan_mode, bool force) const;
-    void scanTracks(const QVector<Track> &tracks, Mode scan_mode, bool force);
+    QVector<Job> planScan(const QVector<Track> &tracks, bool force) const;
+    void scanTracks(const QVector<Track> &tracks, bool force);
     void cancelScan();
 
     static QString storeDirectory();
@@ -45,6 +45,10 @@ namespace ReplayGain {
     void load();
     void persist();
     void onSliceAnalyzed(const ReplayGain::SliceResult &result);
+    bool coversWholeAlbum(const Job &job) const;
+    static bool coversWholeFile(const FileWork &work);
+    bool albumAlreadyAnalysed(const Job &job) const;
+    void dropAnalysedSlices(Job &job) const;
 
     Config::Global &global_conf;
     Store store_;

@@ -15,15 +15,18 @@ private slots:
   void settingsRoundTripThroughConfig();
   void planGroupsByFolder();
   void planSkipsStreamsAndMissingFiles();
-  void planSkipsAlreadyScannedTracks();
-  void planRescansWhenAlbumGainIsMissing();
+  void planWantsAlbumGainOnlyWhenFolderIsCovered();
+  void planSkipsAlreadyScannedTracksWithoutAlbumGain();
+  void planRescansWholeFolderWhenAlbumGainIsMissing();
   void forceRescansEverything();
   void planMergesCueSlicesIntoOneFile();
+  void planSkipsAlbumGainForPartialCue();
   void planMarksTagWritingFromStorageMode();
 
 private:
   QString makeTrackFile(const QString &relative);
   static ReplayGain::Gain trackGain(double db);
+  static ReplayGain::Gain albumGain(double db);
 
   std::unique_ptr<QTemporaryDir> dir;
 };
@@ -55,6 +58,14 @@ ReplayGain::Gain TestReplayGainManager::trackGain(double db) {
   g.track_db = db;
   g.track_peak = 0.5;
   g.has_track = true;
+  return g;
+}
+
+ReplayGain::Gain TestReplayGainManager::albumGain(double db) {
+  ReplayGain::Gain g = trackGain(db);
+  g.album_db = db;
+  g.album_peak = 0.5;
+  g.has_album = true;
   return g;
 }
 
@@ -101,7 +112,7 @@ void TestReplayGainManager::planGroupsByFolder() {
   Config::Global global;
   ReplayGain::Manager m(global);
 
-  const auto jobs = m.planScan({Track(a1), Track(a2), Track(b1)}, ReplayGain::Mode::Album, false);
+  const auto jobs = m.planScan({Track(a1), Track(a2), Track(b1)}, false);
   QCOMPARE(jobs.size(), 2);
   QCOMPARE(jobs.at(0).files.size(), 2);
   QCOMPARE(jobs.at(1).files.size(), 1);
@@ -118,14 +129,45 @@ void TestReplayGainManager::planSkipsStreamsAndMissingFiles() {
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
   const Track missing(dir->filePath(QStringLiteral("albumA/gone.flac")));
 
-  const auto jobs = m.planScan({Track(real), stream, missing}, ReplayGain::Mode::Track, false);
+  const auto jobs = m.planScan({Track(real), stream, missing}, false);
   QCOMPARE(jobs.size(), 1);
   QCOMPARE(jobs.at(0).sliceCount(), 1);
   QCOMPARE(jobs.at(0).files.at(0).path, real);
-  QVERIFY(!jobs.at(0).want_album);
 }
 
-void TestReplayGainManager::planSkipsAlreadyScannedTracks() {
+void TestReplayGainManager::planWantsAlbumGainOnlyWhenFolderIsCovered() {
+  const QString a1 = makeTrackFile(QStringLiteral("albumA/01.flac"));
+  const QString a2 = makeTrackFile(QStringLiteral("albumA/02.flac"));
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+
+  const auto partial = m.planScan({Track(a1)}, false);
+  QCOMPARE(partial.size(), 1);
+  QVERIFY(!partial.at(0).want_album);
+
+  const auto whole = m.planScan({Track(a1), Track(a2)}, false);
+  QCOMPARE(whole.size(), 1);
+  QVERIFY(whole.at(0).want_album);
+}
+
+void TestReplayGainManager::planSkipsAlreadyScannedTracksWithoutAlbumGain() {
+  const QString scanned = makeTrackFile(QStringLiteral("albumA/01.flac"));
+  const QString fresh = makeTrackFile(QStringLiteral("albumA/02.flac"));
+  makeTrackFile(QStringLiteral("albumA/03.flac"));
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+  QVERIFY(m.store().put(scanned, 0, trackGain(-6.0)));
+
+  const auto jobs = m.planScan({Track(scanned), Track(fresh)}, false);
+  QCOMPARE(jobs.size(), 1);
+  QVERIFY(!jobs.at(0).want_album);
+  QCOMPARE(jobs.at(0).sliceCount(), 1);
+  QCOMPARE(jobs.at(0).files.at(0).path, fresh);
+}
+
+void TestReplayGainManager::planRescansWholeFolderWhenAlbumGainIsMissing() {
   const QString scanned = makeTrackFile(QStringLiteral("albumA/01.flac"));
   const QString fresh = makeTrackFile(QStringLiteral("albumA/02.flac"));
 
@@ -133,21 +175,14 @@ void TestReplayGainManager::planSkipsAlreadyScannedTracks() {
   ReplayGain::Manager m(global);
   QVERIFY(m.store().put(scanned, 0, trackGain(-6.0)));
 
-  const auto jobs = m.planScan({Track(scanned), Track(fresh)}, ReplayGain::Mode::Track, false);
+  const auto jobs = m.planScan({Track(scanned), Track(fresh)}, false);
   QCOMPARE(jobs.size(), 1);
-  QCOMPARE(jobs.at(0).sliceCount(), 1);
-  QCOMPARE(jobs.at(0).files.at(0).path, fresh);
-}
+  QVERIFY(jobs.at(0).want_album);
+  QCOMPARE(jobs.at(0).sliceCount(), 2);
 
-void TestReplayGainManager::planRescansWhenAlbumGainIsMissing() {
-  const QString path = makeTrackFile(QStringLiteral("albumA/01.flac"));
-
-  Config::Global global;
-  ReplayGain::Manager m(global);
-  QVERIFY(m.store().put(path, 0, trackGain(-6.0)));
-
-  QVERIFY(m.planScan({Track(path)}, ReplayGain::Mode::Track, false).isEmpty());
-  QCOMPARE(m.planScan({Track(path)}, ReplayGain::Mode::Album, false).size(), 1);
+  QVERIFY(m.store().put(scanned, 0, albumGain(-6.0)));
+  QVERIFY(m.store().put(fresh, 0, albumGain(-6.0)));
+  QVERIFY(m.planScan({Track(scanned), Track(fresh)}, false).isEmpty());
 }
 
 void TestReplayGainManager::forceRescansEverything() {
@@ -155,10 +190,10 @@ void TestReplayGainManager::forceRescansEverything() {
 
   Config::Global global;
   ReplayGain::Manager m(global);
-  QVERIFY(m.store().put(path, 0, trackGain(-6.0)));
+  QVERIFY(m.store().put(path, 0, albumGain(-6.0)));
 
-  QVERIFY(m.planScan({Track(path)}, ReplayGain::Mode::Track, false).isEmpty());
-  QCOMPARE(m.planScan({Track(path)}, ReplayGain::Mode::Track, true).size(), 1);
+  QVERIFY(m.planScan({Track(path)}, false).isEmpty());
+  QCOMPARE(m.planScan({Track(path)}, true).size(), 1);
 }
 
 void TestReplayGainManager::planMergesCueSlicesIntoOneFile() {
@@ -174,14 +209,30 @@ void TestReplayGainManager::planMergesCueSlicesIntoOneFile() {
   Config::Global global;
   ReplayGain::Manager m(global);
 
-  const auto jobs = m.planScan({second, first}, ReplayGain::Mode::Album, false);
+  const auto jobs = m.planScan({second, first}, false);
   QCOMPARE(jobs.size(), 1);
   QCOMPARE(jobs.at(0).files.size(), 1);
+  QVERIFY(jobs.at(0).want_album);
   QCOMPARE(jobs.at(0).files.at(0).slices.size(), 2);
   QCOMPARE(jobs.at(0).files.at(0).slices.at(0).begin_ms, 0ULL);
   QCOMPARE(jobs.at(0).files.at(0).slices.at(0).duration_ms, 180000ULL);
   QCOMPARE(jobs.at(0).files.at(0).slices.at(1).begin_ms, 180000ULL);
   QCOMPARE(jobs.at(0).files.at(0).slices.at(1).duration_ms, 120000ULL);
+}
+
+void TestReplayGainManager::planSkipsAlbumGainForPartialCue() {
+  const QString container = makeTrackFile(QStringLiteral("albumA/whole.flac"));
+
+  Track second(container, 180000);
+  second.setCue();
+  second.setDuration(120000);
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+
+  const auto jobs = m.planScan({second}, false);
+  QCOMPARE(jobs.size(), 1);
+  QVERIFY(!jobs.at(0).want_album);
 }
 
 void TestReplayGainManager::planMarksTagWritingFromStorageMode() {
@@ -190,13 +241,13 @@ void TestReplayGainManager::planMarksTagWritingFromStorageMode() {
   Config::Global global;
   ReplayGain::Manager m(global);
 
-  QVERIFY(!m.planScan({Track(path)}, ReplayGain::Mode::Track, false).at(0).write_tags);
+  QVERIFY(!m.planScan({Track(path)}, false).at(0).write_tags);
 
   ReplayGain::Settings s = m.settings();
   s.storage = ReplayGain::StorageMode::Tags;
   m.setSettings(s);
 
-  QVERIFY(m.planScan({Track(path)}, ReplayGain::Mode::Track, false).at(0).write_tags);
+  QVERIFY(m.planScan({Track(path)}, false).at(0).write_tags);
 }
 
 QTEST_MAIN(TestReplayGainManager)

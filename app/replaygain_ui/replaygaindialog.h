@@ -34,19 +34,21 @@ namespace ReplayGainUi {
     void setLibraryPaths(const QStringList &paths);
 
   signals:
-    void scanLibraryRequested(ReplayGain::Mode mode, bool force);
+    void scanLibraryRequested(bool force);
 
   protected:
     void closeEvent(QCloseEvent *event) override;
 
   private:
-    QWidget *buildApplyGroup();
-    QWidget *buildStorageGroup();
-    QWidget *buildScanGroup();
+    enum class Scope { Library, Playlist, Selection };
 
+    QWidget *buildPlaybackTab();
+    QWidget *buildScanTab();
+
+    Scope currentScope() const;
     void loadSettings();
     void applySettings();
-    void updateScanButtons();
+    void updateScanControls();
     void updateStoreLabel();
     void appendRow(const ReplayGain::SliceResult &result);
     void onScanFinished(int analysed, int failed, bool cancelled);
@@ -66,12 +68,9 @@ namespace ReplayGainUi {
     QRadioButton *sidecar_radio_ = nullptr;
     QRadioButton *tags_radio_ = nullptr;
     QLabel *store_label_ = nullptr;
-    QComboBox *scan_mode_combo_ = nullptr;
     QCheckBox *force_check_ = nullptr;
-    QPushButton *scan_library_ = nullptr;
-    QPushButton *scan_playlist_ = nullptr;
-    QPushButton *scan_selection_ = nullptr;
-    QPushButton *cancel_ = nullptr;
+    QComboBox *scan_scope_combo_ = nullptr;
+    QPushButton *scan_button_ = nullptr;
     QProgressBar *progress_ = nullptr;
     QLabel *progress_label_ = nullptr;
     QTableWidget *results_ = nullptr;

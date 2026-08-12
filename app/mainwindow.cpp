@@ -864,17 +864,7 @@ void MainWindow::setupReplayGain() {
             status_label_replaygain->setText(tr("ReplayGain: %1 / %2").arg(done).arg(total));
             status_label_replaygain->show();
           });
-  connect(replay_gain, &ReplayGain::Manager::scanFinished, this,
-          [this](int analysed, int failed, bool cancelled) {
-            status_label_replaygain->hide();
-            if (cancelled) {
-              return;
-            }
-            const QString text = failed > 0
-                                     ? tr("ReplayGain: %1 analysed, %2 failed").arg(analysed).arg(failed)
-                                     : tr("ReplayGain: %1 analysed").arg(analysed);
-            banner->showMessage(text, SlidingBanner::BannerType::Success, 3456);
-          });
+  connect(replay_gain, &ReplayGain::Manager::scanFinished, status_label_replaygain, &QWidget::hide);
 
   connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
   connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
@@ -892,24 +882,30 @@ void MainWindow::openReplayGainDialog() {
                 "Analysing and tagging still work.");
   }
 
-  auto *dlg = new ReplayGainUi::ReplayGainDialog(*replay_gain, global_conf, applies, reason, this);
-  dlg->setAttribute(Qt::WA_DeleteOnClose);
-  dlg->setModal(false);
-  dlg->setPlaylistTracks(playlist->currentTracks());
-  dlg->setSelectedTracks(playlist->selectedTracks());
-  dlg->setLibraryPaths(local_conf.libraryPaths());
-  connect(dlg, &ReplayGainUi::ReplayGainDialog::scanLibraryRequested,
-          this, &MainWindow::scanLibraryForReplayGain);
-  dlg->show();
+  if (!rg_dialog) {
+    // no parent: a transient-for window can't be sent behind the main window
+    rg_dialog = new ReplayGainUi::ReplayGainDialog(*replay_gain, global_conf, applies, reason);
+    rg_dialog->setAttribute(Qt::WA_DeleteOnClose);
+    rg_dialog->setModal(false);
+    rg_dialog->setWindowIcon(windowIcon());
+    connect(rg_dialog, &ReplayGainUi::ReplayGainDialog::scanLibraryRequested,
+            this, &MainWindow::scanLibraryForReplayGain);
+  }
+  rg_dialog->setPlaylistTracks(playlist->currentTracks());
+  rg_dialog->setSelectedTracks(playlist->selectedTracks());
+  rg_dialog->setLibraryPaths(local_conf.libraryPaths());
+  rg_dialog->show();
+  rg_dialog->raise();
+  rg_dialog->activateWindow();
 }
 
-void MainWindow::scanLibraryForReplayGain(ReplayGain::Mode mode, bool force) {
+void MainWindow::scanLibraryForReplayGain(bool force) {
   const QStringList roots = local_conf.libraryPaths();
   spinner->show();
   auto *watcher = new QFutureWatcher<QVector<Track>>(this);
-  connect(watcher, &QFutureWatcher<QVector<Track>>::finished, this, [this, watcher, mode, force]() {
+  connect(watcher, &QFutureWatcher<QVector<Track>>::finished, this, [this, watcher, force]() {
     spinner->hide();
-    replay_gain->scanTracks(watcher->result(), mode, force);
+    replay_gain->scanTracks(watcher->result(), force);
     watcher->deleteLater();
   });
   watcher->setFuture(QtConcurrent::run([roots]() {

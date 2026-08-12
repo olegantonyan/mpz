@@ -1,7 +1,9 @@
 #include "replaygain_ui/replaygaindialog.h"
 
 #include "config/global.h"
+#include "icons.h"
 #include "replaygain/tags.h"
+#include "reveal_in_filemanager.h"
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -10,7 +12,6 @@
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QFileInfo>
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
@@ -18,6 +19,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTableWidget>
+#include <QTabWidget>
 #include <QVBoxLayout>
 
 namespace ReplayGainUi {
@@ -53,21 +55,10 @@ namespace ReplayGainUi {
     note_->setVisible(!gain_applies && !unavailable_reason.isEmpty());
     root->addWidget(note_);
 
-    root->addWidget(buildApplyGroup());
-    root->addWidget(buildStorageGroup());
-    root->addWidget(buildScanGroup());
-
-    results_ = new QTableWidget(0, 5);
-    results_->setHorizontalHeaderLabels(
-        {tr("Track"), tr("Track gain"), tr("Peak"), tr("Album gain"), tr("Status")});
-    results_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    results_->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    results_->verticalHeader()->setVisible(false);
-    results_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    for (int i = 1; i < 5; i++) {
-      results_->horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
-    }
-    root->addWidget(results_, 1);
+    auto *tabs = new QTabWidget;
+    tabs->addTab(buildPlaybackTab(), tr("Playback"));
+    tabs->addTab(buildScanTab(), tr("Analyse"));
+    root->addWidget(tabs, 1);
 
     auto *buttons = new QDialogButtonBox(QDialogButtonBox::Close);
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::accept);
@@ -84,91 +75,97 @@ namespace ReplayGainUi {
     connect(&rg, &ReplayGain::Manager::scanFinished, this, &ReplayGainDialog::onScanFinished);
 
     loadSettings();
-    updateScanButtons();
+    updateScanControls();
     updateStoreLabel();
-
-    const int line = fontMetrics().height();
-    resize(sizeHint().expandedTo(QSize(line * 44, line * 36)));
+    tabs->setCurrentIndex(rg.isScanning() ? 1 : 0);
   }
 
-  QWidget *ReplayGainDialog::buildApplyGroup() {
-    auto *box = new QGroupBox(tr("Apply"));
+  QWidget *ReplayGainDialog::buildPlaybackTab() {
+    auto *box = new QWidget;
     auto *layout = new QVBoxLayout(box);
 
-    auto *mode_row = new QHBoxLayout;
-    mode_row->addWidget(new QLabel(tr("Mode:")));
+    auto *row = new QHBoxLayout;
+    row->addWidget(new QLabel(tr("Mode:")));
     mode_combo_ = new QComboBox;
     mode_combo_->addItem(tr("Off"), QStringLiteral("off"));
     mode_combo_->addItem(tr("Track gain"), QStringLiteral("track"));
     mode_combo_->addItem(tr("Album gain"), QStringLiteral("album"));
-    mode_row->addWidget(mode_combo_);
-    mode_row->addStretch();
-    layout->addLayout(mode_row);
+    row->addWidget(mode_combo_);
 
-    auto *preamp_row = new QHBoxLayout;
-    preamp_row->addWidget(new QLabel(tr("Preamp:")));
+    row->addSpacing(12);
+    row->addWidget(new QLabel(tr("Preamp:")));
     preamp_spin_ = new QDoubleSpinBox;
     preamp_spin_->setRange(-15.0, 15.0);
     preamp_spin_->setSingleStep(0.5);
     preamp_spin_->setDecimals(1);
     preamp_spin_->setSuffix(" " + tr("dB"));
-    preamp_row->addWidget(preamp_spin_);
+    row->addWidget(preamp_spin_);
 
-    preamp_row->addSpacing(12);
-    preamp_row->addWidget(new QLabel(tr("Untagged tracks:")));
+    row->addSpacing(12);
+    row->addWidget(new QLabel(tr("Untagged tracks:")));
     fallback_spin_ = new QDoubleSpinBox;
     fallback_spin_->setRange(-15.0, 15.0);
     fallback_spin_->setSingleStep(0.5);
     fallback_spin_->setDecimals(1);
     fallback_spin_->setSuffix(" " + tr("dB"));
     fallback_spin_->setToolTip(tr("Applied to tracks with no ReplayGain data"));
-    preamp_row->addWidget(fallback_spin_);
-    preamp_row->addStretch();
-    layout->addLayout(preamp_row);
+    row->addWidget(fallback_spin_);
+    row->addStretch();
+    layout->addLayout(row);
 
     clip_check_ = new QCheckBox(tr("Prevent clipping (use the measured peak)"));
     clip_check_->setToolTip(
         tr("The peak was measured without the equalizer, so with the equalizer boosting "
            "bands the two only compose approximately."));
     layout->addWidget(clip_check_);
+    layout->addStretch();
 
-    auto apply = [this]() {
-      if (!updating_) {
-        applySettings();
-      }
-    };
-    connect(mode_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged), this, apply);
-    connect(preamp_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, apply);
-    connect(fallback_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, apply);
-    connect(clip_check_, &QCheckBox::toggled, this, apply);
+    connect(mode_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ReplayGainDialog::applySettings);
+    connect(preamp_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &ReplayGainDialog::applySettings);
+    connect(fallback_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &ReplayGainDialog::applySettings);
+    connect(clip_check_, &QCheckBox::toggled, this, &ReplayGainDialog::applySettings);
 
     return box;
   }
 
-  QWidget *ReplayGainDialog::buildStorageGroup() {
-    auto *box = new QGroupBox(tr("Storage"));
+  QWidget *ReplayGainDialog::buildScanTab() {
+    auto *box = new QWidget;
     auto *layout = new QVBoxLayout(box);
 
-    sidecar_radio_ = new QRadioButton(tr("Keep audio files unchanged (sidecar database)"));
+    sidecar_radio_ = new QRadioButton(tr("Store results in a sidecar database"));
     tags_radio_ = new QRadioButton(tr("Write ReplayGain tags into the audio files"));
     auto *group = new QButtonGroup(this);
     group->addButton(sidecar_radio_);
     group->addButton(tags_radio_);
+    connect(sidecar_radio_, &QRadioButton::toggled, this, &ReplayGainDialog::applySettings);
     layout->addWidget(sidecar_radio_);
     layout->addWidget(tags_radio_);
 
-    auto *hint = new QLabel(
-        tr("Writing tags rewrites each file, so its size and modification time change. "
+    auto *tags_hint = new QLabel(
+        tr("Rewrites every analysed file, so its size and modification time change. "
            "Tracks inside a cue sheet can only be stored in the sidecar."));
-    hint->setWordWrap(true);
-    hint->setStyleSheet("color: gray;");
-    layout->addWidget(hint);
+    tags_hint->setWordWrap(true);
+    tags_hint->setStyleSheet("color: #d35400;");
+    tags_hint->setVisible(false);
+    connect(tags_radio_, &QRadioButton::toggled, tags_hint, &QWidget::setVisible);
+    layout->addWidget(tags_hint);
 
     auto *store_row = new QHBoxLayout;
     store_label_ = new QLabel;
     store_label_->setWordWrap(true);
     store_label_->setStyleSheet("color: gray;");
     store_row->addWidget(store_label_, 1);
+
+    auto *reveal = new QPushButton;
+    reveal->setIcon(Icons::get(Icons::Icon::FolderReveal));
+    reveal->setToolTip(tr("Show in file manager"));
+    connect(reveal, &QPushButton::clicked, this, [this]() {
+      revealInFileManager({rg.store().filePath()});
+    });
+    store_row->addWidget(reveal);
 
     auto *compact = new QPushButton(tr("Compact now"));
     connect(compact, &QPushButton::clicked, this, [this]() {
@@ -178,74 +175,39 @@ namespace ReplayGainUi {
     store_row->addWidget(compact);
     layout->addLayout(store_row);
 
-    auto apply = [this]() {
-      if (!updating_) {
-        applySettings();
-      }
-    };
-    connect(sidecar_radio_, &QRadioButton::toggled, this, apply);
-
-    return box;
-  }
-
-  QWidget *ReplayGainDialog::buildScanGroup() {
-    auto *box = new QGroupBox(tr("Analyse"));
-    auto *layout = new QVBoxLayout(box);
-
-    auto *mode_row = new QHBoxLayout;
-    mode_row->addWidget(new QLabel(tr("Compute:")));
-    scan_mode_combo_ = new QComboBox;
-    scan_mode_combo_->addItem(tr("Track gain"), QStringLiteral("track"));
-    scan_mode_combo_->addItem(tr("Track and album gain (grouped by folder)"),
-                              QStringLiteral("album"));
-    scan_mode_combo_->setCurrentIndex(1);
-    mode_row->addWidget(scan_mode_combo_);
-    mode_row->addStretch();
-    layout->addLayout(mode_row);
-
     force_check_ = new QCheckBox(tr("Re-analyse tracks that already have data"));
     layout->addWidget(force_check_);
 
-    auto scan_mode = [this]() {
-      return scan_mode_combo_->currentData().toString() == QLatin1String("album")
-                 ? ReplayGain::Mode::Album
-                 : ReplayGain::Mode::Track;
-    };
+    auto *scope_row = new QHBoxLayout;
+    scope_row->addWidget(new QLabel(tr("Scope:")));
+    scan_scope_combo_ = new QComboBox;
+    scan_scope_combo_->addItem(tr("Whole library"), static_cast<int>(Scope::Library));
+    scan_scope_combo_->addItem(tr("Current playlist"), static_cast<int>(Scope::Playlist));
+    scan_scope_combo_->addItem(tr("Selected tracks"), static_cast<int>(Scope::Selection));
+    connect(scan_scope_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &ReplayGainDialog::updateScanControls);
+    scope_row->addWidget(scan_scope_combo_);
+    scope_row->addStretch();
 
-    auto *buttons = new QHBoxLayout;
-    scan_library_ = new QPushButton(tr("Whole library"));
-    connect(scan_library_, &QPushButton::clicked, this, [this, scan_mode]() {
+    scan_button_ = new QPushButton;
+    connect(scan_button_, &QPushButton::clicked, this, [this]() {
+      if (rg.isScanning()) {
+        rg.cancelScan();
+        updateScanControls();
+        return;
+      }
       results_->setRowCount(0);
-      emit scanLibraryRequested(scan_mode(), force_check_->isChecked());
-      updateScanButtons();
+      const Scope scope = currentScope();
+      if (scope == Scope::Library) {
+        emit scanLibraryRequested(force_check_->isChecked());
+      } else {
+        rg.scanTracks(scope == Scope::Playlist ? playlist_tracks : selected_tracks,
+                      force_check_->isChecked());
+      }
+      updateScanControls();
     });
-    buttons->addWidget(scan_library_);
-
-    scan_playlist_ = new QPushButton(tr("Current playlist"));
-    connect(scan_playlist_, &QPushButton::clicked, this, [this, scan_mode]() {
-      results_->setRowCount(0);
-      rg.scanTracks(playlist_tracks, scan_mode(), force_check_->isChecked());
-      updateScanButtons();
-    });
-    buttons->addWidget(scan_playlist_);
-
-    scan_selection_ = new QPushButton(tr("Selected tracks"));
-    connect(scan_selection_, &QPushButton::clicked, this, [this, scan_mode]() {
-      results_->setRowCount(0);
-      rg.scanTracks(selected_tracks, scan_mode(), force_check_->isChecked());
-      updateScanButtons();
-    });
-    buttons->addWidget(scan_selection_);
-
-    buttons->addStretch();
-
-    cancel_ = new QPushButton(tr("Cancel"));
-    connect(cancel_, &QPushButton::clicked, this, [this]() {
-      rg.cancelScan();
-      updateScanButtons();
-    });
-    buttons->addWidget(cancel_);
-    layout->addLayout(buttons);
+    scope_row->addWidget(scan_button_);
+    layout->addLayout(scope_row);
 
     progress_ = new QProgressBar;
     progress_->setFormat(QStringLiteral("%v / %m"));
@@ -255,6 +217,18 @@ namespace ReplayGainUi {
     progress_label_ = new QLabel;
     progress_label_->setStyleSheet("color: gray;");
     layout->addWidget(progress_label_);
+
+    results_ = new QTableWidget(0, 5);
+    results_->setHorizontalHeaderLabels(
+        {tr("Track"), tr("Track gain"), tr("Peak"), tr("Album gain"), tr("Status")});
+    results_->setSelectionBehavior(QAbstractItemView::SelectRows);
+    results_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    results_->verticalHeader()->setVisible(false);
+    results_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    for (int i = 1; i < 5; i++) {
+      results_->horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
+    }
+    layout->addWidget(results_, 1);
 
     return box;
   }
@@ -276,6 +250,10 @@ namespace ReplayGainUi {
   }
 
   void ReplayGainDialog::applySettings() {
+    if (updating_) {
+      return;
+    }
+
     ReplayGain::Settings s;
     const QString mode = mode_combo_->currentData().toString();
     s.mode = mode == QLatin1String("album")  ? ReplayGain::Mode::Album
@@ -289,27 +267,34 @@ namespace ReplayGainUi {
     rg.setSettings(s);
   }
 
+  ReplayGainDialog::Scope ReplayGainDialog::currentScope() const {
+    return static_cast<Scope>(scan_scope_combo_->currentData().toInt());
+  }
+
   void ReplayGainDialog::setPlaylistTracks(const QVector<Track> &tracks) {
     playlist_tracks = tracks;
-    updateScanButtons();
+    updateScanControls();
   }
 
   void ReplayGainDialog::setSelectedTracks(const QVector<Track> &tracks) {
     selected_tracks = tracks;
-    updateScanButtons();
+    updateScanControls();
   }
 
   void ReplayGainDialog::setLibraryPaths(const QStringList &paths) {
     library_paths = paths;
-    updateScanButtons();
+    updateScanControls();
   }
 
-  void ReplayGainDialog::updateScanButtons() {
+  void ReplayGainDialog::updateScanControls() {
     const bool scanning = rg.isScanning();
-    scan_library_->setEnabled(!scanning && !library_paths.isEmpty());
-    scan_playlist_->setEnabled(!scanning && !playlist_tracks.isEmpty());
-    scan_selection_->setEnabled(!scanning && !selected_tracks.isEmpty());
-    cancel_->setEnabled(scanning);
+    const Scope scope = currentScope();
+    const bool available = scope == Scope::Library    ? !library_paths.isEmpty()
+                           : scope == Scope::Playlist ? !playlist_tracks.isEmpty()
+                                                      : !selected_tracks.isEmpty();
+    scan_scope_combo_->setEnabled(!scanning);
+    scan_button_->setText(scanning ? tr("Cancel") : tr("Analyse"));
+    scan_button_->setEnabled(scanning || available);
   }
 
   void ReplayGainDialog::updateStoreLabel() {
@@ -348,7 +333,7 @@ namespace ReplayGainUi {
   }
 
   void ReplayGainDialog::onScanFinished(int analysed, int failed, bool cancelled) {
-    updateScanButtons();
+    updateScanControls();
     updateStoreLabel();
     progress_->setVisible(false);
     if (cancelled) {

@@ -2,9 +2,12 @@
 
 #include "config/global.h"
 #include "config/storage.h"
+#include "playlist/loader.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QHash>
+#include <QSet>
 
 namespace ReplayGain {
   namespace {
@@ -93,13 +96,11 @@ namespace ReplayGain {
     scanner.cancel();
   }
 
-  void Manager::scanTracks(const QVector<Track> &tracks, Mode scan_mode, bool force) {
-    scanner.start(planScan(tracks, scan_mode, force));
+  void Manager::scanTracks(const QVector<Track> &tracks, bool force) {
+    scanner.start(planScan(tracks, force));
   }
 
-  QVector<Job> Manager::planScan(const QVector<Track> &tracks, Mode scan_mode, bool force) const {
-    const bool want_album = scan_mode == Mode::Album;
-
+  QVector<Job> Manager::planScan(const QVector<Track> &tracks, bool force) const {
     QVector<QString> order;
     QHash<QString, Job> by_folder;
 
@@ -111,18 +112,11 @@ namespace ReplayGain {
       if (!info.exists()) {
         continue;
       }
-      if (!force) {
-        const Gain existing = store_.get(track.path(), track.begin());
-        if (existing.has_track && (!want_album || existing.has_album)) {
-          continue;
-        }
-      }
 
       const QString folder = info.absolutePath();
       if (!by_folder.contains(folder)) {
         Job job;
         job.folder = folder;
-        job.want_album = want_album;
         job.write_tags = settings_.storage == StorageMode::Tags;
         by_folder.insert(folder, job);
         order.append(folder);
@@ -157,8 +151,82 @@ namespace ReplayGain {
         std::sort(work.slices.begin(), work.slices.end(),
                   [](const Slice &a, const Slice &b) { return a.begin_ms < b.begin_ms; });
       }
+      job.want_album = coversWholeAlbum(job);
+
+      if (!force) {
+        if (job.want_album) {
+          // an album measurement needs every file, so it is all or nothing
+          if (albumAlreadyAnalysed(job)) {
+            continue;
+          }
+        } else {
+          dropAnalysedSlices(job);
+          if (job.files.isEmpty()) {
+            continue;
+          }
+        }
+      }
       jobs.append(job);
     }
     return jobs;
+  }
+
+  bool Manager::coversWholeAlbum(const Job &job) const {
+    QSet<QString> scanned;
+    for (const auto &work : job.files) {
+      if (!coversWholeFile(work)) {
+        return false;
+      }
+      scanned.insert(QFileInfo(work.path).absoluteFilePath());
+    }
+
+    const auto entries = QDir(job.folder).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+    for (const auto &entry : entries) {
+      const QString suffix = entry.suffix().toLower();
+      if (suffix == QLatin1String("cue") ||
+          !Playlist::Loader::supportedFileFormats().contains(suffix)) {
+        continue;
+      }
+      if (!scanned.contains(entry.absoluteFilePath())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool Manager::coversWholeFile(const FileWork &work) {
+    // cue slices tile the file, so a gap or a late start means tracks are missing
+    quint64 next = 0;
+    for (const auto &slice : work.slices) {
+      if (slice.begin_ms != next) {
+        return false;
+      }
+      next = slice.duration_ms > 0 ? slice.begin_ms + slice.duration_ms : next;
+    }
+    return true;
+  }
+
+  bool Manager::albumAlreadyAnalysed(const Job &job) const {
+    for (const auto &work : job.files) {
+      for (const auto &slice : work.slices) {
+        const Gain existing = store_.get(work.path, slice.begin_ms);
+        if (!existing.has_track || !existing.has_album) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void Manager::dropAnalysedSlices(Job &job) const {
+    for (auto &work : job.files) {
+      const auto analysed = [this, &work](const Slice &slice) {
+        return store_.get(work.path, slice.begin_ms).has_track;
+      };
+      work.slices.erase(std::remove_if(work.slices.begin(), work.slices.end(), analysed),
+                        work.slices.end());
+    }
+    const auto empty = [](const FileWork &work) { return work.slices.isEmpty(); };
+    job.files.erase(std::remove_if(job.files.begin(), job.files.end(), empty), job.files.end());
   }
 }
