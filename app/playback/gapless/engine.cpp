@@ -57,6 +57,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::setTrack(const Track &t) {
+    audio_output_failed = false; // explicit track pick: allow another sink attempt
     const quint64 adopt_uid = boundary_adopt_uid;
     boundary_adopt_uid = 0;
     const int rate = sink_format.sampleRate();
@@ -236,18 +237,35 @@ namespace Playback::Gapless {
 
   void Engine::createSink() {
     destroySink();
+    if (audio_output_failed) {
+      return;
+    }
     active_device = outputDevice();
+    if (active_device.isNull() || !sink_format.isValid()) {
+      handleOutputFailure(QStringLiteral("no audio output device available"));
+      return;
+    }
     sink = new QAudioSink(active_device, sink_format, this);
     sink->setBufferSize(sink_format.bytesForDuration(500000));
     sink->setVolume(volume_pct / 100.0);
     // queued: reset()/start() emit stateChanged synchronously, which must not re-enter feedSink mid-mutation
-    connect(sink, &QAudioSink::stateChanged, this, [this](QAudio::State s) {
+    QAudioSink *created = sink;
+    connect(sink, &QAudioSink::stateChanged, this, [this, created](QAudio::State s) {
+      if (created != sink) {
+        return; // queued state of an already-replaced sink
+      }
       if (s == QAudio::IdleState) {
         feedSink();
         checkEof();
+      } else if (s == QAudio::StoppedState && sink->error() == QAudio::IOError) {
+        handleOutputFailure(QStringLiteral("audio output device failed")); // only IOError: stop()/reset() leave a stale error behind
       }
     }, Qt::QueuedConnection);
     sink_io = sink->start();
+    if (!sink_io || sink->error() != QAudio::NoError) {
+      handleOutputFailure(QStringLiteral("cannot open audio output device"));
+      return;
+    }
     epoch_start_frame = read_cursor_frame;
     if (current_state != MediaPlayer::PlayingState) {
       sink->suspend(); // brought up before play(): stay silent until play()
@@ -263,9 +281,25 @@ namespace Playback::Gapless {
     sink_io = nullptr;
   }
 
+  void Engine::handleOutputFailure(const QString &message) {
+    if (audio_output_failed) {
+      return;
+    }
+    audio_output_failed = true;
+    qCWarning(mpzGapless) << "audio output lost:" << message << "device" << active_device.id();
+    destroySink();
+    advance_on_eof = false; // a dead output must not walk the playlist
+    setState(MediaPlayer::StoppedState);
+    emit error(message);
+  }
+
   void Engine::sinkEnsureStarted() {
     if (sink && sink->state() == QAudio::StoppedState) {
       sink_io = sink->start();
+      if (!sink_io || sink->error() != QAudio::NoError) {
+        handleOutputFailure(QStringLiteral("cannot open audio output device"));
+        return;
+      }
       epoch_start_frame = read_cursor_frame;
     }
   }
@@ -316,9 +350,13 @@ namespace Playback::Gapless {
   }
 
   void Engine::play() {
+    audio_output_failed = false; // explicit play: allow another sink attempt
     if (stream_mode && !sink) {
       setState(MediaPlayer::PlayingState); // optimistic while the ring fills; the sink comes up active
       return;
+    }
+    if (!sink && sink_format.isValid()) {
+      createSink(); // output died earlier; rebuild rather than play silence
     }
     if (synthetic_playing_on_play) {
       synthetic_playing_on_play = false;
@@ -720,6 +758,7 @@ namespace Playback::Gapless {
 
   void Engine::setOutputDevice(QByteArray id) {
     output_device_id = id;
+    audio_output_failed = false;
     preferred_device_missing = false;
     ++device_change_epoch; // invalidate a pending debounced evaluation
     QAudioDevice target = findPreferredDevice();
@@ -755,6 +794,7 @@ namespace Playback::Gapless {
 
   void Engine::evaluateAudioDevice() {
     ++device_change_epoch;
+    audio_output_failed = false; // device topology changed: the output may be back
     updateEffectiveDevice();
     const QAudioDevice preferred = findPreferredDevice();
     QAudioDevice target;
