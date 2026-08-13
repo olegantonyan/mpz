@@ -70,6 +70,8 @@ private slots:
   void missingFileIsReportedAsFailure();
   void trackModeLeavesAlbumEmpty();
   void albumGainIsSharedAcrossTheFolder();
+  void albumGainIsSkippedWhenAFileFails();
+  void cancelDoesNotReportFailures();
   void cueSlicesAreMeasuredSeparately();
   void multiSliceFileCannotWriteTags();
   void emptyRequestFinishesImmediately();
@@ -188,6 +190,42 @@ void TestReplayGainScanner::albumGainIsSharedAcrossTheFolder() {
   const double album = results.at(0).gain.album_db;
   QVERIFY(std::fabs(album - results.at(0).gain.track_db) < 1.0);
   QVERIFY(std::fabs(album - results.at(1).gain.track_db) > 10.0);
+}
+
+void TestReplayGainScanner::albumGainIsSkippedWhenAFileFails() {
+  const QString good = sine(QStringLiteral("01.wav"), 0.5);
+  const QString gone = dir->filePath(QStringLiteral("02.wav"));
+
+  const auto results =
+      runScan({jobFor(dir->path(), {wholeFile(good), wholeFile(gone)}, true)});
+  QCOMPARE(results.size(), 2);
+  QVERIFY(results.at(0).ok);
+  QVERIFY(results.at(0).gain.has_track);
+  QVERIFY(!results.at(0).gain.has_album);
+  QVERIFY(!results.at(1).ok);
+}
+
+void TestReplayGainScanner::cancelDoesNotReportFailures() {
+  QVector<ReplayGain::FileWork> files;
+  for (int i = 0; i < 8; i++) {
+    const QString path = sine(QString("long%1.wav").arg(i), 0.5, 30);
+    QVERIFY(!path.isEmpty());
+    files.append(wholeFile(path));
+  }
+
+  ReplayGain::Scanner scanner;
+  QSignalSpy analyzed(&scanner, &ReplayGain::Scanner::sliceAnalyzed);
+  QSignalSpy done(&scanner, &ReplayGain::Scanner::finished);
+
+  scanner.start({jobFor(dir->path(), files, false)}, 1);
+  QTest::qWait(400);
+  scanner.cancel();
+  QVERIFY(done.wait(kScanTimeoutMs));
+
+  for (const auto &emitted : analyzed) {
+    const auto result = emitted.at(0).value<ReplayGain::SliceResult>();
+    QVERIFY2(result.ok, qPrintable(result.error));
+  }
 }
 
 void TestReplayGainScanner::cueSlicesAreMeasuredSeparately() {

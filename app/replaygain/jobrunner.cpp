@@ -17,7 +17,9 @@
 #include <QTimer>
 #include <QUrl>
 
+#include <algorithm>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace ReplayGain {
@@ -102,10 +104,13 @@ namespace ReplayGain {
 
     std::vector<std::vector<SliceState>> per_file;
     per_file.resize(job.files.size());
+    std::vector<std::pair<qsizetype, qsizetype>> slice_range(job.files.size(), {0, 0});
+    bool any_file_failed = false;
 
     for (int fi = 0; fi < job.files.size(); fi++) {
       const FileWork &work = job.files.at(fi);
       std::vector<SliceState> &states = per_file[fi];
+      slice_range[fi] = {result.slices.size(), result.slices.size()};
 
       if (job.aborted()) {
         break;
@@ -185,10 +190,12 @@ namespace ReplayGain {
             feedBuffer(buffer, frames_seen, states);
             frames_seen += buffer.frameCount();
           }
-          // Yield back as much time as the batch took, so a scan cannot keep a core
-          // busy end to end. Sleeping here also back-pressures the decoder.
-          QThread::msleep(static_cast<unsigned long>(busy.elapsed() * (100 - kBusyPercent) /
-                                                     kBusyPercent));
+          // yield back as much time as the batch took, so a scan cannot keep a core
+          // busy end to end; sliced because nothing polls the abort flag while we sleep
+          const qint64 idle = busy.elapsed() * (100 - kBusyPercent) / kBusyPercent;
+          for (qint64 slept = 0; slept < idle && !job.aborted(); slept += kAbortPollMs) {
+            QThread::msleep(static_cast<unsigned long>(std::min<qint64>(kAbortPollMs, idle - slept)));
+          }
         });
 
         connect(&decoder, &QAudioDecoder::finished, &loop, &QEventLoop::quit);
@@ -211,7 +218,12 @@ namespace ReplayGain {
         }
       }
 
+      if (job.aborted()) {
+        break; // an interrupted file is not a failed one
+      }
+
       if (!file_error.isEmpty()) {
+        any_file_failed = true;
         states.clear();
         for (const auto &slice : work.slices) {
           SliceResult r;
@@ -220,6 +232,7 @@ namespace ReplayGain {
           r.error = file_error;
           result.slices.append(r);
         }
+        slice_range[fi].second = result.slices.size();
         continue;
       }
 
@@ -241,6 +254,11 @@ namespace ReplayGain {
         }
         result.slices.append(r);
       }
+      slice_range[fi].second = result.slices.size();
+
+      if (!job.want_album) {
+        states.clear(); // ~1 MB each; only album gain needs them kept
+      }
     }
 
     if (job.aborted()) {
@@ -248,7 +266,8 @@ namespace ReplayGain {
       return;
     }
 
-    if (job.want_album) {
+    // a gain measured over the surviving files is not this album's gain
+    if (job.want_album && !any_file_failed) {
       std::vector<Analyzer *> album;
       double album_peak = 0.0;
       for (auto &states : per_file) {
@@ -278,13 +297,15 @@ namespace ReplayGain {
     }
 
     if (job.write_tags) {
-      for (const auto &work : job.files) {
+      for (int fi = 0; fi < job.files.size(); fi++) {
         if (job.aborted()) {
           break;
         }
+        const FileWork &work = job.files.at(fi);
         const bool sliced = work.slices.size() > 1;
-        for (auto &r : result.slices) {
-          if (r.path != work.path || !r.ok) {
+        for (qsizetype si = slice_range[fi].first; si < slice_range[fi].second; si++) {
+          SliceResult &r = result.slices[si];
+          if (!r.ok) {
             continue;
           }
           r.tag_result = static_cast<int>(sliced ? TagResult::Unsupported

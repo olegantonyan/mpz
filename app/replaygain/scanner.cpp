@@ -90,7 +90,7 @@ namespace ReplayGain {
       return;
     }
     ensureWorkers(qMin(workers_wanted, pending.size()));
-    emitProgress(QString(), true);
+    emitProgress(QString(), false);
     dispatch();
   }
 

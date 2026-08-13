@@ -19,8 +19,10 @@
 #include <QProgressBar>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QScrollBar>
 #include <QTableWidget>
 #include <QTabWidget>
+#include <QTimer>
 #include <QVBoxLayout>
 
 namespace ReplayGainUi {
@@ -195,6 +197,7 @@ namespace ReplayGainUi {
         return;
       }
       results_->setRowCount(0);
+      pending_rows.clear();
       progress_->setRange(0, 0);
       progress_->setVisible(true);
       progress_label_->clear();
@@ -206,6 +209,7 @@ namespace ReplayGainUi {
         rg.scanTracks(scope == Scope::Playlist ? playlist_tracks : selected_tracks,
                       force_check_->isChecked());
       }
+      progress_->setVisible(rg.isScanning());
       updateScanControls();
     });
     scope_row->addWidget(scan_button_);
@@ -304,34 +308,64 @@ namespace ReplayGainUi {
   }
 
   void ReplayGainDialog::appendRow(const ReplayGain::SliceResult &result) {
-    if (results_->rowCount() >= kMaxResultRows) {
-      results_->removeRow(0);
+    // a job delivers all its slices at once; per-row inserts relayout each time
+    pending_rows.append(result);
+    if (flush_scheduled) {
+      return;
     }
-    const int row = results_->rowCount();
-    results_->insertRow(row);
+    flush_scheduled = true;
+    QTimer::singleShot(0, this, &ReplayGainDialog::flushRows);
+  }
 
-    QString name = QFileInfo(result.path).fileName();
-    if (result.begin_ms > 0) {
-      name += QString(" @%1s").arg(result.begin_ms / 1000);
+  void ReplayGainDialog::flushRows() {
+    flush_scheduled = false;
+    if (pending_rows.isEmpty()) {
+      return;
     }
 
-    QString status = result.ok ? tr("analysed") : result.error;
-    if (result.ok && result.tag_result >= 0) {
-      status += QStringLiteral(", ") + tagStatus(result.tag_result);
+    auto *scroll = results_->verticalScrollBar();
+    const bool follow = scroll->value() == scroll->maximum();
+
+    results_->setUpdatesEnabled(false);
+    const int overflow = results_->rowCount() + pending_rows.size() - kMaxResultRows;
+    if (overflow > 0) {
+      results_->model()->removeRows(0, qMin(overflow, results_->rowCount()));
     }
 
-    results_->setItem(row, 0, new QTableWidgetItem(name));
-    results_->setItem(row, 1, new QTableWidgetItem(gainText(result.gain.track_db, result.gain.has_track)));
-    results_->setItem(row, 2,
-                      new QTableWidgetItem(result.ok ? QString::number(result.gain.track_peak, 'f', 6)
-                                                     : QStringLiteral("—")));
-    results_->setItem(row, 3, new QTableWidgetItem(gainText(result.gain.album_db, result.gain.has_album)));
-    auto *status_item = new QTableWidgetItem(status);
-    if (!result.ok) {
-      status_item->setForeground(Qt::red);
+    for (const auto &result : pending_rows) {
+      const int row = results_->rowCount();
+      results_->insertRow(row);
+
+      QString name = QFileInfo(result.path).fileName();
+      if (result.begin_ms > 0) {
+        name += QString(" @%1s").arg(result.begin_ms / 1000);
+      }
+
+      QString status = result.ok ? tr("analysed") : result.error;
+      if (result.ok && result.tag_result >= 0) {
+        status += QStringLiteral(", ") + tagStatus(result.tag_result);
+      }
+
+      results_->setItem(row, 0, new QTableWidgetItem(name));
+      results_->setItem(row, 1,
+                        new QTableWidgetItem(gainText(result.gain.track_db, result.gain.has_track)));
+      results_->setItem(row, 2,
+                        new QTableWidgetItem(result.ok ? QString::number(result.gain.track_peak, 'f', 6)
+                                                       : QStringLiteral("—")));
+      results_->setItem(row, 3,
+                        new QTableWidgetItem(gainText(result.gain.album_db, result.gain.has_album)));
+      auto *status_item = new QTableWidgetItem(status);
+      if (!result.ok) {
+        status_item->setForeground(Qt::red);
+      }
+      results_->setItem(row, 4, status_item);
     }
-    results_->setItem(row, 4, status_item);
-    results_->scrollToBottom();
+    pending_rows.clear();
+    results_->setUpdatesEnabled(true);
+
+    if (follow) {
+      results_->scrollToBottom();
+    }
   }
 
   void ReplayGainDialog::onScanFinished(int analysed, int failed, bool cancelled) {

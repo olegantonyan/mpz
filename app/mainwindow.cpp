@@ -612,6 +612,12 @@ void MainWindow::setupStatusBar() {
   ui->statusbar->addWidget(new QWidget(this), 1);
 #endif
 
+#ifdef ENABLE_GAPLESS
+  status_label_replaygain = new QLabel(this);
+  status_label_replaygain->hide();
+  ui->statusbar->addPermanentWidget(status_label_replaygain);
+#endif
+
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -850,10 +856,31 @@ void MainWindow::setupReplayGain() {
   player->setReplayGainResolver([this](const Track &t) { return replay_gain->gainDbFor(t); });
   connect(replay_gain, &ReplayGain::Manager::gainsChanged, this, [this]() {
     player->refreshReplayGain();
+    updateReplayGainStatus();
+  });
+  connect(replay_gain, &ReplayGain::Manager::settingsChanged, this,
+          &MainWindow::updateReplayGainStatus);
+
+  connect(player, &Playback::Controller::started, this, [this](const Track &track) {
+    playing_track = track;
+    updateReplayGainStatus();
+  });
+  connect(player, &Playback::Controller::stopped, this, [this]() {
+    playing_track = Track();
+    updateReplayGainStatus();
   });
 
   connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
   connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
+}
+
+void MainWindow::updateReplayGainStatus() {
+  const bool applies = playing_track.uid() != 0 &&
+                       modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
+                       !global_conf.disableGapless();
+  const QString text = applies ? replay_gain->appliedGainText(playing_track) : QString();
+  status_label_replaygain->setText(text);
+  status_label_replaygain->setVisible(!text.isEmpty());
 }
 
 void MainWindow::openReplayGainDialog() {

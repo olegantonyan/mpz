@@ -95,10 +95,6 @@ namespace ReplayGain {
     closeOutput();
   }
 
-  QString Store::key(const QString &path, quint64 begin_ms) {
-    return path + QChar('@') + QString::number(begin_ms);
-  }
-
   bool Store::reload() {
     entries.clear();
     live_lines = 0;
@@ -109,11 +105,13 @@ namespace ReplayGain {
     if (!file.open(QIODevice::ReadOnly)) {
       return false;
     }
-    const QList<QByteArray> raw_lines = file.readAll().split('\n');
-    file.close();
 
     bool header_seen = false;
-    for (const auto &raw : raw_lines) {
+    while (!file.atEnd()) {
+      QByteArray raw = file.readLine();
+      if (raw.endsWith('\n')) {
+        raw.chop(1);
+      }
       QString line = QString::fromUtf8(raw);
       if (line.endsWith(QChar('\r'))) {
         line.chop(1);
@@ -171,7 +169,7 @@ namespace ReplayGain {
         continue;
       }
 
-      const QString k = key(e.path, e.begin_ms);
+      const Key k(e.path, e.begin_ms);
       if (entries.contains(k)) {
         dead_lines++;
       } else {
@@ -184,11 +182,14 @@ namespace ReplayGain {
   }
 
   Gain Store::get(const QString &path, quint64 begin_ms) const {
-    const auto it = entries.constFind(key(path, begin_ms));
+    return get(path, QFileInfo(path), begin_ms);
+  }
+
+  Gain Store::get(const QString &path, const QFileInfo &info, quint64 begin_ms) const {
+    const auto it = entries.constFind(Key(path, begin_ms));
     if (it == entries.constEnd()) {
       return Gain();
     }
-    const QFileInfo info(path);
     if (!info.exists() || info.lastModified().toSecsSinceEpoch() != it->mtime || info.size() != it->size) {
       return Gain();
     }
@@ -215,7 +216,7 @@ namespace ReplayGain {
       return false;
     }
 
-    const QString k = key(path, begin_ms);
+    const Key k(path, begin_ms);
     if (entries.contains(k)) {
       dead_lines++;
     } else {
@@ -242,12 +243,31 @@ namespace ReplayGain {
   bool Store::compact() {
     closeOutput();
 
-    QList<QString> keys = entries.keys();
+    QList<Key> keys = entries.keys();
     std::sort(keys.begin(), keys.end());
 
+    QHash<Key, Entry> kept;
+    kept.reserve(entries.size());
     QByteArray payload = QByteArray(kHeader) + '\n';
+    QString last_dir;
+    bool last_dir_exists = false;
+
     for (const auto &k : keys) {
-      payload += formatLine(entries.value(k)).toUtf8() + '\n';
+      const Entry e = entries.value(k);
+      const QFileInfo info(e.path);
+      if (!info.exists()) {
+        const QString dir = info.absolutePath();
+        if (dir != last_dir) {
+          last_dir = dir;
+          last_dir_exists = QFileInfo::exists(dir);
+        }
+        // an unmounted drive must not wipe the db
+        if (last_dir_exists) {
+          continue;
+        }
+      }
+      payload += formatLine(e).toUtf8() + '\n';
+      kept.insert(k, e);
     }
 
     QSaveFile file(filepath);
@@ -258,6 +278,7 @@ namespace ReplayGain {
       return false;
     }
 
+    entries = std::move(kept);
     live_lines = entries.size();
     dead_lines = 0;
     needs_rewrite = false;

@@ -1114,71 +1114,70 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="338"/>
+        <location filename="../../mainwindow.cpp" line="307"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="304"/>
-        <location filename="../../mainwindow.cpp" line="337"/>
+        <location filename="../../mainwindow.cpp" line="308"/>
+        <location filename="../../mainwindow.cpp" line="341"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="305"/>
-        <location filename="../../mainwindow.cpp" line="339"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="343"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="336"/>
+        <location filename="../../mainwindow.cpp" line="340"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="445"/>
+        <location filename="../../mainwindow.cpp" line="449"/>
         <source>Lock toolbar</source>
         <translation>Закључај траку с алаткама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="463"/>
+        <location filename="../../mainwindow.cpp" line="467"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="469"/>
+        <location filename="../../mainwindow.cpp" line="473"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="617"/>
         <location filename="../../mainwindow.cpp" line="621"/>
+        <location filename="../../mainwindow.cpp" line="625"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="623"/>
+        <location filename="../../mainwindow.cpp" line="627"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="635"/>
+        <location filename="../../mainwindow.cpp" line="639"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="864"/>
         <source>ReplayGain: %1 / %2</source>
-        <translation>ReplayGain: %1 / %2</translation>
+        <translation type="vanished">ReplayGain: %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="878"/>
+        <location filename="../../mainwindow.cpp" line="891"/>
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>У mpd режиму појачање се не примењује — mpd има сопствену replay_gain поставку. Анализа и уписивање ознака и даље раде.</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="881"/>
+        <location filename="../../mainwindow.cpp" line="894"/>
         <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
         <translation>Појачање примењује само gapless мотор. Укључите га у поставкама. Анализа и уписивање ознака и даље раде.</translation>
     </message>
@@ -1443,27 +1442,32 @@
 <context>
     <name>ReplayGain::JobRunner</name>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="106"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="122"/>
         <source>file is gone</source>
         <translation>датотека више не постоји</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="122"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="126"/>
+        <source>unreadable audio stream</source>
+        <translation>аудио ток се не може прочитати</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="150"/>
         <source>decoder stalled</source>
         <translation>декодер је застао</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="156"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="186"/>
         <source>format changed mid-stream</source>
         <translation>формат се променио усред тока</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="179"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="217"/>
         <source>nothing decoded</source>
         <translation>ништа није декодовано</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="203"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="247"/>
         <source>no measurable loudness</source>
         <translation>гласноћа се не може измерити</translation>
     </message>
@@ -1471,161 +1475,161 @@
 <context>
     <name>ReplayGainUi::ReplayGainDialog</name>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="36"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="38"/>
         <source>tags written</source>
         <translation>ознаке уписане</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="37"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="39"/>
         <source>tags unsupported</source>
         <translation>ознаке нису подржане</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="38"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="40"/>
         <source>tags: open failed</source>
         <translation>ознаке: отварање није успело</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="39"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="41"/>
         <source>tags: save failed</source>
         <translation>ознаке: чување није успело</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="49"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="51"/>
         <source>ReplayGain</source>
         <translation>ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="60"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="62"/>
         <source>Playback</source>
         <translation>Репродукција</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="61"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="287"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="63"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="302"/>
         <source>Analyse</source>
         <translation>Анализа</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="92"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="101"/>
         <source>Off</source>
         <translation>Искључено</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="93"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="214"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="102"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
         <source>Track gain</source>
         <translation>Појачање нумере</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="94"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="214"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="103"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
         <source>Album gain</source>
         <translation>Појачање албума</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="95"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="104"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="101"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="108"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="110"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="117"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="102"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="111"/>
         <source>Preamp:</source>
         <translation>Предпојачање:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="109"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="118"/>
         <source>Applied to tracks with no ReplayGain data</source>
         <translation>Примењује се на нумере без ReplayGain података</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="110"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="119"/>
         <source>Untagged tracks:</source>
         <translation>Нумере без ознака:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="112"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="121"/>
         <source>Prevent clipping (use the measured peak)</source>
         <translation>Спречи одсецање (користи измерени пик)</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="123"/>
         <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
         <translation>Пик је измерен без еквилајзера, па се уз појачавање опсега еквилајзером њих двоје слажу само приближно.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="145"/>
         <source>Store results in a sidecar database</source>
         <translation>Чувај резултате у засебној бази података</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="137"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="146"/>
         <source>Write ReplayGain tags into the audio files</source>
         <translation>Уписуј ReplayGain ознаке у аудио датотеке</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="146"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="155"/>
         <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
         <translation>Свака анализирана датотека се поново уписује, па се њена величина и време измене мењају. Нумере из cue листа могу да се чувају само у засебној бази.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="171"/>
         <source>Show in file manager</source>
         <translation>Прикажи у менаџеру датотека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="169"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="178"/>
         <source>Re-analyse tracks that already have data</source>
         <translation>Поново анализирај нумере које већ имају податке</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="173"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="182"/>
         <source>Scope:</source>
         <translation>Обим:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="175"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="184"/>
         <source>Whole library</source>
         <translation>Цела библиотека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="176"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="185"/>
         <source>Current playlist</source>
         <translation>Тренутна плејлиста</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="177"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="186"/>
         <source>Selected tracks</source>
         <translation>Изабране нумере</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="214"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
         <source>Track</source>
         <translation>Нумера</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="214"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="214"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="287"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="302"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="292"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="307"/>
         <source>%1 — %n entries</source>
         <translation>
             <numerusform>%1 — %n ставка</numerusform>
@@ -1634,12 +1638,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="307"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="344"/>
         <source>analysed</source>
         <translation>анализирано</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="331"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="376"/>
         <source>Cancelled after %n track(s)</source>
         <translation>
             <numerusform>Отказано након %n нумере</numerusform>
@@ -1648,7 +1652,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="333"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="378"/>
         <source>Analysed %1, failed %2</source>
         <translation>Анализирано %1, неуспешно %2</translation>
     </message>

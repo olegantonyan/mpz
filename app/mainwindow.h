@@ -132,6 +132,8 @@ private:
   Shortcuts *shortcuts = nullptr;
 #ifdef ENABLE_GAPLESS
   ReplayGain::Manager *replay_gain = nullptr;
+  QLabel *status_label_replaygain = nullptr;
+  Track playing_track;
 #endif
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
@@ -202,6 +204,7 @@ private:
   void applyEqForDevice(const QByteArray &device_id);
   void setupReplayGain();
   void openReplayGainDialog();
+  void updateReplayGainStatus();
 #endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();

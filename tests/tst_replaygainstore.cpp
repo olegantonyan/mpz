@@ -23,6 +23,8 @@ private slots:
   void staleWhenMtimeChanged();
   void albumOnlyEntry();
   void compactCollapsesDuplicates();
+  void compactDropsEntriesForDeletedFiles();
+  void compactKeepsEntriesWhenTheFolderIsGone();
 
 private:
   QString makeTrack(const QString &name, const QByteArray &content = "audio");
@@ -267,6 +269,33 @@ void TestReplayGainStore::compactCollapsesDuplicates() {
   ReplayGain::Store s(dir->path());
   QCOMPARE(s.count(), 1);
   QCOMPARE(s.get(track, 0).track_db, -9.0);
+}
+
+void TestReplayGainStore::compactDropsEntriesForDeletedFiles() {
+  const QString gone = makeTrack("gone.flac");
+  const QString kept = makeTrack("kept.flac");
+
+  ReplayGain::Store s(dir->path());
+  QVERIFY(s.put(gone, 0, sampleGain()));
+  QVERIFY(s.put(kept, 0, sampleGain()));
+  QVERIFY(QFile::remove(gone));
+
+  QVERIFY(s.compact());
+  QCOMPARE(s.count(), 1);
+  QVERIFY(s.get(kept, 0).isValid());
+}
+
+void TestReplayGainStore::compactKeepsEntriesWhenTheFolderIsGone() {
+  const QString folder = dir->filePath("removable");
+  QVERIFY(QDir().mkpath(folder));
+  const QString track = makeTrack("removable/01.flac");
+
+  ReplayGain::Store s(dir->path());
+  QVERIFY(s.put(track, 0, sampleGain()));
+  QVERIFY(QDir(folder).removeRecursively());
+
+  QVERIFY(s.compact());
+  QCOMPARE(s.count(), 1);
 }
 
 QTEST_GUILESS_MAIN(TestReplayGainStore)

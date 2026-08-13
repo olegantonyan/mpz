@@ -55,37 +55,38 @@ namespace ReplayGain {
     return std::clamp(db, kMinGainDb, kMaxGainDb);
   }
 
+  enum class Applied { Fallback, Track, Album };
+
+  inline Applied appliedKind(const Gain &g, const Settings &s) {
+    const bool album_first = s.mode == Mode::Album;
+    if (album_first && g.has_album) {
+      return Applied::Album;
+    }
+    if (!album_first && g.has_track) {
+      return Applied::Track;
+    }
+    if (g.has_track) {
+      return Applied::Track;
+    }
+    if (g.has_album) {
+      return Applied::Album;
+    }
+    return Applied::Fallback;
+  }
+
   inline double effectiveGainDb(const Gain &g, const Settings &s) {
     if (s.mode == Mode::Off) {
       return 0.0;
     }
 
-    const bool album_first = s.mode == Mode::Album;
-    double db = 0.0;
-    double peak = 0.0;
-    bool have = false;
-
-    if (album_first && g.has_album) {
-      db = g.album_db;
-      peak = g.album_peak;
-      have = true;
-    } else if (!album_first && g.has_track) {
-      db = g.track_db;
-      peak = g.track_peak;
-      have = true;
-    } else if (g.has_track) {
-      db = g.track_db;
-      peak = g.track_peak;
-      have = true;
-    } else if (g.has_album) {
-      db = g.album_db;
-      peak = g.album_peak;
-      have = true;
-    }
-
-    if (!have) {
+    const Applied applied = appliedKind(g, s);
+    if (applied == Applied::Fallback) {
       return clampGainDb(s.fallback_db);
     }
+
+    const bool album = applied == Applied::Album;
+    double db = album ? g.album_db : g.track_db;
+    const double peak = album ? g.album_peak : g.track_peak;
 
     db += s.preamp_db;
     if (s.prevent_clipping && peak > 0.0) {

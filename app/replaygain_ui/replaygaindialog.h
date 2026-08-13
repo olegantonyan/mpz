@@ -42,6 +42,7 @@ namespace ReplayGainUi {
     void updateScanControls();
     void updateStoreLabel();
     void appendRow(const ReplayGain::SliceResult &result);
+    void flushRows();
     void onScanFinished(int analysed, int failed, bool cancelled);
 
     ReplayGain::Manager &rg;
@@ -66,6 +67,8 @@ namespace ReplayGainUi {
     QLabel *progress_label_ = nullptr;
     QTableWidget *results_ = nullptr;
 
+    QVector<ReplayGain::SliceResult> pending_rows;
+    bool flush_scheduled = false;
     bool updating_ = false;
   };
 }

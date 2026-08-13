@@ -4,12 +4,16 @@
 #include "replaygain/gain.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QHash>
+#include <QPair>
 #include <QString>
 
 namespace ReplayGain {
   class Store {
   public:
+    using Key = QPair<QString, quint64>;
+
     struct Entry {
       QString path;
       quint64 begin_ms = 0;
@@ -24,9 +28,8 @@ namespace ReplayGain {
     Store(const Store &) = delete;
     Store &operator=(const Store &) = delete;
 
-    static QString key(const QString &path, quint64 begin_ms);
-
     Gain get(const QString &path, quint64 begin_ms) const;
+    Gain get(const QString &path, const QFileInfo &info, quint64 begin_ms) const;
     bool put(const QString &path, quint64 begin_ms, const Gain &gain);
 
     int count() const { return entries.size(); }
@@ -41,7 +44,7 @@ namespace ReplayGain {
     void closeOutput();
 
     QString filepath;
-    QHash<QString, Entry> entries;
+    QHash<Key, Entry> entries;
     QFile out;
     int live_lines = 0;
     int dead_lines = 0;

@@ -21,7 +21,10 @@ private slots:
   void forceRescansEverything();
   void planMergesCueSlicesIntoOneFile();
   void planSkipsAlbumGainForPartialCue();
+  void planSkipsAlbumGainForAnOversizedFolder();
   void planMarksTagWritingFromStorageMode();
+  void tagsModeIgnoresTheSidecarWhenDecidingWhatToScan();
+  void appliedGainTextNamesTheModeValueAndSource();
 
 private:
   QString makeTrackFile(const QString &relative);
@@ -235,6 +238,21 @@ void TestReplayGainManager::planSkipsAlbumGainForPartialCue() {
   QVERIFY(!jobs.at(0).want_album);
 }
 
+void TestReplayGainManager::planSkipsAlbumGainForAnOversizedFolder() {
+  QVector<Track> tracks;
+  for (int i = 0; i < 70; i++) {
+    tracks << Track(makeTrackFile(QString("dump/%1.flac").arg(i, 3, 10, QChar('0'))));
+  }
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+
+  const auto jobs = m.planScan(tracks, false);
+  QCOMPARE(jobs.size(), 1);
+  QCOMPARE(jobs.at(0).files.size(), 70);
+  QVERIFY(!jobs.at(0).want_album);
+}
+
 void TestReplayGainManager::planMarksTagWritingFromStorageMode() {
   const QString path = makeTrackFile(QStringLiteral("albumA/01.flac"));
 
@@ -248,6 +266,51 @@ void TestReplayGainManager::planMarksTagWritingFromStorageMode() {
   m.setSettings(s);
 
   QVERIFY(m.planScan({Track(path)}, false).at(0).write_tags);
+}
+
+void TestReplayGainManager::tagsModeIgnoresTheSidecarWhenDecidingWhatToScan() {
+  const QString path = makeTrackFile(QStringLiteral("albumA/01.flac"));
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+  QVERIFY(m.store().put(path, 0, albumGain(-6.0)));
+  QVERIFY(m.planScan({Track(path)}, false).isEmpty());
+
+  ReplayGain::Settings s = m.settings();
+  s.storage = ReplayGain::StorageMode::Tags;
+  m.setSettings(s);
+
+  // the file carries no tags, so tags mode has nothing analysed yet
+  const auto jobs = m.planScan({Track(path)}, false);
+  QCOMPARE(jobs.size(), 1);
+  QVERIFY(jobs.at(0).write_tags);
+}
+
+void TestReplayGainManager::appliedGainTextNamesTheModeValueAndSource() {
+  const QString scanned = makeTrackFile(QStringLiteral("albumA/01.flac"));
+  const QString bare = makeTrackFile(QStringLiteral("albumA/02.flac"));
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+  QVERIFY(m.store().put(scanned, 0, albumGain(-6.0)));
+
+  QVERIFY(m.appliedGainText(Track(scanned)).isEmpty());
+
+  ReplayGain::Settings s = m.settings();
+  s.mode = ReplayGain::Mode::Track;
+  m.setSettings(s);
+  QCOMPARE(m.appliedGainText(Track(scanned)),
+           QStringLiteral("ReplayGain: track -6.00 dB (sidecar)"));
+  QCOMPARE(m.appliedGainText(Track(bare)), QStringLiteral("ReplayGain: fallback 0.00 dB (none)"));
+
+  s.mode = ReplayGain::Mode::Album;
+  s.preamp_db = 1.5;
+  m.setSettings(s);
+  QCOMPARE(m.appliedGainText(Track(scanned)),
+           QStringLiteral("ReplayGain: album -4.50 dB (sidecar)"));
+
+  const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
+  QVERIFY(m.appliedGainText(stream).isEmpty());
 }
 
 QTEST_MAIN(TestReplayGainManager)

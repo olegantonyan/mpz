@@ -13,9 +13,6 @@ namespace ReplayGain {
   }
 
   void Resolver::setSettings(const Settings &s) {
-    if (s.storage != settings_.storage) {
-      cache.clear();
-    }
     settings_ = s;
   }
 
@@ -27,35 +24,49 @@ namespace ReplayGain {
     cache.remove(keyFor(track));
   }
 
-  QString Resolver::keyFor(const Track &track) {
-    return Store::key(track.path(), track.begin());
+  void Resolver::invalidate(const QString &path, quint64 begin_ms) {
+    cache.remove(Store::Key(path, begin_ms));
   }
 
-  Gain Resolver::gainFor(const Track &track) {
+  Store::Key Resolver::keyFor(const Track &track) {
+    return Store::Key(track.path(), track.begin());
+  }
+
+  Resolved Resolver::resolve(const Track &track) {
     if (track.isStream() || track.isMpd() || track.path().isEmpty()) {
-      return Gain();
+      return Resolved();
     }
 
-    const QString key = keyFor(track);
+    const Store::Key key = keyFor(track);
     const auto cached = cache.constFind(key);
     if (cached != cache.constEnd()) {
       return *cached;
     }
 
-    Gain g;
-    if (settings_.storage == StorageMode::Sidecar && store_) {
-      g = store_->get(track.path(), track.begin());
+    // the store is written in both modes, and a fresh scan lands there first
+    Resolved r;
+    if (store_) {
+      r.gain = store_->get(track.path(), track.begin());
+      if (r.gain.isValid()) {
+        r.source = Source::Sidecar;
+      }
     }
-    if (!g.isValid()) {
-      g = track.replayGain();
+    if (!r.gain.isValid()) {
+      r.gain = track.replayGain();
+      if (r.gain.isValid()) {
+        r.source = Source::Cue;
+      }
     }
-    if (!g.isValid() && !track.isCue()) {
+    if (!r.gain.isValid() && !track.isCue()) {
       // A cue container's tags describe the whole file, not one slice.
-      g = readTags(track.path());
+      r.gain = readTags(track.path());
+      if (r.gain.isValid()) {
+        r.source = Source::Tags;
+      }
     }
 
-    cache.insert(key, g);
-    return g;
+    cache.insert(key, r);
+    return r;
   }
 
   double Resolver::gainDbFor(const Track &track) {

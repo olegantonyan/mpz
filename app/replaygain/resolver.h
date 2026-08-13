@@ -9,6 +9,13 @@
 #include <QString>
 
 namespace ReplayGain {
+  enum class Source { None, Sidecar, Tags, Cue };
+
+  struct Resolved {
+    Gain gain;
+    Source source = Source::None;
+  };
+
   class Resolver {
   public:
     explicit Resolver(Store *store = nullptr);
@@ -17,18 +24,20 @@ namespace ReplayGain {
     void setSettings(const Settings &s);
     Settings settings() const { return settings_; }
 
-    Gain gainFor(const Track &track);
+    Resolved resolve(const Track &track);
+    Gain gainFor(const Track &track) { return resolve(track).gain; }
     double gainDbFor(const Track &track);
 
     void invalidate();
     void invalidate(const Track &track);
+    void invalidate(const QString &path, quint64 begin_ms);
 
   private:
-    static QString keyFor(const Track &track);
+    static Store::Key keyFor(const Track &track);
 
     Store *store_ = nullptr;
     Settings settings_;
-    QHash<QString, Gain> cache;
+    QHash<Store::Key, Resolved> cache;
   };
 }
 

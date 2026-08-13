@@ -4,10 +4,10 @@
 #include "config/storage.h"
 #include "playlist/cueparser.h"
 #include "playlist/loader.h"
+#include "replaygain/tags.h"
 
 #include <QDir>
 #include <QDirIterator>
-#include <QFileInfo>
 #include <QHash>
 #include <QSet>
 #include <QTimer>
@@ -18,6 +18,34 @@ namespace ReplayGain {
     const char kModeAlbum[] = "album";
     const char kStorageTags[] = "tags";
     const char kStorageSidecar[] = "sidecar";
+
+    // album gain holds a ~1 MB ebur128 state per file until the folder is done
+    const int kMaxAlbumFiles = 64;
+
+    QString appliedName(Applied applied) {
+      switch (applied) {
+        case Applied::Track: return QStringLiteral("track");
+        case Applied::Album: return QStringLiteral("album");
+        case Applied::Fallback: break;
+      }
+      return QStringLiteral("fallback");
+    }
+
+    QString sourceName(Source source) {
+      switch (source) {
+        case Source::Sidecar: return QStringLiteral("sidecar");
+        case Source::Tags: return QStringLiteral("tags");
+        case Source::Cue: return QStringLiteral("cue");
+        case Source::None: break;
+      }
+      return QStringLiteral("none");
+    }
+
+    bool isAudioFile(const QFileInfo &entry) {
+      const QString suffix = entry.suffix().toLower();
+      return suffix != QLatin1String("cue") &&
+             Playlist::Loader::supportedFileFormats().contains(suffix);
+    }
 
     Mode modeFromToken(const QString &token) {
       if (token == QLatin1String(kModeTrack)) {
@@ -96,12 +124,38 @@ namespace ReplayGain {
     emit gainsChanged();
   }
 
+  QString Manager::appliedGainText(const Track &track) {
+    if (settings_.mode == Mode::Off || track.isStream() || track.isMpd() ||
+        track.path().isEmpty()) {
+      return QString();
+    }
+
+    const Resolved resolved = resolver_.resolve(track);
+    return QStringLiteral("ReplayGain: %1 %2 dB (%3)")
+        .arg(appliedName(appliedKind(resolved.gain, settings_)),
+             QString::number(effectiveGainDb(resolved.gain, settings_), 'f', 2),
+             sourceName(resolved.source));
+  }
+
   void Manager::onSliceAnalyzed(const ReplayGain::SliceResult &result) {
     if (result.ok) {
       store_.put(result.path, result.begin_ms, result.gain);
+      resolver_.invalidate(result.path, result.begin_ms);
       dirty = true;
+      scheduleGainsChanged();
     }
     emit sliceAnalyzed(result);
+  }
+
+  void Manager::scheduleGainsChanged() {
+    if (gains_changed_scheduled) {
+      return;
+    }
+    gains_changed_scheduled = true;
+    QTimer::singleShot(0, this, [this]() {
+      gains_changed_scheduled = false;
+      emit gainsChanged();
+    });
   }
 
   void Manager::cancelScan() {
@@ -111,6 +165,13 @@ namespace ReplayGain {
   }
 
   void Manager::scanTracks(const QVector<Track> &tracks, bool force) {
+    walking = false;
+    walk_folders.clear();
+    progress_done = 0;
+    progress_total = 0;
+    progress_path.clear();
+    listing_folder.clear();
+
     scanner.start(planScan(tracks, force));
   }
 
@@ -119,6 +180,7 @@ namespace ReplayGain {
       return;
     }
 
+    listing_folder.clear();
     walk_folders.clear();
     for (const auto &root : roots) {
       if (!root.startsWith(QLatin1String("mpd://"))) {
@@ -151,17 +213,26 @@ namespace ReplayGain {
       walk_folders << subdirs.next();
     }
 
-    const QVector<Track> tracks = tracksInFolder(folder);
-    if (!tracks.isEmpty()) {
-      scanner.enqueue(planScan(tracks, walk_force));
+    const QVector<ScanTarget> targets = targetsInFolder(folder);
+    if (!targets.isEmpty()) {
+      scanner.enqueue(planTargets(targets, walk_force));
     }
     QTimer::singleShot(0, this, &Manager::walkNextFolder);
   }
 
-  QVector<Track> Manager::tracksInFolder(const QString &folder) {
-    const QFileInfoList entries = QDir(folder).entryInfoList(QDir::Files);
+  const QFileInfoList &Manager::folderFiles(const QString &folder) const {
+    const QString normalized = QDir(folder).absolutePath();
+    if (normalized != listing_folder) {
+      listing_folder = normalized;
+      listing_files = QDir(normalized).entryInfoList(QDir::Files);
+    }
+    return listing_files;
+  }
 
-    QVector<Track> tracks;
+  QVector<ScanTarget> Manager::targetsInFolder(const QString &folder) const {
+    const QFileInfoList entries = folderFiles(folder);
+
+    QVector<ScanTarget> targets;
     QSet<QString> in_cue;
     for (const auto &entry : entries) {
       if (entry.suffix().toLower() != QLatin1String("cue")) {
@@ -169,36 +240,49 @@ namespace ReplayGain {
       }
       for (const auto &track : Playlist::CueParser(entry.absoluteFilePath()).tracks_list()) {
         in_cue.insert(QFileInfo(track.path()).canonicalFilePath());
-        tracks << track;
+        targets.append({track.path(), QFileInfo(track.path()), track.begin(), track.duration()});
       }
     }
 
     for (const auto &entry : entries) {
-      const QString suffix = entry.suffix().toLower();
-      if (suffix == QLatin1String("cue") ||
-          !Playlist::Loader::supportedFileFormats().contains(suffix) ||
-          in_cue.contains(entry.canonicalFilePath())) {
+      if (!isAudioFile(entry)) {
         continue;
       }
-      tracks << Track(entry.absoluteFilePath());
+      // canonicalFilePath() is a realpath() call; only a cue can alias a file
+      if (!in_cue.isEmpty() && in_cue.contains(entry.canonicalFilePath())) {
+        continue;
+      }
+      targets.append({entry.absoluteFilePath(), entry, 0, 0});
     }
-    return tracks;
+    return targets;
   }
 
   QVector<Job> Manager::planScan(const QVector<Track> &tracks, bool force) const {
-    QVector<QString> order;
-    QHash<QString, Job> by_folder;
-
+    QVector<ScanTarget> targets;
+    targets.reserve(tracks.size());
     for (const auto &track : tracks) {
       if (track.isStream() || track.isMpd() || track.path().isEmpty()) {
         continue;
       }
-      const QFileInfo info(track.path());
-      if (!info.exists()) {
+      targets.append({track.path(), QFileInfo(track.path()), track.begin(),
+                      track.isCue() ? track.duration() : 0});
+    }
+    return planTargets(targets, force);
+  }
+
+  QVector<Job> Manager::planTargets(const QVector<ScanTarget> &targets, bool force) const {
+    QVector<QString> order;
+    QHash<QString, Job> by_folder;
+    QHash<QString, int> file_index;
+    FileStats stats;
+
+    for (const auto &target : targets) {
+      if (!target.info.exists()) {
         continue;
       }
+      stats.insert(target.path, target.info);
 
-      const QString folder = info.absolutePath();
+      const QString folder = target.info.absolutePath();
       if (!by_folder.contains(folder)) {
         Job job;
         job.folder = folder;
@@ -208,22 +292,18 @@ namespace ReplayGain {
       }
 
       Slice slice;
-      slice.begin_ms = track.begin();
-      slice.duration_ms = track.isCue() ? track.duration() : 0;
+      slice.begin_ms = target.begin_ms;
+      slice.duration_ms = target.duration_ms;
 
       Job &job = by_folder[folder];
-      int index = -1;
-      for (int i = 0; i < job.files.size(); i++) {
-        if (job.files.at(i).path == track.path()) {
-          index = i;
-          break;
-        }
-      }
+      const auto known = file_index.constFind(target.path);
+      int index = known == file_index.constEnd() ? -1 : *known;
       if (index < 0) {
         FileWork work;
-        work.path = track.path();
+        work.path = target.path;
         job.files.append(work);
         index = job.files.size() - 1;
+        file_index.insert(target.path, index);
       }
       job.files[index].slices.append(slice);
     }
@@ -236,15 +316,15 @@ namespace ReplayGain {
         std::sort(work.slices.begin(), work.slices.end(),
                   [](const Slice &a, const Slice &b) { return a.begin_ms < b.begin_ms; });
       }
-      job.want_album = coversWholeAlbum(job);
+      job.want_album = job.files.size() <= kMaxAlbumFiles && coversWholeAlbum(job, stats);
 
       if (!force) {
         if (job.want_album) {
-          if (albumAlreadyAnalysed(job)) {
+          if (albumAlreadyAnalysed(job, stats)) {
             continue;
           }
         } else {
-          dropAnalysedSlices(job);
+          dropAnalysedSlices(job, stats);
           if (job.files.isEmpty()) {
             continue;
           }
@@ -255,23 +335,17 @@ namespace ReplayGain {
     return jobs;
   }
 
-  bool Manager::coversWholeAlbum(const Job &job) const {
+  bool Manager::coversWholeAlbum(const Job &job, const FileStats &stats) const {
     QSet<QString> scanned;
     for (const auto &work : job.files) {
       if (!coversWholeFile(work)) {
         return false;
       }
-      scanned.insert(QFileInfo(work.path).absoluteFilePath());
+      scanned.insert(stats.value(work.path).absoluteFilePath());
     }
 
-    const auto entries = QDir(job.folder).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
-    for (const auto &entry : entries) {
-      const QString suffix = entry.suffix().toLower();
-      if (suffix == QLatin1String("cue") ||
-          !Playlist::Loader::supportedFileFormats().contains(suffix)) {
-        continue;
-      }
-      if (!scanned.contains(entry.absoluteFilePath())) {
+    for (const auto &entry : folderFiles(job.folder)) {
+      if (isAudioFile(entry) && !scanned.contains(entry.absoluteFilePath())) {
         return false;
       }
     }
@@ -289,10 +363,21 @@ namespace ReplayGain {
     return true;
   }
 
-  bool Manager::albumAlreadyAnalysed(const Job &job) const {
+  Gain Manager::analysedGain(const QString &path, const QFileInfo &info, quint64 begin_ms,
+                             bool sliced) const {
+    // in tags mode the tags are the storage; a sliced file only fits the sidecar
+    if (settings_.storage == StorageMode::Tags && !sliced) {
+      return readTags(path);
+    }
+    return store_.get(path, info, begin_ms);
+  }
+
+  bool Manager::albumAlreadyAnalysed(const Job &job, const FileStats &stats) const {
     for (const auto &work : job.files) {
+      const QFileInfo info = stats.value(work.path);
+      const bool sliced = work.slices.size() > 1;
       for (const auto &slice : work.slices) {
-        const Gain existing = store_.get(work.path, slice.begin_ms);
+        const Gain existing = analysedGain(work.path, info, slice.begin_ms, sliced);
         if (!existing.has_track || !existing.has_album) {
           return false;
         }
@@ -301,10 +386,12 @@ namespace ReplayGain {
     return true;
   }
 
-  void Manager::dropAnalysedSlices(Job &job) const {
+  void Manager::dropAnalysedSlices(Job &job, const FileStats &stats) const {
     for (auto &work : job.files) {
-      const auto analysed = [this, &work](const Slice &slice) {
-        return store_.get(work.path, slice.begin_ms).has_track;
+      const QFileInfo info = stats.value(work.path);
+      const bool sliced = work.slices.size() > 1;
+      const auto analysed = [this, &work, &info, sliced](const Slice &slice) {
+        return analysedGain(work.path, info, slice.begin_ms, sliced).has_track;
       };
       work.slices.erase(std::remove_if(work.slices.begin(), work.slices.end(), analysed),
                         work.slices.end());
