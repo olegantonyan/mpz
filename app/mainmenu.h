@@ -5,11 +5,10 @@
 #include "config/local.h"
 #include "modusoperandi.h"
 
+#include <QAction>
 #include <QObject>
 #include <QToolButton>
 #include <QList>
-
-class QAction;
 
 class MainMenu : public QObject {
   Q_OBJECT

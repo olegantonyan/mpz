@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="107"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="114"/>
         <source>Changelog</source>
         <translation>Списак измена</translation>
     </message>
@@ -45,22 +45,22 @@
         <translation>Информације о систему</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="26"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="27"/>
         <source>Version %1</source>
         <translation>Верзија %1</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>Website</source>
         <translation>Веб сајт</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="43"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
@@ -1925,7 +1925,7 @@
         <translation>Пречице на тастатури</translation>
     </message>
     <message>
-        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="72"/>
+        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="75"/>
         <source>%1 taken from &quot;%2&quot;</source>
         <translation>%1 преузето од „%2“</translation>
     </message>
@@ -2384,12 +2384,12 @@
         <translation>Није пронађен текст песме.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="727"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="724"/>
         <source>Copy to clipboard</source>
         <translation>Копирај у међуспремник</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="735"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="732"/>
         <source>Open in external viewer</source>
         <translation>Отвори у спољном прегледнику</translation>
     </message>

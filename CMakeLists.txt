@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.2 LANGUAGES CXX C)
+project(mpz VERSION 2.1.3 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Sources carry UTF-8 literals; MSVC otherwise reads them as the active codepage.
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -144,6 +146,7 @@ set(PROJECT_SOURCES
   app/sort_ui/sortmenu.cpp
   app/statusbarlabel.cpp
   app/sysinfo.cpp
+  app/sandboxnotice.cpp
   app/track.cpp
   app/reveal_in_filemanager.cpp
   app/trayicon.cpp
@@ -553,7 +556,73 @@ if(NOT APPLE AND NOT WIN32)
   if(PACKAGE_VERSION AND NOT PACKAGE_VERSION STREQUAL PROJECT_VERSION)
     set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION} [${PACKAGE_VERSION}]")
   endif()
-  string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  # not string(TIMESTAMP): it honors SOURCE_DATE_EPOCH, which flatpak-builder pins to 2011-11-11
+  set(CHANGELOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md)
+  set(APPSTREAM_RELEASE_DATE "")
+  if(EXISTS ${CHANGELOG_FILE})
+    file(READ ${CHANGELOG_FILE} CHANGELOG_CONTENT)
+    string(REGEX MATCH "## \\[${PROJECT_VERSION}\\] - ([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])"
+      CHANGELOG_DATE_MATCH "${CHANGELOG_CONTENT}")
+    if(CHANGELOG_DATE_MATCH)
+      set(APPSTREAM_RELEASE_DATE "${CMAKE_MATCH_1}")
+    else()
+      file(TIMESTAMP ${CHANGELOG_FILE} APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+    endif()
+  endif()
+  if(NOT APPSTREAM_RELEASE_DATE)
+    string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  endif()
+
+  set(APPSTREAM_RELEASE_DESCRIPTION "")
+  string(REGEX MATCH "## \\[${PROJECT_VERSION}\\][^\n]*" SECTION_HEADER "${CHANGELOG_CONTENT}")
+  if(SECTION_HEADER)
+    string(FIND "${CHANGELOG_CONTENT}" "${SECTION_HEADER}" SECTION_START)
+    string(LENGTH "${SECTION_HEADER}" HEADER_LENGTH)
+    math(EXPR SECTION_START "${SECTION_START} + ${HEADER_LENGTH}")
+    string(SUBSTRING "${CHANGELOG_CONTENT}" ${SECTION_START} -1 SECTION)
+    string(FIND "${SECTION}" "\n## " SECTION_END)
+    if(SECTION_END GREATER -1)
+      string(SUBSTRING "${SECTION}" 0 ${SECTION_END} SECTION)
+    endif()
+
+    string(REPLACE "&" "&amp;" SECTION "${SECTION}")
+    string(REPLACE "<" "&lt;" SECTION "${SECTION}")
+    string(REPLACE ">" "&gt;" SECTION "${SECTION}")
+    string(REPLACE "`" "" SECTION "${SECTION}")
+    string(REPLACE ";" "\\;" SECTION "${SECTION}")
+    string(REPLACE "\n" ";" SECTION_LINES "${SECTION}")
+
+    set(NOTES "")
+    set(IN_LIST FALSE)
+    set(PENDING_HEADING "")
+    foreach(LINE IN LISTS SECTION_LINES)
+      if(LINE MATCHES "^### (.+)$")
+        if(IN_LIST)
+          string(APPEND NOTES "</ul>")
+          set(IN_LIST FALSE)
+        endif()
+        set(PENDING_HEADING "${CMAKE_MATCH_1}")
+      elseif(LINE MATCHES "^- (.+)$")
+        set(ITEM "${CMAKE_MATCH_1}")
+        if(NOT IN_LIST)
+          if(PENDING_HEADING)
+            string(APPEND NOTES "<p>${PENDING_HEADING}</p>")
+            set(PENDING_HEADING "")
+          endif()
+          string(APPEND NOTES "<ul>")
+          set(IN_LIST TRUE)
+        endif()
+        string(APPEND NOTES "<li>${ITEM}</li>")
+      endif()
+    endforeach()
+    if(IN_LIST)
+      string(APPEND NOTES "</ul>")
+    endif()
+    if(NOTES)
+      set(APPSTREAM_RELEASE_DESCRIPTION "<description>${NOTES}</description>")
+    endif()
+  endif()
+
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/org.mpz_player.mpz.metainfo.xml.in
     ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml

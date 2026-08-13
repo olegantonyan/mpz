@@ -3,6 +3,7 @@
 
 #include "modusoperandi.h"
 #include "config/global.h"
+#include "config/local.h"
 
 #include <QDialog>
 #include <QStringList>
@@ -16,7 +17,7 @@ class DirectorySettings : public QDialog {
   Q_OBJECT
 
 public:
-  explicit DirectorySettings(const QStringList &paths, ModusOperandi &modus, Config::Global &global_cfg, QWidget *parent = nullptr);
+  explicit DirectorySettings(const QStringList &paths, ModusOperandi &modus, Config::Global &global_cfg, Config::Local &local_cfg, QWidget *parent = nullptr);
   ~DirectorySettings();
 
   QStringList libraryPaths() const;
@@ -30,6 +31,7 @@ private slots:
   void on_pushButtonRemove_clicked();
   void on_pushButtonUp_clicked();
   void on_pushButtonDown_clicked();
+  void on_sandboxNoticeDismiss_clicked();
 
 private:
   void moveCurrent(int delta);
@@ -40,6 +42,7 @@ private:
   QStringListModel model;
   ModusOperandi &modus_operandi;
   Config::Global &global_conf;
+  Config::Local &local_conf;
   bool stations_edited = false;
 };
 

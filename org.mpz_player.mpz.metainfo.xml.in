@@ -5,10 +5,10 @@
   <project_license>GPL-3.0-or-later</project_license>
 
   <name>mpz Music Player</name>
-  <summary>Music player for large local collections</summary>
-  <summary xml:lang="ru">Музыкальный проигрыватель для больших локальных коллекций</summary>
+  <summary>Play local music by folder</summary>
+  <summary xml:lang="ru">Локальная музыка по папкам</summary>
   <summary xml:lang="ja">大規模なローカルコレクション向けの音楽プレーヤー</summary>
-  <summary xml:lang="sr">Музички плејер за велике локалне колекције</summary>
+  <summary xml:lang="sr">Локална музика по фасциклама</summary>
 
   <launchable type="desktop-id">@DESKTOP_FILE_ID@.desktop</launchable>
 
@@ -19,18 +19,72 @@
       library and provides a convenient way to build playlists directly from
       folders.
     </p>
+    <p xml:lang="ru">Проигрыватель для больших локальных музыкальных коллекций, работающий с папками. Вместо того чтобы индексировать каждый файл в библиотеку, mpz считает библиотекой сами файлы и папки и позволяет удобно собирать плейлисты прямо из папок.</p>
+    <p xml:lang="sr">Плејер за велике локалне музичке колекције који ради са фасциклама. Уместо да индексира сваку датотеку у библиотеку, mpz саме датотеке и фасцикле третира као библиотеку и омогућава лако прављење плејлисти директно из фасцикли.</p>
     <p>
       The main feature is the three-column UI: a directory tree, the list of
       playlists, and the tracks of the current playlist — similar to
       Foobar2000's Album List. Choose library folders, middle-click a folder,
       and a playlist is created from it.
     </p>
+    <p xml:lang="ru">Главная особенность — интерфейс из трёх колонок: дерево папок, список плейлистов и треки текущего плейлиста — как Album List в Foobar2000. Укажите папки библиотеки, щёлкните по папке средней кнопкой мыши — и из неё создастся плейлист.</p>
+    <p xml:lang="sr">Главна одлика је интерфејс са три колоне: стабло фасцикли, списак плејлисти и нумере текуће плејлисте — слично Album List-у у Foobar2000. Изаберите фасцикле библиотеке, кликните средњим тастером на фасциклу и од ње се прави плејлиста.</p>
     <p>
       Also supported: gapless playback, a 10-band and parametric equalizer with
       AutoEq presets, internet radio, CUE sheets, a tag editor, cover art and
       lyrics, MPRIS media control, and an experimental MPD client mode.
     </p>
+    <p xml:lang="ru">Также поддерживаются: воспроизведение без пауз, 10-полосный и параметрический эквалайзер с пресетами AutoEq, интернет-радио, CUE-листы, редактор тегов, обложки альбомов и тексты песен, управление через MPRIS и экспериментальный режим клиента MPD.</p>
+    <p xml:lang="sr">Такође су подржани: репродукција без прекида, 10-појасни и параметарски еквилајзер са AutoEq пресетима, интернет радио, CUE листови, уређивач ознака, омоти албума и текстови песама, MPRIS контрола медија и експериментални режим MPD клијента.</p>
   </description>
+
+  <keywords>
+    <keyword>music</keyword>
+    <keyword>audio</keyword>
+    <keyword>player</keyword>
+    <keyword>folder</keyword>
+    <keyword>folders</keyword>
+    <keyword>playlist</keyword>
+    <keyword>collection</keyword>
+    <keyword>library</keyword>
+    <keyword>gapless</keyword>
+    <keyword>equalizer</keyword>
+    <keyword>flac</keyword>
+    <keyword>cue</keyword>
+    <keyword>radio</keyword>
+    <keyword>mpd</keyword>
+    <keyword>foobar2000</keyword>
+    <keyword xml:lang="ru">музыка</keyword>
+    <keyword xml:lang="ru">аудио</keyword>
+    <keyword xml:lang="ru">плеер</keyword>
+    <keyword xml:lang="ru">папка</keyword>
+    <keyword xml:lang="ru">папки</keyword>
+    <keyword xml:lang="ru">плейлист</keyword>
+    <keyword xml:lang="ru">коллекция</keyword>
+    <keyword xml:lang="ru">библиотека</keyword>
+    <keyword xml:lang="ru">эквалайзер</keyword>
+    <keyword xml:lang="ru">радио</keyword>
+    <keyword xml:lang="ja">音楽</keyword>
+    <keyword xml:lang="ja">オーディオ</keyword>
+    <keyword xml:lang="ja">プレーヤー</keyword>
+    <keyword xml:lang="ja">フォルダー</keyword>
+    <keyword xml:lang="ja">プレイリスト</keyword>
+    <keyword xml:lang="ja">コレクション</keyword>
+    <keyword xml:lang="ja">ライブラリ</keyword>
+    <keyword xml:lang="ja">ギャップレス</keyword>
+    <keyword xml:lang="ja">イコライザー</keyword>
+    <keyword xml:lang="ja">ラジオ</keyword>
+    <keyword xml:lang="sr">музика</keyword>
+    <keyword xml:lang="sr">аудио</keyword>
+    <keyword xml:lang="sr">плејер</keyword>
+    <keyword xml:lang="sr">фасцикла</keyword>
+    <keyword xml:lang="sr">фасцикле</keyword>
+    <keyword xml:lang="sr">плејлиста</keyword>
+    <keyword xml:lang="sr">колекција</keyword>
+    <keyword xml:lang="sr">библиотека</keyword>
+    <keyword xml:lang="sr">еквилајзер</keyword>
+    <keyword xml:lang="sr">радио</keyword>
+  </keywords>
 
   <developer id="org.mpz_player">
     <name>Oleg Antonyan</name>
@@ -65,11 +119,14 @@
 
   <content_rating type="oars-1.1"/>
 
+  <branding>
+    <color type="primary" scheme_preference="light">#eabfd2</color>
+    <color type="primary" scheme_preference="dark">#54203f</color>
+  </branding>
+
   <releases>
     <release version="@APPSTREAM_RELEASE_VERSION@" date="@APPSTREAM_RELEASE_DATE@">
-      <description>
-        <p>See the changelog for details.</p>
-      </description>
+      @APPSTREAM_RELEASE_DESCRIPTION@
     </release>
   </releases>
 </component>

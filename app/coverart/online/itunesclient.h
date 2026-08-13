@@ -3,7 +3,7 @@
 
 #include "coverart/online/provider.h"
 
-class QNetworkReply;
+#include <QNetworkReply>
 
 namespace CoverArt {
   namespace Online {

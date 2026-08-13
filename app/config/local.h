@@ -32,6 +32,9 @@ namespace Config {
     bool disableQhotkey() const;
     bool saveDisableQhotkey(bool v);
 
+    bool sandboxNoticeDismissed() const;
+    bool saveSandboxNoticeDismissed(bool v);
+
     QList<std::shared_ptr<Playlist::Playlist>> playlists() const;
     bool savePlaylists(QList<std::shared_ptr<Playlist::Playlist>> &list);
 

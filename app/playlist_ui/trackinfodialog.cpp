@@ -644,12 +644,12 @@ void TrackInfoDialog::setup_lyrics() {
   }
 
   QString embedded = fetch_embedded_lyrics();
-  if (!embedded.isEmpty()) {
+  if (Lyrics::LrcParser::hasLyricContent(embedded)) {
     render_lyrics("embedded", embedded);
     return;
   }
   QString sidecar = fetch_sidecar_lyrics();
-  if (!sidecar.isEmpty()) {
+  if (Lyrics::LrcParser::hasLyricContent(sidecar)) {
     render_lyrics("sidecar", sidecar);
     return;
   }
@@ -710,10 +710,7 @@ QString TrackInfoDialog::fetch_sidecar_lyrics() const {
 
 void TrackInfoDialog::render_lyrics(const QString &source, const QString &raw) {
   ui->labelLyricsSource->setText(QString("(%1)").arg(source));
-  const QString text = Lyrics::LrcParser::looksLikeLrc(raw)
-                         ? Lyrics::LrcParser::stripTimestamps(raw)
-                         : raw.trimmed();
-  ui->plainTextLyrics->setPlainText(text);
+  ui->plainTextLyrics->setPlainText(Lyrics::LrcParser::toPlainLyrics(raw));
 }
 
 void TrackInfoDialog::render_lyrics_state(const QString &message) {

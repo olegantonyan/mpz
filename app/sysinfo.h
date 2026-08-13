@@ -6,6 +6,7 @@
 class SysInfo {
 public:
   static QStringList get();
+  static bool sandboxed();
 };
 
 #endif // SYSINFO_H
