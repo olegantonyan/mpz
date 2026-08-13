@@ -83,6 +83,7 @@ namespace Playback::Gapless {
     void setupPlayback(const QAudioFormat &format);
     void createSink();
     void destroySink();
+    void handleOutputFailure(const QString &message);
     void sinkEnsureStarted();
     void feedSink();
     void applyEq(char *data, qint64 frames);
@@ -149,6 +150,7 @@ namespace Playback::Gapless {
     QByteArray output_device_id;
     QByteArray effective_device_id;
     QAudioDevice active_device; // device the current sink is running on
+    bool audio_output_failed = false; // no automatic sink rebuild until a user action or a device change
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale queued device switches during event bursts
     Playback::MediaPlayer::State current_state = Playback::MediaPlayer::StoppedState;
