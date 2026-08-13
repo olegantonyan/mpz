@@ -52,6 +52,7 @@ jobs:
 
     env:
       QT_QPA_PLATFORM: offscreen
+      QT_MEDIA_BACKEND: ffmpeg
 
     steps:
       - uses: actions/checkout@v6

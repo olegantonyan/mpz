@@ -37,7 +37,8 @@
         "USE_SYSTEM_TAGLIB": "ON",
         "USE_SYSTEM_YAMLCPP": "ON",
         "USE_SYSTEM_LIBMPDCLIENT": "ON",
-        "USE_SYSTEM_CPPTRACE": "ON"
+        "USE_SYSTEM_CPPTRACE": "ON",
+        "USE_SYSTEM_LIBEBUR128": "ON"
       }
     },
     {

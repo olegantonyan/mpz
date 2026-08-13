@@ -883,7 +883,6 @@ void MainWindow::openReplayGainDialog() {
   }
 
   if (!rg_dialog) {
-    // no parent: a transient-for window can't be sent behind the main window
     rg_dialog = new ReplayGainUi::ReplayGainDialog(*replay_gain, global_conf, applies, reason);
     rg_dialog->setAttribute(Qt::WA_DeleteOnClose);
     rg_dialog->setModal(false);

@@ -49,6 +49,7 @@ namespace ReplayGain {
     connect(&scanner, &Scanner::finished, this, [this](int analysed, int failed, bool cancelled) {
       if (dirty) {
         dirty = false;
+        store_.compactIfNeeded();
         resolver_.invalidate();
         emit gainsChanged();
       }
@@ -155,7 +156,6 @@ namespace ReplayGain {
 
       if (!force) {
         if (job.want_album) {
-          // an album measurement needs every file, so it is all or nothing
           if (albumAlreadyAnalysed(job)) {
             continue;
           }
@@ -195,7 +195,6 @@ namespace ReplayGain {
   }
 
   bool Manager::coversWholeFile(const FileWork &work) {
-    // cue slices tile the file, so a gap or a late start means tracks are missing
     quint64 next = 0;
     for (const auto &slice : work.slices) {
       if (slice.begin_ms != next) {

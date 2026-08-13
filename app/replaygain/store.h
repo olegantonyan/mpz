@@ -34,6 +34,7 @@ namespace ReplayGain {
 
     bool reload();
     bool compact();
+    void compactIfNeeded();
 
   private:
     bool appendLine(const QString &line);

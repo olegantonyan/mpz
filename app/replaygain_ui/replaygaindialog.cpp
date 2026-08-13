@@ -12,6 +12,7 @@
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QFileInfo>
+#include <QFormLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
@@ -84,40 +85,37 @@ namespace ReplayGainUi {
     auto *box = new QWidget;
     auto *layout = new QVBoxLayout(box);
 
-    auto *row = new QHBoxLayout;
-    row->addWidget(new QLabel(tr("Mode:")));
+    auto *form = new QFormLayout;
+    form->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+
     mode_combo_ = new QComboBox;
     mode_combo_->addItem(tr("Off"), QStringLiteral("off"));
     mode_combo_->addItem(tr("Track gain"), QStringLiteral("track"));
     mode_combo_->addItem(tr("Album gain"), QStringLiteral("album"));
-    row->addWidget(mode_combo_);
+    form->addRow(tr("Mode:"), mode_combo_);
 
-    row->addSpacing(12);
-    row->addWidget(new QLabel(tr("Preamp:")));
     preamp_spin_ = new QDoubleSpinBox;
     preamp_spin_->setRange(-15.0, 15.0);
     preamp_spin_->setSingleStep(0.5);
     preamp_spin_->setDecimals(1);
     preamp_spin_->setSuffix(" " + tr("dB"));
-    row->addWidget(preamp_spin_);
+    form->addRow(tr("Preamp:"), preamp_spin_);
 
-    row->addSpacing(12);
-    row->addWidget(new QLabel(tr("Untagged tracks:")));
     fallback_spin_ = new QDoubleSpinBox;
     fallback_spin_->setRange(-15.0, 15.0);
     fallback_spin_->setSingleStep(0.5);
     fallback_spin_->setDecimals(1);
     fallback_spin_->setSuffix(" " + tr("dB"));
     fallback_spin_->setToolTip(tr("Applied to tracks with no ReplayGain data"));
-    row->addWidget(fallback_spin_);
-    row->addStretch();
-    layout->addLayout(row);
+    form->addRow(tr("Untagged tracks:"), fallback_spin_);
 
     clip_check_ = new QCheckBox(tr("Prevent clipping (use the measured peak)"));
     clip_check_->setToolTip(
         tr("The peak was measured without the equalizer, so with the equalizer boosting "
            "bands the two only compose approximately."));
-    layout->addWidget(clip_check_);
+    form->addRow(QString(), clip_check_);
+
+    layout->addLayout(form);
     layout->addStretch();
 
     connect(mode_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -166,13 +164,6 @@ namespace ReplayGainUi {
       revealInFileManager({rg.store().filePath()});
     });
     store_row->addWidget(reveal);
-
-    auto *compact = new QPushButton(tr("Compact now"));
-    connect(compact, &QPushButton::clicked, this, [this]() {
-      rg.store().compact();
-      updateStoreLabel();
-    });
-    store_row->addWidget(compact);
     layout->addLayout(store_row);
 
     force_check_ = new QCheckBox(tr("Re-analyse tracks that already have data"));

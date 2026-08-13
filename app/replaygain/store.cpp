@@ -86,12 +86,12 @@ namespace ReplayGain {
     filepath = QString("%1/replaygain.db").arg(dir);
     out.setFileName(filepath);
     reload();
+    if (needs_rewrite) {
+      compact();
+    }
   }
 
   Store::~Store() {
-    if (needs_rewrite || (live_lines > 0 && dead_lines > live_lines * kCompactRatio)) {
-      compact();
-    }
     closeOutput();
   }
 
@@ -262,6 +262,12 @@ namespace ReplayGain {
     dead_lines = 0;
     needs_rewrite = false;
     return true;
+  }
+
+  void Store::compactIfNeeded() {
+    if (live_lines > 0 && dead_lines > live_lines * kCompactRatio) {
+      compact();
+    }
   }
 
   void Store::closeOutput() {

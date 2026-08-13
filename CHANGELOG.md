@@ -1,3 +1,11 @@
+## [2.1.4] - next
+
+### Added
+
+- ReplayGain that can write peaks data into tags or separate file preserving the original audio files unchanged
+
+### Misc
+
 ## [2.1.3] - 2026-08-10
 
 ### Added
