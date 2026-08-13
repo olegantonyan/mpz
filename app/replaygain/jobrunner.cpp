@@ -2,7 +2,9 @@
 
 #include "replaygain/analyzer.h"
 #include "replaygain/tags.h"
-#include "track.h"
+
+#include <audioproperties.h>
+#include <fileref.h>
 
 #include <QLoggingCategory>
 
@@ -25,6 +27,15 @@ namespace ReplayGain {
     const int kStallTimeoutMs = 30000;
     const int kAbortPollMs = 25;
     const int kBusyPercent = 50;
+
+    bool hasAudioStream(const QString &path) {
+      const TagLib::FileRef file(path.toUtf8().constData());
+      if (file.isNull()) {
+        return false;
+      }
+      const TagLib::AudioProperties *props = file.audioProperties();
+      return props != nullptr && props->channels() > 0 && props->sampleRate() > 0;
+    }
 
     struct SliceState {
       qint64 start_frame = 0;
@@ -104,13 +115,10 @@ namespace ReplayGain {
       QString file_error;
       if (!QFileInfo::exists(work.path)) {
         file_error = tr("file is gone");
-      } else {
+      } else if (!hasAudioStream(work.path)) {
         // A stream that reports no channels makes Qt build an empty ffmpeg channel
         // layout, and the plugin then crashes inside swr_init instead of erroring out.
-        const Track::AudioProperties props = Track::audioPropertiesOf(work.path);
-        if (props.channels == 0 || props.sample_rate == 0) {
-          file_error = tr("unreadable audio stream");
-        }
+        file_error = tr("unreadable audio stream");
       }
       qCDebug(mpzReplayGain) << "decoding" << work.path << "error" << file_error;
 
