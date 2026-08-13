@@ -3,13 +3,12 @@
 
 #include "replaygain/gain.h"
 #include "track.h"
+#include "replaygain/store.h"
 
 #include <QHash>
 #include <QString>
 
 namespace ReplayGain {
-  class Store;
-
   class Resolver {
   public:
     explicit Resolver(Store *store = nullptr);

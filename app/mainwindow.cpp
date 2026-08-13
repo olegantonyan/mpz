@@ -266,6 +266,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
+#ifdef ENABLE_GAPLESS
+  replay_gain->cancelScan();
+#endif
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
@@ -275,6 +278,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
   QMainWindow::closeEvent(event);
   qApp->closeAllWindows();
+  qApp->quit();
 }
 
 void MainWindow::requestQuit() {
@@ -608,12 +612,6 @@ void MainWindow::setupStatusBar() {
   ui->statusbar->addWidget(new QWidget(this), 1);
 #endif
 
-#ifdef ENABLE_GAPLESS
-  status_label_replaygain = new QLabel(this);
-  status_label_replaygain->hide();
-  ui->statusbar->addWidget(status_label_replaygain, 0);
-#endif
-
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -854,18 +852,6 @@ void MainWindow::setupReplayGain() {
     player->refreshReplayGain();
   });
 
-  connect(replay_gain, &ReplayGain::Manager::progress, this,
-          [this](int done, int total, const QString &path) {
-            Q_UNUSED(path)
-            if (total <= 0) {
-              status_label_replaygain->hide();
-              return;
-            }
-            status_label_replaygain->setText(tr("ReplayGain: %1 / %2").arg(done).arg(total));
-            status_label_replaygain->show();
-          });
-  connect(replay_gain, &ReplayGain::Manager::scanFinished, status_label_replaygain, &QWidget::hide);
-
   connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
   connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
 }
@@ -887,8 +873,6 @@ void MainWindow::openReplayGainDialog() {
     rg_dialog->setAttribute(Qt::WA_DeleteOnClose);
     rg_dialog->setModal(false);
     rg_dialog->setWindowIcon(windowIcon());
-    connect(rg_dialog, &ReplayGainUi::ReplayGainDialog::scanLibraryRequested,
-            this, &MainWindow::scanLibraryForReplayGain);
   }
   rg_dialog->setPlaylistTracks(playlist->currentTracks());
   rg_dialog->setSelectedTracks(playlist->selectedTracks());
@@ -896,27 +880,6 @@ void MainWindow::openReplayGainDialog() {
   rg_dialog->show();
   rg_dialog->raise();
   rg_dialog->activateWindow();
-}
-
-void MainWindow::scanLibraryForReplayGain(bool force) {
-  const QStringList roots = local_conf.libraryPaths();
-  spinner->show();
-  auto *watcher = new QFutureWatcher<QVector<Track>>(this);
-  connect(watcher, &QFutureWatcher<QVector<Track>>::finished, this, [this, watcher, force]() {
-    spinner->hide();
-    replay_gain->scanTracks(watcher->result(), force);
-    watcher->deleteLater();
-  });
-  watcher->setFuture(QtConcurrent::run([roots]() {
-    QVector<Track> all;
-    for (const auto &root : roots) {
-      if (root.startsWith(QLatin1String("mpd://"))) {
-        continue;
-      }
-      all += Playlist::Loader(QDir(root)).tracks();
-    }
-    return all;
-  }));
 }
 
 void MainWindow::applyEqForDevice(const QByteArray &device_id) {

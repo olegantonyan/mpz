@@ -4,8 +4,7 @@
 #include "playback/playbackcontroller.h"
 
 #include <QObject>
-
-class QWidget;
+#include <QWidget>
 
 // Windows SMTC integration (analogue of MacMediaControls / Mpris). WinRT is kept
 // in the .cpp via Impl so its headers don't leak into the rest of the tree.

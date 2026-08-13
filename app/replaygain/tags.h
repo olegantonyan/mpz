@@ -4,10 +4,7 @@
 #include "replaygain/gain.h"
 
 #include <QString>
-
-namespace TagLib {
-  class PropertyMap;
-}
+#include <tpropertymap.h>
 
 namespace ReplayGain {
   enum class TagResult { Ok, Unsupported, OpenFailed, SaveFailed };

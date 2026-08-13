@@ -2,8 +2,7 @@
 #define LOADINGSPINNER_H
 
 #include <QWidget>
-
-class QTimer;
+#include <QTimer>
 
 class LoadingSpinner : public QWidget {
   Q_OBJECT

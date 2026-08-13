@@ -8,8 +8,7 @@
 #include <QObject>
 #include <QToolButton>
 #include <QList>
-
-class QAction;
+#include <QAction>
 
 class MainMenu : public QObject {
   Q_OBJECT

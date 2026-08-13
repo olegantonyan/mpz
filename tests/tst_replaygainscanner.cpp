@@ -14,6 +14,7 @@ namespace {
   const int kRate = 44100;
   const int kChannels = 2;
   const int kScanTimeoutMs = 30000;
+  const int kCancelDeadlineMs = 2000;
 
   bool writeWav(const QString &path, int frames, const std::function<double(int)> &amplitude) {
     QFile f(path);
@@ -74,6 +75,7 @@ private slots:
   void emptyRequestFinishesImmediately();
   void progressReachesTotal();
   void cancelStopsTheScan();
+  void cancelMidDecodeStopsPromptly();
 
 private:
   QString sine(const QString &name, double amplitude, int seconds = 2);
@@ -274,6 +276,33 @@ void TestReplayGainScanner::cancelStopsTheScan() {
   QVERIFY(done.wait(kScanTimeoutMs));
 
   QCOMPARE(done.size(), 1);
+  QVERIFY(done.first().at(2).toBool());
+  QVERIFY(!scanner.isScanning());
+}
+
+void TestReplayGainScanner::cancelMidDecodeStopsPromptly() {
+  QVector<ReplayGain::FileWork> files;
+  for (int i = 0; i < 8; i++) {
+    const QString path = sine(QString("long%1.wav").arg(i), 0.5, 30);
+    QVERIFY(!path.isEmpty());
+    files.append(wholeFile(path));
+  }
+
+  ReplayGain::Scanner scanner;
+  QSignalSpy done(&scanner, &ReplayGain::Scanner::finished);
+  scanner.start({jobFor(dir->path(), files, false)}, 1);
+
+  QTest::qWait(400);
+  if (!done.isEmpty()) {
+    QSKIP("the scan outran the cancel on this machine");
+  }
+
+  QElapsedTimer elapsed;
+  elapsed.start();
+  scanner.cancel();
+  QVERIFY(done.wait(kCancelDeadlineMs));
+  QVERIFY2(elapsed.elapsed() < kCancelDeadlineMs,
+           qPrintable(QString("cancel took %1 ms").arg(elapsed.elapsed())));
   QVERIFY(done.first().at(2).toBool());
   QVERIFY(!scanner.isScanning());
 }

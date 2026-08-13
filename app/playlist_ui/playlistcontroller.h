@@ -10,6 +10,7 @@
 #include "playlist_ui/playlistcontextmenu.h"
 #include "busyspinner.h"
 #include "playlist_ui/columnsconfig.h"
+#include "tracksmimedata.h"
 
 #include <QObject>
 #include <QTableView>
@@ -17,9 +18,7 @@
 #include <QEvent>
 #include <QLineEdit>
 #include <QHash>
-
-class QDropEvent;
-class TracksMimeData;
+#include <QDropEvent>
 
 namespace PlaylistUi {
   class Controller : public QObject {

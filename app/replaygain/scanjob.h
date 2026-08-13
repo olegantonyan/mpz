@@ -7,6 +7,9 @@
 #include <QString>
 #include <QVector>
 
+#include <atomic>
+#include <memory>
+
 namespace ReplayGain {
   struct Slice {
     quint64 begin_ms = 0;
@@ -24,6 +27,9 @@ namespace ReplayGain {
     QVector<FileWork> files;
     bool want_album = false;
     bool write_tags = false;
+    std::shared_ptr<std::atomic<bool>> abort;
+
+    bool aborted() const { return abort != nullptr && abort->load(); }
 
     int sliceCount() const {
       int n = 0;

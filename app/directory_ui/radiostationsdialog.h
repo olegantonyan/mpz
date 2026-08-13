@@ -4,9 +4,8 @@
 #include "radio/station.h"
 
 #include <QDialog>
+#include <QTableWidget>
 #include <QVector>
-
-class QTableWidget;
 
 namespace DirectoryUi {
   class RadioStationsDialog : public QDialog {

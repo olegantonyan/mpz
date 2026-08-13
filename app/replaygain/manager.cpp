@@ -2,12 +2,15 @@
 
 #include "config/global.h"
 #include "config/storage.h"
+#include "playlist/cueparser.h"
 #include "playlist/loader.h"
 
 #include <QDir>
+#include <QDirIterator>
 #include <QFileInfo>
 #include <QHash>
 #include <QSet>
+#include <QTimer>
 
 namespace ReplayGain {
   namespace {
@@ -45,7 +48,15 @@ namespace ReplayGain {
     load();
 
     connect(&scanner, &Scanner::sliceAnalyzed, this, &Manager::onSliceAnalyzed);
-    connect(&scanner, &Scanner::progress, this, &Manager::progress);
+    connect(&scanner, &Scanner::progress, this,
+            [this](int done, int total, const QString &path) {
+              progress_done = done;
+              progress_total = total;
+              if (!path.isEmpty()) {
+                progress_path = path;
+              }
+              emit progress(done, total, path);
+            });
     connect(&scanner, &Scanner::finished, this, [this](int analysed, int failed, bool cancelled) {
       if (dirty) {
         dirty = false;
@@ -94,11 +105,84 @@ namespace ReplayGain {
   }
 
   void Manager::cancelScan() {
+    walking = false;
+    walk_folders.clear();
     scanner.cancel();
   }
 
   void Manager::scanTracks(const QVector<Track> &tracks, bool force) {
     scanner.start(planScan(tracks, force));
+  }
+
+  void Manager::scanLibrary(const QStringList &roots, bool force) {
+    if (isScanning()) {
+      return;
+    }
+
+    walk_folders.clear();
+    for (const auto &root : roots) {
+      if (!root.startsWith(QLatin1String("mpd://"))) {
+        walk_folders << root;
+      }
+    }
+    walk_force = force;
+    walking = true;
+    progress_done = 0;
+    progress_total = 0;
+    progress_path.clear();
+
+    scanner.open();
+    QTimer::singleShot(0, this, &Manager::walkNextFolder);
+  }
+
+  void Manager::walkNextFolder() {
+    if (!walking) {
+      return;
+    }
+    if (walk_folders.isEmpty()) {
+      walking = false;
+      scanner.producerFinished();
+      return;
+    }
+
+    const QString folder = walk_folders.takeFirst();
+    QDirIterator subdirs(folder, QDir::Dirs | QDir::NoDotAndDotDot);
+    while (subdirs.hasNext()) {
+      walk_folders << subdirs.next();
+    }
+
+    const QVector<Track> tracks = tracksInFolder(folder);
+    if (!tracks.isEmpty()) {
+      scanner.enqueue(planScan(tracks, walk_force));
+    }
+    QTimer::singleShot(0, this, &Manager::walkNextFolder);
+  }
+
+  QVector<Track> Manager::tracksInFolder(const QString &folder) {
+    const QFileInfoList entries = QDir(folder).entryInfoList(QDir::Files);
+
+    QVector<Track> tracks;
+    QSet<QString> in_cue;
+    for (const auto &entry : entries) {
+      if (entry.suffix().toLower() != QLatin1String("cue")) {
+        continue;
+      }
+      for (const auto &track : Playlist::CueParser(entry.absoluteFilePath()).tracks_list()) {
+        in_cue.insert(QFileInfo(track.path()).canonicalFilePath());
+        tracks << track;
+      }
+    }
+
+    for (const auto &entry : entries) {
+      const QString suffix = entry.suffix().toLower();
+      if (suffix == QLatin1String("cue") ||
+          !Playlist::Loader::supportedFileFormats().contains(suffix) ||
+          in_cue.contains(entry.canonicalFilePath())) {
+        continue;
+      }
+      tracks << Track(entry.absoluteFilePath());
+    }
+    return tracks;
   }
 
   QVector<Job> Manager::planScan(const QVector<Track> &tracks, bool force) const {

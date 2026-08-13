@@ -67,7 +67,7 @@ namespace ReplayGainUi {
 
     connect(&rg, &ReplayGain::Manager::progress, this,
             [this](int done, int total, const QString &path) {
-              progress_->setMaximum(total);
+              progress_->setRange(0, total);
               progress_->setValue(done);
               progress_->setVisible(total > 0);
               progress_label_->setText(path.isEmpty() ? QString() : QFileInfo(path).fileName());
@@ -78,7 +78,14 @@ namespace ReplayGainUi {
     loadSettings();
     updateScanControls();
     updateStoreLabel();
-    tabs->setCurrentIndex(rg.isScanning() ? 1 : 0);
+
+    if (rg.isScanning()) {
+      tabs->setCurrentIndex(1);
+      progress_->setRange(0, rg.progressTotal());
+      progress_->setValue(rg.progressDone());
+      progress_->setVisible(true);
+      progress_label_->setText(QFileInfo(rg.progressPath()).fileName());
+    }
   }
 
   QWidget *ReplayGainDialog::buildPlaybackTab() {
@@ -188,9 +195,13 @@ namespace ReplayGainUi {
         return;
       }
       results_->setRowCount(0);
+      progress_->setRange(0, 0);
+      progress_->setVisible(true);
+      progress_label_->clear();
+
       const Scope scope = currentScope();
       if (scope == Scope::Library) {
-        emit scanLibraryRequested(force_check_->isChecked());
+        rg.scanLibrary(library_paths, force_check_->isChecked());
       } else {
         rg.scanTracks(scope == Scope::Playlist ? playlist_tracks : selected_tracks,
                       force_check_->isChecked());

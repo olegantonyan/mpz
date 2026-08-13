@@ -11,9 +11,9 @@
 #include <QObject>
 #include <QVector>
 #include <QPair>
+#include <QAction>
 
 class MainWindow;
-class QAction;
 
 // Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for
 // the given window. All items live here rather than in the in-window hamburger

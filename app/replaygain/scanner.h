@@ -2,19 +2,15 @@
 #define REPLAYGAIN_SCANNER_H
 
 #include "replaygain/scanjob.h"
+#include "replaygain/jobrunner.h"
 
 #include <QElapsedTimer>
 #include <QObject>
 #include <QQueue>
+#include <QThread>
 #include <QVector>
 
-QT_BEGIN_NAMESPACE
-class QThread;
-QT_END_NAMESPACE
-
 namespace ReplayGain {
-  class JobRunner;
-
   class Scanner : public QObject {
     Q_OBJECT
   public:
@@ -23,9 +19,16 @@ namespace ReplayGain {
 
     static int defaultWorkerCount();
 
-    bool isScanning() const { return in_flight > 0 || !pending.isEmpty(); }
+    bool isScanning() const { return in_flight > 0 || !pending.isEmpty() || !producer_done; }
 
     void start(const QVector<Job> &jobs, int worker_count = 0);
+
+    // Incremental form: open(), then enqueue() as jobs are discovered, then
+    // producerFinished(). finished() is held back until the producer is done.
+    void open(int worker_count = 0);
+    void enqueue(const QVector<Job> &jobs);
+    void producerFinished();
+
     void cancel();
 
   signals:
@@ -45,6 +48,7 @@ namespace ReplayGain {
 
     QQueue<Job> pending;
     QElapsedTimer throttle;
+    std::shared_ptr<std::atomic<bool>> abort;
 
     int epoch = 0;
     int in_flight = 0;
@@ -52,7 +56,9 @@ namespace ReplayGain {
     int done_slices = 0;
     int analysed = 0;
     int failed = 0;
+    int workers_wanted = 0;
     bool cancelling = false;
+    bool producer_done = true;
   };
 }
 

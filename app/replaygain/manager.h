@@ -5,13 +5,11 @@
 #include "replaygain/scanner.h"
 #include "replaygain/store.h"
 #include "track.h"
+#include "config/global.h"
 
 #include <QObject>
+#include <QStringList>
 #include <QVector>
-
-namespace Config {
-  class Global;
-}
 
 namespace ReplayGain {
   class Manager : public QObject {
@@ -28,8 +26,12 @@ namespace ReplayGain {
     double gainDbFor(const Track &track) { return resolver_.gainDbFor(track); }
 
     bool isScanning() const { return scanner.isScanning(); }
+    int progressDone() const { return progress_done; }
+    int progressTotal() const { return progress_total; }
+    QString progressPath() const { return progress_path; }
     QVector<Job> planScan(const QVector<Track> &tracks, bool force) const;
     void scanTracks(const QVector<Track> &tracks, bool force);
+    void scanLibrary(const QStringList &roots, bool force);
     void cancelScan();
 
     static QString storeDirectory();
@@ -49,6 +51,8 @@ namespace ReplayGain {
     static bool coversWholeFile(const FileWork &work);
     bool albumAlreadyAnalysed(const Job &job) const;
     void dropAnalysedSlices(Job &job) const;
+    void walkNextFolder();
+    static QVector<Track> tracksInFolder(const QString &folder);
 
     Config::Global &global_conf;
     Store store_;
@@ -56,6 +60,12 @@ namespace ReplayGain {
     Scanner scanner;
     Settings settings_;
     bool dirty = false;
+    int progress_done = 0;
+    int progress_total = 0;
+    QString progress_path;
+    QStringList walk_folders;
+    bool walk_force = false;
+    bool walking = false;
   };
 }
 

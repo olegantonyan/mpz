@@ -17,8 +17,7 @@
 #include <QModelIndex>
 #include <memory>
 #include <QLineEdit>
-
-class QDropEvent;
+#include <QDropEvent>
 
 namespace PlaylistsUi {
   class Controller : public QObject {

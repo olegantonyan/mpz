@@ -3,12 +3,11 @@
 
 #include <QByteArray>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
 #include <QTimer>
 #include <QUrl>
-
-class QNetworkReply;
 
 namespace Radio {
   // Reads title, display-title, metadata.x_icy_title, then the last playlist.trackList

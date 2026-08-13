@@ -51,34 +51,59 @@ namespace ReplayGain {
   }
 
   void Scanner::start(const QVector<Job> &jobs, int worker_count) {
+    open(worker_count);
+    enqueue(jobs);
+    producerFinished();
+  }
+
+  void Scanner::open(int worker_count) {
     cancel();
 
     epoch++;
     cancelling = false;
+    producer_done = false;
+    workers_wanted = worker_count > 0 ? worker_count : defaultWorkerCount();
+    abort = std::make_shared<std::atomic<bool>>(false);
     total_slices = 0;
     done_slices = 0;
     analysed = 0;
     failed = 0;
     throttle.invalidate();
+  }
+
+  void Scanner::enqueue(const QVector<Job> &jobs) {
+    if (producer_done) {
+      return;
+    }
 
     for (Job job : jobs) {
       if (job.files.isEmpty()) {
         continue;
       }
       job.epoch = epoch;
+      job.abort = abort;
       total_slices += job.sliceCount();
       pending.enqueue(job);
     }
 
     if (pending.isEmpty()) {
-      emit progress(0, 0, QString());
-      emit finished(0, 0, false);
       return;
     }
-
-    ensureWorkers(qMin(worker_count > 0 ? worker_count : defaultWorkerCount(), pending.size()));
+    ensureWorkers(qMin(workers_wanted, pending.size()));
     emitProgress(QString(), true);
     dispatch();
+  }
+
+  void Scanner::producerFinished() {
+    if (producer_done) {
+      return;
+    }
+    producer_done = true;
+    if (in_flight == 0 && pending.isEmpty()) {
+      emitProgress(QString(), true);
+      emit finished(analysed, failed, cancelling);
+      cancelling = false;
+    }
   }
 
   void Scanner::dispatch() {
@@ -115,7 +140,7 @@ namespace ReplayGain {
       dispatch();
     }
 
-    if (in_flight == 0 && pending.isEmpty()) {
+    if (in_flight == 0 && pending.isEmpty() && producer_done) {
       emitProgress(QString(), true);
       emit finished(analysed, failed, cancelling);
       cancelling = false;
@@ -137,8 +162,10 @@ namespace ReplayGain {
     cancelling = true;
     epoch++;
     pending.clear();
-    for (auto *runner : runners) {
-      QMetaObject::invokeMethod(runner, "cancel", Qt::QueuedConnection);
+    if (abort) {
+      abort->store(true);
     }
+    producer_done = false;
+    producerFinished();
   }
 }

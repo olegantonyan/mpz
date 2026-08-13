@@ -4,8 +4,7 @@
 #include "lyrics/provider.h"
 
 #include <QString>
-
-class QNetworkReply;
+#include <QNetworkReply>
 
 namespace Lyrics {
   // NetEase Cloud Music (music.163.com). Unofficial API, no key. Search has

@@ -16,6 +16,7 @@
 namespace ReplayGain {
   namespace {
     const int kStallTimeoutMs = 30000;
+    const int kAbortPollMs = 25;
 
     struct SliceState {
       qint64 start_frame = 0;
@@ -75,16 +76,7 @@ namespace ReplayGain {
   JobRunner::JobRunner(QObject *parent) : QObject(parent) {
   }
 
-  void JobRunner::cancel() {
-    cancelled = true;
-    if (active_loop) {
-      active_loop->quit();
-    }
-  }
-
   void JobRunner::run(const ReplayGain::Job &job) {
-    cancelled = false;
-
     JobResult result;
     result.epoch = job.epoch;
     result.folder = job.folder;
@@ -96,7 +88,7 @@ namespace ReplayGain {
       const FileWork &work = job.files.at(fi);
       std::vector<SliceState> &states = per_file[fi];
 
-      if (cancelled) {
+      if (job.aborted()) {
         break;
       }
       emit fileStarted(job.epoch, work.path);
@@ -110,13 +102,20 @@ namespace ReplayGain {
         QAudioDecoder decoder;
         QEventLoop loop;
         QTimer stall;
+        QTimer abort_poll;
         QAudioFormat first_format;
         bool format_known = false;
         qint64 frames_seen = 0;
 
-        active_loop = &loop;
         stall.setSingleShot(true);
         stall.setInterval(kStallTimeoutMs);
+
+        abort_poll.setInterval(kAbortPollMs);
+        connect(&abort_poll, &QTimer::timeout, &loop, [&]() {
+          if (job.aborted()) {
+            loop.quit();
+          }
+        });
 
         connect(&stall, &QTimer::timeout, &loop, [&]() {
           file_error = tr("decoder stalled");
@@ -126,7 +125,7 @@ namespace ReplayGain {
         connect(&decoder, &QAudioDecoder::bufferReady, &loop, [&]() {
           stall.start();
           while (decoder.bufferAvailable()) {
-            if (cancelled) {
+            if (job.aborted()) {
               loop.quit();
               return;
             }
@@ -171,9 +170,11 @@ namespace ReplayGain {
         decoder.setSource(QUrl::fromLocalFile(work.path));
         decoder.start();
         stall.start();
-        loop.exec();
+        abort_poll.start();
+        if (!job.aborted()) {
+          loop.exec();
+        }
         decoder.stop();
-        active_loop = nullptr;
 
         if (file_error.isEmpty() && !format_known) {
           file_error = tr("nothing decoded");
@@ -212,7 +213,7 @@ namespace ReplayGain {
       }
     }
 
-    if (cancelled) {
+    if (job.aborted()) {
       emit jobFinished(result);
       return;
     }
@@ -248,6 +249,9 @@ namespace ReplayGain {
 
     if (job.write_tags) {
       for (const auto &work : job.files) {
+        if (job.aborted()) {
+          break;
+        }
         const bool sliced = work.slices.size() > 1;
         for (auto &r : result.slices) {
           if (r.path != work.path || !r.ok) {

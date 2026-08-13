@@ -6,9 +6,8 @@
 #include "lyrics/providerchain.h"
 
 #include <QWidget>
-
-class QLabel;
-class QPlainTextEdit;
+#include <QLabel>
+#include <QPlainTextEdit>
 
 namespace Lyrics {
   class Widget : public QWidget {

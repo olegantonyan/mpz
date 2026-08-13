@@ -5,12 +5,6 @@
 
 #include <QObject>
 
-#include <atomic>
-
-QT_BEGIN_NAMESPACE
-class QEventLoop;
-QT_END_NAMESPACE
-
 namespace ReplayGain {
   class JobRunner : public QObject {
     Q_OBJECT
@@ -19,15 +13,10 @@ namespace ReplayGain {
 
   public slots:
     void run(const ReplayGain::Job &job);
-    void cancel();
 
   signals:
     void fileStarted(int epoch, const QString &path);
     void jobFinished(const ReplayGain::JobResult &result);
-
-  private:
-    std::atomic<bool> cancelled{false};
-    QEventLoop *active_loop = nullptr;
   };
 }
 

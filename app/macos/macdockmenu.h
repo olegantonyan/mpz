@@ -4,9 +4,8 @@
 #include "playback/playbackcontroller.h"
 
 #include <QObject>
-
-class QMenu;
-class QAction;
+#include <QMenu>
+#include <QAction>
 
 class MacDockMenu : public QObject {
   Q_OBJECT

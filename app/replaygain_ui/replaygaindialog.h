@@ -3,24 +3,18 @@
 
 #include "replaygain/manager.h"
 #include "track.h"
+#include "config/global.h"
 
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QTableWidget>
 #include <QVector>
-
-QT_BEGIN_NAMESPACE
-class QCheckBox;
-class QComboBox;
-class QDoubleSpinBox;
-class QLabel;
-class QProgressBar;
-class QPushButton;
-class QRadioButton;
-class QTableWidget;
-QT_END_NAMESPACE
-
-namespace Config {
-  class Global;
-}
 
 namespace ReplayGainUi {
   class ReplayGainDialog : public QDialog {
@@ -32,9 +26,6 @@ namespace ReplayGainUi {
     void setPlaylistTracks(const QVector<Track> &tracks);
     void setSelectedTracks(const QVector<Track> &tracks);
     void setLibraryPaths(const QStringList &paths);
-
-  signals:
-    void scanLibraryRequested(bool force);
 
   protected:
     void closeEvent(QCloseEvent *event) override;
