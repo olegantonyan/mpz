@@ -23,8 +23,8 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - 3-column UI to quickly create playlists from folders and switch between them
 - Native C++/Qt UI - fast and responsive
 - Drag-n-drop files and folders from file manager
-- Gapless playback (Qt6 only, version 2.1.0+)
-- Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others (only when gapless mode enabled, version 2.1.0+)
+- Gapless playback
+- Equalizer with 10-band and full parametric modes, supports presets from AutoEq, SquigLink and others
 - Internet radio in `m3u` and `pls` formats, as well as built-in radio library
 - CUE sheets, with gapless playback of single-file albums
 - Tag editor
@@ -37,14 +37,14 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Update check on Windows, macOS, and Linux AppImage
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation)
-- [mpd](https://musicpd.org) client mode (version 2.0.0+)
+- [mpd](https://musicpd.org) client mode
 
 ## Supported formats
 
-- Audio: mp3, flac, ogg/oga, opus, spx, m4a/m4b/mp4, aac, wav, aiff/aif/aifc, wma, asf, ape, wv, mpc, tta, mka, dsf, dff, shn, and CUE sheets;
-- Playlists and radio: m3u, m3u8, pls.
+- Audio: mp3, flac, ogg/oga, opus, spx, m4a/m4b/mp4, aac, wav, aiff/aif/aifc, wma, asf, ape, wv, mpc, tta, mka, dsf, dff, shn, and CUE sheets
+- Playlists and radio: m3u, m3u8, pls
 
-Decoding uses your OS codecs (see [Limitations](#limitations)), so exact format support depends on what is installed.
+Decoding uses your OS codecs, so exact format support depends on what is installed.
 
 ## Installation
 
