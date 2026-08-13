@@ -20,9 +20,9 @@
 #include <QMediaDevices>
 #include <QObject>
 #include <QTimer>
+#include <QUrl>
 
 #include <functional>
-#include <QUrl>
 
 namespace Playback::Gapless {
   class Engine : public QObject {

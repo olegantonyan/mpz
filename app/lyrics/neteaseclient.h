@@ -3,6 +3,7 @@
 
 #include "lyrics/provider.h"
 
+#include <QNetworkReply>
 #include <QString>
 #include <QNetworkReply>
 

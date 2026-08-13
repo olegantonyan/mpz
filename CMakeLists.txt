@@ -456,6 +456,13 @@ else()
   # Upstream attaches no include dirs to the target at all, so consumers see nothing.
   target_include_directories(ebur128 INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128>)
+
+  # Without SSE2 (arm64) ebur128.c falls into a branch that uses #warning. MSVC only
+  # accepts that directive in C23 mode, and fails the build with C1021 otherwise.
+  if (MSVC)
+    target_compile_options(ebur128 PRIVATE /std:clatest)
+  endif()
+
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
 endif()
 # ENDOF LIBEBUR128

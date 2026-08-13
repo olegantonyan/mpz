@@ -2,6 +2,7 @@
 #define COVERART_ONLINE_DEEZERCLIENT_H
 
 #include "coverart/online/provider.h"
+
 #include <QNetworkReply>
 
 namespace CoverArt {

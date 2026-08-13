@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QTableView>
 #include <memory>
+#include <QDropEvent>
 #include <QEvent>
 #include <QLineEdit>
 #include <QHash>

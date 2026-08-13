@@ -5,6 +5,8 @@
 #include "config/global.h"
 #include "lyrics/providerchain.h"
 
+#include <QLabel>
+#include <QPlainTextEdit>
 #include <QWidget>
 #include <QLabel>
 #include <QPlainTextEdit>

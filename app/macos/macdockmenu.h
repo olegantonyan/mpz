@@ -3,6 +3,8 @@
 
 #include "playback/playbackcontroller.h"
 
+#include <QAction>
+#include <QMenu>
 #include <QObject>
 #include <QMenu>
 #include <QAction>

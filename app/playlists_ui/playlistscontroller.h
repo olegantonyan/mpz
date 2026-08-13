@@ -14,6 +14,7 @@
 #include <QString>
 #include <QPoint>
 #include <QDir>
+#include <QDropEvent>
 #include <QModelIndex>
 #include <memory>
 #include <QLineEdit>

@@ -5,6 +5,7 @@
 #include "config/local.h"
 #include "modusoperandi.h"
 
+#include <QAction>
 #include <QObject>
 #include <QToolButton>
 #include <QList>

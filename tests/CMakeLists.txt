@@ -295,9 +295,13 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/replaygain/scanner.cpp
     ${APP}/replaygain/jobrunner.cpp
     ${APP}/replaygain/analyzer.cpp
-    ${APP}/replaygain/tags.cpp)
+    ${APP}/replaygain/tags.cpp
+    ${APP}/track.cpp
+    ${APP}/rnjesus.cpp
+    ${APP}/streammetadata.cpp)
   target_link_libraries(tst_replaygainscanner PRIVATE
-    Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui ebur128 tag)
+    Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets
+    ebur128 tag)
 
   mpz_add_test(tst_replaygainmanager tst_replaygainmanager.cpp
     ${APP}/replaygain/manager.cpp

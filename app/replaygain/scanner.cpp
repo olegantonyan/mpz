@@ -6,7 +6,7 @@
 
 namespace ReplayGain {
   namespace {
-    const int kMaxWorkers = 4;
+    const int kMaxWorkers = 2;
     const int kProgressIntervalMs = 100;
   }
 
@@ -26,8 +26,8 @@ namespace ReplayGain {
   }
 
   int Scanner::defaultWorkerCount() {
-    // A starved GUI thread underruns the engine's sink, so leave a core free.
-    return qBound(1, QThread::idealThreadCount() - 1, kMaxWorkers);
+    // Analysis is a background chore, so it gets a quarter of the machine at most.
+    return qBound(1, QThread::idealThreadCount() / 4, kMaxWorkers);
   }
 
   void Scanner::ensureWorkers(int count) {
@@ -42,7 +42,7 @@ namespace ReplayGain {
           emitProgress(path, false);
         }
       });
-      thread->start();
+      thread->start(QThread::LowestPriority);
 
       threads.append(thread);
       runners.append(runner);

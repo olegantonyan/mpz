@@ -2,10 +2,15 @@
 
 #include "replaygain/analyzer.h"
 #include "replaygain/tags.h"
+#include "track.h"
+
+#include <QLoggingCategory>
 
 #include <QAudioBuffer>
 #include <QAudioDecoder>
+#include <QElapsedTimer>
 #include <QEventLoop>
+#include <QThread>
 #include <QFileInfo>
 #include <QTimer>
 #include <QUrl>
@@ -15,8 +20,11 @@
 
 namespace ReplayGain {
   namespace {
+    Q_LOGGING_CATEGORY(mpzReplayGain, "mpz.replaygain", QtWarningMsg)
+
     const int kStallTimeoutMs = 30000;
     const int kAbortPollMs = 25;
+    const int kBusyPercent = 50;
 
     struct SliceState {
       qint64 start_frame = 0;
@@ -96,7 +104,15 @@ namespace ReplayGain {
       QString file_error;
       if (!QFileInfo::exists(work.path)) {
         file_error = tr("file is gone");
+      } else {
+        // A stream that reports no channels makes Qt build an empty ffmpeg channel
+        // layout, and the plugin then crashes inside swr_init instead of erroring out.
+        const Track::AudioProperties props = Track::audioPropertiesOf(work.path);
+        if (props.channels == 0 || props.sample_rate == 0) {
+          file_error = tr("unreadable audio stream");
+        }
       }
+      qCDebug(mpzReplayGain) << "decoding" << work.path << "error" << file_error;
 
       if (file_error.isEmpty()) {
         QAudioDecoder decoder;
@@ -124,6 +140,8 @@ namespace ReplayGain {
 
         connect(&decoder, &QAudioDecoder::bufferReady, &loop, [&]() {
           stall.start();
+          QElapsedTimer busy;
+          busy.start();
           while (decoder.bufferAvailable()) {
             if (job.aborted()) {
               loop.quit();
@@ -159,6 +177,10 @@ namespace ReplayGain {
             feedBuffer(buffer, frames_seen, states);
             frames_seen += buffer.frameCount();
           }
+          // Yield back as much time as the batch took, so a scan cannot keep a core
+          // busy end to end. Sleeping here also back-pressures the decoder.
+          QThread::msleep(static_cast<unsigned long>(busy.elapsed() * (100 - kBusyPercent) /
+                                                     kBusyPercent));
         });
 
         connect(&decoder, &QAudioDecoder::finished, &loop, &QEventLoop::quit);
