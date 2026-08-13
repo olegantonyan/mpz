@@ -4,9 +4,8 @@
 #include "radio/station.h"
 
 #include <QDialog>
-
-class QLineEdit;
-class QSpinBox;
+#include <QLineEdit>
+#include <QSpinBox>
 
 namespace DirectoryUi {
   class RadioStationDialog : public QDialog {

@@ -5,8 +5,7 @@
 
 #include <QObject>
 #include <QAbstractNativeEventFilter>
-
-class QWidget;
+#include <QWidget>
 
 class WindowsTaskbar : public QObject, public QAbstractNativeEventFilter {
   Q_OBJECT

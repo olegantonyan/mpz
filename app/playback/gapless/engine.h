@@ -13,17 +13,14 @@
 
 #include <QAudioDevice>
 #include <QAudioFormat>
+#include <QAudioSink>
 #include <QByteArray>
 #include <QElapsedTimer>
+#include <QIODevice>
 #include <QMediaDevices>
 #include <QObject>
 #include <QTimer>
 #include <QUrl>
-
-QT_BEGIN_NAMESPACE
-class QAudioSink;
-class QIODevice;
-QT_END_NAMESPACE
 
 namespace Playback::Gapless {
   class Engine : public QObject {

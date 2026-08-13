@@ -8,12 +8,13 @@
 #include "shortcuts.h"
 #include "modusoperandi.h"
 
+#include <QAction>
 #include <QObject>
 #include <QVector>
 #include <QPair>
 
+// Cyclic: mainwindow.h includes this header.
 class MainWindow;
-class QAction;
 
 // Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for
 // the given window. All items live here rather than in the in-window hamburger

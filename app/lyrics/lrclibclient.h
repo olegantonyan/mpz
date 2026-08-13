@@ -3,10 +3,9 @@
 
 #include "lyrics/provider.h"
 
+#include <QNetworkReply>
 #include <QString>
 #include <QVector>
-
-class QNetworkReply;
 
 namespace Lyrics {
   // lrclib.net client. Runs a cascade of progressively looser queries and
