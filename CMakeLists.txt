@@ -459,8 +459,9 @@ else()
 
   # Without SSE2 (arm64) ebur128.c falls into a branch that uses #warning. MSVC only
   # accepts that directive in C23 mode, and fails the build with C1021 otherwise.
+  # C only: the target also builds an automoc C++ unit, which is already at c++17.
   if (MSVC)
-    target_compile_options(ebur128 PRIVATE /std:clatest)
+    target_compile_options(ebur128 PRIVATE $<$<COMPILE_LANGUAGE:C>:/std:clatest>)
   endif()
 
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
