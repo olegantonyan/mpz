@@ -457,11 +457,20 @@ else()
   target_include_directories(ebur128 INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128>)
 
-  # Without SSE2 (arm64) ebur128.c falls into a branch that uses #warning. MSVC only
-  # accepts that directive in C23 mode, and fails the build with C1021 otherwise.
-  # C only: the target also builds an automoc C++ unit, which is already at c++17.
+  # It is a C library, and the automoc unit mpz's global AUTOMOC adds to it only drags
+  # C++ flags into a target that has no Qt in it.
+  set_target_properties(ebur128 PROPERTIES AUTOMOC OFF AUTOUIC OFF)
+
+  # Without SSE2 (arm64) ebur128.c takes a branch that opens with #warning, which MSVC
+  # rejects outright (C1021). Compile a copy without that line, leaving the vendored
+  # source untouched.
   if (MSVC)
-    target_compile_options(ebur128 PRIVATE $<$<COMPILE_LANGUAGE:C>:/std:clatest>)
+    set(EBUR128_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128)
+    file(READ ${EBUR128_SOURCE_DIR}/ebur128.c EBUR128_SOURCE)
+    string(REGEX REPLACE "#warning[^\n]*" "" EBUR128_SOURCE "${EBUR128_SOURCE}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c "${EBUR128_SOURCE}")
+    set_property(TARGET ebur128 PROPERTY SOURCES ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c)
+    target_include_directories(ebur128 PRIVATE ${EBUR128_SOURCE_DIR})
   endif()
 
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
