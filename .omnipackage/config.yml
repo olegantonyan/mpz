@@ -172,9 +172,9 @@ debian_qt6: &debian_qt6
 
 pacman: &pacman
   <<: *common
-  CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON"
-  build_dependencies: [cmake, make, qt6-base, qt6-multimedia, qt6-svg, taglib, yaml-cpp, libmpdclient, cpptrace]
-  runtime_dependencies: [qt6-base, qt6-multimedia, qt6-svg, hicolor-icon-theme, taglib, yaml-cpp, libmpdclient, cpptrace, libebur128]
+  CMAKE_EXTRA_CLI: "-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON -DUSE_SYSTEM_SQLITE3=ON"
+  build_dependencies: [cmake, make, qt6-base, qt6-multimedia, qt6-svg, taglib, yaml-cpp, libmpdclient, cpptrace, libebur128, sqlite3]
+  runtime_dependencies: [qt6-base, qt6-multimedia, qt6-svg, hicolor-icon-theme, taglib, yaml-cpp, libmpdclient, cpptrace, libebur128, sqlite3]
   pacman:
     pkgbuild_template: ".omnipackage/PKGBUILD.liquid"
 
