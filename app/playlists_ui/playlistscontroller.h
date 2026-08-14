@@ -4,7 +4,7 @@
 #include "playlist/playlist.h"
 #include "config/local.h"
 #include "track.h"
-#include "busyspinner.h"
+#include "backgroundtasks.h"
 #include "playlistsproxyfiltermodel.h"
 #include "playlistscontextmenu.h"
 #include "modusoperandi.h"
@@ -25,7 +25,7 @@ namespace PlaylistsUi {
     Q_OBJECT
 
   public:
-    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent = nullptr);
+    explicit Controller(QListView *view, QLineEdit *search, Config::Local &conf, BackgroundTasks *_tasks, ModusOperandi &modus, QObject *parent = nullptr);
     std::shared_ptr<Playlist::Playlist> playlistByTrackUid(quint64 track_uid) const;
     std::shared_ptr<Playlist::Playlist> playlistByName(const QString &name) const;
     std::shared_ptr<Playlist::Playlist> currentPlaylist() const;
@@ -61,11 +61,13 @@ namespace PlaylistsUi {
   private:
     QListView *view;
     QLineEdit *search;
-    BusySpinner *spinner;
+    BackgroundTasks *tasks;
+    quint64 load_task = 0;
     ModusOperandi &modus_operandi;
     ProxyFilterModel *proxy;
     PlaylistsContextMenu *context_menu;
 
+    QString dirsLabel(const QList<QDir> &dirs) const;
     void eventFilterTableView(QEvent *event);
     void eventFilterViewport(QEvent *event);
     bool handleDnd(QEvent *event);

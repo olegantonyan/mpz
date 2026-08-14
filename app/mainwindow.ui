@@ -85,23 +85,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widgetSpinner" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Background operation running</string>
-        </property>
-       </widget>
+       <widget class="BackgroundTasksButton" name="toolButtonTasks"/>
       </item>
       <item>
        <widget class="QToolButton" name="sortButton">
@@ -285,6 +269,11 @@
    <class>Playback::Seekbar</class>
    <extends>QProgressBar</extends>
    <header>playback/seekbar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BackgroundTasksButton</class>
+   <extends>QToolButton</extends>
+   <header>backgroundtasksbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

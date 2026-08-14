@@ -55,7 +55,8 @@ set(PROJECT_SOURCES
   app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
   app/about_ui/area51dialog.cpp
-  app/busyspinner.cpp
+  app/backgroundtasks.cpp
+  app/backgroundtasksbutton.cpp
   app/loadingspinner.cpp
   app/config/global.cpp
   app/config/local.cpp

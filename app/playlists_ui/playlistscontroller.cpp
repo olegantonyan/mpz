@@ -7,6 +7,7 @@
 #include "icons.h"
 
 #include <QDebug>
+#include <QFuture>
 #include <QMenu>
 #include <QAction>
 #include <QInputDialog>
@@ -17,16 +18,26 @@
 #include <QMimeData>
 
 namespace PlaylistsUi {
-  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BusySpinner *_spinner, ModusOperandi &modus, QObject *parent) :
+  QString Controller::dirsLabel(const QList<QDir> &dirs) const {
+    if (dirs.size() == 1) {
+      return dirs.first().dirName();
+    }
+    return tr("%n item(s)", "", dirs.size());
+  }
+
+  Controller::Controller(QListView *v, QLineEdit *s, Config::Local &conf, BackgroundTasks *_tasks, ModusOperandi &modus, QObject *parent) :
     QObject(parent),
     view(v),
     search(s),
-    spinner(_spinner),
+    tasks(_tasks),
     modus_operandi(modus) {
 
     proxy = new ProxyFilterModel(conf, modus, this);
-    spinner->show();
-    connect(proxy, &ProxyFilterModel::asyncLoadFinished, spinner, &BusySpinner::hide);
+    load_task = tasks->begin(tr("Loading playlists"));
+    connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, [this]() {
+      tasks->end(load_task);
+      load_task = 0;
+    });
     connect(proxy, &ProxyFilterModel::asyncLoadFinished, this, &Controller::load);
     connect(proxy, &ProxyFilterModel::createPlaylistAsyncFinished, this, &Controller::on_playlistLoadFinished);
     connect(proxy, &ProxyFilterModel::asyncTracksLoadFinished, this, &Controller::selected);
@@ -313,12 +324,12 @@ namespace PlaylistsUi {
   }
 
   void Controller::on_createPlaylist(const QList<QDir> &filepaths, const QString &libraryDir) {
-    proxy->activeModel()->createPlaylistAsync(filepaths, libraryDir);
-    spinner->show();
+    const QFuture<void> work = proxy->activeModel()->createPlaylistAsync(filepaths, libraryDir);
+    tasks->track(work, tr("Creating playlist: %1").arg(dirsLabel(filepaths)));
   }
 
   void Controller::on_createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name) {
-    // Synchronous: no scan to wait on, so no spinner.
+    // Synchronous: no scan to wait on, so no task.
     proxy->activeModel()->createPlaylistFromTracks(tracks, name);
   }
 
@@ -356,7 +367,6 @@ namespace PlaylistsUi {
     proxy->activeModel()->saveCurrentPlaylistIndex(index);
     emit loaded(pl);
     emit selected(pl);
-    spinner->hide();
   }
 
   void Controller::on_search(const QString &term) {
