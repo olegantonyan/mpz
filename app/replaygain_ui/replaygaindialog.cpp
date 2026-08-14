@@ -76,6 +76,11 @@ namespace ReplayGainUi {
             });
     connect(&rg, &ReplayGain::Manager::sliceAnalyzed, this, &ReplayGainDialog::appendRow);
     connect(&rg, &ReplayGain::Manager::scanFinished, this, &ReplayGainDialog::onScanFinished);
+    connect(&rg, &ReplayGain::Manager::settingsChanged, this, [this]() {
+      if (!updating_) {
+        loadSettings();
+      }
+    });
 
     loadSettings();
     updateScanControls();
@@ -270,7 +275,10 @@ namespace ReplayGainUi {
     s.preamp_db = preamp_spin_->value();
     s.fallback_db = fallback_spin_->value();
     s.prevent_clipping = clip_check_->isChecked();
+
+    updating_ = true;
     rg.setSettings(s);
+    updating_ = false;
   }
 
   ReplayGainDialog::Scope ReplayGainDialog::currentScope() const {

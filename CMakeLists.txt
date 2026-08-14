@@ -255,6 +255,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/replaygain/scanner.cpp
     app/replaygain/scanworker.cpp
     app/replaygain_ui/replaygaindialog.cpp
+    app/replaygain_ui/statusmenu.cpp
     app/dynamic_range/dr.cpp
     app/dynamic_range/logformat.cpp
     app/dynamic_range/analyzer.cpp

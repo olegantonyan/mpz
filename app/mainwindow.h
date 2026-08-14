@@ -63,6 +63,7 @@
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
   #include "replaygain_ui/replaygaindialog.h"
+  #include "replaygain_ui/statusmenu.h"
 #endif
 
 #if defined(ENABLE_UPDATE_CHECK)
@@ -133,6 +134,7 @@ private:
 #ifdef ENABLE_GAPLESS
   ReplayGain::Manager *replay_gain = nullptr;
   QLabel *status_label_replaygain = nullptr;
+  ReplayGainUi::StatusMenu *rg_status_menu = nullptr;
   Track playing_track;
 #endif
   PlaybackLogUi::Controller *playback_log = nullptr;
