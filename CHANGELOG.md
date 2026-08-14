@@ -2,7 +2,7 @@
 
 ### Added
 
-- ReplayGain that can write peaks data into tags or separate file preserving the original audio files unchanged
+- ReplayGain: read/write peaks data into tags or separate file preserving the original audio files unchanged
 
 ### Misc
 
@@ -24,7 +24,6 @@
 
 ### Added
 
-- ReplayGain: track and album loudness normalization. Scans the library, playlist or selection; stores gains in a sidecar database or in the files' tags. Existing tags from other taggers are used as-is
 - Seekbar can show the track waveform, off by default (Settings → Interface)
 - Drag folders, radio stations and tracks between the library, playlist and playlists panels
 - macOS: animated dock icon while playing, can be disabled in settings
