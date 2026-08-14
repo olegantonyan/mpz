@@ -6,7 +6,6 @@
 
 namespace ReplayGain {
   namespace {
-    const int kMaxWorkers = 2;
     const int kProgressIntervalMs = 100;
   }
 
@@ -26,14 +25,24 @@ namespace ReplayGain {
   }
 
   int Scanner::defaultWorkerCount() {
-    // Analysis is a background chore, so it gets a quarter of the machine at most.
-    return qBound(1, QThread::idealThreadCount() / 4, kMaxWorkers);
+    // Half the machine. The decoders are niced child processes, so the rest of the
+    // system keeps priority over them.
+    return qMax(1, QThread::idealThreadCount() / 2);
+  }
+
+  void Scanner::setWorker(const QString &program, const QStringList &arguments) {
+    worker_program = program;
+    worker_arguments = arguments;
+    for (auto *runner : runners) {
+      runner->setWorker(program, arguments);
+    }
   }
 
   void Scanner::ensureWorkers(int count) {
     while (threads.size() < count) {
       auto *thread = new QThread;
       auto *runner = new JobRunner;
+      runner->setWorker(worker_program, worker_arguments);
       runner->moveToThread(thread);
       connect(thread, &QThread::finished, runner, &QObject::deleteLater);
       connect(runner, &JobRunner::jobFinished, this, &Scanner::onJobFinished);

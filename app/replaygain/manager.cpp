@@ -164,6 +164,10 @@ namespace ReplayGain {
     scanner.cancel();
   }
 
+  void Manager::setScanWorker(const QString &program, const QStringList &arguments) {
+    scanner.setWorker(program, arguments);
+  }
+
   void Manager::scanTracks(const QVector<Track> &tracks, bool force) {
     walking = false;
     walk_folders.clear();
@@ -264,7 +268,11 @@ namespace ReplayGain {
       if (track.isStream() || track.isMpd() || track.path().isEmpty()) {
         continue;
       }
-      targets.append({track.path(), QFileInfo(track.path()), track.begin(),
+      const QFileInfo info(track.path());
+      if (!isAudioFile(info)) {
+        continue;
+      }
+      targets.append({track.path(), info, track.begin(),
                       track.isCue() ? track.duration() : 0});
     }
     return planTargets(targets, force);

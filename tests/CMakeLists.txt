@@ -291,9 +291,14 @@ target_compile_definitions(tst_cueparser_fixtures PRIVATE
   CUE_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/cue")
 
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+  # Wire format between the scanner and its decode worker process.
+  mpz_add_test(tst_replaygainjobcodec tst_replaygainjobcodec.cpp
+    ${APP}/replaygain/jobcodec.cpp)
+
   mpz_add_test(tst_replaygainscanner tst_replaygainscanner.cpp
     ${APP}/replaygain/scanner.cpp
     ${APP}/replaygain/jobrunner.cpp
+    ${APP}/replaygain/jobcodec.cpp
     ${APP}/replaygain/analyzer.cpp
     ${APP}/replaygain/tags.cpp)
   target_link_libraries(tst_replaygainscanner PRIVATE
@@ -304,6 +309,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/replaygain/resolver.cpp
     ${APP}/replaygain/scanner.cpp
     ${APP}/replaygain/jobrunner.cpp
+    ${APP}/replaygain/jobcodec.cpp
     ${APP}/replaygain/analyzer.cpp
     ${APP}/replaygain/store.cpp
     ${APP}/replaygain/tags.cpp

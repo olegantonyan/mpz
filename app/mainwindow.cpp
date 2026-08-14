@@ -8,6 +8,7 @@
 #include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
 #include "mpzapplication.h"
+#include "replaygain/scanworker.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -852,6 +853,8 @@ void MainWindow::openEqualizerDialog() {
 
 void MainWindow::setupReplayGain() {
   replay_gain = new ReplayGain::Manager(global_conf, this);
+  replay_gain->setScanWorker(QCoreApplication::applicationFilePath(),
+                             {ReplayGain::scanWorkerFlag()});
 
   player->setReplayGainResolver([this](const Track &t) { return replay_gain->gainDbFor(t); });
   connect(replay_gain, &ReplayGain::Manager::gainsChanged, this, [this]() {

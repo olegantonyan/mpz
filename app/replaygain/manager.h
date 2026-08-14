@@ -44,6 +44,7 @@ namespace ReplayGain {
     int progressTotal() const { return progress_total; }
     QString progressPath() const { return progress_path; }
     QVector<Job> planScan(const QVector<Track> &tracks, bool force) const;
+    void setScanWorker(const QString &program, const QStringList &arguments);
     void scanTracks(const QVector<Track> &tracks, bool force);
     void scanLibrary(const QStringList &roots, bool force);
     void cancelScan();

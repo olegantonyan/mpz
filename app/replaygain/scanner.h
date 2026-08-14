@@ -19,6 +19,10 @@ namespace ReplayGain {
 
     static int defaultWorkerCount();
 
+    // Decode in child processes. Off by default so tests, which have no mpz binary
+    // to spawn, keep decoding in process.
+    void setWorker(const QString &program, const QStringList &arguments);
+
     bool isScanning() const { return in_flight > 0 || !pending.isEmpty() || !producer_done; }
 
     void start(const QVector<Job> &jobs, int worker_count = 0);
@@ -45,6 +49,9 @@ namespace ReplayGain {
     QVector<QThread *> threads;
     QVector<JobRunner *> runners;
     QVector<bool> busy;
+
+    QString worker_program;
+    QStringList worker_arguments;
 
     QQueue<Job> pending;
     QElapsedTimer throttle;

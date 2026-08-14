@@ -1,6 +1,7 @@
 #include "replaygain/jobrunner.h"
 
 #include "replaygain/analyzer.h"
+#include "replaygain/jobcodec.h"
 #include "replaygain/tags.h"
 
 #include <audioproperties.h>
@@ -10,12 +11,15 @@
 
 #include <QAudioBuffer>
 #include <QAudioDecoder>
-#include <QElapsedTimer>
 #include <QEventLoop>
-#include <QThread>
 #include <QFileInfo>
+#include <QProcess>
 #include <QTimer>
 #include <QUrl>
+
+#ifdef Q_OS_UNIX
+  #include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <memory>
@@ -28,7 +32,24 @@ namespace ReplayGain {
 
     const int kStallTimeoutMs = 30000;
     const int kAbortPollMs = 25;
-    const int kBusyPercent = 50;
+    const int kWorkerStartMs = 10000;
+    const int kWorkerPollMs = 100;
+    const int kWorkerStopMs = 5000;
+    const int kWorkerNiceness = 10;
+
+    // The in-process path decodes on a LowestPriority thread; a child process would
+    // otherwise inherit this process's normal priority and lose that.
+    void lowerPriority(QProcess &worker) {
+#if defined(Q_OS_UNIX)
+      worker.setChildProcessModifier([]() { ::nice(kWorkerNiceness); });
+#elif defined(Q_OS_WIN)
+      worker.setCreateProcessArgumentsModifier([](QProcess::CreateProcessArguments *args) {
+        args->flags |= BELOW_NORMAL_PRIORITY_CLASS;
+      });
+#else
+      Q_UNUSED(worker)
+#endif
+    }
 
     bool hasAudioStream(const QString &path) {
       const TagLib::FileRef file(path.toUtf8().constData());
@@ -97,7 +118,110 @@ namespace ReplayGain {
   JobRunner::JobRunner(QObject *parent) : QObject(parent) {
   }
 
+  void JobRunner::setWorker(const QString &program, const QStringList &arguments) {
+    worker_program = program;
+    worker_arguments = arguments;
+  }
+
   void JobRunner::run(const ReplayGain::Job &job) {
+    if (!worker_program.isEmpty() && runIsolated(job)) {
+      return;
+    }
+    runInProcess(job);
+  }
+
+  // A worker that dies took the file it last announced with it, so that one is dropped
+  // and the rest go round again: k bad files cost k+1 passes over one folder.
+  bool JobRunner::runIsolated(const ReplayGain::Job &job) {
+    JobResult result;
+    result.epoch = job.epoch;
+    result.folder = job.folder;
+
+    QVector<FileWork> pending = job.files;
+    QVector<FileWork> crashed;
+    bool worker_ran = false;
+
+    while (!pending.isEmpty() && !job.aborted()) {
+      Job pass = job;
+      pass.files = pending;
+      pass.want_album = job.want_album && crashed.isEmpty();
+
+      QProcess worker;
+      worker.setProgram(worker_program);
+      worker.setArguments(worker_arguments);
+      worker.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+      lowerPriority(worker);
+      worker.start();
+      if (!worker.waitForStarted(kWorkerStartMs)) {
+        if (!worker_ran) {
+          return false; // never usable: let the caller decode in this process
+        }
+        break;
+      }
+      worker_ran = true;
+      worker.write(encodeJob(pass));
+      worker.closeWriteChannel();
+
+      QByteArray buffer;
+      QString in_flight;
+      JobResult pass_result;
+      bool have_result = false;
+
+      auto drain = [&]() {
+        buffer.append(worker.readAllStandardOutput());
+        Message type = Message::FileStarted;
+        QByteArray payload;
+        while (takeMessage(buffer, type, payload)) {
+          if (type == Message::FileStarted) {
+            in_flight = decodeFileStarted(payload);
+            emit fileStarted(job.epoch, in_flight);
+          } else if (type == Message::JobDone) {
+            have_result = decodeJobDone(payload, pass_result);
+          }
+        }
+      };
+
+      while (worker.state() != QProcess::NotRunning && !job.aborted()) {
+        if (worker.waitForReadyRead(kWorkerPollMs)) {
+          drain();
+        }
+      }
+      if (job.aborted()) {
+        worker.kill();
+      }
+      worker.waitForFinished(kWorkerStopMs);
+      drain();
+
+      if (job.aborted() || have_result) {
+        result.slices += pass_result.slices;
+        break;
+      }
+      const auto blamed = std::find_if(pending.cbegin(), pending.cend(),
+                                       [&](const FileWork &w) { return w.path == in_flight; });
+      if (blamed == pending.cend()) {
+        break; // died without naming a file: nothing to blame or retry
+      }
+      crashed.append(*blamed);
+      pending.erase(std::remove_if(pending.begin(), pending.end(),
+                                   [&](const FileWork &w) { return w.path == in_flight; }),
+                    pending.end());
+    }
+
+    for (const auto &work : crashed) {
+      for (const auto &slice : work.slices) {
+        SliceResult r;
+        r.path = work.path;
+        r.begin_ms = slice.begin_ms;
+        r.error = QStringLiteral("decoder crashed on this file");
+        result.slices.append(r);
+      }
+    }
+
+    emit jobFinished(result);
+    return true;
+  }
+
+  void JobRunner::runInProcess(const ReplayGain::Job &job) {
     JobResult result;
     result.epoch = job.epoch;
     result.folder = job.folder;
@@ -132,7 +256,6 @@ namespace ReplayGain {
         QEventLoop loop;
         QTimer stall;
         QTimer abort_poll;
-        QAudioFormat first_format;
         bool format_known = false;
         qint64 frames_seen = 0;
 
@@ -153,8 +276,6 @@ namespace ReplayGain {
 
         connect(&decoder, &QAudioDecoder::bufferReady, &loop, [&]() {
           stall.start();
-          QElapsedTimer busy;
-          busy.start();
           while (decoder.bufferAvailable()) {
             if (job.aborted()) {
               loop.quit();
@@ -166,7 +287,6 @@ namespace ReplayGain {
             }
             const QAudioFormat format = buffer.format();
             if (!format_known) {
-              first_format = format;
               format_known = true;
               for (const auto &slice : work.slices) {
                 SliceState s;
@@ -180,21 +300,9 @@ namespace ReplayGain {
                 s.failed = !s.analyzer->isValid();
                 states.push_back(std::move(s));
               }
-            } else if (format.sampleRate() != first_format.sampleRate() ||
-                       format.channelCount() != first_format.channelCount() ||
-                       format.sampleFormat() != first_format.sampleFormat()) {
-              file_error = tr("format changed mid-stream");
-              loop.quit();
-              return;
             }
             feedBuffer(buffer, frames_seen, states);
             frames_seen += buffer.frameCount();
-          }
-          // yield back as much time as the batch took, so a scan cannot keep a core
-          // busy end to end; sliced because nothing polls the abort flag while we sleep
-          const qint64 idle = busy.elapsed() * (100 - kBusyPercent) / kBusyPercent;
-          for (qint64 slept = 0; slept < idle && !job.aborted(); slept += kAbortPollMs) {
-            QThread::msleep(static_cast<unsigned long>(std::min<qint64>(kAbortPollMs, idle - slept)));
           }
         });
 
