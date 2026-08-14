@@ -616,6 +616,15 @@ void MainWindow::setupStatusBar() {
 #ifdef ENABLE_GAPLESS
   status_label_replaygain = new QLabel(this);
   status_label_replaygain->hide();
+  status_label_replaygain->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(status_label_replaygain, &QLabel::customContextMenuRequested, this,
+          [this](const QPoint &pos) {
+            QMenu menu;
+            QAction open(tr("ReplayGain…"));
+            connect(&open, &QAction::triggered, this, &MainWindow::openReplayGainDialog);
+            menu.addAction(&open);
+            menu.exec(status_label_replaygain->mapToGlobal(pos));
+          });
   ui->statusbar->addPermanentWidget(status_label_replaygain);
 #endif
 
@@ -875,15 +884,18 @@ void MainWindow::setupReplayGain() {
 
   connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
   connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
+
+  connect(&modus_operandi, &ModusOperandi::changed, this, &MainWindow::updateReplayGainStatus);
+  updateReplayGainStatus();
 }
 
 void MainWindow::updateReplayGainStatus() {
-  const bool applies = playing_track.uid() != 0 &&
-                       modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
-                       !global_conf.disableGapless();
-  const QString text = applies ? replay_gain->appliedGainText(playing_track) : QString();
-  status_label_replaygain->setText(text);
-  status_label_replaygain->setVisible(!text.isEmpty());
+  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
+                         !global_conf.disableGapless();
+  status_label_replaygain->setVisible(available);
+  if (available) {
+    status_label_replaygain->setText(replay_gain->statusText(playing_track));
+  }
 }
 
 void MainWindow::openReplayGainDialog() {

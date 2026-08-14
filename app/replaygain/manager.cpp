@@ -137,6 +137,15 @@ namespace ReplayGain {
              sourceName(resolved.source));
   }
 
+  QString Manager::statusText(const Track &track) {
+    if (settings_.mode == Mode::Off) {
+      return QStringLiteral("ReplayGain: off");
+    }
+    const QString applied = appliedGainText(track);
+    return applied.isEmpty() ? QStringLiteral("ReplayGain: %1").arg(tokenFromMode(settings_.mode))
+                             : applied;
+  }
+
   void Manager::onSliceAnalyzed(const ReplayGain::SliceResult &result) {
     if (result.ok) {
       store_.put(result.path, result.begin_ms, result.gain);

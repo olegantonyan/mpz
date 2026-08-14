@@ -38,6 +38,8 @@ namespace ReplayGain {
 
     // untranslated "ReplayGain: album -7.25 dB (sidecar)", empty when none applies
     QString appliedGainText(const Track &track);
+    // the same, falling back to the bare mode so the status label always has something
+    QString statusText(const Track &track);
 
     bool isScanning() const { return scanner.isScanning(); }
     int progressDone() const { return progress_done; }

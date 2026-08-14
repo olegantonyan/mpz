@@ -25,6 +25,7 @@ private slots:
   void planMarksTagWritingFromStorageMode();
   void tagsModeIgnoresTheSidecarWhenDecidingWhatToScan();
   void appliedGainTextNamesTheModeValueAndSource();
+  void statusTextFallsBackToTheBareMode();
 
 private:
   QString makeTrackFile(const QString &relative);
@@ -311,6 +312,31 @@ void TestReplayGainManager::appliedGainTextNamesTheModeValueAndSource() {
 
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
   QVERIFY(m.appliedGainText(stream).isEmpty());
+}
+
+// The status label stays on screen when nothing is playing, so this one never goes empty.
+void TestReplayGainManager::statusTextFallsBackToTheBareMode() {
+  const QString scanned = makeTrackFile(QStringLiteral("albumA/01.flac"));
+
+  Config::Global global;
+  ReplayGain::Manager m(global);
+  QVERIFY(m.store().put(scanned, 0, albumGain(-6.0)));
+
+  QCOMPARE(m.statusText(Track(scanned)), QStringLiteral("ReplayGain: off"));
+  QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: off"));
+
+  ReplayGain::Settings s = m.settings();
+  s.mode = ReplayGain::Mode::Track;
+  m.setSettings(s);
+  QCOMPARE(m.statusText(Track(scanned)), QStringLiteral("ReplayGain: track -6.00 dB (sidecar)"));
+  QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: track"));
+
+  const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
+  QCOMPARE(m.statusText(stream), QStringLiteral("ReplayGain: track"));
+
+  s.mode = ReplayGain::Mode::Album;
+  m.setSettings(s);
+  QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: album"));
 }
 
 QTEST_MAIN(TestReplayGainManager)
