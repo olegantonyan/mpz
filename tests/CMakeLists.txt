@@ -41,6 +41,7 @@ mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crash
 mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
 mpz_add_test(tst_replaygaingain  tst_replaygaingain.cpp)
 mpz_add_test(tst_replaygainstore tst_replaygainstore.cpp ${APP}/replaygain/store.cpp)
+target_link_libraries(tst_replaygainstore PRIVATE sqlite3)
 mpz_add_test(tst_replaygainanalyzer tst_replaygainanalyzer.cpp ${APP}/replaygain/analyzer.cpp)
 target_link_libraries(tst_replaygainanalyzer PRIVATE ebur128)
 mpz_add_test(tst_waveformpeaks  tst_waveformpeaks.cpp  ${APP}/waveform/peaks.cpp)
@@ -324,7 +325,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/streammetadata.cpp)
   target_link_libraries(tst_replaygainmanager PRIVATE
     Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Concurrent ebur128 tag yaml-cpp::yaml-cpp)
+    Qt${QT_VERSION_MAJOR}::Concurrent ebur128 tag yaml-cpp::yaml-cpp sqlite3)
   target_compile_definitions(tst_replaygainmanager PRIVATE VERSION="${PROJECT_VERSION}")
 endif()
 

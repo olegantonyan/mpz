@@ -8,6 +8,7 @@
 
 #include <QDir>
 #include <QDirIterator>
+#include <QStandardPaths>
 #include <QHash>
 #include <QSet>
 #include <QTimer>
@@ -68,7 +69,12 @@ namespace ReplayGain {
   }
 
   QString Manager::storeDirectory() {
-    return Config::Storage::configPath();
+    const QString override = qEnvironmentVariable("MPZ_CONFIG_DIR_OVERRIDE");
+    if (!override.isEmpty()) {
+      return override;
+    }
+    // a library-sized database is data, not config
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
   }
 
   Manager::Manager(Config::Global &global_c, QObject *parent) :
@@ -86,9 +92,11 @@ namespace ReplayGain {
               emit progress(done, total, path);
             });
     connect(&scanner, &Scanner::finished, this, [this](int analysed, int failed, bool cancelled) {
+      store_.endBatch();
+      store_.pruneMissing(walked_folders);
+      walked_folders.clear();
       if (dirty) {
         dirty = false;
-        store_.compactIfNeeded();
         resolver_.invalidate();
         emit gainsChanged();
       }
@@ -180,6 +188,8 @@ namespace ReplayGain {
   void Manager::scanTracks(const QVector<Track> &tracks, bool force) {
     walking = false;
     walk_folders.clear();
+    walked_folders.clear();
+    store_.beginBatch();
     progress_done = 0;
     progress_total = 0;
     progress_path.clear();
@@ -195,6 +205,8 @@ namespace ReplayGain {
 
     listing_folder.clear();
     walk_folders.clear();
+    walked_folders.clear();
+    store_.beginBatch();
     for (const auto &root : roots) {
       if (!root.startsWith(QLatin1String("mpd://"))) {
         walk_folders << root;
@@ -228,6 +240,9 @@ namespace ReplayGain {
 
     const QVector<ScanTarget> targets = targetsInFolder(folder);
     if (!targets.isEmpty()) {
+      // only folders holding audio, so pruning walks album directories and not the
+      // whole subtree under every parent
+      walked_folders << folder;
       scanner.enqueue(planTargets(targets, walk_force));
     }
     QTimer::singleShot(0, this, &Manager::walkNextFolder);

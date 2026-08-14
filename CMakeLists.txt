@@ -523,6 +523,25 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 # ENDOF LIBMPDCLIENT
 
+# SQLITE3
+option(USE_SYSTEM_SQLITE3 "Use sqlite3 provided by the OS" OFF)
+if (USE_SYSTEM_SQLITE3)
+  message(STATUS "using system-wide sqlite3")
+  find_package(SQLite3 REQUIRED)
+  add_library(sqlite3 INTERFACE)
+  # SQLite3::SQLite3 only exists from CMake 4.3; before that the name was SQLite::SQLite3,
+  # which newer CMake still provides but warns about
+  if (TARGET SQLite3::SQLite3)
+    target_link_libraries(sqlite3 INTERFACE SQLite3::SQLite3)
+  else()
+    target_link_libraries(sqlite3 INTERFACE SQLite::SQLite3)
+  endif()
+else()
+  include(3rdparty/sqlite3.cmake)
+endif()
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+# ENDOF SQLITE3
+
 # CPPTRACE
 # Crash handler with cpptrace. On Linux + macOS libdl + dladdr gives demangled
 # function names from stripped release binaries with no DWARF shipped: on Linux

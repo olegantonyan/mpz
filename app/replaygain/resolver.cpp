@@ -20,10 +20,6 @@ namespace ReplayGain {
     cache.clear();
   }
 
-  void Resolver::invalidate(const Track &track) {
-    cache.remove(keyFor(track));
-  }
-
   void Resolver::invalidate(const QString &path, quint64 begin_ms) {
     cache.remove(Store::Key(path, begin_ms));
   }
@@ -38,8 +34,7 @@ namespace ReplayGain {
     }
 
     const Store::Key key = keyFor(track);
-    const auto cached = cache.constFind(key);
-    if (cached != cache.constEnd()) {
+    if (const Resolved *cached = cache.object(key)) {
       return *cached;
     }
 
@@ -65,7 +60,7 @@ namespace ReplayGain {
       }
     }
 
-    cache.insert(key, r);
+    cache.insert(key, new Resolved(r));
     return r;
   }
 

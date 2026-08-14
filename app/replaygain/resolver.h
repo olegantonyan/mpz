@@ -5,7 +5,7 @@
 #include "track.h"
 #include "replaygain/store.h"
 
-#include <QHash>
+#include <QCache>
 #include <QString>
 
 namespace ReplayGain {
@@ -29,7 +29,6 @@ namespace ReplayGain {
     double gainDbFor(const Track &track);
 
     void invalidate();
-    void invalidate(const Track &track);
     void invalidate(const QString &path, quint64 begin_ms);
 
   private:
@@ -37,7 +36,8 @@ namespace ReplayGain {
 
     Store *store_ = nullptr;
     Settings settings_;
-    QHash<Store::Key, Resolved> cache;
+    // bounded: a library can hold more tracks than we are willing to remember
+    QCache<Store::Key, Resolved> cache{4096};
   };
 }
 

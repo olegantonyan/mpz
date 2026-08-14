@@ -88,6 +88,7 @@ namespace ReplayGain {
     int progress_total = 0;
     QString progress_path;
     QStringList walk_folders;
+    QStringList walked_folders;
     bool walk_force = false;
     bool walking = false;
     mutable QString listing_folder;

@@ -304,7 +304,8 @@ namespace ReplayGainUi {
   }
 
   void ReplayGainDialog::updateStoreLabel() {
-    store_label_->setText(tr("%1 — %n entries", "", rg.store().count()).arg(rg.store().filePath()));
+    store_label_->setText(
+        tr("%1 — %n entries", "", int(rg.store().count())).arg(rg.store().filePath()));
   }
 
   void ReplayGainDialog::appendRow(const ReplayGain::SliceResult &result) {

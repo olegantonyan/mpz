@@ -7,6 +7,8 @@
 
 #include "replaygain/store.h"
 
+#include <sqlite3.h>
+
 class TestReplayGainStore : public QObject {
   Q_OBJECT
 private slots:
@@ -14,20 +16,22 @@ private slots:
 
   void roundTrip();
   void absentEntryIsInvalid();
-  void lastLineWins();
-  void tornTailIsSkipped();
-  void shortLineIsSkipped();
-  void unknownVersionIsIgnored();
-  void pathWithTabAndNewline();
+  void lastWriteWins();
+  void awkwardPathsSurvive();
   void staleWhenSizeChanged();
   void staleWhenMtimeChanged();
   void albumOnlyEntry();
-  void compactCollapsesDuplicates();
-  void compactDropsEntriesForDeletedFiles();
-  void compactKeepsEntriesWhenTheFolderIsGone();
+  void countTracksInsertsNotRewrites();
+  void batchedWritesAreDurable();
+  void pruneDropsEntriesForDeletedFiles();
+  void pruneKeepsEntriesWhenTheFolderIsGone();
+  void pruneIgnoresFoldersItWasNotGiven();
+  void corruptFileIsQuarantinedNotFatal();
+  void newerSchemaIsLeftAlone();
 
 private:
   QString makeTrack(const QString &name, const QByteArray &content = "audio");
+  QString storeDir();
   static ReplayGain::Gain sampleGain();
 
   std::unique_ptr<QTemporaryDir> dir;
@@ -39,8 +43,15 @@ void TestReplayGainStore::init() {
   QVERIFY(dir->isValid());
 }
 
+QString TestReplayGainStore::storeDir() {
+  const QString path = dir->filePath(QStringLiteral("db"));
+  QDir().mkpath(path);
+  return path;
+}
+
 QString TestReplayGainStore::makeTrack(const QString &name, const QByteArray &content) {
   const QString path = dir->filePath(name);
+  QDir().mkpath(QFileInfo(path).absolutePath());
   QFile f(path);
   if (!f.open(QIODevice::WriteOnly)) {
     return QString();
@@ -62,21 +73,19 @@ ReplayGain::Gain TestReplayGainStore::sampleGain() {
 }
 
 void TestReplayGainStore::roundTrip() {
-  const QString track = makeTrack("01.flac");
-  QVERIFY(!track.isEmpty());
-
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  const QString db = storeDir();
   {
-    ReplayGain::Store s(dir->path());
+    ReplayGain::Store s(db);
+    QVERIFY(s.isOpen());
     QVERIFY(s.put(track, 0, sampleGain()));
-    QCOMPARE(s.count(), 1);
+    QCOMPARE(s.count(), qint64(1));
   }
 
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
-  const ReplayGain::Gain g = s.get(track, 0);
+  ReplayGain::Store reopened(db);
+  QCOMPARE(reopened.count(), qint64(1));
+  const ReplayGain::Gain g = reopened.get(track, 0);
   QVERIFY(g.isValid());
-  QVERIFY(g.has_track);
-  QVERIFY(g.has_album);
   QCOMPARE(g.track_db, -5.57);
   QCOMPARE(g.track_peak, 0.910858);
   QCOMPARE(g.album_db, -2.48);
@@ -84,218 +93,210 @@ void TestReplayGainStore::roundTrip() {
 }
 
 void TestReplayGainStore::absentEntryIsInvalid() {
-  const QString track = makeTrack("01.flac");
-  ReplayGain::Store s(dir->path());
-  QVERIFY(!s.get(track, 0).isValid());
-  QVERIFY(!s.get(dir->filePath("nope.flac"), 0).isValid());
+  const QString present = makeTrack(QStringLiteral("a.flac"));
+  ReplayGain::Store s(storeDir());
+  QVERIFY(!s.get(present, 0).isValid());
+  QVERIFY(!s.get(dir->filePath(QStringLiteral("nope.flac")), 0).isValid());
 }
 
-void TestReplayGainStore::lastLineWins() {
-  const QString track = makeTrack("01.flac");
-
+void TestReplayGainStore::lastWriteWins() {
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  const QString db = storeDir();
   {
-    ReplayGain::Store s(dir->path());
-    ReplayGain::Gain g = sampleGain();
-    QVERIFY(s.put(track, 0, g));
-    g.track_db = -9.99;
-    QVERIFY(s.put(track, 0, g));
-    QCOMPARE(s.count(), 1);
+    ReplayGain::Store s(db);
+    ReplayGain::Gain first = sampleGain();
+    QVERIFY(s.put(track, 0, first));
+    ReplayGain::Gain second = sampleGain();
+    second.track_db = -9.99;
+    QVERIFY(s.put(track, 0, second));
+    QCOMPARE(s.count(), qint64(1));
   }
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
-  QCOMPARE(s.get(track, 0).track_db, -9.99);
+  ReplayGain::Store reopened(db);
+  QCOMPARE(reopened.count(), qint64(1));
+  QCOMPARE(reopened.get(track, 0).track_db, -9.99);
 }
 
-void TestReplayGainStore::tornTailIsSkipped() {
-  const QString first = makeTrack("01.flac");
-  const QString second = makeTrack("02.flac");
-
-  {
-    ReplayGain::Store s(dir->path());
-    QVERIFY(s.put(first, 0, sampleGain()));
-    QVERIFY(s.put(second, 0, sampleGain()));
-  }
-
-  QFile f(dir->filePath("replaygain.db"));
-  QVERIFY(f.open(QIODevice::WriteOnly | QIODevice::Append));
-  f.write("-3.00\t0.5");
-  f.close();
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 2);
-  QVERIFY(s.get(first, 0).isValid());
-  QVERIFY(s.get(second, 0).isValid());
-}
-
-void TestReplayGainStore::shortLineIsSkipped() {
-  const QString track = makeTrack("01.flac");
-  const QFileInfo info(track);
-
-  QFile f(dir->filePath("replaygain.db"));
-  QVERIFY(f.open(QIODevice::WriteOnly));
-  f.write("#mpz-rg 1\n");
-  f.write("-1.00\t0.5\n");
-  f.write(QString("-3.00\t0.500000\t\t\t%1\t%2\t0\t%3\n")
-              .arg(QString::number(info.lastModified().toSecsSinceEpoch()),
-                   QString::number(info.size()), track)
-              .toUtf8());
-  f.close();
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
-  const ReplayGain::Gain g = s.get(track, 0);
-  QVERIFY(g.has_track);
-  QVERIFY(!g.has_album);
-  QCOMPARE(g.track_db, -3.0);
-}
-
-void TestReplayGainStore::unknownVersionIsIgnored() {
-  const QString track = makeTrack("01.flac");
-
-  {
-    ReplayGain::Store s(dir->path());
-    QVERIFY(s.put(track, 0, sampleGain()));
-  }
-
-  QFile f(dir->filePath("replaygain.db"));
-  QVERIFY(f.open(QIODevice::ReadOnly));
-  QByteArray body = f.readAll();
-  f.close();
-  body.replace("#mpz-rg 1", "#mpz-rg 7");
-  QVERIFY(f.open(QIODevice::WriteOnly | QIODevice::Truncate));
-  f.write(body);
-  f.close();
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 0);
-  QVERIFY(!s.get(track, 0).isValid());
-}
-
-void TestReplayGainStore::pathWithTabAndNewline() {
-  const QString track = makeTrack(QStringLiteral("od\td\nname.flac"));
+// The text format needed hand-rolled escaping for these; bound parameters do not.
+void TestReplayGainStore::awkwardPathsSurvive() {
+  const QString track = makeTrack(QStringLiteral("od\td\nname 'quoted' %pct_ ünïcode.flac"));
   QVERIFY(!track.isEmpty());
-  QVERIFY(QFileInfo::exists(track));
-
+  const QString db = storeDir();
   {
-    ReplayGain::Store s(dir->path());
+    ReplayGain::Store s(db);
     QVERIFY(s.put(track, 0, sampleGain()));
   }
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
-  QVERIFY(s.get(track, 0).isValid());
+  ReplayGain::Store reopened(db);
+  QVERIFY(reopened.get(track, 0).isValid());
 }
 
 void TestReplayGainStore::staleWhenSizeChanged() {
-  const QString track = makeTrack("01.flac", "audio");
-
-  {
-    ReplayGain::Store s(dir->path());
-    QVERIFY(s.put(track, 0, sampleGain()));
-  }
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  ReplayGain::Store s(storeDir());
+  QVERIFY(s.put(track, 0, sampleGain()));
+  QVERIFY(s.get(track, 0).isValid());
 
   QFile f(track);
-  QVERIFY(f.open(QIODevice::WriteOnly | QIODevice::Truncate));
-  f.write("audio-but-longer");
+  QVERIFY(f.open(QIODevice::WriteOnly));
+  f.write("audio and then some");
   f.close();
 
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
+  QCOMPARE(s.count(), qint64(1));
   QVERIFY(!s.get(track, 0).isValid());
 }
 
 void TestReplayGainStore::staleWhenMtimeChanged() {
-  const QString track = makeTrack("01.flac", "audio");
-
-  {
-    ReplayGain::Store s(dir->path());
-    QVERIFY(s.put(track, 0, sampleGain()));
-  }
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  ReplayGain::Store s(storeDir());
+  QVERIFY(s.put(track, 0, sampleGain()));
+  QVERIFY(s.get(track, 0).isValid());
 
   QFile f(track);
   QVERIFY(f.open(QIODevice::ReadWrite));
-  QVERIFY(f.setFileTime(QDateTime::currentDateTime().addSecs(-4242),
-                        QFileDevice::FileModificationTime));
+  QVERIFY(f.setFileTime(QDateTime::currentDateTime().addSecs(-4242), QFileDevice::FileModificationTime));
   f.close();
 
-  ReplayGain::Store s(dir->path());
   QVERIFY(!s.get(track, 0).isValid());
 }
 
 void TestReplayGainStore::albumOnlyEntry() {
-  const QString track = makeTrack("01.flac");
-
-  ReplayGain::Gain g;
-  g.album_db = -2.48;
-  g.album_peak = 0.977203;
-  g.has_album = true;
-
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  const QString db = storeDir();
+  ReplayGain::Gain album;
+  album.album_db = -2.48;
+  album.album_peak = 0.977203;
+  album.has_album = true;
   {
-    ReplayGain::Store s(dir->path());
-    QVERIFY(s.put(track, 0, g));
+    ReplayGain::Store s(db);
+    QVERIFY(s.put(track, 0, album));
   }
-
-  ReplayGain::Store s(dir->path());
-  const ReplayGain::Gain loaded = s.get(track, 0);
-  QVERIFY(loaded.isValid());
-  QVERIFY(!loaded.has_track);
-  QVERIFY(loaded.has_album);
-  QCOMPARE(loaded.album_db, -2.48);
+  ReplayGain::Store reopened(db);
+  const ReplayGain::Gain g = reopened.get(track, 0);
+  QVERIFY(g.isValid());
+  QVERIFY(!g.has_track);
+  QVERIFY(g.has_album);
+  QCOMPARE(g.album_db, -2.48);
 }
 
-void TestReplayGainStore::compactCollapsesDuplicates() {
-  const QString track = makeTrack("01.flac");
-  const QString db = dir->filePath("replaygain.db");
+// count() is maintained by triggers, so an upsert must not be counted as a new row.
+void TestReplayGainStore::countTracksInsertsNotRewrites() {
+  const QString a = makeTrack(QStringLiteral("a.flac"));
+  const QString b = makeTrack(QStringLiteral("b.flac"));
+  ReplayGain::Store s(storeDir());
+  QCOMPARE(s.count(), qint64(0));
+  QVERIFY(s.put(a, 0, sampleGain()));
+  QCOMPARE(s.count(), qint64(1));
+  QVERIFY(s.put(a, 0, sampleGain()));
+  QCOMPARE(s.count(), qint64(1));
+  QVERIFY(s.put(a, 5000, sampleGain())); // a second slice of the same file is its own row
+  QCOMPARE(s.count(), qint64(2));
+  QVERIFY(s.put(b, 0, sampleGain()));
+  QCOMPARE(s.count(), qint64(3));
+}
 
+void TestReplayGainStore::batchedWritesAreDurable() {
+  const QString db = storeDir();
+  QStringList tracks;
   {
-    ReplayGain::Store s(dir->path());
-    ReplayGain::Gain g = sampleGain();
-    for (int i = 0; i < 10; i++) {
-      g.track_db = -1.0 * i;
-      QVERIFY(s.put(track, 0, g));
+    ReplayGain::Store s(db);
+    s.beginBatch();
+    for (int i = 0; i < 50; i++) {
+      const QString t = makeTrack(QStringLiteral("batch/%1.flac").arg(i));
+      tracks << t;
+      QVERIFY(s.put(t, 0, sampleGain()));
     }
-    QCOMPARE(s.count(), 1);
-    QVERIFY(s.compact());
+    QCOMPARE(s.count(), qint64(50));
+    s.endBatch();
   }
-
-  QFile f(db);
-  QVERIFY(f.open(QIODevice::ReadOnly));
-  const QList<QByteArray> lines = f.readAll().trimmed().split('\n');
-  f.close();
-  QCOMPARE(lines.size(), 2);
-  QCOMPARE(lines.at(0), QByteArray("#mpz-rg 1"));
-
-  ReplayGain::Store s(dir->path());
-  QCOMPARE(s.count(), 1);
-  QCOMPARE(s.get(track, 0).track_db, -9.0);
+  ReplayGain::Store reopened(db);
+  QCOMPARE(reopened.count(), qint64(50));
+  for (const QString &t : tracks) {
+    QVERIFY(reopened.get(t, 0).isValid());
+  }
 }
 
-void TestReplayGainStore::compactDropsEntriesForDeletedFiles() {
-  const QString gone = makeTrack("gone.flac");
-  const QString kept = makeTrack("kept.flac");
+void TestReplayGainStore::pruneDropsEntriesForDeletedFiles() {
+  const QString kept = makeTrack(QStringLiteral("album/keep.flac"));
+  const QString gone = makeTrack(QStringLiteral("album/gone.flac"));
+  const QString folder = QFileInfo(kept).absolutePath();
 
-  ReplayGain::Store s(dir->path());
-  QVERIFY(s.put(gone, 0, sampleGain()));
+  ReplayGain::Store s(storeDir());
   QVERIFY(s.put(kept, 0, sampleGain()));
-  QVERIFY(QFile::remove(gone));
+  QVERIFY(s.put(gone, 0, sampleGain()));
+  QCOMPARE(s.count(), qint64(2));
 
-  QVERIFY(s.compact());
-  QCOMPARE(s.count(), 1);
+  QVERIFY(QFile::remove(gone));
+  QCOMPARE(s.pruneMissing({folder}), 1);
+  QCOMPARE(s.count(), qint64(1));
   QVERIFY(s.get(kept, 0).isValid());
 }
 
-void TestReplayGainStore::compactKeepsEntriesWhenTheFolderIsGone() {
-  const QString folder = dir->filePath("removable");
-  QVERIFY(QDir().mkpath(folder));
-  const QString track = makeTrack("removable/01.flac");
+// An unmounted drive must not wipe the db.
+void TestReplayGainStore::pruneKeepsEntriesWhenTheFolderIsGone() {
+  const QString track = makeTrack(QStringLiteral("album/a.flac"));
+  const QString folder = QFileInfo(track).absolutePath();
 
-  ReplayGain::Store s(dir->path());
+  ReplayGain::Store s(storeDir());
   QVERIFY(s.put(track, 0, sampleGain()));
   QVERIFY(QDir(folder).removeRecursively());
 
-  QVERIFY(s.compact());
-  QCOMPARE(s.count(), 1);
+  QCOMPARE(s.pruneMissing({folder}), 0);
+  QCOMPARE(s.count(), qint64(1));
+}
+
+void TestReplayGainStore::pruneIgnoresFoldersItWasNotGiven() {
+  const QString one = makeTrack(QStringLiteral("one/a.flac"));
+  const QString two = makeTrack(QStringLiteral("two/b.flac"));
+
+  ReplayGain::Store s(storeDir());
+  QVERIFY(s.put(one, 0, sampleGain()));
+  QVERIFY(s.put(two, 0, sampleGain()));
+  QVERIFY(QFile::remove(one));
+  QVERIFY(QFile::remove(two));
+
+  QCOMPARE(s.pruneMissing({QFileInfo(one).absolutePath()}), 1);
+  QCOMPARE(s.count(), qint64(1));
+}
+
+void TestReplayGainStore::corruptFileIsQuarantinedNotFatal() {
+  const QString db = storeDir();
+  const QString path = db + QStringLiteral("/replaygain.sqlite");
+  QFile f(path);
+  QVERIFY(f.open(QIODevice::WriteOnly));
+  f.write(QByteArray(4096, '\x7f')); // not a database
+  f.close();
+
+  ReplayGain::Store s(db);
+  QVERIFY(s.isOpen());
+  QCOMPARE(s.count(), qint64(0));
+
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  QVERIFY(s.put(track, 0, sampleGain()));
+  QVERIFY(s.get(track, 0).isValid());
+
+  // the damaged file is moved aside, never deleted
+  const QStringList aside = QDir(db).entryList({QStringLiteral("replaygain.sqlite.corrupt-*")});
+  QCOMPARE(aside.size(), 1);
+}
+
+void TestReplayGainStore::newerSchemaIsLeftAlone() {
+  const QString db = storeDir();
+  const QString track = makeTrack(QStringLiteral("a.flac"));
+  {
+    ReplayGain::Store s(db);
+    QVERIFY(s.put(track, 0, sampleGain()));
+  }
+
+  sqlite3 *raw = nullptr;
+  const QString path = db + QStringLiteral("/replaygain.sqlite");
+  QCOMPARE(sqlite3_open(path.toUtf8().constData(), &raw), SQLITE_OK);
+  QCOMPARE(sqlite3_exec(raw, "UPDATE meta SET value = '99' WHERE key = 'schema_version'",
+                        nullptr, nullptr, nullptr), SQLITE_OK);
+  sqlite3_close(raw);
+
+  ReplayGain::Store reopened(db);
+  QVERIFY(!reopened.isOpen());
+  QVERIFY(!reopened.get(track, 0).isValid());
+  QCOMPARE(reopened.count(), qint64(0));
 }
 
 QTEST_GUILESS_MAIN(TestReplayGainStore)
