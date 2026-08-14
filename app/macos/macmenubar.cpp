@@ -109,6 +109,8 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   auto *equalizer = playback->addAction(tr("Equalizer…"));
   equalizer->setEnabled(!global_conf.disableGapless());
   connect(equalizer, &QAction::triggered, shortcuts, &Shortcuts::openEqualizer);
+  auto *replaygain = playback->addAction(tr("ReplayGain…"));
+  connect(replaygain, &QAction::triggered, shortcuts, &Shortcuts::openReplayGain);
   connect(playback, &QMenu::aboutToShow, this, [this, equalizer]() {
     equalizer->setEnabled(!global_conf.disableGapless());
   });

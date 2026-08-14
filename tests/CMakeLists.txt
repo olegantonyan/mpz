@@ -39,6 +39,11 @@ mpz_add_test(tst_treeitem       tst_treeitem.cpp       ${APP}/directory_ui/direc
 mpz_add_test(tst_radioitem      tst_radioitem.cpp      ${APP}/directory_ui/directorymodel/radio/item.cpp)
 mpz_add_test(tst_crashreport    tst_crashreport.cpp    ${APP}/crash_report/crashreport.cpp)
 mpz_add_test(tst_pcmcache       tst_pcmcache.cpp       ${APP}/playback/gapless/pcmcache.cpp)
+mpz_add_test(tst_replaygaingain  tst_replaygaingain.cpp)
+mpz_add_test(tst_replaygainstore tst_replaygainstore.cpp ${APP}/replaygain/store.cpp)
+target_link_libraries(tst_replaygainstore PRIVATE sqlite3)
+mpz_add_test(tst_replaygainanalyzer tst_replaygainanalyzer.cpp ${APP}/replaygain/analyzer.cpp)
+target_link_libraries(tst_replaygainanalyzer PRIVATE ebur128)
 mpz_add_test(tst_waveformpeaks  tst_waveformpeaks.cpp  ${APP}/waveform/peaks.cpp)
 mpz_add_test(tst_dynamicrange   tst_dynamicrange.cpp   ${APP}/dynamic_range/dr.cpp)
 mpz_add_test(tst_drlogformat    tst_drlogformat.cpp    ${APP}/dynamic_range/logformat.cpp ${APP}/dynamic_range/dr.cpp)
@@ -285,6 +290,49 @@ target_link_libraries(tst_cueparser_fixtures PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui tag yaml-cpp::yaml-cpp)
 target_compile_definitions(tst_cueparser_fixtures PRIVATE
   CUE_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/cue")
+
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+  # Wire format between the scanner and its decode worker process.
+  mpz_add_test(tst_replaygainjobcodec tst_replaygainjobcodec.cpp
+    ${APP}/replaygain/jobcodec.cpp)
+
+  mpz_add_test(tst_replaygainscanner tst_replaygainscanner.cpp
+    ${APP}/replaygain/scanner.cpp
+    ${APP}/replaygain/jobrunner.cpp
+    ${APP}/replaygain/jobcodec.cpp
+    ${APP}/replaygain/analyzer.cpp
+    ${APP}/replaygain/tags.cpp)
+  target_link_libraries(tst_replaygainscanner PRIVATE
+    Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui ebur128 tag)
+
+  mpz_add_test(tst_replaygainmanager tst_replaygainmanager.cpp
+    ${APP}/replaygain/manager.cpp
+    ${APP}/replaygain/resolver.cpp
+    ${APP}/replaygain/scanner.cpp
+    ${APP}/replaygain/jobrunner.cpp
+    ${APP}/replaygain/jobcodec.cpp
+    ${APP}/replaygain/analyzer.cpp
+    ${APP}/replaygain/store.cpp
+    ${APP}/replaygain/tags.cpp
+    ${APP}/config/global.cpp
+    ${APP}/config/storage.cpp
+    ${APP}/config/value.cpp
+    ${APP}/playlist/loader.cpp
+    ${APP}/playlist/fileparser.cpp
+    ${APP}/playlist/cueparser.cpp
+    ${APP}/track.cpp
+    ${APP}/rnjesus.cpp
+    ${APP}/streammetadata.cpp)
+  target_link_libraries(tst_replaygainmanager PRIVATE
+    Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Concurrent ebur128 tag yaml-cpp::yaml-cpp sqlite3)
+  target_compile_definitions(tst_replaygainmanager PRIVATE VERSION="${PROJECT_VERSION}")
+endif()
+
+mpz_add_test(tst_replaygaintags tst_replaygaintags.cpp ${APP}/replaygain/tags.cpp)
+target_link_libraries(tst_replaygaintags PRIVATE tag)
+target_compile_definitions(tst_replaygaintags PRIVATE
+  RG_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/replaygain")
 
 mpz_add_test(tst_loader tst_loader.cpp
   ${APP}/playlist/loader.cpp

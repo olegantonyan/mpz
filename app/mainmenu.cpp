@@ -20,6 +20,7 @@ void MainMenu::on_open() {
 
   QAction settings(tr("Settings…"));
   QAction equalizer(tr("Equalizer…"));
+  QAction replaygain(tr("ReplayGain…"));
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
@@ -45,6 +46,7 @@ void MainMenu::on_open() {
 #ifdef ENABLE_GAPLESS
   equalizer.setEnabled(!global_conf.disableGapless());
   connect(&equalizer, &QAction::triggered, this, &MainMenu::openEqualizer);
+  connect(&replaygain, &QAction::triggered, this, &MainMenu::openReplayGain);
 #endif
 #ifdef ENABLE_MPD_SUPPORT
   connect(&mpdupdate, &QAction::triggered, this, [=]() {
@@ -55,6 +57,7 @@ void MainMenu::on_open() {
   menu.addAction(&settings);
 #ifdef ENABLE_GAPLESS
   menu.addAction(&equalizer);
+  menu.addAction(&replaygain);
 #endif
   if (!view_actions.isEmpty()) {
     menu.addSeparator();

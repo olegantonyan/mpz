@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QWidget>
+#include <QTimer>
 
 class LoadingSpinner : public QWidget {
   Q_OBJECT

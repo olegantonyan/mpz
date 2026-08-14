@@ -28,7 +28,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Internet radio in `m3u` and `pls` formats, as well as built-in radio library
 - CUE sheets, with gapless playback of single-file albums
 - Tag editor
-- Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt6 only)
+- Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format
 - Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track
 - Playback order per playlist and global: sequential, random, or no-loop
 - Track sorting presets
@@ -38,6 +38,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation)
 - [mpd](https://musicpd.org) client mode
+- ReplayGain that can write either tags or separate file
 
 ## Supported formats
 
@@ -137,7 +138,7 @@ cmake --build build --parallel
 sudo cmake --install build
 ```
 
-You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON` to cmake cli.
+You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, libebur128, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON` to cmake cli.
 
 Other options: 
 - `-DUSE_QT5=ON` builds Qt5 legacy version

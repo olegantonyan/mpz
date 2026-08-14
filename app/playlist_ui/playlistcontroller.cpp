@@ -397,6 +397,21 @@ namespace PlaylistUi {
     }
   }
 
+  QVector<Track> Controller::currentTracks() const {
+    const auto playlist = proxy->activeModel()->playlist();
+    return playlist == nullptr ? QVector<Track>() : playlist->tracks();
+  }
+
+  QVector<Track> Controller::selectedTracks() const {
+    QVector<Track> result;
+    const auto rows = view->selectionModel()->selectedRows();
+    result.reserve(rows.size());
+    for (const auto &i : rows) {
+      result.append(proxy->activeModel()->itemAt(proxy->mapToSource(i)));
+    }
+    return result;
+  }
+
   void Controller::removeSelectedTracks() {
     const auto rows = view->selectionModel()->selectedRows();
     if (rows.isEmpty()) {

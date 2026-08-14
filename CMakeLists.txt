@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.3 LANGUAGES CXX C)
+project(mpz VERSION 2.1.4 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -61,6 +61,10 @@ set(PROJECT_SOURCES
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/replaygain/analyzer.cpp
+  app/replaygain/resolver.cpp
+  app/replaygain/store.cpp
+  app/replaygain/tags.cpp
   app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/foldercover.cpp
@@ -245,6 +249,12 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/audio_device_ui/devicesmenu.cpp
     app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp
+    app/replaygain/jobcodec.cpp
+    app/replaygain/jobrunner.cpp
+    app/replaygain/manager.cpp
+    app/replaygain/scanner.cpp
+    app/replaygain/scanworker.cpp
+    app/replaygain_ui/replaygaindialog.cpp
     app/dynamic_range/dr.cpp
     app/dynamic_range/logformat.cpp
     app/dynamic_range/analyzer.cpp
@@ -424,6 +434,51 @@ else()
 endif()
 # ENDOF TAGLIB
 
+# LIBEBUR128
+option(USE_SYSTEM_LIBEBUR128 "Use libebur128 provided by the OS" OFF)
+if (USE_SYSTEM_LIBEBUR128)
+  find_library(EBUR128_LIBRARY ebur128 REQUIRED)
+  find_path(EBUR128_INCLUDE_DIR ebur128.h REQUIRED)
+  message(STATUS "using system-wide libebur128")
+  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_INCLUDE_DIR})
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_LIBRARY})
+else()
+  set(EBUR128_DIR 3rdparty/libebur128-1.2.6)
+  message(STATUS "using vendored libebur128 from ${EBUR128_DIR}")
+  # libebur128 declares cmake_minimum_required(2.8.12), which CMake >= 4 rejects outright.
+  # CMP0077 NEW makes its option() honour the BUILD_SHARED_LIBS set here.
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+  set(BUILD_SHARED_LIBS OFF)
+  add_subdirectory(${EBUR128_DIR} EXCLUDE_FROM_ALL)
+  unset(BUILD_SHARED_LIBS)
+  unset(CMAKE_POLICY_DEFAULT_CMP0077)
+  unset(CMAKE_POLICY_VERSION_MINIMUM)
+
+  # Upstream attaches no include dirs to the target at all, so consumers see nothing.
+  target_include_directories(ebur128 INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128>)
+
+  # It is a C library, and the automoc unit mpz's global AUTOMOC adds to it only drags
+  # C++ flags into a target that has no Qt in it.
+  set_target_properties(ebur128 PROPERTIES AUTOMOC OFF AUTOUIC OFF)
+
+  # Without SSE2 (arm64) ebur128.c takes a branch that opens with #warning, which MSVC
+  # rejects outright (C1021). Compile a copy without that line, leaving the vendored
+  # source untouched.
+  if (MSVC)
+    set(EBUR128_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128)
+    file(READ ${EBUR128_SOURCE_DIR}/ebur128.c EBUR128_SOURCE)
+    string(REGEX REPLACE "#warning[^\n]*" "" EBUR128_SOURCE "${EBUR128_SOURCE}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c "${EBUR128_SOURCE}")
+    set_property(TARGET ebur128 PROPERTY SOURCES ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c)
+    target_include_directories(ebur128 PRIVATE ${EBUR128_SOURCE_DIR})
+  endif()
+
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
+endif()
+# ENDOF LIBEBUR128
+
 # QHOTKEY
 # macOS (MPRemoteCommandCenter) and the SMTC build own the media keys; QHotkey would be dead weight.
 if(APPLE OR (WIN32 AND NOT MINGW))
@@ -467,6 +522,25 @@ if (ENABLE_MPD_SUPPORT)
   endif()
 endif()
 # ENDOF LIBMPDCLIENT
+
+# SQLITE3
+option(USE_SYSTEM_SQLITE3 "Use sqlite3 provided by the OS" OFF)
+if (USE_SYSTEM_SQLITE3)
+  message(STATUS "using system-wide sqlite3")
+  find_package(SQLite3 REQUIRED)
+  add_library(sqlite3 INTERFACE)
+  # SQLite3::SQLite3 only exists from CMake 4.3; before that the name was SQLite::SQLite3,
+  # which newer CMake still provides but warns about
+  if (TARGET SQLite3::SQLite3)
+    target_link_libraries(sqlite3 INTERFACE SQLite3::SQLite3)
+  else()
+    target_link_libraries(sqlite3 INTERFACE SQLite::SQLite3)
+  endif()
+else()
+  include(3rdparty/sqlite3.cmake)
+endif()
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+# ENDOF SQLITE3
 
 # CPPTRACE
 # Crash handler with cpptrace. On Linux + macOS libdl + dladdr gives demangled

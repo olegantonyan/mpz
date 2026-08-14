@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QToolButton>
 #include <QList>
+#include <QAction>
 
 class MainMenu : public QObject {
   Q_OBJECT
@@ -24,6 +25,7 @@ signals:
   void openPlaybackLog();
   void openShortcuts();
   void openEqualizer();
+  void openReplayGain();
 
 public slots:
   void on_open();

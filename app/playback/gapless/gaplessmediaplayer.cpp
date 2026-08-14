@@ -65,6 +65,14 @@ namespace Playback::Gapless {
     engine.setEqualizer(profile, enabled);
   }
 
+  void GaplessMediaPlayer::setReplayGainResolver(ReplayGainResolver fn) {
+    engine.setReplayGainResolver(std::move(fn));
+  }
+
+  void GaplessMediaPlayer::refreshReplayGain() {
+    engine.refreshReplayGain();
+  }
+
   void GaplessMediaPlayer::setTrack(const Track &track) {
     if (!gapless_enabled) {
       if (backend == Backend::Engine) {

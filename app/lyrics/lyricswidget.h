@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QPlainTextEdit>
 #include <QWidget>
+#include <QLabel>
+#include <QPlainTextEdit>
 
 namespace Lyrics {
   class Widget : public QWidget {

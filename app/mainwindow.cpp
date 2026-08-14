@@ -8,6 +8,7 @@
 #include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
 #include "mpzapplication.h"
+#include "replaygain/scanworker.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -27,6 +28,9 @@
 #include "settings_ui/settingsdialog.h"
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
+  #include "replaygain_ui/replaygaindialog.h"
+  #include "playlist/loader.h"
+  #include <QtConcurrent>
 #endif
 
 namespace {
@@ -159,6 +163,7 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupOutputDevice();
 #ifdef ENABLE_GAPLESS
   setupEqualizer();
+  setupReplayGain();
 #endif
 
   CoverArt::Covers::instance(modus_operandi);
@@ -262,6 +267,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
+#ifdef ENABLE_GAPLESS
+  replay_gain->cancelScan();
+#endif
   local_conf.saveWindowGeometry(saveGeometry());
   local_conf.saveWindowState(saveState());
   local_conf.sync();
@@ -271,6 +279,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
   QMainWindow::closeEvent(event);
   qApp->closeAllWindows();
+  qApp->quit();
 }
 
 void MainWindow::requestQuit() {
@@ -604,6 +613,21 @@ void MainWindow::setupStatusBar() {
   ui->statusbar->addWidget(new QWidget(this), 1);
 #endif
 
+#ifdef ENABLE_GAPLESS
+  status_label_replaygain = new QLabel(this);
+  status_label_replaygain->hide();
+  status_label_replaygain->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(status_label_replaygain, &QLabel::customContextMenuRequested, this,
+          [this](const QPoint &pos) {
+            QMenu menu;
+            QAction open(tr("ReplayGain…"));
+            connect(&open, &QAction::triggered, this, &MainWindow::openReplayGainDialog);
+            menu.addAction(&open);
+            menu.exec(status_label_replaygain->mapToGlobal(pos));
+          });
+  ui->statusbar->addPermanentWidget(status_label_replaygain);
+#endif
+
   status_label_right = new QLabel(tr("Nothing selected"), this);
   ui->statusbar->addPermanentWidget(status_label_right);
   connect(playlist, &PlaylistUi::Controller::durationOfSelectedChanged, this, [=](quint32 t) {
@@ -834,6 +858,70 @@ void MainWindow::openEqualizerDialog() {
   eq_dialog->show();
   eq_dialog->raise();
   eq_dialog->activateWindow();
+}
+
+void MainWindow::setupReplayGain() {
+  replay_gain = new ReplayGain::Manager(global_conf, this);
+  replay_gain->setScanWorker(QCoreApplication::applicationFilePath(),
+                             {ReplayGain::scanWorkerFlag()});
+
+  player->setReplayGainResolver([this](const Track &t) { return replay_gain->gainDbFor(t); });
+  connect(replay_gain, &ReplayGain::Manager::gainsChanged, this, [this]() {
+    player->refreshReplayGain();
+    updateReplayGainStatus();
+  });
+  connect(replay_gain, &ReplayGain::Manager::settingsChanged, this,
+          &MainWindow::updateReplayGainStatus);
+
+  connect(player, &Playback::Controller::started, this, [this](const Track &track) {
+    playing_track = track;
+    updateReplayGainStatus();
+  });
+  connect(player, &Playback::Controller::stopped, this, [this]() {
+    playing_track = Track();
+    updateReplayGainStatus();
+  });
+
+  connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
+  connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
+
+  connect(&modus_operandi, &ModusOperandi::changed, this, &MainWindow::updateReplayGainStatus);
+  updateReplayGainStatus();
+}
+
+void MainWindow::updateReplayGainStatus() {
+  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
+                         !global_conf.disableGapless();
+  status_label_replaygain->setVisible(available);
+  if (available) {
+    status_label_replaygain->setText(replay_gain->statusText(playing_track));
+  }
+}
+
+void MainWindow::openReplayGainDialog() {
+  QString reason;
+  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
+                       !global_conf.disableGapless();
+  if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+    reason = tr("Gains are not applied in mpd mode — mpd has its own replay_gain setting. "
+                "Analysing and tagging still work.");
+  } else if (global_conf.disableGapless()) {
+    reason = tr("Gains are applied only by the gapless engine. Enable it in Settings. "
+                "Analysing and tagging still work.");
+  }
+
+  if (!rg_dialog) {
+    rg_dialog = new ReplayGainUi::ReplayGainDialog(*replay_gain, global_conf, applies, reason);
+    rg_dialog->setAttribute(Qt::WA_DeleteOnClose);
+    rg_dialog->setModal(false);
+    rg_dialog->setWindowIcon(windowIcon());
+  }
+  rg_dialog->setPlaylistTracks(playlist->currentTracks());
+  rg_dialog->setSelectedTracks(playlist->selectedTracks());
+  rg_dialog->setLibraryPaths(local_conf.libraryPaths());
+  rg_dialog->show();
+  rg_dialog->raise();
+  rg_dialog->activateWindow();
 }
 
 void MainWindow::applyEqForDevice(const QByteArray &device_id) {

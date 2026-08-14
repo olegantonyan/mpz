@@ -88,7 +88,7 @@ namespace Playback::Gapless {
       if (decoder_finished && (end_f < 0 || end_f > decoder_total_frames)) {
         end_f = decoder_total_frames;
       }
-      timeline.reset(t, current_url, begin_f, end_f);
+      timeline.reset(t, current_url, begin_f, end_f, resolveReplayGain(t));
       current_track = t;
       current_segment = 0;
       about_to_finish_emitted = false;
@@ -115,7 +115,7 @@ namespace Playback::Gapless {
     if (catchup_target_frame >= 0) {
       catchup_target_frame += delta;
     }
-    timeline.reset(t, t.url(), new_begin, new_end);
+    timeline.reset(t, t.url(), new_begin, new_end, resolveReplayGain(t));
     current_track = t;
     current_segment = 0;
     about_to_finish_emitted = false;
@@ -221,7 +221,7 @@ namespace Playback::Gapless {
     const qint64 end_f = (current_track.isCue() && current_track.duration() > 0)
                              ? begin_f + qint64(current_track.duration()) * rate / 1000
                              : -1;
-    timeline.reset(current_track, current_url, begin_f, end_f);
+    timeline.reset(current_track, current_url, begin_f, end_f, resolveReplayGain(current_track));
     current_segment = 0;
     read_cursor_frame = 0;
     epoch_start_frame = 0;
@@ -528,6 +528,21 @@ namespace Playback::Gapless {
     last_filtered_frame = -1;
   }
 
+  double Engine::resolveReplayGain(const Track &t) const {
+    return rg_resolver ? rg_resolver(t) : 0.0;
+  }
+
+  void Engine::setReplayGainResolver(std::function<double(const Track &)> fn) {
+    rg_resolver = std::move(fn);
+    refreshReplayGain();
+  }
+
+  void Engine::refreshReplayGain() {
+    for (int i = 0; i < timeline.segmentCount(); i++) {
+      timeline.setSegmentGainDb(i, resolveReplayGain(timeline.segmentTrack(i)));
+    }
+  }
+
   void Engine::prepareNextTrack(const Track &t) {
     resetPreparedState();
     if (stream_mode) {
@@ -552,7 +567,7 @@ namespace Playback::Gapless {
     }
     const qint64 begin_f = qint64(t.begin()) * rate / 1000;
     const qint64 end_f = t.duration() > 0 ? begin_f + qint64(t.duration()) * rate / 1000 : -1;
-    if (timeline.appendSegment(t, current_url, begin_f, end_f) < 0) {
+    if (timeline.appendSegment(t, current_url, begin_f, end_f, resolveReplayGain(t)) < 0) {
       return;
     }
     prepared_url = current_url;
@@ -646,7 +661,8 @@ namespace Playback::Gapless {
     if (prepared_segment_appended || prepared_url.isEmpty()) {
       return;
     }
-    if (timeline.appendSegment(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame()) < 0) {
+    if (timeline.appendSegment(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame(),
+                               resolveReplayGain(prepared_track)) < 0) {
       prepared_append_deferred = true; // current segment still open; retry once it closes
       return;
     }
@@ -693,7 +709,7 @@ namespace Playback::Gapless {
                                : -1;
       cache.dropEntry(current_url);
       cache.openEntry(current_url, chosen.bytesPerFrame());
-      timeline.reset(current_track, current_url, begin_f, end_f);
+      timeline.reset(current_track, current_url, begin_f, end_f, resolveReplayGain(current_track));
       decoder_finished = false;
       decoder_total_frames = 0;
       decoder->stop();
@@ -702,7 +718,8 @@ namespace Playback::Gapless {
     } else {
       decoder_finished = prepared_decoder_finished;
       decoder_total_frames = prepared_total_frames;
-      timeline.reset(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame());
+      timeline.reset(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame(),
+                     resolveReplayGain(prepared_track));
     }
     clearPreparedFlags();
     boundary_adopt_uid = current_track.uid();
@@ -922,7 +939,9 @@ namespace Playback::Gapless {
       if (got <= 0) {
         break;
       }
-      if (!eq.isIdentity()) {
+      // Not current_track: it follows the audible clock, a sink buffer behind.
+      eq.setExtraGainDb(timeline.segmentGainDb(pos.segment));
+      if (!eq.isPassthrough()) {
         if (read_cursor_frame != last_filtered_frame) {
           eq.reset();
         }

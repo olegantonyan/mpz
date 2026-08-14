@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QVector>
 #include <QPair>
+#include <QAction>
 
 // Cyclic: mainwindow.h includes this header.
 class MainWindow;

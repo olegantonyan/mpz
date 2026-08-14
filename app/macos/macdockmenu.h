@@ -6,6 +6,8 @@
 #include <QAction>
 #include <QMenu>
 #include <QObject>
+#include <QMenu>
+#include <QAction>
 
 class MacDockMenu : public QObject {
   Q_OBJECT

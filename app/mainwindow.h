@@ -21,6 +21,9 @@
 #ifdef ENABLE_DEVICES_MENU
   #include "audio_device_ui/outputdevicebutton.h"
 #endif
+#ifdef ENABLE_GAPLESS
+  #include "replaygain/manager.h"
+#endif
 #include "modusoperandi.h"
 #include "slidingbanner.h"
 #include "coverart/coverartwidget.h"
@@ -30,6 +33,7 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QMenu>
+#include <QPointer>
 #include <QToolBar>
 #include <QtGlobal>
 
@@ -58,6 +62,7 @@
 
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
+  #include "replaygain_ui/replaygaindialog.h"
 #endif
 
 #if defined(ENABLE_UPDATE_CHECK)
@@ -125,6 +130,11 @@ private:
   WindowsTaskbar *win_taskbar = nullptr;
 #endif
   Shortcuts *shortcuts = nullptr;
+#ifdef ENABLE_GAPLESS
+  ReplayGain::Manager *replay_gain = nullptr;
+  QLabel *status_label_replaygain = nullptr;
+  Track playing_track;
+#endif
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;
 #ifdef ENABLE_DEVICES_MENU
@@ -132,6 +142,7 @@ private:
 #endif
 #ifdef ENABLE_GAPLESS
   EqualizerUi::EqualizerDialog *eq_dialog = nullptr;
+  QPointer<ReplayGainUi::ReplayGainDialog> rg_dialog;
 #endif
   SleepLock *sleep_lock = nullptr;
   SlidingBanner *banner = nullptr;
@@ -191,6 +202,9 @@ private:
   void setupEqualizer();
   void openEqualizerDialog();
   void applyEqForDevice(const QByteArray &device_id);
+  void setupReplayGain();
+  void openReplayGainDialog();
+  void updateReplayGainStatus();
 #endif
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();
