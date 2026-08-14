@@ -21,6 +21,16 @@
   #include <unistd.h>
 #endif
 
+#ifdef Q_OS_WIN
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+  #ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+  #endif
+  #include <windows.h>
+#endif
+
 #include <algorithm>
 #include <memory>
 #include <utility>

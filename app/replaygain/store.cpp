@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
+#include <QVector>
 
 namespace ReplayGain {
   namespace {
