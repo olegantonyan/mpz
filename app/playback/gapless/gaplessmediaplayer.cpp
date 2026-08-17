@@ -23,6 +23,11 @@ namespace Playback::Gapless {
     return engine.positionMs();
   }
 
+  void GaplessMediaPlayer::releaseAudio() {
+    MediaPlayer::releaseAudio();
+    engine.releaseAudio();
+  }
+
   void GaplessMediaPlayer::pause() {
     if (track_set) {
       engine.pause();

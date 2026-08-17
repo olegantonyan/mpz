@@ -1,6 +1,7 @@
 #include "playbackcontroller.h"
 #include "streammetadata.h"
 
+#include <QCoreApplication>
 #include <QDebug>
 #include <QFileInfo>
 
@@ -28,6 +29,13 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     connect(&_player, &MediaPlayer::aboutToFinish, this, &Controller::aboutToFinish);
     connect(&_player, &MediaPlayer::error, this, [](const QString &message) {
       qWarning() << "playback error:" << message;
+    });
+
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {
+      _player.releaseAudio();
+#ifdef ENABLE_MPD_SUPPORT
+      _mpdplayer.releaseAudio();
+#endif
     });
 
     connect(&_player, &MediaPlayer::streamBufferfillChanged, this, [=](quint32 bytes, quint32 thresh) {

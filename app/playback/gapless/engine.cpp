@@ -138,6 +138,7 @@ namespace Playback::Gapless {
     about_to_finish_emitted = false;
     catchup_target_frame = -1;
     pending_seek_ms = -1;
+    output_failure_ms = -1;
     boundary_adopt_uid = 0;
     current_segment = 0;
     read_cursor_frame = 0;
@@ -281,13 +282,33 @@ namespace Playback::Gapless {
     sink_io = nullptr;
   }
 
+  void Engine::releaseAudio() {
+    pump_timer.stop();
+    position_timer.stop();
+    if (sink) {
+      sink->stop();
+      delete sink; // not deleteLater: the stream must go down while the event loop still runs
+      sink = nullptr;
+      sink_io = nullptr;
+    }
+  }
+
   void Engine::handleOutputFailure(const QString &message) {
     if (audio_output_failed) {
       return;
     }
     audio_output_failed = true;
     qCWarning(mpzGapless) << "audio output lost:" << message << "device" << active_device.id();
+    const bool resumable = current_state == MediaPlayer::PlayingState && !current_url.isEmpty() &&
+                           !QMediaDevices::defaultAudioOutput().isNull();
+    const qint64 ms = positionMs();
     destroySink();
+    if (resumable) {
+      output_failure_ms = ms;
+      setState(MediaPlayer::PausedState); // Stopped makes the Controller clear the track
+      return;
+    }
+    output_failure_ms = -1;
     advance_on_eof = false; // a dead output must not walk the playlist
     setState(MediaPlayer::StoppedState);
     emit error(message);
@@ -393,6 +414,7 @@ namespace Playback::Gapless {
     synthetic_playing_on_play = false;
     boundary_adopt_uid = 0;
     pending_seek_ms = -1;
+    output_failure_ms = -1;
     if (sink) {
       sink->reset();
       sink->stop();
@@ -821,8 +843,23 @@ namespace Playback::Gapless {
   }
 
   void Engine::switchSink(const QAudioDevice &device) {
+    if (device.isNull()) {
+      if (sink || output_failure_ms >= 0) {
+        output_failure_ms = -1;
+        handleOutputFailure(QStringLiteral("no audio output device available"));
+      }
+      active_device = device;
+      return;
+    }
     if (!sink) {
       active_device = device; // stopped/no track: createSink re-resolves on the next start
+      if (output_failure_ms >= 0) {
+        const qint64 ms = output_failure_ms;
+        const Track t = current_track;
+        hardSwitchTo(t);
+        pending_seek_ms = t.isStream() ? -1 : ms;
+        play();
+      }
       return;
     }
     if (device.id() == active_device.id()) {

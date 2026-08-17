@@ -40,6 +40,7 @@ namespace Playback {
     virtual MediaPlayer::State state();
     virtual int volume();
     virtual qint64 position();
+    virtual void releaseAudio();
 
   signals:
     void positionChanged(qint64 position);

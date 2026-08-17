@@ -40,6 +40,7 @@ namespace Playback::Gapless {
 
     void setReplayGainResolver(std::function<double(const Track &)> fn);
     void refreshReplayGain();
+    void releaseAudio();
 
   public slots:
     void setTrack(const Track &t);
@@ -145,6 +146,7 @@ namespace Playback::Gapless {
     qint64 epoch_start_frame = 0; // abs frame the sink clock is anchored to; re-set on every sink (re)start
     qint64 catchup_target_frame = -1;
     qint64 pending_seek_ms = -1; // applied once the pipeline is up after a forced format/device rebuild
+    qint64 output_failure_ms = -1; // -1 = not waiting for an output device to come back
     quint64 boundary_adopt_uid = 0; // uid the next setTrack may adopt seamlessly; 0 = none
     qint64 decoder_total_frames = 0;
     qint64 prepared_begin_frame = 0;

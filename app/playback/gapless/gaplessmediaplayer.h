@@ -16,6 +16,7 @@ namespace Playback::Gapless {
 
     MediaPlayer::State state() override;
     qint64 position() override;
+    void releaseAudio() override;
     QByteArray effectiveOutputDeviceId() const { return engine.effectiveOutputDeviceId(); }
 
   signals:

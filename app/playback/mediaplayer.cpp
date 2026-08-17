@@ -112,6 +112,16 @@ namespace Playback {
     return MediaPlayer::StoppedState;
   }
 
+  void MediaPlayer::releaseAudio() {
+    player.stop();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    player.setSource(QUrl());
+#else
+    player.setMedia(nullptr);
+#endif
+    stream.stop();
+  }
+
   int MediaPlayer::volume() {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     return audio_output.volume() * 100;
@@ -399,9 +409,14 @@ namespace Playback {
       return; // unrelated hotplug: don't disturb playback
     }
 
+    preferred_device_missing = false;
+    if (player.source().isEmpty() && player.sourceDevice() == nullptr) {
+      audio_output.setDevice(preferred); // no media: nothing to re-route
+      return;
+    }
+
     // configured device replugged: switch back to it. Double-set through default
     // with a delay because pipewire sometimes keeps the stream on the wrong sink.
-    preferred_device_missing = false;
     audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     const int epoch = device_change_epoch;
     QTimer::singleShot(100, this, [this, epoch]() {

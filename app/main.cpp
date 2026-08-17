@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
 #ifdef ENABLE_CRASH_HANDLER
   mpz::set_system_info(SysInfo::get().join("\n").toStdString());
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, &a, []() { mpz::set_crash_phase("shutting-down"); });
 #endif
 
   auto arguments = args(argc, argv);
@@ -172,5 +173,8 @@ int main(int argc, char *argv[]) {
 #endif
 
   w.show();
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::set_crash_phase("running");
+#endif
   return a.exec();
 }

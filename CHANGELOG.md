@@ -4,6 +4,10 @@
 
 - ReplayGain: read/write peaks data into tags or separate file preserving the original audio files unchanged
 
+### Fixed
+
+- Crash on exit with PipeWire: audio is now released before the event loop stops
+
 ### Misc
 
 - Gapless playback is always on; Settings toggle is gone. `ENABLE_GAPLESS` build option remains
