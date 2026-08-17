@@ -249,6 +249,7 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/audio_device_ui/devicesmenu.cpp
     app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp
+    app/decode/nativeformat.cpp
     app/replaygain/jobcodec.cpp
     app/replaygain/jobrunner.cpp
     app/replaygain/manager.cpp

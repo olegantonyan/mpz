@@ -1,5 +1,7 @@
 #include "waveform/analyzer.h"
 
+#include "decode/nativeformat.h"
+
 #include <QAudioBuffer>
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -93,9 +95,10 @@ namespace Waveform {
   }
 
   void Analyzer::startDecode() {
-    // no setAudioFormat(): requesting resampling wedges the decoder on mp3s with an encoder delay
+    // FLAC only: a requested format wedges the decoder on mp3s with an encoder delay
     partial_timer.start();
     decoder.setSource(QUrl::fromLocalFile(current_path));
+    decoder.setAudioFormat(Decode::nativeAudioFormat(current_path));
     decoder.start();
   }
 

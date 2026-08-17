@@ -1,5 +1,7 @@
 #include "playback/gapless/trackdecoder.h"
 
+#include "decode/nativeformat.h"
+
 #include <QAudioBuffer>
 
 namespace Playback::Gapless {
@@ -20,6 +22,9 @@ namespace Playback::Gapless {
     QMetaObject::invokeMethod(this, [this, url]() {
       reset(url);
       decoder.setSource(url);
+      if (!requested_format.isValid()) {
+        decoder.setAudioFormat(Decode::nativeAudioFormat(url.toLocalFile()));
+      }
       startDecoder();
     });
   }

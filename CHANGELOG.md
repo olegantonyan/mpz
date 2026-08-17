@@ -7,6 +7,7 @@
 ### Fixed
 
 - Crash on exit with PipeWire: audio is now released before the event loop stops
+- FLAC files that don't play (stuck at 0:00, no waveform) when frame headers omit the sample rate
 
 ### Misc
 
