@@ -68,9 +68,6 @@ namespace ReplayGain {
     if (settings_.mode == Mode::Off) {
       return 0.0;
     }
-    if (track.isStream()) {
-      return 0.0;
-    }
     return effectiveGainDb(gainFor(track), settings_);
   }
 }

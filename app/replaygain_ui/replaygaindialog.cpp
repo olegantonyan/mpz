@@ -33,6 +33,12 @@ namespace ReplayGainUi {
       return present ? QString::number(db, 'f', 2) + QStringLiteral(" dB") : QStringLiteral("—");
     }
 
+    QLabel *hint(const QString &text) {
+      auto *label = new QLabel(text);
+      label->setStyleSheet(QStringLiteral("color: gray;"));
+      return label;
+    }
+
     QString tagStatus(int tag_result) {
       switch (static_cast<ReplayGain::TagResult>(tag_result)) {
         case ReplayGain::TagResult::Ok: return ReplayGainDialog::tr("tags written");
@@ -113,15 +119,20 @@ namespace ReplayGainUi {
     preamp_spin_->setSingleStep(0.5);
     preamp_spin_->setDecimals(1);
     preamp_spin_->setSuffix(" " + tr("dB"));
-    form->addRow(tr("Preamp:"), preamp_spin_);
+    auto *preamp_row = new QHBoxLayout;
+    preamp_row->addWidget(preamp_spin_);
+    preamp_row->addWidget(hint(tr("Added to measured gains only")), 1);
+    form->addRow(tr("Preamp:"), preamp_row);
 
     fallback_spin_ = new QDoubleSpinBox;
     fallback_spin_->setRange(-15.0, 15.0);
     fallback_spin_->setSingleStep(0.5);
     fallback_spin_->setDecimals(1);
     fallback_spin_->setSuffix(" " + tr("dB"));
-    fallback_spin_->setToolTip(tr("Applied to tracks with no ReplayGain data"));
-    form->addRow(tr("Untagged tracks:"), fallback_spin_);
+    auto *fallback_row = new QHBoxLayout;
+    fallback_row->addWidget(fallback_spin_);
+    fallback_row->addWidget(hint(tr("Used for unscanned tracks and radio streams")), 1);
+    form->addRow(tr("Untagged tracks:"), fallback_row);
 
     clip_check_ = new QCheckBox(tr("Prevent clipping (use the measured peak)"));
     clip_check_->setToolTip(

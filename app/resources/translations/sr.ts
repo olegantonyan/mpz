@@ -491,168 +491,168 @@
         <translation>Графички EQ (вишепојасни)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
         <source>Preamp:</source>
         <translation>Претпојачање:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="134"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="128"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="143"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="137"/>
         <source>Auto (clip-safe)</source>
         <translation>Аутоматски (без клиповања)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="138"/>
         <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
         <translation>Подеси претпојачање тако да појачани појасеви никада не пређу 0 dBFS</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="160"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="154"/>
         <source>Graphic</source>
         <translation>Графички</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="155"/>
         <source>Parametric</source>
         <translation>Параметарски</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="182"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="176"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Излазни уређај: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="245"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="239"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
         <translation>Овај пресет није 10-појасни графички EQ. Уредите га у параметарском режиму или ресетујте.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="248"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="242"/>
         <source>Reset to 10-band</source>
         <translation>Ресетуј на 10 појасева</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Freq (Hz)</source>
         <translation>Фрек. (Hz)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Gain (dB)</source>
         <translation>Појачање (dB)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>On</source>
         <translation>Укљ.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="276"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
         <source>Add band</source>
         <translation>Додај појас</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="288"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="282"/>
         <source>Remove selected</source>
         <translation>Уклони изабрано</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="320"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="314"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="315"/>
         <source>Low shelf</source>
         <translation>Ниски шелф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="316"/>
         <source>High shelf</source>
         <translation>Високи шелф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="317"/>
         <source>Low pass</source>
         <translation>Нископропусни</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="318"/>
         <source>High pass</source>
         <translation>Високопропусни</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Save preset</source>
         <translation>Сачувај пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Preset name:</source>
         <translation>Назив пресета:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="506"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="500"/>
         <source>Import equalizer preset</source>
         <translation>Увези пресет еквилајзера</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="535"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="529"/>
         <source>Choose file…</source>
         <translation>Изабери датотеку…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="549"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="543"/>
         <source>Import EqualizerAPO / AutoEQ preset</source>
         <translation>Увези EqualizerAPO / AutoEQ пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="544"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
         <translation>Параметарски EQ (*.txt);;Све датотеке (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>Import failed</source>
         <translation>Увоз није успео</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
         <source>Could not open the file.</source>
         <translation>Није могуће отворити датотеку.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>No filters found in the file.</source>
         <translation>У датотеци нису пронађени филтери.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Export preset</source>
         <translation>Извези пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Text files (*.txt);;All files (*)</source>
         <translation>Текстуалне датотеке (*.txt);;Све датотеке (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Export failed</source>
         <translation>Извоз није успео</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Could not write the file.</source>
         <translation>Није могуће уписати датотеку.</translation>
     </message>
@@ -842,98 +842,98 @@
         <translation>Еквилајзер…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="112"/>
+        <location filename="../../macos/macmenubar.cpp" line="111"/>
         <source>ReplayGain…</source>
         <translation>ReplayGain…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="123"/>
+        <location filename="../../macos/macmenubar.cpp" line="119"/>
         <source>Output Device</source>
         <translation>Излазни уређај</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="135"/>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
         <source>mpd update</source>
         <translation>Ажурирај mpd базу</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="145"/>
+        <location filename="../../macos/macmenubar.cpp" line="141"/>
         <source>View</source>
         <translation>Приказ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="146"/>
+        <location filename="../../macos/macmenubar.cpp" line="142"/>
         <source>Sort</source>
         <translation>Сортирање</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="157"/>
+        <location filename="../../macos/macmenubar.cpp" line="153"/>
         <source>Jump to Playing Track</source>
         <translation>Пређите на нумеру за репродукцију</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="161"/>
+        <location filename="../../macos/macmenubar.cpp" line="157"/>
         <source>Playback Log</source>
         <translation>Дневник репродукције</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="165"/>
+        <location filename="../../macos/macmenubar.cpp" line="161"/>
         <source>Keyboard Shortcuts</source>
         <translation>Пречице на тастатури</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="171"/>
-        <location filename="../../macos/macmenubar.cpp" line="181"/>
+        <location filename="../../macos/macmenubar.cpp" line="167"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Enter Full Screen</source>
         <translation>Пређи у цео екран</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="181"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Exit Full Screen</source>
         <translation>Изађи из целог екрана</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="184"/>
+        <location filename="../../macos/macmenubar.cpp" line="180"/>
         <source>Window</source>
         <translation>Прозор</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="186"/>
+        <location filename="../../macos/macmenubar.cpp" line="182"/>
         <source>Minimize</source>
         <translation>Умањи</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="190"/>
+        <location filename="../../macos/macmenubar.cpp" line="186"/>
         <source>Zoom</source>
         <translation>Зумирај</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="201"/>
+        <location filename="../../macos/macmenubar.cpp" line="197"/>
         <source>Close</source>
         <translation>Затвори</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="205"/>
+        <location filename="../../macos/macmenubar.cpp" line="201"/>
         <source>Help</source>
         <translation>Помоћ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="207"/>
+        <location filename="../../macos/macmenubar.cpp" line="203"/>
         <source>mpz Website</source>
         <translation>mpz веб-сајт</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="212"/>
+        <location filename="../../macos/macmenubar.cpp" line="208"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="217"/>
+        <location filename="../../macos/macmenubar.cpp" line="213"/>
         <source>Send Feedback…</source>
         <translation>Пошаљи повратне информације…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="220"/>
+        <location filename="../../macos/macmenubar.cpp" line="216"/>
         <source>Report a Bug…</source>
         <translation>Пријави грешку…</translation>
     </message>
@@ -1109,56 +1109,56 @@
         <translation>Замени репродукцију за тренутну листу песама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="308"/>
-        <location filename="../../mainwindow.cpp" line="343"/>
+        <location filename="../../mainwindow.cpp" line="307"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>sequential</source>
         <translation>секвенцијално</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="309"/>
-        <location filename="../../mainwindow.cpp" line="342"/>
+        <location filename="../../mainwindow.cpp" line="308"/>
+        <location filename="../../mainwindow.cpp" line="341"/>
         <source>random</source>
         <translation>насумично</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="310"/>
-        <location filename="../../mainwindow.cpp" line="344"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="343"/>
         <source>sequential (no loop)</source>
         <translation>секвенцијално (нема понављања)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="341"/>
+        <location filename="../../mainwindow.cpp" line="340"/>
         <source>(use global)</source>
         <translation>(користи глобално)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="450"/>
+        <location filename="../../mainwindow.cpp" line="449"/>
         <source>Lock toolbar</source>
         <translation>Закључај траку с алаткама</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="468"/>
+        <location filename="../../mainwindow.cpp" line="467"/>
         <source>Album cover</source>
         <translation>Омот албума</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="474"/>
+        <location filename="../../mainwindow.cpp" line="473"/>
         <source>Lyrics</source>
         <translation>Текст песме</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="623"/>
-        <location filename="../../mainwindow.cpp" line="627"/>
+        <location filename="../../mainwindow.cpp" line="622"/>
+        <location filename="../../mainwindow.cpp" line="626"/>
         <source>Nothing selected</source>
         <translation>Ништа није изабрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="629"/>
+        <location filename="../../mainwindow.cpp" line="628"/>
         <source>Selection total duration</source>
         <translation>Укупно трајање избора</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="641"/>
+        <location filename="../../mainwindow.cpp" line="640"/>
         <source>Update available:</source>
         <translation>Доступно ажурирање:</translation>
     </message>
@@ -1167,7 +1167,7 @@
         <translation type="vanished">ReplayGain: %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="906"/>
+        <location filename="../../mainwindow.cpp" line="903"/>
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>У mpd режиму појачање се не примењује — mpd има сопствену replay_gain поставку. Анализа и уписивање ознака и даље раде.</translation>
     </message>
@@ -1464,161 +1464,170 @@
 <context>
     <name>ReplayGainUi::ReplayGainDialog</name>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="38"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="44"/>
         <source>tags written</source>
         <translation>ознаке уписане</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="39"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
         <source>tags unsupported</source>
         <translation>ознаке нису подржане</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="40"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
         <source>tags: open failed</source>
         <translation>ознаке: отварање није успело</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="41"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
         <source>tags: save failed</source>
         <translation>ознаке: чување није успело</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="51"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="57"/>
         <source>ReplayGain</source>
         <translation>ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="62"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="68"/>
         <source>Playback</source>
         <translation>Репродукција</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="63"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="310"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="321"/>
         <source>Analyse</source>
         <translation>Анализа</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="106"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="112"/>
         <source>Off</source>
         <translation>Искључено</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="107"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="234"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
         <source>Track gain</source>
         <translation>Појачање нумере</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="108"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="234"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
         <source>Album gain</source>
         <translation>Појачање албума</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="109"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="122"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="121"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="131"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="124"/>
+        <source>Added to measured gains only</source>
+        <translation>Само на измерена појачања</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
         <source>Preamp:</source>
         <translation>Предпојачање:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="123"/>
         <source>Applied to tracks with no ReplayGain data</source>
-        <translation>Примењује се на нумере без ReplayGain података</translation>
+        <translation type="vanished">Примењује се на нумере без ReplayGain података</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="124"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="134"/>
+        <source>Used for unscanned tracks and radio streams</source>
+        <translation>За неанализиране нумере и радио стримове</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
         <source>Untagged tracks:</source>
         <translation>Нумере без ознака:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="137"/>
         <source>Prevent clipping (use the measured peak)</source>
         <translation>Спречи одсецање (користи измерени пик)</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="128"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="139"/>
         <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
         <translation>Пик је измерен без еквилајзера, па се уз појачавање опсега еквилајзером њих двоје слажу само приближно.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="150"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="161"/>
         <source>Store results in a sidecar database</source>
         <translation>Чувај резултате у засебној бази података</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="151"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
         <source>Write ReplayGain tags into the audio files</source>
         <translation>Уписуј ReplayGain ознаке у аудио датотеке</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="160"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="171"/>
         <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
         <translation>Свака анализирана датотека се поново уписује, па се њена величина и време измене мењају. Нумере из cue листа могу да се чувају само у засебној бази.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="176"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="187"/>
         <source>Show in file manager</source>
         <translation>Прикажи у менаџеру датотека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="183"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="194"/>
         <source>Re-analyse tracks that already have data</source>
         <translation>Поново анализирај нумере које већ имају податке</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="187"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="198"/>
         <source>Scope:</source>
         <translation>Обим:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="189"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="200"/>
         <source>Whole library</source>
         <translation>Цела библиотека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="190"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="201"/>
         <source>Current playlist</source>
         <translation>Тренутна плејлиста</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="191"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
         <source>Selected tracks</source>
         <translation>Изабране нумере</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="234"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
         <source>Track</source>
         <translation>Нумера</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="234"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="234"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="310"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="321"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="316"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="327"/>
         <source>%1 — %n entries</source>
         <translation>
             <numerusform>%1 — %n ставка</numerusform>
@@ -1627,12 +1636,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="353"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="364"/>
         <source>analysed</source>
         <translation>анализирано</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="385"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="396"/>
         <source>Cancelled after %n track(s)</source>
         <translation>
             <numerusform>Отказано након %n нумере</numerusform>
@@ -1641,7 +1650,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="387"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="398"/>
         <source>Analysed %1, failed %2</source>
         <translation>Анализирано %1, неуспешно %2</translation>
     </message>
@@ -1811,8 +1820,7 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="280"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="459"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="522"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="537"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
         <source>(requires restart)</source>
         <translation>(захтева поновно покретање)</translation>
     </message>
@@ -1863,13 +1871,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="268"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
         <source>Add</source>
         <translation>Додај</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="269"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Remove</source>
         <translation>Уклони</translation>
     </message>
@@ -1890,13 +1898,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="305"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="647"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="633"/>
         <source>Left</source>
         <translation>Лево</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="306"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="648"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="634"/>
         <source>Right</source>
         <translation>Десно</translation>
     </message>
@@ -1974,62 +1982,62 @@
         <translation>ставки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="529"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
         <source>Gapless memory buffer:</source>
         <translation>Меморијски бафер за репродукцију без прекида:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="532"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="543"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>Декодирани звук се чува у меморији како би прелази између нумера били без прекида, а премотавање унутар нумере тренутно. Већи бафер кешира више (или дуже) нумере; 100 МБ је довољно за већину библиотека.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="555"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
         <source>MPRIS blacklist</source>
         <translation>Црна листа MPRIS-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="544"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнориши имена MPRIS пошиљалаца (нпр. „wireplumber“):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="572"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
         <source>Add MPRIS sender</source>
         <translation>Додај MPRIS пошиљаоца</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="573"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Sender name:</source>
         <translation>Име пошиљаоца:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="584"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="570"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Заустави MPD репродукцију при затварању mpz-а</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="591"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
         <source>Crash reports:</source>
         <translation>Извештаји о падовима:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="593"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="579"/>
         <source>Send automatically</source>
         <translation>Шаљи аутоматски</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="594"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="580"/>
         <source>Ask after next crash</source>
         <translation>Питај после следећег пада</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="595"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="581"/>
         <source>Never send</source>
         <translation>Никад не шаљи</translation>
     </message>
