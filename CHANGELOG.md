@@ -6,6 +6,8 @@
 
 ### Misc
 
+- Gapless playback is always on; Settings toggle is gone. `ENABLE_GAPLESS` build option remains
+
 ## [2.1.3] - 2026-08-10
 
 ### Added

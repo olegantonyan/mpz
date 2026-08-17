@@ -491,11 +491,6 @@
         <translation>Графички EQ (вишепојасни)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="122"/>
-        <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
-        <translation>Еквилајзер ради само са механизмом репродукције без прекида. Омогућите га у подешавањима.</translation>
-    </message>
-    <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
         <source>Preamp:</source>
         <translation>Претпојачање:</translation>
@@ -1176,11 +1171,6 @@
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>У mpd режиму појачање се не примењује — mpd има сопствену replay_gain поставку. Анализа и уписивање ознака и даље раде.</translation>
     </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="909"/>
-        <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
-        <translation>Појачање примењује само gapless мотор. Укључите га у поставкама. Анализа и уписивање ознака и даље раде.</translation>
-    </message>
 </context>
 <context>
     <name>ModusOperandi</name>
@@ -1798,8 +1788,8 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
-        <source>(gapless playback, local files only)</source>
-        <translation>(репродукција без прекида, само локалне датотеке)</translation>
+        <source>(local files only)</source>
+        <translation>(само локалне датотеке)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
@@ -1982,11 +1972,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="509"/>
         <source>entries</source>
         <translation>ставки</translation>
-    </message>
-    <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
-        <source>Enable gapless playback</source>
-        <translation>Омогући репродукцију без прекида</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="529"/>

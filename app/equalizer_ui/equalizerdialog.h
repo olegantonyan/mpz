@@ -3,7 +3,6 @@
 
 #include "eq/eqprofile.h"
 #include "config/local.h"
-#include "config/global.h"
 #include "playback/playbackcontroller.h"
 #include "equalizer_ui/eqcurvewidget.h"
 
@@ -24,7 +23,7 @@ namespace EqualizerUi {
     Q_OBJECT
   public:
     EqualizerDialog(Playback::Controller *player, Config::Local &local_c,
-                    Config::Global &global_c, QWidget *parent = nullptr);
+                    QWidget *parent = nullptr);
 
     void done(int result) override;
 
@@ -53,7 +52,6 @@ namespace EqualizerUi {
 
     Playback::Controller *player_;
     Config::Local &local_conf;
-    Config::Global &global_conf;
 
     QByteArray device_id_;
     QList<Eq::EqProfile> profiles_;
@@ -66,7 +64,6 @@ namespace EqualizerUi {
     QComboBox *preset_combo_ = nullptr;
     QDoubleSpinBox *preamp_spin_ = nullptr;
     QCheckBox *auto_preamp_check_ = nullptr;
-    QLabel *note_ = nullptr;
     CurveWidget *curve_ = nullptr;
     QTabWidget *tabs_ = nullptr;
     QVector<QSlider *> sliders_;

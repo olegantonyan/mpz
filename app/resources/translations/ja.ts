@@ -491,11 +491,6 @@
         <translation>グラフィック EQ (マルチバンド)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="122"/>
-        <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
-        <translation>イコライザーはギャップレスエンジンでのみ動作します。設定で有効にしてください。</translation>
-    </message>
-    <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
         <source>Preamp:</source>
         <translation>プリアンプ :</translation>
@@ -1176,11 +1171,6 @@
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>mpd モードではゲインは適用されません — mpd には独自の replay_gain 設定があります。解析とタグ書き込みは動作します。</translation>
     </message>
-    <message>
-        <location filename="../../mainwindow.cpp" line="909"/>
-        <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
-        <translation>ゲインはギャップレスエンジンでのみ適用されます。設定で有効にしてください。解析とタグ書き込みは動作します。</translation>
-    </message>
 </context>
 <context>
     <name>ModusOperandi</name>
@@ -1794,8 +1784,8 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
-        <source>(gapless playback, local files only)</source>
-        <translation>(ギャップレス再生、ローカルファイルのみ)</translation>
+        <source>(local files only)</source>
+        <translation>(ローカルファイルのみ)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
@@ -1976,11 +1966,6 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="509"/>
         <source>entries</source>
         <translation>件</translation>
-    </message>
-    <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
-        <source>Enable gapless playback</source>
-        <translation>ギャップレス再生を有効にする</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="529"/>

@@ -98,12 +98,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.seekbar = ui->seekBar;
   pc.time = ui->timeLabel;
   ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  bool gapless_on = !global_conf.disableGapless();
   int gapless_mb = global_conf.gaplessCacheSizeMb();
   if (gapless_mb <= 0) {
     gapless_mb = 100;
   }
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, modus_operandi, this);
   player->setWaveformEnabled(!global_conf.waveformDisabled());
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
@@ -844,7 +843,7 @@ void MainWindow::setupEqualizer() {
 
 void MainWindow::openEqualizerDialog() {
   if (!eq_dialog) {
-    eq_dialog = new EqualizerUi::EqualizerDialog(player, local_conf, global_conf, this);
+    eq_dialog = new EqualizerUi::EqualizerDialog(player, local_conf, this);
     eq_dialog->setModal(false);
   }
   eq_dialog->show();
@@ -890,8 +889,7 @@ void MainWindow::setupReplayGain() {
 }
 
 void MainWindow::updateReplayGainStatus() {
-  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
-                         !global_conf.disableGapless();
+  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS;
   status_label_replaygain->setVisible(available);
   if (available) {
     status_label_replaygain->setText(replay_gain->statusText(playing_track));
@@ -900,13 +898,9 @@ void MainWindow::updateReplayGainStatus() {
 
 void MainWindow::openReplayGainDialog() {
   QString reason;
-  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
-                       !global_conf.disableGapless();
+  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS;
   if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
     reason = tr("Gains are not applied in mpd mode — mpd has its own replay_gain setting. "
-                "Analysing and tagging still work.");
-  } else if (global_conf.disableGapless()) {
-    reason = tr("Gains are applied only by the gapless engine. Enable it in Settings. "
                 "Analysing and tagging still work.");
   }
 

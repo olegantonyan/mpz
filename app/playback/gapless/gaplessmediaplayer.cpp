@@ -1,10 +1,9 @@
 #include "gaplessmediaplayer.h"
 
 namespace Playback::Gapless {
-  GaplessMediaPlayer::GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, bool gapless_enabled, QObject *parent) :
+  GaplessMediaPlayer::GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, QObject *parent) :
     MediaPlayer(stream_buffer_size, outdevid, parent),
-    engine(qint64(cache_mb) * 1024 * 1024, stream_buffer_size),
-    gapless_enabled(gapless_enabled) {
+    engine(qint64(cache_mb) * 1024 * 1024, stream_buffer_size) {
     connect(&engine, &Engine::positionChanged, this, &MediaPlayer::positionChanged);
     connect(&engine, &Engine::stateChanged, this, &MediaPlayer::stateChanged);
     connect(&engine, &Engine::error, this, &MediaPlayer::error);
@@ -17,15 +16,15 @@ namespace Playback::Gapless {
   }
 
   MediaPlayer::State GaplessMediaPlayer::state() {
-    return backend == Backend::Engine ? engine.state() : MediaPlayer::state();
+    return engine.state();
   }
 
   qint64 GaplessMediaPlayer::position() {
-    return backend == Backend::Engine ? engine.positionMs() : MediaPlayer::position();
+    return engine.positionMs();
   }
 
   void GaplessMediaPlayer::pause() {
-    if (backend == Backend::Engine) {
+    if (track_set) {
       engine.pause();
     } else {
       MediaPlayer::pause();
@@ -33,7 +32,7 @@ namespace Playback::Gapless {
   }
 
   void GaplessMediaPlayer::play() {
-    if (backend == Backend::Engine) {
+    if (track_set) {
       engine.play();
     } else {
       MediaPlayer::play();
@@ -41,15 +40,15 @@ namespace Playback::Gapless {
   }
 
   void GaplessMediaPlayer::stop() {
-    if (backend == Backend::Engine) {
-      engine.stop(); // never base stop() while Engine active: base synthesizes a spurious StoppedState from its idle QMediaPlayer
+    if (track_set) {
+      engine.stop();
     } else {
-      MediaPlayer::stop();
+      MediaPlayer::stop(); // the idle base synthesizes the StoppedState the engine won't re-emit
     }
   }
 
   void GaplessMediaPlayer::setPosition(qint64 position) {
-    if (backend == Backend::Engine) {
+    if (track_set) {
       engine.setPositionMs(position);
     } else {
       MediaPlayer::setPosition(position);
@@ -74,35 +73,24 @@ namespace Playback::Gapless {
   }
 
   void GaplessMediaPlayer::setTrack(const Track &track) {
-    if (!gapless_enabled) {
-      if (backend == Backend::Engine) {
-        engine.clearTrack();
-      }
-      backend = Backend::Qmp;
-      MediaPlayer::setTrack(track);
-    } else {
-      if (backend == Backend::Qmp) {
-        MediaPlayer::clearTrack();
-      }
-      backend = Backend::Engine;
-      engine.setTrack(track);
-    }
+    track_set = true;
+    engine.setTrack(track);
   }
 
   void GaplessMediaPlayer::prepareNextTrack(const Track &track) {
-    if (backend != Backend::Engine) {
+    if (!track_set) {
       return;
     }
     engine.prepareNextTrack(track.isStream() ? Track() : track);
   }
 
   void GaplessMediaPlayer::clearTrack() {
-    if (backend == Backend::Engine) {
+    if (track_set) {
       engine.clearTrack();
     } else {
       MediaPlayer::clearTrack();
     }
-    backend = Backend::None;
+    track_set = false;
   }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

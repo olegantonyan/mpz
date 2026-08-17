@@ -57,7 +57,6 @@ private:
 #endif
   QSpinBox *spin_playback_log_size = nullptr;
 #ifdef ENABLE_GAPLESS
-  QCheckBox *check_gapless = nullptr;
   QSpinBox *spin_gapless_cache_mb = nullptr;
 #endif
 

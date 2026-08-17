@@ -44,7 +44,6 @@ void MainMenu::on_open() {
   });
   connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
 #ifdef ENABLE_GAPLESS
-  equalizer.setEnabled(!global_conf.disableGapless());
   connect(&equalizer, &QAction::triggered, this, &MainMenu::openEqualizer);
   connect(&replaygain, &QAction::triggered, this, &MainMenu::openReplayGain);
 #endif

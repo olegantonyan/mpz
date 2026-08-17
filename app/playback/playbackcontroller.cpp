@@ -5,11 +5,11 @@
 #include <QFileInfo>
 
 namespace Playback {
-Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, bool gapless_enabled, ModusOperandi &modus, QObject *parent) :
+Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray outdevid, int gapless_cache_mb, ModusOperandi &modus, QObject *parent) :
   QObject(parent),
   _controls(c),
 #ifdef ENABLE_GAPLESS
-  _player(stream_buffer_size, outdevid, gapless_cache_mb, gapless_enabled),
+  _player(stream_buffer_size, outdevid, gapless_cache_mb),
 #else
   _player(stream_buffer_size, outdevid),
 #endif
@@ -20,7 +20,6 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 {
 #ifndef ENABLE_GAPLESS
     Q_UNUSED(gapless_cache_mb)
-    Q_UNUSED(gapless_enabled)
 #endif
     connect(&_player, &MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
     connect(&_player, &MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
@@ -91,7 +90,6 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
     _controls.seekbar->installEventFilter(this);
 
 #ifdef ENABLE_GAPLESS
-    _gapless_enabled = gapless_enabled;
     connect(&waveform, &Waveform::Analyzer::ready, this, [this](const QString &path, const Waveform::Peaks &peaks) {
       if (path == _current_track.path()) {
         _controls.seekbar->setPeaks(peaks);
@@ -340,7 +338,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       _waveform_path = track.path();
       _controls.seekbar->setPeaks(Waveform::Peaks());
     }
-    if (_waveform_enabled && _gapless_enabled && !track.isStream() && QFileInfo::exists(track.path())) {
+    if (_waveform_enabled && !track.isStream() && QFileInfo::exists(track.path())) {
       waveform.request(track.path());
     } else {
       waveform.cancel();
