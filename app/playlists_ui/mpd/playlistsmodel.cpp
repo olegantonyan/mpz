@@ -168,11 +168,11 @@ namespace PlaylistsUi {
       }
     }
 
-    void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
+    QFuture<void> Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
       Q_ASSERT(!filepaths.isEmpty());
       Q_UNUSED(libraryDir);
 
-      QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
+      return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
         const QString playlistName = createPlaylistFromDirs(filepaths);
 
         QMetaObject::invokeMethod(this,
@@ -182,7 +182,6 @@ namespace PlaylistsUi {
           },
           Qt::QueuedConnection);
       });
-      Q_UNUSED(future);
     }
 
     QString Model::playlistUniqueName(const QString &name) const {

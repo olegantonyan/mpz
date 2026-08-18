@@ -8,7 +8,7 @@
 #include "config/local.h"
 #include "config/global.h"
 #include "playback/dispatch.h"
-#include "busyspinner.h"
+#include "backgroundtasks.h"
 #include "trayicon.h"
 #include "volumecontrol.h"
 #include "mainmenu.h"
@@ -102,7 +102,7 @@ private:
   Playback::Dispatch *dispatch = nullptr;
   Config::Local &local_conf;
   Config::Global &global_conf;
-  BusySpinner *spinner = nullptr;
+  BackgroundTasks *tasks = nullptr;
   TrayIcon *trayicon = nullptr;
   VolumeControl *volume = nullptr;
   MainMenu *main_menu = nullptr;
@@ -136,6 +136,7 @@ private:
   QLabel *status_label_replaygain = nullptr;
   ReplayGainUi::StatusMenu *rg_status_menu = nullptr;
   Track playing_track;
+  quint64 rg_task = 0;
 #endif
   PlaybackLogUi::Controller *playback_log = nullptr;
   SortUi::SortMenu *sort_menu = nullptr;

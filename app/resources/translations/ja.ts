@@ -81,11 +81,20 @@
     </message>
 </context>
 <context>
+    <name>BackgroundTasksButton</name>
+    <message numerus="yes">
+        <location filename="../../backgroundtasksbutton.cpp" line="144"/>
+        <source>%n background operations</source>
+        <translation>
+            <numerusform>バックグラウンド処理 %n 件</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>BusySpinner</name>
     <message>
-        <location filename="../../busyspinner.cpp" line="8"/>
         <source>Background operation running</source>
-        <translation>バックグラウンド処理実行中</translation>
+        <translation type="vanished">バックグラウンド処理実行中</translation>
     </message>
 </context>
 <context>
@@ -489,6 +498,10 @@
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="114"/>
         <source>Graphic EQ (multiband)…</source>
         <translation>グラフィック EQ (マルチバンド)…</translation>
+    </message>
+    <message>
+        <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
+        <translation type="vanished">イコライザーはギャップレスエンジンでのみ動作します。設定で有効にしてください。</translation>
     </message>
     <message>
         <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
@@ -1024,152 +1037,164 @@
         <translation>トラック長</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="102"/>
         <source>Background operation running</source>
-        <translation>バックグラウンド処理実行中</translation>
+        <translation type="vanished">バックグラウンド処理実行中</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="119"/>
+        <location filename="../../mainwindow.ui" line="103"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="109"/>
+        <location filename="../../mainwindow.ui" line="93"/>
         <source>Sort</source>
         <translation>並び替え</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="139"/>
+        <location filename="../../mainwindow.ui" line="123"/>
         <source>Main menu</source>
         <translation>メインメニュー</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="161"/>
+        <location filename="../../mainwindow.ui" line="145"/>
         <source>Configure library folders</source>
         <translation>ライブラリ フォルダーの設定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="132"/>
+        <location filename="../../mainwindow.ui" line="116"/>
         <source>Output</source>
         <translation>出力</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="171"/>
+        <location filename="../../mainwindow.ui" line="155"/>
         <source>Select library folder</source>
         <translation>ライブラリ フォルダーを選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="187"/>
+        <location filename="../../mainwindow.ui" line="171"/>
         <source>Filter library</source>
         <translation>ライブラリをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="201"/>
+        <location filename="../../mainwindow.ui" line="185"/>
         <source>Filter playlists</source>
         <translation>プレイリストをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="224"/>
+        <location filename="../../mainwindow.ui" line="208"/>
         <source>Filter tracks</source>
         <translation>トラックをフィルタリング</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="231"/>
+        <location filename="../../mainwindow.ui" line="215"/>
         <source>Playback follows selection</source>
         <translation>選択に連動して再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="234"/>
+        <location filename="../../mainwindow.ui" line="218"/>
         <source>Playback follows cursor</source>
         <translation>カーソルに連動して再生</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="241"/>
+        <location filename="../../mainwindow.ui" line="225"/>
         <source>Order:</source>
         <translation>順序 :</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="248"/>
+        <location filename="../../mainwindow.ui" line="232"/>
         <source>global</source>
         <translation>全体</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="255"/>
+        <location filename="../../mainwindow.ui" line="239"/>
         <source>Default playback order</source>
         <translation>デフォルトの再生順序</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="262"/>
+        <location filename="../../mainwindow.ui" line="246"/>
         <source>playlist</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="269"/>
+        <location filename="../../mainwindow.ui" line="253"/>
         <source>Override playback for current playlist</source>
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="307"/>
-        <location filename="../../mainwindow.cpp" line="342"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="344"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="308"/>
-        <location filename="../../mainwindow.cpp" line="341"/>
+        <location filename="../../mainwindow.cpp" line="310"/>
+        <location filename="../../mainwindow.cpp" line="343"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="309"/>
-        <location filename="../../mainwindow.cpp" line="343"/>
+        <location filename="../../mainwindow.cpp" line="311"/>
+        <location filename="../../mainwindow.cpp" line="345"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="340"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="449"/>
+        <location filename="../../mainwindow.cpp" line="451"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="467"/>
+        <location filename="../../mainwindow.cpp" line="469"/>
         <source>Album cover</source>
         <translation>アルバムカバー</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="473"/>
+        <location filename="../../mainwindow.cpp" line="475"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="622"/>
-        <location filename="../../mainwindow.cpp" line="626"/>
+        <source>ReplayGain…</source>
+        <translation type="vanished">ReplayGain…</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="624"/>
+        <location filename="../../mainwindow.cpp" line="628"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="628"/>
+        <location filename="../../mainwindow.cpp" line="630"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="640"/>
+        <location filename="../../mainwindow.cpp" line="642"/>
         <source>Update available:</source>
         <translation>アップデートがあります :</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="880"/>
+        <source>ReplayGain scan</source>
+        <translation>ReplayGain スキャン</translation>
     </message>
     <message>
         <source>ReplayGain: %1 / %2</source>
         <translation type="vanished">ReplayGain: %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="903"/>
+        <location filename="../../mainwindow.cpp" line="921"/>
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>mpd モードではゲインは適用されません — mpd には独自の replay_gain 設定があります。解析とタグ書き込みは動作します。</translation>
+    </message>
+    <message>
+        <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
+        <translation type="vanished">ゲインはギャップレスエンジンでのみ適用されます。設定で有効にしてください。解析とタグ書き込みは動作します。</translation>
     </message>
 </context>
 <context>
@@ -1225,6 +1250,22 @@
     </message>
 </context>
 <context>
+    <name>PlaylistUi::Controller</name>
+    <message numerus="yes">
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="22"/>
+        <source>%n item(s)</source>
+        <translation>
+            <numerusform>%n 項目</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="190"/>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="333"/>
+        <source>Adding to playlist: %1</source>
+        <translation>プレイリストに追加中: %1</translation>
+    </message>
+</context>
+<context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="23"/>
@@ -1264,21 +1305,38 @@
 </context>
 <context>
     <name>PlaylistsUi::Controller</name>
+    <message numerus="yes">
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="25"/>
+        <source>%n item(s)</source>
+        <translation>
+            <numerusform>%n 項目</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="157"/>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="191"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="36"/>
+        <source>Loading playlists</source>
+        <translation>プレイリストを読み込み中</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="168"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="202"/>
         <source>Create new playlist</source>
         <translation>新しいプレイリストを作成</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="158"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="169"/>
         <source>Append to &quot;%1&quot;</source>
         <translation>&quot;%1&quot; に追加</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="160"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="171"/>
         <source>Move to &quot;%1&quot;</source>
         <translation>&quot;%1&quot; に移動</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="328"/>
+        <source>Creating playlist: %1</source>
+        <translation>プレイリストを作成中: %1</translation>
     </message>
 </context>
 <context>
@@ -1542,11 +1600,6 @@
         <translation type="vanished">ReplayGain データがないトラックに適用されます</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
-        <source>Used for unscanned tracks and radio streams</source>
-        <translation>未解析のトラックとラジオストリームに適用</translation>
-    </message>
-    <message>
         <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
         <source>Untagged tracks:</source>
         <translation>タグなしトラック:</translation>
@@ -1600,6 +1653,11 @@
         <location filename="../../replaygain_ui/replaygaindialog.cpp" line="208"/>
         <source>Current playlist</source>
         <translation>現在のプレイリスト</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
+        <source>Used for unscanned tracks and radio streams</source>
+        <translation>未解析のトラックとラジオストリームに適用</translation>
     </message>
     <message>
         <location filename="../../replaygain_ui/replaygaindialog.cpp" line="210"/>
@@ -1732,6 +1790,11 @@
         <translation>再生中はシステムのスリープを抑制</translation>
     </message>
     <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
+        <source>(local files only)</source>
+        <translation>(ローカルファイルのみ)</translation>
+    </message>
+    <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="470"/>
         <source>Grab global media keys</source>
         <translation>グローバルメディアキーを取得する</translation>
@@ -1792,9 +1855,8 @@
         <translation>シークバーに波形を表示</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
-        <source>(local files only)</source>
-        <translation>(ローカルファイルのみ)</translation>
+        <source>(gapless playback, local files only)</source>
+        <translation type="vanished">(ギャップレス再生、ローカルファイルのみ)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
@@ -1974,6 +2036,10 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="509"/>
         <source>entries</source>
         <translation>件</translation>
+    </message>
+    <message>
+        <source>Enable gapless playback</source>
+        <translation type="vanished">ギャップレス再生を有効にする</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>

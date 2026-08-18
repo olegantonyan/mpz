@@ -21,6 +21,7 @@
 #include <QDockWidget>
 #include <QToolBar>
 #include <QAction>
+#include <QFileInfo>
 #include <QFontDatabase>
 #include <QComboBox>
 #include <QAbstractItemView>
@@ -74,11 +75,12 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     app_icon.addFile(":/app/resources/icons/" + size + "/mpz.png");
   setWindowIcon(app_icon);
 
-  spinner = new BusySpinner(ui->widgetSpinner, this);
+  tasks = new BackgroundTasks(this);
+  ui->toolButtonTasks->setTasks(tasks);
 
   library = new DirectoryUi::Controller(ui->treeView, ui->treeViewSearch, ui->comboBoxLibraries, ui->toolButtonLibraries, ui->toolButtonLibrarySort, local_conf, global_conf, modus_operandi, this);
-  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, spinner, modus_operandi, this);
-  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, spinner, local_conf, global_conf, modus_operandi, this);
+  playlists = new PlaylistsUi::Controller(ui->listView, ui->listViewSearch, local_conf, tasks, modus_operandi, this);
+  playlist = new PlaylistUi::Controller(ui->tableView, ui->tableViewSearch, tasks, local_conf, global_conf, modus_operandi, this);
 
   ui->toolButtonLibrarySort->setIcon(Icons::get(Icons::Icon::Sort));
   ui->toolButtonLibraries->setIcon(Icons::get(Icons::Icon::Settings));
@@ -871,6 +873,22 @@ void MainWindow::setupReplayGain() {
   connect(player, &Playback::Controller::stopped, this, [this]() {
     playing_track = Track();
     updateReplayGainStatus();
+  });
+
+  connect(replay_gain, &ReplayGain::Manager::progress, this, [this](int done, int total, const QString &) {
+    if (rg_task == 0) {
+      rg_task = tasks->begin(tr("ReplayGain scan"), true);
+    }
+    tasks->setProgress(rg_task, QFileInfo(replay_gain->progressPath()).fileName(), done, total);
+  });
+  connect(replay_gain, &ReplayGain::Manager::scanFinished, this, [this]() {
+    tasks->end(rg_task);
+    rg_task = 0;
+  });
+  connect(tasks, &BackgroundTasks::activated, this, [this](quint64 id) {
+    if (id == rg_task) {
+      openReplayGainDialog();
+    }
   });
 
   rg_status_menu = new ReplayGainUi::StatusMenu(*replay_gain, global_conf, this);

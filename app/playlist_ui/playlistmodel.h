@@ -5,6 +5,7 @@
 #include "playlist/playlist.h"
 #include "playlist_ui/columnsconfig.h"
 
+#include <QFuture>
 #include <QVector>
 #include <QAbstractTableModel>
 #include <memory>
@@ -54,9 +55,9 @@ namespace PlaylistUi {
 
     virtual void remove(const QList<QModelIndex> &items);
 
-    virtual void appendToPlaylistAsync(const QList<QDir> &filepaths);
+    virtual QFuture<void> appendToPlaylistAsync(const QList<QDir> &filepaths);
     void appendTracks(const QVector<Track> &tracks);
-    virtual void insertTracksAsync(const QList<QDir> &filepaths, int atRow);
+    virtual QFuture<void> insertTracksAsync(const QList<QDir> &filepaths, int atRow);
     void insertTracks(const QVector<Track> &new_tracks, int atRow);
 
     virtual void sortBy(const QString &criteria);
