@@ -23,7 +23,9 @@ namespace Decode {
     QAudioFormat format;
     format.setSampleRate(props->sampleRate());
     format.setChannelCount(props->channels());
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
     format.setChannelConfig(QAudioFormat::defaultChannelConfigForChannelCount(props->channels()));
+#endif
     format.setSampleFormat(props->bitsPerSample() > 16 ? QAudioFormat::Int32 : QAudioFormat::Int16);
     return format;
   }
