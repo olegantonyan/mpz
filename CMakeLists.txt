@@ -62,10 +62,6 @@ set(PROJECT_SOURCES
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
-  app/replaygain/analyzer.cpp
-  app/replaygain/resolver.cpp
-  app/replaygain/store.cpp
-  app/replaygain/tags.cpp
   app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/foldercover.cpp
@@ -192,6 +188,37 @@ if (ENABLE_MPD_SUPPORT)
 endif()
 
 option(ENABLE_GAPLESS "Enable gapless playback engine for local files (Qt6 only)" ON)
+if (ENABLE_GAPLESS AND QT_VERSION_MAJOR LESS 6)
+  message(STATUS "gapless engine needs Qt6, disabling")
+  set(ENABLE_GAPLESS OFF)
+endif()
+
+if (ENABLE_GAPLESS)
+  list(APPEND PROJECT_SOURCES
+    app/playback/gapless/pcmcache.cpp
+    app/playback/gapless/timeline.cpp
+    app/playback/gapless/trackdecoder.cpp
+    app/playback/gapless/streamsource.cpp
+    app/playback/gapless/engine.cpp
+    app/playback/gapless/gaplessmediaplayer.cpp
+    app/replaygain/analyzer.cpp
+    app/replaygain/resolver.cpp
+    app/replaygain/store.cpp
+    app/replaygain/tags.cpp
+    app/replaygain/jobcodec.cpp
+    app/replaygain/jobrunner.cpp
+    app/replaygain/manager.cpp
+    app/replaygain/scanner.cpp
+    app/replaygain/scanworker.cpp
+    app/replaygain_ui/replaygaindialog.cpp
+    app/replaygain_ui/statusmenu.cpp
+    app/eq/equalizer.cpp
+    app/eq/autoeqimport.cpp
+    app/eq/eqexport.cpp
+    app/equalizer_ui/equalizerdialog.cpp
+    app/equalizer_ui/eqcurvewidget.cpp
+    app/waveform/analyzer.cpp)
+endif()
 
 if (ENABLE_UPDATE_CHECK)
   list(APPEND PROJECT_SOURCES app/update_check/updatechecker.cpp)
@@ -251,13 +278,6 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp
     app/decode/nativeformat.cpp
-    app/replaygain/jobcodec.cpp
-    app/replaygain/jobrunner.cpp
-    app/replaygain/manager.cpp
-    app/replaygain/scanner.cpp
-    app/replaygain/scanworker.cpp
-    app/replaygain_ui/replaygaindialog.cpp
-    app/replaygain_ui/statusmenu.cpp
     app/dynamic_range/dr.cpp
     app/dynamic_range/logformat.cpp
     app/dynamic_range/analyzer.cpp
@@ -265,30 +285,15 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/dynamic_range_ui/dynamicrangedialog.cpp
     app/dynamic_range_ui/dynamicrangedialog.ui)
 
-  if (ENABLE_GAPLESS)
-    list(APPEND PROJECT_SOURCES
-      app/playback/gapless/pcmcache.cpp
-      app/playback/gapless/timeline.cpp
-      app/playback/gapless/trackdecoder.cpp
-      app/playback/gapless/streamsource.cpp
-      app/playback/gapless/engine.cpp
-      app/playback/gapless/gaplessmediaplayer.cpp
-      app/eq/equalizer.cpp
-      app/eq/autoeqimport.cpp
-      app/eq/eqexport.cpp
-      app/equalizer_ui/equalizerdialog.cpp
-      app/equalizer_ui/eqcurvewidget.cpp
-      app/waveform/analyzer.cpp)
-  endif()
-
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU ENABLE_DR_METER)
-  if (ENABLE_GAPLESS)
-    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
-  endif()
 else()
   message(STATUS "using Qt5")
   add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
+endif()
+
+if (ENABLE_GAPLESS)
+  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
 endif()
 
 foreach(_qt_comp IN LISTS QT_COMPONENTS)
@@ -443,8 +448,9 @@ if (USE_SYSTEM_LIBEBUR128)
   find_library(EBUR128_LIBRARY ebur128 REQUIRED)
   find_path(EBUR128_INCLUDE_DIR ebur128.h REQUIRED)
   message(STATUS "using system-wide libebur128")
-  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_INCLUDE_DIR})
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_LIBRARY})
+  add_library(ebur128 INTERFACE)
+  target_include_directories(ebur128 INTERFACE ${EBUR128_INCLUDE_DIR})
+  target_link_libraries(ebur128 INTERFACE ${EBUR128_LIBRARY})
 else()
   set(EBUR128_DIR 3rdparty/libebur128-1.2.6)
   message(STATUS "using vendored libebur128 from ${EBUR128_DIR}")
@@ -477,7 +483,8 @@ else()
     set_property(TARGET ebur128 PROPERTY SOURCES ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c)
     target_include_directories(ebur128 PRIVATE ${EBUR128_SOURCE_DIR})
   endif()
-
+endif()
+if (ENABLE_GAPLESS)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
 endif()
 # ENDOF LIBEBUR128
@@ -542,7 +549,9 @@ if (USE_SYSTEM_SQLITE3)
 else()
   include(3rdparty/sqlite3.cmake)
 endif()
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+if (ENABLE_GAPLESS)
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+endif()
 # ENDOF SQLITE3
 
 # CPPTRACE
