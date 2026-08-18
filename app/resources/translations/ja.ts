@@ -500,173 +500,172 @@
         <translation>グラフィック EQ (マルチバンド)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="122"/>
         <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
-        <translation>イコライザーはギャップレスエンジンでのみ動作します。設定で有効にしてください。</translation>
+        <translation type="vanished">イコライザーはギャップレスエンジンでのみ動作します。設定で有効にしてください。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="129"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
         <source>Preamp:</source>
         <translation>プリアンプ :</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="134"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="128"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="143"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="137"/>
         <source>Auto (clip-safe)</source>
         <translation>自動 (クリップ回避)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="138"/>
         <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
         <translation>ブーストされたバンドが 0 dBFS を超えないようにプリアンプを設定します</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="160"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="154"/>
         <source>Graphic</source>
         <translation>グラフィック</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="155"/>
         <source>Parametric</source>
         <translation>パラメトリック</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="182"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="176"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>出力デバイス : &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="245"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="239"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
         <translation>このプリセットは10バンドのグラフィック EQ ではありません。パラメトリックで編集するか、リセットしてください。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="248"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="242"/>
         <source>Reset to 10-band</source>
         <translation>10バンドにリセット</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Type</source>
         <translation>タイプ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Freq (Hz)</source>
         <translation>周波数 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Gain (dB)</source>
         <translation>ゲイン (dB)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="269"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>On</source>
         <translation>オン</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="276"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
         <source>Add band</source>
         <translation>バンドを追加</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="288"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="282"/>
         <source>Remove selected</source>
         <translation>選択項目を削除</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="320"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="314"/>
         <source>Peak</source>
         <translation>ピーク</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="315"/>
         <source>Low shelf</source>
         <translation>ローシェルフ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="316"/>
         <source>High shelf</source>
         <translation>ハイシェルフ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="317"/>
         <source>Low pass</source>
         <translation>ローパス</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="318"/>
         <source>High pass</source>
         <translation>ハイパス</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Save preset</source>
         <translation>プリセットを保存</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="466"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Preset name:</source>
         <translation>プリセット名 :</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="506"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="500"/>
         <source>Import equalizer preset</source>
         <translation>イコライザープリセットをインポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="535"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="529"/>
         <source>Choose file…</source>
         <translation>ファイルを選択…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="549"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="543"/>
         <source>Import EqualizerAPO / AutoEQ preset</source>
         <translation>EqualizerAPO / AutoEQ プリセットをインポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="544"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
         <translation>パラメトリック EQ (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>Import failed</source>
         <translation>インポートに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="556"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
         <source>Could not open the file.</source>
         <translation>ファイルを開けませんでした。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="561"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>No filters found in the file.</source>
         <translation>ファイルにフィルターが見つかりませんでした。</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Export preset</source>
         <translation>プリセットをエクスポート</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="597"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Text files (*.txt);;All files (*)</source>
         <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Export failed</source>
         <translation>エクスポートに失敗しました</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="605"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Could not write the file.</source>
         <translation>ファイルを書き込めませんでした。</translation>
     </message>
@@ -856,98 +855,98 @@
         <translation>イコライザー…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="112"/>
+        <location filename="../../macos/macmenubar.cpp" line="111"/>
         <source>ReplayGain…</source>
         <translation>ReplayGain…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="123"/>
+        <location filename="../../macos/macmenubar.cpp" line="119"/>
         <source>Output Device</source>
         <translation>出力デバイス</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="135"/>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
         <source>mpd update</source>
         <translation>mpd を更新</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="145"/>
+        <location filename="../../macos/macmenubar.cpp" line="141"/>
         <source>View</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="146"/>
+        <location filename="../../macos/macmenubar.cpp" line="142"/>
         <source>Sort</source>
         <translation>並び替え</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="157"/>
+        <location filename="../../macos/macmenubar.cpp" line="153"/>
         <source>Jump to Playing Track</source>
         <translation>再生中のトラックにジャンプ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="161"/>
+        <location filename="../../macos/macmenubar.cpp" line="157"/>
         <source>Playback Log</source>
         <translation>再生ログ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="165"/>
+        <location filename="../../macos/macmenubar.cpp" line="161"/>
         <source>Keyboard Shortcuts</source>
         <translation>キーボード ショートカット</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="171"/>
-        <location filename="../../macos/macmenubar.cpp" line="181"/>
+        <location filename="../../macos/macmenubar.cpp" line="167"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Enter Full Screen</source>
         <translation>フルスクリーンにする</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="181"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Exit Full Screen</source>
         <translation>フルスクリーンを解除</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="184"/>
+        <location filename="../../macos/macmenubar.cpp" line="180"/>
         <source>Window</source>
         <translation>ウインドウ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="186"/>
+        <location filename="../../macos/macmenubar.cpp" line="182"/>
         <source>Minimize</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="190"/>
+        <location filename="../../macos/macmenubar.cpp" line="186"/>
         <source>Zoom</source>
         <translation>拡大/縮小</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="201"/>
+        <location filename="../../macos/macmenubar.cpp" line="197"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="205"/>
+        <location filename="../../macos/macmenubar.cpp" line="201"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="207"/>
+        <location filename="../../macos/macmenubar.cpp" line="203"/>
         <source>mpz Website</source>
         <translation>mpz ウェブサイト</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="212"/>
+        <location filename="../../macos/macmenubar.cpp" line="208"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="217"/>
+        <location filename="../../macos/macmenubar.cpp" line="213"/>
         <source>Send Feedback…</source>
         <translation>フィードバックを送る…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="220"/>
+        <location filename="../../macos/macmenubar.cpp" line="216"/>
         <source>Report a Bug…</source>
         <translation>バグを報告…</translation>
     </message>
@@ -1122,66 +1121,65 @@
         <translation>現在のプレイリストで再生順序を上書き</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="310"/>
-        <location filename="../../mainwindow.cpp" line="345"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="344"/>
         <source>sequential</source>
         <translation>順次</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="311"/>
-        <location filename="../../mainwindow.cpp" line="344"/>
+        <location filename="../../mainwindow.cpp" line="310"/>
+        <location filename="../../mainwindow.cpp" line="343"/>
         <source>random</source>
         <translation>ランダム</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="312"/>
-        <location filename="../../mainwindow.cpp" line="346"/>
+        <location filename="../../mainwindow.cpp" line="311"/>
+        <location filename="../../mainwindow.cpp" line="345"/>
         <source>sequential (no loop)</source>
         <translation>順次 (繰り返しなし)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="343"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>(use global)</source>
         <translation>(全体設定を使用)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="452"/>
+        <location filename="../../mainwindow.cpp" line="451"/>
         <source>Lock toolbar</source>
         <translation>ツールバーを固定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="470"/>
+        <location filename="../../mainwindow.cpp" line="469"/>
         <source>Album cover</source>
         <translation>アルバムカバー</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="476"/>
+        <location filename="../../mainwindow.cpp" line="475"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="625"/>
         <source>ReplayGain…</source>
-        <translation>ReplayGain…</translation>
+        <translation type="vanished">ReplayGain…</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="633"/>
-        <location filename="../../mainwindow.cpp" line="637"/>
+        <location filename="../../mainwindow.cpp" line="624"/>
+        <location filename="../../mainwindow.cpp" line="628"/>
         <source>Nothing selected</source>
         <translation>未選択</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="639"/>
+        <location filename="../../mainwindow.cpp" line="630"/>
         <source>Selection total duration</source>
         <translation>選択項目の合計時間</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="651"/>
+        <location filename="../../mainwindow.cpp" line="642"/>
         <source>Update available:</source>
         <translation>アップデートがあります :</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="889"/>
+        <location filename="../../mainwindow.cpp" line="880"/>
         <source>ReplayGain scan</source>
         <translation>ReplayGain スキャン</translation>
     </message>
@@ -1190,14 +1188,13 @@
         <translation type="vanished">ReplayGain: %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="924"/>
+        <location filename="../../mainwindow.cpp" line="921"/>
         <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
         <translation>mpd モードではゲインは適用されません — mpd には独自の replay_gain 設定があります。解析とタグ書き込みは動作します。</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="927"/>
         <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
-        <translation>ゲインはギャップレスエンジンでのみ適用されます。設定で有効にしてください。解析とタグ書き込みは動作します。</translation>
+        <translation type="vanished">ゲインはギャップレスエンジンでのみ適用されます。設定で有効にしてください。解析とタグ書き込みは動作します。</translation>
     </message>
 </context>
 <context>
@@ -1493,17 +1490,17 @@
 <context>
     <name>ReplayGain::JobRunner</name>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="246"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="257"/>
         <source>file is gone</source>
         <translation>ファイルがありません</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="250"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="261"/>
         <source>unreadable audio stream</source>
         <translation>オーディオストリームを読み取れません</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="273"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="284"/>
         <source>decoder stalled</source>
         <translation>デコーダーが停止しました</translation>
     </message>
@@ -1512,12 +1509,12 @@
         <translation type="vanished">ストリーム途中でフォーマットが変化しました</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="325"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="337"/>
         <source>nothing decoded</source>
         <translation>デコードできませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="355"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="367"/>
         <source>no measurable loudness</source>
         <translation>ラウドネスを測定できません</translation>
     </message>
@@ -1525,182 +1522,214 @@
 <context>
     <name>ReplayGainUi::ReplayGainDialog</name>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="38"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
         <source>tags written</source>
         <translation>タグを書き込みました</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="39"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
         <source>tags unsupported</source>
         <translation>タグ非対応</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="40"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
         <source>tags: open failed</source>
         <translation>タグ: 開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="41"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="48"/>
         <source>tags: save failed</source>
         <translation>タグ: 保存できませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="51"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="58"/>
         <source>ReplayGain</source>
         <translation>ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="62"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="63"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="302"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="70"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
         <source>Analyse</source>
         <translation>解析</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="101"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
         <source>Off</source>
         <translation>オフ</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="102"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Track gain</source>
         <translation>トラックゲイン</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="103"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Album gain</source>
         <translation>アルバムゲイン</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="104"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
         <source>Mode:</source>
         <translation>モード:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="110"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="117"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="122"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="132"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="111"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
+        <source>Added to measured gains only</source>
+        <translation>測定済みゲインにのみ加算</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
         <source>Preamp:</source>
         <translation>プリアンプ:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="118"/>
         <source>Applied to tracks with no ReplayGain data</source>
-        <translation>ReplayGain データがないトラックに適用されます</translation>
+        <translation type="vanished">ReplayGain データがないトラックに適用されます</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="119"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
         <source>Untagged tracks:</source>
         <translation>タグなしトラック:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="121"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="138"/>
         <source>Prevent clipping (use the measured peak)</source>
         <translation>クリッピングを防ぐ (測定したピークを使用)</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="123"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="140"/>
         <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
         <translation>ピークはイコライザーなしで測定されているため、イコライザーで帯域を持ち上げた場合は両者がおおよそでしか合成されません。</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="145"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
         <source>Store results in a sidecar database</source>
         <translation>結果を別のデータベースに保存する</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="146"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="163"/>
         <source>Write ReplayGain tags into the audio files</source>
         <translation>音声ファイルに ReplayGain タグを書き込む</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="155"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="193"/>
         <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
         <translation>解析した各ファイルを書き換えるため、サイズと更新日時が変わります。cue シート内のトラックは別のデータベースにのみ保存できます。</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="171"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="183"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="178"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
         <source>Re-analyse tracks that already have data</source>
         <translation>データがあるトラックも再解析する</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="182"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="206"/>
         <source>Scope:</source>
         <translation>対象:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="184"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="209"/>
         <source>Whole library</source>
         <translation>ライブラリ全体</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="185"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="208"/>
         <source>Current playlist</source>
         <translation>現在のプレイリスト</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="186"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
+        <source>Used for unscanned tracks and radio streams</source>
+        <translation>未解析のトラックとラジオストリームに適用</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="210"/>
         <source>Selected tracks</source>
         <translation>選択したトラック</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Track</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Peak</source>
         <translation>ピーク</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="229"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Status</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="302"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="308"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="335"/>
         <source>%1 — %n entries</source>
         <translation>
             <numerusform>%1 — %n 件</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="345"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="372"/>
         <source>analysed</source>
         <translation>解析済み</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="377"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="404"/>
         <source>Cancelled after %n track(s)</source>
         <translation>
             <numerusform>%n トラックで中止しました</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="379"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="406"/>
         <source>Analysed %1, failed %2</source>
         <translation>解析 %1、失敗 %2</translation>
+    </message>
+</context>
+<context>
+    <name>ReplayGainUi::StatusMenu</name>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="21"/>
+        <source>Off</source>
+        <translation>オフ</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="22"/>
+        <source>Track gain</source>
+        <translation>トラックゲイン</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="23"/>
+        <source>Album gain</source>
+        <translation>アルバムゲイン</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="40"/>
+        <source>ReplayGain…</source>
+        <translation>ReplayGain…</translation>
     </message>
 </context>
 <context>
@@ -1759,6 +1788,11 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="133"/>
         <source>Prevent system sleep while playing</source>
         <translation>再生中はシステムのスリープを抑制</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
+        <source>(local files only)</source>
+        <translation>(ローカルファイルのみ)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="470"/>
@@ -1821,9 +1855,8 @@
         <translation>シークバーに波形を表示</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
         <source>(gapless playback, local files only)</source>
-        <translation>(ギャップレス再生、ローカルファイルのみ)</translation>
+        <translation type="vanished">(ギャップレス再生、ローカルファイルのみ)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
@@ -1845,8 +1878,7 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="280"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="459"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="522"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="537"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
         <source>(requires restart)</source>
         <translation>(再起動が必要)</translation>
     </message>
@@ -1897,13 +1929,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="268"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
         <source>Add</source>
         <translation>追加</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="269"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
@@ -1924,13 +1956,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="305"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="647"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="633"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="306"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="648"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="634"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
@@ -2006,67 +2038,66 @@
         <translation>件</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
         <source>Enable gapless playback</source>
-        <translation>ギャップレス再生を有効にする</translation>
+        <translation type="vanished">ギャップレス再生を有効にする</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="529"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
         <source>Gapless memory buffer:</source>
         <translation>ギャップレス用メモリバッファ :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="532"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="543"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>デコードした音声をメモリに保持することで、トラック間の移行がギャップレスになり、トラック内のシークが瞬時に行えます。バッファが大きいほど、より多くの (または長い) トラックをキャッシュできます。ほとんどのライブラリでは 100MBで十分です。</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="555"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
         <source>MPRIS blacklist</source>
         <translation>MPRIS ブラックリスト</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="544"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>MPRIS の送信者名を無視 (例 : &quot;wireplumber&quot;):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="572"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
         <source>Add MPRIS sender</source>
         <translation>MPRIS 送信者を追加</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="573"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Sender name:</source>
         <translation>送信者名 :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="584"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="570"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>mpz 終了時に MPD の再生を停止</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="591"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
         <source>Crash reports:</source>
         <translation>クラッシュレポート :</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="593"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="579"/>
         <source>Send automatically</source>
         <translation>自動的に送信</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="594"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="580"/>
         <source>Ask after next crash</source>
         <translation>次回のクラッシュ後に確認</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="595"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="581"/>
         <source>Never send</source>
         <translation>送信しない</translation>
     </message>

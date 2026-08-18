@@ -301,7 +301,8 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/replaygain/jobrunner.cpp
     ${APP}/replaygain/jobcodec.cpp
     ${APP}/replaygain/analyzer.cpp
-    ${APP}/replaygain/tags.cpp)
+    ${APP}/replaygain/tags.cpp
+    ${APP}/decode/nativeformat.cpp)
   target_link_libraries(tst_replaygainscanner PRIVATE
     Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui ebur128 tag)
 
@@ -322,11 +323,19 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     ${APP}/playlist/cueparser.cpp
     ${APP}/track.cpp
     ${APP}/rnjesus.cpp
-    ${APP}/streammetadata.cpp)
+    ${APP}/streammetadata.cpp
+    ${APP}/decode/nativeformat.cpp)
   target_link_libraries(tst_replaygainmanager PRIVATE
     Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Concurrent ebur128 tag yaml-cpp::yaml-cpp sqlite3)
   target_compile_definitions(tst_replaygainmanager PRIVATE VERSION="${PROJECT_VERSION}")
+
+  mpz_add_test(tst_nativeformat tst_nativeformat.cpp
+    ${APP}/decode/nativeformat.cpp)
+  target_link_libraries(tst_nativeformat PRIVATE
+    Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Gui tag)
+  target_compile_definitions(tst_nativeformat PRIVATE
+    AUDIO_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/replaygain")
 endif()
 
 mpz_add_test(tst_replaygaintags tst_replaygaintags.cpp ${APP}/replaygain/tags.cpp)

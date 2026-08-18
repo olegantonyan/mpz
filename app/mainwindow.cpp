@@ -100,12 +100,11 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   pc.seekbar = ui->seekBar;
   pc.time = ui->timeLabel;
   ui->timeLabel->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  bool gapless_on = !global_conf.disableGapless();
   int gapless_mb = global_conf.gaplessCacheSizeMb();
   if (gapless_mb <= 0) {
     gapless_mb = 100;
   }
-  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, gapless_on, modus_operandi, this);
+  player = new Playback::Controller(pc, streamBuffer(), local_conf.outputDeviceId(), gapless_mb, modus_operandi, this);
   player->setWaveformEnabled(!global_conf.waveformDisabled());
   if (local_conf.volume() > 0) {
     player->setVolume(local_conf.volume());
@@ -619,14 +618,6 @@ void MainWindow::setupStatusBar() {
   status_label_replaygain = new QLabel(this);
   status_label_replaygain->hide();
   status_label_replaygain->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(status_label_replaygain, &QLabel::customContextMenuRequested, this,
-          [this](const QPoint &pos) {
-            QMenu menu;
-            QAction open(tr("ReplayGain…"));
-            connect(&open, &QAction::triggered, this, &MainWindow::openReplayGainDialog);
-            menu.addAction(&open);
-            menu.exec(status_label_replaygain->mapToGlobal(pos));
-          });
   ui->statusbar->addPermanentWidget(status_label_replaygain);
 #endif
 
@@ -854,7 +845,7 @@ void MainWindow::setupEqualizer() {
 
 void MainWindow::openEqualizerDialog() {
   if (!eq_dialog) {
-    eq_dialog = new EqualizerUi::EqualizerDialog(player, local_conf, global_conf, this);
+    eq_dialog = new EqualizerUi::EqualizerDialog(player, local_conf, this);
     eq_dialog->setModal(false);
   }
   eq_dialog->show();
@@ -900,6 +891,14 @@ void MainWindow::setupReplayGain() {
     }
   });
 
+  rg_status_menu = new ReplayGainUi::StatusMenu(*replay_gain, global_conf, this);
+  connect(rg_status_menu, &ReplayGainUi::StatusMenu::openDialog, this,
+          &MainWindow::openReplayGainDialog);
+  connect(status_label_replaygain, &QLabel::customContextMenuRequested, this,
+          [this](const QPoint &pos) {
+            rg_status_menu->popup(status_label_replaygain->mapToGlobal(pos));
+          });
+
   connect(shortcuts, &Shortcuts::openReplayGain, this, &MainWindow::openReplayGainDialog);
   connect(main_menu, &MainMenu::openReplayGain, shortcuts, &Shortcuts::openReplayGain);
 
@@ -908,8 +907,7 @@ void MainWindow::setupReplayGain() {
 }
 
 void MainWindow::updateReplayGainStatus() {
-  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
-                         !global_conf.disableGapless();
+  const bool available = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS;
   status_label_replaygain->setVisible(available);
   if (available) {
     status_label_replaygain->setText(replay_gain->statusText(playing_track));
@@ -918,13 +916,9 @@ void MainWindow::updateReplayGainStatus() {
 
 void MainWindow::openReplayGainDialog() {
   QString reason;
-  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS &&
-                       !global_conf.disableGapless();
+  const bool applies = modus_operandi.get() == ModusOperandi::MODUS_LOCALFS;
   if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
     reason = tr("Gains are not applied in mpd mode — mpd has its own replay_gain setting. "
-                "Analysing and tagging still work.");
-  } else if (global_conf.disableGapless()) {
-    reason = tr("Gains are applied only by the gapless engine. Enable it in Settings. "
                 "Analysing and tagging still work.");
   }
 

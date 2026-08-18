@@ -4,7 +4,14 @@
 
 - ReplayGain: read/write peaks data into tags or separate file preserving the original audio files unchanged
 
+### Fixed
+
+- Crash on exit with PipeWire: audio is now released before the event loop stops
+- FLAC files that don't play (stuck at 0:00, no waveform) when frame headers omit the sample rate
+
 ### Misc
+
+- Gapless playback is always on; Settings toggle is gone. `ENABLE_GAPLESS` build option remains
 
 ## [2.1.3] - 2026-08-10
 

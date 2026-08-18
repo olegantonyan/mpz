@@ -1,5 +1,7 @@
 #include "dynamic_range/analyzer.h"
 
+#include "decode/nativeformat.h"
+
 #include <QAudioBuffer>
 #include <QUrl>
 
@@ -108,6 +110,7 @@ namespace DynamicRange {
     connect(decoder, qOverload<QAudioDecoder::Error>(&QAudioDecoder::error), this,
             [this](QAudioDecoder::Error) { onDecodeError(); });
     decoder->setSource(QUrl::fromLocalFile(job.path));
+    decoder->setAudioFormat(Decode::nativeAudioFormat(job.path));
     decoder->start();
   }
 

@@ -1,5 +1,6 @@
 #include "replaygain/jobrunner.h"
 
+#include "decode/nativeformat.h"
 #include "replaygain/analyzer.h"
 #include "replaygain/jobcodec.h"
 #include "replaygain/tags.h"
@@ -323,6 +324,7 @@ namespace ReplayGain {
         });
 
         decoder.setSource(QUrl::fromLocalFile(work.path));
+        decoder.setAudioFormat(Decode::nativeAudioFormat(work.path));
         decoder.start();
         stall.start();
         abort_poll.start();

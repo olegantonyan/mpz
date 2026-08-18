@@ -37,9 +37,6 @@ namespace Config {
     QVector<Radio::Station> radioStations() const;
     bool saveRadioStations(const QVector<Radio::Station> &arg);
 
-    bool disableGapless() const;
-    void saveDisableGapless(bool arg);
-
     int gaplessCacheSizeMb() const;
     void saveGaplessCacheSizeMb(int arg);
 

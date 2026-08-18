@@ -26,6 +26,7 @@ private slots:
   void tagsModeIgnoresTheSidecarWhenDecidingWhatToScan();
   void appliedGainTextNamesTheModeValueAndSource();
   void statusTextFallsBackToTheBareMode();
+  void streamsUseTheUntaggedFallback();
 
 private:
   QString makeTrackFile(const QString &relative);
@@ -311,7 +312,7 @@ void TestReplayGainManager::appliedGainTextNamesTheModeValueAndSource() {
            QStringLiteral("ReplayGain: album -4.50 dB (sidecar)"));
 
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
-  QVERIFY(m.appliedGainText(stream).isEmpty());
+  QCOMPARE(m.appliedGainText(stream), QStringLiteral("ReplayGain: fallback 0.00 dB (none)"));
 }
 
 // The status label stays on screen when nothing is playing, so this one never goes empty.
@@ -332,11 +333,37 @@ void TestReplayGainManager::statusTextFallsBackToTheBareMode() {
   QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: track"));
 
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
-  QCOMPARE(m.statusText(stream), QStringLiteral("ReplayGain: track"));
+  QCOMPARE(m.statusText(stream), QStringLiteral("ReplayGain: fallback 0.00 dB (none)"));
 
   s.mode = ReplayGain::Mode::Album;
   m.setSettings(s);
   QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: album"));
+}
+
+// A stream has no tags and no sidecar row, so it lands on the untagged fallback.
+void TestReplayGainManager::streamsUseTheUntaggedFallback() {
+  Config::Global global;
+  ReplayGain::Manager m(global);
+
+  const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
+
+  ReplayGain::Settings s = m.settings();
+  s.mode = ReplayGain::Mode::Track;
+  s.fallback_db = -6.0;
+  m.setSettings(s);
+  QCOMPARE(m.gainDbFor(stream), -6.0);
+
+  s.preamp_db = 3.0;
+  m.setSettings(s);
+  QCOMPARE(m.gainDbFor(stream), -6.0);
+
+  s.fallback_db = -40.0;
+  m.setSettings(s);
+  QCOMPARE(m.gainDbFor(stream), ReplayGain::kMinGainDb);
+
+  s.mode = ReplayGain::Mode::Off;
+  m.setSettings(s);
+  QCOMPARE(m.gainDbFor(stream), 0.0);
 }
 
 QTEST_MAIN(TestReplayGainManager)

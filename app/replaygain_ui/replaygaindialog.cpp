@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScrollBar>
+#include <QStyle>
 #include <QTableWidget>
 #include <QTabWidget>
 #include <QTimer>
@@ -31,6 +32,12 @@ namespace ReplayGainUi {
 
     QString gainText(double db, bool present) {
       return present ? QString::number(db, 'f', 2) + QStringLiteral(" dB") : QStringLiteral("—");
+    }
+
+    QLabel *hint(const QString &text) {
+      auto *label = new QLabel(text);
+      label->setStyleSheet(QStringLiteral("color: gray;"));
+      return label;
     }
 
     QString tagStatus(int tag_result) {
@@ -76,6 +83,11 @@ namespace ReplayGainUi {
             });
     connect(&rg, &ReplayGain::Manager::sliceAnalyzed, this, &ReplayGainDialog::appendRow);
     connect(&rg, &ReplayGain::Manager::scanFinished, this, &ReplayGainDialog::onScanFinished);
+    connect(&rg, &ReplayGain::Manager::settingsChanged, this, [this]() {
+      if (!updating_) {
+        loadSettings();
+      }
+    });
 
     loadSettings();
     updateScanControls();
@@ -108,15 +120,20 @@ namespace ReplayGainUi {
     preamp_spin_->setSingleStep(0.5);
     preamp_spin_->setDecimals(1);
     preamp_spin_->setSuffix(" " + tr("dB"));
-    form->addRow(tr("Preamp:"), preamp_spin_);
+    auto *preamp_row = new QHBoxLayout;
+    preamp_row->addWidget(preamp_spin_);
+    preamp_row->addWidget(hint(tr("Added to measured gains only")), 1);
+    form->addRow(tr("Preamp:"), preamp_row);
 
     fallback_spin_ = new QDoubleSpinBox;
     fallback_spin_->setRange(-15.0, 15.0);
     fallback_spin_->setSingleStep(0.5);
     fallback_spin_->setDecimals(1);
     fallback_spin_->setSuffix(" " + tr("dB"));
-    fallback_spin_->setToolTip(tr("Applied to tracks with no ReplayGain data"));
-    form->addRow(tr("Untagged tracks:"), fallback_spin_);
+    auto *fallback_row = new QHBoxLayout;
+    fallback_row->addWidget(fallback_spin_);
+    fallback_row->addWidget(hint(tr("Used for unscanned tracks and radio streams")), 1);
+    form->addRow(tr("Untagged tracks:"), fallback_row);
 
     clip_check_ = new QCheckBox(tr("Prevent clipping (use the measured peak)"));
     clip_check_->setToolTip(
@@ -148,19 +165,14 @@ namespace ReplayGainUi {
     group->addButton(sidecar_radio_);
     group->addButton(tags_radio_);
     connect(sidecar_radio_, &QRadioButton::toggled, this, &ReplayGainDialog::applySettings);
-    layout->addWidget(sidecar_radio_);
-    layout->addWidget(tags_radio_);
 
-    auto *tags_hint = new QLabel(
-        tr("Rewrites every analysed file, so its size and modification time change. "
-           "Tracks inside a cue sheet can only be stored in the sidecar."));
-    tags_hint->setWordWrap(true);
-    tags_hint->setStyleSheet("color: #d35400;");
-    tags_hint->setVisible(false);
-    connect(tags_radio_, &QRadioButton::toggled, tags_hint, &QWidget::setVisible);
-    layout->addWidget(tags_hint);
+    const int indent = style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth) +
+                       style()->pixelMetric(QStyle::PM_CheckBoxLabelSpacing);
+
+    layout->addWidget(sidecar_radio_);
 
     auto *store_row = new QHBoxLayout;
+    store_row->setContentsMargins(indent, 0, 0, 0);
     store_label_ = new QLabel;
     store_label_->setWordWrap(true);
     store_label_->setStyleSheet("color: gray;");
@@ -175,14 +187,26 @@ namespace ReplayGainUi {
     store_row->addWidget(reveal);
     layout->addLayout(store_row);
 
+    layout->addWidget(tags_radio_);
+
+    auto *tags_hint = new QLabel(
+        tr("Rewrites every analysed file, so its size and modification time change. "
+           "Tracks inside a cue sheet can only be stored in the sidecar."));
+    tags_hint->setWordWrap(true);
+    tags_hint->setContentsMargins(indent, 0, 0, 0);
+    tags_hint->setStyleSheet("color: #d35400;");
+    tags_hint->setVisible(false);
+    connect(tags_radio_, &QRadioButton::toggled, tags_hint, &QWidget::setVisible);
+    layout->addWidget(tags_hint);
+
     force_check_ = new QCheckBox(tr("Re-analyse tracks that already have data"));
     layout->addWidget(force_check_);
 
     auto *scope_row = new QHBoxLayout;
     scope_row->addWidget(new QLabel(tr("Scope:")));
     scan_scope_combo_ = new QComboBox;
-    scan_scope_combo_->addItem(tr("Whole library"), static_cast<int>(Scope::Library));
     scan_scope_combo_->addItem(tr("Current playlist"), static_cast<int>(Scope::Playlist));
+    scan_scope_combo_->addItem(tr("Whole library"), static_cast<int>(Scope::Library));
     scan_scope_combo_->addItem(tr("Selected tracks"), static_cast<int>(Scope::Selection));
     connect(scan_scope_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &ReplayGainDialog::updateScanControls);
@@ -270,7 +294,10 @@ namespace ReplayGainUi {
     s.preamp_db = preamp_spin_->value();
     s.fallback_db = fallback_spin_->value();
     s.prevent_clipping = clip_check_->isChecked();
+
+    updating_ = true;
     rg.setSettings(s);
+    updating_ = false;
   }
 
   ReplayGainDialog::Scope ReplayGainDialog::currentScope() const {

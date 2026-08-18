@@ -25,6 +25,10 @@ std::string crash_log_path();
 // Call once at startup after the application version is set. Safe to omit.
 void set_system_info(std::string info);
 
+// Lifecycle phase written into each crash item. String literals only: kept by
+// pointer and read from a signal handler.
+void set_crash_phase(const char *phase);
+
 }
 
 #endif

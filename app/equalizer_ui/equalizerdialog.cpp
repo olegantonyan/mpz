@@ -55,8 +55,8 @@ namespace EqualizerUi {
   }
 
   EqualizerDialog::EqualizerDialog(Playback::Controller *player, Config::Local &local_c,
-                                   Config::Global &global_c, QWidget *parent) :
-    QDialog(parent), player_(player), local_conf(local_c), global_conf(global_c) {
+                                   QWidget *parent) :
+    QDialog(parent), player_(player), local_conf(local_c) {
     setWindowTitle(tr("Equalizer"));
 
     profiles_ = local_conf.eqProfiles();
@@ -118,12 +118,6 @@ namespace EqualizerUi {
     preset_layout->addLayout(actions);
 
     root->addWidget(preset_box);
-
-    note_ = new QLabel(tr("The equalizer runs only on the gapless engine. Enable it in Settings."));
-    note_->setWordWrap(true);
-    note_->setStyleSheet("color: #d35400;");
-    note_->setVisible(global_conf.disableGapless());
-    root->addWidget(note_);
 
     auto *preamp_row = new QHBoxLayout;
     preamp_row->addWidget(new QLabel(tr("Preamp:")));

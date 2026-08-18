@@ -133,8 +133,8 @@ namespace ReplayGain {
   }
 
   QString Manager::appliedGainText(const Track &track) {
-    if (settings_.mode == Mode::Off || track.isStream() || track.isMpd() ||
-        track.path().isEmpty()) {
+    if (settings_.mode == Mode::Off || track.isMpd() ||
+        (!track.isStream() && track.path().isEmpty())) {
       return QString();
     }
 

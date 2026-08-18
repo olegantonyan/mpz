@@ -179,7 +179,7 @@ QWidget *SettingsDialog::buildGeneralTab() {
 #ifdef ENABLE_GAPLESS
   check_waveform = new QCheckBox(tr("Show waveform in the seekbar"));
   check_waveform->setChecked(!global_conf.waveformDisabled());
-  auto *wf_hint = new QLabel(tr("(gapless playback, local files only)"));
+  auto *wf_hint = new QLabel(tr("(local files only)"));
   wf_hint->setStyleSheet("color: gray;");
   auto *wf_row = new QHBoxLayout;
   wf_row->addWidget(check_waveform);
@@ -514,17 +514,6 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   vbox->addLayout(plog_row);
 
 #ifdef ENABLE_GAPLESS
-  // Gapless playback
-  auto *gapless_row = new QHBoxLayout;
-  check_gapless = new QCheckBox(tr("Enable gapless playback"));
-  check_gapless->setChecked(!global_conf.disableGapless());
-  gapless_row->addWidget(check_gapless);
-  auto *gapless_hint = new QLabel(tr("(requires restart)"));
-  gapless_hint->setStyleSheet("color: gray;");
-  gapless_row->addWidget(gapless_hint);
-  gapless_row->addStretch();
-  vbox->addLayout(gapless_row);
-
   auto *gcache_row = new QHBoxLayout;
   gcache_row->addWidget(new QLabel(tr("Gapless memory buffer:")));
   spin_gapless_cache_mb = new QSpinBox;
@@ -532,7 +521,6 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   spin_gapless_cache_mb->setSuffix(" " + tr("MB"));
   int gcache_mb = global_conf.gaplessCacheSizeMb();
   spin_gapless_cache_mb->setValue(gcache_mb > 0 ? gcache_mb : 100);
-  spin_gapless_cache_mb->setEnabled(check_gapless->isChecked());
   gcache_row->addWidget(spin_gapless_cache_mb);
   auto *gcache_hint = new QLabel(tr("(requires restart)"));
   gcache_hint->setStyleSheet("color: gray;");
@@ -547,8 +535,6 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   gcache_desc->setWordWrap(true);
   gcache_desc->setStyleSheet("color: gray;");
   vbox->addWidget(gcache_desc);
-
-  connect(check_gapless, &QCheckBox::toggled, spin_gapless_cache_mb, &QWidget::setEnabled);
 #endif
 
 #ifdef MPRIS_ENABLE
@@ -805,9 +791,6 @@ void SettingsDialog::apply() {
   global_conf.saveStreamBufferSize(spin_buffer_kib->value() * BUFFER_BYTES_PER_KIB);
   global_conf.savePlaybackLogSize(spin_playback_log_size->value());
 #ifdef ENABLE_GAPLESS
-  if (check_gapless) {
-    global_conf.saveDisableGapless(!check_gapless->isChecked());
-  }
   if (spin_gapless_cache_mb) {
     global_conf.saveGaplessCacheSizeMb(spin_gapless_cache_mb->value());
   }
