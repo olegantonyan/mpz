@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QMediaPlayer>
 #include <QTimer>
+
+#include <functional>
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
   #include <QAudioOutput>
   #include <QMediaDevices>
@@ -18,6 +20,11 @@
 #endif
 
 namespace Playback {
+#ifdef ENABLE_GAPLESS
+  // Aliased because moc misparses the const inside the std::function signature.
+  using ReplayGainResolver = std::function<double(const Track &)>;
+#endif
+
   class MediaPlayer : public QObject {
     Q_OBJECT
   public:
@@ -33,6 +40,7 @@ namespace Playback {
     virtual MediaPlayer::State state();
     virtual int volume();
     virtual qint64 position();
+    virtual void releaseAudio();
 
   signals:
     void positionChanged(qint64 position);
@@ -57,6 +65,8 @@ namespace Playback {
     virtual void prepareNextTrack(const Track &track) { Q_UNUSED(track) }
 #ifdef ENABLE_GAPLESS
     virtual void setEqualizer(const Eq::EqProfile &profile, bool enabled) { Q_UNUSED(profile) Q_UNUSED(enabled) }
+    virtual void setReplayGainResolver(ReplayGainResolver fn) { Q_UNUSED(fn) }
+    virtual void refreshReplayGain() { }
 #endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     virtual void setOutputDevice(QByteArray deviceid);

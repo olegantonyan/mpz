@@ -3,10 +3,9 @@
 
 #include "lyrics/provider.h"
 
+#include <QNetworkReply>
 #include <QString>
 #include <QVector>
-
-class QNetworkReply;
 
 namespace Lyrics {
   // lyrics.ovh: trivial keyless API, plain text only. Last-resort fallback.

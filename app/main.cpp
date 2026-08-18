@@ -7,6 +7,10 @@
 #include "config/global.h"
 #include "config/local.h"
 #include "config/storage.h"
+#include <QtGlobal>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  #include "replaygain/scanworker.h"
+#endif
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd_client/entity.h"
   #include "mpd_client/song.h"
@@ -76,6 +80,13 @@ void load_locale(MpzApplication &a, const QString &conf_language) {
 }
 
 int main(int argc, char *argv[]) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+  // Ahead of the crash handler: a crash in a decode worker is a result the parent
+  // reads, not an incident to report.
+  if (ReplayGain::isScanWorkerInvocation(argc, argv)) {
+    return ReplayGain::runScanWorker(argc, argv);
+  }
+#endif
 #ifdef ENABLE_CRASH_HANDLER
   mpz::install_crash_handler();
 #endif
@@ -124,6 +135,7 @@ int main(int argc, char *argv[]) {
   a.setApplicationDisplayName(QString("%1 v%2").arg(a.applicationName(), a.applicationVersion()));
 #ifdef ENABLE_CRASH_HANDLER
   mpz::set_system_info(SysInfo::get().join("\n").toStdString());
+  QObject::connect(&a, &QCoreApplication::aboutToQuit, &a, []() { mpz::set_crash_phase("shutting-down"); });
 #endif
 
   auto arguments = args(argc, argv);
@@ -161,5 +173,8 @@ int main(int argc, char *argv[]) {
 #endif
 
   w.show();
+#ifdef ENABLE_CRASH_HANDLER
+  mpz::set_crash_phase("running");
+#endif
   return a.exec();
 }

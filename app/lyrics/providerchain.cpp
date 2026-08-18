@@ -1,6 +1,7 @@
 #include "lyrics/providerchain.h"
 #include "lyrics/cache.h"
 #include "lyrics/lrclibclient.h"
+#include "lyrics/lrcparser.h"
 #include "lyrics/lyricsovhclient.h"
 #include "lyrics/neteaseclient.h"
 #include "lyrics/qqmusicclient.h"
@@ -51,8 +52,9 @@ namespace Lyrics {
     enabled = filterKnown(enabled_providers);
     pending = enabled;
 
+    // Entries written before content validation existed are dropped on read.
     Cache::Entry cached;
-    if (Cache::instance().lookup(query, cached)) {
+    if (Cache::instance().lookup(query, cached) && LrcParser::hasLyricContent(cached.lyrics)) {
       emit found(cached.provider, cached.lyrics);
       return;
     }
@@ -91,6 +93,11 @@ namespace Lyrics {
       watchdog.stop();
       provider->disconnect(this);
       provider->deleteLater();
+      if (!LrcParser::hasLyricContent(lyrics)) {
+        qWarning() << "lyrics provider" << name << "returned no actual lyrics";
+        advance();
+        return;
+      }
       Cache::instance().storeFound(query, name, lyrics);
       emit found(name, lyrics);
     });

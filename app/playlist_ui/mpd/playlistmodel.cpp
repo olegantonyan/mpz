@@ -20,13 +20,13 @@ namespace PlaylistUi {
       client.removeSongsFromPlaylist(indecies.toVector(), playlist()->name());
     }
 
-    void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
+    QFuture<void> Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
       auto pl = playlist();
       if (!pl) {
-        return;
+        return QFuture<void>();
       }
 
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() {
+      return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() {
         auto tracks = Playlist::MpdLoader(client).dirsTracks(filepaths, pl->name());
         pl->append(tracks, true);
         appendToPlaylist(tracks, pl->name());

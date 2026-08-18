@@ -201,13 +201,13 @@ namespace PlaylistUi {
     }
   }
 
-  void Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
+  QFuture<void> Model::appendToPlaylistAsync(const QList<QDir> &filepaths) {
     auto pl = playlist();
     if (!pl) {
-      return;
+      return QFuture<void>();
     }
 
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() -> void {
+    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() -> void {
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);
         pl->append(loader.tracks(), !loader.is_playlist_file());
@@ -226,13 +226,13 @@ namespace PlaylistUi {
     emit appendToPlaylistAsyncFinished(pl);
   }
 
-  void Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {
+  QFuture<void> Model::insertTracksAsync(const QList<QDir> &filepaths, int atRow) {
     auto pl = playlist();
     if (!pl) {
-      return;
+      return QFuture<void>();
     }
 
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, atRow, pl]() -> void {
+    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, atRow, pl]() -> void {
       Playlist::Playlist batch;
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);

@@ -3,6 +3,7 @@
 
 #include <cpptrace/cpptrace.hpp>
 
+#include <atomic>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -17,6 +18,8 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
+#else
+#include <pthread.h>
 #endif
 
 namespace mpz {
@@ -25,6 +28,17 @@ namespace {
 
 std::string g_log_path;
 std::string g_system_info;
+std::atomic<const char *> g_phase{"starting"};
+
+void thread_name(char *buf, std::size_t size) {
+#ifdef _WIN32
+  std::snprintf(buf, size, "%lu", GetCurrentThreadId());
+#else
+  if (pthread_getname_np(pthread_self(), buf, size) != 0) {
+    std::snprintf(buf, size, "?");
+  }
+#endif
+}
 
 const char *signal_name(int signum) {
   switch (signum) {
@@ -46,9 +60,14 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   if (g_log_path.empty()) return;
   std::ofstream ofs(g_log_path, std::ios::app);
   if (!ofs) return;
+  char tname[24];
+  thread_name(tname, sizeof(tname));
+
   ofs << "\n" << kCrashBegin << "\n";
   ofs << kCrashTimeLabel << std::time(nullptr) << "\n";
   ofs << kCrashReasonLabel << reason << "\n";
+  ofs << kCrashPhaseLabel << g_phase.load(std::memory_order_relaxed) << "\n";
+  ofs << kCrashThreadLabel << tname << "\n";
   if (!g_system_info.empty()) ofs << g_system_info << "\n\n";
   trace.print(ofs);
   ofs << "\n" << kCrashEnd << "\n";
@@ -120,6 +139,10 @@ std::string crash_log_path() {
 
 void set_system_info(std::string info) {
   g_system_info = std::move(info);
+}
+
+void set_crash_phase(const char *phase) {
+  g_phase.store(phase, std::memory_order_relaxed);
 }
 
 }

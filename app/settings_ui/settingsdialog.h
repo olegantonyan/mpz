@@ -4,19 +4,18 @@
 #include "config/global.h"
 #include "config/local.h"
 
+#include <QAbstractButton>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
+#include <QDialogButtonBox>
+#include <QLayout>
+#include <QListWidget>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTableWidget>
 
 #include <functional>
-
-class QLayout;
-class QCheckBox;
-class QComboBox;
-class QSpinBox;
-class QListWidget;
-class QTableWidget;
-class QPushButton;
-class QDialogButtonBox;
-class QAbstractButton;
 
 class SettingsDialog : public QDialog {
   Q_OBJECT
@@ -58,7 +57,6 @@ private:
 #endif
   QSpinBox *spin_playback_log_size = nullptr;
 #ifdef ENABLE_GAPLESS
-  QCheckBox *check_gapless = nullptr;
   QSpinBox *spin_gapless_cache_mb = nullptr;
 #endif
 

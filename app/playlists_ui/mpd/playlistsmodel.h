@@ -7,6 +7,7 @@
 #include "mpd_client/client.h"
 
 #include <QAbstractListModel>
+#include <QFuture>
 #include <QList>
 #include <QModelIndex>
 #include <memory>
@@ -23,7 +24,7 @@ namespace PlaylistsUi {
       void remove(const QModelIndex &index) override;
       QModelIndex currentPlaylistIndex() override;
       void saveCurrentPlaylistIndex(const QModelIndex &idx) override;
-      void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
+      QFuture<void> createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) override;
       void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist) override;
       void higlight(std::shared_ptr<Playlist::Playlist> playlist) override;
       void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) override;

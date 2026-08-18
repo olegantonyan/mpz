@@ -5,10 +5,11 @@
 #include "config/global.h"
 #include "lyrics/providerchain.h"
 
+#include <QLabel>
+#include <QPlainTextEdit>
 #include <QWidget>
-
-class QLabel;
-class QPlainTextEdit;
+#include <QLabel>
+#include <QPlainTextEdit>
 
 namespace Lyrics {
   class Widget : public QWidget {

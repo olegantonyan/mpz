@@ -7,6 +7,7 @@
 #include "playlist_ui/playlistmodel.h"
 #include "mpd_client/client.h"
 
+#include <QFuture>
 #include <QVector>
 #include <QAbstractTableModel>
 #include <memory>
@@ -22,7 +23,7 @@ namespace PlaylistUi {
       explicit Model(QStyle *stl, const ColumnsConfig &col_cfg, MpdClient::Client &cl, QObject *parent = nullptr);
 
       void reload() override;
-      void appendToPlaylistAsync(const QList<QDir> &filepaths) override;
+      QFuture<void> appendToPlaylistAsync(const QList<QDir> &filepaths) override;
       void sortBy(const QString &criteria) override;
       bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 

@@ -2,10 +2,9 @@
 #define FEEDBACKSENDER_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
-
-class QNetworkReply;
 
 class FeedbackSender : public QObject {
   Q_OBJECT

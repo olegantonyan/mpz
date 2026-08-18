@@ -8,24 +8,27 @@
 #include "config/global.h"
 #include "playlistproxyfiltermodel.h"
 #include "playlist_ui/playlistcontextmenu.h"
-#include "busyspinner.h"
+#include "backgroundtasks.h"
 #include "playlist_ui/columnsconfig.h"
+#include "tracksmimedata.h"
 
 #include <QObject>
 #include <QTableView>
 #include <memory>
+#include <QDropEvent>
 #include <QEvent>
 #include <QLineEdit>
 #include <QHash>
-
-class QDropEvent;
-class TracksMimeData;
+#include <QDropEvent>
 
 namespace PlaylistUi {
   class Controller : public QObject {
     Q_OBJECT
   public:
-    explicit Controller(QTableView *v, QLineEdit *search, BusySpinner *_spinner, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
+    explicit Controller(QTableView *v, QLineEdit *search, BackgroundTasks *_tasks, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
+
+    QVector<Track> currentTracks() const;
+    QVector<Track> selectedTracks() const;
 
   signals:
     void activated(const Track &track);
@@ -61,7 +64,7 @@ namespace PlaylistUi {
   private:
     QTableView *view;
     QLineEdit *search;
-    BusySpinner *spinner;
+    BackgroundTasks *tasks;
     Config::Local &local_conf;
     Config::Global &global_conf;
     ModusOperandi &modus_operandi;
@@ -74,6 +77,7 @@ namespace PlaylistUi {
     quint64 live_stream_uid = 0;
     bool restoring_cursor = false;
 
+    QString dirsLabel(const QList<QDir> &dirs) const;
     void updateStreamSpans();
     void restoreCursor(quint64 cursor_uid, int fallback_row);
     void eventFilterTableView(QEvent *event);

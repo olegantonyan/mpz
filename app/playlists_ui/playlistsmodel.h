@@ -5,6 +5,7 @@
 #include "config/local.h"
 
 #include <QAbstractListModel>
+#include <QFuture>
 #include <QList>
 #include <QModelIndex>
 #include <memory>
@@ -38,7 +39,7 @@ namespace PlaylistsUi {
     virtual void higlight(std::shared_ptr<Playlist::Playlist> playlist);
     virtual QModelIndex currentPlaylistIndex();
     virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
-    virtual void createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
+    virtual QFuture<void> createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
     // Tracks are already built (radio stations), so there is nothing to scan.
     void createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
     virtual void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist);

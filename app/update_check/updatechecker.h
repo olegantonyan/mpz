@@ -2,10 +2,9 @@
 #define UPDATECHECKER_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
-
-class QNetworkReply;
 
 class UpdateChecker : public QObject {
   Q_OBJECT

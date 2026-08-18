@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="107"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="114"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -45,22 +45,22 @@
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="26"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="27"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="34"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="35"/>
         <source>GitHub</source>
         <translation>GitHub</translation>
     </message>
     <message>
-        <location filename="../../about_ui/aboutdialog.cpp" line="43"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="44"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
     </message>
@@ -81,11 +81,22 @@
     </message>
 </context>
 <context>
+    <name>BackgroundTasksButton</name>
+    <message numerus="yes">
+        <location filename="../../backgroundtasksbutton.cpp" line="144"/>
+        <source>%n background operations</source>
+        <translation>
+            <numerusform>%n фоновая операция</numerusform>
+            <numerusform>%n фоновые операции</numerusform>
+            <numerusform>%n фоновых операций</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>BusySpinner</name>
     <message>
-        <location filename="../../busyspinner.cpp" line="8"/>
         <source>Background operation running</source>
-        <translation>Выполняется фоновая операция</translation>
+        <translation type="vanished">Выполняется фоновая операция</translation>
     </message>
 </context>
 <context>
@@ -436,228 +447,227 @@
 <context>
     <name>EqualizerUi::EqualizerDialog</name>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="61"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="60"/>
         <source>Equalizer</source>
         <translation>Эквалайзер</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="74"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="73"/>
         <source>Everything below applies to this output device only.</source>
         <translation>Всё, что ниже, применяется только к этому устройству вывода.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="79"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="78"/>
         <source>Enable equalizer for this device</source>
         <translation>Включить эквалайзер для этого устройства</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="83"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="82"/>
         <source>Preset</source>
         <translation>Пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="99"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="98"/>
         <source>Save As…</source>
         <translation>Сохранить как…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="102"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="101"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="105"/>
         <source>Import…</source>
         <translation>Импорт…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="107"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="106"/>
         <source>Import an EqualizerAPO / AutoEQ ParametricEQ.txt file</source>
         <translation>Импортировать файл EqualizerAPO / AutoEQ ParametricEQ.txt</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="111"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="110"/>
         <source>Export…</source>
         <translation>Экспорт…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="113"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="112"/>
         <source>Parametric EQ…</source>
         <translation>Параметрический EQ…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="115"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="114"/>
         <source>Graphic EQ (multiband)…</source>
         <translation>Графический EQ (многополосный)…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
         <source>The equalizer runs only on the gapless engine. Enable it in Settings.</source>
-        <translation>Эквалайзер работает только с движком воспроизведения без пауз. Включите его в настройках.</translation>
+        <translation type="vanished">Эквалайзер работает только с движком воспроизведения без пауз. Включите его в настройках.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="130"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="123"/>
         <source>Preamp:</source>
         <translation>Предусиление:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="135"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="128"/>
         <source>dB</source>
         <translation>дБ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="144"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="137"/>
         <source>Auto (clip-safe)</source>
         <translation>Авто (без клиппинга)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="145"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="138"/>
         <source>Set the preamp so boosted bands never exceed 0 dBFS</source>
         <translation>Установить предусиление так, чтобы усиленные полосы не превышали 0 dBFS</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="161"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="154"/>
         <source>Graphic</source>
         <translation>Графический</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="162"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="155"/>
         <source>Parametric</source>
         <translation>Параметрический</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="183"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="176"/>
         <source>Output device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Устройство вывода: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="246"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="239"/>
         <source>This preset isn&apos;t a 10-band graphic EQ. Edit it in Parametric, or reset.</source>
         <translation>Этот пресет не является 10-полосным графическим EQ. Отредактируйте его в параметрическом режиме или сбросьте.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="249"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="242"/>
         <source>Reset to 10-band</source>
         <translation>Сбросить до 10 полос</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Freq (Hz)</source>
         <translation>Частота (Гц)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>Gain (dB)</source>
         <translation>Усиление (дБ)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="263"/>
         <source>On</source>
         <translation>Вкл.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="277"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="270"/>
         <source>Add band</source>
         <translation>Добавить полосу</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="289"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="282"/>
         <source>Remove selected</source>
         <translation>Удалить выбранное</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="321"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="314"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="322"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="315"/>
         <source>Low shelf</source>
         <translation>Нижний шельф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="323"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="316"/>
         <source>High shelf</source>
         <translation>Верхний шельф</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="324"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="317"/>
         <source>Low pass</source>
         <translation>Низкочастотный</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="325"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="318"/>
         <source>High pass</source>
         <translation>Высокочастотный</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="467"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="460"/>
         <source>Preset name:</source>
         <translation>Название пресета:</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="507"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="500"/>
         <source>Import equalizer preset</source>
         <translation>Импортировать пресет эквалайзера</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="536"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="529"/>
         <source>Choose file…</source>
         <translation>Выбрать файл…</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="543"/>
         <source>Import EqualizerAPO / AutoEQ preset</source>
         <translation>Импортировать пресет EqualizerAPO / AutoEQ</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="551"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="544"/>
         <source>Parametric EQ (*.txt);;All files (*)</source>
         <translation>Параметрический EQ (*.txt);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>Import failed</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="557"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="550"/>
         <source>Could not open the file.</source>
         <translation>Не удалось открыть файл.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="562"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="555"/>
         <source>No filters found in the file.</source>
         <translation>В файле не найдено фильтров.</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Export preset</source>
         <translation>Экспортировать пресет</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="598"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="591"/>
         <source>Text files (*.txt);;All files (*)</source>
         <translation>Текстовые файлы (*.txt);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Export failed</source>
         <translation>Ошибка экспорта</translation>
     </message>
     <message>
-        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="606"/>
+        <location filename="../../equalizer_ui/equalizerdialog.cpp" line="599"/>
         <source>Could not write the file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
@@ -847,93 +857,98 @@
         <translation>Эквалайзер…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="121"/>
+        <location filename="../../macos/macmenubar.cpp" line="111"/>
+        <source>ReplayGain…</source>
+        <translation>ReplayGain…</translation>
+    </message>
+    <message>
+        <location filename="../../macos/macmenubar.cpp" line="119"/>
         <source>Output Device</source>
         <translation>Устройство вывода</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="133"/>
+        <location filename="../../macos/macmenubar.cpp" line="131"/>
         <source>mpd update</source>
         <translation>mpd update</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="143"/>
+        <location filename="../../macos/macmenubar.cpp" line="141"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="144"/>
+        <location filename="../../macos/macmenubar.cpp" line="142"/>
         <source>Sort</source>
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="155"/>
+        <location filename="../../macos/macmenubar.cpp" line="153"/>
         <source>Jump to Playing Track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="159"/>
+        <location filename="../../macos/macmenubar.cpp" line="157"/>
         <source>Playback Log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="163"/>
+        <location filename="../../macos/macmenubar.cpp" line="161"/>
         <source>Keyboard Shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="169"/>
-        <location filename="../../macos/macmenubar.cpp" line="179"/>
+        <location filename="../../macos/macmenubar.cpp" line="167"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Enter Full Screen</source>
         <translation>Перейти в полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="179"/>
+        <location filename="../../macos/macmenubar.cpp" line="177"/>
         <source>Exit Full Screen</source>
         <translation>Выйти из полноэкранного режима</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="182"/>
+        <location filename="../../macos/macmenubar.cpp" line="180"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="184"/>
+        <location filename="../../macos/macmenubar.cpp" line="182"/>
         <source>Minimize</source>
         <translation>Свернуть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="188"/>
+        <location filename="../../macos/macmenubar.cpp" line="186"/>
         <source>Zoom</source>
         <translation>Масштаб</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="199"/>
+        <location filename="../../macos/macmenubar.cpp" line="197"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="203"/>
+        <location filename="../../macos/macmenubar.cpp" line="201"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="205"/>
+        <location filename="../../macos/macmenubar.cpp" line="203"/>
         <source>mpz Website</source>
         <translation>Сайт mpz</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="210"/>
+        <location filename="../../macos/macmenubar.cpp" line="208"/>
         <source>mpz GitHub</source>
         <translation>mpz GitHub</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="215"/>
+        <location filename="../../macos/macmenubar.cpp" line="213"/>
         <source>Send Feedback…</source>
         <translation>Отправить отзыв…</translation>
     </message>
     <message>
-        <location filename="../../macos/macmenubar.cpp" line="218"/>
+        <location filename="../../macos/macmenubar.cpp" line="216"/>
         <source>Report a Bug…</source>
         <translation>Сообщить об ошибке…</translation>
     </message>
@@ -952,31 +967,36 @@
     </message>
     <message>
         <location filename="../../mainmenu.cpp" line="23"/>
+        <source>ReplayGain…</source>
+        <translation>ReplayGain…</translation>
+    </message>
+    <message>
+        <location filename="../../mainmenu.cpp" line="24"/>
         <source>Playback log</source>
         <translation>Лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="24"/>
+        <location filename="../../mainmenu.cpp" line="25"/>
         <source>About mpz</source>
         <translation>О mpz</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="25"/>
+        <location filename="../../mainmenu.cpp" line="26"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="26"/>
+        <location filename="../../mainmenu.cpp" line="27"/>
         <source>Got feedback?</source>
         <translation>Связаться с автором?</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="27"/>
+        <location filename="../../mainmenu.cpp" line="28"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
     </message>
     <message>
-        <location filename="../../mainmenu.cpp" line="28"/>
+        <location filename="../../mainmenu.cpp" line="29"/>
         <source>mpd update</source>
         <translation>mpd update</translation>
     </message>
@@ -1019,143 +1039,164 @@
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="102"/>
         <source>Background operation running</source>
-        <translation>Выполняется фоновая операция</translation>
+        <translation type="vanished">Выполняется фоновая операция</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="119"/>
+        <location filename="../../mainwindow.ui" line="103"/>
         <source>Volume</source>
         <translation>Громкость</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="109"/>
+        <location filename="../../mainwindow.ui" line="93"/>
         <source>Sort</source>
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="139"/>
+        <location filename="../../mainwindow.ui" line="123"/>
         <source>Main menu</source>
         <translation>Главное меню</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="161"/>
+        <location filename="../../mainwindow.ui" line="145"/>
         <source>Configure library folders</source>
         <translation>Настроить папки с музыкой</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="132"/>
+        <location filename="../../mainwindow.ui" line="116"/>
         <source>Output</source>
         <translation>Аудиовыход</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="171"/>
+        <location filename="../../mainwindow.ui" line="155"/>
         <source>Select library folder</source>
         <translation>Выбрать папку с музыкой</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="187"/>
+        <location filename="../../mainwindow.ui" line="171"/>
         <source>Filter library</source>
         <translation>Фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="201"/>
+        <location filename="../../mainwindow.ui" line="185"/>
         <source>Filter playlists</source>
         <translation>Фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="224"/>
+        <location filename="../../mainwindow.ui" line="208"/>
         <source>Filter tracks</source>
         <translation>Фильтр треков</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="231"/>
+        <location filename="../../mainwindow.ui" line="215"/>
         <source>Playback follows selection</source>
         <translation>Воспроизведение следует за выделением</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="234"/>
+        <location filename="../../mainwindow.ui" line="218"/>
         <source>Playback follows cursor</source>
         <translation>Воспроизведение следует за курсором</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="241"/>
+        <location filename="../../mainwindow.ui" line="225"/>
         <source>Order:</source>
         <translation>Порядок:</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="248"/>
+        <location filename="../../mainwindow.ui" line="232"/>
         <source>global</source>
         <translation>глобальный</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="255"/>
+        <location filename="../../mainwindow.ui" line="239"/>
         <source>Default playback order</source>
         <translation>Порядок воспроизведения по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="262"/>
+        <location filename="../../mainwindow.ui" line="246"/>
         <source>playlist</source>
         <translation>плейлист</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="269"/>
+        <location filename="../../mainwindow.ui" line="253"/>
         <source>Override playback for current playlist</source>
         <translation>Изменить порядок воспроизведения в текущем плейлисте</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="299"/>
-        <location filename="../../mainwindow.cpp" line="334"/>
+        <location filename="../../mainwindow.cpp" line="309"/>
+        <location filename="../../mainwindow.cpp" line="344"/>
         <source>sequential</source>
         <translation>последовательно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="300"/>
-        <location filename="../../mainwindow.cpp" line="333"/>
+        <location filename="../../mainwindow.cpp" line="310"/>
+        <location filename="../../mainwindow.cpp" line="343"/>
         <source>random</source>
         <translation>случайно</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="335"/>
+        <location filename="../../mainwindow.cpp" line="311"/>
+        <location filename="../../mainwindow.cpp" line="345"/>
         <source>sequential (no loop)</source>
         <translation>последовательно (без повтора)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="332"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>(use global)</source>
         <translation>(использовать глобальный)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="441"/>
+        <location filename="../../mainwindow.cpp" line="451"/>
         <source>Lock toolbar</source>
         <translation>Закрепить панель инструментов</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="459"/>
+        <location filename="../../mainwindow.cpp" line="469"/>
         <source>Album cover</source>
         <translation>Обложка альбома</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="465"/>
+        <location filename="../../mainwindow.cpp" line="475"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="607"/>
-        <location filename="../../mainwindow.cpp" line="611"/>
+        <source>ReplayGain…</source>
+        <translation type="vanished">ReplayGain…</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="624"/>
+        <location filename="../../mainwindow.cpp" line="628"/>
         <source>Nothing selected</source>
         <translation>Ничего не выбрано</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="613"/>
+        <location filename="../../mainwindow.cpp" line="630"/>
         <source>Selection total duration</source>
         <translation>Общая длительность выделенного</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="625"/>
+        <location filename="../../mainwindow.cpp" line="642"/>
         <source>Update available:</source>
         <translation>Доступно обновление:</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="880"/>
+        <source>ReplayGain scan</source>
+        <translation>Сканирование ReplayGain</translation>
+    </message>
+    <message>
+        <source>ReplayGain: %1 / %2</source>
+        <translation type="vanished">ReplayGain: %1 / %2</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="921"/>
+        <source>Gains are not applied in mpd mode — mpd has its own replay_gain setting. Analysing and tagging still work.</source>
+        <translation>В режиме mpd усиление не применяется — у mpd своя настройка replay_gain. Анализ и запись тегов работают.</translation>
+    </message>
+    <message>
+        <source>Gains are applied only by the gapless engine. Enable it in Settings. Analysing and tagging still work.</source>
+        <translation type="vanished">Усиление применяет только gapless-движок. Включите его в настройках. Анализ и запись тегов работают.</translation>
     </message>
 </context>
 <context>
@@ -1211,6 +1252,24 @@
     </message>
 </context>
 <context>
+    <name>PlaylistUi::Controller</name>
+    <message numerus="yes">
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="22"/>
+        <source>%n item(s)</source>
+        <translation>
+            <numerusform>%n элемент</numerusform>
+            <numerusform>%n элемента</numerusform>
+            <numerusform>%n элементов</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="190"/>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="333"/>
+        <source>Adding to playlist: %1</source>
+        <translation>Добавление в плейлист: %1</translation>
+    </message>
+</context>
+<context>
     <name>PlaylistUi::PlaylistContextMenu</name>
     <message>
         <location filename="../../playlist_ui/playlistcontextmenu.cpp" line="23"/>
@@ -1250,21 +1309,40 @@
 </context>
 <context>
     <name>PlaylistsUi::Controller</name>
+    <message numerus="yes">
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="25"/>
+        <source>%n item(s)</source>
+        <translation>
+            <numerusform>%n элемент</numerusform>
+            <numerusform>%n элемента</numerusform>
+            <numerusform>%n элементов</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="157"/>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="191"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="36"/>
+        <source>Loading playlists</source>
+        <translation>Загрузка плейлистов</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="168"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="202"/>
         <source>Create new playlist</source>
         <translation>Создать новый плейлист</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="158"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="169"/>
         <source>Append to &quot;%1&quot;</source>
         <translation>Добавить в «%1»</translation>
     </message>
     <message>
-        <location filename="../../playlists_ui/playlistscontroller.cpp" line="160"/>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="171"/>
         <source>Move to &quot;%1&quot;</source>
         <translation>Переместить в «%1»</translation>
+    </message>
+    <message>
+        <location filename="../../playlists_ui/playlistscontroller.cpp" line="328"/>
+        <source>Creating playlist: %1</source>
+        <translation>Создание плейлиста: %1</translation>
     </message>
 </context>
 <context>
@@ -1416,6 +1494,255 @@
     </message>
 </context>
 <context>
+    <name>ReplayGain::JobRunner</name>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="257"/>
+        <source>file is gone</source>
+        <translation>файл отсутствует</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="261"/>
+        <source>unreadable audio stream</source>
+        <translation>аудиопоток не читается</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="284"/>
+        <source>decoder stalled</source>
+        <translation>декодер завис</translation>
+    </message>
+    <message>
+        <source>format changed mid-stream</source>
+        <translation type="vanished">формат изменился в процессе</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="337"/>
+        <source>nothing decoded</source>
+        <translation>ничего не декодировано</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain/jobrunner.cpp" line="367"/>
+        <source>no measurable loudness</source>
+        <translation>громкость не измерена</translation>
+    </message>
+</context>
+<context>
+    <name>ReplayGainUi::ReplayGainDialog</name>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
+        <source>tags written</source>
+        <translation>теги записаны</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
+        <source>tags unsupported</source>
+        <translation>теги не поддерживаются</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
+        <source>tags: open failed</source>
+        <translation>теги: не удалось открыть</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="48"/>
+        <source>tags: save failed</source>
+        <translation>теги: не удалось сохранить</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="58"/>
+        <source>ReplayGain</source>
+        <translation>ReplayGain</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
+        <source>Playback</source>
+        <translation>Воспроизведение</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="70"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
+        <source>Analyse</source>
+        <translation>Анализ</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
+        <source>Off</source>
+        <translation>Выключено</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <source>Track gain</source>
+        <translation>Усиление трека</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <source>Album gain</source>
+        <translation>Усиление альбома</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
+        <source>Mode:</source>
+        <translation>Режим:</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="122"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="132"/>
+        <source>dB</source>
+        <translation>дБ</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
+        <source>Added to measured gains only</source>
+        <translation>Только к измеренным усилениям</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
+        <source>Preamp:</source>
+        <translation>Предусиление:</translation>
+    </message>
+    <message>
+        <source>Applied to tracks with no ReplayGain data</source>
+        <translation type="vanished">Применяется к трекам без данных ReplayGain</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
+        <source>Untagged tracks:</source>
+        <translation>Треки без тегов:</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="138"/>
+        <source>Prevent clipping (use the measured peak)</source>
+        <translation>Не допускать клиппинг (по измеренному пику)</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="140"/>
+        <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
+        <translation>Пик измерен без эквалайзера, поэтому при усилении полос эквалайзером они сочетаются лишь приблизительно.</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
+        <source>Store results in a sidecar database</source>
+        <translation>Хранить результаты в отдельной базе данных</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="163"/>
+        <source>Write ReplayGain tags into the audio files</source>
+        <translation>Записывать теги ReplayGain в аудиофайлы</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="193"/>
+        <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
+        <translation>Каждый проанализированный файл перезаписывается, поэтому его размер и время изменения меняются. Треки из cue-листа можно хранить только в отдельной базе.</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="183"/>
+        <source>Show in file manager</source>
+        <translation>Показать в файловом менеджере</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
+        <source>Re-analyse tracks that already have data</source>
+        <translation>Повторно анализировать треки, у которых уже есть данные</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="206"/>
+        <source>Scope:</source>
+        <translation>Область:</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="209"/>
+        <source>Whole library</source>
+        <translation>Вся библиотека</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="208"/>
+        <source>Current playlist</source>
+        <translation>Текущий плейлист</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
+        <source>Used for unscanned tracks and radio streams</source>
+        <translation>Для непроанализированных треков и радиопотоков</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="210"/>
+        <source>Selected tracks</source>
+        <translation>Выбранные треки</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <source>Track</source>
+        <translation>Трек</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <source>Peak</source>
+        <translation>Пик</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <source>Status</source>
+        <translation>Статус</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="335"/>
+        <source>%1 — %n entries</source>
+        <translation>
+            <numerusform>%1 — %n запись</numerusform>
+            <numerusform>%1 — %n записи</numerusform>
+            <numerusform>%1 — %n записей</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="372"/>
+        <source>analysed</source>
+        <translation>проанализирован</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="404"/>
+        <source>Cancelled after %n track(s)</source>
+        <translation>
+            <numerusform>Отменено после %n трека</numerusform>
+            <numerusform>Отменено после %n треков</numerusform>
+            <numerusform>Отменено после %n треков</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="406"/>
+        <source>Analysed %1, failed %2</source>
+        <translation>Проанализировано %1, ошибок %2</translation>
+    </message>
+</context>
+<context>
+    <name>ReplayGainUi::StatusMenu</name>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="21"/>
+        <source>Off</source>
+        <translation>Выключено</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="22"/>
+        <source>Track gain</source>
+        <translation>Усиление трека</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="23"/>
+        <source>Album gain</source>
+        <translation>Усиление альбома</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/statusmenu.cpp" line="40"/>
+        <source>ReplayGain…</source>
+        <translation>ReplayGain…</translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="65"/>
@@ -1471,6 +1798,11 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="133"/>
         <source>Prevent system sleep while playing</source>
         <translation>Не давать системе уснуть во время воспроизведения</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
+        <source>(local files only)</source>
+        <translation>(только локальные файлы)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="470"/>
@@ -1533,9 +1865,8 @@
         <translation>Показывать осциллограмму на полосе перемотки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="182"/>
         <source>(gapless playback, local files only)</source>
-        <translation>(воспроизведение без пауз, только локальные файлы)</translation>
+        <translation type="vanished">(воспроизведение без пауз, только локальные файлы)</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="191"/>
@@ -1557,8 +1888,7 @@
         <location filename="../../settings_ui/settingsdialog.cpp" line="280"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="459"/>
         <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="522"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="537"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
@@ -1609,13 +1939,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="268"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="562"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="269"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
@@ -1636,13 +1966,13 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="305"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="647"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="633"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="306"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="648"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="634"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
@@ -1720,67 +2050,66 @@
         <translation>записей</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="519"/>
         <source>Enable gapless playback</source>
-        <translation>Включить воспроизведение без пауз</translation>
+        <translation type="vanished">Включить воспроизведение без пауз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="529"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
         <source>Gapless memory buffer:</source>
         <translation>Буфер памяти для воспроизведения без пауз:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="532"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="543"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>Декодированный звук хранится в памяти, чтобы переходы между треками были без пауз, а перемотка внутри трека — мгновенной. Чем больше буфер, тем больше (и более длинных) треков помещается в кэш; 100 МБ достаточно для большинства библиотек.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="555"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="544"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="572"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="573"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="584"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="570"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="591"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
         <source>Crash reports:</source>
         <translation>Отчёты о сбоях:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="593"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="579"/>
         <source>Send automatically</source>
         <translation>Отправлять автоматически</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="594"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="580"/>
         <source>Ask after next crash</source>
         <translation>Спрашивать после сбоя</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="595"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="581"/>
         <source>Never send</source>
         <translation>Не отправлять</translation>
     </message>
@@ -1788,131 +2117,131 @@
 <context>
     <name>Shortcuts</name>
     <message>
-        <location filename="../../shortcuts.cpp" line="56"/>
-        <location filename="../../shortcuts.cpp" line="81"/>
+        <location filename="../../shortcuts.cpp" line="55"/>
+        <location filename="../../shortcuts.cpp" line="80"/>
         <source>Open shortcuts dialog</source>
         <translation>Открыть диалог клавиатурных сочетаний</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="57"/>
-        <location filename="../../shortcuts.cpp" line="82"/>
+        <location filename="../../shortcuts.cpp" line="56"/>
+        <location filename="../../shortcuts.cpp" line="81"/>
         <source>Jump to playing track</source>
         <translation>Перейти к воспроизводимому треку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="58"/>
-        <location filename="../../shortcuts.cpp" line="83"/>
+        <location filename="../../shortcuts.cpp" line="57"/>
+        <location filename="../../shortcuts.cpp" line="82"/>
         <source>Quit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="42"/>
-        <location filename="../../shortcuts.cpp" line="69"/>
+        <location filename="../../shortcuts.cpp" line="41"/>
+        <location filename="../../shortcuts.cpp" line="68"/>
         <source>Focus on library</source>
         <translation>Фокус на библиотеку</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="33"/>
-        <location filename="../../shortcuts.cpp" line="60"/>
+        <location filename="../../shortcuts.cpp" line="32"/>
+        <location filename="../../shortcuts.cpp" line="59"/>
         <source>Play / Pause</source>
         <translation>Воспроизведение / Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="39"/>
-        <location filename="../../shortcuts.cpp" line="66"/>
+        <location filename="../../shortcuts.cpp" line="38"/>
+        <location filename="../../shortcuts.cpp" line="65"/>
         <source>Volume up</source>
         <translation>Увеличить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="40"/>
-        <location filename="../../shortcuts.cpp" line="67"/>
+        <location filename="../../shortcuts.cpp" line="39"/>
+        <location filename="../../shortcuts.cpp" line="66"/>
         <source>Volume down</source>
         <translation>Уменьшить громкость</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="41"/>
-        <location filename="../../shortcuts.cpp" line="68"/>
+        <location filename="../../shortcuts.cpp" line="40"/>
+        <location filename="../../shortcuts.cpp" line="67"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="43"/>
-        <location filename="../../shortcuts.cpp" line="70"/>
+        <location filename="../../shortcuts.cpp" line="42"/>
+        <location filename="../../shortcuts.cpp" line="69"/>
         <source>Focus on playlists</source>
         <translation>Фокус на плейлисты</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="44"/>
-        <location filename="../../shortcuts.cpp" line="71"/>
+        <location filename="../../shortcuts.cpp" line="43"/>
+        <location filename="../../shortcuts.cpp" line="70"/>
         <source>Focus on playlist</source>
         <translation>Фокус на плейлист</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="47"/>
-        <location filename="../../shortcuts.cpp" line="72"/>
+        <location filename="../../shortcuts.cpp" line="46"/>
+        <location filename="../../shortcuts.cpp" line="71"/>
         <source>Focus on library filter</source>
         <translation>Фокус на фильтр библиотеки</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="48"/>
-        <location filename="../../shortcuts.cpp" line="73"/>
+        <location filename="../../shortcuts.cpp" line="47"/>
+        <location filename="../../shortcuts.cpp" line="72"/>
         <source>Focus on playlists filter</source>
         <translation>Фокус на фильтр плейлистов</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="49"/>
-        <location filename="../../shortcuts.cpp" line="74"/>
+        <location filename="../../shortcuts.cpp" line="48"/>
+        <location filename="../../shortcuts.cpp" line="73"/>
         <source>Focus on playlist filter</source>
         <translation>Фокус на фильтр плейлиста</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="50"/>
-        <location filename="../../shortcuts.cpp" line="75"/>
+        <location filename="../../shortcuts.cpp" line="49"/>
+        <location filename="../../shortcuts.cpp" line="74"/>
         <source>Open main menu</source>
         <translation>Открыть главное меню</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="51"/>
-        <location filename="../../shortcuts.cpp" line="76"/>
+        <location filename="../../shortcuts.cpp" line="50"/>
+        <location filename="../../shortcuts.cpp" line="75"/>
         <source>Open playback log</source>
         <translation>Открыть лог воспроизведения</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="52"/>
-        <location filename="../../shortcuts.cpp" line="77"/>
+        <location filename="../../shortcuts.cpp" line="51"/>
+        <location filename="../../shortcuts.cpp" line="76"/>
         <source>Open sort menu</source>
         <translation>Открыть меню сортировок</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="54"/>
-        <location filename="../../shortcuts.cpp" line="79"/>
+        <location filename="../../shortcuts.cpp" line="53"/>
+        <location filename="../../shortcuts.cpp" line="78"/>
         <source>Open output device menu</source>
         <translation>Открыть меню устройства вывода</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="61"/>
+        <location filename="../../shortcuts.cpp" line="60"/>
         <source>Play</source>
         <translation>Воспроизвести</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="63"/>
+        <location filename="../../shortcuts.cpp" line="62"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="62"/>
+        <location filename="../../shortcuts.cpp" line="61"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="37"/>
-        <location filename="../../shortcuts.cpp" line="64"/>
+        <location filename="../../shortcuts.cpp" line="36"/>
+        <location filename="../../shortcuts.cpp" line="63"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../../shortcuts.cpp" line="38"/>
-        <location filename="../../shortcuts.cpp" line="65"/>
+        <location filename="../../shortcuts.cpp" line="37"/>
+        <location filename="../../shortcuts.cpp" line="64"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
@@ -1923,6 +2252,11 @@
         <location filename="../../shortcuts_ui/shortcutsdialog.ui" line="14"/>
         <source>Keyboard shortcuts</source>
         <translation>Клавиатурные сочетания</translation>
+    </message>
+    <message>
+        <location filename="../../shortcuts_ui/shortcutsdialog.cpp" line="75"/>
+        <source>%1 taken from &quot;%2&quot;</source>
+        <translation>%1 отобрано у «%2»</translation>
     </message>
 </context>
 <context>
@@ -2334,12 +2668,12 @@
         <translation>Текст песни не найден.</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="727"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="724"/>
         <source>Copy to clipboard</source>
         <translation>Копировать в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/trackinfodialog.cpp" line="735"/>
+        <location filename="../../playlist_ui/trackinfodialog.cpp" line="732"/>
         <source>Open in external viewer</source>
         <translation>Открыть во внешнем просмотрщике</translation>
     </message>

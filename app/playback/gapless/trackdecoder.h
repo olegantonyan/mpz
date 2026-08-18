@@ -4,12 +4,9 @@
 #include <QAudioDecoder>
 #include <QAudioFormat>
 #include <QByteArray>
+#include <QIODevice>
 #include <QObject>
 #include <QUrl>
-
-QT_BEGIN_NAMESPACE
-class QIODevice;
-QT_END_NAMESPACE
 
 namespace Playback::Gapless {
   class TrackDecoder : public QObject {

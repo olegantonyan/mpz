@@ -4,9 +4,8 @@
 #include "lyrics/provider.h"
 
 #include <QByteArray>
+#include <QNetworkReply>
 #include <QString>
-
-class QNetworkReply;
 
 namespace Lyrics {
   // QQ Music (y.qq.com). Unofficial API, no key. Search results carry no

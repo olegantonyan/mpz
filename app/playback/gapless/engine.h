@@ -13,17 +13,16 @@
 
 #include <QAudioDevice>
 #include <QAudioFormat>
+#include <QAudioSink>
 #include <QByteArray>
 #include <QElapsedTimer>
+#include <QIODevice>
 #include <QMediaDevices>
 #include <QObject>
 #include <QTimer>
 #include <QUrl>
 
-QT_BEGIN_NAMESPACE
-class QAudioSink;
-class QIODevice;
-QT_END_NAMESPACE
+#include <functional>
 
 namespace Playback::Gapless {
   class Engine : public QObject {
@@ -38,6 +37,10 @@ namespace Playback::Gapless {
     // The device selection actually in effect: the configured id while that device
     // is plugged in, empty (= system default) whenever it is not.
     QByteArray effectiveOutputDeviceId() const { return effective_device_id; }
+
+    void setReplayGainResolver(std::function<double(const Track &)> fn);
+    void refreshReplayGain();
+    void releaseAudio();
 
   public slots:
     void setTrack(const Track &t);
@@ -86,9 +89,11 @@ namespace Playback::Gapless {
     void setupPlayback(const QAudioFormat &format);
     void createSink();
     void destroySink();
+    void handleOutputFailure(const QString &message);
     void sinkEnsureStarted();
     void feedSink();
     void applyEq(char *data, qint64 frames);
+    double resolveReplayGain(const Track &t) const;
 
     void onPumpTick();
     void emitPosition();
@@ -141,6 +146,7 @@ namespace Playback::Gapless {
     qint64 epoch_start_frame = 0; // abs frame the sink clock is anchored to; re-set on every sink (re)start
     qint64 catchup_target_frame = -1;
     qint64 pending_seek_ms = -1; // applied once the pipeline is up after a forced format/device rebuild
+    qint64 output_failure_ms = -1; // -1 = not waiting for an output device to come back
     quint64 boundary_adopt_uid = 0; // uid the next setTrack may adopt seamlessly; 0 = none
     qint64 decoder_total_frames = 0;
     qint64 prepared_begin_frame = 0;
@@ -148,10 +154,12 @@ namespace Playback::Gapless {
     qint64 prepared_total_frames = 0;
     int volume_pct = 100;
     Eq::Equalizer eq;
+    std::function<double(const Track &)> rg_resolver;
     qint64 last_filtered_frame = -1; // abs frame the EQ state is contiguous with; mismatch => reset on seek
     QByteArray output_device_id;
     QByteArray effective_device_id;
     QAudioDevice active_device; // device the current sink is running on
+    bool audio_output_failed = false; // no automatic sink rebuild until a user action or a device change
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale queued device switches during event bursts
     Playback::MediaPlayer::State current_state = Playback::MediaPlayer::StoppedState;

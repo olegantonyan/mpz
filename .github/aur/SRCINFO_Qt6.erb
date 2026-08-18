@@ -13,6 +13,8 @@ pkgbase = <%= pkgname %>
 	depends = taglib
 	depends = libmpdclient
 	depends = cpptrace
+	depends = libebur128
+	depends = sqlite3
 	provides = <%= pkgname %>
 	source = <%= pkgname %>-<%= pkgver %>-<%= pkgrel %>.zip::<%= source %>
 	sha256sums = <%= sha256sums %>

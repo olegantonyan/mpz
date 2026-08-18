@@ -57,6 +57,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::setTrack(const Track &t) {
+    audio_output_failed = false; // explicit track pick: allow another sink attempt
     const quint64 adopt_uid = boundary_adopt_uid;
     boundary_adopt_uid = 0;
     const int rate = sink_format.sampleRate();
@@ -87,7 +88,7 @@ namespace Playback::Gapless {
       if (decoder_finished && (end_f < 0 || end_f > decoder_total_frames)) {
         end_f = decoder_total_frames;
       }
-      timeline.reset(t, current_url, begin_f, end_f);
+      timeline.reset(t, current_url, begin_f, end_f, resolveReplayGain(t));
       current_track = t;
       current_segment = 0;
       about_to_finish_emitted = false;
@@ -114,7 +115,7 @@ namespace Playback::Gapless {
     if (catchup_target_frame >= 0) {
       catchup_target_frame += delta;
     }
-    timeline.reset(t, t.url(), new_begin, new_end);
+    timeline.reset(t, t.url(), new_begin, new_end, resolveReplayGain(t));
     current_track = t;
     current_segment = 0;
     about_to_finish_emitted = false;
@@ -137,6 +138,7 @@ namespace Playback::Gapless {
     about_to_finish_emitted = false;
     catchup_target_frame = -1;
     pending_seek_ms = -1;
+    output_failure_ms = -1;
     boundary_adopt_uid = 0;
     current_segment = 0;
     read_cursor_frame = 0;
@@ -220,7 +222,7 @@ namespace Playback::Gapless {
     const qint64 end_f = (current_track.isCue() && current_track.duration() > 0)
                              ? begin_f + qint64(current_track.duration()) * rate / 1000
                              : -1;
-    timeline.reset(current_track, current_url, begin_f, end_f);
+    timeline.reset(current_track, current_url, begin_f, end_f, resolveReplayGain(current_track));
     current_segment = 0;
     read_cursor_frame = 0;
     epoch_start_frame = 0;
@@ -236,18 +238,35 @@ namespace Playback::Gapless {
 
   void Engine::createSink() {
     destroySink();
+    if (audio_output_failed) {
+      return;
+    }
     active_device = outputDevice();
+    if (active_device.isNull() || !sink_format.isValid()) {
+      handleOutputFailure(QStringLiteral("no audio output device available"));
+      return;
+    }
     sink = new QAudioSink(active_device, sink_format, this);
     sink->setBufferSize(sink_format.bytesForDuration(500000));
     sink->setVolume(volume_pct / 100.0);
     // queued: reset()/start() emit stateChanged synchronously, which must not re-enter feedSink mid-mutation
-    connect(sink, &QAudioSink::stateChanged, this, [this](QAudio::State s) {
+    QAudioSink *created = sink;
+    connect(sink, &QAudioSink::stateChanged, this, [this, created](QAudio::State s) {
+      if (created != sink) {
+        return; // queued state of an already-replaced sink
+      }
       if (s == QAudio::IdleState) {
         feedSink();
         checkEof();
+      } else if (s == QAudio::StoppedState && sink->error() == QAudio::IOError) {
+        handleOutputFailure(QStringLiteral("audio output device failed")); // only IOError: stop()/reset() leave a stale error behind
       }
     }, Qt::QueuedConnection);
     sink_io = sink->start();
+    if (!sink_io || sink->error() != QAudio::NoError) {
+      handleOutputFailure(QStringLiteral("cannot open audio output device"));
+      return;
+    }
     epoch_start_frame = read_cursor_frame;
     if (current_state != MediaPlayer::PlayingState) {
       sink->suspend(); // brought up before play(): stay silent until play()
@@ -263,9 +282,45 @@ namespace Playback::Gapless {
     sink_io = nullptr;
   }
 
+  void Engine::releaseAudio() {
+    pump_timer.stop();
+    position_timer.stop();
+    if (sink) {
+      sink->stop();
+      delete sink; // not deleteLater: the stream must go down while the event loop still runs
+      sink = nullptr;
+      sink_io = nullptr;
+    }
+  }
+
+  void Engine::handleOutputFailure(const QString &message) {
+    if (audio_output_failed) {
+      return;
+    }
+    audio_output_failed = true;
+    qCWarning(mpzGapless) << "audio output lost:" << message << "device" << active_device.id();
+    const bool resumable = current_state == MediaPlayer::PlayingState && !current_url.isEmpty() &&
+                           !QMediaDevices::defaultAudioOutput().isNull();
+    const qint64 ms = positionMs();
+    destroySink();
+    if (resumable) {
+      output_failure_ms = ms;
+      setState(MediaPlayer::PausedState); // Stopped makes the Controller clear the track
+      return;
+    }
+    output_failure_ms = -1;
+    advance_on_eof = false; // a dead output must not walk the playlist
+    setState(MediaPlayer::StoppedState);
+    emit error(message);
+  }
+
   void Engine::sinkEnsureStarted() {
     if (sink && sink->state() == QAudio::StoppedState) {
       sink_io = sink->start();
+      if (!sink_io || sink->error() != QAudio::NoError) {
+        handleOutputFailure(QStringLiteral("cannot open audio output device"));
+        return;
+      }
       epoch_start_frame = read_cursor_frame;
     }
   }
@@ -316,9 +371,13 @@ namespace Playback::Gapless {
   }
 
   void Engine::play() {
+    audio_output_failed = false; // explicit play: allow another sink attempt
     if (stream_mode && !sink) {
       setState(MediaPlayer::PlayingState); // optimistic while the ring fills; the sink comes up active
       return;
+    }
+    if (!sink && sink_format.isValid()) {
+      createSink(); // output died earlier; rebuild rather than play silence
     }
     if (synthetic_playing_on_play) {
       synthetic_playing_on_play = false;
@@ -355,6 +414,7 @@ namespace Playback::Gapless {
     synthetic_playing_on_play = false;
     boundary_adopt_uid = 0;
     pending_seek_ms = -1;
+    output_failure_ms = -1;
     if (sink) {
       sink->reset();
       sink->stop();
@@ -490,6 +550,21 @@ namespace Playback::Gapless {
     last_filtered_frame = -1;
   }
 
+  double Engine::resolveReplayGain(const Track &t) const {
+    return rg_resolver ? rg_resolver(t) : 0.0;
+  }
+
+  void Engine::setReplayGainResolver(std::function<double(const Track &)> fn) {
+    rg_resolver = std::move(fn);
+    refreshReplayGain();
+  }
+
+  void Engine::refreshReplayGain() {
+    for (int i = 0; i < timeline.segmentCount(); i++) {
+      timeline.setSegmentGainDb(i, resolveReplayGain(timeline.segmentTrack(i)));
+    }
+  }
+
   void Engine::prepareNextTrack(const Track &t) {
     resetPreparedState();
     if (stream_mode) {
@@ -514,7 +589,7 @@ namespace Playback::Gapless {
     }
     const qint64 begin_f = qint64(t.begin()) * rate / 1000;
     const qint64 end_f = t.duration() > 0 ? begin_f + qint64(t.duration()) * rate / 1000 : -1;
-    if (timeline.appendSegment(t, current_url, begin_f, end_f) < 0) {
+    if (timeline.appendSegment(t, current_url, begin_f, end_f, resolveReplayGain(t)) < 0) {
       return;
     }
     prepared_url = current_url;
@@ -608,7 +683,8 @@ namespace Playback::Gapless {
     if (prepared_segment_appended || prepared_url.isEmpty()) {
       return;
     }
-    if (timeline.appendSegment(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame()) < 0) {
+    if (timeline.appendSegment(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame(),
+                               resolveReplayGain(prepared_track)) < 0) {
       prepared_append_deferred = true; // current segment still open; retry once it closes
       return;
     }
@@ -655,7 +731,7 @@ namespace Playback::Gapless {
                                : -1;
       cache.dropEntry(current_url);
       cache.openEntry(current_url, chosen.bytesPerFrame());
-      timeline.reset(current_track, current_url, begin_f, end_f);
+      timeline.reset(current_track, current_url, begin_f, end_f, resolveReplayGain(current_track));
       decoder_finished = false;
       decoder_total_frames = 0;
       decoder->stop();
@@ -664,7 +740,8 @@ namespace Playback::Gapless {
     } else {
       decoder_finished = prepared_decoder_finished;
       decoder_total_frames = prepared_total_frames;
-      timeline.reset(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame());
+      timeline.reset(prepared_track, prepared_url, prepared_begin_frame, preparedEndFrame(),
+                     resolveReplayGain(prepared_track));
     }
     clearPreparedFlags();
     boundary_adopt_uid = current_track.uid();
@@ -703,6 +780,7 @@ namespace Playback::Gapless {
 
   void Engine::setOutputDevice(QByteArray id) {
     output_device_id = id;
+    audio_output_failed = false;
     preferred_device_missing = false;
     ++device_change_epoch; // invalidate a pending debounced evaluation
     QAudioDevice target = findPreferredDevice();
@@ -738,6 +816,7 @@ namespace Playback::Gapless {
 
   void Engine::evaluateAudioDevice() {
     ++device_change_epoch;
+    audio_output_failed = false; // device topology changed: the output may be back
     updateEffectiveDevice();
     const QAudioDevice preferred = findPreferredDevice();
     QAudioDevice target;
@@ -764,8 +843,23 @@ namespace Playback::Gapless {
   }
 
   void Engine::switchSink(const QAudioDevice &device) {
+    if (device.isNull()) {
+      if (sink || output_failure_ms >= 0) {
+        output_failure_ms = -1;
+        handleOutputFailure(QStringLiteral("no audio output device available"));
+      }
+      active_device = device;
+      return;
+    }
     if (!sink) {
       active_device = device; // stopped/no track: createSink re-resolves on the next start
+      if (output_failure_ms >= 0) {
+        const qint64 ms = output_failure_ms;
+        const Track t = current_track;
+        hardSwitchTo(t);
+        pending_seek_ms = t.isStream() ? -1 : ms;
+        play();
+      }
       return;
     }
     if (device.id() == active_device.id()) {
@@ -882,7 +976,9 @@ namespace Playback::Gapless {
       if (got <= 0) {
         break;
       }
-      if (!eq.isIdentity()) {
+      // Not current_track: it follows the audible clock, a sink buffer behind.
+      eq.setExtraGainDb(timeline.segmentGainDb(pos.segment));
+      if (!eq.isPassthrough()) {
         if (read_cursor_frame != last_filtered_frame) {
           eq.reset();
         }

@@ -91,14 +91,6 @@ namespace Config {
     return storage.set("radio_stations", value);
   }
 
-  bool Global::disableGapless() const {
-    return storage.get("disable_gapless").get<bool>();
-  }
-
-  void Global::saveDisableGapless(bool arg) {
-    storage.set("disable_gapless", Config::Value(arg));
-  }
-
   int Global::gaplessCacheSizeMb() const {
     return storage.get("gapless_cache_size_mb").get<int>();
   }
@@ -302,6 +294,91 @@ namespace Config {
 
   void Global::saveLibraryFilterScope(const QString &arg) {
     storage.set("library_filter_scope", Config::Value(arg));
+  }
+
+  QString Global::replayGainMode() const {
+    return storage.get("replay_gain_mode").get<QString>();
+  }
+
+  void Global::saveReplayGainMode(const QString &arg) {
+    storage.set("replay_gain_mode", Config::Value(arg));
+  }
+
+  QString Global::replayGainStorage() const {
+    return storage.get("replay_gain_storage").get<QString>();
+  }
+
+  void Global::saveReplayGainStorage(const QString &arg) {
+    storage.set("replay_gain_storage", Config::Value(arg));
+  }
+
+  double Global::replayGainPreampDb() const {
+    return storage.get("replay_gain_preamp_db").get<QString>().toDouble();
+  }
+
+  void Global::saveReplayGainPreampDb(double arg) {
+    storage.set("replay_gain_preamp_db", Config::Value(QString::number(arg, 'g', 10)));
+  }
+
+  double Global::replayGainFallbackDb() const {
+    return storage.get("replay_gain_fallback_db").get<QString>().toDouble();
+  }
+
+  void Global::saveReplayGainFallbackDb(double arg) {
+    storage.set("replay_gain_fallback_db", Config::Value(QString::number(arg, 'g', 10)));
+  }
+
+  bool Global::replayGainAllowClipping() const {
+    return storage.get("replay_gain_allow_clipping").get<bool>();
+  }
+
+  void Global::saveReplayGainAllowClipping(bool arg) {
+    storage.set("replay_gain_allow_clipping", Config::Value(arg));
+  }
+
+  // castScalar turns a bare "Y" into a boolean and "5" into an integer
+  static bool shortcutScalar(const Config::Value &value, QString &out) {
+    switch (value.type()) {
+      case Config::Value::String:
+        out = value.get<QString>();
+        return true;
+      case Config::Value::Integer:
+        out = QString::number(value.get<int>());
+        return true;
+      case Config::Value::Boolean:
+        out = value.get<bool>() ? QStringLiteral("Y") : QStringLiteral("N");
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  QMap<QString, QString> Global::shortcuts() const {
+    QMap<QString, QString> result;
+    auto raw = storage.get("shortcuts");
+    if (raw.type() != Config::Value::Map) {
+      return result;
+    }
+    const auto map = raw.get<QMap<QString, Config::Value>>();
+    for (auto i = map.cbegin(); i != map.cend(); ++i) {
+      QString value;
+      if (shortcutScalar(i.value(), value)) {
+        result.insert(i.key(), value);
+      }
+    }
+    return result;
+  }
+
+  bool Global::saveShortcuts(const QMap<QString, QString> &arg) {
+    if (arg.isEmpty()) {
+      storage.remove("shortcuts");
+      return true;
+    }
+    QMap<QString, Config::Value> map;
+    for (auto i = arg.cbegin(); i != arg.cend(); ++i) {
+      map.insert(i.key(), Config::Value(i.value()));
+    }
+    return storage.set("shortcuts", Config::Value(map));
   }
 
 }

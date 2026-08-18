@@ -12,10 +12,11 @@ namespace Playback::Gapless {
   class GaplessMediaPlayer : public Playback::MediaPlayer {
     Q_OBJECT
   public:
-    explicit GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, bool gapless_enabled, QObject *parent = nullptr);
+    explicit GaplessMediaPlayer(quint32 stream_buffer_size, QByteArray outdevid, int cache_mb, QObject *parent = nullptr);
 
     MediaPlayer::State state() override;
     qint64 position() override;
+    void releaseAudio() override;
     QByteArray effectiveOutputDeviceId() const { return engine.effectiveOutputDeviceId(); }
 
   signals:
@@ -28,6 +29,8 @@ namespace Playback::Gapless {
     void setPosition(qint64 position) override;
     void setVolume(int volume) override;
     void setEqualizer(const Eq::EqProfile &profile, bool enabled) override;
+    void setReplayGainResolver(ReplayGainResolver fn) override;
+    void refreshReplayGain() override;
     void setTrack(const Track &track) override;
     void clearTrack() override;
     void prepareNextTrack(const Track &track) override;
@@ -37,8 +40,7 @@ namespace Playback::Gapless {
 
   private:
     Engine engine;
-    bool gapless_enabled;
-    enum class Backend { None, Qmp, Engine } backend = Backend::None;
+    bool track_set = false;
   };
 }
 

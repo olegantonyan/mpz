@@ -2,6 +2,7 @@
 #define SHORTCUTS_H
 
 #include "config/local.h"
+#include "config/global.h"
 
 #ifdef ENABLE_QHOTKEY
 #include <qhotkey.h>
@@ -13,7 +14,7 @@
 #include <QShortcut>
 #include <QKeySequence>
 #include <QVector>
-#include <QPair>
+#include <QMap>
 #include <QString>
 
 class Shortcuts : public QObject {
@@ -44,27 +45,28 @@ public:
     JumpToPlayingTrack
   };
 
-  // Single source of truth for one shortcut: its action, the dialog label
-  // (empty when it should not appear in the shortcuts dialog), the platform-
-  // resolved key sequence, and whether a QShortcut should be registered for it
-  // (false when the macOS native menu bar already owns the key, to avoid
-  // double-firing).
+  // empty description hides it from the dialog; registerLocal false means the macOS menu bar owns the key
   struct Spec {
     Action action;
+    QString key;
     QString description;
     QKeySequence sequence;
     bool registerLocal;
   };
 
-  explicit Shortcuts(Config::Local &local_c, QWidget *parent);
+  explicit Shortcuts(Config::Global &global_c, Config::Local &local_c, QWidget *parent);
 
-  QVector<QPair<QString, QString>> describe() const;
+  static const QVector<Spec> &defaults();
+  static QVector<Spec> resolve(const QMap<QString, QString> &overrides);
 
-  // The canonical, platform-resolved key for an action. The macOS menu bar
-  // reads its shortcuts from here so the menu and the dialog never drift.
-  static QKeySequence sequenceFor(Action action);
+  const QVector<Spec> &specs() const;
+  QKeySequence sequenceFor(Action action) const;
+
+  void applyOverrides(const QMap<QString, QString> &overrides);
 
 signals:
+  void changed();
+
   void quit();
   void focusLibrary();
   void focusPlaylists();
@@ -82,6 +84,7 @@ signals:
   void volumeDown();
   void openSettings();
   void openEqualizer();
+  void openReplayGain();
   void openMainMenu();
   void openPlabackLog();
   void openSortMenu();
@@ -90,13 +93,17 @@ signals:
   void jumpToPLayingTrack();
 
 private:
-  static const QVector<Spec> &specs();
   void setupGlobal();
   void setupLocal();
   void emitFor(Action action);
 
   QWidget *_parent;
+  Config::Global &global_conf;
   Config::Local &local_conf;
+
+  QVector<Spec> _specs;
+  // index-aligned with _specs, null where registerLocal is false
+  QVector<QShortcut *> _local;
 
 #ifdef ENABLE_QHOTKEY
 #ifdef Q_OS_WIN

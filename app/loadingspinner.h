@@ -1,9 +1,9 @@
 #ifndef LOADINGSPINNER_H
 #define LOADINGSPINNER_H
 
+#include <QTimer>
 #include <QWidget>
-
-class QTimer;
+#include <QTimer>
 
 class LoadingSpinner : public QWidget {
   Q_OBJECT

@@ -201,7 +201,7 @@ namespace DirectoryUi {
   }
 
   void Controller::settingsDialog(QComboBox *libswitch) {
-    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi, global_conf);
+    DirectorySettings dlg(local_conf.libraryPaths(), modus_operandi, global_conf, local_conf);
     auto old_paths = local_conf.libraryPaths();
     if(dlg.exec() == QDialog::Accepted) {
       if (old_paths != dlg.libraryPaths()) {

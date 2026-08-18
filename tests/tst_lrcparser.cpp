@@ -13,6 +13,12 @@ private slots:
   void stripTimestampsTrimsLeadingTrailingBlanks();
   void stripTimestampsHandlesCrlf();
   void stripTimestampsAcceptsMillisecondColonSeparator();
+  void handlesNetEaseSubIndexTimestamps();
+  void dropsCreditLines();
+  void keepsLyricsThatMentionCreditWords();
+  void hasLyricContentRejectsCreditsOnly();
+  void hasLyricContentRejectsInstrumentalPlaceholders();
+  void hasLyricContentAcceptsRealLyrics();
 };
 
 void TestLrcParser::looksLikeLrcDetectsTimestamp() {
@@ -61,6 +67,51 @@ void TestLrcParser::stripTimestampsAcceptsMillisecondColonSeparator() {
   const QString in  = QStringLiteral("[00:01:500]hello");
   const QString out = Lyrics::LrcParser::stripTimestamps(in);
   QCOMPARE(out, QStringLiteral("hello"));
+}
+
+void TestLrcParser::handlesNetEaseSubIndexTimestamps() {
+  QVERIFY(Lyrics::LrcParser::looksLikeLrc(QStringLiteral("[00:00.00-1]hello")));
+  const QString out = Lyrics::LrcParser::stripTimestamps(
+    QStringLiteral("[00:12.34-1]first\n[00:56.78-12]second"));
+  QCOMPARE(out, QStringLiteral("first\nsecond"));
+}
+
+void TestLrcParser::dropsCreditLines() {
+  const QString in = QString::fromUtf8(
+    "[00:00.00-1] 作词 : Vidar Jensen\n"
+    "[00:00.00-1] 作曲 : Vidar Jensen\n"
+    "[00:03.00]Produced by: Morfeus\n"
+    "[00:07.00]I walk the night");
+  QCOMPARE(Lyrics::LrcParser::toPlainLyrics(in), QStringLiteral("I walk the night"));
+
+  const QString plain = QString::fromUtf8("作曲：Someone\nunder a black sun");
+  QCOMPARE(Lyrics::LrcParser::toPlainLyrics(plain), QStringLiteral("under a black sun"));
+}
+
+void TestLrcParser::keepsLyricsThatMentionCreditWords() {
+  const QString in = QStringLiteral("Written in the stars\nBass by the river\nDrums of war");
+  QCOMPARE(Lyrics::LrcParser::toPlainLyrics(in), in);
+}
+
+void TestLrcParser::hasLyricContentRejectsCreditsOnly() {
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QString::fromUtf8(
+    "[00:00.00-1] 作词 : Vidar Jensen\n[00:00.00-1] 作曲 : Vidar Jensen\n")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QStringLiteral("Lyricist: Someone")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QStringLiteral("[ar:Artist]\n[00:01.00]")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QStringLiteral("   \n\n")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QString()));
+}
+
+void TestLrcParser::hasLyricContentRejectsInstrumentalPlaceholders() {
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QString::fromUtf8("[00:05.00]纯音乐，请欣赏\n")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QString::fromUtf8(
+    "此歌曲为没有填词的纯音乐，请您欣赏")));
+  QVERIFY(!Lyrics::LrcParser::hasLyricContent(QString::fromUtf8("[00:00.00]暂无歌词")));
+}
+
+void TestLrcParser::hasLyricContentAcceptsRealLyrics() {
+  QVERIFY(Lyrics::LrcParser::hasLyricContent(QStringLiteral("[00:01.00]a\n[00:02.00]b")));
+  QVERIFY(Lyrics::LrcParser::hasLyricContent(QStringLiteral("just some lyrics")));
 }
 
 QTEST_GUILESS_MAIN(TestLrcParser)

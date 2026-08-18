@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mpz VERSION 2.1.2 LANGUAGES CXX C)
+project(mpz VERSION 2.1.4 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Sources carry UTF-8 literals; MSVC otherwise reads them as the active codepage.
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -53,12 +55,17 @@ set(PROJECT_SOURCES
   app/resources/icons/ui/bootstrap.qrc
   app/about_ui/aboutdialog.cpp
   app/about_ui/area51dialog.cpp
-  app/busyspinner.cpp
+  app/backgroundtasks.cpp
+  app/backgroundtasksbutton.cpp
   app/loadingspinner.cpp
   app/config/global.cpp
   app/config/local.cpp
   app/config/storage.cpp
   app/config/value.cpp
+  app/replaygain/analyzer.cpp
+  app/replaygain/resolver.cpp
+  app/replaygain/store.cpp
+  app/replaygain/tags.cpp
   app/diskcache.cpp
   app/coverart/embedded.cpp
   app/coverart/foldercover.cpp
@@ -144,6 +151,7 @@ set(PROJECT_SOURCES
   app/sort_ui/sortmenu.cpp
   app/statusbarlabel.cpp
   app/sysinfo.cpp
+  app/sandboxnotice.cpp
   app/track.cpp
   app/reveal_in_filemanager.cpp
   app/trayicon.cpp
@@ -242,6 +250,14 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/audio_device_ui/devicesmenu.cpp
     app/audio_device_ui/outputdevicebutton.cpp
     app/audio_device_ui/outputdevicename.cpp
+    app/decode/nativeformat.cpp
+    app/replaygain/jobcodec.cpp
+    app/replaygain/jobrunner.cpp
+    app/replaygain/manager.cpp
+    app/replaygain/scanner.cpp
+    app/replaygain/scanworker.cpp
+    app/replaygain_ui/replaygaindialog.cpp
+    app/replaygain_ui/statusmenu.cpp
     app/dynamic_range/dr.cpp
     app/dynamic_range/logformat.cpp
     app/dynamic_range/analyzer.cpp
@@ -421,6 +437,51 @@ else()
 endif()
 # ENDOF TAGLIB
 
+# LIBEBUR128
+option(USE_SYSTEM_LIBEBUR128 "Use libebur128 provided by the OS" OFF)
+if (USE_SYSTEM_LIBEBUR128)
+  find_library(EBUR128_LIBRARY ebur128 REQUIRED)
+  find_path(EBUR128_INCLUDE_DIR ebur128.h REQUIRED)
+  message(STATUS "using system-wide libebur128")
+  target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_INCLUDE_DIR})
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${EBUR128_LIBRARY})
+else()
+  set(EBUR128_DIR 3rdparty/libebur128-1.2.6)
+  message(STATUS "using vendored libebur128 from ${EBUR128_DIR}")
+  # libebur128 declares cmake_minimum_required(2.8.12), which CMake >= 4 rejects outright.
+  # CMP0077 NEW makes its option() honour the BUILD_SHARED_LIBS set here.
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+  set(BUILD_SHARED_LIBS OFF)
+  add_subdirectory(${EBUR128_DIR} EXCLUDE_FROM_ALL)
+  unset(BUILD_SHARED_LIBS)
+  unset(CMAKE_POLICY_DEFAULT_CMP0077)
+  unset(CMAKE_POLICY_VERSION_MINIMUM)
+
+  # Upstream attaches no include dirs to the target at all, so consumers see nothing.
+  target_include_directories(ebur128 INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128>)
+
+  # It is a C library, and the automoc unit mpz's global AUTOMOC adds to it only drags
+  # C++ flags into a target that has no Qt in it.
+  set_target_properties(ebur128 PROPERTIES AUTOMOC OFF AUTOUIC OFF)
+
+  # Without SSE2 (arm64) ebur128.c takes a branch that opens with #warning, which MSVC
+  # rejects outright (C1021). Compile a copy without that line, leaving the vendored
+  # source untouched.
+  if (MSVC)
+    set(EBUR128_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${EBUR128_DIR}/ebur128)
+    file(READ ${EBUR128_SOURCE_DIR}/ebur128.c EBUR128_SOURCE)
+    string(REGEX REPLACE "#warning[^\n]*" "" EBUR128_SOURCE "${EBUR128_SOURCE}")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c "${EBUR128_SOURCE}")
+    set_property(TARGET ebur128 PROPERTY SOURCES ${CMAKE_CURRENT_BINARY_DIR}/ebur128_msvc.c)
+    target_include_directories(ebur128 PRIVATE ${EBUR128_SOURCE_DIR})
+  endif()
+
+  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
+endif()
+# ENDOF LIBEBUR128
+
 # QHOTKEY
 # macOS (MPRemoteCommandCenter) and the SMTC build own the media keys; QHotkey would be dead weight.
 if(APPLE OR (WIN32 AND NOT MINGW))
@@ -464,6 +525,25 @@ if (ENABLE_MPD_SUPPORT)
   endif()
 endif()
 # ENDOF LIBMPDCLIENT
+
+# SQLITE3
+option(USE_SYSTEM_SQLITE3 "Use sqlite3 provided by the OS" OFF)
+if (USE_SYSTEM_SQLITE3)
+  message(STATUS "using system-wide sqlite3")
+  find_package(SQLite3 REQUIRED)
+  add_library(sqlite3 INTERFACE)
+  # SQLite3::SQLite3 only exists from CMake 4.3; before that the name was SQLite::SQLite3,
+  # which newer CMake still provides but warns about
+  if (TARGET SQLite3::SQLite3)
+    target_link_libraries(sqlite3 INTERFACE SQLite3::SQLite3)
+  else()
+    target_link_libraries(sqlite3 INTERFACE SQLite::SQLite3)
+  endif()
+else()
+  include(3rdparty/sqlite3.cmake)
+endif()
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+# ENDOF SQLITE3
 
 # CPPTRACE
 # Crash handler with cpptrace. On Linux + macOS libdl + dladdr gives demangled
@@ -553,7 +633,73 @@ if(NOT APPLE AND NOT WIN32)
   if(PACKAGE_VERSION AND NOT PACKAGE_VERSION STREQUAL PROJECT_VERSION)
     set(APPSTREAM_RELEASE_VERSION "${PROJECT_VERSION} [${PACKAGE_VERSION}]")
   endif()
-  string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  # not string(TIMESTAMP): it honors SOURCE_DATE_EPOCH, which flatpak-builder pins to 2011-11-11
+  set(CHANGELOG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md)
+  set(APPSTREAM_RELEASE_DATE "")
+  if(EXISTS ${CHANGELOG_FILE})
+    file(READ ${CHANGELOG_FILE} CHANGELOG_CONTENT)
+    string(REGEX MATCH "## \\[${PROJECT_VERSION}\\] - ([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])"
+      CHANGELOG_DATE_MATCH "${CHANGELOG_CONTENT}")
+    if(CHANGELOG_DATE_MATCH)
+      set(APPSTREAM_RELEASE_DATE "${CMAKE_MATCH_1}")
+    else()
+      file(TIMESTAMP ${CHANGELOG_FILE} APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+    endif()
+  endif()
+  if(NOT APPSTREAM_RELEASE_DATE)
+    string(TIMESTAMP APPSTREAM_RELEASE_DATE "%Y-%m-%d" UTC)
+  endif()
+
+  set(APPSTREAM_RELEASE_DESCRIPTION "")
+  string(REGEX MATCH "## \\[${PROJECT_VERSION}\\][^\n]*" SECTION_HEADER "${CHANGELOG_CONTENT}")
+  if(SECTION_HEADER)
+    string(FIND "${CHANGELOG_CONTENT}" "${SECTION_HEADER}" SECTION_START)
+    string(LENGTH "${SECTION_HEADER}" HEADER_LENGTH)
+    math(EXPR SECTION_START "${SECTION_START} + ${HEADER_LENGTH}")
+    string(SUBSTRING "${CHANGELOG_CONTENT}" ${SECTION_START} -1 SECTION)
+    string(FIND "${SECTION}" "\n## " SECTION_END)
+    if(SECTION_END GREATER -1)
+      string(SUBSTRING "${SECTION}" 0 ${SECTION_END} SECTION)
+    endif()
+
+    string(REPLACE "&" "&amp;" SECTION "${SECTION}")
+    string(REPLACE "<" "&lt;" SECTION "${SECTION}")
+    string(REPLACE ">" "&gt;" SECTION "${SECTION}")
+    string(REPLACE "`" "" SECTION "${SECTION}")
+    string(REPLACE ";" "\\;" SECTION "${SECTION}")
+    string(REPLACE "\n" ";" SECTION_LINES "${SECTION}")
+
+    set(NOTES "")
+    set(IN_LIST FALSE)
+    set(PENDING_HEADING "")
+    foreach(LINE IN LISTS SECTION_LINES)
+      if(LINE MATCHES "^### (.+)$")
+        if(IN_LIST)
+          string(APPEND NOTES "</ul>")
+          set(IN_LIST FALSE)
+        endif()
+        set(PENDING_HEADING "${CMAKE_MATCH_1}")
+      elseif(LINE MATCHES "^- (.+)$")
+        set(ITEM "${CMAKE_MATCH_1}")
+        if(NOT IN_LIST)
+          if(PENDING_HEADING)
+            string(APPEND NOTES "<p>${PENDING_HEADING}</p>")
+            set(PENDING_HEADING "")
+          endif()
+          string(APPEND NOTES "<ul>")
+          set(IN_LIST TRUE)
+        endif()
+        string(APPEND NOTES "<li>${ITEM}</li>")
+      endif()
+    endforeach()
+    if(IN_LIST)
+      string(APPEND NOTES "</ul>")
+    endif()
+    if(NOTES)
+      set(APPSTREAM_RELEASE_DESCRIPTION "<description>${NOTES}</description>")
+    endif()
+  endif()
+
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/org.mpz_player.mpz.metainfo.xml.in
     ${CMAKE_CURRENT_BINARY_DIR}/org.mpz_player.mpz.metainfo.xml

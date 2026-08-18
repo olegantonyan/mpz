@@ -41,6 +41,15 @@ namespace Eq {
     rebuild();
   }
 
+  // No rebuild(): that would clear the filter state on every buffer.
+  void Equalizer::setExtraGainDb(double db) {
+    if (std::fabs(db - extra_gain_db_) < kMinDb) {
+      return;
+    }
+    extra_gain_db_ = db;
+    extra_gain_lin_ = dbToLin(db);
+  }
+
   void Equalizer::setSampleRate(int fs) {
     if (fs > 0 && fs != fs_) {
       fs_ = fs;
@@ -106,6 +115,10 @@ namespace Eq {
     return std::fabs(effectivePreampDb()) < kMinDb;
   }
 
+  bool Equalizer::isPassthrough() const {
+    return isIdentity() && std::fabs(extra_gain_db_) < kMinDb;
+  }
+
   double Equalizer::magnitudeResponseDb(double freq_hz) const {
     const double w = 2.0 * kPi * freq_hz / fs_;
     double db = effectivePreampDb();
@@ -131,15 +144,26 @@ namespace Eq {
   }
 
   void Equalizer::processFloat(float *data, std::size_t frames, int channels) {
-    if (isIdentity() || channels <= 0) {
+    if (isPassthrough() || channels <= 0) {
       return;
     }
-    ensureChannels(channels);
+    // coeffs_ is filled even when disabled, so gate the filters here.
+    const bool run_eq = !isIdentity();
+    const double pre = extra_gain_lin_ * (run_eq ? preamp_lin_ : 1.0);
+    const bool clamp_output = extra_gain_lin_ > 1.0;
+    if (run_eq) {
+      ensureChannels(channels);
+    }
     for (std::size_t i = 0; i < frames; ++i) {
       for (int c = 0; c < channels; ++c) {
-        double x = static_cast<double>(data[i * channels + c]) * preamp_lin_;
-        for (auto &s : channel_state_[c]) {
-          x = s.process(x);
+        double x = static_cast<double>(data[i * channels + c]) * pre;
+        if (run_eq) {
+          for (auto &s : channel_state_[c]) {
+            x = s.process(x);
+          }
+        }
+        if (clamp_output) {
+          x = std::clamp(x, -1.0, 1.0);
         }
         data[i * channels + c] = static_cast<float>(x);
       }
@@ -147,15 +171,21 @@ namespace Eq {
   }
 
   void Equalizer::processInt16(int16_t *data, std::size_t frames, int channels) {
-    if (isIdentity() || channels <= 0) {
+    if (isPassthrough() || channels <= 0) {
       return;
     }
-    ensureChannels(channels);
+    const bool run_eq = !isIdentity();
+    const double pre = extra_gain_lin_ * (run_eq ? preamp_lin_ : 1.0);
+    if (run_eq) {
+      ensureChannels(channels);
+    }
     for (std::size_t i = 0; i < frames; ++i) {
       for (int c = 0; c < channels; ++c) {
-        double x = (static_cast<double>(data[i * channels + c]) / 32768.0) * preamp_lin_;
-        for (auto &s : channel_state_[c]) {
-          x = s.process(x);
+        double x = (static_cast<double>(data[i * channels + c]) / 32768.0) * pre;
+        if (run_eq) {
+          for (auto &s : channel_state_[c]) {
+            x = s.process(x);
+          }
         }
         data[i * channels + c] = clampInt16(x * 32768.0 + nextTpdf());
       }
@@ -163,15 +193,21 @@ namespace Eq {
   }
 
   void Equalizer::processInt32(int32_t *data, std::size_t frames, int channels) {
-    if (isIdentity() || channels <= 0) {
+    if (isPassthrough() || channels <= 0) {
       return;
     }
-    ensureChannels(channels);
+    const bool run_eq = !isIdentity();
+    const double pre = extra_gain_lin_ * (run_eq ? preamp_lin_ : 1.0);
+    if (run_eq) {
+      ensureChannels(channels);
+    }
     for (std::size_t i = 0; i < frames; ++i) {
       for (int c = 0; c < channels; ++c) {
-        double x = (static_cast<double>(data[i * channels + c]) / 2147483648.0) * preamp_lin_;
-        for (auto &s : channel_state_[c]) {
-          x = s.process(x);
+        double x = (static_cast<double>(data[i * channels + c]) / 2147483648.0) * pre;
+        if (run_eq) {
+          for (auto &s : channel_state_[c]) {
+            x = s.process(x);
+          }
         }
         data[i * channels + c] = clampInt32(x * 2147483648.0);
       }

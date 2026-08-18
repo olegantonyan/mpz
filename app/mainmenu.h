@@ -5,11 +5,11 @@
 #include "config/local.h"
 #include "modusoperandi.h"
 
+#include <QAction>
 #include <QObject>
 #include <QToolButton>
 #include <QList>
-
-class QAction;
+#include <QAction>
 
 class MainMenu : public QObject {
   Q_OBJECT
@@ -25,6 +25,7 @@ signals:
   void openPlaybackLog();
   void openShortcuts();
   void openEqualizer();
+  void openReplayGain();
 
 public slots:
   void on_open();

@@ -19,6 +19,31 @@
 
 namespace Playlist {
   namespace {
+    bool parse_rg_number(const QString &raw, double *out) {
+      QString s = raw.trimmed();
+      if (s.endsWith(QLatin1String("dB"), Qt::CaseInsensitive)) {
+        s.chop(2);
+        s = s.trimmed();
+      }
+      bool ok = false;
+      const double v = s.toDouble(&ok);
+      if (!ok) {
+        return false;
+      }
+      *out = v;
+      return true;
+    }
+
+    ReplayGain::Gain cue_replay_gain(const QString &track_gain, const QString &track_peak,
+                                     const QString &album_gain, const QString &album_peak) {
+      ReplayGain::Gain g;
+      g.has_track = parse_rg_number(track_gain, &g.track_db);
+      parse_rg_number(track_peak, &g.track_peak);
+      g.has_album = parse_rg_number(album_gain, &g.album_db);
+      parse_rg_number(album_peak, &g.album_peak);
+      return g;
+    }
+
     // Windows-1251 (CP1251, Cyrillic) → Unicode for bytes 0x80..0xFF.
     // Used as a fallback when a cue isn't valid UTF-8; common for Russian rips.
     static const ushort kCp1251Hi[128] = {
@@ -281,6 +306,8 @@ namespace Playlist {
     QString album_genre;
     QString album_date;
     QString album_disc;
+    QString album_rg_gain;
+    QString album_rg_peak;
 
     // Current FILE.
     QString cur_file;
@@ -386,6 +413,18 @@ namespace Playlist {
           album_date = v;
         } else if (sub == QLatin1String("discnumber") || sub == QLatin1String("disc")) {
           album_disc = v;
+        } else if (sub == QLatin1String("replaygain_track_gain")) {
+          if (in_track) {
+            cur.rg_gain = v;
+          }
+        } else if (sub == QLatin1String("replaygain_track_peak")) {
+          if (in_track) {
+            cur.rg_peak = v;
+          }
+        } else if (sub == QLatin1String("replaygain_album_gain")) {
+          album_rg_gain = v;
+        } else if (sub == QLatin1String("replaygain_album_peak")) {
+          album_rg_peak = v;
         }
       }
       // All other commands (CATALOG, ISRC, FLAGS, CDTEXTFILE, POSTGAP, PREGAP, ...)
@@ -430,6 +469,7 @@ namespace Playlist {
                   props.bitrate,
                   props.sample_rate);
       track.setCue();
+      track.setReplayGain(cue_replay_gain(e.rg_gain, e.rg_peak, album_rg_gain, album_rg_peak));
       track.setAlbumArtist(album_artist);
       track.setDiscNumber(album_disc);
 

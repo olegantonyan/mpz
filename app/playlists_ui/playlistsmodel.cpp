@@ -238,12 +238,12 @@ namespace PlaylistsUi {
     local_conf.saveCurrentPlaylist(save_index);
   }
 
-  void Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
+  QFuture<void> Model::createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir) {
     Q_ASSERT(filepaths.size() > 0);
 
     auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
 
-    (void)QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir, pl]() -> void {
+    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir, pl]() -> void {
       QStringList names;
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);

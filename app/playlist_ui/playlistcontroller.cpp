@@ -4,6 +4,7 @@
 #include "tracksmimedata.h"
 
 #include <QDebug>
+#include <QFuture>
 #include <QHeaderView>
 #include <QAbstractItemView>
 #include <QScrollBar>
@@ -14,7 +15,14 @@
 #include <QMimeData>
 
 namespace PlaylistUi {
-  Controller::Controller(QTableView *v, QLineEdit *s, BusySpinner *sp, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), spinner(sp), local_conf(local_cfg), global_conf(global_cfg), modus_operandi(modus) {
+  QString Controller::dirsLabel(const QList<QDir> &dirs) const {
+    if (dirs.size() == 1) {
+      return dirs.first().dirName();
+    }
+    return tr("%n item(s)", "", dirs.size());
+  }
+
+  Controller::Controller(QTableView *v, QLineEdit *s, BackgroundTasks *t, Config::Local &local_cfg, Config::Global &global_cfg,  ModusOperandi &modus, QObject *parent) : QObject(parent), search(s), tasks(t), local_conf(local_cfg), global_conf(global_cfg), modus_operandi(modus) {
     restore_scroll_once = true;
     view = v;
     scroll_positions.clear();
@@ -178,8 +186,8 @@ namespace PlaylistUi {
 
   void Controller::on_appendToPlaylist(const QList<QDir> &filepaths) {
     if (proxy->activeModel()->playlist() != nullptr) {
-      proxy->activeModel()->appendToPlaylistAsync(filepaths);
-      spinner->show();
+      const QFuture<void> work = proxy->activeModel()->appendToPlaylistAsync(filepaths);
+      tasks->track(work, tr("Adding to playlist: %1").arg(dirsLabel(filepaths)));
     }
   }
 
@@ -231,7 +239,6 @@ namespace PlaylistUi {
 
     proxy->activeModel()->reload();
     emit changed(proxy->activeModel()->playlist());
-    spinner->hide();
   }
 
   void Controller::on_tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids) {
@@ -322,8 +329,8 @@ namespace PlaylistUi {
       model->insertTracks(tracks_mime->tracks(), at_row);
       return;
     }
-    model->insertTracksAsync(dirs, at_row);
-    spinner->show();
+    const QFuture<void> work = model->insertTracksAsync(dirs, at_row);
+    tasks->track(work, tr("Adding to playlist: %1").arg(dirsLabel(dirs)));
   }
 
   void Controller::eventFilterTableView(QEvent *event) {
@@ -395,6 +402,21 @@ namespace PlaylistUi {
         }
       });
     }
+  }
+
+  QVector<Track> Controller::currentTracks() const {
+    const auto playlist = proxy->activeModel()->playlist();
+    return playlist == nullptr ? QVector<Track>() : playlist->tracks();
+  }
+
+  QVector<Track> Controller::selectedTracks() const {
+    QVector<Track> result;
+    const auto rows = view->selectionModel()->selectedRows();
+    result.reserve(rows.size());
+    for (const auto &i : rows) {
+      result.append(proxy->activeModel()->itemAt(proxy->mapToSource(i)));
+    }
+    return result;
   }
 
   void Controller::removeSelectedTracks() {

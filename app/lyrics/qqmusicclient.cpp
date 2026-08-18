@@ -1,5 +1,4 @@
 #include "lyrics/qqmusicclient.h"
-#include "lyrics/lrcparser.h"
 #include "lyrics/textmatch.h"
 
 #include <QJsonArray>
@@ -113,8 +112,7 @@ namespace Lyrics {
     // The lyric field is base64-encoded LRC.
     const QString lyric = QString::fromUtf8(
       QByteArray::fromBase64(obj.value("lyric").toString().toLatin1())).trimmed();
-    if (lyric.isEmpty()
-        || (LrcParser::looksLikeLrc(lyric) && LrcParser::stripTimestamps(lyric).isEmpty())) {
+    if (lyric.isEmpty()) {
       emit notFound();
       return;
     }

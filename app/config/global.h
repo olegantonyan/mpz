@@ -10,6 +10,7 @@
 #include <QPair>
 #include <QList>
 #include <QVector>
+#include <QMap>
 
 namespace Config {
   class Global : public SingleInstanceGuard<Global> {
@@ -35,9 +36,6 @@ namespace Config {
 
     QVector<Radio::Station> radioStations() const;
     bool saveRadioStations(const QVector<Radio::Station> &arg);
-
-    bool disableGapless() const;
-    void saveDisableGapless(bool arg);
 
     int gaplessCacheSizeMb() const;
     void saveGaplessCacheSizeMb(int arg);
@@ -89,6 +87,24 @@ namespace Config {
 
     QString libraryFilterScope() const;
     void saveLibraryFilterScope(const QString &arg);
+
+    QString replayGainMode() const;
+    void saveReplayGainMode(const QString &arg);
+
+    QString replayGainStorage() const;
+    void saveReplayGainStorage(const QString &arg);
+
+    double replayGainPreampDb() const;
+    void saveReplayGainPreampDb(double arg);
+
+    double replayGainFallbackDb() const;
+    void saveReplayGainFallbackDb(double arg);
+
+    bool replayGainAllowClipping() const;
+    void saveReplayGainAllowClipping(bool arg);
+
+    QMap<QString, QString> shortcuts() const;
+    bool saveShortcuts(const QMap<QString, QString> &arg);
 
   private:
     QStringList providersUnder(const QString &key) const;
