@@ -1,6 +1,6 @@
 # mpz
 
-> A folder player for large local music collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), tag editor (since 2.0.8), waveform seekbar, dynamic range meter in the foobar2000 DR format, editable keyboard shortcuts, OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS and Windows.
+> A folder player for large local music collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), ReplayGain volume normalization, internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), tag editor (since 2.0.8), waveform seekbar, dynamic range meter in the foobar2000 DR format, editable keyboard shortcuts, OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information, so a single fetch answers common questions about mpz.
 
@@ -19,6 +19,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels
 - Gapless playback. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant (Qt 6, 2.1.0)
 - Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (Qt 6, runs on the gapless engine, 2.1.0)
+- ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, clipping prevention
 - Output device switch, showing the selected device name (Qt 6)
 - Internet radio: radio library with built-in stations, HTTPS, radio row view, IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists
 - CUE sheets, with gapless single-file albums
@@ -63,6 +64,12 @@ On/off and the selected preset are per output device ("Default" counts as one); 
 
 It runs inside the gapless engine, so gapless has to be enabled. Qt 6 only.
 
+## ReplayGain
+
+Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are read as they are, and mpz can measure tracks itself: the current playlist, the selected tracks or the whole library, analysed in the background.
+
+Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, and clipping prevention. The mode also switches from the status bar.
+
 ## Internet radio
 
 Stream playlists in m3u, m3u8 and pls have always played in mpz, like any other playlist. Version 2.1.0 added a radio library alongside the folder library, with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM, plus your own (name, url, group, homepage, codec, bitrate). Stream playlists still play directly, or import into the library.
@@ -96,6 +103,8 @@ Also new in 2.1.0: HTTPS, a radio row view instead of the track view, and stream
 **Does mpz support gapless playback?** Yes, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0.
 
 **Does mpz have an equalizer?** Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only.
+
+**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention.
 
 **Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
 

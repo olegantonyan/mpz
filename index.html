@@ -107,8 +107,8 @@
                 "applicationCategory": "MultimediaApplication",
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 (Qt 5 builds available for older Linux distributions)",
-                "description": "A folder player for large local collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
-                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player, flatpak music player, dynamic range meter",
+                "description": "A folder player for large local collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, ReplayGain, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
+                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player, flatpak music player, dynamic range meter, ReplayGain, volume normalization, loudness normalization",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
@@ -133,6 +133,7 @@
                     "Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels",
                     "Gapless playback, with instant in-track seeking (Qt 6)",
                     "Equalizer: 10-band graphic and full parametric modes, AutoEq presets, on/off and preset per output device (Qt 6, runs on the gapless engine)",
+                    "ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results in a sidecar database or written as tags; track or album gain, preamp, clipping prevention",
                     "Output device switch, showing the selected device name (Qt 6)",
                     "Internet radio: radio library with built-in stations, HTTPS and IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists",
                     "CUE sheets, with gapless playback of single-file albums",
@@ -287,6 +288,14 @@
                         "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Does mpz support ReplayGain?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention."
                         }
                     },
                     {
@@ -614,6 +623,7 @@
                 <a href="#library">Screenshots</a>
                 <a href="#gapless">Gapless</a>
                 <a href="#equalizer">Equalizer</a>
+                <a href="#replaygain">ReplayGain</a>
                 <a href="#radio">Radio</a>
                 <a href="#features">Features</a>
                 <a href="#install">Install</a>
@@ -931,6 +941,18 @@
                         so unplugging headphones switches it along with the
                         audio. Runs on the gapless engine, so gapless has to be
                         enabled. Qt 6 only, since 2.1.0.
+                    </div>
+
+                    <h2 id="replaygain" class="title">ReplayGain</h2>
+                    <div class="content">
+                        Volume normalization, so albums mastered at different
+                        levels play equally loud. Existing ReplayGain tags are
+                        read as they are, and mpz can measure tracks itself:
+                        the current playlist, the selection or the whole
+                        library, analysed in the background. Results go either
+                        into a sidecar database, leaving your audio files
+                        untouched, or into tags written into the files. Track or
+                        album gain, with a preamp and clipping prevention.
                     </div>
 
                     <h2 id="radio" class="title">Internet radio</h2>
@@ -1647,6 +1669,19 @@
                                 headphones switches it along with the audio. It
                                 runs on the gapless engine, so gapless has to be
                                 enabled. Qt 6 only.
+                            </p>
+
+                            <p>
+                                <strong>Does mpz support ReplayGain?</strong
+                                ><br />
+                                Yes. mpz reads existing ReplayGain tags and
+                                can measure tracks itself: the current
+                                playlist, the selection, or the whole library,
+                                analysed in the background. Results are stored
+                                either in a sidecar database, which leaves the
+                                audio files untouched, or written into the
+                                files as tags. Track or album gain, with a
+                                preamp and clipping prevention.
                             </p>
 
                             <p>
