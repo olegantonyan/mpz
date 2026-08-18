@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScrollBar>
+#include <QStyle>
 #include <QTableWidget>
 #include <QTabWidget>
 #include <QTimer>
@@ -164,19 +165,14 @@ namespace ReplayGainUi {
     group->addButton(sidecar_radio_);
     group->addButton(tags_radio_);
     connect(sidecar_radio_, &QRadioButton::toggled, this, &ReplayGainDialog::applySettings);
-    layout->addWidget(sidecar_radio_);
-    layout->addWidget(tags_radio_);
 
-    auto *tags_hint = new QLabel(
-        tr("Rewrites every analysed file, so its size and modification time change. "
-           "Tracks inside a cue sheet can only be stored in the sidecar."));
-    tags_hint->setWordWrap(true);
-    tags_hint->setStyleSheet("color: #d35400;");
-    tags_hint->setVisible(false);
-    connect(tags_radio_, &QRadioButton::toggled, tags_hint, &QWidget::setVisible);
-    layout->addWidget(tags_hint);
+    const int indent = style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth) +
+                       style()->pixelMetric(QStyle::PM_CheckBoxLabelSpacing);
+
+    layout->addWidget(sidecar_radio_);
 
     auto *store_row = new QHBoxLayout;
+    store_row->setContentsMargins(indent, 0, 0, 0);
     store_label_ = new QLabel;
     store_label_->setWordWrap(true);
     store_label_->setStyleSheet("color: gray;");
@@ -191,14 +187,26 @@ namespace ReplayGainUi {
     store_row->addWidget(reveal);
     layout->addLayout(store_row);
 
+    layout->addWidget(tags_radio_);
+
+    auto *tags_hint = new QLabel(
+        tr("Rewrites every analysed file, so its size and modification time change. "
+           "Tracks inside a cue sheet can only be stored in the sidecar."));
+    tags_hint->setWordWrap(true);
+    tags_hint->setContentsMargins(indent, 0, 0, 0);
+    tags_hint->setStyleSheet("color: #d35400;");
+    tags_hint->setVisible(false);
+    connect(tags_radio_, &QRadioButton::toggled, tags_hint, &QWidget::setVisible);
+    layout->addWidget(tags_hint);
+
     force_check_ = new QCheckBox(tr("Re-analyse tracks that already have data"));
     layout->addWidget(force_check_);
 
     auto *scope_row = new QHBoxLayout;
     scope_row->addWidget(new QLabel(tr("Scope:")));
     scan_scope_combo_ = new QComboBox;
-    scan_scope_combo_->addItem(tr("Whole library"), static_cast<int>(Scope::Library));
     scan_scope_combo_->addItem(tr("Current playlist"), static_cast<int>(Scope::Playlist));
+    scan_scope_combo_->addItem(tr("Whole library"), static_cast<int>(Scope::Library));
     scan_scope_combo_->addItem(tr("Selected tracks"), static_cast<int>(Scope::Selection));
     connect(scan_scope_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &ReplayGainDialog::updateScanControls);

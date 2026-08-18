@@ -1432,17 +1432,17 @@
 <context>
     <name>ReplayGain::JobRunner</name>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="256"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="257"/>
         <source>file is gone</source>
         <translation>ファイルがありません</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="260"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="261"/>
         <source>unreadable audio stream</source>
         <translation>オーディオストリームを読み取れません</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="283"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="284"/>
         <source>decoder stalled</source>
         <translation>デコーダーが停止しました</translation>
     </message>
@@ -1451,12 +1451,12 @@
         <translation type="vanished">ストリーム途中でフォーマットが変化しました</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="335"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="337"/>
         <source>nothing decoded</source>
         <translation>デコードできませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain/jobrunner.cpp" line="365"/>
+        <location filename="../../replaygain/jobrunner.cpp" line="367"/>
         <source>no measurable loudness</source>
         <translation>ラウドネスを測定できません</translation>
     </message>
@@ -1464,76 +1464,76 @@
 <context>
     <name>ReplayGainUi::ReplayGainDialog</name>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="44"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
         <source>tags written</source>
         <translation>タグを書き込みました</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
         <source>tags unsupported</source>
         <translation>タグ非対応</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
         <source>tags: open failed</source>
         <translation>タグ: 開けませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="48"/>
         <source>tags: save failed</source>
         <translation>タグ: 保存できませんでした</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="57"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="58"/>
         <source>ReplayGain</source>
         <translation>ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="68"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
         <source>Playback</source>
         <translation>再生</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="321"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="70"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
         <source>Analyse</source>
         <translation>解析</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="112"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
         <source>Off</source>
         <translation>オフ</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Track gain</source>
         <translation>トラックゲイン</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Album gain</source>
         <translation>アルバムゲイン</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
         <source>Mode:</source>
         <translation>モード:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="121"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="131"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="122"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="132"/>
         <source>dB</source>
         <translation>dB</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="124"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
         <source>Added to measured gains only</source>
         <translation>測定済みゲインにのみ加算</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
         <source>Preamp:</source>
         <translation>プリアンプ:</translation>
     </message>
@@ -1542,111 +1542,111 @@
         <translation type="vanished">ReplayGain データがないトラックに適用されます</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="134"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
         <source>Used for unscanned tracks and radio streams</source>
         <translation>未解析のトラックとラジオストリームに適用</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
         <source>Untagged tracks:</source>
         <translation>タグなしトラック:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="137"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="138"/>
         <source>Prevent clipping (use the measured peak)</source>
         <translation>クリッピングを防ぐ (測定したピークを使用)</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="139"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="140"/>
         <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
         <translation>ピークはイコライザーなしで測定されているため、イコライザーで帯域を持ち上げた場合は両者がおおよそでしか合成されません。</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="161"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
         <source>Store results in a sidecar database</source>
         <translation>結果を別のデータベースに保存する</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="163"/>
         <source>Write ReplayGain tags into the audio files</source>
         <translation>音声ファイルに ReplayGain タグを書き込む</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="171"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="193"/>
         <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
         <translation>解析した各ファイルを書き換えるため、サイズと更新日時が変わります。cue シート内のトラックは別のデータベースにのみ保存できます。</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="187"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="183"/>
         <source>Show in file manager</source>
         <translation>ファイルマネージャで表示</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="194"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
         <source>Re-analyse tracks that already have data</source>
         <translation>データがあるトラックも再解析する</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="198"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="206"/>
         <source>Scope:</source>
         <translation>対象:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="200"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="209"/>
         <source>Whole library</source>
         <translation>ライブラリ全体</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="201"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="208"/>
         <source>Current playlist</source>
         <translation>現在のプレイリスト</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="210"/>
         <source>Selected tracks</source>
         <translation>選択したトラック</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Track</source>
         <translation>トラック</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Peak</source>
         <translation>ピーク</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="245"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
         <source>Status</source>
         <translation>状態</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="321"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="327"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="335"/>
         <source>%1 — %n entries</source>
         <translation>
             <numerusform>%1 — %n 件</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="364"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="372"/>
         <source>analysed</source>
         <translation>解析済み</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="396"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="404"/>
         <source>Cancelled after %n track(s)</source>
         <translation>
             <numerusform>%n トラックで中止しました</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="398"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="406"/>
         <source>Analysed %1, failed %2</source>
         <translation>解析 %1、失敗 %2</translation>
     </message>
