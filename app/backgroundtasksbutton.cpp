@@ -53,13 +53,18 @@ namespace PrivateBackgroundTasks {
   }
 
   void Row::mouseReleaseEvent(QMouseEvent *event) {
-    if (clickable && event->button() == Qt::LeftButton && rect().contains(event->position().toPoint())) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    const QPoint pos = event->position().toPoint();
+#else
+    const QPoint pos = event->pos();
+#endif
+    if (clickable && event->button() == Qt::LeftButton && rect().contains(pos)) {
       emit clicked();
     }
     QFrame::mouseReleaseEvent(event);
   }
 
-  void Row::enterEvent(QEnterEvent *event) {
+  void Row::enterEvent(EnterEventType *event) {
     setAutoFillBackground(clickable);
     QFrame::enterEvent(event);
   }

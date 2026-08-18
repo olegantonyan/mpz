@@ -4,7 +4,6 @@
 #include "backgroundtasks.h"
 #include "loadingspinner.h"
 
-#include <QEnterEvent>
 #include <QEvent>
 #include <QFrame>
 #include <QLabel>
@@ -15,8 +14,18 @@
 #include <QVector>
 #include <QWidget>
 #include <QWidgetAction>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QEnterEvent>
+#endif
 
 namespace PrivateBackgroundTasks {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  using EnterEventType = QEnterEvent;
+#else
+  using EnterEventType = QEvent;
+#endif
+
   class Row : public QFrame {
     Q_OBJECT
   public:
@@ -30,7 +39,7 @@ namespace PrivateBackgroundTasks {
 
   protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void enterEvent(QEnterEvent *event) override;
+    void enterEvent(EnterEventType *event) override;
     void leaveEvent(QEvent *event) override;
 
   private:
