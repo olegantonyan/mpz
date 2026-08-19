@@ -103,6 +103,9 @@ namespace Config {
     bool replayGainAllowClipping() const;
     void saveReplayGainAllowClipping(bool arg);
 
+    int replayGainDynamicsPct() const;
+    void saveReplayGainDynamicsPct(int arg);
+
     QMap<QString, QString> shortcuts() const;
     bool saveShortcuts(const QMap<QString, QString> &arg);
 

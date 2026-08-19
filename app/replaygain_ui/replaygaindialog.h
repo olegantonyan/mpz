@@ -13,6 +13,7 @@
 #include <QProgressBar>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QSpinBox>
 #include <QTableWidget>
 #include <QVector>
 
@@ -55,6 +56,7 @@ namespace ReplayGainUi {
     QLabel *note_ = nullptr;
     QComboBox *mode_combo_ = nullptr;
     QDoubleSpinBox *preamp_spin_ = nullptr;
+    QSpinBox *dynamics_spin_ = nullptr;
     QDoubleSpinBox *fallback_spin_ = nullptr;
     QCheckBox *clip_check_ = nullptr;
     QRadioButton *sidecar_radio_ = nullptr;

@@ -21,6 +21,13 @@ private slots:
   void clipPreventionOffLetsItThrough();
   void unscannedTracksUseTheFallback();
   void resultIsClamped();
+  void dynamicsIsOffByDefault();
+  void dynamicsBoostsDenseMasters();
+  void dynamicsTrimsDynamicMaterial();
+  void dynamicsIsClamped();
+  void dynamicsNeedsAPeak();
+  void dynamicsTrimSurvivesTheClipCap();
+  void dynamicsUsesAlbumValuesInAlbumMode();
 
 private:
   static Gain trackOnly(double db, double peak);
@@ -135,6 +142,92 @@ void TestReplayGainGain::resultIsClamped() {
   s.prevent_clipping = false;
   QCOMPARE(ReplayGain::effectiveGainDb(trackOnly(-99.0, 0.5), s), ReplayGain::kMinGainDb);
   QCOMPARE(ReplayGain::effectiveGainDb(trackOnly(99.0, 0.5), s), ReplayGain::kMaxGainDb);
+}
+
+// 10^(x/20): a peak that many dB from full scale
+static double peakAtDb(double db) {
+  return std::pow(10.0, db / 20.0);
+}
+
+void TestReplayGainGain::dynamicsIsOffByDefault() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.prevent_clipping = false;
+  QCOMPARE(s.dynamics_pct, 0);
+  QCOMPARE(ReplayGain::effectiveGainDb(trackOnly(-10.0, peakAtDb(1.0)), s), -10.0);
+}
+
+void TestReplayGainGain::dynamicsBoostsDenseMasters() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.prevent_clipping = false;
+  s.dynamics_pct = 40;
+
+  // -8 LUFS at +1 dBTP: PLR 9, four below the reference
+  const Gain g = trackOnly(-10.0, peakAtDb(1.0));
+  QVERIFY2(std::fabs(ReplayGain::plrDb(g.track_db, g.track_peak) - 9.0) < 1e-9,
+           qPrintable(QString::number(ReplayGain::plrDb(g.track_db, g.track_peak))));
+
+  const double db = ReplayGain::effectiveGainDb(g, s);
+  QVERIFY2(std::fabs(db - (-8.8)) < 0.001, qPrintable(QString::number(db)));
+}
+
+void TestReplayGainGain::dynamicsTrimsDynamicMaterial() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.prevent_clipping = false;
+  s.dynamics_pct = 40;
+
+  // -25 LUFS at -1 dBTP: PLR 24
+  const double db = ReplayGain::effectiveGainDb(trackOnly(7.0, peakAtDb(-1.0)), s);
+  QVERIFY2(std::fabs(db - 3.7) < 0.001, qPrintable(QString::number(db)));
+}
+
+void TestReplayGainGain::dynamicsIsClamped() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.prevent_clipping = false;
+  s.dynamics_pct = 100;
+
+  // the raw correction would be -8.25
+  const double db = ReplayGain::effectiveGainDb(trackOnly(7.0, peakAtDb(-1.0)), s);
+  QVERIFY2(std::fabs(db - (7.0 - ReplayGain::kMaxDynamicsDb)) < 0.001,
+           qPrintable(QString::number(db)));
+}
+
+void TestReplayGainGain::dynamicsNeedsAPeak() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.dynamics_pct = 100;
+  QCOMPARE(ReplayGain::effectiveGainDb(trackOnly(-10.0, 0.0), s), -10.0);
+}
+
+void TestReplayGainGain::dynamicsTrimSurvivesTheClipCap() {
+  Settings s;
+  s.mode = Mode::Track;
+  s.prevent_clipping = true;
+
+  const Gain g = trackOnly(7.0, peakAtDb(-1.0));
+  QCOMPARE(ReplayGain::effectiveGainDb(g, s), 1.0);
+
+  s.dynamics_pct = 40;
+  const double db = ReplayGain::effectiveGainDb(g, s);
+  QVERIFY2(std::fabs(db - (1.0 - 3.3)) < 0.001, qPrintable(QString::number(db)));
+}
+
+void TestReplayGainGain::dynamicsUsesAlbumValuesInAlbumMode() {
+  Settings s;
+  s.mode = Mode::Album;
+  s.prevent_clipping = false;
+  s.dynamics_pct = 40;
+
+  Gain g = albumOnly(7.0, peakAtDb(-1.0));
+  g.track_db = -10.0;
+  g.track_peak = peakAtDb(1.0);
+  g.has_track = true;
+
+  const double db = ReplayGain::effectiveGainDb(g, s);
+  QVERIFY2(std::fabs(db - 3.7) < 0.001, qPrintable(QString::number(db)));
 }
 
 QTEST_GUILESS_MAIN(TestReplayGainGain)

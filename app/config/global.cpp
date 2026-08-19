@@ -336,6 +336,14 @@ namespace Config {
     storage.set("replay_gain_allow_clipping", Config::Value(arg));
   }
 
+  int Global::replayGainDynamicsPct() const {
+    return storage.get("replay_gain_dynamics_pct").get<int>();
+  }
+
+  void Global::saveReplayGainDynamicsPct(int arg) {
+    storage.set("replay_gain_dynamics_pct", Config::Value(arg));
+  }
+
   // castScalar turns a bare "Y" into a boolean and "5" into an integer
   static bool shortcutScalar(const Config::Value &value, QString &out) {
     switch (value.type()) {

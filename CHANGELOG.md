@@ -2,6 +2,8 @@
 
 ### Added
 
+- ReplayGain: optional dynamics compensation
+
 ### Fixed
 
 - Regression: playback continues on default device when current one disappeared
