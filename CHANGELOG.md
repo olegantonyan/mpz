@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Regression: playback continues on default device when current one disappeared
+
 ### Misc
 
 ## [2.1.4] - 2026-08-18
