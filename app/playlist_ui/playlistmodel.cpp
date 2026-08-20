@@ -48,6 +48,13 @@ namespace PlaylistUi {
     return columns_config.count() + 1;
   }
 
+  QVariant Model::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 1) {
+      return QVariant();
+    }
+    return columns_config.field(section);
+  }
+
   QVariant Model::data(const QModelIndex &index, int role) const {
     QVariant none;
 

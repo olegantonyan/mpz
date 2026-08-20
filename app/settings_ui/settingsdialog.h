@@ -42,6 +42,7 @@ private:
 #endif
   QCheckBox *check_auto_update = nullptr;
   QCheckBox *check_row_height = nullptr;
+  QCheckBox *check_show_headers = nullptr;
   QSpinBox *spin_row_height = nullptr;
   QComboBox *combo_language = nullptr;
 

@@ -3,6 +3,7 @@
 ### Added
 
 - ReplayGain: optional dynamics compensation
+- Option to show playlist column headers
 
 ### Fixed
 

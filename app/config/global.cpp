@@ -203,6 +203,14 @@ namespace Config {
     storage.set("playlist_row_height", Config::Value(arg));
   }
 
+  bool Global::showPlaylistHeaders() const {
+    return storage.get("show_playlist_headers").get<bool>();
+  }
+
+  void Global::saveShowPlaylistHeaders(bool arg) {
+    storage.set("show_playlist_headers", Config::Value(arg));
+  }
+
   bool Global::waveformDisabled() const {
     return storage.get("waveform_disabled").get<bool>();
   }

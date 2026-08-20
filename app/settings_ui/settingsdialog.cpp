@@ -248,6 +248,11 @@ QWidget *SettingsDialog::buildGeneralTab() {
   // Playlist columns
   auto *gb_cols = new QGroupBox(tr("Playlist columns"));
   auto *cv = new QVBoxLayout(gb_cols);
+
+  check_show_headers = new QCheckBox(tr("Show column headers"));
+  check_show_headers->setChecked(global_conf.showPlaylistHeaders());
+  cv->addWidget(check_show_headers);
+
   table_columns = new QTableWidget;
   table_columns->setColumnCount(4);
   table_columns->setHorizontalHeaderLabels(
@@ -775,6 +780,7 @@ void SettingsDialog::apply() {
 
   // Columns
   global_conf.saveColumnsConfig(collectColumns());
+  global_conf.saveShowPlaylistHeaders(check_show_headers->isChecked());
 
   // Lyrics
   global_conf.saveLyricsProviders(collectProviders(list_lyrics));
