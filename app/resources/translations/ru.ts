@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../../about_ui/aboutdialog.ui" line="132"/>
-        <location filename="../../about_ui/aboutdialog.cpp" line="114"/>
+        <location filename="../../about_ui/aboutdialog.cpp" line="118"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
@@ -83,7 +83,7 @@
 <context>
     <name>BackgroundTasksButton</name>
     <message numerus="yes">
-        <location filename="../../backgroundtasksbutton.cpp" line="144"/>
+        <location filename="../../backgroundtasksbutton.cpp" line="149"/>
         <source>%n background operations</source>
         <translation>
             <numerusform>%n фоновая операция</numerusform>
@@ -1263,8 +1263,8 @@
         </translation>
     </message>
     <message>
-        <location filename="../../playlist_ui/playlistcontroller.cpp" line="190"/>
-        <location filename="../../playlist_ui/playlistcontroller.cpp" line="333"/>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="191"/>
+        <location filename="../../playlist_ui/playlistcontroller.cpp" line="334"/>
         <source>Adding to playlist: %1</source>
         <translation>Добавление в плейлист: %1</translation>
     </message>
@@ -1528,76 +1528,76 @@
 <context>
     <name>ReplayGainUi::ReplayGainDialog</name>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="45"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
         <source>tags written</source>
         <translation>теги записаны</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="46"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
         <source>tags unsupported</source>
         <translation>теги не поддерживаются</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="47"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="48"/>
         <source>tags: open failed</source>
         <translation>теги: не удалось открыть</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="48"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="49"/>
         <source>tags: save failed</source>
         <translation>теги: не удалось сохранить</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="58"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="59"/>
         <source>ReplayGain</source>
         <translation>ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="69"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="70"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="70"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="71"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="347"/>
         <source>Analyse</source>
         <translation>Анализ</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="113"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
         <source>Off</source>
         <translation>Выключено</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="114"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="269"/>
         <source>Track gain</source>
         <translation>Усиление трека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="115"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="269"/>
         <source>Album gain</source>
         <translation>Усиление альбома</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="116"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="117"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="122"/>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="132"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="123"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="146"/>
         <source>dB</source>
         <translation>дБ</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="125"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
         <source>Added to measured gains only</source>
         <translation>Только к измеренным усилениям</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="126"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="127"/>
         <source>Preamp:</source>
         <translation>Предусиление:</translation>
     </message>
@@ -1606,92 +1606,107 @@
         <translation type="vanished">Применяется к трекам без данных ReplayGain</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="136"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="150"/>
         <source>Untagged tracks:</source>
         <translation>Треки без тегов:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="138"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="152"/>
         <source>Prevent clipping (use the measured peak)</source>
         <translation>Не допускать клиппинг (по измеренному пику)</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="140"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="154"/>
         <source>The peak was measured without the equalizer, so with the equalizer boosting bands the two only compose approximately.</source>
         <translation>Пик измерен без эквалайзера, поэтому при усилении полос эквалайзером они сочетаются лишь приблизительно.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="162"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="178"/>
         <source>Store results in a sidecar database</source>
         <translation>Хранить результаты в отдельной базе данных</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="163"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="179"/>
         <source>Write ReplayGain tags into the audio files</source>
         <translation>Записывать теги ReplayGain в аудиофайлы</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="193"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="209"/>
         <source>Rewrites every analysed file, so its size and modification time change. Tracks inside a cue sheet can only be stored in the sidecar.</source>
         <translation>Каждый проанализированный файл перезаписывается, поэтому его размер и время изменения меняются. Треки из cue-листа можно хранить только в отдельной базе.</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="183"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="199"/>
         <source>Show in file manager</source>
         <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="202"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="218"/>
         <source>Re-analyse tracks that already have data</source>
         <translation>Повторно анализировать треки, у которых уже есть данные</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="206"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="222"/>
         <source>Scope:</source>
         <translation>Область:</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="209"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="225"/>
         <source>Whole library</source>
         <translation>Вся библиотека</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="208"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="224"/>
         <source>Current playlist</source>
         <translation>Текущий плейлист</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="135"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="134"/>
+        <source>ReplayGain measures dense, heavily compressed music as louder than it sounds, so metal and pop end up too quiet next to classical or jazz. This nudges them back. 0 % turns it off. Needs a measured peak.</source>
+        <translation>ReplayGain измеряет плотную, сильно компрессированную музыку громче, чем она звучит, поэтому метал и поп оказываются слишком тихими рядом с классикой и джазом. Эта настройка подтягивает их обратно. 0 % — выключено. Нужен измеренный пик.</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="139"/>
+        <source>Evens out metal and pop against classical and jazz</source>
+        <translation>Выравнивает метал и поп относительно классики и джаза</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="140"/>
+        <source>Dynamics compensation:</source>
+        <translation>Компенсация динамики:</translation>
+    </message>
+    <message>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="149"/>
         <source>Used for unscanned tracks and radio streams</source>
         <translation>Для непроанализированных треков и радиопотоков</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="210"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="226"/>
         <source>Selected tracks</source>
         <translation>Выбранные треки</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="269"/>
         <source>Track</source>
         <translation>Трек</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="269"/>
         <source>Peak</source>
         <translation>Пик</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="253"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="269"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="329"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="347"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="335"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="353"/>
         <source>%1 — %n entries</source>
         <translation>
             <numerusform>%1 — %n запись</numerusform>
@@ -1700,12 +1715,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="372"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="390"/>
         <source>analysed</source>
         <translation>проанализирован</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="404"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="422"/>
         <source>Cancelled after %n track(s)</source>
         <translation>
             <numerusform>Отменено после %n трека</numerusform>
@@ -1714,7 +1729,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="406"/>
+        <location filename="../../replaygain_ui/replaygaindialog.cpp" line="424"/>
         <source>Analysed %1, failed %2</source>
         <translation>Проанализировано %1, ошибок %2</translation>
     </message>
@@ -1755,12 +1770,12 @@
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="390"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="395"/>
         <source>Embedded tags and files next to the music are always used first. These are the online sources tried when nothing is found locally.</source>
         <translation>Встроенные тексты и изображения всегда в приоритете. Онлайн провайдеры используются только если встроенных нет локально.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="396"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="401"/>
         <source>Lyrics</source>
         <translation>Текст песни</translation>
     </message>
@@ -1805,22 +1820,22 @@
         <translation>(только локальные файлы)</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="470"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="475"/>
         <source>Grab global media keys</source>
         <translation>Перехватывать глобальные мультимедийные клавиши</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="481"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="486"/>
         <source>Wayland does not let applications grab global keys. Assign the media keys in your desktop environment&apos;s keyboard settings instead - they reach mpz over MPRIS.</source>
         <translation>Wayland не позволяет приложениям перехватывать глобальные клавиши. Назначьте мультимедийные клавиши в настройках клавиатуры вашей рабочей среды - они дойдут до mpz через MPRIS.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="495"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="500"/>
         <source>KiB</source>
         <translation>КиБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="492"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="497"/>
         <source>Stream buffer size:</source>
         <translation>Размер буфера потока:</translation>
     </message>
@@ -1885,10 +1900,10 @@
     </message>
     <message>
         <location filename="../../settings_ui/settingsdialog.cpp" line="214"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="280"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="459"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="474"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="525"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="285"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="464"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="479"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="530"/>
         <source>(requires restart)</source>
         <translation>(требует перезапуск)</translation>
     </message>
@@ -1918,111 +1933,116 @@
         <translation>Столбцы плейлиста</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="254"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="252"/>
+        <source>Show column headers</source>
+        <translation>Показывать заголовки столбцов</translation>
+    </message>
+    <message>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="259"/>
         <source>Field</source>
         <translation>Поле</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="254"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="259"/>
         <source>Width %</source>
         <translation>Ширина %</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="254"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="259"/>
         <source>Alignment</source>
         <translation>Выравнивание</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="254"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="259"/>
         <source>Stretch</source>
         <translation>Растягивать</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="268"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="548"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="273"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="553"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="269"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="274"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="554"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="270"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="275"/>
         <source>Move up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="271"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="276"/>
         <source>Move down</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="272"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="277"/>
         <source>Restore defaults</source>
         <translation>Восстановить по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="305"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="633"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="310"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="638"/>
         <source>Left</source>
         <translation>По левому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="306"/>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="634"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="311"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="639"/>
         <source>Right</source>
         <translation>По правому</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="398"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="403"/>
         <source>Drag to reorder, uncheck to disable:</source>
         <translation>Перетащите для приоритезации, снимите галку чтобы отключить:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="403"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="408"/>
         <source>Open lyrics folder</source>
         <translation>Открыть папку с текстами</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="403"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="408"/>
         <source>Clear downloaded lyrics</source>
         <translation>Очистить загруженные тексты</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="404"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="409"/>
         <source>Delete all lyrics downloaded from online providers?</source>
         <translation>Удалить все тексты загруженные из онлайн провайдеров?</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="409"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="414"/>
         <source>Album covers</source>
         <translation>Обложки альбомов</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="411"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
         <source>Download missing covers from (drag to reorder, uncheck to disable):</source>
         <translation>Загружать недостающие обложки альбомов (для приоритезации перетащите, для отключения снимите галку):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="421"/>
         <source>Open covers folder</source>
         <translation>Открыть папку с обложками</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="416"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="421"/>
         <source>Clear downloaded covers</source>
         <translation>Очистить загруженные обложки</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="417"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="422"/>
         <source>Delete all covers downloaded from online providers?</source>
         <translation>Удалить все загруженные из онлайн провайдеров обложки альбомов?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../settings_ui/settingsdialog.cpp" line="445"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="450"/>
         <source>Removed %n file(s).</source>
         <translation>
             <numerusform>Удалено %n файл.</numerusform>
@@ -2031,7 +2051,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="456"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="461"/>
         <source>Single instance mode</source>
         <translation>Один экземпляр приложения</translation>
     </message>
@@ -2040,12 +2060,12 @@
         <translation type="vanished">IPC порт:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="506"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="511"/>
         <source>Playback log size:</source>
         <translation>Размер лога воспроизведения:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="509"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="514"/>
         <source>entries</source>
         <translation>записей</translation>
     </message>
@@ -2054,62 +2074,62 @@
         <translation type="vanished">Включить воспроизведение без пауз</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="518"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="523"/>
         <source>Gapless memory buffer:</source>
         <translation>Буфер памяти для воспроизведения без пауз:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="521"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="526"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="531"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="536"/>
         <source>Decoded audio kept in memory so track transitions are gapless and seeking within a track is instant. A larger buffer caches more (or longer) tracks; 100 MB suits most libraries.</source>
         <translation>Декодированный звук хранится в памяти, чтобы переходы между треками были без пауз, а перемотка внутри трека — мгновенной. Чем больше буфер, тем больше (и более длинных) треков помещается в кэш; 100 МБ достаточно для большинства библиотек.</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="541"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="546"/>
         <source>MPRIS blacklist</source>
         <translation>Чёрный список MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="544"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="549"/>
         <source>Ignore MPRIS sender names (e.g. &quot;wireplumber&quot;):</source>
         <translation>Игнорировать имена отправителей MPRIS (например, «wireplumber»):</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="558"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="563"/>
         <source>Add MPRIS sender</source>
         <translation>Добавить отправителя MPRIS</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="559"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="564"/>
         <source>Sender name:</source>
         <translation>Имя отправителя:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="570"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="575"/>
         <source>Stop MPD playback when closing mpz</source>
         <translation>Останавливать воспроизведение MPD при закрытии mpz</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="577"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="582"/>
         <source>Crash reports:</source>
         <translation>Отчёты о сбоях:</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="579"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="584"/>
         <source>Send automatically</source>
         <translation>Отправлять автоматически</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="580"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="585"/>
         <source>Ask after next crash</source>
         <translation>Спрашивать после сбоя</translation>
     </message>
     <message>
-        <location filename="../../settings_ui/settingsdialog.cpp" line="581"/>
+        <location filename="../../settings_ui/settingsdialog.cpp" line="586"/>
         <source>Never send</source>
         <translation>Не отправлять</translation>
     </message>

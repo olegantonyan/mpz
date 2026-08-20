@@ -8,7 +8,7 @@ pkgdesc='Music player for the large local collections'
 arch=('x86_64')
 url="https://github.com/olegantonyan/mpz"
 license=('GPL3')
-depends=('qt6-multimedia' 'qt6-svg' 'hicolor-icon-theme' 'yaml-cpp' 'taglib' 'libmpdclient' 'cpptrace', 'libebur128', 'sqlite3')
+depends=('qt6-multimedia' 'qt6-svg' 'hicolor-icon-theme' 'yaml-cpp' 'taglib' 'libmpdclient' 'cpptrace' 'libebur128' 'sqlite3')
 makedepends=('cmake')
 provides=('<%= pkgname %>')
 source=("$pkgname-$pkgver-$pkgrel.zip::<%= source %>")
@@ -20,7 +20,15 @@ build() {
     rm -rf build
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON -DUSE_SYSTEM_SQLITE3=ON ..
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=/usr \
+          -DUSE_SYSTEM_TAGLIB=ON \
+          -DUSE_SYSTEM_YAMLCPP=ON \
+          -DUSE_SYSTEM_LIBMPDCLIENT=ON \
+          -DUSE_SYSTEM_CPPTRACE=ON \
+          -DUSE_SYSTEM_LIBEBUR128=ON \
+          -DUSE_SYSTEM_SQLITE3=ON \
+          ..
     cmake --build .
 }
 

@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScrollBar>
+#include <QSpinBox>
 #include <QStyle>
 #include <QTableWidget>
 #include <QTabWidget>
@@ -125,6 +126,19 @@ namespace ReplayGainUi {
     preamp_row->addWidget(hint(tr("Added to measured gains only")), 1);
     form->addRow(tr("Preamp:"), preamp_row);
 
+    dynamics_spin_ = new QSpinBox;
+    dynamics_spin_->setRange(0, 100);
+    dynamics_spin_->setSingleStep(10);
+    dynamics_spin_->setSuffix(" %");
+    dynamics_spin_->setToolTip(
+        tr("ReplayGain measures dense, heavily compressed music as louder than it sounds, so metal "
+           "and pop end up too quiet next to classical or jazz. This nudges them back. 0 % turns it "
+           "off. Needs a measured peak."));
+    auto *dynamics_row = new QHBoxLayout;
+    dynamics_row->addWidget(dynamics_spin_);
+    dynamics_row->addWidget(hint(tr("Evens out metal and pop against classical and jazz")), 1);
+    form->addRow(tr("Dynamics compensation:"), dynamics_row);
+
     fallback_spin_ = new QDoubleSpinBox;
     fallback_spin_->setRange(-15.0, 15.0);
     fallback_spin_->setSingleStep(0.5);
@@ -147,6 +161,8 @@ namespace ReplayGainUi {
     connect(mode_combo_, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ReplayGainDialog::applySettings);
     connect(preamp_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &ReplayGainDialog::applySettings);
+    connect(dynamics_spin_, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ReplayGainDialog::applySettings);
     connect(fallback_spin_, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this, &ReplayGainDialog::applySettings);
@@ -272,6 +288,7 @@ namespace ReplayGainUi {
                                                              : QStringLiteral("off");
     mode_combo_->setCurrentIndex(qMax(0, mode_combo_->findData(mode)));
     preamp_spin_->setValue(s.preamp_db);
+    dynamics_spin_->setValue(s.dynamics_pct);
     fallback_spin_->setValue(s.fallback_db);
     clip_check_->setChecked(s.prevent_clipping);
     sidecar_radio_->setChecked(s.storage == ReplayGain::StorageMode::Sidecar);
@@ -292,6 +309,7 @@ namespace ReplayGainUi {
     s.storage = tags_radio_->isChecked() ? ReplayGain::StorageMode::Tags
                                          : ReplayGain::StorageMode::Sidecar;
     s.preamp_db = preamp_spin_->value();
+    s.dynamics_pct = dynamics_spin_->value();
     s.fallback_db = fallback_spin_->value();
     s.prevent_clipping = clip_check_->isChecked();
 

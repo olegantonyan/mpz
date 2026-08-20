@@ -15,6 +15,8 @@ namespace Playback::Gapless {
     // stream decode-ahead: keep only a small PCM runway so the decoder reads the ring
     // at playback rate and the Stream ring stays near threshold (like QMediaPlayer)
     constexpr qint64 kStreamRunwaySeconds = 1;
+    constexpr int kOutputRetryMs = 500;
+    constexpr qint64 kOutputGiveUpMs = 10000;
     bool sameFormat(const QAudioFormat &a, const QAudioFormat &b) {
       return a.sampleRate() == b.sampleRate() && a.channelCount() == b.channelCount() &&
              a.sampleFormat() == b.sampleFormat();
@@ -28,6 +30,8 @@ namespace Playback::Gapless {
     connect(&pump_timer, &QTimer::timeout, this, &Engine::onPumpTick);
     position_timer.setInterval(100);
     connect(&position_timer, &QTimer::timeout, this, &Engine::emitPosition);
+    output_recovery_timer.setInterval(kOutputRetryMs);
+    connect(&output_recovery_timer, &QTimer::timeout, this, &Engine::tryRestoreOutput);
     connect(&media_devices, &QMediaDevices::audioOutputsChanged, this,
             [this]() { devices_changed_debounce.start(); });
     devices_changed_debounce.setSingleShot(true);
@@ -57,11 +61,10 @@ namespace Playback::Gapless {
   }
 
   void Engine::setTrack(const Track &t) {
-    audio_output_failed = false; // explicit track pick: allow another sink attempt
     const quint64 adopt_uid = boundary_adopt_uid;
     boundary_adopt_uid = 0;
     const int rate = sink_format.sampleRate();
-    const bool live = current_state != MediaPlayer::StoppedState && sink && rate > 0;
+    const bool live = current_state != MediaPlayer::StoppedState && (sink || output_recovery_pending) && rate > 0;
     if (live && adopt_uid != 0 && t.uid() == adopt_uid) {
       const Timeline::Pos pos = timeline.map(audibleAbsFrame());
       if (pos.segment >= 0 && pos.track.uid() == t.uid()) {
@@ -138,7 +141,7 @@ namespace Playback::Gapless {
     about_to_finish_emitted = false;
     catchup_target_frame = -1;
     pending_seek_ms = -1;
-    output_failure_ms = -1;
+    cancelOutputRecovery();
     boundary_adopt_uid = 0;
     current_segment = 0;
     read_cursor_frame = 0;
@@ -228,7 +231,7 @@ namespace Playback::Gapless {
     epoch_start_frame = 0;
     about_to_finish_emitted = false;
     cache.openEntry(current_url, format.bytesPerFrame());
-    createSink();
+    ensureSink(); // on failure recovery is armed; the pending seek still applies below
     if (pending_seek_ms >= 0) {
       const qint64 ms = pending_seek_ms;
       pending_seek_ms = -1;
@@ -236,44 +239,59 @@ namespace Playback::Gapless {
     }
   }
 
-  void Engine::createSink() {
+  bool Engine::createSink() {
     destroySink();
-    if (audio_output_failed) {
-      return;
-    }
     active_device = outputDevice();
     if (active_device.isNull() || !sink_format.isValid()) {
-      handleOutputFailure(QStringLiteral("no audio output device available"));
-      return;
+      return false;
     }
     sink = new QAudioSink(active_device, sink_format, this);
     sink->setBufferSize(sink_format.bytesForDuration(500000));
     sink->setVolume(volume_pct / 100.0);
     // queued: reset()/start() emit stateChanged synchronously, which must not re-enter feedSink mid-mutation
-    QAudioSink *created = sink;
-    connect(sink, &QAudioSink::stateChanged, this, [this, created](QAudio::State s) {
-      if (created != sink) {
+    const quint64 generation = sink_generation;
+    connect(sink, &QAudioSink::stateChanged, this, [this, generation](QAudio::State s) {
+      if (generation != sink_generation) {
         return; // queued state of an already-replaced sink
       }
       if (s == QAudio::IdleState) {
         feedSink();
         checkEof();
-      } else if (s == QAudio::StoppedState && sink->error() == QAudio::IOError) {
-        handleOutputFailure(QStringLiteral("audio output device failed")); // only IOError: stop()/reset() leave a stale error behind
+        return;
+      }
+      // re-read at delivery time: a queued Stopped from reset()/stop() is stale by now
+      if (s == QAudio::StoppedState && sink->state() == QAudio::StoppedState &&
+          sink->error() == QAudio::IOError) {
+        beginOutputRecovery(QStringLiteral("audio output device failed"));
       }
     }, Qt::QueuedConnection);
     sink_io = sink->start();
     if (!sink_io || sink->error() != QAudio::NoError) {
-      handleOutputFailure(QStringLiteral("cannot open audio output device"));
-      return;
+      destroySink(); // never leave a dead sink attached
+      return false;
     }
     epoch_start_frame = read_cursor_frame;
-    if (current_state != MediaPlayer::PlayingState) {
-      sink->suspend(); // brought up before play(): stay silent until play()
+    if (current_state != MediaPlayer::PlayingState || catchup_target_frame >= 0) {
+      sink->suspend(); // brought up before play(), or mid seek catch-up: maybeFinishCatchUp restarts it
     }
+    return true;
+  }
+
+  bool Engine::ensureSink() {
+    if (!createSink()) {
+      beginOutputRecovery(QStringLiteral("cannot open audio output device"));
+      return false;
+    }
+    if (output_recovery_pending) {
+      qCWarning(mpzGapless) << "audio output restored on" << active_device.id()
+                            << "at frame" << read_cursor_frame;
+    }
+    cancelOutputRecovery();
+    return true;
   }
 
   void Engine::destroySink() {
+    ++sink_generation; // any queued stateChanged of the old sink is stale from here on
     if (sink) {
       sink->stop();
       sink->deleteLater();
@@ -283,9 +301,13 @@ namespace Playback::Gapless {
   }
 
   void Engine::releaseAudio() {
+    cancelOutputRecovery(); // the retry timer must not build a sink after aboutToQuit
+    devices_changed_debounce.stop();
+    ++sink_generation;
     pump_timer.stop();
     position_timer.stop();
     if (sink) {
+      sink->reset(); // stop() drains synchronously on Linux; drop the buffer first
       sink->stop();
       delete sink; // not deleteLater: the stream must go down while the event loop still runs
       sink = nullptr;
@@ -293,32 +315,97 @@ namespace Playback::Gapless {
     }
   }
 
-  void Engine::handleOutputFailure(const QString &message) {
-    if (audio_output_failed) {
+  void Engine::beginOutputRecovery(const QString &reason) {
+    if (current_url.isEmpty() || current_state == MediaPlayer::StoppedState) {
+      destroySink(); // nothing playing: no position worth parking
       return;
     }
-    audio_output_failed = true;
-    qCWarning(mpzGapless) << "audio output lost:" << message << "device" << active_device.id();
-    const bool resumable = current_state == MediaPlayer::PlayingState && !current_url.isEmpty() &&
-                           !QMediaDevices::defaultAudioOutput().isNull();
-    const qint64 ms = positionMs();
+    if (output_recovery_pending) {
+      if (!output_recovery_timer.isActive()) {
+        output_recovery_timer.start();
+      }
+      return;
+    }
+    output_recovery_pending = true;
+    const qint64 audible = audibleAbsFrame();
+    qCWarning(mpzGapless) << "audio output lost:" << reason << "device" << active_device.id()
+                          << "parking at frame" << audible << "read_cursor" << read_cursor_frame;
+    if (sink) {
+      sink->reset(); // stop() drains synchronously on Linux; drop the buffer first
+    }
     destroySink();
-    if (resumable) {
-      output_failure_ms = ms;
-      setState(MediaPlayer::PausedState); // Stopped makes the Controller clear the track
+    if (catchup_target_frame < 0) {
+      // re-feed what the dead sink buffered but never played; the floor guards a backend that
+      // zeroes processedUSecs on failure (feedSink never runs more than one buffer ahead)
+      const qint64 rate = sink_format.sampleRate();
+      const qint64 floor = rate > 0 ? read_cursor_frame - rate : read_cursor_frame;
+      read_cursor_frame = qBound(floor, audible, read_cursor_frame);
+    }
+    epoch_start_frame = read_cursor_frame;
+    stall_timer.invalidate(); // parked time must not count toward the stall watchdog
+    output_parked_since.start();
+    output_recovery_timer.start();
+  }
+
+  void Engine::tryRestoreOutput() {
+    if (!output_recovery_pending) {
       return;
     }
-    output_failure_ms = -1;
+    if (current_url.isEmpty() || current_state == MediaPlayer::StoppedState) {
+      cancelOutputRecovery();
+      return;
+    }
+    if (!sink_format.isValid()) {
+      return; // pipeline not up yet; setupPlayback brings the sink with it
+    }
+    updateEffectiveDevice();
+    preferred_device_missing = !output_device_id.isEmpty() && findPreferredDevice().isNull();
+    const QAudioDevice device = outputDevice();
+    if (!device.isNull()) {
+      if (!device.isFormatSupported(sink_format) &&
+          !sameFormat(nearestSupported(device, sink_format), sink_format)) {
+        const qint64 ms = positionMs();
+        const Track t = current_track;
+        const bool was_playing = current_state == MediaPlayer::PlayingState;
+        hardSwitchTo(t); // clears recovery; onFirstFormat picks a format the device supports
+        if (!t.isStream()) {
+          pending_seek_ms = ms;
+        }
+        if (was_playing) {
+          play();
+        }
+        return;
+      }
+      if (ensureSink()) {
+        feedSink();
+        return;
+      }
+    }
+    if (output_parked_since.elapsed() > kOutputGiveUpMs) {
+      abandonOutputRecovery(device.isNull() ? QStringLiteral("no audio output device available")
+                                            : QStringLiteral("cannot open audio output device"));
+    }
+  }
+
+  void Engine::cancelOutputRecovery() {
+    output_recovery_pending = false;
+    output_recovery_timer.stop();
+    output_parked_since.invalidate();
+  }
+
+  void Engine::abandonOutputRecovery(const QString &reason) {
+    cancelOutputRecovery();
+    qCWarning(mpzGapless) << "audio output recovery gave up:" << reason;
     advance_on_eof = false; // a dead output must not walk the playlist
     setState(MediaPlayer::StoppedState);
-    emit error(message);
+    emit error(reason);
   }
 
   void Engine::sinkEnsureStarted() {
     if (sink && sink->state() == QAudio::StoppedState) {
       sink_io = sink->start();
       if (!sink_io || sink->error() != QAudio::NoError) {
-        handleOutputFailure(QStringLiteral("cannot open audio output device"));
+        beginOutputRecovery(QStringLiteral("cannot restart audio output device"));
         return;
       }
       epoch_start_frame = read_cursor_frame;
@@ -371,29 +458,34 @@ namespace Playback::Gapless {
   }
 
   void Engine::play() {
-    audio_output_failed = false; // explicit play: allow another sink attempt
+    if (output_recovery_pending) {
+      synthetic_playing_on_play = false;
+      setState(MediaPlayer::PlayingState); // before the attempt: createSink must not suspend the new sink
+      tryRestoreOutput();                  // explicit user action: retry now instead of on the next tick
+      return;
+    }
     if (stream_mode && !sink) {
       setState(MediaPlayer::PlayingState); // optimistic while the ring fills; the sink comes up active
       return;
     }
-    if (!sink && sink_format.isValid()) {
-      createSink(); // output died earlier; rebuild rather than play silence
+    const bool synthetic = synthetic_playing_on_play;
+    synthetic_playing_on_play = false;
+    setState(MediaPlayer::PlayingState); // first: a sink failure below must arm recovery, not be dropped
+    if (!sink && sink_format.isValid() && !ensureSink()) {
+      return; // output died earlier; recovery is armed
     }
-    if (synthetic_playing_on_play) {
-      synthetic_playing_on_play = false;
+    if (synthetic) {
       if (sink && sink->state() == QAudio::SuspendedState) {
         sink->resume();
       }
-      setState(MediaPlayer::PlayingState);
       return;
     }
     if (sink && catchup_target_frame < 0) { // during seek catch-up the sink stays suspended; maybeFinishCatchUp resumes it at the target
       sinkEnsureStarted();
-      if (sink->state() == QAudio::SuspendedState) {
+      if (sink && sink->state() == QAudio::SuspendedState) {
         sink->resume();
       }
     }
-    setState(MediaPlayer::PlayingState);
   }
 
   void Engine::pause() {
@@ -414,7 +506,7 @@ namespace Playback::Gapless {
     synthetic_playing_on_play = false;
     boundary_adopt_uid = 0;
     pending_seek_ms = -1;
-    output_failure_ms = -1;
+    cancelOutputRecovery();
     if (sink) {
       sink->reset();
       sink->stop();
@@ -745,7 +837,7 @@ namespace Playback::Gapless {
     }
     clearPreparedFlags();
     boundary_adopt_uid = current_track.uid();
-    createSink();
+    ensureSink();
     emit positionChanged(0);
     QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
   }
@@ -780,7 +872,6 @@ namespace Playback::Gapless {
 
   void Engine::setOutputDevice(QByteArray id) {
     output_device_id = id;
-    audio_output_failed = false;
     preferred_device_missing = false;
     ++device_change_epoch; // invalidate a pending debounced evaluation
     QAudioDevice target = findPreferredDevice();
@@ -816,7 +907,6 @@ namespace Playback::Gapless {
 
   void Engine::evaluateAudioDevice() {
     ++device_change_epoch;
-    audio_output_failed = false; // device topology changed: the output may be back
     updateEffectiveDevice();
     const QAudioDevice preferred = findPreferredDevice();
     QAudioDevice target;
@@ -843,23 +933,19 @@ namespace Playback::Gapless {
   }
 
   void Engine::switchSink(const QAudioDevice &device) {
+    if (output_recovery_pending) {
+      tryRestoreOutput(); // a topology change is the fastest restore signal there is
+      return;
+    }
     if (device.isNull()) {
-      if (sink || output_failure_ms >= 0) {
-        output_failure_ms = -1;
-        handleOutputFailure(QStringLiteral("no audio output device available"));
-      }
       active_device = device;
+      if (sink) {
+        beginOutputRecovery(QStringLiteral("no audio output device available"));
+      }
       return;
     }
     if (!sink) {
       active_device = device; // stopped/no track: createSink re-resolves on the next start
-      if (output_failure_ms >= 0) {
-        const qint64 ms = output_failure_ms;
-        const Track t = current_track;
-        hardSwitchTo(t);
-        pending_seek_ms = t.isStream() ? -1 : ms;
-        play();
-      }
       return;
     }
     if (device.id() == active_device.id()) {
@@ -882,8 +968,9 @@ namespace Playback::Gapless {
         return;
       }
     }
-    createSink(); // rebuild on the new device; epoch re-anchored to the captured frame
-    feedSink();
+    if (ensureSink()) { // rebuild on the new device; epoch re-anchored to the captured frame
+      feedSink();
+    }
   }
 
   void Engine::onPumpTick() {
@@ -891,6 +978,14 @@ namespace Playback::Gapless {
       maybeFinishCatchUp();
     }
     protectCache();
+    if (output_recovery_pending) {
+      applyBackPressure(); // PcmCache::append has no cap of its own: keep the decoder in check
+      return;
+    }
+    if (sink && sink->state() == QAudio::StoppedState && sink->error() == QAudio::IOError) {
+      beginOutputRecovery(QStringLiteral("audio output device failed")); // backends that never deliver stateChanged
+      return;
+    }
     feedSink();
     applyBackPressure();
     maybeEmitAboutToFinish();
@@ -1146,7 +1241,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::checkEof() {
-    if (!decoder_finished || eof_done) {
+    if (!decoder_finished || eof_done || output_recovery_pending) {
       return;
     }
     if (current_segment + 1 < timeline.segmentCount()) {
@@ -1318,7 +1413,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::onStreamStopped() {
-    if (!sink) {
+    if (!sink && !output_recovery_pending) {
       // died before any audio (connect failure / instant end): match QMediaPlayer,
       // which advances to the next item (or stops when there is none)
       teardownStream();

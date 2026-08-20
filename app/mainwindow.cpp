@@ -8,7 +8,6 @@
 #include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
 #include "mpzapplication.h"
-#include "replaygain/scanworker.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -29,6 +28,7 @@
 #include "settings_ui/settingsdialog.h"
 #ifdef ENABLE_GAPLESS
   #include "equalizer_ui/equalizerdialog.h"
+  #include "replaygain/scanworker.h"
   #include "replaygain_ui/replaygaindialog.h"
   #include "playlist/loader.h"
   #include <QtConcurrent>

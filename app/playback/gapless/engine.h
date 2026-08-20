@@ -87,9 +87,13 @@ namespace Playback::Gapless {
     void clearPreparedFlags();
 
     void setupPlayback(const QAudioFormat &format);
-    void createSink();
+    bool createSink();
+    bool ensureSink();
     void destroySink();
-    void handleOutputFailure(const QString &message);
+    void beginOutputRecovery(const QString &reason);
+    void tryRestoreOutput();
+    void cancelOutputRecovery();
+    void abandonOutputRecovery(const QString &reason);
     void sinkEnsureStarted();
     void feedSink();
     void applyEq(char *data, qint64 frames);
@@ -146,7 +150,6 @@ namespace Playback::Gapless {
     qint64 epoch_start_frame = 0; // abs frame the sink clock is anchored to; re-set on every sink (re)start
     qint64 catchup_target_frame = -1;
     qint64 pending_seek_ms = -1; // applied once the pipeline is up after a forced format/device rebuild
-    qint64 output_failure_ms = -1; // -1 = not waiting for an output device to come back
     quint64 boundary_adopt_uid = 0; // uid the next setTrack may adopt seamlessly; 0 = none
     qint64 decoder_total_frames = 0;
     qint64 prepared_begin_frame = 0;
@@ -159,7 +162,8 @@ namespace Playback::Gapless {
     QByteArray output_device_id;
     QByteArray effective_device_id;
     QAudioDevice active_device; // device the current sink is running on
-    bool audio_output_failed = false; // no automatic sink rebuild until a user action or a device change
+    bool output_recovery_pending = false; // output gone: parked sinkless at read_cursor_frame, retrying
+    quint64 sink_generation = 0; // invalidates queued stateChanged of replaced sinks; addresses get reused
     bool preferred_device_missing = false; // configured device absent; running on follow-default fallback
     int device_change_epoch = 0; // cancels stale queued device switches during event bursts
     Playback::MediaPlayer::State current_state = Playback::MediaPlayer::StoppedState;
@@ -180,6 +184,8 @@ namespace Playback::Gapless {
     bool stall_fallback_done = false;
     QTimer pump_timer;
     QTimer position_timer;
+    QTimer output_recovery_timer; // repeating; retries the sink while the output is missing
+    QElapsedTimer output_parked_since; // how long playback has been parked without a working sink
     QMediaDevices media_devices;
     QTimer devices_changed_debounce; // single-shot; coalesces audioOutputsChanged bursts
 

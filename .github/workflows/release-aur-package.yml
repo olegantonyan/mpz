@@ -27,11 +27,3 @@ jobs:
         PKGBUILD: ./.github/aur/PKGBUILD_Qt6.erb
         SRCINFO: ./.github/aur/SRCINFO_Qt6.erb
       run: ./.github/release-aur-github-action.rb
-
-    - name: Run release script (Qt5)
-      env:
-        AUR_SSH_PRIVATE_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-        PKGNAME: mpz-qt5
-        PKGBUILD: ./.github/aur/PKGBUILD_Qt5.erb
-        SRCINFO: ./.github/aur/SRCINFO_Qt5.erb
-      run: ./.github/release-aur-github-action.rb

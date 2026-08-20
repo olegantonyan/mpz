@@ -67,6 +67,10 @@ AboutDialog::AboutDialog(Config::Global &global_c, Config::Local &local_c, QWidg
   os << libraryInfo("QHotKey", "https://github.com/Skycoder42/QHotkey");
 #endif
   os << libraryInfo("yaml-cpp", "https://github.com/jbeder/yaml-cpp");
+#ifdef ENABLE_GAPLESS
+  os << libraryInfo("SQLite", "https://www.sqlite.org/");
+  os << libraryInfo("libebur128", "https://github.com/jiixyj/libebur128");
+#endif
   os << libraryInfo("Bootstrap Icons", "https://icons.getbootstrap.com/");
 #ifdef ENABLE_MPD_SUPPORT
   os << libraryInfo("libmpdclient", "https://github.com/MusicPlayerDaemon/libmpdclient");

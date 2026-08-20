@@ -1,4 +1,17 @@
-## [2.1.4] - next
+## [2.1.5] - next
+
+### Added
+
+- ReplayGain: optional dynamics compensation
+- Option to show playlist column headers
+
+### Fixed
+
+- Regression: playback continues on default device when current one disappeared
+
+### Misc
+
+## [2.1.4] - 2026-08-18
 
 ### Added
 

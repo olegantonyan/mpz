@@ -8,7 +8,7 @@
 #include "config/local.h"
 #include "config/storage.h"
 #include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#ifdef ENABLE_GAPLESS
   #include "replaygain/scanworker.h"
 #endif
 #ifdef ENABLE_MPD_SUPPORT
@@ -80,7 +80,7 @@ void load_locale(MpzApplication &a, const QString &conf_language) {
 }
 
 int main(int argc, char *argv[]) {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#ifdef ENABLE_GAPLESS
   // Ahead of the crash handler: a crash in a decode worker is a result the parent
   // reads, not an incident to report.
   if (ReplayGain::isScanWorkerInvocation(argc, argv)) {

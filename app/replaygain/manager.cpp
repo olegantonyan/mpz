@@ -112,6 +112,7 @@ namespace ReplayGain {
     settings_.preamp_db = global_conf.replayGainPreampDb();
     settings_.fallback_db = global_conf.replayGainFallbackDb();
     settings_.prevent_clipping = !global_conf.replayGainAllowClipping();
+    settings_.dynamics_pct = std::clamp(global_conf.replayGainDynamicsPct(), 0, 100);
     resolver_.setSettings(settings_);
   }
 
@@ -122,6 +123,7 @@ namespace ReplayGain {
     global_conf.saveReplayGainPreampDb(settings_.preamp_db);
     global_conf.saveReplayGainFallbackDb(settings_.fallback_db);
     global_conf.saveReplayGainAllowClipping(!settings_.prevent_clipping);
+    global_conf.saveReplayGainDynamicsPct(settings_.dynamics_pct);
   }
 
   void Manager::setSettings(const Settings &s) {

@@ -83,6 +83,7 @@ void TestReplayGainManager::defaultsAreOffAndSidecar() {
   QVERIFY(m.settings().prevent_clipping);
   QCOMPARE(m.settings().preamp_db, 0.0);
   QCOMPARE(m.settings().fallback_db, 0.0);
+  QCOMPARE(m.settings().dynamics_pct, 0);
 }
 
 void TestReplayGainManager::settingsRoundTripThroughConfig() {
@@ -92,6 +93,7 @@ void TestReplayGainManager::settingsRoundTripThroughConfig() {
   s.preamp_db = -3.5;
   s.fallback_db = 2.5;
   s.prevent_clipping = false;
+  s.dynamics_pct = 40;
 
   {
     Config::Global global;
@@ -107,6 +109,7 @@ void TestReplayGainManager::settingsRoundTripThroughConfig() {
   QCOMPARE(m.settings().preamp_db, -3.5);
   QCOMPARE(m.settings().fallback_db, 2.5);
   QVERIFY(!m.settings().prevent_clipping);
+  QCOMPARE(m.settings().dynamics_pct, 40);
 }
 
 void TestReplayGainManager::planGroupsByFolder() {

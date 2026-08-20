@@ -32,7 +32,8 @@ namespace PlaylistUi {
     proxy = new ProxyFilterModel(view->style(), columns_config, modus, this);
     view->setModel(proxy);
     view->setItemDelegate(new StreamRowDelegate(this));
-    view->horizontalHeader()->hide();
+    view->horizontalHeader()->setVisible(global_conf.showPlaylistHeaders());
+    view->horizontalHeader()->setSectionsClickable(false);
     view->verticalHeader()->hide();
     view->setSelectionBehavior(QAbstractItemView::SelectRows);
     view->setSelectionMode(QAbstractItemView::ExtendedSelection);

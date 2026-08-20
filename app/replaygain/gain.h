@@ -46,13 +46,35 @@ namespace ReplayGain {
     double preamp_db = 0.0;
     double fallback_db = 0.0;
     bool prevent_clipping = true;
+    int dynamics_pct = 0;
   };
 
   constexpr double kMinGainDb = -30.0;
   constexpr double kMaxGainDb = 12.0;
 
+  constexpr double kDynamicsReferencePlr = 13.0;
+  constexpr double kDynamicsSlope = 0.75;
+  constexpr double kMaxDynamicsDb = 6.0;
+
   inline double clampGainDb(double db) {
     return std::clamp(db, kMinGainDb, kMaxGainDb);
+  }
+
+  // Peak-to-loudness ratio: low means a dense, heavily limited master.
+  inline double plrDb(double gain_db, double peak) {
+    return 20.0 * std::log10(peak) + gain_db - kReferenceLufs;
+  }
+
+  inline double dynamicsCorrectionDb(double gain_db, double peak, int pct) {
+    if (pct <= 0 || peak <= 0.0) {
+      return 0.0;
+    }
+    const double plr = plrDb(gain_db, peak);
+    if (!std::isfinite(plr)) {
+      return 0.0;
+    }
+    const double corr = kDynamicsSlope * (pct / 100.0) * (kDynamicsReferencePlr - plr);
+    return std::clamp(corr, -kMaxDynamicsDb, kMaxDynamicsDb);
   }
 
   enum class Applied { Fallback, Track, Album };
@@ -88,9 +110,11 @@ namespace ReplayGain {
     double db = album ? g.album_db : g.track_db;
     const double peak = album ? g.album_peak : g.track_peak;
 
-    db += s.preamp_db;
+    const double dynamics = dynamicsCorrectionDb(db, peak, s.dynamics_pct);
+    db += s.preamp_db + dynamics;
     if (s.prevent_clipping && peak > 0.0) {
-      db = std::min(db, -20.0 * std::log10(peak));
+      // a dynamics trim has to survive the peak cap, a dynamics boost must not
+      db = std::min(db, -20.0 * std::log10(peak) + std::min(dynamics, 0.0));
     }
     return clampGainDb(db);
   }

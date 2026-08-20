@@ -1,7 +1,7 @@
 set(SQLITE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/sqlite-amalgamation-3530400)
 
 # only the library; shell.c ships in the upstream archive but is the CLI
-add_library(sqlite3 STATIC ${SQLITE_DIR}/sqlite3.c)
+add_library(sqlite3 STATIC EXCLUDE_FROM_ALL ${SQLITE_DIR}/sqlite3.c)
 
 target_include_directories(sqlite3 PUBLIC ${SQLITE_DIR})
 

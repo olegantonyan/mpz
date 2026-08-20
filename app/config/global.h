@@ -70,6 +70,9 @@ namespace Config {
     int playlistRowHeight() const;
     void savePlaylistRowHeight(int arg);
 
+    bool showPlaylistHeaders() const;
+    void saveShowPlaylistHeaders(bool arg);
+
     bool waveformDisabled() const;
     void saveWaveformDisabled(bool arg);
 
@@ -102,6 +105,9 @@ namespace Config {
 
     bool replayGainAllowClipping() const;
     void saveReplayGainAllowClipping(bool arg);
+
+    int replayGainDynamicsPct() const;
+    void saveReplayGainDynamicsPct(int arg);
 
     QMap<QString, QString> shortcuts() const;
     bool saveShortcuts(const QMap<QString, QString> &arg);
