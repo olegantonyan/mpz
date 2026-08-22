@@ -8,6 +8,7 @@
 ### Fixed
 
 - Regression: playback continues on default device when current one disappeared
+- Sorting: natural order for file and folder names, so track2 no longer follows track10
 
 ### Misc
 

@@ -4,6 +4,9 @@
 #include "track.h"
 
 #include <algorithm>
+#include <QStringList>
+#include <QTemporaryDir>
+#include <QDir>
 
 using Playlist::Sorter;
 
@@ -35,6 +38,14 @@ private slots:
   void discNumberOrderingIgnoresLocale();
   void discNumberUntaggedSortsFirst();
   void discNumberOutranksTrackNumberInDefault();
+  void filenameOrderingIsNatural();
+  void filenameOrderingHandlesZeroPadding();
+  void filenameOrderingHandlesEmbeddedNumbers();
+  void filenameOrderingIgnoresLocale();
+  void filenameOrderingIsStrictWeak();
+  void directoryOrderingIsNatural();
+  void directoryOrderingComparesPathComponents();
+  void directoryOrderingPutsParentBeforeChild();
   void sortVectorEndToEnd();
 };
 
@@ -193,6 +204,130 @@ void TestSorter::discNumberOutranksTrackNumberInDefault() {
   disc2_track1.setDiscNumber(QStringLiteral("2"));
   QVERIFY(s.condition(disc1_track9, disc2_track1));
   QVERIFY(!s.condition(disc2_track1, disc1_track9));
+}
+
+void TestSorter::filenameOrderingIsNatural() {
+  Sorter s(QStringLiteral("FILENAME"));
+  Track two = mk(QStringLiteral("/d/track2.flac"), {}, {}, {}, 0, 0);
+  Track ten = mk(QStringLiteral("/d/track10.flac"), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(two, ten));
+  QVERIFY(!s.condition(ten, two));
+}
+
+void TestSorter::filenameOrderingHandlesZeroPadding() {
+  Sorter s(QStringLiteral("FILENAME"));
+  QVector<Track> v;
+  v << mk(QStringLiteral("/d/10.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/01.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/2.mp3"), {}, {}, {}, 0, 0);
+  std::sort(v.begin(), v.end(), [&s](const Track &x, const Track &y) {
+    return s.condition(x, y);
+  });
+  QCOMPARE(v.at(0).filename(), QStringLiteral("01.mp3"));
+  QCOMPARE(v.at(1).filename(), QStringLiteral("2.mp3"));
+  QCOMPARE(v.at(2).filename(), QStringLiteral("10.mp3"));
+
+  Track seven = mk(QStringLiteral("/d/7.mp3"), {}, {}, {}, 0, 0);
+  Track padded = mk(QStringLiteral("/d/007.mp3"), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(seven, padded));
+  QVERIFY(!s.condition(padded, seven));
+}
+
+void TestSorter::filenameOrderingHandlesEmbeddedNumbers() {
+  Sorter s(QStringLiteral("FILENAME"));
+  Track cd1_02 = mk(QStringLiteral("/d/CD1 - 02 x.flac"), {}, {}, {}, 0, 0);
+  Track cd1_10 = mk(QStringLiteral("/d/CD1 - 10 x.flac"), {}, {}, {}, 0, 0);
+  Track cd2_02 = mk(QStringLiteral("/d/CD2 - 02 x.flac"), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(cd1_02, cd1_10));
+  QVERIFY(!s.condition(cd1_10, cd1_02));
+  QVERIFY(s.condition(cd1_10, cd2_02));
+  QVERIFY(!s.condition(cd2_02, cd1_10));
+}
+
+void TestSorter::filenameOrderingIgnoresLocale() {
+  const QLocale saved = QLocale();
+  QLocale::setDefault(QLocale::c());
+
+  Sorter s(QStringLiteral("FILENAME"));
+  Track two = mk(QStringLiteral("/d/2.mp3"), {}, {}, {}, 0, 0);
+  Track ten = mk(QStringLiteral("/d/10.mp3"), {}, {}, {}, 0, 0);
+  const bool ordered = s.condition(two, ten);
+
+  QLocale::setDefault(saved);
+  QVERIFY(ordered);
+}
+
+void TestSorter::filenameOrderingIsStrictWeak() {
+  Sorter s(QStringLiteral("FILENAME"));
+  QVector<Track> v;
+  v << mk(QStringLiteral("/d/1.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/01.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/2.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/10.mp3"), {}, {}, {}, 0, 0);
+  v << mk(QStringLiteral("/d/a.mp3"), {}, {}, {}, 0, 0);
+
+  const auto condition = [&s](const Track &x, const Track &y) {
+    return s.condition(x, y);
+  };
+  QVector<Track> forward = v;
+  std::sort(forward.begin(), forward.end(), condition);
+  QVector<Track> backward = v;
+  std::reverse(backward.begin(), backward.end());
+  std::sort(backward.begin(), backward.end(), condition);
+
+  QStringList forward_names;
+  QStringList backward_names;
+  for (const auto &i : std::as_const(forward)) {
+    forward_names << i.filename();
+  }
+  for (const auto &i : std::as_const(backward)) {
+    backward_names << i.filename();
+  }
+  QCOMPARE(forward_names, backward_names);
+}
+
+void TestSorter::directoryOrderingIsNatural() {
+  QTemporaryDir tmp;
+  QVERIFY(tmp.isValid());
+  QDir root(tmp.path());
+  QVERIFY(root.mkpath(QStringLiteral("Disc 2")));
+  QVERIFY(root.mkpath(QStringLiteral("Disc 10")));
+
+  Sorter s(QStringLiteral("DIRECTORY"));
+  Track two = mk(root.filePath(QStringLiteral("Disc 2/x.flac")), {}, {}, {}, 0, 0);
+  Track ten = mk(root.filePath(QStringLiteral("Disc 10/x.flac")), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(two, ten));
+  QVERIFY(!s.condition(ten, two));
+
+  Sorter desc(QStringLiteral("-DIRECTORY"));
+  QVERIFY(desc.condition(ten, two));
+}
+
+void TestSorter::directoryOrderingComparesPathComponents() {
+  QTemporaryDir tmp;
+  QVERIFY(tmp.isValid());
+  QDir root(tmp.path());
+  QVERIFY(root.mkpath(QStringLiteral("a/b")));
+  QVERIFY(root.mkpath(QStringLiteral("a-c/d")));
+
+  Sorter s(QStringLiteral("DIRECTORY"));
+  Track nested = mk(root.filePath(QStringLiteral("a/b/x.flac")), {}, {}, {}, 0, 0);
+  Track sibling = mk(root.filePath(QStringLiteral("a-c/d/x.flac")), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(nested, sibling));
+  QVERIFY(!s.condition(sibling, nested));
+}
+
+void TestSorter::directoryOrderingPutsParentBeforeChild() {
+  QTemporaryDir tmp;
+  QVERIFY(tmp.isValid());
+  QDir root(tmp.path());
+  QVERIFY(root.mkpath(QStringLiteral("album/bonus")));
+
+  Sorter s(QStringLiteral("DIRECTORY"));
+  Track parent = mk(root.filePath(QStringLiteral("album/x.flac")), {}, {}, {}, 0, 0);
+  Track child = mk(root.filePath(QStringLiteral("album/bonus/x.flac")), {}, {}, {}, 0, 0);
+  QVERIFY(s.condition(parent, child));
+  QVERIFY(!s.condition(child, parent));
 }
 
 void TestSorter::sortVectorEndToEnd() {

@@ -1,5 +1,7 @@
 #include "sorter.h"
 
+#include <QStringView>
+
 namespace Playlist {
   namespace {
     int leading_number(const QString &s) {
@@ -8,6 +10,79 @@ namespace Playlist {
         digits++;
       }
       return s.left(digits).toInt();
+    }
+
+    int natural_compare(const QString &a, const QString &b) {
+      int i = 0;
+      int j = 0;
+      while (i < a.size() && j < b.size()) {
+        if (a.at(i).isDigit() && b.at(j).isDigit()) {
+          const int a_start = i;
+          const int b_start = j;
+          while (i < a.size() && a.at(i).isDigit()) {
+            i++;
+          }
+          while (j < b.size() && b.at(j).isDigit()) {
+            j++;
+          }
+          int a_digits = a_start;
+          while (a_digits < i - 1 && a.at(a_digits) == QLatin1Char('0')) {
+            a_digits++;
+          }
+          int b_digits = b_start;
+          while (b_digits < j - 1 && b.at(b_digits) == QLatin1Char('0')) {
+            b_digits++;
+          }
+          const QStringView a_number = QStringView(a).mid(a_digits, i - a_digits);
+          const QStringView b_number = QStringView(b).mid(b_digits, j - b_digits);
+          if (a_number.size() != b_number.size()) {
+            return a_number.size() < b_number.size() ? -1 : 1;
+          }
+          const int digits_cmp = a_number.compare(b_number);
+          if (digits_cmp != 0) {
+            return digits_cmp;
+          }
+          if (a_digits - a_start != b_digits - b_start) {
+            return (a_digits - a_start) < (b_digits - b_start) ? -1 : 1;
+          }
+        } else {
+          const int a_start = i;
+          const int b_start = j;
+          while (i < a.size() && !a.at(i).isDigit()) {
+            i++;
+          }
+          while (j < b.size() && !b.at(j).isDigit()) {
+            j++;
+          }
+          const int text_cmp = QString::localeAwareCompare(a.mid(a_start, i - a_start), b.mid(b_start, j - b_start));
+          if (text_cmp != 0) {
+            return text_cmp;
+          }
+        }
+      }
+      if (i < a.size()) {
+        return 1;
+      }
+      if (j < b.size()) {
+        return -1;
+      }
+      return 0;
+    }
+
+    int path_compare(const QString &a, const QString &b) {
+      const QStringList a_parts = a.split(QLatin1Char('/'));
+      const QStringList b_parts = b.split(QLatin1Char('/'));
+      const int common = qMin(a_parts.size(), b_parts.size());
+      for (int i = 0; i < common; i++) {
+        const int cmp = natural_compare(a_parts.at(i), b_parts.at(i));
+        if (cmp != 0) {
+          return cmp;
+        }
+      }
+      if (a_parts.size() != b_parts.size()) {
+        return a_parts.size() < b_parts.size() ? -1 : 1;
+      }
+      return 0;
     }
   }
 
@@ -103,7 +178,7 @@ namespace Playlist {
   }
 
   int Sorter::compare_filename(const Track &t1, const Track &t2) const {
-    return -QString::localeAwareCompare(t1.filename(), t2.filename());
+    return -natural_compare(t1.filename(), t2.filename());
   }
 
   int Sorter::compare_title(const Track &t1, const Track &t2) const {
@@ -119,6 +194,6 @@ namespace Playlist {
   }
 
   int Sorter::compare_dir(const Track &t1, const Track &t2) const {
-    return -QString::localeAwareCompare(t1.dir(), t2.dir());
+    return -path_compare(t1.dir(), t2.dir());
   }
 }
