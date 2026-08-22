@@ -160,6 +160,7 @@ private:
   Playback::Mpd::PlaybackOrder *mpd_order = nullptr;
 #endif
   bool quitting = false;
+  bool autoplay_created_playlist = false;
 
   int streamBuffer();
   void setupUiSettings();

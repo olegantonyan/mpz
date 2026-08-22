@@ -22,6 +22,7 @@ namespace Playback {
     void unloadPlaylistView();
     void trackChangedQueryComplete(const Track &track);
     void prepareNext(const Track &track);
+    void noTrackToStart();
 
   public slots:
     void on_nextRequested();

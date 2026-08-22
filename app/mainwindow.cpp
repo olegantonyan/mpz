@@ -583,6 +583,18 @@ void MainWindow::setupPlaybackDispatch() {
   connect(dispatch, &Playback::Dispatch::unloadPlaylistView, playlist, &PlaylistUi::Controller::on_unload);
 
   connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
+
+  connect(dispatch, &Playback::Dispatch::noTrackToStart, this, [=]() {
+    autoplay_created_playlist = library->createPlaylistFromSelection();
+  });
+  connect(playlists, &PlaylistsUi::Controller::loaded, this, [=](const std::shared_ptr<Playlist::Playlist> pl) {
+    if (!autoplay_created_playlist) {
+      return;
+    }
+    autoplay_created_playlist = false;
+    // loaded() is emitted before selected(), so the track view has not switched to pl yet
+    QTimer::singleShot(0, this, [=]() { dispatch->on_startFromPlaylistRequested(pl); });
+  });
 }
 
 void MainWindow::setupStatusBar() {

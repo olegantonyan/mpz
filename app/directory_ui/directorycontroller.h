@@ -25,6 +25,8 @@ namespace DirectoryUi {
 
   public:
     explicit Controller(QTreeView *view, QLineEdit *search, QComboBox *_libswitch, QToolButton *libcfg, QToolButton *libsort, Config::Local &local_cfg, Config::Global &global_cfg, ModusOperandi &modus, QObject *parent = nullptr);
+    // Returns true when a playlist creation was actually requested.
+    bool createPlaylistFromSelection();
 
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
