@@ -8,6 +8,11 @@ message(STATUS "using vendored libmpdclient from ${LIBMPDCLIENT_DIR}")
 # Generate config.h
 include(CheckSymbolExists)
 include(CheckFunctionExists)
+# probe under the same feature-test macro config.h will define, otherwise
+# strndup/uselocale probe as missing and then get declared anyway
+if(NOT MSVC)
+  set(CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
+endif()
 if(WIN32)
   check_symbol_exists(getaddrinfo "ws2tcpip.h" HAVE_GETADDRINFO)
 else()
@@ -15,6 +20,7 @@ else()
 endif()
 check_symbol_exists(strndup "string.h" HAVE_STRNDUP)
 check_function_exists(uselocale HAVE_USELOCALE)
+unset(CMAKE_REQUIRED_DEFINITIONS)
 
 set(CONFIG_H_FILE ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated/config.h)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mpd/generated)
