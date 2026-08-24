@@ -92,6 +92,8 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: var(--link); text-decoration: none; }
 a:hover { color: var(--link-hover); text-decoration: underline; }
 
+pre { overflow-x: auto; }
+
 code {
   background: var(--code-bg);
   padding: 0.1em 0.35em;
@@ -174,7 +176,6 @@ code {
 .content p:last-child { margin-bottom: 0; }
 .content ul, .content ol { margin: 0 0 0.85em 1.5em; padding: 0; }
 .content li { margin-bottom: 0.25em; }
-.content table { margin-bottom: 1em; }
 .content.is-small { font-size: 0.9rem; }
 
 .has-text-centered { text-align: center; }
@@ -231,20 +232,6 @@ code {
   .motion-only { display: none; }
   .reduced-motion-only { display: block; }
 }
-
-/* Tables */
-.table {
-  border-collapse: collapse;
-  width: auto;
-}
-.table.is-fullwidth { width: 100%; }
-.table th, .table td {
-  border: 1px solid var(--border);
-  padding: 0.55em 0.75em;
-  text-align: left;
-  vertical-align: top;
-}
-.table th { background: var(--surface); font-weight: 600; }
 
 /* Footer */
 .footer {
@@ -359,7 +346,97 @@ details > summary { cursor: pointer; }
   html { scroll-behavior: smooth; }
 }
 
-/* Install table: highlight the visitor's OS row */
-.table tr.os-current th,
-.table tr.os-current td { background: var(--surface-2); }
-.table tr.os-current th { border-left: 3px solid var(--link); }
+/* Install picker: OS cards, then a channel tab per OS.
+   Without :has() every panel simply renders stacked with its own heading. */
+.install-os-tabs { gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.install-ch-tabs { gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.install-os-tabs, .install-ch-tabs { display: none; }
+
+.os-card, .ch-tab {
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  line-height: 1.2;
+}
+.os-card input, .ch-tab input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+}
+
+.os-card {
+  flex: 1 1 0;
+  min-width: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-color: var(--border);
+  background: var(--button-bg);
+  font-weight: 500;
+}
+.os-card svg { width: 28px; height: 28px; fill: currentColor; }
+.os-card:hover { background: var(--button-bg-hover); }
+.os-card:has(:checked) {
+  background: var(--surface-2);
+  border-color: var(--link);
+  box-shadow: inset 0 -2px 0 var(--link);
+}
+
+.ch-tab {
+  padding: 0.4em 0.8em;
+  color: var(--text-muted);
+}
+.ch-tab:hover { color: var(--text); }
+.ch-tab:has(:checked) {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+.ch-badge {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.os-card:has(:focus-visible), .ch-tab:has(:focus-visible) {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.install-note {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.install .install-source {
+  margin-top: 1.5rem;
+  color: var(--text-muted);
+}
+
+@supports selector(:has(*)) {
+  .install-os-tabs, .install-ch-tabs { display: flex; }
+  .install-os, .install-panel { display: none; }
+  .install-os-title, .install-panel-title { display: none; }
+
+  .install:has(.os-card input[value="linux"]:checked) .install-os[data-os="linux"],
+  .install:has(.os-card input[value="windows"]:checked) .install-os[data-os="windows"],
+  .install:has(.os-card input[value="macos"]:checked) .install-os[data-os="macos"] { display: block; }
+
+  .install-os:has(input[value="native"]:checked) .install-panel[data-ch="native"],
+  .install-os:has(input[value="flatpak"]:checked) .install-panel[data-ch="flatpak"],
+  .install-os:has(input[value="appimage"]:checked) .install-panel[data-ch="appimage"],
+  .install-os:has(input[value="aur"]:checked) .install-panel[data-ch="aur"],
+  .install-os:has(input[value="installer"]:checked) .install-panel[data-ch="installer"],
+  .install-os:has(input[value="portable"]:checked) .install-panel[data-ch="portable"] { display: block; }
+}
+
+@media (max-width: 768px) {
+  .os-card { padding: 0.7rem 0.4rem; min-width: 0; font-size: 0.9rem; }
+  .os-card svg { width: 24px; height: 24px; }
+}
