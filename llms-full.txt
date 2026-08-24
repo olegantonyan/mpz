@@ -1,6 +1,6 @@
 # mpz
 
-> A folder player for large local music collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), ReplayGain volume normalization, internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, lyrics (embedded, .lrc/.txt sidecar, or online), tag editor (since 2.0.8), waveform seekbar, dynamic range meter in the foobar2000 DR format, editable keyboard shortcuts, OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS and Windows.
+> A folder player for large local music collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback (2.1.0), equalizer with 10-band and parametric modes (2.1.0), ReplayGain volume normalization, internet radio from m3u/m3u8/pls stream playlists plus a radio library (2.1.0), CUE sheets, cover art and lyrics (embedded, sidecar files, or opt-in online sources), tag editor (since 2.0.8), waveform seekbar, dynamic range meter in the foobar2000 DR format, editable keyboard shortcuts, OS media integration (MPRIS on Linux, SMTC on Windows, Now Playing on macOS), and an experimental mpd client mode. Free and open source under GPL-3.0. Runs on Linux, macOS and Windows.
 
 This is the self-contained, full-content version of <https://mpz-player.org/llms.txt>. The shorter `llms.txt` lists outbound links; this file inlines the same information, so a single fetch answers common questions about mpz.
 
@@ -19,11 +19,11 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels
 - Gapless playback. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant (Qt 6, 2.1.0)
 - Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (Qt 6, runs on the gapless engine, 2.1.0)
-- ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, clipping prevention
+- ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, clipping prevention (Qt 6)
 - Output device switch, showing the selected device name (Qt 6)
 - Internet radio: radio library with built-in stations, HTTPS, radio row view, IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists
 - CUE sheets, with gapless single-file albums
-- Dynamic range meter: per-track and album DR log for the selected tracks in the foobar2000 Dynamic Range Meter format, from the playlist context menu or the track info dialog (Qt 6)
+- Dynamic range meter: per-track and album DR log in the foobar2000 Dynamic Range Meter format, from the playlist context menu or the track info dialog (Qt 6)
 - Waveform in the seekbar, off by default in Settings → Interface
 - OS media integration: MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
 - Global media-key hotkeys and a keyboard shortcuts dialog where every shortcut is editable (global media keys are not rebindable)
@@ -31,7 +31,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - m3u, m3u8 and pls playlists, including radio streams: play directly or import into the radio library
 - Playback order per playlist and global: sequential, random, or no-loop
 - Track sorting presets
-- Cover art (from tags or folder images) and lyrics from embedded tags, `.lrc`/`.txt` sidecar files, or online from LRCLIB (NetEase, QQ Music and Lyrics.ovh available too), shown in the Track Info dialog or in dockable panels that follow the playing track
+- Cover art from tags or folder images, and lyrics from embedded tags or `.lrc`/`.txt` sidecar files. Both can also come from online sources, opt-in and off by default: covers from Deezer, Apple Music or Cover Art Archive, lyrics from LRCLIB, NetEase, QQ Music or Lyrics.ovh, enabled in Settings → Online lyrics & covers. Shown in the Track Info dialog or in dockable panels that follow the playing track
 - Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE), with a built-in tag editor since version 2.0.8; album artist and disc number are separate tags, available as columns and sort keys
 - Common audio formats through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows): FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF), Shorten
 - Playback log of recently played tracks, useful for identifying tracks heard on internet radio
@@ -44,8 +44,8 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 
 ## Install
 
-- openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro: install from the omnipackage stable repositories (recommended) at <https://repositories.omnipackage.org/mpz/stable/install.html> (x86_64) or <https://repositories.omnipackage.org/mpz/stable-aarch64/install.html> (aarch64), or the unstable repositories with builds from master at <https://repositories.omnipackage.org/mpz/next/install.html> (x86_64) and <https://repositories.omnipackage.org/mpz/next-aarch64/install.html> (aarch64). Arch and Manjaro are x86_64 only. These repositories hold a single package, mpz, so they cannot break anything else on the system. The Open Build Service repositories still exist and existing installations keep working, but both new and existing users are encouraged to switch to omnipackage.
-- Arch and Manjaro: covered by the omnipackage repositories above. An AUR package is also available at <https://aur.archlinux.org/packages/mpz/> if you prefer it over the binary repositories.
+- openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro: install from the omnipackage stable repositories (recommended) at <https://repositories.omnipackage.org/mpz/stable/install.html> (x86_64) or <https://repositories.omnipackage.org/mpz/stable-aarch64/install.html> (aarch64), or the unstable repositories with builds from master at <https://repositories.omnipackage.org/mpz/next/install.html> (x86_64) and <https://repositories.omnipackage.org/mpz/next-aarch64/install.html> (aarch64). Arch and Manjaro are x86_64 only. These repositories hold a single package, mpz, so they cannot break anything else on the system. Packages can also be downloaded directly, without adding a repository. The Open Build Service repositories still exist and existing installations keep working, but both new and existing users are encouraged to switch to omnipackage.
+- Arch and Manjaro: covered by the omnipackage repositories above. An AUR package is also available at <https://aur.archlinux.org/packages/mpz/>.
 - AppImage: Linux builds for x86_64 and aarch64 at <https://github.com/olegantonyan/mpz/releases>. Prefer the native repositories if your distro is supported.
 - Flatpak: on Flathub as `org.mpz_player.mpz` at <https://flathub.org/apps/org.mpz_player.mpz>. Install with `flatpak install flathub org.mpz_player.mpz`, or from the desktop's software centre. Works on any distribution. Prefer the native repositories if your distro is supported.
 - Windows: download the installer or portable binaries from <https://github.com/olegantonyan/mpz/releases>. Builds for x64 (recommended), native ARM64 (Windows on ARM) and legacy 32-bit. The build is not signed, so Windows blocks it on first launch: in Microsoft Defender SmartScreen click *More info*, then *Run anyway*, or right-click the file → Properties → tick Unblock → Apply. With Smart App Control on (clean Windows 11 installs only) there is nothing to click, so turn it off in Windows Security → App & browser control → Smart App Control, install, then turn it back on.
@@ -68,7 +68,7 @@ It runs inside the gapless engine, so gapless has to be enabled. Qt 6 only.
 
 Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are read as they are, and mpz can measure tracks itself: the current playlist, the selected tracks or the whole library, analysed in the background.
 
-Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, and clipping prevention. The mode also switches from the status bar.
+Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, and clipping prevention. The mode also switches from the status bar. Qt 6 only.
 
 ## Internet radio
 
@@ -104,7 +104,7 @@ Also new in 2.1.0: HTTPS, a radio row view instead of the track view, and stream
 
 **Does mpz have an equalizer?** Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only.
 
-**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention.
+**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention. Qt 6 only.
 
 **Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
 
@@ -114,7 +114,9 @@ Also new in 2.1.0: HTTPS, a radio row view instead of the track view, and stream
 
 **Can mpz act as an mpd client?** Yes, as an experimental mode since version 2.0.0. You can add an mpd server as a library folder. See the mpd impedance mismatch note in the README for caveats.
 
-**Does mpz support lyrics?** Yes. Lyrics can be embedded in tags, loaded from `.lrc` or `.txt` sidecar files, or fetched online from LRCLIB (<https://lrclib.net>). They show up in the Track Info dialog or in a dockable Lyrics panel.
+**Does mpz support lyrics?** Yes. Lyrics can be embedded in tags, loaded from `.lrc` or `.txt` sidecar files, or fetched online from LRCLIB (<https://lrclib.net>), NetEase, QQ Music or Lyrics.ovh. Online lookup is opt-in: nothing is fetched until a provider is enabled in Settings → Online lyrics & covers. Lyrics show up in the Track Info dialog or in a dockable Lyrics panel.
+
+**Can mpz download missing cover art?** Yes, once it is turned on. Cover art comes from tags or folder images first, and when neither has one mpz can look it up online through Deezer, Apple Music or Cover Art Archive (<https://coverartarchive.org>). These sources are opt-in and off by default: enable and reorder them in Settings → Online lyrics & covers, where downloaded covers can also be cleared.
 
 **Can mpz edit tags?** Yes. Since version 2.0.8 there is a built-in tag editor for track metadata (title, artist, album and so on) on the formats TagLib supports: ID3v2, Vorbis Comment, MP4 and APE.
 

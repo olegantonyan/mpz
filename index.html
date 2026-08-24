@@ -108,7 +108,7 @@
                 "applicationSubCategory": "AudioPlayer",
                 "softwareRequirements": "Qt 6 (Qt 5 builds available for older Linux distributions)",
                 "description": "A folder player for large local collections. Plays music straight from your folder structure. Native C++/Qt, 3-column folder-based UI, gapless playback, equalizer, ReplayGain, internet radio, CUE sheets, lyrics, tag editing, MPRIS, mpd client mode.",
-                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player, flatpak music player, dynamic range meter, ReplayGain, volume normalization, loudness normalization",
+                "keywords": "folder player, folder music player, play music from folders, folder-based music player, foobar2000 alternative, FLAC player, local music player, CUE sheet player, MPRIS music player, gapless playback, gapless music player, equalizer, parametric equalizer, AutoEq presets, internet radio player, flatpak music player, dynamic range meter, ReplayGain, volume normalization, loudness normalization, cover art, album art, lyrics",
                 "url": "https://mpz-player.org/",
                 "sameAs": [
                     "https://github.com/olegantonyan/mpz",
@@ -133,11 +133,11 @@
                     "Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels",
                     "Gapless playback, with instant in-track seeking (Qt 6)",
                     "Equalizer: 10-band graphic and full parametric modes, AutoEq presets, on/off and preset per output device (Qt 6, runs on the gapless engine)",
-                    "ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results in a sidecar database or written as tags; track or album gain, preamp, clipping prevention",
+                    "ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results in a sidecar database or written as tags; track or album gain, preamp, clipping prevention (Qt 6)",
                     "Output device switch, showing the selected device name (Qt 6)",
                     "Internet radio: radio library with built-in stations, HTTPS and IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists",
                     "CUE sheets, with gapless playback of single-file albums",
-                    "Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format (Qt 6)",
+                    "Dynamic range meter: per-track and album DR log in the foobar2000 Dynamic Range Meter format (Qt 6)",
                     "Waveform in the seekbar, off by default",
                     "OS media integration: MPRIS on Linux, SMTC and taskbar on Windows, Now Playing and Dock on macOS, system tray",
                     "Global media-key hotkeys and a keyboard shortcuts dialog, every shortcut editable",
@@ -145,7 +145,7 @@
                     "m3u, m3u8 and pls playlists including radio streams: play directly or import into the radio library",
                     "Playback order per playlist and global: sequential, random, or no-loop",
                     "Track sorting presets",
-                    "Cover art (from tags or folder images) and lyrics from embedded tags, .lrc/.txt sidecar files, LRCLIB, NetEase, QQ Music or Lyrics.ovh, in the Track Info dialog or as dockable panels that follow the playing track",
+                    "Cover art from tags or folder images, and lyrics from embedded tags or .lrc/.txt sidecar files, both with opt-in online sources: Deezer, Apple Music or Cover Art Archive for covers, LRCLIB, NetEase, QQ Music or Lyrics.ovh for lyrics, in the Track Info dialog or as dockable panels that follow the playing track",
                     "Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE), album artist and disc number included",
                     "Common audio formats via system codecs: FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF), Shorten",
                     "Playback log of recently played tracks",
@@ -295,7 +295,7 @@
                         "name": "Does mpz support ReplayGain?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention."
+                            "text": "Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention. Qt 6 only."
                         }
                     },
                     {
@@ -335,7 +335,15 @@
                         "name": "Does mpz support lyrics?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB. They show up in the Track Info dialog or in a dockable Lyrics panel."
+                            "text": "Yes. Lyrics can be embedded in tags, loaded from .lrc or .txt sidecar files, or fetched online from LRCLIB, NetEase, QQ Music or Lyrics.ovh. Online lookup is opt-in: nothing is fetched until you enable a provider in Settings → Online lyrics & covers. Lyrics show up in the Track Info dialog or in a dockable Lyrics panel."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can mpz download missing cover art?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes, once you turn it on. Cover art comes from tags or folder images first, and when neither has one mpz can look it up online through Deezer, Apple Music or Cover Art Archive. These sources are opt-in and off by default: enable and reorder them in Settings → Online lyrics & covers, where downloaded covers can also be cleared."
                         }
                     },
                     {
@@ -370,14 +378,14 @@
                         "position": 1,
                         "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro",
                         "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
-                        "text": "Install from the omnipackage stable repositories (recommended): https://repositories.omnipackage.org/mpz/stable/install.html for x86_64, https://repositories.omnipackage.org/mpz/stable-aarch64/install.html for aarch64. Unstable builds from master: https://repositories.omnipackage.org/mpz/next/install.html and https://repositories.omnipackage.org/mpz/next-aarch64/install.html. Arch and Manjaro are x86_64 only."
+                        "text": "Install from the omnipackage stable repositories (recommended): https://repositories.omnipackage.org/mpz/stable/install.html for x86_64, https://repositories.omnipackage.org/mpz/stable-aarch64/install.html for aarch64. Unstable builds from master: https://repositories.omnipackage.org/mpz/next/install.html and https://repositories.omnipackage.org/mpz/next-aarch64/install.html. Arch and Manjaro are x86_64 only. Packages can also be downloaded directly, without adding a repository."
                     },
                     {
                         "@type": "HowToStep",
                         "position": 2,
                         "name": "Arch (AUR)",
                         "url": "https://aur.archlinux.org/packages/mpz/",
-                        "text": "An AUR package is also available if you prefer it over the binary repositories."
+                        "text": "An AUR package is also available."
                     },
                     {
                         "@type": "HowToStep",
@@ -952,7 +960,8 @@
                         library, analysed in the background. Results go either
                         into a sidecar database, leaving your audio files
                         untouched, or into tags written into the files. Track or
-                        album gain, with a preamp and clipping prevention.
+                        album gain, with a preamp and clipping prevention. Qt 6
+                        only.
                     </div>
 
                     <h2 id="radio" class="title">Internet radio</h2>
@@ -1010,20 +1019,28 @@
                             playback controls.
                         </p>
                         <p>
-                            Cover art (from tags or folder images) and lyrics,
-                            the latter embedded in tags, in
-                            <code>.lrc</code>/<code>.txt</code> sidecar files,
-                            or fetched online from
+                            Cover art from tags or folder images, and lyrics
+                            embedded in tags or in
+                            <code>.lrc</code>/<code>.txt</code> sidecar files.
+                            Both can also come from online sources, opt-in and
+                            off by default: nothing is fetched until you enable
+                            a provider in <em>Settings → Online lyrics &
+                            covers</em>. Covers come from Deezer, Apple
+                            Music or
+                            <a
+                                href="https://coverartarchive.org"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >Cover Art Archive</a
+                            >, lyrics from
                             <a
                                 href="https://lrclib.net"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 >LRCLIB</a
-                            >
-                            (NetEase, QQ Music and Lyrics.ovh available too).
-                            Both show in the Track Info dialog or in dockable
-                            panels that follow the playing track. Tags are read
-                            and written via
+                            >, NetEase, QQ Music or Lyrics.ovh. Both show in the
+                            Track Info dialog or in dockable panels that follow
+                            the playing track. Tags are read and written via
                             <a
                                 href="https://taglib.org/"
                                 target="_blank"
@@ -1042,9 +1059,9 @@
                         </p>
                         <p>
                             The dynamic range meter gives a per-track and album
-                            DR log for the selected tracks in the foobar2000
-                            Dynamic Range Meter format, from the playlist
-                            context menu or the track info dialog (Qt 6 only).
+                            DR log in the foobar2000 Dynamic Range Meter format,
+                            from the playlist context menu or the track info
+                            dialog (Qt 6 only).
                             The seekbar can show the track waveform (off by
                             default in <em>Settings → Interface</em>), and the
                             output device button shows the selected device name.
@@ -1253,7 +1270,9 @@
                                         These are the primary repositories going
                                         forward, and they hold a single package,
                                         mpz, so they can't break anything else
-                                        on your system.
+                                        on your system. Packages can also be
+                                        downloaded directly, without adding a
+                                        repository.
                                         <details style="margin-top: 0.75em">
                                             <summary>
                                                 Already using Open Build Service
@@ -1285,8 +1304,7 @@
                                 <tr data-os="linux">
                                     <th scope="row">Arch <small>(AUR)</small></th>
                                     <td>
-                                        An AUR package is also available if you
-                                        prefer it over the binary repositories:
+                                        An AUR package is also available:
                                         <a
                                             href="https://aur.archlinux.org/packages/mpz/"
                                             target="_blank"
@@ -1681,7 +1699,7 @@
                                 either in a sidecar database, which leaves the
                                 audio files untouched, or written into the
                                 files as tags. Track or album gain, with a
-                                preamp and clipping prevention.
+                                preamp and clipping prevention. Qt 6 only.
                             </p>
 
                             <p>
@@ -1737,8 +1755,31 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     >LRCLIB</a
-                                >. They show up in the Track Info dialog or in
-                                a dockable Lyrics panel.
+                                >, NetEase, QQ Music or Lyrics.ovh. Online
+                                lookup is opt-in: nothing is fetched until you
+                                enable a provider in <em>Settings → Online
+                                lyrics & covers</em>. Lyrics show up in the
+                                Track Info dialog or in a dockable Lyrics panel.
+                            </p>
+
+                            <p>
+                                <strong
+                                    >Can mpz download missing cover
+                                    art?</strong
+                                ><br />
+                                Yes, once you turn it on. Cover art comes from
+                                tags or folder images first, and when neither
+                                has one mpz can look it up online through
+                                Deezer, Apple Music or
+                                <a
+                                    href="https://coverartarchive.org"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Cover Art Archive</a
+                                >. These sources are opt-in and off by default:
+                                enable and reorder them in <em>Settings →
+                                Online lyrics & covers</em>, where
+                                downloaded covers can also be cleared.
                             </p>
 
                             <p>
