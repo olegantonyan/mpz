@@ -28,8 +28,8 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Internet radio in `m3u` and `pls` formats, as well as built-in radio library
 - CUE sheets, with gapless playback of single-file albums
 - Tag editor
-- Dynamic range meter: per-track and album DR log for the selected tracks, in the foobar2000 Dynamic Range Meter format
-- Cover art and lyrics in the track info dialog or as dockable panels that follow the playing track
+- Dynamic range meter: per-track and album DR log, in the foobar2000 Dynamic Range Meter format
+- Cover art and lyrics with opt-in online sources
 - Playback order per playlist and global: sequential, random, or no-loop
 - Track sorting presets
 - Global media-key hotkeys and a built-in keyboard shortcuts dialog
@@ -49,14 +49,14 @@ Decoding uses your OS codecs, so exact format support depends on what is install
 
 ## Installation
 
-#### openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
+#### Linux
 
-Install from the repositories:
+openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro native packages:
 
 - **Stable** (recommended): [x86_64](https://repositories.omnipackage.org/mpz/stable/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html)
 - **Next** (unstable builds from master): [x86_64](https://repositories.omnipackage.org/mpz/next/install.html) | [aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html)
 
-Arch and Manjaro are x86_64 only. These repos contain only one package - mpz - and bring no risk of breaking anything else on your system.
+Arch and Manjaro are x86_64 only. These repos contain only one package - mpz - and bring no risk of breaking anything else on your system, you can also download package directly without adding repository.
 
 <details>
 <summary>Already using Open Build Service repositories?</summary>
@@ -67,7 +67,7 @@ Arch and Manjaro are x86_64 only. These repos contain only one package - mpz - a
 
 ##### AUR
 
-An Arch AUR package is also available if you prefer it over binary repositories: https://aur.archlinux.org/packages/mpz/
+An Arch AUR package is also available: https://aur.archlinux.org/packages/mpz/
 
 ```
 git clone https://aur.archlinux.org/mpz.git
@@ -138,7 +138,7 @@ cmake --build build --parallel
 sudo cmake --install build
 ```
 
-You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, libebur128, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON` to cmake cli.
+You can also link against shared libraries Taglib, yaml-cpp, libmpdclient, QHotkey, libebur128, sqlite, or cpptrace installed on your OS instead of using vendored statically compiled versions. To do this add `-DUSE_SYSTEM_TAGLIB=ON -DUSE_SYSTEM_YAMLCPP=ON -DUSE_SYSTEM_LIBMPDCLIENT=ON -DUSE_SYSTEM_QHOTKEY=ON -DUSE_SYSTEM_CPPTRACE=ON -DUSE_SYSTEM_LIBEBUR128=ON -DUSE_SYSTEM_SQLITE3=ON` to cmake cli.
 
 Other options: 
 - `-DUSE_QT5=ON` builds Qt5 legacy version
@@ -152,16 +152,13 @@ Other options:
 
 Some features require Qt6:
 
-- gapless playback
-- equalizer
-- audio output switch
-- dynamic range meter
+- Gapless playback
+- Equalizer
+- Audio output switch
+- Dynamic range meter
+- ReplayGain
 
 This means win-legacy-qt5 won't have these. As well as old Linux distros. Qt5 support will be dropped at some point in future.
-
-OmniPackage repositories contain binaries with Qt6 for: openSUSE Tumbleweed & Leap 15.4+, Fedora 38+, Debian 12+, Ubuntu 22.04+, Alma/Rocky 10+, Mageia 9+, Arch/Manjaro.
-
-AppImage, macOS DMG, win-x86_64, win-arm64, Faltpak are all built with Qt6.
 
 ## Configuration
 
