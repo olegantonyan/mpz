@@ -16,13 +16,13 @@ mpz is a folder player: your folder structure is the library, with no global ind
 
 ## Install
 
-- [omnipackage stable repositories, x86_64](https://repositories.omnipackage.org/mpz/stable/install.html): Recommended Linux install for openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
-- [omnipackage stable repositories, aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html): Same distros, native ARM64 (Arch and Manjaro are x86_64 only)
-- [omnipackage unstable repositories, x86_64](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master
-- [omnipackage unstable repositories, aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html): Builds from master, native ARM64
+- [Stable native packages, x86_64](https://repositories.omnipackage.org/mpz/stable/install.html): Recommended Linux install for openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro
+- [Stable native packages, aarch64](https://repositories.omnipackage.org/mpz/stable-aarch64/install.html): Same distros, native ARM64
+- [Unstable native packages, x86_64](https://repositories.omnipackage.org/mpz/next/install.html): Builds from master
+- [Unstable native packages, aarch64](https://repositories.omnipackage.org/mpz/next-aarch64/install.html): Builds from master, native ARM64
 - [AUR](https://aur.archlinux.org/packages/mpz/): Arch Linux package
-- [AppImage](https://github.com/olegantonyan/mpz/releases): Linux builds for x86_64 and aarch64; prefer the native repositories if your distro is supported
-- [Flathub](https://flathub.org/apps/org.mpz_player.mpz): Flatpak build (`flatpak install flathub org.mpz_player.mpz`) for any distro; prefer the native repositories if your distro is supported
+- [AppImage](https://github.com/olegantonyan/mpz/releases): Linux builds for x86_64 and aarch64; prefer the native packages if your distro is supported
+- [Flathub](https://flathub.org/apps/org.mpz_player.mpz): Flatpak build (`flatpak install flathub org.mpz_player.mpz`) for any distro; prefer the native packages if your distro is supported
 - [GitHub releases](https://github.com/olegantonyan/mpz/releases): Windows installer and portable binaries (x64, native ARM64, legacy 32-bit); macOS .dmg (unsigned, see the README for the Gatekeeper workaround); tagged source archives
 
 ## Source and feedback

@@ -223,7 +223,7 @@
                         "name": "What platforms does mpz support?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Linux, macOS and Windows. On Linux, install from the omnipackage repositories (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) for x86_64 and aarch64, Arch and Manjaro x86_64 only, or from the AUR, Flathub (flatpak install flathub org.mpz_player.mpz) or an AppImage. On Windows, take a release from GitHub: 64-bit x64, native ARM64 (Windows on ARM) or legacy 32-bit. On macOS, take the .dmg from GitHub releases. That build is unsigned, so Gatekeeper blocks it on first launch: either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security. Building from source works on any platform with Qt and a C++ compiler."
+                            "text": "Linux, macOS and Windows. On Linux, install the native packages (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) for x86_64 and aarch64, or from the AUR, Flathub (flatpak install flathub org.mpz_player.mpz) or an AppImage. On Windows, take a release from GitHub: 64-bit x64, native ARM64 (Windows on ARM) or legacy 32-bit. On macOS, take the .dmg from GitHub releases. That build is unsigned, so Gatekeeper blocks it on first launch: either remove the quarantine flag with xattr -dr com.apple.quarantine \"/Applications/mpz music player.app\", or click Open Anyway under System Settings → Privacy & Security. Building from source works on any platform with Qt and a C++ compiler."
                         }
                     },
                     {
@@ -231,7 +231,7 @@
                         "name": "Is mpz available as a Flatpak?",
                         "acceptedAnswer": {
                             "@type": "Answer",
-                            "text": "Yes, on Flathub as org.mpz_player.mpz. Install it with flatpak install flathub org.mpz_player.mpz, or from your desktop's software centre. It works on any distribution, but prefer the native omnipackage repositories if your distro is supported."
+                            "text": "Yes, on Flathub as org.mpz_player.mpz. Install it with flatpak install flathub org.mpz_player.mpz, or from your desktop's software centre. It works on any distribution, but prefer the native packages if your distro is supported."
                         }
                     },
                     {
@@ -378,7 +378,7 @@
                         "position": 1,
                         "name": "openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro",
                         "url": "https://repositories.omnipackage.org/mpz/stable/install.html",
-                        "text": "Install from the omnipackage stable repositories (recommended): https://repositories.omnipackage.org/mpz/stable/install.html for x86_64, https://repositories.omnipackage.org/mpz/stable-aarch64/install.html for aarch64. Unstable builds from master: https://repositories.omnipackage.org/mpz/next/install.html and https://repositories.omnipackage.org/mpz/next-aarch64/install.html. Arch and Manjaro are x86_64 only. Packages can also be downloaded directly, without adding a repository."
+                        "text": "Install the native packages, stable (recommended): https://repositories.omnipackage.org/mpz/stable/install.html for x86_64, https://repositories.omnipackage.org/mpz/stable-aarch64/install.html for aarch64. Unstable builds from master: https://repositories.omnipackage.org/mpz/next/install.html and https://repositories.omnipackage.org/mpz/next-aarch64/install.html. Packages can also be downloaded directly, without adding a repository."
                     },
                     {
                         "@type": "HowToStep",
@@ -392,14 +392,14 @@
                         "position": 3,
                         "name": "AppImage",
                         "url": "https://github.com/olegantonyan/mpz/releases",
-                        "text": "AppImage builds for x86_64 and aarch64 are on the GitHub releases page. Prefer the native repositories above if your distro is supported."
+                        "text": "AppImage builds for x86_64 and aarch64 are on the GitHub releases page. Prefer the native packages above if your distro is supported."
                     },
                     {
                         "@type": "HowToStep",
                         "position": 4,
                         "name": "Flatpak (Flathub)",
                         "url": "https://flathub.org/apps/org.mpz_player.mpz",
-                        "text": "Install from Flathub: flatpak install flathub org.mpz_player.mpz, or find mpz in your desktop's software centre. Works on any distribution, but prefer the native repositories above if your distro is supported."
+                        "text": "Install from Flathub: flatpak install flathub org.mpz_player.mpz, or find mpz in your desktop's software centre. Works on any distribution, but prefer the native packages above if your distro is supported."
                     },
                     {
                         "@type": "HowToStep",
@@ -699,7 +699,7 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/stable/badge.svg"
-                            alt="omnipackage stable repositories (x86_64)"
+                            alt="Stable native packages (x86_64)"
                             height="20"
                     /></a>
                     <a
@@ -708,7 +708,7 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/stable-aarch64/badge.svg"
-                            alt="omnipackage stable repositories (aarch64)"
+                            alt="Stable native packages (aarch64)"
                             height="20"
                     /></a>
                     <a
@@ -717,7 +717,7 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/next/badge.svg"
-                            alt="omnipackage unstable repositories (x86_64)"
+                            alt="Unstable native packages (x86_64)"
                             height="20"
                     /></a>
                     <a
@@ -726,7 +726,7 @@
                         rel="noopener noreferrer"
                         ><img
                             src="https://repositories.omnipackage.org/mpz/next-aarch64/badge.svg"
-                            alt="omnipackage unstable repositories (aarch64)"
+                            alt="Unstable native packages (aarch64)"
                             height="20"
                     /></a>
                     <a
@@ -1228,8 +1228,8 @@
                                         Manjaro
                                     </th>
                                     <td>
-                                        Install from the omnipackage
-                                        repositories, for x86_64 and aarch64:
+                                        Native packages for x86_64 and
+                                        aarch64:
                                         <ul style="margin-top: 0.5em">
                                             <li>
                                                 <strong>Stable</strong>
@@ -1266,13 +1266,10 @@
                                                 >
                                             </li>
                                         </ul>
-                                        Arch and Manjaro are x86_64 only.
-                                        These are the primary repositories going
-                                        forward, and they hold a single package,
-                                        mpz, so they can't break anything else
-                                        on your system. Packages can also be
-                                        downloaded directly, without adding a
-                                        repository.
+                                        The repository holds only mpz, so it
+                                        can't break anything else on your
+                                        system. Packages can also be downloaded
+                                        directly, without adding a repository.
                                         <details style="margin-top: 0.75em">
                                             <summary>
                                                 Already using Open Build Service
@@ -1290,8 +1287,9 @@
                                                 still exist, but existing users
                                                 are encouraged to switch, since
                                                 future packaging effort is
-                                                focused on omnipackage. The new
-                                                repositories are signed with
+                                                focused on the new packages.
+                                                The new repositories are signed
+                                                with
                                                 different GPG keys, so switching
                                                 means removing the old
                                                 repository and adding the new
@@ -1323,8 +1321,8 @@
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             >GitHub releases page</a
-                                        >. Prefer the native repositories above
-                                        if your distro is supported.
+                                        >. Prefer the native packages above if
+                                        your distro is supported.
                                     </td>
                                 </tr>
                                 <tr data-os="linux">
@@ -1339,7 +1337,7 @@
                                         >, or from your desktop's software
                                         centre:
                                         <pre><code>flatpak install flathub org.mpz_player.mpz</code></pre>
-                                        Prefer the native repositories above if
+                                        Prefer the native packages above if
                                         your distro is supported.
                                     </td>
                                 </tr>
@@ -1553,10 +1551,10 @@
                                 <strong>What platforms does mpz support?</strong
                                 ><br />
                                 Linux, macOS and Windows. On Linux, install
-                                from the omnipackage repositories (openSUSE,
+                                the native packages (openSUSE,
                                 Debian, Fedora, Ubuntu, RedHat, Mageia, Arch,
-                                Manjaro) for x86_64 and aarch64, Arch and
-                                Manjaro x86_64 only, or from the AUR, Flathub
+                                Manjaro) for x86_64 and aarch64, or from the
+                                AUR, Flathub
                                 (<code>flatpak install flathub org.mpz_player.mpz</code>)
                                 or an AppImage. On Windows, take a release from
                                 GitHub: 64-bit x64, native ARM64 (Windows on
@@ -1588,8 +1586,7 @@
                                 <code>flatpak install flathub org.mpz_player.mpz</code>,
                                 or from your desktop's software centre. It works
                                 on any distribution, but prefer the native
-                                omnipackage repositories if your distro is
-                                supported.
+                                packages if your distro is supported.
                             </p>
 
                             <p>
