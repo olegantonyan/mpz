@@ -4,6 +4,7 @@
 
 - ReplayGain: optional dynamics compensation
 - Option to show playlist column headers
+- Play button creates a playlist from the library selection when there is nothing to play
 
 ### Fixed
 

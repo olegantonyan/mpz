@@ -239,6 +239,32 @@ namespace DirectoryUi {
     }
   }
 
+  bool Controller::createPlaylistFromSelection() {
+    if (view->selectionModel() == nullptr) {
+      return false;
+    }
+    const auto selected = view->selectionModel()->selectedRows();
+    if (selected.isEmpty()) {
+      return false;
+    }
+
+    if (radioMode()) {
+      const auto tracks = model->tracksAt(selected);
+      if (tracks.isEmpty()) {
+        return false;
+      }
+      emit createNewPlaylistFromTracks(tracks, model->displayName(selected.first()));
+      return true;
+    }
+
+    QList<QDir> dirs;
+    for (const auto &i : selected) {
+      dirs << QDir(model->filePath(i));
+    }
+    on_createNewPlaylist(dirs);
+    return true;
+  }
+
   void Controller::on_createNewPlaylist(const QList<QDir> &filepaths) {
     QString libraryDir = "";
     if (local_conf.libraryPaths().size() > 0 && libswitch->currentIndex() < local_conf.libraryPaths().size()) {

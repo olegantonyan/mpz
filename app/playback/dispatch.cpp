@@ -247,10 +247,12 @@ namespace Playback {
   void Dispatch::on_startRequested() {
     quint64 selected_track_uid = player_state.selectedTrack();
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
-    if (selected_playlist != nullptr) {
-      Track t = selected_playlist->trackBy(selected_track_uid);
-      playTrack(t);
+    if (selected_playlist == nullptr) {
+      emit noTrackToStart();
+      return;
     }
+    Track t = selected_playlist->trackBy(selected_track_uid);
+    playTrack(t);
   }
 
   void Dispatch::on_started(const Track &t) {
