@@ -137,6 +137,7 @@ code {
   .section .container > .columns + .title,
   .section .container > .content + .title { margin-top: 2rem; }
   .container { padding-inline: 1rem; }
+  .features-list { columns: 1; }
 }
 
 /* Hero */
@@ -149,6 +150,8 @@ code {
 .hero.is-small .hero-body { padding: 1.5rem 1.5rem; }
 .hero .title, .hero .subtitle { color: var(--hero-text); margin: 0; }
 .hero .subtitle { color: rgba(245, 245, 245, 0.85); font-weight: 400; }
+.hero-h1 { margin: 0; }
+.hero-h1 .title, .hero-h1 .subtitle { display: block; }
 
 /* Typography */
 .title {
@@ -177,6 +180,11 @@ code {
 .content ul, .content ol { margin: 0 0 0.85em 1.5em; padding: 0; }
 .content li { margin-bottom: 0.25em; }
 .content.is-small { font-size: 0.9rem; }
+.faq-q { font-size: 1rem; font-weight: 700; line-height: 1.4; margin: 1.4em 0 0.35em 0; color: var(--text); }
+.faq-q:first-child { margin-top: 0; }
+.features-list-title { font-size: 1rem; font-weight: 700; margin: 1.4em 0 0.5em 0; color: var(--text); }
+.features-list { columns: 2; column-gap: 2rem; }
+.features-list li { break-inside: avoid; }
 
 .has-text-centered { text-align: center; }
 .has-text-grey { color: var(--text-muted); }
