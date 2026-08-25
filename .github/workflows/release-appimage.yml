@@ -104,6 +104,9 @@ jobs:
           echo "PACKAGE_VERSION=$PV" >> "$GITHUB_ENV"
           echo "ARTIFACT_SUFFIX=-$PV" >> "$GITHUB_ENV"
 
+      - name: Enable delta updates
+        run: echo "MPZ_UPDATE_REPO=${{ github.repository }}" >> "$GITHUB_ENV"
+
       - name: Build AppImage
         env:
           MPZ_OUTPUT_DIR: ${{ github.workspace }}/dist
@@ -118,9 +121,18 @@ jobs:
           path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-${{ matrix.ld_arch }}.AppImage
           archive: false
 
+      # archive: false uploads a single file only, so the zsync needs its own step
+      - name: Upload zsync as workflow artifact (non-release builds)
+        if: env.RELEASE_TAG == ''
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/mpz-${{ steps.ver.outputs.version }}${{ env.ARTIFACT_SUFFIX }}-${{ matrix.ld_arch }}.AppImage.zsync
+          archive: false
+
       - name: Upload to GitHub release
         if: env.RELEASE_TAG != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "$RELEASE_TAG" "dist/mpz-${{ steps.ver.outputs.version }}-${{ matrix.ld_arch }}.AppImage" --repo "${{ github.repository }}" --clobber
+          appimage="dist/mpz-${{ steps.ver.outputs.version }}-${{ matrix.ld_arch }}.AppImage"
+          gh release upload "$RELEASE_TAG" "$appimage" "$appimage.zsync" --repo "${{ github.repository }}" --clobber

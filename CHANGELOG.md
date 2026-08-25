@@ -13,6 +13,8 @@
 
 ### Misc
 
+- AppImage: delta updates via zsync
+
 ## [2.1.4] - 2026-08-18
 
 ### Added

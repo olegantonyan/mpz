@@ -34,6 +34,11 @@ esac
 SUFFIX="${PACKAGE_VERSION:+-$PACKAGE_VERSION}"
 ARTIFACT_NAME=mpz-$VERSION$SUFFIX-$ARCH
 
+# appimagetool rejects an empty -u, so keep this unset for non-release builds.
+if [ -n "${MPZ_UPDATE_REPO:-}" ]; then
+    export LDAI_UPDATE_INFORMATION="gh-releases-zsync|${MPZ_UPDATE_REPO%%/*}|${MPZ_UPDATE_REPO#*/}|latest|mpz-*-$ARCH.AppImage.zsync"
+fi
+
 find_tool() {
     local candidate
     for candidate in "$1-$ARCH.AppImage" "$1-$ARCH.appimage" "$1"; do
@@ -110,8 +115,13 @@ LDAI_OUTPUT="$ARTIFACT_NAME.AppImage" "$LINUXDEPLOY" \
     --output appimage
 
 mkdir -p "$OUTPUT_DIR"
-rm -f "$OUTPUT_DIR/$ARTIFACT_NAME.AppImage"
+rm -f "$OUTPUT_DIR/$ARTIFACT_NAME.AppImage" "$OUTPUT_DIR/$ARTIFACT_NAME.AppImage.zsync"
 cp "$ARTIFACT_NAME.AppImage" "$OUTPUT_DIR/"
+if [ -n "${LDAI_UPDATE_INFORMATION:-}" ]; then
+    # appimagetool only warns when zsyncmake is missing, leaving update information pointing at nothing.
+    test -f "$ARTIFACT_NAME.AppImage.zsync" || { echo "ERROR: update information embedded but no .zsync produced" >&2; exit 1; }
+    cp "$ARTIFACT_NAME.AppImage.zsync" "$OUTPUT_DIR/"
+fi
 
 echo -e "version:\t$VERSION"
 echo -e "source dir:\t$SRC_DIR"
