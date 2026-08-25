@@ -15,7 +15,7 @@ namespace Playback::Gapless {
     // stream decode-ahead: keep only a small PCM runway so the decoder reads the ring
     // at playback rate and the Stream ring stays near threshold (like QMediaPlayer)
     constexpr qint64 kStreamRunwaySeconds = 1;
-    constexpr int kOutputRetryMs = 500;
+    constexpr int kOutputRetryMs = 2000;
     constexpr qint64 kOutputGiveUpMs = 10000;
     bool sameFormat(const QAudioFormat &a, const QAudioFormat &b) {
       return a.sampleRate() == b.sampleRate() && a.channelCount() == b.channelCount() &&
@@ -147,9 +147,6 @@ namespace Playback::Gapless {
     read_cursor_frame = 0;
     epoch_start_frame = 0;
     sink_format = QAudioFormat();
-    if (sink) {
-      sink->reset();
-    }
     destroySink();
     cache.clear();
     timeline.clear();
@@ -293,6 +290,7 @@ namespace Playback::Gapless {
   void Engine::destroySink() {
     ++sink_generation; // any queued stateChanged of the old sink is stale from here on
     if (sink) {
+      sink->reset(); // stop() defers the pipewire disconnect until the ringbuffer drains, which a dead device never does
       sink->stop();
       sink->deleteLater();
       sink = nullptr;
@@ -330,9 +328,6 @@ namespace Playback::Gapless {
     const qint64 audible = audibleAbsFrame();
     qCWarning(mpzGapless) << "audio output lost:" << reason << "device" << active_device.id()
                           << "parking at frame" << audible << "read_cursor" << read_cursor_frame;
-    if (sink) {
-      sink->reset(); // stop() drains synchronously on Linux; drop the buffer first
-    }
     destroySink();
     if (catchup_target_frame < 0) {
       // re-feed what the dead sink buffered but never played; the floor guards a backend that
@@ -361,6 +356,8 @@ namespace Playback::Gapless {
     updateEffectiveDevice();
     preferred_device_missing = !output_device_id.isEmpty() && findPreferredDevice().isNull();
     const QAudioDevice device = outputDevice();
+    qCDebug(mpzGapless) << "output recovery attempt after" << output_parked_since.elapsed()
+                        << "ms on" << device.id();
     if (!device.isNull()) {
       if (!device.isFormatSupported(sink_format) &&
           !sameFormat(nearestSupported(device, sink_format), sink_format)) {

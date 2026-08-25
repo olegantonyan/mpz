@@ -10,6 +10,7 @@
 
 - Regression: playback continues on default device when current one disappeared
 - Sorting: natural order for file and folder names
+- Fewer crashes in the PipeWire audio backend when an output device disappears
 
 ### Misc
 
