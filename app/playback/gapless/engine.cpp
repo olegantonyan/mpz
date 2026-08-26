@@ -201,6 +201,8 @@ namespace Playback::Gapless {
       }
       if (stream_mode) {
         stream_source->releaseRead(); // abort the old probe's blocked read so it can be discarded
+        decoder->stop();              // join the old demux thread: rearm() below would let it resume
+                                      // reading stream_source concurrently with the new decoder
         stream_source->rearm();       // re-open the live device for the new decoder
         newDecoder(); // fresh decoder: the aborted probe's decodeError is disconnected, not treated as stream death
         decoder->requestFormat(target);

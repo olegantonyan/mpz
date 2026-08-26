@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Fix a crash when a retired decoder was destroyed while still running
+
 ### Misc
 
 ## [2.1.5] - 2026-08-26

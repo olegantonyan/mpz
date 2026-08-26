@@ -13,6 +13,7 @@ namespace Playback::Gapless {
     Q_OBJECT
   public:
     explicit TrackDecoder(QObject *parent = nullptr);
+    ~TrackDecoder() override;
 
     void start(const QUrl &url);
     void start(const QUrl &key, QIODevice *device);
