@@ -134,6 +134,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupUiSettings();
 
   setupPlaybackDispatch();
+#ifdef ENABLE_MPD_SUPPORT
+  setupMpdOrder();
+#endif
   setupStatusBar();
   setupTrayIcon();
   setupOrderCombobox();
@@ -178,10 +181,6 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
     raise();
     activateWindow();
   });
-
-#ifdef ENABLE_MPD_SUPPORT
-  setupMpdOrder();
-#endif
 
 #if defined(ENABLE_UPDATE_CHECK)
   setupUpdateChecker();
@@ -328,7 +327,9 @@ void MainWindow::setupOrderCombobox() {
     }
 #endif
 #ifdef ENABLE_MPD_SUPPORT
-    mpd_order->onOrderChanged();
+    if (mpd_order != nullptr) {
+      mpd_order->onOrderChanged();
+    }
 #endif
   });
 #if defined(MPRIS_ENABLE)
@@ -363,7 +364,9 @@ void MainWindow::setupPerPlaylistOrderCombobox() {
       current_playlist->setRandom(static_cast<Playlist::Playlist::PlaylistRandom>(idx));
       playlists->on_playlistChanged(current_playlist);
 #ifdef ENABLE_MPD_SUPPORT
-      mpd_order->onOrderChanged();
+      if (mpd_order != nullptr) {
+        mpd_order->onOrderChanged();
+      }
 #endif
     }
   });
@@ -557,7 +560,9 @@ void MainWindow::setupPlaybackDispatch() {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
 #ifdef ENABLE_MPD_SUPPORT
-    mpd_order->onTrackSelected(track);
+    if (mpd_order != nullptr) {
+      mpd_order->onTrackSelected(track);
+    }
 #endif
   });
 
