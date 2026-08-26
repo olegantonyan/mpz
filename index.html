@@ -557,8 +557,8 @@
           <h2 id="library" class="title">A folder player: your directory tree is the music library</h2>
           <div class="content">
             <p>
-              If you organize your music in folders rather than letting an app index a "library", mpz is the folder player for you. A free, open-source, native C++/Qt 6 music player for large local
-              collections on Linux, macOS and Windows. No indexing step: just folders, and playlists you build from them by middle-clicking.
+              If you keep your music in folders instead of letting an app index a "library", mpz is the folder player for you: free, open-source, native C++/Qt 6, for large local collections on
+              Linux, macOS and Windows. No indexing step, just folders.
             </p>
             <p>The 3-column UI shows the directory tree, the list of playlists, and tracks from the selected playlist. Middle-click a folder and it becomes a playlist.</p>
           </div>
@@ -661,7 +661,7 @@
             <div class="column">
               <div class="content">
                 Built with C++ and Qt 6: lightweight, fast, cross-platform, open source (GPL-3.0). Uses the audio codecs installed on your system (GStreamer or ffmpeg through QtMultimedia on Linux)
-                and follows your desktop theme. The "z" in the name reflects a no-nonsense approach: no clutter, no distractions.
+                and follows your desktop theme. The "z" in the name stands for no clutter and no distractions.
               </div>
             </div>
           </div>
@@ -682,25 +682,23 @@
 
           <h2 id="replaygain" class="title">ReplayGain</h2>
           <div class="content">
-            Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are read as they are, and mpz can measure tracks itself: the current playlist, the
-            selection or the whole library, analysed in the background. Results go either into a sidecar database, leaving your audio files untouched, or into tags written into the files. Track or
-            album gain, with a preamp and clipping prevention. Qt 6 only.
+            Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are used as they are, and mpz can measure tracks itself: the current playlist,
+            the selection or the whole library, analysed in the background. Results go into a sidecar database, leaving your files untouched, or into tags in the files. Track or album gain, with
+            preamp and clipping prevention. Qt 6 only.
           </div>
 
           <h2 id="radio" class="title">Internet radio</h2>
           <div class="content">
-            Streams in <code>m3u</code>, <code>m3u8</code> and <code>pls</code> playlists play directly. There is also a dedicated Radio library with built-in stations from
-            <a href="https://somafm.com/" target="_blank" rel="noopener noreferrer">SomaFM</a>, Radio Paradise, FIP, France Musique and Nightride FM, plus your own. Stream playlists still play
-            directly, or import into the library. HTTPS, a radio row view, and stream titles from IceCast's <code>status-json.xsl</code> are supported. The playback log keeps the history of what
-            played.
+            Streams in <code>m3u</code>, <code>m3u8</code> and <code>pls</code> playlists play directly, or import them into the Radio library, which comes with stations from
+            <a href="https://somafm.com/" target="_blank" rel="noopener noreferrer">SomaFM</a>, Radio Paradise, FIP, France Musique and Nightride FM, plus your own. HTTPS, a radio row view and
+            stream titles from IceCast's <code>status-json.xsl</code> are supported. The playback log keeps the history of what played.
           </div>
 
           <h2 id="mpd" class="title">mpd client mode</h2>
           <div class="content">
             Supports
             <a href="https://musicpd.org/" target="_blank" rel="noopener noreferrer">mpd</a>
-            (Music Player Daemon). You can add an mpd server as a library folder, browsing and playing remote music as if it were local. This is an experimental feature, and there is an mpd impedance
-            mismatch, see more in the
+            (Music Player Daemon). You can add an mpd server as a library folder, browsing and playing remote music as if it were local. Experimental, with an mpd impedance mismatch, see the
             <a href="https://github.com/olegantonyan/mpz#mpd-impedance-mismatch" target="_blank" rel="noopener noreferrer">README</a>.
           </div>
 
@@ -709,28 +707,27 @@
             <p>
               OS media integration: MPRIS on Linux (remote control, e.g. via
               <a href="https://kdeconnect.kde.org/" target="_blank" rel="noopener noreferrer">KDE Connect</a>), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a
-              system tray with playback controls.
+              system tray.
             </p>
             <p>
-              Cover art from tags or folder images, and lyrics embedded in tags or in
-              <code>.lrc</code>/<code>.txt</code> sidecar files. Both can also come from online sources, opt-in and off by default: nothing is fetched until you enable a provider in
-              <em>Settings → Online lyrics &amp; covers</em>. Covers come from Deezer, Apple Music or
+              Cover art from tags or folder images, lyrics from tags or <code>.lrc</code>/<code>.txt</code> sidecars. Both can also come online, off until you enable a provider in
+              <em>Settings → Online lyrics &amp; covers</em>: covers from Deezer, Apple Music or
               <a href="https://coverartarchive.org" target="_blank" rel="noopener noreferrer">Cover Art Archive</a>, lyrics from
               <a href="https://lrclib.net" target="_blank" rel="noopener noreferrer">LRCLIB</a>, NetEase, QQ Music or Lyrics.ovh. Both show in the Track Info dialog or in dockable panels that follow
               the playing track. Tags are read and written via
               <a href="https://taglib.org/" target="_blank" rel="noopener noreferrer">TagLib</a>
               (ID3v2, Vorbis Comment, MP4, APE), editable in the built-in tag editor, album artist and disc number included, as columns and sort keys too. Audio formats go through your system's codecs
-              (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows): FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE,
-              WavPack, Musepack, TTA, MKA, DSD, Shorten.
+              (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends elsewhere): FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack,
+              Musepack, TTA, MKA, DSD, Shorten.
             </p>
             <p>
-              The dynamic range meter gives a per-track and album DR log in the foobar2000 Dynamic Range Meter format, from the playlist context menu or the track info dialog (Qt 6 only). The seekbar
-              can show the track waveform (off by default in <em>Settings → Interface</em>), and the output device button shows the selected device name.
+              The dynamic range meter logs per-track and album DR in the foobar2000 format, from the playlist context menu or the track info dialog (Qt 6 only). The seekbar can show the waveform (off
+              by default in <em>Settings → Interface</em>), and the output device button shows the current device.
             </p>
             <p>
-              Drag and drop files and folders from your file manager, reorder tracks within a playlist by dragging, and drag folders, radio stations and tracks between the three panels. Playback order
-              per playlist and global: sequential, random, or no-loop. Track sorting presets. Global media-key hotkeys and a keyboard shortcuts dialog where every shortcut is editable. Update check on
-              Windows, macOS and the Linux AppImage. UI in English, Russian, Japanese and Serbian.
+              Drag and drop files and folders from your file manager, reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels. Playback order per playlist and
+              global: sequential, random, or no-loop. Track sorting presets. Global media-key hotkeys and a shortcuts dialog where every shortcut is editable. Update check on Windows, macOS and the
+              Linux AppImage. UI in English, Russian, Japanese and Serbian.
             </p>
             <h3 class="features-list-title">Feature list</h3>
             <ul class="features-list">
@@ -1044,7 +1041,7 @@
                   <pre><code>xattr -dr com.apple.quarantine "/Applications/mpz music player.app"</code></pre>
                   <p>
                     <strong>System Settings:</strong> try to open <code>mpz music player.app</code> once and dismiss the warning, then go to <em>System Settings → Privacy &amp; Security</em>. Near the
-                    bottom you'll see a message that mpz was blocked, click <em>Open Anyway</em> and confirm. The app launches normally from then on.
+                    bottom you'll see a message that mpz was blocked. Click <em>Open Anyway</em> and confirm, and the app launches normally from then on.
                   </p>
                   <p>
                     See the
@@ -1055,7 +1052,7 @@
               </div>
 
               <p class="install-source">
-                Or build from source — follow the
+                Or build from source, see the
                 <a href="https://github.com/olegantonyan/mpz/" target="_blank" rel="noopener noreferrer">README</a>.
               </p>
             </div>
@@ -1063,9 +1060,9 @@
 
           <h2 id="philosophy" class="title">Not an attempt to clone Foobar2000</h2>
           <div class="content">
-            Inspired by Foobar2000 and especially its "Album list" feature, mpz isn't trying to be a cross-platform Foobar2000 clone. That's not feasible, and not the goal. Instead it has the features
-            I've been using for many years (quite literally the same unchanged Foobar2000 config since 2005 or so). If you're looking for a Foobar2000-style alternative on Linux, macOS or Windows, mpz
-            may be it, or it may not fit your taste. Either way I'd love to hear from you: use the built-in feedback form or
+            Inspired by Foobar2000, especially its "Album list", but not a cross-platform clone: that's not feasible, and not the goal. mpz has the features I've been using for many years (the same
+            unchanged Foobar2000 config since 2005 or so). If you're after a Foobar2000-style player on Linux, macOS or Windows, mpz may fit your taste, or it may not. Either way I'd love to hear
+            from you: use the built-in feedback form or
             <a href="https://github.com/olegantonyan/mpz/issues" target="_blank" rel="noopener noreferrer">GitHub issues</a>.
           </div>
 
@@ -1083,7 +1080,7 @@
             </p>
             <h3 class="faq-q">Is mpz a Foobar2000 alternative?</h3>
             <p>
-              Partly. mpz is inspired by Foobar2000, especially its "Album list", but it is not a clone: a faithful cross-platform clone is neither feasible nor the goal. It keeps the features the
+              Partly. mpz is inspired by Foobar2000, especially its "Album list", but it is not a clone: a faithful cross-platform one is neither feasible nor the goal. It keeps the features the
               author has used daily for years, in a native folder-based player for Linux, macOS and Windows, where Foobar2000 is Windows-only.
             </p>
             <h3 class="faq-q">Can mpz handle very large music collections?</h3>
