@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fix a crash when a retired decoder was destroyed while still running
+- Play button starts the selected playlist when no track is selected
 
 ### Misc
 

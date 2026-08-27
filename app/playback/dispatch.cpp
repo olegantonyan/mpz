@@ -248,7 +248,12 @@ namespace Playback {
     quint64 selected_track_uid = player_state.selectedTrack();
     auto selected_playlist = playlists->playlistByTrackUid(selected_track_uid);
     if (selected_playlist == nullptr) {
-      emit noTrackToStart();
+      auto current = playlists->currentPlaylist();
+      if (current == nullptr || current->tracks().isEmpty()) {
+        emit noTrackToStart();
+        return;
+      }
+      on_startFromPlaylistRequested(current);
       return;
     }
     Track t = selected_playlist->trackBy(selected_track_uid);
