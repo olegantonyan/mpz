@@ -118,7 +118,7 @@
               "Drag and drop from the file manager, and between the three panels",
               "Gapless playback, with instant seeking",
               "Equalizer: 10-band graphic and parametric, AutoEq presets, per output device",
-              "ReplayGain: reads or measures gain, stored in a sidecar database or in tags, with preamp and clipping prevention",
+              "ReplayGain: reads or measures gain, stored in a sidecar database or in tags, with preamp, dynamics compensation and clipping prevention",
               "Output device switch",
               "Internet radio: station library, HTTPS, IceCast stream titles",
               "CUE sheets, gapless on single-file albums",
@@ -265,7 +265,7 @@
                 "name": "Does mpz have an equalizer?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only."
+                  "text": "Yes. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device (\"Default\" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled."
                 }
               },
               {
@@ -273,7 +273,7 @@
                 "name": "Does mpz support ReplayGain?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention. Qt 6 only."
+                  "text": "Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp, optional dynamics compensation for heavily limited masters, and clipping prevention."
                 }
               },
               {
@@ -289,7 +289,7 @@
                 "name": "Does mpz measure dynamic range (DR)?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. Select tracks and pick \"Dynamic range\" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format. Qt 6 only."
+                  "text": "Yes. Select tracks and pick \"Dynamic range\" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format."
                 }
               },
               {
@@ -677,14 +677,14 @@
             10-band graphic and full parametric modes, importing presets from
             <a href="https://github.com/jaakkopasanen/AutoEq" target="_blank" rel="noopener noreferrer">AutoEq</a>, SquigLink and similar sources. On/off and preset are per output device ("Default"
             counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. Runs on the gapless engine, so gapless has
-            to be enabled. Qt 6 only.
+            to be enabled.
           </div>
 
           <h2 id="replaygain" class="title">ReplayGain</h2>
           <div class="content">
             Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are used as they are, and mpz can measure tracks itself: the current playlist,
             the selection or the whole library, analysed in the background. Results go into a sidecar database, leaving your files untouched, or into tags in the files. Track or album gain, with
-            preamp and clipping prevention. Qt 6 only.
+            preamp and clipping prevention. Optional dynamics compensation nudges loud, heavily limited masters back up, so metal and pop stop playing quieter than classical and jazz.
           </div>
 
           <h2 id="radio" class="title">Internet radio</h2>
@@ -721,7 +721,7 @@
               Musepack, TTA, MKA, DSD, Shorten.
             </p>
             <p>
-              The dynamic range meter logs per-track and album DR in the foobar2000 format, from the playlist context menu or the track info dialog (Qt 6 only). The seekbar can show the waveform (off
+              The dynamic range meter logs per-track and album DR in the foobar2000 format, from the playlist context menu or the track info dialog. The seekbar can show the waveform (off
               by default in <em>Settings → Interface</em>), and the output device button shows the current device.
             </p>
             <p>
@@ -737,7 +737,7 @@
               <li>Drag and drop from the file manager, and between the three panels</li>
               <li>Gapless playback, with instant seeking</li>
               <li>Equalizer: 10-band graphic and parametric, AutoEq presets, per output device</li>
-              <li>ReplayGain: reads or measures gain, stored in a sidecar database or in tags, with preamp and clipping prevention</li>
+              <li>ReplayGain: reads or measures gain, stored in a sidecar database or in tags, with preamp, dynamics compensation and clipping prevention</li>
               <li>Output device switch</li>
               <li>Internet radio: station library, HTTPS, IceCast stream titles</li>
               <li>CUE sheets, gapless on single-file albums</li>
@@ -940,7 +940,6 @@
                     <a href="https://flathub.org/apps/org.mpz_player.mpz" target="_blank" rel="noopener noreferrer">Flathub</a>, or from your desktop's software centre:
                   </p>
                   <pre><code>flatpak install flathub org.mpz_player.mpz</code></pre>
-                  <p>Works on any distribution.</p>
                 </div>
 
                 <div class="install-panel" data-ch="appimage" id="install-linux-appimage">
@@ -1121,19 +1120,18 @@
             <p>
               Yes. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the
               presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled.
-              Qt 6 only.
             </p>
             <h3 class="faq-q">Does mpz support ReplayGain?</h3>
             <p>
               Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in
-              a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention. Qt 6 only.
+              a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp, optional dynamics compensation for heavily limited masters, and clipping prevention.
             </p>
             <h3 class="faq-q">Does mpz support CUE sheets?</h3>
             <p>Yes, including gapless playback of single-file albums split by a CUE sheet.</p>
             <h3 class="faq-q">Does mpz measure dynamic range (DR)?</h3>
             <p>
               Yes. Select tracks and pick "Dynamic range" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter
-              format. Qt 6 only.
+              format.
             </p>
             <h3 class="faq-q">What languages is mpz available in?</h3>
             <p>The interface is translated into English, Russian, Japanese and Serbian, and follows your system language by default.</p>

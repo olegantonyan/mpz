@@ -18,12 +18,12 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Drag and drop files and folders from your file manager
 - Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels
 - Gapless playback. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant (Qt 6, 2.1.0)
-- Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (Qt 6, runs on the gapless engine, 2.1.0)
-- ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, clipping prevention (Qt 6)
-- Output device switch, showing the selected device name (Qt 6)
+- Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (runs on the gapless engine, 2.1.0)
+- ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, dynamics compensation, clipping prevention
+- Output device switch, showing the selected device name
 - Internet radio: radio library with built-in stations, HTTPS, radio row view, IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists
 - CUE sheets, with gapless single-file albums
-- Dynamic range meter: per-track and album DR log in the foobar2000 Dynamic Range Meter format, from the playlist context menu or the track info dialog (Qt 6)
+- Dynamic range meter: per-track and album DR log in the foobar2000 Dynamic Range Meter format, from the playlist context menu or the track info dialog
 - Waveform in the seekbar, off by default in Settings → Interface
 - OS media integration: MPRIS on Linux (remote control via e.g. KDE Connect), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, plus a system tray with playback controls
 - Global media-key hotkeys and a keyboard shortcuts dialog where every shortcut is editable (global media keys are not rebindable)
@@ -62,13 +62,13 @@ Added in 2.1.0. Two modes: 10-band graphic, and full parametric with control ove
 
 On/off and the selected preset are per output device ("Default" counts as one); the presets themselves are shared across devices. The EQ follows the device in use, so unplugging headphones switches it along with the audio.
 
-It runs inside the gapless engine, so gapless has to be enabled. Qt 6 only.
+It runs inside the gapless engine, so gapless has to be enabled.
 
 ## ReplayGain
 
 Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are read as they are, and mpz can measure tracks itself: the current playlist, the selected tracks or the whole library, analysed in the background.
 
-Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, and clipping prevention. The mode also switches from the status bar. Qt 6 only.
+Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, dynamics compensation, and clipping prevention. Dynamics compensation (0-100%) uses the measured peak-to-loudness ratio to raise loud, heavily limited masters, so metal and pop stop playing quieter than classical and jazz. The mode also switches from the status bar.
 
 ## Internet radio
 
@@ -102,13 +102,13 @@ Also new in 2.1.0: HTTPS, a radio row view instead of the track view, and stream
 
 **Does mpz support gapless playback?** Yes, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0.
 
-**Does mpz have an equalizer?** Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled. Qt 6 only.
+**Does mpz have an equalizer?** Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled.
 
-**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp and clipping prevention. Qt 6 only.
+**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp, optional dynamics compensation for heavily limited masters, and clipping prevention.
 
 **Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
 
-**Does mpz measure dynamic range (DR)?** Yes. Select tracks and pick "Dynamic range" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format. Qt 6 only.
+**Does mpz measure dynamic range (DR)?** Yes. Select tracks and pick "Dynamic range" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format.
 
 **What languages is mpz available in?** The interface is translated into English, Russian, Japanese and Serbian, and follows your system language by default.
 
