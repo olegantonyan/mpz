@@ -34,6 +34,8 @@ option(ENABLE_UPDATE_CHECK "Enable builtin update checker (checks GitHub for new
 
 option(BUILD_TESTING "Build unit tests" OFF)
 
+set(MPZ_LIB mpz_lib)
+
 option(USE_QT5 "Use Qt5, the default is Qt6" OFF)
 if (USE_QT5)
   find_package(Qt5 REQUIRED COMPONENTS ${QT_COMPONENTS})
@@ -90,7 +92,6 @@ set(PROJECT_SOURCES
   app/feedback_ui/feedbacksender.cpp
   app/crash_report/crashreport.cpp
   app/ipc/instance.cpp
-  app/main.cpp
   app/mainmenu.cpp
   app/mpzapplication.cpp
   app/mainwindow.cpp
@@ -251,7 +252,7 @@ if (WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/app/resources/icons/mpz.rc.in
     ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc
     @ONLY)
-  list(APPEND PROJECT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc)
+  list(APPEND MPZ_EXE_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/mpz.rc)
   list(APPEND PROJECT_SOURCES app/windows/windowstaskbar.cpp)
 endif()
 
@@ -284,52 +285,61 @@ if(QT_VERSION_MAJOR GREATER_EQUAL 6)
     app/dynamic_range/scanner.cpp
     app/dynamic_range_ui/dynamicrangedialog.cpp
     app/dynamic_range_ui/dynamicrangedialog.ui)
-
-  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_DEVICES_MENU ENABLE_DR_METER)
 else()
   message(STATUS "using Qt5")
-  add_executable(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCES})
 endif()
 
+# Everything but main() lives here so GUI tests can link the whole app.
+# OBJECT and not STATIC: a static archive drops the AUTORCC resource initializers
+# nothing references, which silently takes the icons and translations with them.
+add_library(${MPZ_LIB} OBJECT ${PROJECT_SOURCES})
+
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+  qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION app/main.cpp ${MPZ_EXE_SOURCES})
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_DEVICES_MENU ENABLE_DR_METER)
+else()
+  add_executable(${CMAKE_PROJECT_NAME} app/main.cpp ${MPZ_EXE_SOURCES})
+endif()
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MPZ_LIB})
+
 if (ENABLE_GAPLESS)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_GAPLESS)
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_GAPLESS)
 endif()
 
 foreach(_qt_comp IN LISTS QT_COMPONENTS)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::${_qt_comp})
+  target_link_libraries(${MPZ_LIB} PUBLIC Qt${QT_VERSION_MAJOR}::${_qt_comp})
 endforeach()
 
 if (WIN32)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shell32 ole32)
+  target_link_libraries(${MPZ_LIB} PUBLIC shell32 ole32)
 endif()
 
 if (WIN32 AND NOT MINGW)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE SMTC_ENABLE)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE runtimeobject) # C++/WinRT activation factory
+  target_compile_definitions(${MPZ_LIB} PUBLIC SMTC_ENABLE)
+  target_link_libraries(${MPZ_LIB} PUBLIC runtimeobject) # C++/WinRT activation factory
 endif()
 
 if (APPLE)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+  target_link_libraries(${MPZ_LIB} PUBLIC
     "-framework IOKit" "-framework MediaPlayer" "-framework AppKit" "-framework Foundation")
 endif()
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/app)
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(${MPZ_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app)
+target_include_directories(${MPZ_LIB} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
 
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE VERSION="${PROJECT_VERSION}")
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+target_compile_definitions(${MPZ_LIB} PUBLIC VERSION="${PROJECT_VERSION}")
+target_compile_definitions(${MPZ_LIB} PUBLIC
   DESKTOP_FILE_ID="${DESKTOP_FILE_ID}" ICON_NAME="${ICON_NAME}")
 if (ENABLE_DBUS)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_ENABLE)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPZ_ENABLE_DBUS)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE MPRIS_SERVICE_SUFFIX="${MPRIS_SERVICE_SUFFIX}")
+  target_compile_definitions(${MPZ_LIB} PUBLIC MPRIS_ENABLE)
+  target_compile_definitions(${MPZ_LIB} PUBLIC MPZ_ENABLE_DBUS)
+  target_compile_definitions(${MPZ_LIB} PUBLIC MPRIS_SERVICE_SUFFIX="${MPRIS_SERVICE_SUFFIX}")
 endif()
 if (ENABLE_MPD_SUPPORT)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_MPD_SUPPORT)
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_MPD_SUPPORT)
 endif()
 if (ENABLE_UPDATE_CHECK)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_UPDATE_CHECK)
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_UPDATE_CHECK)
 endif()
 
 set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER org.mpz-player.mpz)
@@ -354,7 +364,7 @@ if(APPLE)
 endif()
 
 if(PACKAGE_VERSION)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE PACKAGE_VERSION="${PACKAGE_VERSION}")
+  target_compile_definitions(${MPZ_LIB} PUBLIC PACKAGE_VERSION="${PACKAGE_VERSION}")
 endif()
 
 
@@ -378,16 +388,16 @@ if(USE_SYSTEM_YAMLCPP)
   find_package(yaml-cpp REQUIRED)
   message(STATUS "using system-wide yaml-cpp ${yaml-cpp_VERSION}")
   if(TARGET yaml-cpp::yaml-cpp)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp::yaml-cpp)
+    target_link_libraries(${MPZ_LIB} PUBLIC yaml-cpp::yaml-cpp)
   else()
     # yaml-cpp < 0.8 only exports the un-namespaced target
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp)
+    target_link_libraries(${MPZ_LIB} PUBLIC yaml-cpp)
   endif()
 else()
   set(YAMLCPP_DIR 3rdparty/yaml-cpp-0.9.0)
   message(STATUS "using vendored yaml-cpp from ${YAMLCPP_DIR}")
   add_subdirectory(${YAMLCPP_DIR} EXCLUDE_FROM_ALL)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE yaml-cpp::yaml-cpp)
+  target_link_libraries(${MPZ_LIB} PUBLIC yaml-cpp::yaml-cpp)
 endif()
 # ENDOF YAML-CPP
 
@@ -396,7 +406,7 @@ option(USE_SYSTEM_TAGLIB "Use Taglib provided by the OS" OFF)
 if (USE_SYSTEM_TAGLIB)
   find_package(TagLib 1.12 REQUIRED)
   message(STATUS "using system-wide taglib ${TagLib_VERSION}")
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TagLib::tag)
+  target_link_libraries(${MPZ_LIB} PUBLIC TagLib::tag)
 else()
   set(TAGLIB_DIR 3rdparty/taglib-2.3.1)
   message(STATUS "using vendored taglib from ${TAGLIB_DIR}")
@@ -438,7 +448,7 @@ else()
     $<BUILD_INTERFACE:${_taglib_root}/taglib/wavpack>
     $<BUILD_INTERFACE:${_taglib_root}/taglib/xm>
   )
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tag)
+  target_link_libraries(${MPZ_LIB} PUBLIC tag)
 endif()
 # ENDOF TAGLIB
 
@@ -485,7 +495,7 @@ else()
   endif()
 endif()
 if (ENABLE_GAPLESS)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ebur128)
+  target_link_libraries(${MPZ_LIB} PUBLIC ebur128)
 endif()
 # ENDOF LIBEBUR128
 
@@ -499,12 +509,12 @@ endif()
 option(ENABLE_QHOTKEY "Enable global media-key hotkeys via QHotkey" ${DEFAULT_ENABLE_QHOTKEY})
 if (ENABLE_QHOTKEY)
   message(STATUS "global hotkeys ON")
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_QHOTKEY)
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_QHOTKEY)
   option(USE_SYSTEM_QHOTKEY "Use QHotkey provided by the OS" OFF)
   if (USE_SYSTEM_QHOTKEY)
     find_library(QHOTKEY_LIB qhotkey REQUIRED)
     message(STATUS "using system-wide qhotkey")
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${QHOTKEY_LIB})
+    target_link_libraries(${MPZ_LIB} PUBLIC ${QHOTKEY_LIB})
   else()
     set(QHOTKEY_DIR 3rdparty/QHotkey-1.5.0)
     message(STATUS "using vendored qhotkey from ${QHOTKEY_DIR}")
@@ -512,7 +522,7 @@ if (ENABLE_QHOTKEY)
     set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
     add_subdirectory(${QHOTKEY_DIR} EXCLUDE_FROM_ALL)
     unset(CMAKE_POLICY_VERSION_MINIMUM)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qhotkey)
+    target_link_libraries(${MPZ_LIB} PUBLIC qhotkey)
   endif()
 else()
   message(STATUS "global hotkeys OFF")
@@ -525,10 +535,10 @@ if (ENABLE_MPD_SUPPORT)
   if (USE_SYSTEM_LIBMPDCLIENT)
     message(STATUS "using system-wide libmpdclient")
     find_library(MPDCLIENT_LIB mpdclient REQUIRED)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${MPDCLIENT_LIB})
+    target_link_libraries(${MPZ_LIB} PUBLIC ${MPDCLIENT_LIB})
   else()
     include(3rdparty/libmpdclient.cmake)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mpdclient)
+    target_link_libraries(${MPZ_LIB} PUBLIC mpdclient)
   endif()
 endif()
 # ENDOF LIBMPDCLIENT
@@ -550,7 +560,7 @@ else()
   include(3rdparty/sqlite3.cmake)
 endif()
 if (ENABLE_GAPLESS)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE sqlite3)
+  target_link_libraries(${MPZ_LIB} PUBLIC sqlite3)
 endif()
 # ENDOF SQLITE3
 
@@ -590,20 +600,20 @@ if(ENABLE_CRASH_HANDLER)
     endif()
     add_subdirectory(${CPPTRACE_DIR} EXCLUDE_FROM_ALL)
   endif()
-  target_sources(${CMAKE_PROJECT_NAME} PRIVATE app/crash_handler.cpp)
-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE cpptrace::cpptrace)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE ENABLE_CRASH_HANDLER)
+  target_sources(${MPZ_LIB} PRIVATE app/crash_handler.cpp)
+  target_link_libraries(${MPZ_LIB} PUBLIC cpptrace::cpptrace)
+  target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_CRASH_HANDLER)
   if(UNIX AND NOT APPLE)
     target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -rdynamic)
   elseif(WIN32 AND NOT MINGW)
     # Emit a PDB from the optimized Release build so dbghelp symbolizes at runtime.
     # /OPT:REF /OPT:ICF restore the folding /DEBUG disables; /O2 stays untouched.
-    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE $<$<CONFIG:Release>:/Zi>)
+    target_compile_options(${MPZ_LIB} PRIVATE $<$<CONFIG:Release>:/Zi>)
     target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
       $<$<CONFIG:Release>:/DEBUG>
       $<$<CONFIG:Release>:/OPT:REF>
       $<$<CONFIG:Release>:/OPT:ICF>)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE dbghelp)
+    target_link_libraries(${MPZ_LIB} PUBLIC dbghelp)
   endif()
 else()
   message(STATUS "crash handler OFF")

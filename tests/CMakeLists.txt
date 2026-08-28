@@ -27,6 +27,22 @@ endfunction()
 
 set(APP ${CMAKE_SOURCE_DIR}/app)
 
+# GUI tests drive the real widgets, so they link the whole app object library
+# rather than a hand-picked source list. Separate target and ctest label: they
+# cost a full app build and need a display, a session bus and an audio sink,
+# so the plain unit run neither builds nor executes them.
+add_custom_target(build_gui_tests)
+
+function(mpz_add_gui_test name)
+  add_executable(${name} ${ARGN})
+  target_link_libraries(${name} PRIVATE ${MPZ_LIB} Qt${QT_VERSION_MAJOR}::Test)
+  add_dependencies(build_gui_tests ${name})
+  add_test(NAME ${name} COMMAND ${name})
+  set_tests_properties(${name} PROPERTIES
+    LABELS gui
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endfunction()
+
 # Pure-logic, zero-fixture, zero-3rdparty
 mpz_add_test(tst_playerstate    tst_playerstate.cpp    ${APP}/playback/playerstate.cpp)
 mpz_add_test(tst_randomtrail    tst_randomtrail.cpp    ${APP}/playback/randomtrail.cpp)
@@ -353,3 +369,5 @@ mpz_add_test(tst_loader tst_loader.cpp
 target_link_libraries(tst_loader PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Gui
   Qt${QT_VERSION_MAJOR}::Concurrent tag yaml-cpp::yaml-cpp)
+
+mpz_add_gui_test(tst_mainwindow tst_mainwindow.cpp)
