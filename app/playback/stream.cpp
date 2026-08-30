@@ -43,6 +43,7 @@ namespace Playback {
       stop();
     }
     clear();
+    _stop_requested.store(false);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     _future = QtConcurrent::run(&Stream::thread, this);
@@ -80,6 +81,7 @@ namespace Playback {
   }
 
   void Stream::stop() {
+    _stop_requested.store(true);
     if (isRunning()) {
       emit stopping();
       _future.waitForFinished();
@@ -326,15 +328,21 @@ namespace Playback {
     const QUrl u = url();
     const bool secure = u.scheme() == "https";
     const quint16 port = static_cast<quint16>(u.port(secure ? 443 : 80));
-    if (secure) {
-      sock.connectToHostEncrypted(u.host(), port);
-    } else {
-      sock.connectToHost(u.host(), port);
+    // A stop() that raced ahead of the connections above emitted stopping()
+    // with nothing listening, so the flag is what tells us about it.
+    if (!_stop_requested.load()) {
+      if (secure) {
+        sock.connectToHostEncrypted(u.host(), port);
+      } else {
+        sock.connectToHost(u.host(), port);
+      }
+      sock.waitForConnected(5000); // cap the GUI-blocking window when tearing down mid-connect against a dead host
+      sock.write(buildRequest().toLatin1());
     }
-    sock.waitForConnected(5000); // cap the GUI-blocking window when tearing down mid-connect against a dead host
-    sock.write(buildRequest().toLatin1());
 
-    loop.exec();
+    if (!_stop_requested.load()) {
+      loop.exec();
+    }
     disconnect(conn_read);
     disconnect(conn_abort);
     disconnect(conn_quit);

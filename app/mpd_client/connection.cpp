@@ -1,11 +1,13 @@
 #include "connection.h"
 
 #include <QDebug>
-#include <QEventLoop>
 
+#include <algorithm>
+#include <functional>
 #include <vector>
 
 #define MPD_TIMEOUT 8000
+constexpr int MPD_DEFAULT_PORT = 6600;
 
 class TimerStarter {
 public:
@@ -41,11 +43,27 @@ namespace MpdClient {
   Connection::Connection() : QObject{nullptr} {
   }
 
-  QString Connection::lastError() const {
+  // Reads the error and clears it. libmpdclient keeps a failed command's error
+  // on the connection, and every later command on it fails until it is cleared.
+  QString Connection::takeError() {
     if (!conn) {
       return "";
     }
-    return QString::fromUtf8(mpd_connection_get_error_message(conn));
+    const QString msg = QString::fromUtf8(mpd_connection_get_error_message(conn));
+    mpd_connection_clear_error(conn);
+    return msg;
+  }
+
+  // mpd_response_finish leaves a server-side error set the same way.
+  bool Connection::finishResponse() {
+    if (!conn) {
+      return false;
+    }
+    if (!mpd_response_finish(conn)) {
+      qWarning() << "mpd:" << takeError();
+      return false;
+    }
+    return true;
   }
 
   void Connection::initConnTimer() {
@@ -69,7 +87,7 @@ namespace MpdClient {
     }
 
     if (!mpd_send_list_meta(conn, path.toUtf8().constData())) {
-      qWarning() << "mpd_send_list_all:" << lastError();
+      qWarning() << "mpd_send_list_all:" << takeError();
       return result;
     }
 
@@ -78,7 +96,7 @@ namespace MpdClient {
       result.append(Entity(entity));
       mpd_entity_free(entity);
     }
-    mpd_response_finish(conn);
+    finishResponse();
 
     return result;
   }
@@ -92,7 +110,7 @@ namespace MpdClient {
 
     mpd_status *status = mpd_run_status(conn);
     if (!status) {
-      qWarning() << "mpd_run_status: " << lastError();
+      qWarning() << "mpd_run_status: " << takeError();
       return result;
     }
 
@@ -108,7 +126,7 @@ namespace MpdClient {
     }
 
     if (!mpd_send_list_playlist_meta(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_send_list_playlist_meta:" << lastError();
+      qWarning() << "mpd_send_list_playlist_meta:" << takeError();
       return result;
     }
 
@@ -118,7 +136,7 @@ namespace MpdClient {
       mpd_song_free(song);
     }
 
-    mpd_response_finish(conn);
+    finishResponse();
 
     return result;
   }
@@ -131,8 +149,8 @@ namespace MpdClient {
 
     for (const auto &path : std::as_const(paths)) {
       if (!mpd_send_list_all_meta(conn, path.toUtf8().constData())) {
-        qWarning() << "mpd_send_list_all_meta: " << lastError();
-        mpd_response_finish(conn);
+        qWarning() << "mpd_send_list_all_meta: " << takeError();
+        finishResponse();
         return result;
       }
 
@@ -142,7 +160,7 @@ namespace MpdClient {
         mpd_song_free(song);
       }
 
-      mpd_response_finish(conn);
+      finishResponse();
     }
 
     return result;
@@ -154,25 +172,25 @@ namespace MpdClient {
     }
 
     if (!mpd_command_list_begin(conn, true)) {
-      qWarning() << "mpd_send_list_all_meta: " << lastError();
+      qWarning() << "mpd_send_list_all_meta: " << takeError();
       return false;
     }
 
     bool ok = true;
     for (const auto &path : std::as_const(paths)) {
       if (!mpd_send_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
-        qWarning() << "mpd_send_playlist_add: " << lastError();
+        qWarning() << "mpd_send_playlist_add: " << takeError();
         ok = false;
       }
     }
 
     if (!mpd_command_list_end(conn)) {
-      qWarning() << "mpd_send_playlist_add: " << lastError();
+      qWarning() << "mpd_send_playlist_add: " << takeError();
       ok = false;
     }
 
-    if (!mpd_response_finish(conn)) {
-      qWarning() << "mpd_send_playlist_add: " << lastError();
+    if (!finishResponse()) {
+      qWarning() << "mpd_send_playlist_add: " << takeError();
       ok = false;
     }
     return ok;
@@ -184,25 +202,29 @@ namespace MpdClient {
     }
 
     if (!mpd_command_list_begin(conn, true)) {
-      qWarning() << "mpd_command_list_begin:" << lastError();
-      mpd_response_finish(conn);
+      qWarning() << "mpd_command_list_begin:" << takeError();
+      finishResponse();
       return false;
     }
 
-    for (int i : indecies) {
+    // Each delete shifts everything after it down, so remove from the back.
+    QVector<int> ordered = indecies;
+    std::sort(ordered.begin(), ordered.end(), std::greater<int>());
+
+    for (int i : ordered) {
       if (!mpd_send_playlist_delete(conn, playlist_name.toUtf8().constData(), i)) {
-        qWarning() << "mpd_command_list_end:" << lastError();
-        mpd_response_finish(conn);
+        qWarning() << "mpd_command_list_end:" << takeError();
+        finishResponse();
         return false;
       }
     }
 
     if (!mpd_command_list_end(conn)) {
-      qWarning() << "mpd_command_list_end:" << lastError();
+      qWarning() << "mpd_command_list_end:" << takeError();
       return false;
     }
-    if (!mpd_response_finish(conn)) {
-      qWarning() << "mpd_response_finish:" << lastError();
+    if (!finishResponse()) {
+      qWarning() << "mpd_response_finish:" << takeError();
       return false;
     }
     return true;
@@ -215,7 +237,7 @@ namespace MpdClient {
     }
 
     if (!mpd_send_list_playlists(conn)) {
-      qWarning() << "mpd_send_list_playlists:" << lastError();
+      qWarning() << "mpd_send_list_playlists:" << takeError();
       return result;
     }
 
@@ -224,7 +246,7 @@ namespace MpdClient {
       result.append(Entity(pl));
       mpd_playlist_free(pl);
     }
-    mpd_response_finish(conn);
+    finishResponse();
 
     return result;
   }
@@ -235,7 +257,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_rm(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "error deleting mpd playlist:" << lastError();
+      qWarning() << "error deleting mpd playlist:" << takeError();
       return false;
     }
     return true;
@@ -247,33 +269,41 @@ namespace MpdClient {
     }
 
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_save: " << playlist_name << lastError();
-      return false;
+      // mpd 0.24 refuses to save over an existing playlist where 0.23 replaced
+      // it. The clear and add below are what actually fill the playlist, so an
+      // existing one is not an error here.
+      const bool exists = mpd_connection_get_error(conn) == MPD_ERROR_SERVER &&
+                          mpd_connection_get_server_error(conn) == MPD_SERVER_ERROR_EXIST;
+      if (!exists) {
+        qWarning() << "mpd_run_save: " << playlist_name << takeError();
+        return false;
+      }
+      mpd_connection_clear_error(conn);
     }
     if (!mpd_run_playlist_clear(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_playlist_clear: " << playlist_name << lastError();
+      qWarning() << "mpd_run_playlist_clear: " << playlist_name << takeError();
       return false;
     }
     for (const auto &path : std::as_const(song_paths)) {
       if (!mpd_run_playlist_add(conn, playlist_name.toUtf8().constData(), path.toUtf8().constData())) {
-        qWarning() << "mpd_run_playlist_add: " << path << lastError();
+        qWarning() << "mpd_run_playlist_add: " << path << takeError();
         return false;
       }
     }
 
     /*if (!mpd_run_clear(conn)) {
-      qWarning() << "mpd_run_clear: " << lastError();
+      qWarning() << "mpd_run_clear: " << takeError();
       return false;
     }
 
     for (const auto &path : std::as_const(song_paths)) {
       if (!mpd_run_add(conn, path.toUtf8().constData())) {
-        qWarning() << "mpd_run_add: " << lastError();
+        qWarning() << "mpd_run_add: " << takeError();
         return false;
       }
     }
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_save: " << lastError();
+      qWarning() << "mpd_run_save: " << takeError();
       return false;
     }*/
 
@@ -286,21 +316,21 @@ namespace MpdClient {
     }
 
     if (!mpd_run_clear(conn)) {
-      qWarning() << "mpd_run_clear:" << lastError();
+      qWarning() << "mpd_run_clear:" << takeError();
       return false;
     }
     if (!mpd_run_load(conn, playlist_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_load:" << lastError();
+      qWarning() << "mpd_run_load:" << takeError();
       return false;
     }
 
     if (!mpd_run_idle_mask(conn, MPD_IDLE_QUEUE)) {
-      qWarning() << "mpd_run_idle_mask:" << lastError();
+      qWarning() << "mpd_run_idle_mask:" << takeError();
       return false;
     }
 
     if (!mpd_run_play_pos(conn, position)) {
-      qWarning() << "mpd_run_play_pos:" << lastError();
+      qWarning() << "mpd_run_play_pos:" << takeError();
       return false;
     }
 
@@ -313,7 +343,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_pause(conn, true)) {
-      qWarning() << "mpd_run_pause:" << lastError();
+      qWarning() << "mpd_run_pause:" << takeError();
       return false;
     }
     return true;
@@ -325,7 +355,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_pause(conn, false)) {
-      qWarning() << "mpd_run_pause:" << lastError();
+      qWarning() << "mpd_run_pause:" << takeError();
       return false;
     }
     return true;
@@ -337,7 +367,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_stop(conn)) {
-      qWarning() << "mpd_run_stop:" << lastError();
+      qWarning() << "mpd_run_stop:" << takeError();
       return false;
     }
     return true;
@@ -349,7 +379,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_next(conn)) {
-      qWarning() << "mpd_run_next:" << lastError();
+      qWarning() << "mpd_run_next:" << takeError();
       return false;
     }
     return true;
@@ -361,7 +391,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_previous(conn)) {
-      qWarning() << "mpd_run_previous:" << lastError();
+      qWarning() << "mpd_run_previous:" << takeError();
       return false;
     }
     return true;
@@ -388,7 +418,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_set_volume(conn, volume)) {
-      qWarning() << "mpd_run_set_volume:" << lastError();
+      qWarning() << "mpd_run_set_volume:" << takeError();
       return false;
     }
     return true;
@@ -406,7 +436,7 @@ namespace MpdClient {
     int id = mpd_status_get_song_id(st);
     mpd_status_free(st);
     if (!mpd_run_seek_id(conn, id, pos)) {
-      qWarning() << "mpd_run_seek_id:" << lastError();
+      qWarning() << "mpd_run_seek_id:" << takeError();
       return false;
     }
     return true;
@@ -418,7 +448,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_repeat(conn, repeat)) {
-      qWarning() << "mpd_run_repeat:" << lastError();
+      qWarning() << "mpd_run_repeat:" << takeError();
       return false;
     }
     return true;
@@ -430,7 +460,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_random(conn, rand)) {
-      qWarning() << "mpd_run_random:" << lastError();
+      qWarning() << "mpd_run_random:" << takeError();
       return false;
     }
     return true;
@@ -443,7 +473,7 @@ namespace MpdClient {
     }
 
     if (!mpd_send_outputs(conn)) {
-      qWarning() << "mpd_send_outputs:" << lastError();
+      qWarning() << "mpd_send_outputs:" << takeError();
       return result;
     }
 
@@ -452,24 +482,8 @@ namespace MpdClient {
       result.append(Output(output));
       mpd_output_free(output);
     }
-    mpd_response_finish(conn);
+    finishResponse();
     return result;
-  }
-
-  bool Connection::changeOutputState(int outid, bool state) {
-    bool ok = false;
-    if (!conn) {
-      return ok;
-    }
-    if (state) {
-      ok = mpd_run_enable_output(conn, outid);
-    } else {
-      ok = mpd_run_disable_output(conn, outid);
-    }
-    if (!ok) {
-      qWarning() << "mpd_run_enable_output / mpd_run_disable_output:" << lastError();
-    }
-    return ok;
   }
 
   bool Connection::setPriority(int song_id, int prio) {
@@ -478,7 +492,7 @@ namespace MpdClient {
     }
 
     if (!mpd_run_prio_id(conn, prio, song_id)) {
-      qWarning() << "mpd_run_prio_pos:" << lastError();
+      qWarning() << "mpd_run_prio_pos:" << takeError();
       return false;
     }
     return true;
@@ -495,8 +509,9 @@ namespace MpdClient {
       mpd_status_free(status);
 
       if (queue_len > 0) {
-        if (!mpd_run_prio_range(conn, 0, 0, queue_len - 1)) {
-          qWarning() << "mpd_run_prio_range:" << lastError();
+        // The range end is exclusive, so queue_len - 1 would skip the last song.
+        if (!mpd_run_prio_range(conn, 0, 0, queue_len)) {
+          qWarning() << "mpd_run_prio_range:" << takeError();
           return false;
         }
       }
@@ -517,7 +532,7 @@ namespace MpdClient {
       result << Song(song);
       mpd_song_free(song);
     }
-    mpd_response_finish(conn);
+    finishResponse();
 
     return result;
   }
@@ -527,7 +542,7 @@ namespace MpdClient {
       return false;
     }
     if (!mpd_run_update(conn, nullptr)) {
-      qWarning() << "mpd_run_update:" << lastError();
+      qWarning() << "mpd_run_update:" << takeError();
       return false;
     }
     return true;
@@ -607,19 +622,11 @@ namespace MpdClient {
     }
 
     if (!mpd_run_rename(conn, old_name.toUtf8().constData(), new_name.toUtf8().constData())) {
-      qWarning() << "mpd_run_rename:" << lastError();
+      qWarning() << "mpd_run_rename:" << takeError();
       return false;
     }
 
     return true;
-  }
-
-  void Connection::waitConnected() {
-    if (!ping()) {
-      QEventLoop loop;
-      connect(this, &Connection::connected, &loop, &QEventLoop::quit);
-      loop.exec();
-    }
   }
 
   bool Connection::ping() {
@@ -639,12 +646,21 @@ namespace MpdClient {
       return false;
     }
 
+    const QUrl previous = current_connection_url;
+    const bool was_connected = conn != nullptr;
+    if (url != previous) {
+      ever_connected = false;
+    }
+
     current_connection_url = url;
     initConnTimer();
     TimerStarter tmr(conn_timer);
 
     destroy();
-    auto new_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), MPD_TIMEOUT);
+    if (was_connected && url != previous) {
+      emit disconnected(previous);
+    }
+    auto new_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(MPD_DEFAULT_PORT), MPD_TIMEOUT);
     if (!new_conn) {
       qWarning() << "error allocation mpd connection";
       emit error(url);
@@ -673,6 +689,7 @@ namespace MpdClient {
     }
     qDebug() << "connected to mpd at" << url;
     conn = new_conn;
+    ever_connected = true;
     emit connected(url);
     return true;
   }
@@ -690,7 +707,7 @@ namespace MpdClient {
   QPair<bool, QString> Connection::probe(const QUrl &url) {
     QPair<bool, QString> result(true, "");
 
-    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), MPD_TIMEOUT);
+    auto probed_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(MPD_DEFAULT_PORT), MPD_TIMEOUT);
     if (!probed_conn) {
       result.first = false;
       result.second = "out of memory allocating mpd connection";
@@ -743,7 +760,7 @@ namespace MpdClient {
       return false;
     }
 
-    idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(), 0);
+    idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(MPD_DEFAULT_PORT), 0);
     if (!idle_conn) {
       qWarning() << "error allocation mpd idle connection";
       return false;
@@ -787,7 +804,9 @@ namespace MpdClient {
   }
 
   void Connection::on_timeout() {
-    if (currentUrl().isEmpty()) {
+    // A url that never connected has nothing to reconnect to; retrying it would
+    // re-emit error every interval forever.
+    if (currentUrl().isEmpty() || !ever_connected) {
       return;
     }
     if (!ping() || !idle_conn) {

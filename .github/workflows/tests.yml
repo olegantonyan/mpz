@@ -64,3 +64,61 @@ jobs:
 
       - name: Configure, build and test
         run: cmake --workflow ${{ matrix.workflow }}
+
+  gui:
+    name: gui tests Qt6
+    runs-on: ubuntu-latest
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+      QT_MEDIA_BACKEND: ffmpeg
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build dbus-x11 pulseaudio \
+            qt6-tools-dev qt6-base-dev qt6-multimedia-dev libqt6svg6-dev
+
+      - name: Start a dummy audio sink
+        run: |
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=mpz_ci
+
+      - name: Configure, build and test
+        run: dbus-run-session -- cmake --workflow gui-tests-qt6
+
+  mpd:
+    name: mpd tests Qt6
+    runs-on: ubuntu-latest
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+      QT_MEDIA_BACKEND: ffmpeg
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          # mpd's postinst starts a system daemon, and a failed start would fail
+          # the whole step. policy-rc.d keeps it from ever running, so the only
+          # mpd on the box is the one a test spawns for itself.
+          printf '#!/bin/sh\nexit 101\n' | sudo tee /usr/sbin/policy-rc.d > /dev/null
+          sudo chmod +x /usr/sbin/policy-rc.d
+          sudo apt-get install -y build-essential cmake ninja-build dbus-x11 pulseaudio mpd \
+            qt6-tools-dev qt6-base-dev qt6-multimedia-dev libqt6svg6-dev
+          sudo rm -f /usr/sbin/policy-rc.d
+          sudo systemctl disable --now mpd.service mpd.socket || true
+          mpd --version | head -1
+
+      - name: Start a dummy audio sink
+        run: |
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=mpz_ci
+
+      - name: Configure, build and test
+        run: dbus-run-session -- cmake --workflow mpd-tests-qt6

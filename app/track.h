@@ -4,6 +4,7 @@
 #include "replaygain/gain.h"
 #include "streammetadata.h"
 
+#include <QMetaType>
 #include <QString>
 #include <QUrl>
 
@@ -130,5 +131,7 @@ private:
   QString detectFormat() const;
   bool readMetadata();
 };
+
+Q_DECLARE_METATYPE(Track)
 
 #endif // TRACK_H

@@ -11,6 +11,8 @@
 #include <QStringList>
 #include <QMap>
 
+#include <atomic>
+
 namespace Playback {
   class Stream : public QIODevice {
     Q_OBJECT
@@ -44,6 +46,9 @@ namespace Playback {
 
   private:
     QByteArray _buffer;
+    // stop() can land before the worker has wired up its stopping() handlers,
+    // which would drop the signal and leave the loop running until the timeout.
+    std::atomic<bool> _stop_requested{false};
     qint64 _total_bytes_received;
     QUrl _url;
     const quint32 _threshold_bytes;

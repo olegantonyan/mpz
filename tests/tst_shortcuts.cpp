@@ -182,6 +182,7 @@ void TestShortcuts::applyOverrides_persistsAndKeepsUnknownKeys() {
   QWidget parent;
   Config::Global global_conf;
   Config::Local local_conf;
+  local_conf.saveDisableQhotkey(true);
   Shortcuts sc(global_conf, local_conf, &parent);
 
   sc.applyOverrides({{"next", "Ctrl+Alt+N"}});
@@ -208,6 +209,7 @@ void TestShortcuts::applyOverrides_emptyDropsOwnKeysOnly() {
   QWidget parent;
   Config::Global global_conf;
   Config::Local local_conf;
+  local_conf.saveDisableQhotkey(true);
   Shortcuts sc(global_conf, local_conf, &parent);
 
   sc.applyOverrides({});
@@ -232,6 +234,7 @@ void TestShortcuts::applyOverrides_rebindsTheLiveQShortcut() {
   QWidget parent;
   Config::Global global_conf;
   Config::Local local_conf;
+  local_conf.saveDisableQhotkey(true);
   Shortcuts sc(global_conf, local_conf, &parent);
 
   const auto before = parent.findChildren<QShortcut *>().size();

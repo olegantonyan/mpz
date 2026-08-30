@@ -3,6 +3,7 @@
 #include "decode/nativeformat.h"
 
 #include <QAudioBuffer>
+#include <QFileInfo>
 #include <QUrl>
 
 #include <limits>
@@ -101,6 +102,14 @@ namespace DynamicRange {
     frame_pos = 0;
     job_active = true;
     abort_queued = false;
+
+    // Qt 6.4's gstreamer decoder reports neither error nor finished for a file it
+    // cannot open, which leaves the scan stuck on that job
+    if (!QFileInfo::exists(job.path)) {
+      finishJob();
+      QMetaObject::invokeMethod(this, [this]() { next(); }, Qt::QueuedConnection);
+      return;
+    }
 
     // a decoder per job: reusing one lets a stale finished() from the previous file
     // terminate the next job before it produces a single buffer

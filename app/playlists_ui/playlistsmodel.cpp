@@ -273,11 +273,17 @@ namespace PlaylistsUi {
   }
 
   QString Model::playlistNameBy(const QDir &path, const QString &libraryDir) {
-    auto result = path.absolutePath().remove(libraryDir);
-    if (result.startsWith("/")) {
-      return result.remove(0, 1);
-    } else {
-      return result;
+    QString result = path.absolutePath();
+    // Strip the library only as a leading path component: remove() would also
+    // eat the library name where it repeats deeper in the path, and a bare
+    // startsWith would turn /musicvideos into videos for the /music library.
+    const QString root = libraryDir.isEmpty() ? QString() : QDir(libraryDir).absolutePath();
+    if (!root.isEmpty() && (result == root || result.startsWith(root + "/"))) {
+      result.remove(0, root.size());
     }
+    if (result.startsWith("/")) {
+      result.remove(0, 1);
+    }
+    return result;
   }
 }

@@ -310,4 +310,9 @@ Translations live in `app/resources/translations/` as `.ts` (source) and `.qm` (
 
 `cmake --workflow tests-qt6` (or `tests-qt5`) configures, builds, and runs the unit tests.
 
+`cmake --workflow gui-tests-qt6` runs the widget tests. They need a session bus and an audio sink.
+
+`cmake --workflow mpd-tests-qt6` runs the MPD end-to-end tests. They need `mpd` installed; each test binary
+starts its own server on a free port with a throwaway config, so a running system mpd is left alone.
+
 ## [Changelog](https://github.com/olegantonyan/mpz/blob/master/CHANGELOG.md)

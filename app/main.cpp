@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "cli.h"
 #include "mpzapplication.h"
 #include "rnjesus.h"
 #include "ipc/instance.h"
@@ -46,18 +47,10 @@ void registerMetaTypes() {
   qRegisterMetaType<MpdClient::Status>("MpdClient::Status");
   qRegisterMetaType<MpdClient::Output>("MpdClient::Output");
   qRegisterMetaType<mpd_idle>("mpd_idle");
-  qRegisterMetaType<QVector<MpdClient::Entity>>("QVector<MpdClient::Entity");
+  qRegisterMetaType<QVector<MpdClient::Entity>>("QVector<MpdClient::Entity>");
   qRegisterMetaType<QVector<MpdClient::Output>>("QVector<MpdClient::Output>");
   qRegisterMetaType<QVector<MpdClient::Song>>("QVector<MpdClient::Song>");
 #endif
-}
-
-QStringList args(int argc, char *argv[]) {
-  QStringList result;
-  for (int i = 1; i < argc; i++) {
-    result << argv[i];
-  }
-  return result;
 }
 
 void load_locale(MpzApplication &a, const QString &conf_language) {
@@ -138,8 +131,8 @@ int main(int argc, char *argv[]) {
   QObject::connect(&a, &QCoreApplication::aboutToQuit, &a, []() { mpz::set_crash_phase("shutting-down"); });
 #endif
 
-  auto arguments = args(argc, argv);
-  if (arguments.size() == 1 && arguments.first() == "--version") {
+  auto arguments = Cli::arguments(argc, argv);
+  if (Cli::isVersionRequest(arguments)) {
     std::cout << a.applicationVersion().toStdString() << std::endl;
     return 0;
   }
@@ -150,14 +143,13 @@ int main(int argc, char *argv[]) {
   load_locale(a, global_conf.language());
 
   IPC::Instance instance;
-  if (global_conf.singleInstance()) {
-    int another_pid = instance.anotherPid();
-    if (another_pid > 0) {
-      qDebug() << "reusing another instance with pid" << another_pid;
-      return instance.load_files_send(arguments) == true ? 0 : 1;
-    } else {
-      instance.start();
-    }
+  switch (Cli::claimInstance(instance, global_conf.singleInstance(), arguments)) {
+    case Cli::Startup::HandedOff:
+      return 0;
+    case Cli::Startup::HandOffFailed:
+      return 1;
+    case Cli::Startup::Run:
+      break;
   }
 
   // Files opened from Finder before the main window exists arrive as
