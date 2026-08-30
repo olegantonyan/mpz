@@ -4,8 +4,13 @@
 
 ### Fixed
 
-- Fix a crash when a retired decoder was destroyed while still running
-- Play button starts the selected playlist when no track is selected
+- Crash when a retired decoder was destroyed while running
+- Play button starts the selected playlist when nothing is selected
+- Sorting: "Arist" typo in default presets, old presets repaired
+- MPD: stale errors breaking later commands, multi-track delete hitting wrong rows, save over existing playlist on 0.24, last queued track skipped on priority reset, missing port, endless retries on a never-connected address
+- Radio: stopping while connecting froze the UI
+- Dynamic range scan stuck on a missing file
+- Playlist name when the library folder name repeats in the path
 
 ### Misc
 
