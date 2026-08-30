@@ -51,7 +51,6 @@ namespace MpdClient {
     bool setRepeat(bool repeat);
     bool setRandom(bool rand);
     QVector<MpdClient::Output> outputs();
-    bool changeOutputState(int outid, bool state);
     QVector<MpdClient::Song> lsQueueSongs();
     bool setPriority(int song_id, int prio);
     bool resetAllPriorities();
@@ -75,12 +74,13 @@ namespace MpdClient {
     struct mpd_connection *idle_conn = nullptr;
     QSocketNotifier *idle_notifier = nullptr;
     QUrl current_connection_url;
+    bool ever_connected = false;
     QTimer *conn_timer = nullptr;
 
     bool establish_idle(const QUrl &url);
     void destroy();
-    void waitConnected();
-    QString lastError() const;
+    QString takeError();
+    bool finishResponse();
     void initConnTimer();
   };
 }

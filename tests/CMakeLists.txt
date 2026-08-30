@@ -93,9 +93,8 @@ if(ENABLE_UPDATE_CHECK)
   mpz_add_test(tst_updatechecker)
 endif()
 
-# MPD data classes — testable for defaults + nullptr update guard.
-# Constructing real mpd_status/mpd_song/mpd_output structs requires
-# libmpdclient internals, so deeper coverage would need a live mpd server.
+# MPD data classes — defaults and the nullptr update guard, no server needed.
+# Everything that needs a live mpd lives in tests/mpd (ctest label "mpd").
 if(ENABLE_MPD_SUPPORT)
   mpz_add_test(tst_treeitem)
   mpz_add_test(tst_mpdentity)
@@ -137,3 +136,7 @@ if(ENABLE_GAPLESS)
 endif()
 
 add_subdirectory(gui)
+
+if(ENABLE_MPD_SUPPORT)
+  add_subdirectory(mpd)
+endif()

@@ -80,26 +80,33 @@
   "buildPresets": [
     { "name": "debug-qt6-tests", "configurePreset": "debug-qt6-tests", "targets": "build_tests" },
     { "name": "debug-qt5-tests", "configurePreset": "debug-qt5-tests", "targets": "build_tests" },
-    { "name": "debug-qt6-gui", "configurePreset": "debug-qt6-tests", "targets": "build_gui_tests" }
+    { "name": "debug-qt6-gui", "configurePreset": "debug-qt6-tests", "targets": "build_gui_tests" },
+    { "name": "debug-qt6-mpd", "configurePreset": "debug-qt6-tests", "targets": "build_mpd_tests" }
   ],
   "testPresets": [
     {
       "name": "debug-qt6-tests",
       "configurePreset": "debug-qt6-tests",
       "output": { "outputOnFailure": true },
-      "filter": { "exclude": { "label": "^gui$" } }
+      "filter": { "exclude": { "label": "^(gui|mpd)$" } }
     },
     {
       "name": "debug-qt5-tests",
       "configurePreset": "debug-qt5-tests",
       "output": { "outputOnFailure": true },
-      "filter": { "exclude": { "label": "^gui$" } }
+      "filter": { "exclude": { "label": "^(gui|mpd)$" } }
     },
     {
       "name": "debug-qt6-gui",
       "configurePreset": "debug-qt6-tests",
       "output": { "outputOnFailure": true },
       "filter": { "include": { "label": "^gui$" } }
+    },
+    {
+      "name": "debug-qt6-mpd",
+      "configurePreset": "debug-qt6-tests",
+      "output": { "outputOnFailure": true },
+      "filter": { "include": { "label": "^mpd$" } }
     }
   ],
   "workflowPresets": [
@@ -125,6 +132,14 @@
         { "type": "configure", "name": "debug-qt6-tests" },
         { "type": "build",     "name": "debug-qt6-gui" },
         { "type": "test",      "name": "debug-qt6-gui" }
+      ]
+    },
+    {
+      "name": "mpd-tests-qt6",
+      "steps": [
+        { "type": "configure", "name": "debug-qt6-tests" },
+        { "type": "build",     "name": "debug-qt6-mpd" },
+        { "type": "test",      "name": "debug-qt6-mpd" }
       ]
     }
   ]
