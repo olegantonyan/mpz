@@ -4,9 +4,16 @@
 #include "config/local.h"
 #include "ipc/instance.h"
 #include "mainwindow.h"
+#include "playback/playbackcontroller.h"
+#include "playlists_ui/playlistscontroller.h"
+#include "shortcuts.h"
+#include "trayicon.h"
 
+#include <QAction>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDockWidget>
+#include <QToolBar>
 #include <QLineEdit>
 #include <QListView>
 #include <QStyle>
@@ -36,6 +43,14 @@ private slots:
   void buildsWithControlsAndViews();
   void followCursorClickWritesConfig();
   void orderComboBoxKeyboardWritesConfig();
+  void perPlaylistOrderFollowsTheSelectedPlaylist();
+  void focusShortcutsReachTheThreeViews();
+  void volumeShortcutsStepByFiveAndClamp();
+  void controlsToolbarIsNamedAndLockable();
+  void dockWidgetsExistAndStartHidden();
+  void windowTitleFollowsPlayback();
+  void streamBufferDefaultIsPersisted();
+  void trayIconStaysOffWhenDisabled();
 
 private:
   GuiTest::ConfigDir config;
@@ -99,6 +114,120 @@ void TestMainWindow::orderComboBoxKeyboardWritesConfig() {
 
   QCOMPARE(combo->currentIndex(), 1);
   QCOMPARE(global->playbackOrder(), QString("random"));
+}
+
+void TestMainWindow::perPlaylistOrderFollowsTheSelectedPlaylist() {
+  auto *combo = window->findChild<QComboBox *>(QStringLiteral("perPlaylistOrdercomboBox"));
+  QVERIFY(combo != nullptr);
+  QCOMPARE(combo->count(), 4);
+  QCOMPARE(combo->itemText(0), QString("(use global)"));
+
+  auto *playlists = window->findChild<PlaylistsUi::Controller *>();
+  QVERIFY(playlists != nullptr);
+  QSignalSpy created(playlists, &PlaylistsUi::Controller::loaded);
+  playlists->on_createPlaylistFromTracks(GuiTest::tracks({"one", "two"}), "ordered");
+  QVERIFY(created.wait());
+
+  auto playlist = playlists->currentPlaylist();
+  QVERIFY(playlist != nullptr);
+  playlist->setRandom(Playlist::Playlist::SequentialNoLoop);
+  playlists->on_jumpTo(playlist);
+  QCOMPARE(combo->currentIndex(), 3);
+}
+
+void TestMainWindow::focusShortcutsReachTheThreeViews() {
+  auto *shortcuts = window->findChild<Shortcuts *>();
+  QVERIFY(shortcuts != nullptr);
+
+  emit shortcuts->focusLibrary();
+  QVERIFY(window->findChild<QTreeView *>(QStringLiteral("treeView"))->hasFocus());
+
+  emit shortcuts->focusPlaylists();
+  QVERIFY(window->findChild<QListView *>(QStringLiteral("listView"))->hasFocus());
+
+  emit shortcuts->focusPlaylist();
+  QVERIFY(window->findChild<QTableView *>(QStringLiteral("tableView"))->hasFocus());
+
+  emit shortcuts->focusFilterLibrary();
+  QVERIFY(window->findChild<QLineEdit *>(QStringLiteral("treeViewSearch"))->hasFocus());
+}
+
+void TestMainWindow::volumeShortcutsStepByFiveAndClamp() {
+  auto *shortcuts = window->findChild<Shortcuts *>();
+  auto *player = window->findChild<Playback::Controller *>();
+  QVERIFY(player != nullptr);
+
+  player->setVolume(50);
+  emit shortcuts->volumeUp();
+  QCOMPARE(player->volume(), 55);
+
+  emit shortcuts->volumeDown();
+  QCOMPARE(player->volume(), 50);
+
+  player->setVolume(98);
+  emit shortcuts->volumeUp();
+  QCOMPARE(player->volume(), 100);
+
+  player->setVolume(3);
+  emit shortcuts->volumeDown();
+  QCOMPARE(player->volume(), 0);
+}
+
+void TestMainWindow::controlsToolbarIsNamedAndLockable() {
+  // The object name is what makes saveState()/restoreState() find it again.
+  auto *toolbar = window->findChild<QToolBar *>(QStringLiteral("controlsToolBar"));
+  QVERIFY(toolbar != nullptr);
+  QCOMPARE(toolbar->isMovable(), local->toolbarMovable());
+
+  QAction *lock = nullptr;
+  for (auto *action : window->findChildren<QAction *>()) {
+    if (action->text() == "Lock toolbar") {
+      lock = action;
+    }
+  }
+  QVERIFY(lock != nullptr);
+  QVERIFY(lock->isCheckable());
+
+  lock->setChecked(false);
+  QVERIFY(toolbar->isMovable());
+  QVERIFY(local->toolbarMovable());
+
+  lock->setChecked(true);
+  QVERIFY(!toolbar->isMovable());
+  QVERIFY(!local->toolbarMovable());
+}
+
+void TestMainWindow::dockWidgetsExistAndStartHidden() {
+  auto *cover = window->findChild<QDockWidget *>(QStringLiteral("coverArtDock"));
+  auto *lyrics = window->findChild<QDockWidget *>(QStringLiteral("lyricsDock"));
+  QVERIFY(cover != nullptr && lyrics != nullptr);
+
+  // Hidden on a first run; restoreState() brings them back afterwards.
+  QVERIFY(cover->isHidden());
+  QVERIFY(lyrics->isHidden());
+  QVERIFY(!cover->toggleViewAction()->isChecked());
+}
+
+void TestMainWindow::windowTitleFollowsPlayback() {
+  auto *player = window->findChild<Playback::Controller *>();
+  const QString idle = qApp->applicationDisplayName();
+  QCOMPARE(window->windowTitle(), idle);
+
+  const Track track = GuiTest::track("song");
+  emit player->started(track);
+  QCOMPARE(window->windowTitle(), "[" + track.shortText() + "] " + idle);
+
+  emit player->stopped();
+  QCOMPARE(window->windowTitle(), idle);
+}
+
+void TestMainWindow::streamBufferDefaultIsPersisted() {
+  QCOMPARE(global->streamBufferSize(), 262144);
+}
+
+void TestMainWindow::trayIconStaysOffWhenDisabled() {
+  QVERIFY(!global->trayIconEnabled());
+  QVERIFY(window->findChild<TrayIcon *>() == nullptr);
 }
 
 MPZ_GUI_TEST_MAIN(TestMainWindow)

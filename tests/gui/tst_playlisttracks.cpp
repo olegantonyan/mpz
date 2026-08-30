@@ -2,14 +2,28 @@
 
 #include "backgroundtasks.h"
 #include "modusoperandi.h"
+#include "playlist_ui/playlistcontextmenu.h"
+#include "playlist_ui/tageditordialog.h"
 #include "playlist_ui/playlistcontroller.h"
 #include "slidingbanner.h"
 
+#include <QClipboard>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMimeData>
 #include <QTableView>
 
 namespace {
+  // The editor is created parentless, so it shows up as a top-level widget.
+  TagEditorDialog *openEditor() {
+    for (auto *widget : qApp->topLevelWidgets()) {
+      if (auto *editor = qobject_cast<TagEditorDialog *>(widget)) {
+        return editor;
+      }
+    }
+    return nullptr;
+  }
+
   QMimeData *rowsMime(const QList<int> &rows) {
     QByteArray bytes;
     QDataStream stream(&bytes, QIODevice::WriteOnly);
@@ -38,6 +52,8 @@ private slots:
   void filterMatchesArtistAlbumTitleAndFilename();
   void sortByReordersThePlaylist();
   void unloadClearsTheView();
+  void editTagsSkipsStreamsAndOpensForTheRest();
+  void copyNameJoinsTheSelectedTitles();
 
 private:
   GuiTest::ConfigDir config;
@@ -187,6 +203,50 @@ void TestPlaylistTracks::unloadClearsTheView() {
 
   QCOMPARE(view.model()->rowCount(), 0);
   QVERIFY(controller->currentTracks().isEmpty());
+}
+
+void TestPlaylistTracks::editTagsSkipsStreamsAndOpensForTheRest() {
+  playlist->load({GuiTest::track("one"),
+                  Track(QUrl("http://radio.example/live"), "radio://x", "Station"),
+                  GuiTest::track("two")});
+  controller->on_load(playlist);
+  auto *menu = controller->findChild<PlaylistUi::PlaylistContextMenu *>();
+  QVERIFY(menu != nullptr);
+
+  // A stream alone has nothing to edit, so no editor opens.
+  view.selectRow(1);
+  QVERIFY(QMetaObject::invokeMethod(menu, "on_editTags"));
+  QVERIFY(openEditor() == nullptr);
+
+  view.selectRow(0);
+  view.selectionModel()->select(view.model()->index(1, 0),
+                                QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  view.selectionModel()->select(view.model()->index(2, 0),
+                                QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  QVERIFY(QMetaObject::invokeMethod(menu, "on_editTags"));
+
+  auto *editor = openEditor();
+  QVERIFY(editor != nullptr);
+  // The stream was dropped from the three selected rows.
+  QCOMPARE(editor->findChild<QLabel *>(QStringLiteral("labelHeader"))->text(),
+           QString("Editing 2 track(s)"));
+  editor->close();
+}
+
+void TestPlaylistTracks::copyNameJoinsTheSelectedTitles() {
+  load({"one", "two", "three"});
+  auto *menu = controller->findChild<PlaylistUi::PlaylistContextMenu *>();
+  qApp->clipboard()->clear();
+
+  view.selectRow(0);
+  view.selectionModel()->select(view.model()->index(2, 0),
+                                QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  QVERIFY(QMetaObject::invokeMethod(menu, "on_copyName"));
+
+  const QStringList lines = qApp->clipboard()->text().split('\n');
+  QCOMPARE(lines.size(), 2);
+  QVERIFY(lines.first().contains("one"));
+  QVERIFY(lines.last().contains("three"));
 }
 
 MPZ_GUI_TEST_MAIN(TestPlaylistTracks)

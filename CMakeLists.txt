@@ -91,6 +91,7 @@ set(PROJECT_SOURCES
   app/feedback_ui/feedbackform.cpp
   app/feedback_ui/feedbacksender.cpp
   app/crash_report/crashreport.cpp
+  app/cli.cpp
   app/ipc/instance.cpp
   app/mainmenu.cpp
   app/mpzapplication.cpp

@@ -18,3 +18,18 @@ mpz_add_gui_test(tst_mainwindow)
 mpz_add_gui_test(tst_playlists)
 mpz_add_gui_test(tst_playlisttracks)
 mpz_add_gui_test(tst_library)
+mpz_add_gui_test(tst_fileopen)
+
+# The only way to exercise the hand-off in main.cpp is to run the real binary.
+mpz_add_gui_test(tst_singleinstance)
+add_dependencies(tst_singleinstance ${CMAKE_PROJECT_NAME})
+target_compile_definitions(tst_singleinstance PRIVATE
+  MPZ_BINARY="$<TARGET_FILE:${CMAKE_PROJECT_NAME}>")
+
+mpz_add_gui_test(tst_shortcutsdialog)
+mpz_add_gui_test(tst_tageditor)
+mpz_add_gui_test(tst_settingsdialog)
+mpz_add_gui_test(tst_trackinfo)
+mpz_add_gui_test(tst_playbackcontroller)
+mpz_add_gui_test(tst_devicesmenu)
+mpz_add_gui_test(tst_smalldialogs)

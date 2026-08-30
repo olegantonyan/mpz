@@ -2,6 +2,7 @@
 
 #include "backgroundtasks.h"
 #include "modusoperandi.h"
+#include "playlists_ui/playlistscontextmenu.h"
 #include "playlists_ui/playlistscontroller.h"
 #include "slidingbanner.h"
 
@@ -34,6 +35,8 @@ private slots:
   void removingTheLastPlaylistEmpties();
   void reorderPersistsTheNewOrder();
   void filteringHidesRowsAndDisablesDragging();
+  void reloadFromFilesystemRefreshesAndPersists();
+  void m3uExportListsTheTrackPaths();
 
 private:
   GuiTest::ConfigDir config;
@@ -179,6 +182,38 @@ void TestPlaylists::filteringHidesRowsAndDisablesDragging() {
   search.clear();
   QCOMPARE(shownNames().size(), 2);
   QCOMPARE(view.dragDropMode(), QAbstractItemView::InternalMove);
+}
+
+void TestPlaylists::reloadFromFilesystemRefreshesAndPersists() {
+  const QString music = config.path() + "/reload";
+  QVERIFY(GuiTest::copyAudioFixtures(music));
+  QVector<Track> tracks;
+  for (const QString &name : {"silence.mp3", "silence.flac"}) {
+    tracks << Track(music + "/" + name);
+  }
+  QSignalSpy created(playlists.get(), &PlaylistsUi::Controller::loaded);
+  playlists->on_createPlaylistFromTracks(tracks, "reloadable");
+  QVERIFY(created.wait());
+
+  auto *menu = playlists->findChild<PlaylistsUi::PlaylistsContextMenu *>();
+  QVERIFY(menu != nullptr);
+  QSignalSpy changed(menu, &PlaylistsUi::PlaylistsContextMenu::playlistChanged);
+
+  // "Reload from filesystem" re-reads the tags of every track in place.
+  QVERIFY(QMetaObject::invokeMethod(menu, "on_reload", Q_ARG(QModelIndex, view.model()->index(0, 0))));
+
+  QCOMPARE(changed.count(), 1);
+  QCOMPARE(playlists->currentPlaylist()->tracks().size(), 2);
+  QCOMPARE(local->playlists().size(), 1);
+}
+
+void TestPlaylists::m3uExportListsTheTrackPaths() {
+  create("exported", {"one", "two"});
+
+  const QByteArray m3u = playlists->playlistByName("exported")->toM3U();
+
+  QVERIFY(m3u.contains("/music/one.mp3"));
+  QVERIFY(m3u.contains("/music/two.mp3"));
 }
 
 MPZ_GUI_TEST_MAIN(TestPlaylists)

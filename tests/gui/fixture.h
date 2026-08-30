@@ -6,6 +6,9 @@
 #include "mpzapplication.h"
 #include "track.h"
 
+#include <fileref.h>
+#include <tpropertymap.h>
+
 #include <QDir>
 #include <QFile>
 #include <QStandardPaths>
@@ -64,6 +67,17 @@ namespace GuiTest {
       result << track(t);
     }
     return result;
+  }
+
+  inline bool writeLyricsTag(const QString &path, const QString &lyrics) {
+    TagLib::FileRef f(QFile::encodeName(path).constData(), false);
+    if (f.isNull() || !f.tag()) {
+      return false;
+    }
+    TagLib::PropertyMap props = f.properties();
+    props.replace("LYRICS", TagLib::String(lyrics.toUtf8().constData(), TagLib::String::UTF8));
+    f.setProperties(props);
+    return f.save();
   }
 
   // Real, tag-readable files, for the paths that scan the filesystem.
