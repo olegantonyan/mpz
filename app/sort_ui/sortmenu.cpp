@@ -22,7 +22,7 @@ namespace SortUi {
     result << SortingPreset("", "-Artist");
     result << SortingPreset("", "Album / Title");
     result << SortingPreset("", "-Album / Title");
-    result << SortingPreset("", "Arist / Album / TrackNumber / Filename / Title");
+    result << SortingPreset("", "Artist / Album / TrackNumber / Filename / Title");
 
     return result;
   }
