@@ -60,6 +60,7 @@ private slots:
   void chunkedBodyIsDecoded();
   void chunkedHeaderSplitAcrossReadsIsDecoded();
   void stopClearsTheUrlAndReportsStopped();
+  void stopRightAfterStartDoesNotWaitForTheTimeout();
 
 private:
   static QByteArray response(const QByteArray &headers, const QByteArray &body) {
@@ -246,8 +247,6 @@ void TestStream::stopClearsTheUrlAndReportsStopped() {
   QSignalSpy stopping(&stream, &Playback::Stream::stopping);
   QSignalSpy stopped(&stream, &Playback::Stream::stopped);
   QVERIFY(stream.start());
-  // Wait for data, not just for the future: stopping is wired up inside the
-  // worker, so a stop racing the connects would be missed until the timeout.
   QTRY_VERIFY_WITH_TIMEOUT(stream.bytesAvailable() > 0, kWaitMs);
 
   stream.stop();
@@ -257,6 +256,27 @@ void TestStream::stopClearsTheUrlAndReportsStopped() {
   // The worker clears the url on the way out.
   QVERIFY(stream.url().isEmpty());
   QVERIFY(stopping.count() <= 1);
+}
+
+void TestStream::stopRightAfterStartDoesNotWaitForTheTimeout() {
+  Server server;
+  QVERIFY(server.listen(QHostAddress::LocalHost));
+  // Accepts and then says nothing, so only stop() can end the worker.
+  server.chunks = {};
+
+  Playback::Stream stream(16);
+  stream.setUrl(server.url());
+  QSignalSpy stopped(&stream, &Playback::Stream::stopped);
+
+  QElapsedTimer elapsed;
+  elapsed.start();
+  QVERIFY(stream.start());
+  // The worker has almost certainly not wired up stopping() yet.
+  stream.stop();
+
+  QVERIFY(elapsed.elapsed() < 5000);
+  QVERIFY(!stream.isRunning());
+  QVERIFY(stopped.count() == 1 || stopped.wait(kWaitMs));
 }
 
 QTEST_GUILESS_MAIN(TestStream)
