@@ -294,6 +294,12 @@ endif()
 # nothing references, which silently takes the icons and translations with them.
 add_library(${MPZ_LIB} OBJECT ${PROJECT_SOURCES})
 
+# Tests link the whole library; without per-function sections --gc-sections has
+# nothing to strip and every test binary carries a full copy of the app.
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  target_compile_options(${MPZ_LIB} PRIVATE -ffunction-sections -fdata-sections)
+endif()
+
 if(QT_VERSION_MAJOR GREATER_EQUAL 6)
   qt_add_executable(${CMAKE_PROJECT_NAME} MANUAL_FINALIZATION app/main.cpp ${MPZ_EXE_SOURCES})
   target_compile_definitions(${MPZ_LIB} PUBLIC ENABLE_DEVICES_MENU ENABLE_DR_METER)
