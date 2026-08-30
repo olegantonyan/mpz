@@ -2,6 +2,7 @@
 #define STREAMMETADATA_H
 
 #include <QMap>
+#include <QMetaType>
 
 class StreamMetaData {
 public:
@@ -30,5 +31,7 @@ private:
   QString title_explicit;
   QString _status_now_playing;
 };
+
+Q_DECLARE_METATYPE(StreamMetaData)
 
 #endif // STREAMMETADATA_H

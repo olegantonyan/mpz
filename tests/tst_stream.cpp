@@ -50,6 +50,8 @@ namespace {
 class TestStream : public QObject {
   Q_OBJECT
 private slots:
+  void initTestCase();
+
   void setUrl_fillsInTheImplicitPort();
   void isValidUrl_acceptsHttpSchemesOnly();
   void start_rejectsANonHttpUrl();
@@ -69,6 +71,10 @@ private:
   static QByteArray drain(Playback::Stream &stream);
   static QByteArray readAudio(Playback::Stream &stream, int expected);
 };
+
+void TestStream::initTestCase() {
+  qRegisterMetaType<StreamMetaData>("StreamMetaData");
+}
 
 QByteArray TestStream::drain(Playback::Stream &stream) {
   QByteArray out;
