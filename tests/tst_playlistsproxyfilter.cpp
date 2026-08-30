@@ -68,10 +68,10 @@ void TestPlaylistsProxyFilter::rowCount_bypassesTheProxyWithoutAFilter() {
 }
 
 void TestPlaylistsProxyFilter::rowCount_defersToTheProxyWhenFiltering() {
-  proxy->setFilterRegularExpression(QRegularExpression("rock"));
+  proxy->setFilterFixedString("rock");
   QCOMPARE(proxy->rowCount(), 1);
 
-  proxy->setFilterRegularExpression(QRegularExpression());
+  proxy->setFilterFixedString(QString());
   QCOMPARE(proxy->rowCount(), 2);
 }
 
@@ -83,7 +83,7 @@ void TestPlaylistsProxyFilter::append_returnsAProxyIndex() {
 }
 
 void TestPlaylistsProxyFilter::itemAt_mapsThroughTheProxy() {
-  proxy->setFilterRegularExpression(QRegularExpression("jazz"));
+  proxy->setFilterFixedString("jazz");
   QCOMPARE(proxy->itemAt(proxy->index(0, 0))->name(), QString("jazz"));
 }
 

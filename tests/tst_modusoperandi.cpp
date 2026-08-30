@@ -64,6 +64,7 @@ void TestModusOperandi::ignoresAnOutOfRangeCurrentLibrary() {
 }
 
 void TestModusOperandi::set_emitsOnlyOnATransition() {
+  qRegisterMetaType<ModusOperandi::ActiveMode>("ActiveMode");
   Config::Local local;
   ModusOperandi modus(local, &banner);
   QSignalSpy spy(&modus, &ModusOperandi::changed);
