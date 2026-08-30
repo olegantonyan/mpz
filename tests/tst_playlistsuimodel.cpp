@@ -229,6 +229,9 @@ void TestPlaylistsUiModel::playlistNameBy_stripsTheLibraryPrefix() {
   QCOMPARE(model.playlistNameBy(QDir("/music"), "/music"), QString(""));
   // The library name reappearing deeper in the path must not be stripped too.
   QCOMPARE(model.playlistNameBy(QDir("/music/rock/music"), "/music"), QString("rock/music"));
+  // ...and a sibling that merely starts with the library name is not the library.
+  QCOMPARE(model.playlistNameBy(QDir("/musicvideos/rock"), "/music"), QString("musicvideos/rock"));
+  QCOMPARE(model.playlistNameBy(QDir("/music/rock"), "/music/"), QString("rock"));
 }
 
 void TestPlaylistsUiModel::satisfiesTheModelContract() {
