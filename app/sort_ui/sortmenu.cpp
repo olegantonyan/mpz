@@ -8,6 +8,20 @@
 static const int EDIT_PRESETS_QACTION_DATA = 42;
 
 namespace SortUi {
+  namespace {
+    // Legacy fix-up for the "Arist" typo shipped in the default presets up to 2.1.5. Delete once old configs are gone.
+    bool repairAristTypo(QList<SortingPreset> &presets) {
+      bool repaired = false;
+      for (auto &i : presets) {
+        if (i.second.contains("Arist")) {
+          i.second.replace("Arist", "Artist");
+          repaired = true;
+        }
+      }
+      return repaired;
+    }
+  }
+
   SortMenu::SortMenu(QToolButton *butn, Config::Global &global_c) : QObject(butn), button(butn), global_conf(global_c) {
     connect(button, &QToolButton::clicked, this, &SortMenu::on_open);
     //button->setMenu(new QMenu(button)); // to show small arrow
@@ -35,11 +49,16 @@ namespace SortUi {
     menu->addAction(defau);
     menu->addSeparator();
 
-    if (global_conf.sortPresets().isEmpty()) {
-      global_conf.saveSortPresets(SortUi::SortMenu::standardPresets());
+    auto presets = global_conf.sortPresets();
+
+    if (presets.isEmpty()) {
+      presets = standardPresets();
+      global_conf.saveSortPresets(presets);
+    } else if (repairAristTypo(presets)) {
+      global_conf.saveSortPresets(presets);
     }
 
-    for (const auto &i : global_conf.sortPresets()) {
+    for (const auto &i : std::as_const(presets)) {
       QAction *action = new QAction(i.first.isEmpty() ? i.second : i.first, menu);
       action->setData(i.second);
       menu->addAction(action);
