@@ -106,7 +106,8 @@ void TestMpdPlayback::status_reportsTheAudioFormatAndDurationWhilePlaying() {
   QCOMPARE(status.audioFormat.channels, 2u);
   QCOMPARE(status.audioFormat.bits, 16u);
   QCOMPARE(status.totalTime, 30);
-  QVERIFY(status.bitrate > 0);
+  // bitrate is not asserted: mpd 0.24 reports one for uncompressed PCM, 0.23
+  // leaves it at 0.
 }
 
 void TestMpdPlayback::status_reportsTheNextSongForAMultiTrackQueue() {
