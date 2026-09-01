@@ -11,6 +11,7 @@
 - Radio: stopping while connecting froze the UI
 - Dynamic range scan stuck on a missing file
 - Playlist name when the library folder name repeats in the path
+- Long track titles widened the window and blocked resizing it back down
 
 ### Misc
 

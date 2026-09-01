@@ -9,6 +9,7 @@
 #include "lyrics/providerchain.h"
 #include "reveal_in_filemanager.h"
 #include "taglib_compat.h"
+#include "textelide.h"
 #ifdef ENABLE_DR_METER
   #include "dynamic_range_ui/dynamicrangedialog.h"
 #endif
@@ -77,10 +78,6 @@ namespace {
       return s;
     }
     return s.simplified();
-  }
-
-  QString elide(const QString &s, int limit) {
-    return s.size() <= limit ? s : s.left(limit) + QChar(0x2026);
   }
 
   QString qstr(const TagLib::String &s) {
@@ -493,13 +490,13 @@ void TrackInfoDialog::add_other_rows() {
 }
 
 void TrackInfoDialog::add_table_row(QStandardItemModel &m, const QString &title, const QString &content) {
-  const QString display = elide(flatten(content), kValueLimit);
+  const QString display = Text::elide(flatten(content), kValueLimit);
   auto *key = new QStandardItem(title);
   auto *value = new QStandardItem(display);
   // Display is flattened and capped; keep the original so copy/search stay faithful.
   value->setData(content, FullValueRole);
   if (display != content) {
-    value->setToolTip(elide(content, kTooltipLimit));
+    value->setToolTip(Text::elide(content, kTooltipLimit));
   }
   m.appendRow({key, value});
 }

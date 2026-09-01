@@ -9,6 +9,7 @@
 #include "icons.h"
 #include "mpzapplication.h"
 #include "asynctasks.h"
+#include "textelide.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -36,6 +37,8 @@
 #endif
 
 namespace {
+  constexpr int kWindowTitleTrackLimit = 96;
+
   // widen popup so long items aren't elided when the combobox is squeezed narrow
   void fitComboBoxPopupToContents(QComboBox *combo) {
     int width = combo->view()->sizeHintForColumn(0);
@@ -783,7 +786,7 @@ void MainWindow::setupShortcuts() {
 void MainWindow::setupWindowTitle() {
   setWindowTitle(qApp->applicationDisplayName());
   connect(player, &Playback::Controller::started, this, [=](const Track &track) {
-    setWindowTitle("[" + track.shortText() + "] " + qApp->applicationDisplayName());
+    setWindowTitle("[" + Text::elide(track.shortText(), kWindowTitleTrackLimit) + "] " + qApp->applicationDisplayName());
   });
   connect(player, &Playback::Controller::stopped, this, [=]() {
     setWindowTitle(qApp->applicationDisplayName());

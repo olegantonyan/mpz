@@ -9,6 +9,11 @@ namespace {
     return Track("/music/song.mp3", 0, "artist", "album", "title", 1, 2000, 1000, 2, 320, 44100);
   }
 
+  Track longTrack() {
+    return Track("/music/song.mp3", 0, QString("artist").repeated(40), "album", QString("title").repeated(40),
+                 1, 2000, 1000, 2, 320, 44100);
+  }
+
   QString bufferSuffix(const QString &text) {
     const auto parts = text.split(" | ");
     return parts.size() > 2 ? parts.last() : QString();
@@ -28,6 +33,7 @@ private slots:
   void streamBufferFill_stopsScalingAtTerabytes();
   void progress_refreshesWithoutChangingTheState();
   void doubleClick_isReported();
+  void longTrack_doesNotWidenTheMinimumSize();
 };
 
 void TestStatusBarLabel::startsStopped() {
@@ -122,6 +128,17 @@ void TestStatusBarLabel::doubleClick_isReported() {
   QTest::mouseDClick(&label, Qt::LeftButton);
 
   QCOMPARE(spy.count(), 1);
+}
+
+void TestStatusBarLabel::longTrack_doesNotWidenTheMinimumSize() {
+  StatusBarLabel label;
+  const Track track = longTrack();
+
+  label.on_playerStarted(track);
+
+  QVERIFY(label.text().contains(track.shortText()));
+  QVERIFY(label.minimumSizeHint().width() < label.fontMetrics().horizontalAdvance(label.text()) / 4);
+  QCOMPARE(label.toolTip(), label.text());
 }
 
 QTEST_MAIN(TestStatusBarLabel)

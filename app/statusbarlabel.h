@@ -13,6 +13,8 @@ class StatusBarLabel : public QLabel {
 public:
   explicit StatusBarLabel(QWidget *parent = nullptr);
 
+  QSize minimumSizeHint() const override;
+
 public slots:
   void on_playerStopped();
   void on_playerStarted(const Track &track);
@@ -26,11 +28,13 @@ signals:
 
 protected:
   void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void paintEvent(QPaintEvent *event) override;
 
 private slots:
   void on_contextMenu(const QPoint &pos);
 
 private:
+  void showText(const QString &text);
   QString trackInfo(const Track &t) const;
 
   QString _state;

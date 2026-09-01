@@ -7,6 +7,8 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QPainter>
+#include <QStyle>
 
 StatusBarLabel::StatusBarLabel(QWidget *parent) : QLabel(parent) {
   on_playerStopped();
@@ -17,32 +19,49 @@ StatusBarLabel::StatusBarLabel(QWidget *parent) : QLabel(parent) {
 void StatusBarLabel::on_playerStopped() {
   _state = tr("Stopped");
   _stream_buffer = 0;
-  setText(_state);
+  showText(_state);
 }
 
 void StatusBarLabel::on_playerStarted(const Track &track) {
   _state = tr("Playing");
   auto t = _state + trackInfo(track);
   _stream_buffer = 0;
-  setText(t);
+  showText(t);
 }
 
 void StatusBarLabel::on_playerPaused(const Track &track) {
   _state = tr("Paused");
   auto t = _state + trackInfo(track);
-  setText(t);
+  showText(t);
 }
 
 void StatusBarLabel::on_streamBufferFill(const Track &track, quint32 bytes) {
   _stream_buffer = bytes;
   if (_state != tr("Stopped")) {
-    setText(_state + trackInfo(track));
+    showText(_state + trackInfo(track));
   }
 }
 
 void StatusBarLabel::on_progress(const Track &track, int current_seconds) {
   Q_UNUSED(current_seconds)
-  setText(_state + trackInfo(track));
+  showText(_state + trackInfo(track));
+}
+
+QSize StatusBarLabel::minimumSizeHint() const {
+  return QSize(fontMetrics().averageCharWidth() * 16, QLabel::minimumSizeHint().height());
+}
+
+void StatusBarLabel::showText(const QString &text) {
+  setText(text);
+  setToolTip(text);
+}
+
+void StatusBarLabel::paintEvent(QPaintEvent *event) {
+  Q_UNUSED(event)
+  QPainter painter(this);
+  const auto rect = contentsRect();
+  style()->drawItemText(&painter, rect, alignment(), palette(), isEnabled(),
+                        fontMetrics().elidedText(text(), Qt::ElideRight, rect.width()), foregroundRole());
 }
 
 void StatusBarLabel::mouseDoubleClickEvent(QMouseEvent *event) {

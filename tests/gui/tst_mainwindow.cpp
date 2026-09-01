@@ -16,6 +16,7 @@
 #include <QToolBar>
 #include <QLineEdit>
 #include <QListView>
+#include <QStatusBar>
 #include <QStyle>
 #include <QStyleOptionButton>
 #include <QTableView>
@@ -49,6 +50,7 @@ private slots:
   void controlsToolbarIsNamedAndLockable();
   void dockWidgetsExistAndStartHidden();
   void windowTitleFollowsPlayback();
+  void windowTitleIsElidedForLongTracks();
   void streamBufferDefaultIsPersisted();
   void trayIconStaysOffWhenDisabled();
 
@@ -219,6 +221,17 @@ void TestMainWindow::windowTitleFollowsPlayback() {
 
   emit player->stopped();
   QCOMPARE(window->windowTitle(), idle);
+}
+
+void TestMainWindow::windowTitleIsElidedForLongTracks() {
+  auto *player = window->findChild<Playback::Controller *>();
+  const int status_bar_width = window->statusBar()->minimumSizeHint().width();
+
+  emit player->started(GuiTest::track(QString("title").repeated(40), "album", QString("artist").repeated(40)));
+
+  QVERIFY(window->windowTitle().size() < 128);
+  QVERIFY(window->windowTitle().endsWith(QString(QChar(0x2026)) + "] " + qApp->applicationDisplayName()));
+  QCOMPARE(window->statusBar()->minimumSizeHint().width(), status_bar_width);
 }
 
 void TestMainWindow::streamBufferDefaultIsPersisted() {
