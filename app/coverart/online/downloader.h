@@ -32,6 +32,8 @@ namespace CoverArt {
       // before or after request() runs for a given track.
       bool isSearching(const QString &artist, const QString &album) const;
 
+      void shutdown();
+
     signals:
       void searchStarted(const QString &artist, const QString &album);
       void coverAvailable(const QString &artist, const QString &album, const QString &path);

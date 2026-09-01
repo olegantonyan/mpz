@@ -115,6 +115,7 @@ namespace MpdClient {
     }
 
     result = Status(status);
+    mpd_status_free(status);
 
     return result;
   }
@@ -684,6 +685,7 @@ namespace MpdClient {
     }
     if (!establish_idle(url)) {
       mpd_connection_free(new_conn);
+      ever_connected = false;
       emit error(url, "cannot establish idle connection");
       return false;
     }
@@ -760,7 +762,7 @@ namespace MpdClient {
       return false;
     }
 
-    idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(MPD_DEFAULT_PORT), 0);
+    idle_conn = mpd_connection_new(url.host().toUtf8().constData(), url.port(MPD_DEFAULT_PORT), MPD_TIMEOUT);
     if (!idle_conn) {
       qWarning() << "error allocation mpd idle connection";
       return false;
@@ -823,13 +825,14 @@ namespace MpdClient {
       mpd_connection_free(conn);
       conn = nullptr;
     }
+    if (idle_notifier) {
+      idle_notifier->setEnabled(false);
+      delete idle_notifier;
+      idle_notifier = nullptr;
+    }
     if (idle_conn) {
       mpd_connection_free(idle_conn);
       idle_conn = nullptr;
-    }
-    if (idle_notifier) {
-      delete idle_notifier;
-      idle_notifier = nullptr;
     }
   }
 

@@ -92,7 +92,14 @@ namespace Playback {
 #endif
 #ifdef QT6_STREAM_HACKS
     bool suppress_emit_playing_state;
-    bool start_stream();
+    void start_stream();
+    void cancel_stream_wait();
+
+    QMetaObject::Connection stream_ready_conn;
+    QMetaObject::Connection stream_error_conn;
+    QTimer *stream_deadline = nullptr;
+    quint64 stream_generation = 0;
+    bool stream_autoplay_pending = false;
 #endif
     bool unpause_workaround_needed_on_playing_state_change = false;
 

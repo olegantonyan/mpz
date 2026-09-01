@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QtConcurrent>
 
+#include "asynctasks.h"
+
 namespace PlaylistUi {
   namespace Mpd {
     Model::Model(QStyle *stl, const ColumnsConfig &col_cfg,MpdClient::Client &cl, QObject *parent) :
@@ -26,7 +28,7 @@ namespace PlaylistUi {
         return QFuture<void>();
       }
 
-      return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() {
+      return AsyncTasks::instance().run([this, filepaths, pl]() {
         auto tracks = Playlist::MpdLoader(client).dirsTracks(filepaths, pl->name());
         pl->append(tracks, true);
         appendToPlaylist(tracks, pl->name());

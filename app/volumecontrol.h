@@ -27,11 +27,9 @@ namespace PrivateVolumeControl {
     void changed(int value);
 
   private:
-    QWidgetAction action;
-    QWidget widget;
     QMenu menu;
-    QSlider slider;
-    QHBoxLayout layout;
+    QWidgetAction *action;
+    QSlider *slider;
   };
 }
 

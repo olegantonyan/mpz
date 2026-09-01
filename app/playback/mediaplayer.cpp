@@ -140,6 +140,9 @@ namespace Playback {
     if (state() == MediaPlayer::PausedState) {
       play();
     } else  {
+#ifdef QT6_STREAM_HACKS
+      stream_autoplay_pending = false;
+#endif
       player.pause();
       unpause_workaround();
     }
@@ -221,6 +224,9 @@ namespace Playback {
     // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed
     // stop back here; player.stop() is a no-op so synthesise the transition.
     const bool already_stopped = state() == MediaPlayer::StoppedState;
+#ifdef QT6_STREAM_HACKS
+    cancel_stream_wait();
+#endif
     player.stop();
     stream.stop();
     if (already_stopped) {
@@ -294,11 +300,7 @@ namespace Playback {
       // also prevent double emit playing state after player starts playing
       suppress_emit_playing_state = true;
       emitStateChanged(MediaPlayer::PlayingState);
-      if (start_stream()) {
-        player.setSourceDevice(&stream);
-      } else {
-        emitStateChanged(MediaPlayer::StoppedState);
-      }
+      start_stream();
 #else
       player.setMedia(track.url(), &stream);
 #endif
@@ -317,27 +319,68 @@ namespace Playback {
     }
   }
 #ifdef QT6_STREAM_HACKS
-  bool MediaPlayer::start_stream() {
-    if (stream.isValidUrl()) {
-      if (!stream.start()) {
-        qWarning() << "error starting stream form" << stream.url();
-        return false;
-      }
+  void MediaPlayer::start_stream() {
+    cancel_stream_wait();
+    if (stream.isValidUrl() && !stream.start()) {
+      qWarning() << "error starting stream form" << stream.url();
+      emitStateChanged(MediaPlayer::StoppedState);
+      return;
     }
-    QTimer timer;
-    QEventLoop loop;
-    timer.setSingleShot(true);
-    timer.setInterval(30000);
-    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    connect(&stream, &Stream::readyRead, &loop, &QEventLoop::quit);
-    connect(&stream, &Stream::error, &loop, &QEventLoop::quit);
-    timer.start();
-    loop.exec();
-    return stream.bytesAvailable() > 0;
+
+    const quint64 generation = stream_generation;
+    stream_autoplay_pending = true;
+
+    stream_ready_conn = connect(&stream, &Stream::readyRead, this, [this, generation]() {
+      if (generation != stream_generation) {
+        return;
+      }
+      const bool autoplay = stream_autoplay_pending;
+      cancel_stream_wait();
+      player.setSourceDevice(&stream);
+      if (autoplay) {
+        player.play();
+      }
+    });
+    stream_error_conn = connect(&stream, &Stream::error, this, [this, generation](const QString &) {
+      if (generation != stream_generation) {
+        return;
+      }
+      cancel_stream_wait();
+      emitStateChanged(MediaPlayer::StoppedState);
+    });
+
+    stream_deadline = new QTimer(this);
+    stream_deadline->setSingleShot(true);
+    connect(stream_deadline, &QTimer::timeout, this, [this, generation]() {
+      if (generation != stream_generation) {
+        return;
+      }
+      qWarning() << "timed out waiting for stream data from" << stream.url();
+      cancel_stream_wait();
+      emitStateChanged(MediaPlayer::StoppedState);
+    });
+    stream_deadline->start(30000);
+  }
+
+  void MediaPlayer::cancel_stream_wait() {
+    stream_generation++;
+    stream_autoplay_pending = false;
+    disconnect(stream_ready_conn);
+    disconnect(stream_error_conn);
+    stream_ready_conn = QMetaObject::Connection();
+    stream_error_conn = QMetaObject::Connection();
+    if (stream_deadline != nullptr) {
+      stream_deadline->stop();
+      stream_deadline->deleteLater();
+      stream_deadline = nullptr;
+    }
   }
 #endif
   void MediaPlayer::clearTrack() {
     next_after_stop = false;
+#ifdef QT6_STREAM_HACKS
+    cancel_stream_wait();
+#endif
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     player.setSource(QUrl(nullptr));
 #else

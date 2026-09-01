@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QFont>
 #include <QtConcurrent>
+
+#include "asynctasks.h"
 #include <QMimeData>
 #include <QDataStream>
 #include <QSet>
@@ -214,7 +216,7 @@ namespace PlaylistUi {
       return QFuture<void>();
     }
 
-    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, pl]() -> void {
+    return AsyncTasks::instance().run([this, filepaths, pl]() -> void {
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);
         pl->append(loader.tracks(), !loader.is_playlist_file());
@@ -239,7 +241,7 @@ namespace PlaylistUi {
       return QFuture<void>();
     }
 
-    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, atRow, pl]() -> void {
+    return AsyncTasks::instance().run([this, filepaths, atRow, pl]() -> void {
       Playlist::Playlist batch;
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);

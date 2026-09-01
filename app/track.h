@@ -121,15 +121,14 @@ private:
   StreamMetaData _stream_meta;
   ReplayGain::Gain _replay_gain;
 
-  mutable QString _dir_cache;
-  mutable bool _dir_cached = false;
-  mutable QString _filename_cache;
-  mutable bool _filename_cached = false;
+  QString _dir;
+  QString _filename;
 
   quint64 generateUid() const;
   QString displayUrl() const;
   QString detectFormat() const;
   bool readMetadata();
+  void initPathParts();
 };
 
 Q_DECLARE_METATYPE(Track)

@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QtConcurrent>
+
+#include "asynctasks.h"
 #include <QFont>
 #include <QMimeData>
 #include <QDataStream>
@@ -18,7 +20,7 @@ namespace PlaylistsUi {
   }
 
   void Model::loadAsync() {
-    QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this]() {
+    QFuture<void> future = AsyncTasks::instance().run([this]() {
       auto newList = local_conf.playlists();
 
       auto lambda = [this, newList = std::move(newList)]() mutable {
@@ -243,7 +245,7 @@ namespace PlaylistsUi {
 
     auto pl = std::shared_ptr<Playlist::Playlist>(new Playlist::Playlist());
 
-    return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths, libraryDir, pl]() -> void {
+    return AsyncTasks::instance().run([this, filepaths, libraryDir, pl]() -> void {
       QStringList names;
       for (const auto &path : std::as_const(filepaths)) {
         Playlist::Loader loader(path);

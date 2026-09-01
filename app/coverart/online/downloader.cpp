@@ -42,6 +42,16 @@ namespace CoverArt {
       start(query, providers);
     }
 
+    void Downloader::shutdown() {
+      global_conf = nullptr;
+      in_flight.clear();
+      const auto chains = findChildren<ProviderChain *>();
+      for (auto *chain : chains) {
+        chain->disconnect(this);
+        delete chain;
+      }
+    }
+
     bool Downloader::isSearching(const QString &artist, const QString &album) const {
       const QString key = Cache::key(AlbumQuery{artist, album});
       return !key.isEmpty() && in_flight.contains(key);

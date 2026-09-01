@@ -8,6 +8,7 @@
 #include "playlist_ui/trackinfodialog.h"
 #include "icons.h"
 #include "mpzapplication.h"
+#include "asynctasks.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -191,6 +192,8 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
 }
 
 MainWindow::~MainWindow() {
+  AsyncTasks::instance().drain();
+  CoverArt::Online::Downloader::instance().shutdown();
   delete ui;
 }
 
@@ -987,20 +990,33 @@ void MainWindow::preloadPlaylist(const QStringList &args) {
     return;
   }
 
-  QEventLoop loop;
-  std::shared_ptr<Playlist::Playlist> pl;
-  auto conn = connect(playlists, &PlaylistsUi::Controller::loaded, this, [&](const std::shared_ptr<Playlist::Playlist> item) {
-    pl = item;
-    loop.quit();
+  cancelPreload();
+
+  preload_deadline = new QTimer(this);
+  preload_deadline->setSingleShot(true);
+  connect(preload_deadline, &QTimer::timeout, this, &MainWindow::cancelPreload);
+  preload_deadline->start(60000);
+
+  preload_conn = connect(playlists, &PlaylistsUi::Controller::loaded, this, [this](const std::shared_ptr<Playlist::Playlist> item) {
+    cancelPreload();
+    if (item != nullptr && !item->tracks().isEmpty()) {
+      emit playlist->activated(item->tracks().first());
+    }
   });
 
-  QTimer::singleShot(60000, &loop, &QEventLoop::quit); // deadline: don't hang startup if loaded never fires
   emit library->createNewPlaylist(preload_files, "");
-  loop.exec();
-  if (pl != nullptr && pl->tracks().size() > 0) {
-    emit playlist->activated(pl->tracks().first());
+}
+
+void MainWindow::cancelPreload() {
+  if (preload_conn) {
+    disconnect(preload_conn);
+    preload_conn = QMetaObject::Connection();
   }
-  disconnect(conn);
+  if (preload_deadline != nullptr) {
+    preload_deadline->stop();
+    preload_deadline->deleteLater();
+    preload_deadline = nullptr;
+  }
 }
 
 #ifdef Q_OS_MACOS

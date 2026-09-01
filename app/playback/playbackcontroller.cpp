@@ -276,13 +276,19 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 
   void Controller::on_stateChanged(MediaPlayer::State state) {
     switch (state) {
-      case MediaPlayer::StoppedState:
+      case MediaPlayer::StoppedState: {
         _controls.seekbar->setValue(0);
-        player().clearTrack();
+        auto *emitter = qobject_cast<MediaPlayer *>(sender());
+        if (emitter != nullptr) {
+          emitter->clearTrack();
+        } else {
+          player().clearTrack();
+        }
         _controls.time->clear();
         setCurrentTrack(Track());
         emit stopped();
         break;
+      }
       case MediaPlayer::PlayingState:
         if (_current_track.isStream() && _inline_meta.title().isEmpty()) {
           _icecast_status.start(_current_track.url());

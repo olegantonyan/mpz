@@ -34,6 +34,7 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QPointer>
+#include <QTimer>
 #include <QToolBar>
 #include <QtGlobal>
 
@@ -161,6 +162,8 @@ private:
 #endif
   bool quitting = false;
   bool autoplay_created_playlist = false;
+  QMetaObject::Connection preload_conn;
+  QTimer *preload_deadline = nullptr;
 
   int streamBuffer();
   void setupUiSettings();
@@ -215,6 +218,7 @@ private:
 #endif
 
   void preloadPlaylist(const QStringList &args);
+  void cancelPreload();
 
 protected:
   void closeEvent(QCloseEvent *event) override;

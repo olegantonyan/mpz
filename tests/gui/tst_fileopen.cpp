@@ -53,6 +53,8 @@ void TestFileOpen::initTestCase() {
   window->show();
   QVERIFY(QTest::qWaitForWindowExposed(window.get()));
 
+  QTRY_COMPARE(playlistNames(), QStringList({nameFor(first_dir)}));
+
   // The preloaded playlist starts playing; stop it so nothing holds the device.
   window->findChild<QToolButton *>(QStringLiteral("stopButton"))->click();
 }
@@ -76,6 +78,9 @@ QString TestFileOpen::nameFor(const QString &dir) {
 QStringList TestFileOpen::playlistNames() const {
   QStringList result;
   auto *model = playlists()->model();
+  if (model == nullptr) {
+    return result;
+  }
   for (int i = 0; i < model->rowCount(); i++) {
     result << model->index(i, 0).data().toString();
   }
@@ -84,13 +89,13 @@ QStringList TestFileOpen::playlistNames() const {
 
 void TestFileOpen::commandLineArgumentBecomesAPlaylist() {
   QCOMPARE(playlistNames(), QStringList({nameFor(first_dir)}));
-  QCOMPARE(window->findChild<QTableView *>(QStringLiteral("tableView"))->model()->rowCount(), 3);
+  QTRY_COMPARE(window->findChild<QTableView *>(QStringLiteral("tableView"))->model()->rowCount(), 3);
 }
 
 void TestFileOpen::filesFromARunningInstanceAppendAnotherPlaylist() {
   emit instance->load_files_received({second_dir});
 
-  QCOMPARE(playlistNames(), QStringList({nameFor(first_dir), nameFor(second_dir)}));
+  QTRY_COMPARE(playlistNames(), QStringList({nameFor(first_dir), nameFor(second_dir)}));
   window->findChild<QToolButton *>(QStringLiteral("stopButton"))->click();
 }
 

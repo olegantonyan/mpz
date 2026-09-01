@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <QEventLoop>
+#include <QPointer>
 #include <QTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -115,38 +115,53 @@ namespace IPC {
     if (!socket) {
       return;
     }
-    QTimer timer;
-    QEventLoop loop;
-    auto buffer = std::make_shared<QByteArray>();
+    buffers.insert(socket, QByteArray());
 
-    timer.setSingleShot(true);
-    timer.setInterval(timeout_ms);
-    timer.start();
-    auto conn_read = connect(socket, &QLocalSocket::readyRead, this, [&, buffer]() {
-      buffer->append(socket->readAll());
-      if (buffer->size() > MAX_PAYLOAD_BYTES) {
-        qWarning() << "ipc payload exceeds" << MAX_PAYLOAD_BYTES << "bytes, dropping";
-        socket->abort();
-        loop.quit();
-        return;
-      }
-      if (!buffer->contains("\r\n\r\n")) {
-        return;
-      }
-      socket->write(process_received(*buffer));
-      socket->waitForBytesWritten(timeout_ms);
-      socket->flush();
-      socket->disconnectFromServer();
-      loop.quit();
-    });
-    auto conn_timer = connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    auto *deadline = new QTimer(socket);
+    deadline->setSingleShot(true);
+    deadline->setInterval(timeout_ms);
+    connect(deadline, &QTimer::timeout, this, [this, socket]() { drop(socket); });
+    deadline->start();
 
-    loop.exec();
+    connect(socket, &QLocalSocket::readyRead, this, [this, socket]() { on_socket_readable(socket); });
+    connect(socket, &QLocalSocket::disconnected, this, [this, socket]() { drop(socket); });
+  }
 
-    timer.stop();
-    disconnect(conn_read);
-    disconnect(conn_timer);
+  void Instance::on_socket_readable(QLocalSocket *socket) {
+    auto it = buffers.find(socket);
+    if (it == buffers.end()) {
+      return;
+    }
+    it->append(socket->readAll());
+    if (it->size() > MAX_PAYLOAD_BYTES) {
+      qWarning() << "ipc payload exceeds" << MAX_PAYLOAD_BYTES << "bytes, dropping";
+      socket->abort();
+      drop(socket);
+      return;
+    }
+    if (!it->contains("\r\n\r\n")) {
+      return;
+    }
 
+    const QByteArray payload = *it;
+    buffers.erase(it);
+
+    QPointer<QLocalSocket> guard(socket);
+    const QByteArray response = process_received(payload);
+    if (guard.isNull()) {
+      return;
+    }
+    socket->write(response);
+    socket->flush();
+    socket->disconnectFromServer();
+    socket->close();
+    socket->deleteLater();
+  }
+
+  void Instance::drop(QLocalSocket *socket) {
+    if (buffers.remove(socket) == 0) {
+      return;
+    }
     socket->close();
     socket->deleteLater();
   }

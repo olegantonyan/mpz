@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QtConcurrent>
+
+#include "asynctasks.h"
 #include <QFont>
 
 namespace PlaylistsUi {
@@ -12,7 +14,7 @@ namespace PlaylistsUi {
     }
 
     void Model::loadAsync() {
-      (void)QtConcurrent::run(QThreadPool::globalInstance(), [this]() -> void {
+      (void)AsyncTasks::instance().run([this]() -> void {
         auto loadedList = loadMpdPlaylists();
         QMetaObject::invokeMethod(this, [this, loadedList]() { applyAsyncLoadedList(loadedList); }, Qt::QueuedConnection);
       });
@@ -57,7 +59,7 @@ namespace PlaylistsUi {
       if (!playlist) {
         return;
       }
-      QFuture<void> future = QtConcurrent::run(QThreadPool::globalInstance(), [this, playlist]() {
+      QFuture<void> future = AsyncTasks::instance().run([this, playlist]() {
         auto tracks = Playlist::MpdLoader(client).playlistTracks(playlist->name());
         playlist->load(tracks);
 
@@ -172,7 +174,7 @@ namespace PlaylistsUi {
       Q_ASSERT(!filepaths.isEmpty());
       Q_UNUSED(libraryDir);
 
-      return QtConcurrent::run(QThreadPool::globalInstance(), [this, filepaths]() {
+      return AsyncTasks::instance().run([this, filepaths]() {
         const QString playlistName = createPlaylistFromDirs(filepaths);
 
         QMetaObject::invokeMethod(this,

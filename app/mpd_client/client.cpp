@@ -18,7 +18,7 @@ namespace MpdClient {
   Client::~Client() {
     thread->quit();
     thread->wait();
-    thread->deleteLater();
+    delete thread;
   }
 
   // Runs on the caller's thread, unlike every other method here. Only safe while

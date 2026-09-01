@@ -91,6 +91,7 @@ Track::Track() {
   _year = 0;
   _track_number = 0;
   setCue(false);
+  initPathParts();
 }
 
 Track::Track(const QString &fp, quint32 bgn) {
@@ -98,6 +99,7 @@ Track::Track(const QString &fp, quint32 bgn) {
   _begin = bgn;
 
   filepath = fp;
+  initPathParts();
 
   readMetadata();
   setCue(false);
@@ -121,6 +123,7 @@ Track::Track(const QString &fp,
   _begin = bgn;
 
   filepath = fp;
+  initPathParts();
   _duration = dur;
   _year = yr;
   _title = ttle;
@@ -150,6 +153,7 @@ Track::Track(const QUrl &stream_url, const QString &filepath_reference, const QS
   _uid = generateUid();
   _stream_url = stream_url;
   filepath = filepath_reference;
+  initPathParts();
   _title = title;
 }
 
@@ -365,11 +369,7 @@ quint64 Track::uid() const {
 }
 
 QString Track::dir() const {
-  if (!_dir_cached) {
-    _dir_cache = QFileInfo(path()).absoluteDir().canonicalPath();
-    _dir_cached = true;
-  }
-  return _dir_cache;
+  return _dir;
 }
 
 QString Track::formattedTitle() const {
@@ -447,11 +447,13 @@ QString Track::format() const {
 }
 
 QString Track::filename() const {
-  if (!_filename_cached) {
-    _filename_cache = QFileInfo(path()).fileName();
-    _filename_cached = true;
-  }
-  return _filename_cache;
+  return _filename;
+}
+
+void Track::initPathParts() {
+  const QFileInfo info(filepath);
+  _dir = info.absoluteDir().canonicalPath();
+  _filename = info.fileName();
 }
 
 quint16 Track::track_number() const {

@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QInputDialog>
 #include <QItemSelectionModel>
+#include <QAbstractItemModel>
 #include <QtConcurrent>
 #include <QMouseEvent>
 #include <QDropEvent>
@@ -151,7 +152,7 @@ namespace PlaylistsUi {
       return;
     }
 
-    const auto index = view->indexAt(DropUtil::dropPosition(event));
+    const QPersistentModelIndex index = view->indexAt(DropUtil::dropPosition(event));
     std::shared_ptr<Playlist::Playlist> playlist;
     if (index.isValid()) {
       playlist = proxy->itemAt(index);
@@ -187,7 +188,9 @@ namespace PlaylistsUi {
           for (const auto &dir : std::as_const(dirs)) {
             paths << dir.absolutePath();
           }
-          importFilesInto(index, paths);
+          if (index.isValid()) {
+            importFilesInto(index, paths);
+          }
         }
         emit tracksAppended(playlist);
         return;
@@ -211,6 +214,9 @@ namespace PlaylistsUi {
   }
 
   void Controller::eventFilterTableView(QEvent *event) {
+    if (view->selectionModel() == nullptr) {
+      return;
+    }
     if (event->type() == QEvent::KeyPress) {
       QKeyEvent* keyevent = dynamic_cast<QKeyEvent*>(event);
       if (keyevent->key() == Qt::Key_Delete
@@ -361,8 +367,10 @@ namespace PlaylistsUi {
   void Controller::on_playlistLoadFinished(std::shared_ptr<Playlist::Playlist> pl) {
     auto index = proxy->append(pl);
     view->setCurrentIndex(index);
-    view->selectionModel()->clearSelection();
-    view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    if (view->selectionModel() != nullptr) {
+      view->selectionModel()->clearSelection();
+      view->selectionModel()->select(index, {QItemSelectionModel::Select});
+    }
     view->scrollToBottom();
     proxy->activeModel()->saveCurrentPlaylistIndex(index);
     emit loaded(pl);

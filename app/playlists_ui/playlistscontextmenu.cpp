@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QAbstractItemModel>
 #include <QStandardPaths>
 
 namespace PlaylistsUi {
@@ -19,7 +20,7 @@ namespace PlaylistsUi {
   }
 
   void PlaylistsContextMenu::show(const QPoint &pos) {
-    auto index = view->indexAt(pos);
+    const QPersistentModelIndex index = view->indexAt(pos);
     if (!index.isValid()) {
       return;
     }
@@ -71,7 +72,9 @@ namespace PlaylistsUi {
 
     connect(&loadm3u, &QAction::triggered, this, [&]() {
       QStringList files = QFileDialog::getOpenFileNames(view, tr("Select playlist files"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "Playlists (*.m3u *.pls)");
-      emit loadPlaylistFiles(index, files);
+      if (index.isValid()) {
+        emit loadPlaylistFiles(index, files);
+      }
     });
 
     menu.addAction(&play);
@@ -87,6 +90,9 @@ namespace PlaylistsUi {
 
   void PlaylistsContextMenu::on_rename(const QModelIndex &index)  {
     auto i = model->itemAt(index);
+    if (!i) {
+      return;
+    }
     bool ok;
     QString new_name = QInputDialog::getText(view, QString("%1 '%2'").arg(tr("Rename playlist")).arg(i->name()), "", QLineEdit::Normal, i->name(), &ok, Qt::Widget);
     if (ok && !new_name.isEmpty()) {
@@ -99,6 +105,9 @@ namespace PlaylistsUi {
 
   void PlaylistsContextMenu::on_savem3u(const QModelIndex &index) {
     auto i = model->itemAt(index);
+    if (!i) {
+      return;
+    }
     QByteArray m3u = i->toM3U();
     QString fname = QFileDialog::getSaveFileName(view, tr("Save as m3u"), QStandardPaths::writableLocation(QStandardPaths::MusicLocation) + "/" + i->name(), "m3u (*.m3u)");
     QFile f(fname);
@@ -111,8 +120,12 @@ namespace PlaylistsUi {
   }
 
   void PlaylistsContextMenu::on_reload(const QModelIndex &index) {
-    model->itemAt(index)->reload();
+    auto i = model->itemAt(index);
+    if (!i) {
+      return;
+    }
+    i->reload();
     model->persist();
-    emit playlistChanged(model->itemAt(index));
+    emit playlistChanged(i);
   }
 }

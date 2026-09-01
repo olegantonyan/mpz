@@ -52,14 +52,18 @@ bool VolumeControl::eventFilter(QObject *obj, QEvent *event) {
 
 
 namespace PrivateVolumeControl {
-  Menu::Menu(QObject *parent) : QObject(parent), action(this) {
-    slider.setMaximum(100);
-    slider.setMinimum(0);
-    layout.addWidget(&slider);
-    widget.setLayout(&layout);
-    action.setDefaultWidget(&widget);
-    menu.addAction(&action);
-    connect(&slider, &QSlider::valueChanged, this, &Menu::changed);
+  Menu::Menu(QObject *parent) : QObject(parent) {
+    auto *widget = new QWidget;
+    auto *layout = new QHBoxLayout(widget);
+    slider = new QSlider(widget);
+    slider->setMaximum(100);
+    slider->setMinimum(0);
+    layout->addWidget(slider);
+
+    action = new QWidgetAction(&menu);
+    action->setDefaultWidget(widget);
+    menu.addAction(action);
+    connect(slider, &QSlider::valueChanged, this, &Menu::changed);
   }
 
   void Menu::show(const QPoint &pos) {
@@ -67,7 +71,7 @@ namespace PrivateVolumeControl {
   }
 
   void Menu::setValue(int value) {
-    slider.setValue(value);
+    slider->setValue(value);
   }
 
   QSize Menu::sizeHint() const {
@@ -75,6 +79,6 @@ namespace PrivateVolumeControl {
   }
 
   int Menu::value() const {
-    return slider.value();
+    return slider->value();
   }
 }

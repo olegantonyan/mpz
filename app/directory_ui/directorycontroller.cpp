@@ -116,6 +116,9 @@ namespace DirectoryUi {
   void Controller::on_search(const QString &term) {
     if (term.isEmpty()) {
       QTimer::singleShot(20, this, [=]() {
+        if (view->selectionModel() == nullptr) {
+          return;
+        }
         if (!view->selectionModel()->selectedRows().isEmpty()) {
           view->scrollTo(view->selectionModel()->selectedRows().first(), QAbstractItemView::PositionAtCenter);
         }
@@ -183,7 +186,8 @@ namespace DirectoryUi {
       }
       if (event->type() == QEvent::MouseButtonPress && me->button() == Qt::LeftButton) {
         const auto index = view->indexAt(me->pos());
-        view->setDragEnabled(index.isValid() && view->selectionModel()->isSelected(index));
+        auto *selection = view->selectionModel();
+        view->setDragEnabled(index.isValid() && selection != nullptr && selection->isSelected(index));
       }
     } else if (event->type() == QEvent::MouseButtonRelease) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(event);
