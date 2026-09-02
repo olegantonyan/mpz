@@ -12,10 +12,8 @@
 #include <QThreadPool>
 #include <QtTest>
 
-// The whole app pointed at a real mpd. One window for the binary: the config
-// objects and ModusOperandi are single-instance guarded, CoverArt::Covers is a
-// process-wide singleton, and closeEvent ends in qApp->quit() so the window is
-// never closed here.
+// The whole app pointed at a real mpd. One window for the binary: the config objects and ModusOperandi are single-instance
+// guarded, CoverArt::Covers is a process-wide singleton, and closeEvent ends in qApp->quit() so the window is never closed here.
 class TestMpdMainWindow : public QObject {
   Q_OBJECT
 

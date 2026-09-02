@@ -97,10 +97,8 @@ namespace Playlist {
           return s;
         }
       }
-      // Cue files in the wild often use Windows-1251 (Russian) or Latin-1.
-      // CP1251 covers more cases in practice (and degrades gracefully to
-      // Latin-1-like for Western text — the affected bytes are usually only
-      // in metadata strings, which we won't try to fix beyond best effort).
+      // Cue files in the wild often use Windows-1251 (Russian) or Latin-1. CP1251 covers more cases in practice (and degrades gracefully to
+      // Latin-1-like for Western text — the affected bytes are usually only in metadata strings, which we won't try to fix beyond best effort).
       return decode_cp1251(bytes);
 #else
       QTextCodec* codec = QTextCodec::codecForUtfText(bytes, QTextCodec::codecForName("UTF-8"));
@@ -184,8 +182,7 @@ namespace Playlist {
     return tokens;
   }
 
-  // Parse "MM:SS:FF" (minutes:seconds:frames, 75 frames per second) into ms.
-  // Returns -1 if the input doesn't look like an INDEX position.
+  // Parse "MM:SS:FF" (minutes:seconds:frames, 75 frames per second) into ms. Returns -1 if the input doesn't look like an INDEX position.
   qint64 CueParser::parse_index_position(const QString& mss_ff) {
     const auto parts = mss_ff.split(QChar(':'));
     if (parts.size() != 3) {
@@ -202,16 +199,13 @@ namespace Playlist {
     return (frames * 1000) / 75;
   }
 
-  // Resolve the FILE reference from the cue against the cue's directory.
-  // Strategy, in order:
+  // Resolve the FILE reference from the cue against the cue's directory. Strategy, in order:
   //   1. normalize Windows backslashes on Unix
   //   2. exact path (canonicalized) if it exists
   //   3. case-insensitive name match in the parent directory
-  //   4. stem match against any audio file in the parent directory — handles
-  //      foobar2000-style "stub WAV name for FLAC" cues where the cue says
-  //      "Track.wav" but the actual file is "Track.flac" / ".ape" / ".mp3"
-  //   5. fallback to the same trick using only the basename in cue_dir
-  //      (some cues prefix the name with subdirectories that don't exist)
+  //   4. stem match against any audio file in the parent directory — handles foobar2000-style "stub WAV name
+  //      for FLAC" cues where the cue says "Track.wav" but the actual file is "Track.flac" / ".ape" / ".mp3"
+  //   5. fallback to the same trick using only the basename in cue_dir (some cues prefix the name with subdirectories that don't exist)
   //   6. give up: return empty so the caller can skip the FILE block
   QString CueParser::resolve_audio_file(const QString& cue_dir, const QString& referenced) {
     if (referenced.isEmpty()) {
@@ -266,9 +260,8 @@ namespace Playlist {
       return found;
     }
 
-    // Some cues reference paths like "DJ Tiësto/Traffic/01-foo.wav" that don't
-    // resolve. Try looking for the basename (with stem fallback) directly in
-    // the cue's directory.
+    // Some cues reference paths like "DJ Tiësto/Traffic/01-foo.wav" that don't resolve.
+    // Try looking for the basename (with stem fallback) directly in the cue's directory.
     if (QString found = find_in_dir(QDir(cue_dir), QFileInfo(r).fileName()); !found.isEmpty()) {
       return found;
     }
@@ -343,10 +336,8 @@ namespace Playlist {
       if (cmd == QLatin1String("file")) {
         const QString name = toks.value(1);
         const QString type = toks.value(2);
-        // EAC "gaps appended": the open track's INDEX 00 (pregap) is the tail of
-        // the file we're leaving, but its INDEX 01 (audio) starts in this new
-        // file. Keep it open so the next INDEX 01 binds here, not onto the
-        // previous file at the pregap offset.
+        // EAC "gaps appended": the open track's INDEX 00 (pregap) is the tail of the file we're leaving, but its INDEX 01 (audio)
+        // starts in this new file. Keep it open so the next INDEX 01 binds here, not onto the previous file at the pregap offset.
         if (!(in_track && cur.index01_ms < 0)) {
           flush_track();
         }
@@ -427,8 +418,7 @@ namespace Playlist {
           album_rg_peak = v;
         }
       }
-      // All other commands (CATALOG, ISRC, FLAGS, CDTEXTFILE, POSTGAP, PREGAP, ...)
-      // are ignored on purpose.
+      // All other commands (CATALOG, ISRC, FLAGS, CDTEXTFILE, POSTGAP, PREGAP, ...) are ignored on purpose.
     }
     flush_track();
 

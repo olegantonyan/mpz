@@ -18,9 +18,8 @@ namespace {
     return f.write(content) == content.size();
   }
 
-  // Create an empty (zero-byte) file. Existence is enough to make Track ctors
-  // and FileParser accept the entry; TagLib silently returns null on bogus
-  // audio content, which is fine for parser tests.
+  // Create an empty (zero-byte) file. Existence is enough to make Track ctors and FileParser accept
+  // the entry; TagLib silently returns null on bogus audio content, which is fine for parser tests.
   bool touch(const QString &path) {
     QFile f(path);
     return f.open(QIODevice::WriteOnly) && f.flush();
@@ -87,8 +86,7 @@ void TestFileParser::m3uPicksUpAbsoluteLocalFile() {
 }
 
 void TestFileParser::m3uPicksUpRelativeLocalFile() {
-  // FileParser resolves relative paths against the parent of the playlist file
-  // (it calls QDir(path.absolutePath()).absolutePath() for current_dir()).
+  // FileParser resolves relative paths against the parent of the playlist file (it calls QDir(path.absolutePath()).absolutePath() for current_dir()).
   QDir t(tempDir.path());
   QVERIFY(t.mkpath(QStringLiteral("nested")));
   const QString audio = t.filePath(QStringLiteral("nested/clip.mp3"));

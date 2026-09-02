@@ -163,8 +163,7 @@ void TestRadioItem::destructorDeletesChildren() {
     QCOMPARE(g->children.size(), 2);
     delete g;
   }
-  // Reaching here without an ASan/leak abort is the assertion; qDeleteAll is
-  // what tst_treeitem asserts the same way.
+  // Reaching here without an ASan/leak abort is the assertion; qDeleteAll is what tst_treeitem asserts the same way.
   QVERIFY(true);
 }
 

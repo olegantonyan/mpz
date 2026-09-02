@@ -145,8 +145,7 @@ void TestTagEditor::mixedSelectionShowsThePlaceholder() {
   TagEditorDialog dlg({Track(one), Track(two)});
 
   QCOMPARE(field(dlg, "lineEditAlbum")->text(), QString("Same"));
-  // Differing values leave the field empty and show the placeholder, so typing
-  // into it is an explicit choice rather than an accidental overwrite.
+  // Differing values leave the field empty and show the placeholder, so typing into it is an explicit choice rather than an accidental overwrite.
   QVERIFY(field(dlg, "lineEditArtist")->text().isEmpty());
   QCOMPARE(field(dlg, "lineEditArtist")->placeholderText(), QString("<multiple values>"));
   QVERIFY(dlg.findChild<QLineEdit *>(QStringLiteral("lineEditFilename"))->isHidden());

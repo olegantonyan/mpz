@@ -117,9 +117,8 @@ namespace Playback {
 
   QString Stream::buildRequest() const {
     QStringList headers;
-    // HTTP/1.0: a 1.1 response to an infinite (no Content-Length) stream is framed
-    // with Transfer-Encoding: chunked by proxies like Caddy, which the ffmpeg
-    // backend can't parse. 1.0 forces a raw byte stream instead.
+    // HTTP/1.0: a 1.1 response to an infinite (no Content-Length) stream is framed with Transfer-Encoding:
+    // chunked by proxies like Caddy, which the ffmpeg backend can't parse. 1.0 forces a raw byte stream instead.
     headers.append(QString("GET %1 HTTP/1.0").arg(url().path()));
     headers.append(QString("Host: %1:%2").arg(url().host()).arg(url().port()));
     headers.append(QString("User-Agent: %1 %2").arg(qAppName()).arg(qApp->applicationVersion()));
@@ -140,9 +139,8 @@ namespace Playback {
     rawheaders.removeAt(0); // status line. don't care
     rawheaders.removeAll({}); // empty and null
     for (const auto &i : std::as_const(rawheaders)) {
-      // HTTP header names are case-insensitive; proxies (Caddy/Go) Title-Case them
-      // (Icy-Metaint, Icy-Br, ...). Normalise to lower case so downstream lookups
-      // here and in StreamMetaData (which reads "icy-br", "content-type", ...) match.
+      // HTTP header names are case-insensitive; proxies (Caddy/Go) Title-Case them (Icy-Metaint, Icy-Br, ...). Normalise
+      // to lower case so downstream lookups here and in StreamMetaData (which reads "icy-br", "content-type", ...) match.
       auto key = i.section(':', 0, 0).trimmed().toLower();
       auto value = i.section(':', 1).trimmed();
       result.insert(key, value);
@@ -292,8 +290,7 @@ namespace Playback {
       if (!headers.isEmpty()) {
         feed(data);
       } else {
-        // HTTP headers may arrive split across multiple readyRead calls.
-        // Accumulate into header_buf until we see the \r\n\r\n terminator.
+        // HTTP headers may arrive split across multiple readyRead calls. Accumulate into header_buf until we see the \r\n\r\n terminator.
         header_buf.append(data);
         const QByteArray HEADERS_TERMINATOR("\r\n\r\n");
         int term_idx = header_buf.indexOf(HEADERS_TERMINATOR);
@@ -328,8 +325,7 @@ namespace Playback {
     const QUrl u = url();
     const bool secure = u.scheme() == "https";
     const quint16 port = static_cast<quint16>(u.port(secure ? 443 : 80));
-    // A stop() that raced ahead of the connections above emitted stopping()
-    // with nothing listening, so the flag is what tells us about it.
+    // A stop() that raced ahead of the connections above emitted stopping() with nothing listening, so the flag is what tells us about it.
     if (!_stop_requested.load()) {
       if (secure) {
         sock.connectToHostEncrypted(u.host(), port);

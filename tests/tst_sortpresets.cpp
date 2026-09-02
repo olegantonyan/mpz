@@ -24,9 +24,8 @@ private slots:
 private:
   QStringList presetCriteria(QMenu &menu) const;
 
-  // Differ in every sortable field, so a criterion the sorter understands orders
-  // them strictly and one it does not leaves them equal. Track::dir() canonicalizes,
-  // so DIRECTORY only sorts when the paths really exist.
+  // Differ in every sortable field, so a criterion the sorter understands orders them strictly and one it does
+  // not leaves them equal. Track::dir() canonicalizes, so DIRECTORY only sorts when the paths really exist.
   Track make(const QString &name, quint16 tracknum, quint16 year);
   bool orders(const QString &criterion);
 

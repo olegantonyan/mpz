@@ -10,8 +10,7 @@
 #include <QUrl>
 
 namespace Lyrics {
-  // Base class for online lyrics providers. Exactly one of found/notFound/failed
-  // is emitted per fetch().
+  // Base class for online lyrics providers. Exactly one of found/notFound/failed is emitted per fetch().
   class Provider : public QObject {
     Q_OBJECT
   public:

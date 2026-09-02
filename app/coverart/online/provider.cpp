@@ -16,8 +16,7 @@ namespace CoverArt {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
       nam.setTransferTimeout(10000);
 #endif
-      // Cover Art Archive answers front-500 with a redirect to archive.org. Qt6
-      // follows redirects by default, Qt5 does not, and mpz builds both.
+      // Cover Art Archive answers front-500 with a redirect to archive.org. Qt6 follows redirects by default, Qt5 does not, and mpz builds both.
       nam.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     }
 

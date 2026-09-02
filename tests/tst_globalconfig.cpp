@@ -88,8 +88,7 @@ void TestGlobalConfig::gaplessCacheSizeMb_roundTrips() {
   QCOMPARE(reloaded.gaplessCacheSizeMb(), 250);
 }
 
-// No online provider is enabled until the user picks one; built-in lyrics
-// sources are always on and never appear in the config.
+// No online provider is enabled until the user picks one; built-in lyrics sources are always on and never appear in the config.
 void TestGlobalConfig::lyricsProviders_defaultsToEmpty() {
   Config::Global g;
   QVERIFY(g.lyricsProviders().isEmpty());
@@ -101,8 +100,7 @@ void TestGlobalConfig::lyricsProviders_ignoresMalformedValue() {
   QVERIFY(g.lyricsProviders().isEmpty());
 }
 
-// Configs written before built-in sources became always-on still name them.
-// They are returned verbatim here and dropped by ProviderChain::filterKnown.
+// Configs written before built-in sources became always-on still name them. They are returned verbatim here and dropped by ProviderChain::filterKnown.
 void TestGlobalConfig::lyricsProviders_keepsLegacyBuiltinEntries() {
   writeGlobalYaml("lyrics:\n  providers:\n    - embedded\n    - sidecar\n    - lrclib\n");
   Config::Global g;
@@ -110,8 +108,7 @@ void TestGlobalConfig::lyricsProviders_keepsLegacyBuiltinEntries() {
   QCOMPARE(g.lyricsProviders(), expected);
 }
 
-// An explicitly empty list means the user turned everything off. It must not
-// fall back to the defaults.
+// An explicitly empty list means the user turned everything off. It must not fall back to the defaults.
 void TestGlobalConfig::lyricsProviders_explicitEmptyStaysEmpty() {
   writeGlobalYaml("lyrics:\n  providers: []\n");
   Config::Global g;

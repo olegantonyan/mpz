@@ -12,9 +12,8 @@
 namespace {
   const int kDefaultMpdPort = 6600;
 
-  // Client::probe blocks the calling thread inside libmpdclient, so a fake
-  // server sharing that thread would never get to accept. It runs its own event
-  // loop instead.
+  // Client::probe blocks the calling thread inside libmpdclient, so a fake server
+  // sharing that thread would never get to accept. It runs its own event loop instead.
   class FakeMpd : public QThread {
   public:
     enum Behaviour { Answer, HangUpAfterGreeting, SilentAfterGreeting };
@@ -147,9 +146,8 @@ void TestMpdConnection::initTestCase() {
 void TestMpdConnection::cleanup() {
   // A live connection would otherwise keep its watchdog ticking into the next case.
   client->closeConnection();
-  // The client re-emits its worker's signals across threads, so they are queued
-  // and only land once an event loop spins. Drain them here or a stale
-  // disconnected shows up in the next case's spy.
+  // The client re-emits its worker's signals across threads, so they are queued and only land once
+  // an event loop spins. Drain them here or a stale disconnected shows up in the next case's spy.
   client->ping();
   QTest::qWait(50);
   server.resetState();
@@ -208,8 +206,7 @@ void TestMpdConnection::probe_reportsAuthenticationFailureForAWrongPassword() {
 }
 
 void TestMpdConnection::probe_reportsPermissionDeniedWithoutAPassword() {
-  // Configuring any password zeroes the unauthenticated default permissions, so
-  // the greeting still succeeds and the first real command is refused.
+  // Configuring any password zeroes the unauthenticated default permissions, so the greeting still succeeds and the first real command is refused.
   const auto result = client->probe(auth_server.url());
   QVERIFY(!result.first);
   QVERIFY2(result.second.contains("permission denied"), qPrintable(result.second));
@@ -231,8 +228,7 @@ void TestMpdConnection::open_emitsConnectedAndAnswersPing() {
 
   client->openConnection(server.url());
 
-  // openConnection is queued and ping blocks on the same worker queue, so a
-  // successful ping proves open() already ran.
+  // openConnection is queued and ping blocks on the same worker queue, so a successful ping proves open() already ran.
   QVERIFY(client->ping());
   QTRY_COMPARE(connected.count(), 1);
   QCOMPARE(connected.first().at(0).toUrl(), server.url());
@@ -335,8 +331,7 @@ void TestMpdConnection::openingABadUrlDoesNotRetryForever() {
   client->openConnection(QUrl(QString("mpd://127.0.0.1:%1").arg(port)));
   QTRY_VERIFY(error.count() >= 1);
 
-  // The watchdog interval is 8.5 s. A url that never connected must not keep
-  // retrying it and re-emitting error every interval.
+  // The watchdog interval is 8.5 s. A url that never connected must not keep retrying it and re-emitting error every interval.
   const int settled = error.count();
   QTest::qWait(11000);
   QCOMPARE(error.count(), settled);
@@ -363,8 +358,7 @@ void TestMpdConnection::watchdogReconnectsAfterTheServerRestarts() {
   QVERIFY(reconnecting.ping());
   QTRY_COMPARE(connected.count(), 1);
 
-  // Restart before the watchdog fires, so one interval is enough: the ping
-  // fails, the loss is announced, and the re-open finds the server already back.
+  // Restart before the watchdog fires, so one interval is enough: the ping fails, the loss is announced, and the re-open finds the server already back.
   own.crash();
   QVERIFY2(own.restartSamePort(), qPrintable(own.failReason()));
 

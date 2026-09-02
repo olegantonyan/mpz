@@ -126,8 +126,7 @@ namespace DirectoryUi {
       case ModusOperandi::MODUS_LOCALFS:
       default:
         if (global_conf.libraryFilterScope() == "top_level_only") {
-          // Top-level-only mode: proxy does the filtering. Clear any legacy name filter
-          // that may have been set in all-levels mode before the user switched.
+          // Top-level-only mode: proxy does the filtering. Clear any legacy name filter that may have been set in all-levels mode before the user switched.
           localfs->setNameFilters(QStringList());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
           beginFilterChange();
@@ -138,9 +137,8 @@ namespace DirectoryUi {
           invalidateFilter();
 #endif
         } else {
-          // All-levels mode (default; also covers empty/unknown stored value):
-          // QFileSystemModel filters at every level via setNameFilters. Make sure the
-          // proxy-level filter is cleared so it doesn't double up if the user just switched.
+          // All-levels mode (default; also covers empty/unknown stored value): QFileSystemModel filters at every level via
+          // setNameFilters. Make sure the proxy-level filter is cleared so it doesn't double up if the user just switched.
 #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
           beginFilterChange();
           filter_term.clear();
@@ -166,8 +164,8 @@ namespace DirectoryUi {
       if (sourceModel() != localfs) {
         return true;
       }
-      // Filter only at the top level (children of rootIndex); deeper rows are always accepted
-      // so that expanding a matched top-level dir shows its full contents.
+      // Filter only at the top level (children of rootIndex); deeper rows are always
+      // accepted so that expanding a matched top-level dir shows its full contents.
       if (source_parent != localfs->rootIndex()) {
         return true;
       }

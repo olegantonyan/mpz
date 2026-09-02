@@ -22,15 +22,13 @@ namespace Lyrics {
     const QString norm_artist = TextMatch::normalizeArtist(q.artist);
     const QString prim_artist = TextMatch::normalizeArtist(TextMatch::primaryArtist(q.artist));
 
-    // 1. Exact signature. Sent duration is matched server-side within ±2s, so
-    //    an off-by-a-few-seconds tag silently misses — attempt 2 rescues that.
+    // 1. Exact signature. Sent duration is matched server-side within ±2s, so an off-by-a-few-seconds tag silently misses — attempt 2 rescues that.
     if (!q.album.isEmpty() || q.duration_seconds > 0) {
       attempts.append({Attempt::Kind::Get, q.artist, q.title, q.album, q.duration_seconds});
     }
     // 2. Get without album/duration (the API is lenient about the "required" fields).
     attempts.append({Attempt::Kind::Get, q.artist, q.title, QString(), 0});
-    // 3-5. Field search: raw, normalized, primary artist. lrclib search has no
-    //      typo tolerance, so stripping decorations client-side is what helps.
+    // 3-5. Field search: raw, normalized, primary artist. lrclib search has no typo tolerance, so stripping decorations client-side is what helps.
     addSearchAttempt(q.artist, q.title);
     addSearchAttempt(norm_artist, norm_title);
     addSearchAttempt(prim_artist, norm_title);

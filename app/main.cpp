@@ -74,8 +74,7 @@ void load_locale(MpzApplication &a, const QString &conf_language) {
 
 int main(int argc, char *argv[]) {
 #ifdef ENABLE_GAPLESS
-  // Ahead of the crash handler: a crash in a decode worker is a result the parent
-  // reads, not an incident to report.
+  // Ahead of the crash handler: a crash in a decode worker is a result the parent reads, not an incident to report.
   if (ReplayGain::isScanWorkerInvocation(argc, argv)) {
     return ReplayGain::runScanWorker(argc, argv);
   }
@@ -113,9 +112,8 @@ int main(int argc, char *argv[]) {
   WindowsTaskbar::setAppUserModelId();
 #endif
 #ifdef Q_OS_MACOS
-  // The main window hides (not quits) on close, so don't let the app exit when
-  // the last visible window — e.g. a dialog while the window is hidden — closes.
-  // MainWindow::requestQuit() quits explicitly on Cmd-Q / menu Quit.
+  // The main window hides (not quits) on close, so don't let the app exit when the last visible window — e.g. a
+  // dialog while the window is hidden — closes. MainWindow::requestQuit() quits explicitly on Cmd-Q / menu Quit.
   a.setQuitOnLastWindowClosed(false);
 #endif
   QString version = VERSION;
@@ -152,10 +150,8 @@ int main(int argc, char *argv[]) {
       break;
   }
 
-  // Files opened from Finder before the main window exists arrive as
-  // QFileOpenEvent and queue up inside MpzApplication; merge them into
-  // the initial argument list. Later FileOpen events route through the
-  // same IPC signal as a second-instance file drop.
+  // Files opened from Finder before the main window exists arrive as QFileOpenEvent and queue up inside MpzApplication; merge
+  // them into the initial argument list. Later FileOpen events route through the same IPC signal as a second-instance file drop.
   arguments << a.drainPendingFiles();
 
   MainWindow w(arguments, &instance, local_conf, global_conf);

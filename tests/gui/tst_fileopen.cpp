@@ -10,8 +10,7 @@
 #include <QTableView>
 #include <QToolButton>
 
-// Opening files from the command line: MainWindow preloads its argument list in
-// the constructor, so the window is built once here with a directory of tracks.
+// Opening files from the command line: MainWindow preloads its argument list in the constructor, so the window is built once here with a directory of tracks.
 class TestFileOpen : public QObject {
   Q_OBJECT
 
@@ -33,8 +32,7 @@ private:
 
   QListView *playlists() const;
   QStringList playlistNames() const;
-  // Files named on the command line have no library root to strip, so the
-  // playlist is named after the absolute path, clamped by Playlist::rename.
+  // Files named on the command line have no library root to strip, so the playlist is named after the absolute path, clamped by Playlist::rename.
   static QString nameFor(const QString &dir);
 };
 

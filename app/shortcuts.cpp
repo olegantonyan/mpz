@@ -41,8 +41,7 @@ const QVector<Shortcuts::Spec> &Shortcuts::defaults() {
     t << Spec{Action::FocusLibrary, "focus_library", tr("Focus on library"), QKeySequence(Qt::CTRL | Qt::Key_1), true};
     t << Spec{Action::FocusPlaylists, "focus_playlists", tr("Focus on playlists"), QKeySequence(Qt::CTRL | Qt::Key_2), true};
     t << Spec{Action::FocusPlaylist, "focus_playlist", tr("Focus on playlist"), QKeySequence(Qt::CTRL | Qt::Key_3), true};
-    // Cmd+Option+digit, not Cmd+Shift+digit: the latter clashes with macOS
-    // system screenshot shortcuts (⌘⇧3/⌘⇧4/⌘⇧5).
+    // Cmd+Option+digit, not Cmd+Shift+digit: the latter clashes with macOS system screenshot shortcuts (⌘⇧3/⌘⇧4/⌘⇧5).
     t << Spec{Action::FocusFilterLibrary, "focus_filter_library", tr("Focus on library filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_1), true};
     t << Spec{Action::FocusFilterPlaylists, "focus_filter_playlists", tr("Focus on playlists filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_2), true};
     t << Spec{Action::FocusFilterPlaylist, "focus_filter_playlist", tr("Focus on playlist filter"), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_3), true};
@@ -181,8 +180,8 @@ void Shortcuts::setupGlobal() {
   if (local_conf.disableQhotkey()) {
     return;
   }
-  // Skip where the OS owns the media keys — macOS (MPRemoteCommandCenter) and the
-  // SMTC build (WindowsMediaControls); a QHotkey grab would double-fire alongside them.
+  // Skip where the OS owns the media keys — macOS (MPRemoteCommandCenter) and the SMTC
+  // build (WindowsMediaControls); a QHotkey grab would double-fire alongside them.
 #ifdef Q_OS_WIN
   connect(&_playpause_global, &QHotkey::activated, this, &Shortcuts::playPause);
 #else
@@ -195,8 +194,7 @@ void Shortcuts::setupGlobal() {
 
   _stop_global.setShortcut(Qt::Key_MediaStop, Qt::NoModifier, true);
 #ifdef Q_OS_WIN
-  // Windows has no VK for a discrete pause — Key_MediaPause silently fails to
-  // register, and Key_MediaPlay is VK_MEDIA_PLAY_PAUSE, a single toggle key.
+  // Windows has no VK for a discrete pause — Key_MediaPause silently fails to register, and Key_MediaPlay is VK_MEDIA_PLAY_PAUSE, a single toggle key.
   _playpause_global.setShortcut(Qt::Key_MediaPlay, Qt::NoModifier, true);
 #else
   _play_global.setShortcut(Qt::Key_MediaPlay, Qt::NoModifier, true);

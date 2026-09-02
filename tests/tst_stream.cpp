@@ -8,8 +8,7 @@
 namespace {
   const int kWaitMs = 10000;
 
-  // Serves one canned response, optionally in pieces, so the split-read paths
-  // through parseHeaders/dechunk/append_extract_meta are reachable offline.
+  // Serves one canned response, optionally in pieces, so the split-read paths through parseHeaders/dechunk/append_extract_meta are reachable offline.
   class Server : public QTcpServer {
   public:
     QList<QByteArray> chunks;
@@ -33,8 +32,7 @@ namespace {
           socket->flush();
           socket->waitForBytesWritten(1000);
         }
-        // Deliberately kept open: Stream::thread() clears the buffer when the
-        // connection ends, so a test has to read while the stream is live.
+        // Deliberately kept open: Stream::thread() clears the buffer when the connection ends, so a test has to read while the stream is live.
       });
     }
   };

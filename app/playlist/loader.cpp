@@ -21,8 +21,7 @@ namespace Playlist {
     }
 
     QThreadPool &scan_pool() {
-      // Deliberately not globalInstance(): tracks() itself runs on a global-pool thread
-      // and blocks here, so sharing that pool could starve it.
+      // Deliberately not globalInstance(): tracks() itself runs on a global-pool thread and blocks here, so sharing that pool could starve it.
       static QThreadPool pool;
       return pool;
     }
@@ -104,11 +103,9 @@ namespace Playlist {
 
     QVector<Track> result;
 
-    // Audio file paths (canonicalized) referenced by any cue. Files a cue already
-    // covers are never tag-read as standalone tracks below.
+    // Audio file paths (canonicalized) referenced by any cue. Files a cue already covers are never tag-read as standalone tracks below.
     QSet<QString> cue_audio_paths;
-    // (canonical_audio_path + "@" + begin_ms) -- used to drop duplicate cue
-    // entries when more than one cue covers the same audio at the same offset.
+    // (canonical_audio_path + "@" + begin_ms) -- used to drop duplicate cue entries when more than one cue covers the same audio at the same offset.
     QSet<QString> seen_cue_keys;
 
     const auto per_cue = parallel_map<QVector<Track>>(cue_paths, [](const QString &p) {

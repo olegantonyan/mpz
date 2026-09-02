@@ -6,8 +6,7 @@
 #include <QSet>
 #include <QUrl>
 
-// Guards the shipped station list against a bad curation edit. Reads the source
-// file directly rather than the qrc so the test needs no resource compilation.
+// Guards the shipped station list against a bad curation edit. Reads the source file directly rather than the qrc so the test needs no resource compilation.
 class TestRadioCatalogResource : public QObject {
   Q_OBJECT
 private slots:
@@ -35,8 +34,7 @@ void TestRadioCatalogResource::shippedListParses() {
   QVERIFY(stations.size() >= 20);
 }
 
-// Multi-station providers live under one folder; single stations stay top-level.
-// A station's group is a pure function of its id prefix.
+// Multi-station providers live under one folder; single stations stay top-level. A station's group is a pure function of its id prefix.
 void TestRadioCatalogResource::stationsAreGroupedByProvider() {
   const auto stations = shipped();
   QCOMPARE(Radio::Catalog::groups(stations),
@@ -66,8 +64,7 @@ void TestRadioCatalogResource::idsAreUnique() {
   }
 }
 
-// Playback::Stream sends only url().path() and never follows redirects, so a
-// query string is silently dropped and a non-http scheme cannot connect at all.
+// Playback::Stream sends only url().path() and never follows redirects, so a query string is silently dropped and a non-http scheme cannot connect at all.
 void TestRadioCatalogResource::everyUrlIsHttpAndQueryFree() {
   for (const auto &s : shipped()) {
     const QUrl parsed(s.url);

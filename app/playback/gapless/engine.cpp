@@ -424,9 +424,8 @@ namespace Playback::Gapless {
     if (url != current_url) {
       return;
     }
-    // Streams reach here only on a real end (the blocking StreamSource EOFs only when
-    // the socket is dead and the ring drained): closeSegment lets the buffered PCM
-    // play out, then checkEof -> finishPlayback advances, exactly like QMediaPlayer.
+    // Streams reach here only on a real end (the blocking StreamSource EOFs only when the socket is dead and the ring drained):
+    // closeSegment lets the buffered PCM play out, then checkEof -> finishPlayback advances, exactly like QMediaPlayer.
     decoder_finished = true;
     decoder_total_frames = total_frames;
     for (int i = 0; i < timeline.segmentCount(); i++) {
@@ -597,8 +596,7 @@ namespace Playback::Gapless {
   }
 
   void Engine::restartDecoderForSeek(qint64 target_abs) {
-    // Target is behind the retained window; the decoder cannot seek, so re-open
-    // the entry and discard-append from the file start until the target frame.
+    // Target is behind the retained window; the decoder cannot seek, so re-open the entry and discard-append from the file start until the target frame.
     cache.dropEntry(current_url);
     cache.openEntry(current_url, sink_format.bytesPerFrame());
     newDecoder();
@@ -813,8 +811,7 @@ namespace Playback::Gapless {
     about_to_finish_emitted = false;
     eof_done = false;
     if (reformat) {
-      // prepared native format unsupported on the device: re-decode into the supported
-      // format (the prebuffered native PCM and native-rate frames are unusable)
+      // prepared native format unsupported on the device: re-decode into the supported format (the prebuffered native PCM and native-rate frames are unusable)
       const int rate = chosen.sampleRate();
       const qint64 begin_f = current_track.isCue() ? qint64(current_track.begin()) * rate / 1000 : 0;
       const qint64 end_f = (current_track.isCue() && current_track.duration() > 0)
@@ -1150,9 +1147,8 @@ namespace Playback::Gapless {
   }
 
   void Engine::maybeCloseCurrentAtFrontier() {
-    // CUE track ending mid-file with a cross-file next prepared: once the file is
-    // decoded up to that track's end there is nothing more to wait for, so synthesize
-    // EOF instead of letting back-pressure pause the decoder forever.
+    // CUE track ending mid-file with a cross-file next prepared: once the file is decoded up to that track's end there
+    // is nothing more to wait for, so synthesize EOF instead of letting back-pressure pause the decoder forever.
     if (decoder_finished || prepared_url.isEmpty() || prepared_url == current_url) {
       return;
     }
@@ -1178,8 +1174,8 @@ namespace Playback::Gapless {
     }
     const int rate = sink_format.sampleRate();
     const qint64 reserve = rate > 0 ? qint64(30) * rate : 0;
-    // during forward-seek catch-up the sink is frozen; anchor to the seek target so the
-    // skipped span is evictable instead of pinned behind the frozen audible frame
+    // during forward-seek catch-up the sink is frozen; anchor to the seek target so
+    // the skipped span is evictable instead of pinned behind the frozen audible frame
     const qint64 anchor = catchup_target_frame >= 0 ? catchup_target_frame : audibleAbsFrame();
     cache.protect(current_url, inFileFrame(anchor) - reserve);
   }
@@ -1388,9 +1384,8 @@ namespace Playback::Gapless {
   }
 
   void Engine::startStreamDecoder() {
-    // Ring reached the configured size (fill-to-threshold, like QMediaPlayer's
-    // start_stream); now decode the live device. Forward-runway back-pressure then
-    // reads the ring at playback rate, keeping it near threshold.
+    // Ring reached the configured size (fill-to-threshold, like QMediaPlayer's start_stream); now decode the
+    // live device. Forward-runway back-pressure then reads the ring at playback rate, keeping it near threshold.
     newDecoder();
     if (sink && sink_format.isValid()) {
       decoder->requestFormat(sink_format); // sink already up (device switch): match its format
@@ -1413,8 +1408,7 @@ namespace Playback::Gapless {
 
   void Engine::onStreamStopped() {
     if (!sink && !output_recovery_pending) {
-      // died before any audio (connect failure / instant end): match QMediaPlayer,
-      // which advances to the next item (or stops when there is none)
+      // died before any audio (connect failure / instant end): match QMediaPlayer, which advances to the next item (or stops when there is none)
       teardownStream();
       finishPlayback();
     }

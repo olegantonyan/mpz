@@ -256,8 +256,7 @@ void MainWindow::setupUiSettings() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
 #ifdef Q_OS_MACOS
-  // Native Mac idiom for a media player: the red button / Cmd-W hides the
-  // window and playback keeps going; only Cmd-Q (requestQuit) really quits.
+  // Native Mac idiom for a media player: the red button / Cmd-W hides the window and playback keeps going; only Cmd-Q (requestQuit) really quits.
   if (!quitting) {
     hide();
     event->ignore();
@@ -292,8 +291,7 @@ void MainWindow::requestQuit() {
   quitting = true;
   close();
 #ifdef Q_OS_MACOS
-  // quitOnLastWindowClosed is off on macOS (see main.cpp) so closing windows
-  // no longer ends the event loop — quit explicitly.
+  // quitOnLastWindowClosed is off on macOS (see main.cpp) so closing windows no longer ends the event loop — quit explicitly.
   qApp->quit();
 #endif
 }
@@ -496,9 +494,8 @@ void MainWindow::setupDockWidgets() {
   connect(player, &Playback::Controller::trackChanged, cover_widget, &CoverArt::Widget::setTrack);
   connect(player, &Playback::Controller::stopped, cover_widget, &CoverArt::Widget::clear);
 
-  // The only trigger for online cover lookups: driving it from playback rather
-  // than from Track::artCover() is what keeps "current track only" true no
-  // matter who reads a cover.
+  // The only trigger for online cover lookups: driving it from playback rather than from
+  // Track::artCover() is what keeps "current track only" true no matter who reads a cover.
   CoverArt::Online::Downloader::instance().init(global_conf);
   connect(player, &Playback::Controller::started, &CoverArt::Online::Downloader::instance(),
           &CoverArt::Online::Downloader::request);
@@ -857,8 +854,8 @@ void MainWindow::setupOutputDevice() {
 
 #ifdef ENABLE_GAPLESS
 void MainWindow::setupEqualizer() {
-  // The engine owns device resolution, so it also decides which device the EQ is
-  // scoped to: hotplug that drops the configured device re-scopes the EQ to the default.
+  // The engine owns device resolution, so it also decides which device the EQ is scoped
+  // to: hotplug that drops the configured device re-scopes the EQ to the default.
   connect(player, &Playback::Controller::effectiveOutputDeviceChanged, this, &MainWindow::applyEqForDevice);
   applyEqForDevice(player->effectiveOutputDeviceId());
 

@@ -10,14 +10,12 @@ namespace CoverArt {
   namespace Online {
     ProviderChain::ProviderChain(QObject *parent) : QObject(parent) {
       watchdog.setSingleShot(true);
-      // Backstop for a provider that never emits; per-request transfer timeouts
-      // normally fire first.
+      // Backstop for a provider that never emits; per-request transfer timeouts normally fire first.
       watchdog.setInterval(20000);
     }
 
     QStringList ProviderChain::knownProviders() {
-      // Cover Art Archive is last: two round-trips and a 1 req/sec limit make it
-      // the slowest, so it only runs when the fast ones come up empty.
+      // Cover Art Archive is last: two round-trips and a 1 req/sec limit make it the slowest, so it only runs when the fast ones come up empty.
       return {"deezer", "itunes", "coverartarchive"};
     }
 
@@ -73,8 +71,7 @@ namespace CoverArt {
       watchdog.disconnect();
       if (pending.isEmpty()) {
         if (!had_failure) {
-          // Every provider genuinely returned not-found; a failed/timed-out
-          // provider must not poison the cache with a 30-day sentinel.
+          // Every provider genuinely returned not-found; a failed/timed-out provider must not poison the cache with a 30-day sentinel.
           Cache::instance().storeNotFound(query, enabled);
         }
         emit notFound();

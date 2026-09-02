@@ -242,8 +242,7 @@ namespace ReplayGain {
 
     const QVector<ScanTarget> targets = targetsInFolder(folder);
     if (!targets.isEmpty()) {
-      // only folders holding audio, so pruning walks album directories and not the
-      // whole subtree under every parent
+      // only folders holding audio, so pruning walks album directories and not the whole subtree under every parent
       walked_folders << folder;
       scanner.enqueue(planTargets(targets, walk_force));
     }

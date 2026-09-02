@@ -10,8 +10,7 @@ namespace {
     return re;
   }
 
-  // Production credits NetEase and QQ Music ship instead of, or ahead of, the
-  // lyrics. The trailing colon is what keeps sung lines out.
+  // Production credits NetEase and QQ Music ship instead of, or ahead of, the lyrics. The trailing colon is what keeps sung lines out.
   const QRegularExpression &creditRe() {
     static const QString labels = QStringLiteral(
       "作词|作詞|作曲|编曲|編曲|词|曲|制作人|製作人|出品人|监制|監製|录音|錄音|混音|"
@@ -23,8 +22,7 @@ namespace {
     return re;
   }
 
-  // Placeholder bodies for instrumentals or missing lyrics: "纯音乐，请欣赏"
-  // (pure music, enjoy), "暂无歌词" (no lyrics yet).
+  // Placeholder bodies for instrumentals or missing lyrics: "纯音乐，请欣赏" (pure music, enjoy), "暂无歌词" (no lyrics yet).
   const QRegularExpression &placeholderRe() {
     static const QRegularExpression re(QStringLiteral("纯音乐|純音樂|暂无歌词|暫無歌詞|没有填词|沒有填詞"));
     return re;

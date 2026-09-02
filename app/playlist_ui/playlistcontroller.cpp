@@ -439,8 +439,8 @@ namespace PlaylistUi {
     restoreCursor(cursor_uid, fallback_row);
   }
 
-  // removal rebuilds the model and drops the cursor; left invalid, Qt moves it to the first row on
-  // the next focus-in, which would hijack "playback follows cursor"
+  // removal rebuilds the model and drops the cursor; left invalid, Qt moves it to
+  // the first row on the next focus-in, which would hijack "playback follows cursor"
   void Controller::restoreCursor(quint64 cursor_uid, int fallback_row) {
     if (proxy->rowCount() == 0) {
       return;

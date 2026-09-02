@@ -4,8 +4,7 @@
 #include <QStyledItemDelegate>
 
 namespace DirectoryUi {
-  // Rows that don't answer RadioRole::IsStation fall through to the base
-  // delegate, so this is safe to install on the library tree unconditionally.
+  // Rows that don't answer RadioRole::IsStation fall through to the base delegate, so this is safe to install on the library tree unconditionally.
   class RadioDelegate : public QStyledItemDelegate {
     Q_OBJECT
 

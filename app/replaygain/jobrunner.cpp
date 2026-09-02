@@ -48,8 +48,7 @@ namespace ReplayGain {
     const int kWorkerStopMs = 5000;
     const int kWorkerNiceness = 10;
 
-    // The in-process path decodes on a LowestPriority thread; a child process would
-    // otherwise inherit this process's normal priority and lose that.
+    // The in-process path decodes on a LowestPriority thread; a child process would otherwise inherit this process's normal priority and lose that.
     void lowerPriority(QProcess &worker) {
 #if defined(Q_OS_UNIX)
       worker.setChildProcessModifier([]() { ::nice(kWorkerNiceness); });
@@ -141,8 +140,8 @@ namespace ReplayGain {
     runInProcess(job);
   }
 
-  // A worker that dies took the file it last announced with it, so that one is dropped
-  // and the rest go round again: k bad files cost k+1 passes over one folder.
+  // A worker that dies took the file it last announced with it, so that one is
+  // dropped and the rest go round again: k bad files cost k+1 passes over one folder.
   bool JobRunner::runIsolated(const ReplayGain::Job &job) {
     JobResult result;
     result.epoch = job.epoch;
@@ -256,8 +255,7 @@ namespace ReplayGain {
       if (!QFileInfo::exists(work.path)) {
         file_error = tr("file is gone");
       } else if (!hasAudioStream(work.path)) {
-        // A stream that reports no channels makes Qt build an empty ffmpeg channel
-        // layout, and the plugin then crashes inside swr_init instead of erroring out.
+        // A stream that reports no channels makes Qt build an empty ffmpeg channel layout, and the plugin then crashes inside swr_init instead of erroring out.
         file_error = tr("unreadable audio stream");
       }
       qCDebug(mpzReplayGain) << "decoding" << work.path << "error" << file_error;

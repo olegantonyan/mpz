@@ -8,8 +8,7 @@
 #include <QNetworkReply>
 
 namespace Lyrics {
-  // NetEase Cloud Music (music.163.com). Unofficial API, no key. Search has
-  // real fuzzy matching, so it often rescues misspelled tags lrclib can't.
+  // NetEase Cloud Music (music.163.com). Unofficial API, no key. Search has real fuzzy matching, so it often rescues misspelled tags lrclib can't.
   class NetEaseClient : public Provider {
     Q_OBJECT
   public:

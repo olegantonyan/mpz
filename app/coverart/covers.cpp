@@ -72,8 +72,7 @@ namespace CoverArt {
         found = local.file;
         cache.insert(key, found);
       } else {
-        // Embedded art is per file; the dir-keyed `cache` would serve it to the
-        // whole directory, so it is deliberately left uncached.
+        // Embedded art is per file; the dir-keyed `cache` would serve it to the whole directory, so it is deliberately left uncached.
         found = embedded_covers.get(filepath);
         if (found.isEmpty() && !local.file.isEmpty()) {
           found = local.file;
@@ -83,9 +82,8 @@ namespace CoverArt {
     }
 
     if (found.isEmpty()) {
-      // Downloaded covers are keyed by artist+album, so for the same reason as
-      // above they must not go into the dir-keyed `cache` either. Cheap enough
-      // to re-check: a hash plus a few QFile::exists.
+      // Downloaded covers are keyed by artist+album, so for the same reason as above they must not go
+      // into the dir-keyed `cache` either. Cheap enough to re-check: a hash plus a few QFile::exists.
       found = Online::Cache::instance().lookup(Online::AlbumQuery{artist, album});
     }
 

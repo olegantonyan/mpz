@@ -49,8 +49,7 @@ void TestTrackInfo::initTestCase() {
   QVERIFY(dir.isValid());
   global = std::make_unique<Config::Global>();
   QVERIFY(global->lyricsProviders().isEmpty());
-  // Track::artCover() goes through the process-wide singleton, which qFatals
-  // if it was never initialised.
+  // Track::artCover() goes through the process-wide singleton, which qFatals if it was never initialised.
   local = std::make_unique<Config::Local>();
   modus = std::make_unique<ModusOperandi>(*local, &banner);
   CoverArt::Covers::instance(*modus);

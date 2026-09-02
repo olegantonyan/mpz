@@ -18,17 +18,13 @@ namespace Playback {
     setOutputDevice(output_device_id);
 #endif
     connect(&player, &QMediaPlayer::positionChanged, this, [=](quint64 pos) {
-      // pos can lag behind offset_begin briefly after a CUE setSource while
-      // seek_to_offset_begin is still resolving; clamp to avoid unsigned
-      // underflow that would publish a near-ULLONG_MAX duration to the UI.
+      // pos can lag behind offset_begin briefly after a CUE setSource while seek_to_offset_begin is still
+      // resolving; clamp to avoid unsigned underflow that would publish a near-ULLONG_MAX duration to the UI.
       emit positionChanged(pos > offset_begin ? pos - offset_begin : 0);
       if (offset_end > 0 && pos >= offset_end) {
-        // Soft CUE boundary: let the underlying file keep playing and advance to
-        // the next track. If the upcoming setTrack() points at the same file
-        // (same-file CUE) we skip setSource entirely. If this track is the
-        // last/only one in its file, the file hits a natural EOF right after this
-        // — soft_advance_pending makes the StoppedState handler swallow that one
-        // EOF (we've already queued the advance), instead of stopping playback.
+        // Soft CUE boundary: let the underlying file keep playing and advance to the next track. If the upcoming setTrack() points at the same file
+        // (same-file CUE) we skip setSource entirely. If this track is the last/only one in its file, the file hits a natural EOF right after this —
+        // soft_advance_pending makes the StoppedState handler swallow that one EOF (we've already queued the advance), instead of stopping playback.
         offset_begin = offset_end;
         offset_end = 0;
         next_after_stop = false;
@@ -45,16 +41,14 @@ namespace Playback {
       switch (state) {
         case QMediaPlayer::StoppedState:
           if (soft_advance_pending) {
-            // Natural EOF right after a soft CUE boundary (last/only track in a
-            // file). The boundary already queued nextRequested, so don't stop and
-            // don't re-advance — just consume this one StoppedState.
+            // Natural EOF right after a soft CUE boundary (last/only track in a file). The boundary already
+            // queued nextRequested, so don't stop and don't re-advance — just consume this one StoppedState.
             soft_advance_pending = false;
             break;
           }
           emit positionChanged(0);
           if (next_after_stop) {
-            // Defer one tick so the next setSource/play doesn't re-enter
-            // QMediaPlayer while it's still inside its own EOF emission.
+            // Defer one tick so the next setSource/play doesn't re-enter QMediaPlayer while it's still inside its own EOF emission.
             QTimer::singleShot(0, this, [this]() { emit nextRequested(); });
           } else {
             emitStateChanged(MediaPlayer::StoppedState);
@@ -185,15 +179,13 @@ namespace Playback {
       synthetic_playing_on_play = false;
       next_after_stop = false;
       if (state() == MediaPlayer::PausedState) {
-        // Paused mid-CUE then user picked a same-file track: actually resume.
-        // QMediaPlayer will emit PlayingState; the normal handler emits
-        // stateChanged(PlayingState).
+        // Paused mid-CUE then user picked a same-file track: actually resume. QMediaPlayer
+        // will emit PlayingState; the normal handler emits stateChanged(PlayingState).
         player.play();
         unpause_workaround();
       } else {
-        // Already playing through a soft CUE boundary. QMediaPlayer wouldn't
-        // emit a state transition, so synthesise the per-track PlayingState
-        // event so downstream emits started(_current_track).
+        // Already playing through a soft CUE boundary. QMediaPlayer wouldn't emit a state transition,
+        // so synthesise the per-track PlayingState event so downstream emits started(_current_track).
         emitStateChanged(MediaPlayer::PlayingState);
       }
       return;
@@ -221,8 +213,7 @@ namespace Playback {
     next_after_stop = false;
     synthetic_playing_on_play = false;
     soft_advance_pending = false; // honor an explicit stop even if it lands right after a soft boundary
-    // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed
-    // stop back here; player.stop() is a no-op so synthesise the transition.
+    // Sequential-no-loop EOF: lambda emitted nextRequested, Dispatch routed stop back here; player.stop() is a no-op so synthesise the transition.
     const bool already_stopped = state() == MediaPlayer::StoppedState;
 #ifdef QT6_STREAM_HACKS
     cancel_stream_wait();
@@ -261,15 +252,11 @@ namespace Playback {
   }
 
   void MediaPlayer::setTrack(const Track &track) {
-    // A source swap is a deliberate action, never a real EOF. Clear the flag
-    // before any setSource so the resulting StoppedState doesn't schedule a
-    // spurious nextRequested (e.g. double-clicking a playlist would otherwise
-    // skip to the 2nd track).
+    // A source swap is a deliberate action, never a real EOF. Clear the flag before any setSource so the resulting StoppedState
+    // doesn't schedule a spurious nextRequested (e.g. double-clicking a playlist would otherwise skip to the 2nd track).
     next_after_stop = false;
-    // Same-file CUE continuation: skip the expensive setSource/stream.stop
-    // cycle. Works for sequential autoplay (player is already at the right
-    // region) and for random/manual jumps inside the same file (cheap
-    // in-file seek).
+    // Same-file CUE continuation: skip the expensive setSource/stream.stop cycle. Works for sequential autoplay
+    // (player is already at the right region) and for random/manual jumps inside the same file (cheap in-file seek).
     const bool same_file_cue =
         track.isCue()
         && !track.isStream()
@@ -399,16 +386,14 @@ namespace Playback {
     preferred_device_missing = false;
     ++device_change_epoch; // invalidate in-flight device-switch timers
     if (deviceid.isEmpty()) {
-      // the ffmpeg backend resolves the sink at open time and doesn't follow
-      // system default changes (a null QAudioDevice doesn't either); pin the
-      // current default and re-pin in evaluateAudioDevice when it changes
+      // the ffmpeg backend resolves the sink at open time and doesn't follow system default changes (a null
+      // QAudioDevice doesn't either); pin the current default and re-pin in evaluateAudioDevice when it changes
       audio_output.setDevice(QMediaDevices::defaultAudioOutput());
       return;
     }
     const QAudioDevice device = findPreferredDevice();
     if (device.isNull()) {
-      // configured device not present (e.g. unplugged before startup): fall back
-      // to the default; evaluateAudioDevice switches back when it appears
+      // configured device not present (e.g. unplugged before startup): fall back to the default; evaluateAudioDevice switches back when it appears
       preferred_device_missing = true;
       audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     } else {
@@ -427,8 +412,7 @@ namespace Playback {
   }
 
   void MediaPlayer::onAudioDevicesChanged() {
-    // also fires when the system default changes — QMediaDevices has no
-    // separate notifier for defaultAudioOutput
+    // also fires when the system default changes — QMediaDevices has no separate notifier for defaultAudioOutput
     devices_changed_debounce.start();
   }
 
@@ -437,8 +421,7 @@ namespace Playback {
     const QAudioDevice preferred = findPreferredDevice(); // null in default mode too (empty id matches nothing)
 
     if (preferred.isNull()) {
-      // default mode, or configured device unplugged: play through the current
-      // default sink; the backend doesn't re-route by itself
+      // default mode, or configured device unplugged: play through the current default sink; the backend doesn't re-route by itself
       preferred_device_missing = !output_device_id.isEmpty();
       const QAudioDevice default_device = QMediaDevices::defaultAudioOutput();
       if (audio_output.device().id() != default_device.id()) {
@@ -458,8 +441,7 @@ namespace Playback {
       return;
     }
 
-    // configured device replugged: switch back to it. Double-set through default
-    // with a delay because pipewire sometimes keeps the stream on the wrong sink.
+    // configured device replugged: switch back to it. Double-set through default with a delay because pipewire sometimes keeps the stream on the wrong sink.
     audio_output.setDevice(QMediaDevices::defaultAudioOutput());
     const int epoch = device_change_epoch;
     QTimer::singleShot(100, this, [this, epoch]() {
@@ -478,9 +460,8 @@ namespace Playback {
   }
 
   void MediaPlayer::recoverPlayback() {
-    // Reference only the QMediaPlayer this class manages: the virtual state()/
-    // position()/setPosition() dispatch to the gapless engine in the facade subclass,
-    // which owns its own device recovery.
+    // Reference only the QMediaPlayer this class manages: the virtual state()/position()/setPosition()
+    // dispatch to the gapless engine in the facade subclass, which owns its own device recovery.
     if (player.playbackState() != QMediaPlayer::PlayingState) {
       return; // paused/stopped: play() runs unpause_workaround itself
     }

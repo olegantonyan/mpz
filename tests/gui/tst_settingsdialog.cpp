@@ -13,9 +13,8 @@
 #include <QSpinBox>
 #include <QTableWidget>
 
-// The dialog builds its widgets in code with no object names, so everything is
-// found by type and label text. Cache-clear and blacklist buttons open modal
-// dialogs and are never clicked here.
+// The dialog builds its widgets in code with no object names, so everything is found by type and
+// label text. Cache-clear and blacklist buttons open modal dialogs and are never clicked here.
 class TestSettingsDialog : public QObject {
   Q_OBJECT
 

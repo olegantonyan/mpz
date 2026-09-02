@@ -7,8 +7,7 @@
 
 namespace CoverArt {
   namespace Online {
-    // itunes.apple.com search. Keyless, one request; the 100x100 artwork URL it
-    // returns is rewritten to a larger size before download.
+    // itunes.apple.com search. Keyless, one request; the 100x100 artwork URL it returns is rewritten to a larger size before download.
     class ItunesClient : public Provider {
       Q_OBJECT
     public:

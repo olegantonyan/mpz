@@ -6,8 +6,7 @@ namespace CoverArt {
     namespace {
       constexpr double ALBUM_WEIGHT = 0.55;
       constexpr double ARTIST_WEIGHT = 0.45;
-      // Deliberately strict: a wrong cover is written to disk and outlives the
-      // session, so showing nothing beats showing someone else's artwork.
+      // Deliberately strict: a wrong cover is written to disk and outlives the session, so showing nothing beats showing someone else's artwork.
       constexpr double ACCEPT_TOTAL = 0.72;
       constexpr double MIN_ALBUM_SCORE = 0.6;
       constexpr double MIN_ARTIST_SCORE = 0.45;

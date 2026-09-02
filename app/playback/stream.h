@@ -46,8 +46,7 @@ namespace Playback {
 
   private:
     QByteArray _buffer;
-    // stop() can land before the worker has wired up its stopping() handlers,
-    // which would drop the signal and leave the loop running until the timeout.
+    // stop() can land before the worker has wired up its stopping() handlers, which would drop the signal and leave the loop running until the timeout.
     std::atomic<bool> _stop_requested{false};
     qint64 _total_bytes_received;
     QUrl _url;
@@ -61,9 +60,8 @@ namespace Playback {
     int _meta_bytes_remaining;
     StreamMetaData _meta;
     int _timeout_ms;
-    // chunked transfer-encoding decode state. HTTP/1.1 proxies in front of the
-    // shoutcast/icecast server (e.g. Caddy) frame the body as chunked; we request
-    // HTTP/1.0 to avoid it, but still decode it here as a safety net.
+    // chunked transfer-encoding decode state. HTTP/1.1 proxies in front of the shoutcast/icecast server (e.g.
+    // Caddy) frame the body as chunked; we request HTTP/1.0 to avoid it, but still decode it here as a safety net.
     bool _chunked;
     enum class ChunkState { Size, Data, AfterData, Done } _chunk_state;
     qint64 _chunk_remaining;

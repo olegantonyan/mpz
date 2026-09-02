@@ -6,8 +6,7 @@
 #include <QObject>
 #include <QWidget>
 
-// Windows SMTC integration (analogue of MacMediaControls / Mpris). WinRT is kept
-// in the .cpp via Impl so its headers don't leak into the rest of the tree.
+// Windows SMTC integration (analogue of MacMediaControls / Mpris). WinRT is kept in the .cpp via Impl so its headers don't leak into the rest of the tree.
 class WindowsMediaControls : public QObject {
   Q_OBJECT
 public:

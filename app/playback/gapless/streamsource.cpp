@@ -68,8 +68,7 @@ namespace Playback::Gapless {
   }
 
   void StreamSource::connectStream(Playback::Stream *s) {
-    // Wake lambdas fire on the network (and, for fillChanged, the demux) thread
-    // with Stream's mutex released; they must do nothing but set flags and wake.
+    // Wake lambdas fire on the network (and, for fillChanged, the demux) thread with Stream's mutex released; they must do nothing but set flags and wake.
     connect(s, &Playback::Stream::fillChanged, this, [this](quint32, quint32) {
       QMutexLocker lock(&wait_mutex);
       wait_cond.wakeAll();
@@ -123,10 +122,8 @@ namespace Playback::Gapless {
   }
 
   qint64 StreamSource::readData(char *data, qint64 maxlen) {
-    // Runs on the decoder demux thread. The ffmpeg backend maps a 0-byte read or
-    // atEnd() to AVERROR_EOF, so block until data, release, or dead+drained; the
-    // 250ms timed wait is a safety net against a missed wake. Reads straight from
-    // the ring at the decoder's rate — Engine back-pressure keeps the ring full.
+    // Runs on the decoder demux thread. The ffmpeg backend maps a 0-byte read or atEnd() to AVERROR_EOF, so block until data, release, or dead+drained; the
+    // 250ms timed wait is a safety net against a missed wake. Reads straight from the ring at the decoder's rate — Engine back-pressure keeps the ring full.
     wait_mutex.lock();
     for (;;) {
       Playback::Stream *s = stream;

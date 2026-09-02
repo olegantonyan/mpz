@@ -23,10 +23,8 @@ namespace CoverArt {
         return t;
       }
 
-      // The throttle has to be process-global: ProviderChain builds a fresh
-      // client per fetch and destroys it after, so an instance member would
-      // never see the previous request. Reserving the slot at scheduling time
-      // (rather than at send time) keeps concurrent callers staggered.
+      // The throttle has to be process-global: ProviderChain builds a fresh client per fetch and destroys it after, so an instance member would
+      // never see the previous request. Reserving the slot at scheduling time (rather than at send time) keeps concurrent callers staggered.
       qint64 reserveMusicBrainzSlot() {
         static qint64 next_allowed = 0;
         const qint64 now = clock().elapsed();
@@ -103,8 +101,7 @@ namespace CoverArt {
         emitNotFound();
         return;
       }
-      // Answers 404 when the release has no art, and 307 to archive.org when it
-      // does — the base class sets a redirect policy so Qt5 follows it too.
+      // Answers 404 when the release has no art, and 307 to archive.org when it does — the base class sets a redirect policy so Qt5 follows it too.
       downloadImage(QUrl(QString("https://coverartarchive.org/release/%1/front-500").arg(mbids.at(best))));
     }
   }

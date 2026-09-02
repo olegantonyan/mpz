@@ -3,13 +3,11 @@
 #include <QHash>
 #include <QProcess>
 
-// End-to-end over the real binary: only a second process can exercise the
-// hand-off in app/main.cpp. That the handed-over files actually become a
-// playlist is asserted in-process by tst_fileopen.
+// End-to-end over the real binary: only a second process can exercise the hand-off in app/main.cpp.
+// That the handed-over files actually become a playlist is asserted in-process by tst_fileopen.
 //
-// The IPC socket lives under QStandardPaths::CacheLocation, which no environment
-// variable relocates on macOS, so these cases synchronize on the app's own log
-// output instead of on the socket file, and skip when a real mpz already owns it.
+// The IPC socket lives under QStandardPaths::CacheLocation, which no environment variable relocates on macOS, so these
+// cases synchronize on the app's own log output instead of on the socket file, and skip when a real mpz already owns it.
 class TestSingleInstance : public QObject {
   Q_OBJECT
 

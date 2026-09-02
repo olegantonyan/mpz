@@ -20,8 +20,7 @@ namespace Lyrics {
   }
 
   QString Cache::key(const TrackQuery &query) {
-    // Album and duration are deliberately excluded: the same song on another
-    // album or compilation should hit the cache.
+    // Album and duration are deliberately excluded: the same song on another album or compilation should hit the cache.
     return DiskCache::Store::hash(TextMatch::normalizeArtist(query.artist),
                                   TextMatch::normalizeTitle(query.title));
   }

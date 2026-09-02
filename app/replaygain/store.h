@@ -12,9 +12,8 @@
 #include <QStringList>
 
 namespace ReplayGain {
-  // A gain per (path, slice), kept in an on-disk B-tree. Nothing about it scales with
-  // the size of the library: opening reads a page or two, a lookup is one descent, and
-  // memory is whatever the page cache is set to.
+  // A gain per (path, slice), kept in an on-disk B-tree. Nothing about it scales with the size of the library:
+  // opening reads a page or two, a lookup is one descent, and memory is whatever the page cache is set to.
   class Store {
   public:
     using Key = QPair<QString, quint64>;

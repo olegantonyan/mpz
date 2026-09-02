@@ -145,8 +145,7 @@ void TestReplayGainJobCodec::messagesArePoppedInOrder() {
   QVERIFY(buffer.isEmpty());
 }
 
-// The worker's output arrives in whatever chunks the pipe hands over, so a
-// half-delivered message has to be left alone rather than half-parsed.
+// The worker's output arrives in whatever chunks the pipe hands over, so a half-delivered message has to be left alone rather than half-parsed.
 void TestReplayGainJobCodec::partialBufferYieldsNothing() {
   const QByteArray whole = frameFileStarted(QStringLiteral("/a/track.mp3"));
   Message type = Message::JobDone;

@@ -21,8 +21,7 @@ namespace MpdClient {
     delete thread;
   }
 
-  // Runs on the caller's thread, unlike every other method here. Only safe while
-  // probe() touches nothing but locals -- keep it that way.
+  // Runs on the caller's thread, unlike every other method here. Only safe while probe() touches nothing but locals -- keep it that way.
   QPair<bool, QString> Client::probe(const QUrl &url) {
     return conn->probe(url);
   }

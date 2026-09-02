@@ -26,8 +26,7 @@ namespace {
   }
 }
 
-// Database, stored playlist and cover-art commands against a real server. The
-// raw protocol socket on the fixture is the oracle and the second client.
+// Database, stored playlist and cover-art commands against a real server. The raw protocol socket on the fixture is the oracle and the second client.
 class TestMpdCommands : public QObject {
   Q_OBJECT
 
@@ -87,8 +86,7 @@ void TestMpdCommands::cleanup() {
 }
 
 void TestMpdCommands::lsDir_listsTheRootDirectories() {
-  // Only the directories are asserted: the tree model ignores ENTITY_PLAYLIST,
-  // and whether lsinfo reports stored playlists at the root varies by mpd version.
+  // Only the directories are asserted: the tree model ignores ENTITY_PLAYLIST, and whether lsinfo reports stored playlists at the root varies by mpd version.
   const QStringList dirs = paths(client->lsDir(""), MpdClient::Entity::ENTITY_DIR);
 
   QCOMPARE(dirs.size(), 4);
@@ -185,8 +183,7 @@ void TestMpdCommands::removeSongsFromPlaylist_dropsTheGivenIndices() {
 }
 
 void TestMpdCommands::removeSongsFromPlaylist_dropsEveryIndexOfAMultiSelection() {
-  // The indices all refer to the playlist as it was before the call, so removing
-  // several at once must not let an earlier delete shift the later ones.
+  // The indices all refer to the playlist as it was before the call, so removing several at once must not let an earlier delete shift the later ones.
   QVERIFY(client->createPlaylist(
     {"tagged/one.mp3", "tagged/two.flac", "wav/long_a.wav", "wav/long_b.wav"}, "multi"));
   QVERIFY(client->removeSongsFromPlaylist({0, 2}, "multi"));

@@ -83,8 +83,7 @@ namespace PlaylistsUi {
       }
     }
 
-    // MPD playlists are recreated on every reload, so uids change; re-resolve the
-    // highlighted playlist by name.
+    // MPD playlists are recreated on every reload, so uids change; re-resolve the highlighted playlist by name.
     void Model::syncHighlightUid() {
       highlight_uid = 0;
       if (highlight_name.isEmpty()) {

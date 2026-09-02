@@ -92,8 +92,7 @@ void TestEqualizer::autoPreampNeverClips() {
     mk(Band::Type::HighShelf, 8000, 5, 0.707),
   });
 
-  // With auto-preamp, the combined response (preamp included) must not exceed
-  // 0 dBFS anywhere: a 0 dBFS input can never clip.
+  // With auto-preamp, the combined response (preamp included) must not exceed 0 dBFS anywhere: a 0 dBFS input can never clip.
   double peak = -100.0;
   for (double f = 20.0; f <= 20000.0; f *= 1.02) {
     peak = std::max(peak, eq.magnitudeResponseDb(f));

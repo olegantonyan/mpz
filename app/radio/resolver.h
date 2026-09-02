@@ -5,8 +5,7 @@
 #include <QString>
 
 namespace Radio {
-  // A raw stream url passes through; a .pls/.m3u (local file or remote url) is
-  // read/fetched and its first stream url extracted. Empty + *error on failure.
+  // A raw stream url passes through; a .pls/.m3u (local file or remote url) is read/fetched and its first stream url extracted. Empty + *error on failure.
   QString resolveStreamUrl(const QString &input, QString *error = nullptr);
 
   QString firstStreamUrl(const QByteArray &playlist_body);

@@ -13,13 +13,11 @@ namespace Lyrics {
     bool instrumental = false;
   };
 
-  // Metadata normalization and candidate scoring for online lyrics search.
-  // Pure functions, no I/O.
+  // Metadata normalization and candidate scoring for online lyrics search. Pure functions, no I/O.
   class TextMatch {
   public:
-    // Strips "(feat. X)", "(Remastered 2021)", "- Live" suffixes etc., folds
-    // unicode punctuation, collapses whitespace. Falls back to the trimmed
-    // input if stripping would leave nothing.
+    // Strips "(feat. X)", "(Remastered 2021)", "- Live" suffixes etc., folds unicode punctuation,
+    // collapses whitespace. Falls back to the trimmed input if stripping would leave nothing.
     static QString normalizeTitle(const QString &raw);
     // Same pipeline without title-decoration stripping.
     static QString normalizeArtist(const QString &raw);

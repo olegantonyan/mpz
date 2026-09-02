@@ -266,9 +266,8 @@ namespace PlaylistsUi {
     pl->append(tracks, false);
     pl->rename(name);
 
-    // createPlaylistAsync emits from a worker thread, so the finished handler
-    // always runs queued. Defer here too, or it would re-enter the view that is
-    // currently dispatching the double-click.
+    // createPlaylistAsync emits from a worker thread, so the finished handler always runs queued.
+    // Defer here too, or it would re-enter the view that is currently dispatching the double-click.
     QTimer::singleShot(0, this, [this, pl]() {
       emit createPlaylistAsyncFinished(pl);
     });
@@ -276,9 +275,8 @@ namespace PlaylistsUi {
 
   QString Model::playlistNameBy(const QDir &path, const QString &libraryDir) {
     QString result = path.absolutePath();
-    // Strip the library only as a leading path component: remove() would also
-    // eat the library name where it repeats deeper in the path, and a bare
-    // startsWith would turn /musicvideos into videos for the /music library.
+    // Strip the library only as a leading path component: remove() would also eat the library name where it repeats
+    // deeper in the path, and a bare startsWith would turn /musicvideos into videos for the /music library.
     const QString root = libraryDir.isEmpty() ? QString() : QDir(libraryDir).absolutePath();
     if (!root.isEmpty() && (result == root || result.startsWith(root + "/"))) {
       result.remove(0, root.size());

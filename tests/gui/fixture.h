@@ -16,8 +16,7 @@
 #include <QTemporaryDir>
 #include <QtTest>
 
-// MainWindow reaches for MpzApplication (tray icon, Windows taskbar), which a
-// plain QTEST_MAIN QApplication would make an invalid downcast.
+// MainWindow reaches for MpzApplication (tray icon, Windows taskbar), which a plain QTEST_MAIN QApplication would make an invalid downcast.
 #define MPZ_GUI_TEST_MAIN(TestClass) \
   int main(int argc, char *argv[]) { \
     MpzApplication app(argc, argv); \
@@ -29,8 +28,7 @@
   }
 
 namespace GuiTest {
-  // Isolates config, caches and the IPC socket, and pre-seeds the settings that
-  // would otherwise make a headless run grab global media keys or hit the network.
+  // Isolates config, caches and the IPC socket, and pre-seeds the settings that would otherwise make a headless run grab global media keys or hit the network.
   class ConfigDir {
   public:
     bool init(const QStringList &library_paths = {}) {

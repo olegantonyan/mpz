@@ -40,8 +40,7 @@ namespace DynamicRange {
   Analyzer::Analyzer(QObject *parent) : QObject(parent) {
   }
 
-  // public mutators self-dispatch to the decoder's thread, so the blocking probe
-  // inside QAudioDecoder::start() cannot freeze the caller
+  // public mutators self-dispatch to the decoder's thread, so the blocking probe inside QAudioDecoder::start() cannot freeze the caller
   void Analyzer::run(const QVector<Job> &jobs) {
     QMetaObject::invokeMethod(this, [this, jobs]() {
       cancelled.store(false);
@@ -103,16 +102,14 @@ namespace DynamicRange {
     job_active = true;
     abort_queued = false;
 
-    // Qt 6.4's gstreamer decoder reports neither error nor finished for a file it
-    // cannot open, which leaves the scan stuck on that job
+    // Qt 6.4's gstreamer decoder reports neither error nor finished for a file it cannot open, which leaves the scan stuck on that job
     if (!QFileInfo::exists(job.path)) {
       finishJob();
       QMetaObject::invokeMethod(this, [this]() { next(); }, Qt::QueuedConnection);
       return;
     }
 
-    // a decoder per job: reusing one lets a stale finished() from the previous file
-    // terminate the next job before it produces a single buffer
+    // a decoder per job: reusing one lets a stale finished() from the previous file terminate the next job before it produces a single buffer
     decoder = new QAudioDecoder(this);
     connect(decoder, &QAudioDecoder::bufferReady, this, &Analyzer::onBufferReady);
     connect(decoder, &QAudioDecoder::finished, this, &Analyzer::onDecoderFinished);

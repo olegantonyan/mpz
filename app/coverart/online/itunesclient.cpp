@@ -55,8 +55,7 @@ namespace CoverArt {
         if (art.isEmpty()) {
           continue;
         }
-        // The search API only ever advertises 100x100, but the CDN serves any
-        // size from the same path.
+        // The search API only ever advertises 100x100, but the CDN serves any size from the same path.
         art.replace(QStringLiteral("100x100bb"), QStringLiteral("600x600bb"));
         candidates.append({obj.value("artistName").toString(),
                            obj.value("collectionName").toString()});

@@ -8,8 +8,7 @@
 #include <QString>
 
 namespace Lyrics {
-  // QQ Music (y.qq.com). Unofficial API, no key. Search results carry no
-  // duration, so scoring falls back to title/artist only.
+  // QQ Music (y.qq.com). Unofficial API, no key. Search results carry no duration, so scoring falls back to title/artist only.
   class QQMusicClient : public Provider {
     Q_OBJECT
   public:

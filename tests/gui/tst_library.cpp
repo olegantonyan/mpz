@@ -13,8 +13,7 @@
 #include <QToolButton>
 #include <QTreeView>
 
-// Adding a folder is not reachable here: it opens QFileDialog, so the "add"
-// path is covered by seeding library_paths and asserting the UI picks it up.
+// Adding a folder is not reachable here: it opens QFileDialog, so the "add" path is covered by seeding library_paths and asserting the UI picks it up.
 class TestLibrary : public QObject {
   Q_OBJECT
 

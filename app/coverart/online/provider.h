@@ -12,11 +12,9 @@
 
 namespace CoverArt {
   namespace Online {
-    // Base class for online album cover providers. Exactly one of
-    // found/notFound/failed is emitted per fetch(); unlike Lyrics::Provider the
-    // contract is enforced rather than assumed, because a provider here issues
-    // two requests (resolve a URL, then download it) and both replies can land
-    // in the same event loop turn.
+    // Base class for online album cover providers. Exactly one of found/notFound/failed is emitted per fetch();
+    // unlike Lyrics::Provider the contract is enforced rather than assumed, because a provider here issues two
+    // requests (resolve a URL, then download it) and both replies can land in the same event loop turn.
     class Provider : public QObject {
       Q_OBJECT
     public:

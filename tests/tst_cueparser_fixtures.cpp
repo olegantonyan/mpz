@@ -12,12 +12,9 @@
 
 using Playlist::CueParser;
 
-// These tests run a curated set of real-world CUE sheets from various
-// rippers/encodings through CueParser and assert on the parsed Track output.
-// Expected strings for non-UTF-8 fixtures lock in the parser's CP1251 fallback
-// behavior — those values were derived once by running `iconv -f CP1251` on
-// the source files, not by guessing. If a parser change shifts the decoded
-// output, update the constant deliberately.
+// These tests run a curated set of real-world CUE sheets from various rippers/encodings through CueParser and assert on the parsed Track
+// output. Expected strings for non-UTF-8 fixtures lock in the parser's CP1251 fallback behavior — those values were derived once by running
+// `iconv -f CP1251` on the source files, not by guessing. If a parser change shifts the decoded output, update the constant deliberately.
 
 namespace {
 
@@ -30,9 +27,8 @@ QString fixturePath(const char* fname) {
   return QStringLiteral(CUE_FIXTURES_DIR) + QChar('/') + QString::fromLatin1(fname);
 }
 
-// Copy a fixture cue into tempDir verbatim; touch each named audio stub so
-// the parser's resolve_audio_file finds them. The stub filenames are passed
-// as UTF-8 (some contain non-ASCII characters like ø, ß, ä, Cyrillic).
+// Copy a fixture cue into tempDir verbatim; touch each named audio stub so the parser's resolve_audio_file finds
+// them. The stub filenames are passed as UTF-8 (some contain non-ASCII characters like ø, ß, ä, Cyrillic).
 QString stage(const QTemporaryDir& dir,
               const char* fixture,
               std::initializer_list<const char*> audioStubs) {
@@ -87,8 +83,7 @@ private:
 };
 
 void TestCueParserFixtures::init() {
-  // Same pattern as tst_cueparser.cpp::init — wipe tempDir between slots so
-  // stem-fallback lookups don't see stale files.
+  // Same pattern as tst_cueparser.cpp::init — wipe tempDir between slots so stem-fallback lookups don't see stale files.
   QVERIFY(tempDir.isValid());
   QDir d(tempDir.path());
   const QStringList all = d.entryList(QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot);
@@ -201,8 +196,7 @@ void TestCueParserFixtures::utf8bomBeyondDawnElectric_matchesAsciiTwin() {
 }
 
 void TestCueParserFixtures::utf8bomDodheimsgardBmc() {
-  // FILE references contain Norwegian ø — UTF-8 BOM, so decode goes through
-  // the BOM-detected UTF-8 path and the stub filename must match exactly.
+  // FILE references contain Norwegian ø — UTF-8 BOM, so decode goes through the BOM-detected UTF-8 path and the stub filename must match exactly.
   const QString cue = stage(tempDir, "utf8bom_dodheimsgard_bmc.cue",
                             {"D\xC3\xB8""dheimsgard - Black Medium Current.flac"});
   QVERIFY(!cue.isEmpty());
@@ -253,9 +247,8 @@ void TestCueParserFixtures::utf8bomBthvnCd027() {
 }
 
 void TestCueParserFixtures::utf8NachtreichSturmgang_noBom() {
-  // UTF-8 *without* BOM (and so QStringConverter::encodingForData returns
-  // empty; strict-UTF-8 path is taken). Also exercises one-FILE-per-track
-  // layout where each TRACK's INDEX 01 is 0.
+  // UTF-8 *without* BOM (and so QStringConverter::encodingForData returns empty; strict-UTF-8
+  // path is taken). Also exercises one-FILE-per-track layout where each TRACK's INDEX 01 is 0.
   const QString cue = stage(tempDir, "utf8_nachtreich_sturmgang.cue", {
     "01 Im Sturmwind.wav",
     "02 In die Ferne.wav",
@@ -285,10 +278,8 @@ void TestCueParserFixtures::utf8NachtreichSturmgang_noBom() {
 // ---------- non-UTF-8 cues: CP1251 fallback decode ----------
 
 void TestCueParserFixtures::cp1252BthvnCd010_decodedAsCp1251() {
-  // Source is Windows-1252 (Beethoven liner notes with curly quotes 0x93/0x94
-  // and German umlauts 0xF6/...). Qt6 parser path falls back to CP1251 decode;
-  // Qt5 path falls back to lenient UTF-8 and emits U+FFFD per invalid byte.
-  // Either way the structural fields (count, INDEX timings) match.
+  // Source is Windows-1252 (Beethoven liner notes with curly quotes 0x93/0x94 and German umlauts 0xF6/...). Qt6 parser path falls back to CP1251
+  // decode; Qt5 path falls back to lenient UTF-8 and emits U+FFFD per invalid byte. Either way the structural fields (count, INDEX timings) match.
   const QString cue = stage(tempDir, "cp1252_bthvn_cd010.cue",
                             {"BTHVN 2020 - CD 010.flac"});
   QVERIFY(!cue.isEmpty());
@@ -302,13 +293,11 @@ void TestCueParserFixtures::cp1252BthvnCd010_decodedAsCp1251() {
   QCOMPARE(tracks.first().title(),
            QStringLiteral("Symphony no. 9 in d, op. 125: I. Allegro ma non troppo, un poco maestoso"));
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  // Qt6: CP1251 fallback. 0x93/0x94/0x96 share punctuation slots with CP1252
-  // and decode correctly to U+201C/U+201D/U+2013; 0xF6 mangles ö → ц (U+0446).
+  // Qt6: CP1251 fallback. 0x93/0x94/0x96 share punctuation slots with CP1252 and decode correctly to U+201C/U+201D/U+2013; 0xF6 mangles ö → ц (U+0446).
   QCOMPARE(tracks.last().title(),
            QString::fromUtf8(u8"Symphony no. 9 in d, op. 125: V. Presto - “O Freunde, nicht diese Tцne!” – Allegro assai - Allegro assai: “Freude, schцner Gцtterfunken” - Allegro assai vivace. Alla marcia - Andante maestoso - Allegro energico, sempre ben marcato - Allegro ma non tanto - Prestissimo"));
 #else
-  // Qt5: lenient UTF-8 fallback. All 8 high bytes (0x93×3, 0x94×3, 0x96, 0xF6×3)
-  // emit U+FFFD replacement characters.
+  // Qt5: lenient UTF-8 fallback. All 8 high bytes (0x93×3, 0x94×3, 0x96, 0xF6×3) emit U+FFFD replacement characters.
   QCOMPARE(tracks.last().title(),
            QString::fromUtf8(u8"Symphony no. 9 in d, op. 125: V. Presto - �O Freunde, nicht diese T�ne!� � Allegro assai - Allegro assai: �Freude, sch�ner G�tterfunken� - Allegro assai vivace. Alla marcia - Andante maestoso - Allegro energico, sempre ben marcato - Allegro ma non tanto - Prestissimo"));
 #endif
@@ -342,11 +331,9 @@ void TestCueParserFixtures::cp1252BthvnCd005_decodedAsCp1251() {
 }
 
 void TestCueParserFixtures::cp1251Wagner() {
-  // Cue and FILE clause are pure CP1251 Cyrillic. On Qt6, the parser's CP1251
-  // fallback decodes both successfully and finds the stubbed UTF-8 audio file.
-  // On Qt5, lenient UTF-8 decode produces U+FFFD for every Cyrillic byte, so
-  // resolve_audio_file can't match the stub and the whole cue yields no
-  // tracks — different behaviour, but lock both in as regression baselines.
+  // Cue and FILE clause are pure CP1251 Cyrillic. On Qt6, the parser's CP1251 fallback decodes both successfully and finds
+  // the stubbed UTF-8 audio file. On Qt5, lenient UTF-8 decode produces U+FFFD for every Cyrillic byte, so resolve_audio_file
+  // can't match the stub and the whole cue yields no tracks — different behaviour, but lock both in as regression baselines.
   const QString cue = stage(tempDir, "cp1251_wagner.cue",
                             {u8"Вагнер Рихард - Великие композиторы.wav"});
   QVERIFY(!cue.isEmpty());
@@ -368,14 +355,10 @@ void TestCueParserFixtures::cp1251Wagner() {
 }
 
 void TestCueParserFixtures::cp1251JungleBook() {
-  // CP1251 album title, ASCII track titles, multi-FILE EAC "gaps appended"
-  // layout (each track's INDEX 00 pregap sits at the tail of the previous file,
-  // its INDEX 01 audio at the head of its own file), plus the PREGAP directive
-  // (silently ignored). The cue's FILE 03 line carries a CP1251 byte 0xDC (Ь)
-  // inside the filename — on Qt6 the CP1251 fallback decodes it and the stub
-  // matches; on Qt5 lenient UTF-8 turns it into U+FFFD, the FILE 03 stub can't
-  // be resolved, and the track whose audio lives in FILE 03 (track 3) gets
-  // dropped — 7 surviving tracks.
+  // CP1251 album title, ASCII track titles, multi-FILE EAC "gaps appended" layout (each track's INDEX 00 pregap sits at the tail of the
+  // previous file, its INDEX 01 audio at the head of its own file), plus the PREGAP directive (silently ignored). The cue's FILE 03 line
+  // carries a CP1251 byte 0xDC (Ь) inside the filename — on Qt6 the CP1251 fallback decodes it and the stub matches; on Qt5 lenient UTF-8 turns
+  // it into U+FFFD, the FILE 03 stub can't be resolved, and the track whose audio lives in FILE 03 (track 3) gets dropped — 7 surviving tracks.
   const QString cue = stage(tempDir, "cp1251_jungle_book.cue", {
     "01 - Mega-Phone - Hard Dramma.wav",
     "02 - Plexus - Protein.wav",
@@ -392,8 +375,7 @@ void TestCueParserFixtures::cp1251JungleBook() {
   QCOMPARE(tracks.first().year(),   quint16{1997});
   QCOMPARE(tracks.first().title(),  QStringLiteral("Hard Dramma"));
   QCOMPARE(tracks.first().begin(),  quint32{0});
-  // Track 2's audio is the whole of FILE 02 (INDEX 01 00:00:00); its INDEX 00
-  // pregap at 05:29:56 belongs to the tail of FILE 01 and is discarded.
+  // Track 2's audio is the whole of FILE 02 (INDEX 01 00:00:00); its INDEX 00 pregap at 05:29:56 belongs to the tail of FILE 01 and is discarded.
   QCOMPARE(tracks.at(1).title(),    QStringLiteral("Protein"));
   QCOMPARE(tracks.at(1).artist(),   QStringLiteral("Plexus"));
   QCOMPARE(tracks.at(1).begin(),    quint32{0});
@@ -412,8 +394,7 @@ void TestCueParserFixtures::cp1251JungleBook() {
 // ---------- multi-FILE cues ----------
 
 void TestCueParserFixtures::multifileVibrasphereArchipelago() {
-  // Capitalized .CUE extension; interleaved INDEX 00 / FILE / INDEX 01 layout
-  // where the pregap of the next track is declared under the previous FILE.
+  // Capitalized .CUE extension; interleaved INDEX 00 / FILE / INDEX 01 layout where the pregap of the next track is declared under the previous FILE.
   const QString cue = stage(tempDir, "multifile_vibrasphere_archipelago.CUE", {
     "01-Vibrasphere - Tierra azul-2006.wav",
     "02-Vibrasphere - Sweet september-2006.wav",
@@ -432,8 +413,7 @@ void TestCueParserFixtures::multifileVibrasphereArchipelago() {
   QCOMPARE(tracks.first().artist(), QStringLiteral("Vibrasphere"));
   QCOMPARE(tracks.first().year(),   quint16{2006});
   QCOMPARE(tracks.first().title(),  QStringLiteral("Tierra azul"));
-  // Track 2's audio is the whole of file 02 (INDEX 01 0); its INDEX 00 06:55:59
-  // pregap rode at the tail of file 01 and is discarded.
+  // Track 2's audio is the whole of file 02 (INDEX 01 0); its INDEX 00 06:55:59 pregap rode at the tail of file 01 and is discarded.
   QCOMPARE(tracks.at(1).title(),    QStringLiteral("Sweet september"));
   QCOMPARE(tracks.at(1).begin(),    quint32{0});
   QVERIFY(tracks.at(1).path().endsWith(QStringLiteral("02-Vibrasphere - Sweet september-2006.wav")));
@@ -467,17 +447,15 @@ void TestCueParserFixtures::multifileVibrasphereTributaries() {
   QCOMPARE(tracks.first().album(),  QStringLiteral("Unknown Title"));
   QCOMPARE(tracks.first().artist(), QStringLiteral("Unknown Artist"));
   QCOMPARE(tracks.first().title(),  QStringLiteral("Track01"));
-  // Track 11's audio is the whole of file 11 (INDEX 01 0); its INDEX 00 06:31:27
-  // pregap rode at the tail of file 10 and is discarded.
+  // Track 11's audio is the whole of file 11 (INDEX 01 0); its INDEX 00 06:31:27 pregap rode at the tail of file 10 and is discarded.
   QCOMPARE(tracks.at(10).title(),   QStringLiteral("Track11"));
   QCOMPARE(tracks.at(10).begin(),   quint32{0});
   QVERIFY(tracks.at(10).path().endsWith(QStringLiteral("11 - Unknown Artist - Track11.wav")));
 }
 
 void TestCueParserFixtures::multifileNightwishImaginaerum_oneTrackPerFile() {
-  // One FILE per TRACK, every track at INDEX 01 00:00:00 — each track is a whole
-  // standalone file. This is the layout that made multi-file playback stop after
-  // every file (each track is the last/only track in its file).
+  // One FILE per TRACK, every track at INDEX 01 00:00:00 — each track is a whole standalone file. This is the
+  // layout that made multi-file playback stop after every file (each track is the last/only track in its file).
   const QString cue = stage(tempDir, "multifile_nightwish_imaginaerum.cue", {
     "01. Taikatalvi.flac",
     "02. Storytime.flac",
@@ -516,8 +494,7 @@ void TestCueParserFixtures::multifileNightwishImaginaerum_oneTrackPerFile() {
 }
 
 void TestCueParserFixtures::multifileTherionFleurs_tracksGroupedPerFile() {
-  // Mixed layout: one cue, four files (a/b/c/d.flac), several tracks per file.
-  // Each file's first track starts at 0; later tracks are mid-file (same FILE).
+  // Mixed layout: one cue, four files (a/b/c/d.flac), several tracks per file. Each file's first track starts at 0; later tracks are mid-file (same FILE).
   const QString cue = stage(tempDir, "multifile_therion_fleurs.cue",
                             {"a.flac", "b.flac", "c.flac", "d.flac"});
   QVERIFY(!cue.isEmpty());
@@ -553,12 +530,9 @@ void TestCueParserFixtures::multifileTherionFleurs_tracksGroupedPerFile() {
 }
 
 void TestCueParserFixtures::multifileChapuisNoel_gapsAppendedCrossFile() {
-  // The exact cue from the bug report: a 12-track EAC "gaps appended to previous
-  // file" rip, one FLAC per track. Every track 2..12 has its INDEX 00 pregap at
-  // the tail of the previous file and its INDEX 01 audio at 0 in its own file.
-  // Pre-fix, tracks 2..12 bound to the previous file at the pregap offset and
-  // played a few seconds of trailing silence; each must bind to its own file at
-  // begin 0. FILE names are NFC; we touch identical stubs and assert on them.
+  // The exact cue from the bug report: a 12-track EAC "gaps appended to previous file" rip, one FLAC per track. Every track 2..12 has its INDEX 00 pregap
+  // at the tail of the previous file and its INDEX 01 audio at 0 in its own file. Pre-fix, tracks 2..12 bound to the previous file at the pregap offset and
+  // played a few seconds of trailing silence; each must bind to its own file at begin 0. FILE names are NFC; we touch identical stubs and assert on them.
   static const char* files[] = {
     "01 Noël étranger (Noël VIII).flac",
     "02 Noël en dialogue, duo, trio (Noël II).flac",
@@ -648,11 +622,9 @@ void TestCueParserFixtures::mp3BseCruelAndUnusual() {
 // ---------- file-resolution edge cases ----------
 
 void TestCueParserFixtures::backslashDjTiestoTraffic() {
-  // Cue references "DJ Tiлsto\Traffic\01-...wav" (CP1251 + Windows backslashes
-  // and a subpath that doesn't exist). On Unix, backslashes get rewritten to
-  // forward slashes, the canonical path lookup fails, the parent-dir scan
-  // fails, and the parser falls back to looking up the bare basename in the
-  // cue's directory — that's where our stubs live.
+  // Cue references "DJ Tiлsto\Traffic\01-...wav" (CP1251 + Windows backslashes and a subpath that doesn't exist). On
+  // Unix, backslashes get rewritten to forward slashes, the canonical path lookup fails, the parent-dir scan fails,
+  // and the parser falls back to looking up the bare basename in the cue's directory — that's where our stubs live.
   const QString cue = stage(tempDir, "backslash_dj_tiesto_traffic.cue", {
     "01-Traffic (Radio Edit).wav",
     "02-Traffic (Original Mix).wav",

@@ -7,8 +7,7 @@
 
 namespace AudioDeviceUi {
   namespace {
-    // Remembers descriptions of devices seen plugged in, so the configured but
-    // currently disconnected device can still be shown by name.
+    // Remembers descriptions of devices seen plugged in, so the configured but currently disconnected device can still be shown by name.
     QHash<QByteArray, QString> &descriptionCache() {
       static QHash<QByteArray, QString> cache;
       return cache;

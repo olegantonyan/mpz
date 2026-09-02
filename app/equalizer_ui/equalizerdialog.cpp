@@ -167,8 +167,8 @@ namespace EqualizerUi {
     resize(sizeHint().expandedTo(QSize(line * 46, line * 44)));
   }
 
-  // Also called while the dialog is open: a hotplug can re-scope the engine onto
-  // another device, and the dialog must follow it rather than keep saving to the old one.
+  // Also called while the dialog is open: a hotplug can re-scope the engine onto another
+  // device, and the dialog must follow it rather than keep saving to the old one.
   void EqualizerDialog::setDevice(const QByteArray &device_id) {
     device_id_ = device_id;
     const Eq::DeviceSettings settings = local_conf.eqDeviceSettings(device_id_);

@@ -256,8 +256,7 @@ namespace Config {
               result[key].push_back(serialize(i.get<QMap<QString, Config::Value>>()));
             }
           } else {
-            // An empty list has no element type to dispatch on. Without this the
-            // key would be dropped entirely and reload would fall back to defaults.
+            // An empty list has no element type to dispatch on. Without this the key would be dropped entirely and reload would fall back to defaults.
             result[key] = std::vector<std::string>();
           }
           break;

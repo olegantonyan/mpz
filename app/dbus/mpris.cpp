@@ -79,8 +79,7 @@ Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QOb
     notify("Metadata", Metadata());
   });
 
-  // A cover downloaded mid-track changes artUrl without any playback event, so
-  // republish rather than leave the art blank until the next pause.
+  // A cover downloaded mid-track changes artUrl without any playback event, so republish rather than leave the art blank until the next pause.
   connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
           this, [=](const QString &artist, const QString &album, const QString &path) {
     Q_UNUSED(path)

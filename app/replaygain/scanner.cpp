@@ -25,8 +25,7 @@ namespace ReplayGain {
   }
 
   int Scanner::defaultWorkerCount() {
-    // Half the machine. The decoders are niced child processes, so the rest of the
-    // system keeps priority over them.
+    // Half the machine. The decoders are niced child processes, so the rest of the system keeps priority over them.
     return qMax(1, QThread::idealThreadCount() / 2);
   }
 

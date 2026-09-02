@@ -192,9 +192,8 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std
   setup_table();
   setup_cover_art();
   setup_lyrics();
-  // Splitters only honour absolute sizes, so derive them from the dialog's own
-  // width instead of fixed pixel counts. Stretch factors keep the proportions
-  // once the user resizes.
+  // Splitters only honour absolute sizes, so derive them from the dialog's own width instead
+  // of fixed pixel counts. Stretch factors keep the proportions once the user resizes.
   const int metadata_width = width() * kMetadataShare / 100;
   ui->splitter->setSizes({metadata_width, width() - metadata_width});
   ui->splitter->setStretchFactor(0, kMetadataShare);
@@ -238,8 +237,7 @@ void TrackInfoDialog::setup_table() {
     { ui->tabOther, ui->tableViewOther, &model_other },
   };
 
-  // Re-adding only the non-empty pages rather than QTabWidget::setTabVisible,
-  // which needs Qt 5.15 (openSUSE Leap 15.3 still ships 5.12).
+  // Re-adding only the non-empty pages rather than QTabWidget::setTabVisible, which needs Qt 5.15 (openSUSE Leap 15.3 still ships 5.12).
   QWidget *current = ui->tabWidget->currentWidget();
   while (ui->tabWidget->count() > 0) {
     ui->tabWidget->removeTab(0);
@@ -547,8 +545,7 @@ void TrackInfoDialog::setup_context_menu(QTableView *view) {
 }
 
 void TrackInfoDialog::setup_cover_art() {
-  // The label's geometry is only final after the layout runs, which is later
-  // than any resizeEvent on the dialog; follow the label itself instead.
+  // The label's geometry is only final after the layout runs, which is later than any resizeEvent on the dialog; follow the label itself instead.
   ui->labelCoverArt->installEventFilter(this);
   connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
           this, [this](const QString &artist, const QString &album, const QString &) {

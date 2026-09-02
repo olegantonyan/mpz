@@ -120,8 +120,7 @@ void TestPlaybackController::seekbarMaximumFollowsTheTrackKind() {
   QCOMPARE(seekbar.maximum(), 180);
   player->stop();
 
-  // Unknown length: the bar goes unbounded. Streams take the same branch, but
-  // playing one here would hold the test for the stream's 30 s connect timeout.
+  // Unknown length: the bar goes unbounded. Streams take the same branch, but playing one here would hold the test for the stream's 30 s connect timeout.
   player->play(localTrack(0));
   QCOMPARE(seekbar.maximum(), std::numeric_limits<int>::max());
   player->stop();

@@ -54,8 +54,7 @@ void TestLyricsCache::positiveRoundTrip() {
 // The whole point of moving off the session cache.
 void TestLyricsCache::survivesRestart() {
   Cache::instance().storeFound({"Metallica", "One", "", 0}, "lrclib", "Lyrics text");
-  // A fresh process would build a new Store over the same directory; the files
-  // are the state, so re-reading through the same API proves persistence.
+  // A fresh process would build a new Store over the same directory; the files are the state, so re-reading through the same API proves persistence.
   const QString path = Cache::instance().dir() + Cache::key({"Metallica", "One", "", 0}) + ".json";
   QVERIFY(QFile::exists(path));
   Cache::Entry entry;

@@ -53,8 +53,7 @@ TrayIcon::TrayIcon(QMainWindow *parent) : QObject(parent) {
   trayicon->show();
   connect(trayicon, &QSystemTrayIcon::activated, this, [=](QSystemTrayIcon::ActivationReason reason) {
 #ifdef Q_OS_MACOS
-    // setContextMenu() attaches a native NSMenu that AppKit opens on click.
-    // Popping our QMenu on top would stack two menus.
+    // setContextMenu() attaches a native NSMenu that AppKit opens on click. Popping our QMenu on top would stack two menus.
     Q_UNUSED(reason)
 #else
     if (reason == QSystemTrayIcon::Trigger) {

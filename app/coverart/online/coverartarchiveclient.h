@@ -7,9 +7,8 @@
 
 namespace CoverArt {
   namespace Online {
-    // MusicBrainz release search followed by a Cover Art Archive front image.
-    // Keyless but the slowest provider: two round-trips, a redirect to
-    // archive.org, and MusicBrainz's 1 req/sec limit.
+    // MusicBrainz release search followed by a Cover Art Archive front image. Keyless but the slowest
+    // provider: two round-trips, a redirect to archive.org, and MusicBrainz's 1 req/sec limit.
     class CoverArtArchiveClient : public Provider {
       Q_OBJECT
     public:

@@ -17,9 +17,8 @@
 // Cyclic: mainwindow.h includes this header.
 class MainWindow;
 
-// Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for
-// the given window. All items live here rather than in the in-window hamburger
-// menu, which is hidden on macOS (see MainWindow::setupMainMenu).
+// Builds the native macOS menu bar (mpz / Playback / View / Window / Help) for the given window. All items live
+// here rather than in the in-window hamburger menu, which is hidden on macOS (see MainWindow::setupMainMenu).
 class MacMenuBar : public QObject {
   Q_OBJECT
 public:

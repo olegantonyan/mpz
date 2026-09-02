@@ -86,10 +86,8 @@ void revealInFileManager(const QStringList &absolute_file_paths) {
     CoUninitialize();
   }
 #elif defined(Q_OS_MACOS)
-  // Group by directory so each Finder window shows all of that folder's
-  // selected items at once, mirroring the Windows branch above. Driving Finder
-  // via osascript is the only way to multi-select; `open -R` reveals a single
-  // item per invocation and opens a fresh window each time.
+  // Group by directory so each Finder window shows all of that folder's selected items at once, mirroring the Windows branch above. Driving
+  // Finder via osascript is the only way to multi-select; `open -R` reveals a single item per invocation and opens a fresh window each time.
   QMap<QString, QStringList> by_dir;
   for (const auto &p : absolute_file_paths) {
     by_dir[QFileInfo(p).absolutePath()] << p;

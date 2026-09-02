@@ -32,8 +32,7 @@ private:
 };
 
 void TestCoverOnlineCache::initTestCase() {
-  // The cache lives under QStandardPaths::CacheLocation, which
-  // MPZ_CONFIG_DIR_OVERRIDE does not affect.
+  // The cache lives under QStandardPaths::CacheLocation, which MPZ_CONFIG_DIR_OVERRIDE does not affect.
   QStandardPaths::setTestModeEnabled(true);
   QVERIFY(Cache::instance().dir().contains("downloaded_covers"));
 }

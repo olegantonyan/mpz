@@ -40,8 +40,7 @@ namespace DirectoryUi {
       QMimeData *mimeData(const QModelIndexList &indexes) const override;
       Qt::DropActions supportedDragActions() const override;
 
-      // Radio is a view state of the library tree, orthogonal to the app mode:
-      // the underlying ModusOperandi stays LOCALFS while radio is shown.
+      // Radio is a view state of the library tree, orthogonal to the app mode: the underlying ModusOperandi stays LOCALFS while radio is shown.
       void setRadioActive(bool active);
       bool isRadioActive() const { return radio_active; }
 

@@ -124,9 +124,8 @@ void TestTreeItem::childOutOfRangeReturnsNullptr() {
 }
 
 void TestTreeItem::destructorDeletesChildren() {
-  // We can't observe deletion directly, but constructing/destroying a tree
-  // with several nested children should not leak under ASAN. This test
-  // exercises that path; the assertion is that the program doesn't crash.
+  // We can't observe deletion directly, but constructing/destroying a tree with several nested children should
+  // not leak under ASAN. This test exercises that path; the assertion is that the program doesn't crash.
   {
     TreeItem root(true, QStringLiteral("/"));
     auto a = new TreeItem(true, QStringLiteral("/a"), 0, &root);

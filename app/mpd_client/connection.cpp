@@ -43,8 +43,7 @@ namespace MpdClient {
   Connection::Connection() : QObject{nullptr} {
   }
 
-  // Reads the error and clears it. libmpdclient keeps a failed command's error
-  // on the connection, and every later command on it fails until it is cleared.
+  // Reads the error and clears it. libmpdclient keeps a failed command's error on the connection, and every later command on it fails until it is cleared.
   QString Connection::takeError() {
     if (!conn) {
       return "";
@@ -270,9 +269,8 @@ namespace MpdClient {
     }
 
     if (!mpd_run_save(conn, playlist_name.toUtf8().constData())) {
-      // mpd 0.24 refuses to save over an existing playlist where 0.23 replaced
-      // it. The clear and add below are what actually fill the playlist, so an
-      // existing one is not an error here.
+      // mpd 0.24 refuses to save over an existing playlist where 0.23 replaced it. The clear and
+      // add below are what actually fill the playlist, so an existing one is not an error here.
       const bool exists = mpd_connection_get_error(conn) == MPD_ERROR_SERVER &&
                           mpd_connection_get_server_error(conn) == MPD_SERVER_ERROR_EXIST;
       if (!exists) {
@@ -806,8 +804,7 @@ namespace MpdClient {
   }
 
   void Connection::on_timeout() {
-    // A url that never connected has nothing to reconnect to; retrying it would
-    // re-emit error every interval forever.
+    // A url that never connected has nothing to reconnect to; retrying it would re-emit error every interval forever.
     if (currentUrl().isEmpty() || !ever_connected) {
       return;
     }

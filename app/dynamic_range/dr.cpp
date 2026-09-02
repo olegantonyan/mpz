@@ -1,5 +1,4 @@
-// Implements the TT Dynamic Range Meter algorithm by the Pleasurize Music Foundation,
-// as used by foobar2000's Dynamic Range Meter and dr14_tmeter.
+// Implements the TT Dynamic Range Meter algorithm by the Pleasurize Music Foundation, as used by foobar2000's Dynamic Range Meter and dr14_tmeter.
 
 #include "dynamic_range/dr.h"
 

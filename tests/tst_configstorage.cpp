@@ -181,8 +181,7 @@ void TestConfigStorage::saveWritesAppVersion() {
 }
 
 void TestConfigStorage::castScalarParsesBooleanAndInteger() {
-  // Round-trip via a raw YAML file: this exercises the parse() → castScalar()
-  // path that turns "true"/"42"/plain text into typed Config::Values.
+  // Round-trip via a raw YAML file: this exercises the parse() → castScalar() path that turns "true"/"42"/plain text into typed Config::Values.
   const QString path = tempDir.filePath(QStringLiteral("raw.yml"));
   {
     QFile f(path);

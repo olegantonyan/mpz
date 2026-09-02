@@ -28,10 +28,8 @@
 #include <cmath>
 
 namespace MpdTest {
-  // app/main.cpp holds the real registerMetaTypes(), but main.cpp is in the
-  // executable and not in mpz_lib, so test binaries never run it. Without the
-  // mpd_idle registration the queued Connection::idleEvent -> Client connection
-  // is dropped and no idle-derived signal ever fires.
+  // app/main.cpp holds the real registerMetaTypes(), but main.cpp is in the executable and not in mpz_lib, so test binaries never run it.
+  // Without the mpd_idle registration the queued Connection::idleEvent -> Client connection is dropped and no idle-derived signal ever fires.
   inline void registerMetaTypes() {
     qRegisterMetaType<MpdClient::Song>("MpdClient::Song");
     qRegisterMetaType<MpdClient::Entity>("MpdClient::Entity");
@@ -118,9 +116,8 @@ namespace MpdTest {
     int preferred_port = 0;
   };
 
-  // Spawns a real mpd against a throwaway config, music tree and port. One
-  // server per test binary; ctest may run several binaries at once, so nothing
-  // here may touch a fixed path or a fixed port.
+  // Spawns a real mpd against a throwaway config, music tree and port. One server per test binary;
+  // ctest may run several binaries at once, so nothing here may touch a fixed path or a fixed port.
   class Server {
   public:
     static constexpr int kSongCount = 6;
@@ -203,8 +200,7 @@ namespace MpdTest {
     QVersionNumber version() const { return mpd_version; }
     QString failReason() const { return fail_reason; }
 
-    // Raw protocol channel. Independent of the code under test, so it doubles as
-    // the assertion oracle and reaches commands Client has no slot for.
+    // Raw protocol channel. Independent of the code under test, so it doubles as the assertion oracle and reaches commands Client has no slot for.
     QStringList command(const QString &line) {
       QTcpSocket sock;
       if (!connectAndGreet(sock)) {
@@ -334,13 +330,11 @@ namespace MpdTest {
           << "connection_timeout \"600\"\n"
           << "log_level          \"verbose\"\n";
       if (!options.password.isEmpty()) {
-        // Any password at all zeroes the unauthenticated default permissions,
-        // which is what makes the permission-denied probe case reachable.
+        // Any password at all zeroes the unauthenticated default permissions, which is what makes the permission-denied probe case reachable.
         out << "password \"" << options.password << "@" << options.permissions.join(",") << "\"\n";
       }
-      // Two outputs so enabling and disabling one is observable. Only the first
-      // carries a mixer: mpd averages volume across mixer-carrying outputs, so a
-      // second software mixer would couple the output cases to the volume cases.
+      // Two outputs so enabling and disabling one is observable. Only the first carries a mixer: mpd averages volume
+      // across mixer-carrying outputs, so a second software mixer would couple the output cases to the volume cases.
       out << "audio_output {\n  type \"null\"\n  name \"mpz test out\"\n  mixer_type \"software\"\n}\n"
           << "audio_output {\n  type \"null\"\n  name \"mpz test out 2\"\n  mixer_type \"none\"\n}\n";
 
@@ -379,8 +373,7 @@ namespace MpdTest {
       return awaitReady();
     }
 
-    // The OK greeting is not enough: a fresh db_file makes mpd kick off an async
-    // scan, so lsinfo legitimately returns nothing right after connecting.
+    // The OK greeting is not enough: a fresh db_file makes mpd kick off an async scan, so lsinfo legitimately returns nothing right after connecting.
     bool awaitReady() {
       QElapsedTimer clock;
       clock.start();

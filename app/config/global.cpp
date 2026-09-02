@@ -264,10 +264,8 @@ namespace Config {
     return saveProvidersUnder("covers", arg);
   }
 
-  // Online providers only, and there are no defaults: anything missing or
-  // malformed is simply "no online providers". Built-in sources are not
-  // configurable and never appear here. Legacy entries naming them are returned
-  // as-is and dropped downstream by ProviderChain::filterKnown.
+  // Online providers only, and there are no defaults: anything missing or malformed is simply "no online providers". Built-in sources are not
+  // configurable and never appear here. Legacy entries naming them are returned as-is and dropped downstream by ProviderChain::filterKnown.
   QStringList Global::providersUnder(const QString &key) const {
     auto raw = storage.get(key);
     if (raw.type() != Config::Value::Map) {

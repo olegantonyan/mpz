@@ -4,8 +4,7 @@
 #include <QIODevice>
 
 namespace ReplayGain {
-  // Must not be in an anonymous namespace: QList's streaming operator finds these
-  // by argument-dependent lookup, which never looks inside this file.
+  // Must not be in an anonymous namespace: QList's streaming operator finds these by argument-dependent lookup, which never looks inside this file.
   QDataStream &operator<<(QDataStream &s, const Slice &slice) {
     return s << slice.begin_ms << slice.duration_ms;
   }

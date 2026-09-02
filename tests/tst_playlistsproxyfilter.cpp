@@ -53,8 +53,7 @@ void TestPlaylistsProxyFilter::init() {
   local = std::make_unique<Config::Local>();
   modus = std::make_unique<ModusOperandi>(*local, &banner);
   proxy = std::make_unique<PlaylistsUi::ProxyFilterModel>(*local, *modus);
-  // The constructor kicks off a load off the GUI thread; let it land before
-  // appending, or its model reset wipes what we just added.
+  // The constructor kicks off a load off the GUI thread; let it land before appending, or its model reset wipes what we just added.
   QSignalSpy loaded(proxy.get(), &PlaylistsUi::ProxyFilterModel::asyncLoadFinished);
   QVERIFY(loaded.wait());
 

@@ -13,9 +13,8 @@ namespace ReplayGain {
   public:
     explicit JobRunner(QObject *parent = nullptr);
 
-    // With a worker set, decoding happens in a child process: a malformed file can
-    // segfault inside Qt's ffmpeg plugin, on a thread nothing here can catch. Unset
-    // (the default) decodes in this process.
+    // With a worker set, decoding happens in a child process: a malformed file can segfault inside Qt's
+    // ffmpeg plugin, on a thread nothing here can catch. Unset (the default) decodes in this process.
     void setWorker(const QString &program, const QStringList &arguments);
 
   public slots:

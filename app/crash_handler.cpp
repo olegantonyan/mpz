@@ -74,14 +74,12 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
 }
 
 [[noreturn]] void crash_handler(int signum) {
-  // Restore default disposition so a second fault while we're tracing aborts
-  // hard instead of recursing. Both glibc and Windows MSVCRT reset to SIG_DFL
-  // automatically after a signal() handler fires, but be explicit anyway.
+  // Restore default disposition so a second fault while we're tracing aborts hard instead of recursing. Both glibc
+  // and Windows MSVCRT reset to SIG_DFL automatically after a signal() handler fires, but be explicit anyway.
   std::signal(signum, SIG_DFL);
 
-  // async-signal-unsafe but pragmatic — same trade-off as DeathHandler. A
-  // desktop app crashing once is fine to take a few hundred ms in the handler
-  // if it gets a usable trace out of it.
+  // async-signal-unsafe but pragmatic — same trade-off as DeathHandler. A desktop app crashing
+  // once is fine to take a few hundred ms in the handler if it gets a usable trace out of it.
   char reason[32];
   std::snprintf(reason, sizeof(reason), "%s (%d)", signal_name(signum), signum);
   write_trace(cpptrace::generate_trace(/*skip=*/1), reason);
@@ -95,10 +93,9 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
 }
 
 #ifdef _WIN32
-// A real access violation is delivered as an SEH exception, not a C signal, so
-// the std::signal handlers below never fire for it on Windows. This top-level
-// filter runs before stack unwinding, so generate_trace() still sees the faulting
-// frames (rooted at the filter itself). cpptrace installs no such filter itself.
+// A real access violation is delivered as an SEH exception, not a C signal, so the std::signal handlers
+// below never fire for it on Windows. This top-level filter runs before stack unwinding, so generate_trace()
+// still sees the faulting frames (rooted at the filter itself). cpptrace installs no such filter itself.
 LONG WINAPI seh_filter(EXCEPTION_POINTERS *info) {
   char reason[64];
   std::snprintf(reason, sizeof(reason), "SEH exception 0x%08lX",

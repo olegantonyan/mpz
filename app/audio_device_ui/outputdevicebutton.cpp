@@ -34,8 +34,7 @@ namespace AudioDeviceUi {
     return QObject::eventFilter(obj, event);
   }
 
-  // Sizes the button from an ASCII sample, so device names carrying fallback-font
-  // glyphs (e.g. "MKⅢ") cannot inflate it out of line with the rest of the row.
+  // Sizes the button from an ASCII sample, so device names carrying fallback-font glyphs (e.g. "MKⅢ") cannot inflate it out of line with the rest of the row.
   void OutputDeviceButton::updateSize() {
     const QString sample(name_max_chars, u'A');
     button->setText(sample);

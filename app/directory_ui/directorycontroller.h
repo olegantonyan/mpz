@@ -31,8 +31,7 @@ namespace DirectoryUi {
   signals:
     void createNewPlaylist(const QList<QDir> &filepaths, const QString &libraryDir);
     void appendToCurrentPlaylist(const QList<QDir> &filepaths);
-    // Radio bypasses the QDir payload: QDir mangles a stream URL (it drops the
-    // trailing slash) and Playlist::Loader only scans the filesystem.
+    // Radio bypasses the QDir payload: QDir mangles a stream URL (it drops the trailing slash) and Playlist::Loader only scans the filesystem.
     void createNewPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
     void appendTracksToCurrentPlaylist(const QVector<Track> &tracks);
 

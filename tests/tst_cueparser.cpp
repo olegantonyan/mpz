@@ -48,12 +48,9 @@ private:
 };
 
 void TestCueParser::init() {
-  // tempDir is a member constructed once per test object, so files accumulate
-  // across slots without this reset. resolve_audio_file's stem fallback walks
-  // the dir in QDir's default IgnoreCase sort — leftover entries that
-  // case-collide with a newly created fixture can be returned first, flipping
-  // the resolved path between runs. Qt5 has no move-assignment for
-  // QTemporaryDir, so wipe the contents instead of reassigning.
+  // tempDir is a member constructed once per test object, so files accumulate across slots without this reset. resolve_audio_file's stem
+  // fallback walks the dir in QDir's default IgnoreCase sort — leftover entries that case-collide with a newly created fixture can be returned
+  // first, flipping the resolved path between runs. Qt5 has no move-assignment for QTemporaryDir, so wipe the contents instead of reassigning.
   QVERIFY(tempDir.isValid());
   QDir d(tempDir.path());
   for (const QString& f : d.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
@@ -96,9 +93,8 @@ void TestCueParser::singleFileMultipleTracks() {
 }
 
 void TestCueParser::multiFileOneTrackPerFile() {
-  // One FILE per TRACK, each at INDEX 01 00:00:00 — every track is a whole
-  // standalone file (the multi-file cue layout). Each track maps to its own file
-  // and starts at 0.
+  // One FILE per TRACK, each at INDEX 01 00:00:00 — every track is a whole standalone
+  // file (the multi-file cue layout). Each track maps to its own file and starts at 0.
   QVERIFY(touch(tempDir.filePath(QStringLiteral("01 first.flac"))));
   QVERIFY(touch(tempDir.filePath(QStringLiteral("02 second.flac"))));
   QVERIFY(touch(tempDir.filePath(QStringLiteral("03 third.flac"))));
@@ -132,11 +128,9 @@ void TestCueParser::multiFileOneTrackPerFile() {
 }
 
 void TestCueParser::multiFileGapsAppendedCrossFileIndex() {
-  // EAC "gaps appended to previous file": one FLAC per track, where each track's
-  // INDEX 00 pregap sits at the tail of the previous file and its INDEX 01 audio
-  // starts at 0 in its own file. Track N must bind to file N at begin 0 — not to
-  // file N-1 at the pregap offset (that bug played a few seconds of trailing
-  // silence for every track after the first).
+  // EAC "gaps appended to previous file": one FLAC per track, where each track's INDEX 00 pregap sits at the tail of the
+  // previous file and its INDEX 01 audio starts at 0 in its own file. Track N must bind to file N at begin 0 — not to
+  // file N-1 at the pregap offset (that bug played a few seconds of trailing silence for every track after the first).
   QVERIFY(touch(tempDir.filePath(QStringLiteral("01 first.flac"))));
   QVERIFY(touch(tempDir.filePath(QStringLiteral("02 second.flac"))));
   QVERIFY(touch(tempDir.filePath(QStringLiteral("03 third.flac"))));

@@ -39,8 +39,7 @@ namespace ReplayGain {
       END;
     )";
 
-    // upsert rather than INSERT OR REPLACE: REPLACE would skip the delete trigger and
-    // leave row_count counting every rewrite as a new row
+    // upsert rather than INSERT OR REPLACE: REPLACE would skip the delete trigger and leave row_count counting every rewrite as a new row
     const char *kPutSql = R"(
       INSERT INTO gain (path, begin_ms, track_db, track_peak, album_db, album_peak, mtime, size)
       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
@@ -71,8 +70,7 @@ namespace ReplayGain {
   Store::Store(const QString &dir) {
     QDir().mkpath(dir);
     filepath = QString("%1/replaygain.sqlite").arg(dir);
-    // a db written by a newer mpz is left exactly as it is; only an unreadable one
-    // is moved aside and replaced
+    // a db written by a newer mpz is left exactly as it is; only an unreadable one is moved aside and replaced
     if (openAt(filepath) == OpenResult::Failed) {
       quarantine();
       openAt(filepath);
@@ -95,8 +93,7 @@ namespace ReplayGain {
     exec("PRAGMA journal_mode = WAL");
     exec("PRAGMA synchronous = NORMAL");
     exec("PRAGMA cache_size = -8000");
-    // no mmap: the 8 MB page cache is then the whole of our footprint, and the OS page
-    // cache still absorbs the file without it showing up as ours
+    // no mmap: the 8 MB page cache is then the whole of our footprint, and the OS page cache still absorbs the file without it showing up as ours
     exec("PRAGMA mmap_size = 0");
     exec("PRAGMA temp_store = MEMORY");
 
@@ -263,8 +260,7 @@ namespace ReplayGain {
       return 0;
     }
 
-    // A range over the primary key, not LIKE: an ESCAPE clause turns off the index
-    // optimisation and would make this a full scan of the whole library.
+    // A range over the primary key, not LIKE: an ESCAPE clause turns off the index optimisation and would make this a full scan of the whole library.
     sqlite3_stmt *list = nullptr;
     if (sqlite3_prepare_v2(db, "SELECT path, begin_ms FROM gain WHERE path >= ?1 AND path < ?2",
                            -1, &list, nullptr) != SQLITE_OK) {

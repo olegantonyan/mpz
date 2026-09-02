@@ -93,8 +93,7 @@ void TestCovers::initTestCase() {
   QVERIFY(cfg.isValid());
   qputenv("MPZ_CONFIG_DIR_OVERRIDE", cfg.path().toUtf8());
 
-  // Covers is a process-wide singleton over one ModusOperandi, so both live for
-  // the whole binary and every test gets a fresh directory instead.
+  // Covers is a process-wide singleton over one ModusOperandi, so both live for the whole binary and every test gets a fresh directory instead.
   local = std::make_unique<Config::Local>();
   modus = std::make_unique<ModusOperandi>(*local, &banner);
   CoverArt::Covers::instance(*modus);
@@ -117,8 +116,7 @@ void TestCovers::folderCoverIsMemoizedPerDirectory() {
   const QString first = CoverArt::Covers::instance().get(dir + "/a.mp3", "artist", "album");
   QCOMPARE(QFileInfo(first).fileName(), QString("cover.jpg"));
 
-  // Memoized by directory: a sibling track resolves to the same file, and
-  // replacing the image on disk does not invalidate it.
+  // Memoized by directory: a sibling track resolves to the same file, and replacing the image on disk does not invalidate it.
   QVERIFY(QFile::remove(dir + "/cover.jpg"));
   QCOMPARE(CoverArt::Covers::instance().get(dir + "/b.mp3", "artist", "album"), first);
 }

@@ -8,9 +8,8 @@
 #include <QVector>
 
 namespace Lyrics {
-  // lrclib.net client. Runs a cascade of progressively looser queries and
-  // stops at the first confident hit; search results are ranked with
-  // TextMatch::bestCandidate instead of first-match-wins.
+  // lrclib.net client. Runs a cascade of progressively looser queries and stops at the first confident
+  // hit; search results are ranked with TextMatch::bestCandidate instead of first-match-wins.
   class LrcLibClient : public Provider {
     Q_OBJECT
   public:

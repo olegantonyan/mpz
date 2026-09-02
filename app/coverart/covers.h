@@ -19,9 +19,8 @@ namespace CoverArt {
     static Covers &instance(ModusOperandi &modus);
     static Covers &instance();
 
-    // Built-in sources first, then any previously downloaded cover. Misses are
-    // deliberately not cached: that is what lets a later download, or a cover
-    // file dropped into the directory, be picked up by the next call.
+    // Built-in sources first, then any previously downloaded cover. Misses are deliberately not cached: that is
+    // what lets a later download, or a cover file dropped into the directory, be picked up by the next call.
     QString get(const QString& filepath, const QString &artist, const QString &album);
 
   private:

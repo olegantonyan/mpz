@@ -115,8 +115,7 @@ void TestLoader::singleAudioFileReturnsOneTrack() {
   Loader loader{QDir(p)};
   auto tracks = loader.tracks();
   QCOMPARE(tracks.size(), 1);
-  // Track path comes from QDir::absolutePath(), which returns the input for a
-  // file-shaped QDir.
+  // Track path comes from QDir::absolutePath(), which returns the input for a file-shaped QDir.
   QVERIFY(tracks.first().path().endsWith(QStringLiteral("single.flac")));
 }
 

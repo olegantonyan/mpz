@@ -17,8 +17,7 @@ namespace {
   }
 }
 
-// Transport, status and queue commands. The two wav fixtures are 30 s each, so
-// the null output plays them in real time and elapsed has room to move.
+// Transport, status and queue commands. The two wav fixtures are 30 s each, so the null output plays them in real time and elapsed has room to move.
 class TestMpdPlayback : public QObject {
   Q_OBJECT
 
@@ -85,8 +84,7 @@ void TestMpdPlayback::play_loadsThePlaylistAndStartsAtTheGivenPosition() {
 void TestMpdPlayback::play_returnsPromptlyForAnEmptyPlaylist() {
   QVERIFY(client->createPlaylist({}, "empty"));
 
-  // play() runs clear + load + idle_mask on the command socket, and the idle
-  // wait blocks for the full 8 s timeout if the queue never signals a change.
+  // play() runs clear + load + idle_mask on the command socket, and the idle wait blocks for the full 8 s timeout if the queue never signals a change.
   QElapsedTimer clock;
   clock.start();
   client->play("empty", 0);
@@ -97,8 +95,7 @@ void TestMpdPlayback::play_returnsPromptlyForAnEmptyPlaylist() {
 
 void TestMpdPlayback::status_reportsTheAudioFormatAndDurationWhilePlaying() {
   client->play(kPlaylist, 0);
-  // The format only appears once the decoder has opened the file, a moment
-  // after the state flips to Play.
+  // The format only appears once the decoder has opened the file, a moment after the state flips to Play.
   QTRY_VERIFY(client->status().audioFormat.sampleRate != 0);
 
   const auto status = client->status();
@@ -106,8 +103,7 @@ void TestMpdPlayback::status_reportsTheAudioFormatAndDurationWhilePlaying() {
   QCOMPARE(status.audioFormat.channels, 2u);
   QCOMPARE(status.audioFormat.bits, 16u);
   QCOMPARE(status.totalTime, 30);
-  // bitrate is not asserted: mpd 0.24 reports one for uncompressed PCM, 0.23
-  // leaves it at 0.
+  // bitrate is not asserted: mpd 0.24 reports one for uncompressed PCM, 0.23 leaves it at 0.
 }
 
 void TestMpdPlayback::status_reportsTheNextSongForAMultiTrackQueue() {

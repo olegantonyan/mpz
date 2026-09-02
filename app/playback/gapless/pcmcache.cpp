@@ -97,8 +97,7 @@ namespace Playback::Gapless {
   }
 
   void PcmCache::evict(Entry &e) {
-    // The protect floor beats the budget: frames >= protect_frame are never dropped,
-    // so retained may exceed the allowance while the floor pins the front.
+    // The protect floor beats the budget: frames >= protect_frame are never dropped, so retained may exceed the allowance while the floor pins the front.
     while (e.retained() > e.allowance && frontEvictable(e)) {
       e.first_byte += e.chunks.front().size();
       e.chunks.pop_front();

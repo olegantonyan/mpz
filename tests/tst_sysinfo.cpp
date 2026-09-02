@@ -14,8 +14,7 @@ private slots:
 };
 
 void TestSysInfo::initTestCase() {
-  // main.cpp does qApp->setApplicationVersion(VERSION) before SysInfo is ever
-  // read; mirror that so the "App version:" line has a value.
+  // main.cpp does qApp->setApplicationVersion(VERSION) before SysInfo is ever read; mirror that so the "App version:" line has a value.
   QCoreApplication::setApplicationVersion(QStringLiteral("test-version"));
 }
 
@@ -41,8 +40,7 @@ void TestSysInfo::noEntryIsEmpty() {
   const auto info = SysInfo::get();
   for (const QString &line : info) {
     QVERIFY(!line.isEmpty());
-    // Every entry follows "Label: value" — bare "Label:" with nothing after
-    // signals a probe that returned empty data.
+    // Every entry follows "Label: value" — bare "Label:" with nothing after signals a probe that returned empty data.
     QVERIFY2(!line.endsWith(QStringLiteral(": ")),
              qPrintable(QStringLiteral("empty value in '%1'").arg(line)));
   }

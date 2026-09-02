@@ -49,8 +49,7 @@ namespace DiskCache {
       return QString();
     }
     const QString path = cache_dir + key + "." + ext;
-    // QSaveFile is atomic and replaces an existing file on Windows, which a
-    // plain QFile::rename does not.
+    // QSaveFile is atomic and replaces an existing file on Windows, which a plain QFile::rename does not.
     QSaveFile f(path);
     if (!f.open(QIODevice::WriteOnly)) {
       return QString();

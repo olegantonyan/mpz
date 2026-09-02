@@ -11,8 +11,7 @@
 namespace Lyrics {
   ProviderChain::ProviderChain(QObject *parent) : QObject(parent) {
     watchdog.setSingleShot(true);
-    // Backstop for a provider that never emits; per-request transfer timeouts
-    // normally fire first.
+    // Backstop for a provider that never emits; per-request transfer timeouts normally fire first.
     watchdog.setInterval(20000);
   }
 
@@ -76,8 +75,7 @@ namespace Lyrics {
     watchdog.disconnect();
     if (pending.isEmpty()) {
       if (!had_failure) {
-        // Every provider genuinely returned not-found; a failed/timed-out
-        // provider must not poison the cache with a 30-day sentinel.
+        // Every provider genuinely returned not-found; a failed/timed-out provider must not poison the cache with a 30-day sentinel.
         Cache::instance().storeNotFound(query, enabled);
       }
       emit notFound();

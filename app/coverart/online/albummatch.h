@@ -11,9 +11,8 @@ namespace CoverArt {
       QString album;
     };
 
-    // Candidate scoring for online album search. Pure functions, no I/O.
-    // Reuses Lyrics::TextMatch for normalization; the scoring itself is
-    // separate because album lookups have no duration or sync signal to weigh.
+    // Candidate scoring for online album search. Pure functions, no I/O. Reuses Lyrics::TextMatch for
+    // normalization; the scoring itself is separate because album lookups have no duration or sync signal to weigh.
     class AlbumMatch {
     public:
       // 0..1 for a candidate against the wanted artist/album.

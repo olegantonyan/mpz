@@ -6,9 +6,8 @@
 
 namespace AudioDeviceUi {
   DevicesMenu::DevicesMenu(QWidget *parent, Config::Local &local_c) : QMenu(parent), local_conf(local_c) {
-    // Rebuild on every open so hot-plugged devices and the current selection
-    // stay in sync (matters for a persistent submenu; harmless for the
-    // recreated-per-click toolbar popup).
+    // Rebuild on every open so hot-plugged devices and the current selection stay in sync
+    // (matters for a persistent submenu; harmless for the recreated-per-click toolbar popup).
     connect(this, &QMenu::aboutToShow, this, &DevicesMenu::populate);
     populate();
   }

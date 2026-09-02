@@ -31,10 +31,8 @@ namespace {
   }
 }
 
-// One window for the whole binary: Config::Global, Config::Local and
-// ModusOperandi are single-instance guarded, and CoverArt::Covers is a
-// process-wide singleton that captures the first window's ModusOperandi.
-// The window is never close()d either -- closeEvent ends in qApp->quit().
+// One window for the whole binary: Config::Global, Config::Local and ModusOperandi are single-instance guarded, and CoverArt::Covers is a
+// process-wide singleton that captures the first window's ModusOperandi. The window is never close()d either -- closeEvent ends in qApp->quit().
 class TestMainWindow : public QObject {
   Q_OBJECT
 

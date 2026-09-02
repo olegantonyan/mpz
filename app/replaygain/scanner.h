@@ -19,16 +19,14 @@ namespace ReplayGain {
 
     static int defaultWorkerCount();
 
-    // Decode in child processes. Off by default so tests, which have no mpz binary
-    // to spawn, keep decoding in process.
+    // Decode in child processes. Off by default so tests, which have no mpz binary to spawn, keep decoding in process.
     void setWorker(const QString &program, const QStringList &arguments);
 
     bool isScanning() const { return in_flight > 0 || !pending.isEmpty() || !producer_done; }
 
     void start(const QVector<Job> &jobs, int worker_count = 0);
 
-    // Incremental form: open(), then enqueue() as jobs are discovered, then
-    // producerFinished(). finished() is held back until the producer is done.
+    // Incremental form: open(), then enqueue() as jobs are discovered, then producerFinished(). finished() is held back until the producer is done.
     void open(int worker_count = 0);
     void enqueue(const QVector<Job> &jobs);
     void producerFinished();

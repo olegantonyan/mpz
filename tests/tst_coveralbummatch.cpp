@@ -41,8 +41,7 @@ void TestCoverAlbumMatch::toleratesFeaturedArtists() {
   QCOMPARE(AlbumMatch::bestCandidate(candidates, "Queen feat. David Bowie", "The Works"), 0);
 }
 
-// A wrong cover is written to disk and outlives the session, so a near miss
-// must lose rather than "probably match".
+// A wrong cover is written to disk and outlives the session, so a near miss must lose rather than "probably match".
 void TestCoverAlbumMatch::rejectsWrongAlbum() {
   const QVector<AlbumCandidate> candidates{{"Pink Floyd", "Animals"}};
   QCOMPARE(AlbumMatch::bestCandidate(candidates, "Pink Floyd", "The Wall"), -1);

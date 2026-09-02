@@ -439,8 +439,7 @@ QLayout *SettingsDialog::buildCacheButtons(const QString &open_text, const QStri
   row->addStretch();
 
   connect(open_btn, &QPushButton::clicked, this, [dir]() {
-    // The cache constructor creates the directory, so this works before the
-    // first download too.
+    // The cache constructor creates the directory, so this works before the first download too.
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir()));
   });
   connect(clear_btn, &QPushButton::clicked, this, [this, clear, clear_text, confirm_text]() {
@@ -661,9 +660,8 @@ void SettingsDialog::populateCovers() {
 void SettingsDialog::populateProviders(QListWidget *list, const QStringList &known,
                                        const QStringList &configured,
                                        QString (*display_name)(const QString &)) {
-  // Configured ones first (in order), then any known-but-disabled providers as
-  // unchecked. Names the chain doesn't know are dropped, which is how legacy
-  // built-in entries retire themselves on the next save.
+  // Configured ones first (in order), then any known-but-disabled providers as unchecked. Names the chain
+  // doesn't know are dropped, which is how legacy built-in entries retire themselves on the next save.
   QStringList all;
   for (const auto &p : configured) {
     if (known.contains(p) && !all.contains(p)) all << p;

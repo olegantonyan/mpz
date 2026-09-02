@@ -10,10 +10,8 @@
 
 namespace CoverArt {
   namespace Online {
-    // Walks enabled online providers in the user-configured order, advancing on
-    // notFound/failed. Emits found(provider_name, path) or notFound() once.
-    // Results are persisted (see Cache); a cache hit emits synchronously from
-    // fetch(), so connect before fetching.
+    // Walks enabled online providers in the user-configured order, advancing on notFound/failed. Emits found(provider_name, path) or
+    // notFound() once. Results are persisted (see Cache); a cache hit emits synchronously from fetch(), so connect before fetching.
     class ProviderChain : public QObject {
       Q_OBJECT
     public:

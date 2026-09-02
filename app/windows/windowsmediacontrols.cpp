@@ -120,8 +120,7 @@ WindowsMediaControls::WindowsMediaControls(Playback::Controller *pl, QWidget *wi
   connect(player, &Playback::Controller::seeked, this, [this](int) {
     updateTimeline();
   });
-  // updateMetadata() nulls the thumbnail before reading artCover(), so without
-  // this the flyout stays blank for the whole track a cover is downloaded on.
+  // updateMetadata() nulls the thumbnail before reading artCover(), so without this the flyout stays blank for the whole track a cover is downloaded on.
   connect(&CoverArt::Online::Downloader::instance(), &CoverArt::Online::Downloader::coverAvailable,
           this, [this](const QString &artist, const QString &album, const QString &) {
     const Track current = player->currentTrack();

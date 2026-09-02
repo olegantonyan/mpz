@@ -43,8 +43,7 @@ namespace {
     InitialValues v;
     TagLib::FileRef f(QFile::encodeName(t.path()).constData(), false);
     if (!f.isNull() && f.tag()) {
-      // Read raw tag values directly — Track::title() falls back to filename
-      // when the tag is empty, which we don't want in an editor.
+      // Read raw tag values directly — Track::title() falls back to filename when the tag is empty, which we don't want in an editor.
       auto *tag = f.tag();
       v.artist = QString::fromUtf8(tag->artist().toCString(true));
       v.album = QString::fromUtf8(tag->album().toCString(true));
@@ -153,8 +152,7 @@ TagEditorDialog::TagEditorDialog(const QVector<Track> &tracks,
   connect(ui->lineEditTrackNumber, &QLineEdit::textEdited, this, [this](const QString &) { _track_number.dirty = true; });
   connect(ui->lineEditDiscNumber, &QLineEdit::textEdited, this, [this](const QString &) { _disc_number.dirty = true; });
   connect(ui->lineEditGenre, &QLineEdit::textEdited, this, [this](const QString &) { _genre.dirty = true; });
-  // QPlainTextEdit has no textEdited; populate_fields() uses QSignalBlocker
-  // so this connection is safe to make before or after the initial fill.
+  // QPlainTextEdit has no textEdited; populate_fields() uses QSignalBlocker so this connection is safe to make before or after the initial fill.
   connect(ui->plainTextComment, &QPlainTextEdit::textChanged, this, [this]() { _comment.dirty = true; });
 
   connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TagEditorDialog::on_save);
@@ -165,8 +163,7 @@ TagEditorDialog::~TagEditorDialog() {
 }
 
 void TagEditorDialog::populate_fields() {
-  // Suppress textChanged on the comment field so repopulation doesn't mark
-  // _comment dirty on subsequent loads (during Previous/Next navigation).
+  // Suppress textChanged on the comment field so repopulation doesn't mark _comment dirty on subsequent loads (during Previous/Next navigation).
   QSignalBlocker blocker(ui->plainTextComment);
 
   QVector<InitialValues> values;

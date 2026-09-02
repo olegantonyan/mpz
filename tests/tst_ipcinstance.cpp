@@ -11,8 +11,7 @@ namespace {
     QByteArray body;
   };
 
-  // Instance::send() blocks on waitForReadyRead, which starves the server living
-  // in the same process, so the client side is hand-rolled and fully async here.
+  // Instance::send() blocks on waitForReadyRead, which starves the server living in the same process, so the client side is hand-rolled and fully async here.
   QByteArray request(const QByteArray &body) {
     return QByteArray("POST / HTTP/1.1\r\n\r\n\r\n") + body;
   }
@@ -46,8 +45,7 @@ private slots:
   void oversizedPayloadIsDroppedUnanswered();
 
 private:
-  // Constructed only after test mode is on: Instance caches its socket name,
-  // which QStandardPaths would otherwise resolve to the real cache dir.
+  // Constructed only after test mode is on: Instance caches its socket name, which QStandardPaths would otherwise resolve to the real cache dir.
   std::unique_ptr<IPC::Instance> server;
 };
 

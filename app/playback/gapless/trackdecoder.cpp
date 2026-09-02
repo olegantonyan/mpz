@@ -16,15 +16,14 @@ namespace Playback::Gapless {
   }
 
   TrackDecoder::~TrackDecoder() {
-    // the ffmpeg backend tears its demux/decode threads down inside ~QAudioDecoder; stop first
-    // so the pipeline is already quiescent and no bufferReady can re-enter pump() mid-destruction
+    // the ffmpeg backend tears its demux/decode threads down inside ~QAudioDecoder; stop first so
+    // the pipeline is already quiescent and no bufferReady can re-enter pump() mid-destruction
     decoder.disconnect(this);
     decoder.stop();
   }
 
-  // public mutators self-dispatch to the decoder's thread (synchronous on the same
-  // thread), so a stream decoder can live on a worker where the blocking probe
-  // inside QAudioDecoder::start() cannot freeze the GUI
+  // public mutators self-dispatch to the decoder's thread (synchronous on the same thread), so a stream
+  // decoder can live on a worker where the blocking probe inside QAudioDecoder::start() cannot freeze the GUI
   void TrackDecoder::start(const QUrl &url) {
     QMetaObject::invokeMethod(this, [this, url]() {
       reset(url);

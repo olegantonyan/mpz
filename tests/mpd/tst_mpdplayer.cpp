@@ -11,9 +11,8 @@ namespace {
   const char *kPlaylist = "queue";
 }
 
-// Playback::Mpd::MediaPlayer against a real server. The base ctor builds a
-// QMediaPlayer and QAudioOutput, so this binary needs an audio sink even though
-// nothing here decodes locally.
+// Playback::Mpd::MediaPlayer against a real server. The base ctor builds a QMediaPlayer and
+// QAudioOutput, so this binary needs an audio sink even though nothing here decodes locally.
 class TestMpdPlayer : public QObject {
   Q_OBJECT
 
@@ -134,8 +133,7 @@ void TestMpdPlayer::positionFollowsTheServerElapsed() {
 
   client->setPosition(15);
 
-  // The player extrapolates from the last status it saw, so it lands near the
-  // server's elapsed rather than exactly on it.
+  // The player extrapolates from the last status it saw, so it lands near the server's elapsed rather than exactly on it.
   QTRY_VERIFY_WITH_TIMEOUT(player->position() >= 15000, 5000);
   QVERIFY(player->position() < 22000);
 }

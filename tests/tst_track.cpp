@@ -97,9 +97,8 @@ void TestTrack::formattedTimeMinutesAndSeconds() {
 }
 
 void TestTrack::formattedTimeHours() {
-  // Implementation pads minutes/seconds with '0' but pads hours with the
-  // default fill char (space) — `arg(hours, 2, 10)` has no explicit fill.
-  // Lock down the current output so any future change is intentional.
+  // Implementation pads minutes/seconds with '0' but pads hours with the default fill char (space) —
+  // `arg(hours, 2, 10)` has no explicit fill. Lock down the current output so any future change is intentional.
   QCOMPARE(Track::formattedTime(3600000),  QStringLiteral(" 1:00:00"));
   QCOMPARE(Track::formattedTime(3661000),  QStringLiteral(" 1:01:01"));
 }
@@ -108,8 +107,7 @@ void TestTrack::formattedTimeDays() {
   const quint64 twentyFiveHoursMs = 25ULL * 3600ULL * 1000ULL;
   QCOMPARE(Track::formattedTime(twentyFiveHoursMs), QStringLiteral("1d  1:00:00"));
 
-  // 217 days + 4h 26m 40s — the value-shape that exposed the original
-  // recursive-call unit bug (seconds passed where ms were expected).
+  // 217 days + 4h 26m 40s — the value-shape that exposed the original recursive-call unit bug (seconds passed where ms were expected).
   const quint64 bigMs = (217ULL * 86400ULL + 4ULL * 3600ULL + 26ULL * 60ULL + 40ULL) * 1000ULL;
   QCOMPARE(Track::formattedTime(bigMs), QStringLiteral("217d  4:26:40"));
 }
@@ -281,8 +279,7 @@ void TestTrack::shortTextFallsBackToFilename() {
   Track t(QStringLiteral("/dir/song.flac"), 0,
           QString(), QString(), QString(),
           0, 0, 0, 0, 0, 0);
-  // title() falls back to filename() when title is empty and not a stream,
-  // so shortText hits the title branch and reports the filename.
+  // title() falls back to filename() when title is empty and not a stream, so shortText hits the title branch and reports the filename.
   QCOMPARE(t.shortText(), QStringLiteral("song.flac"));
 }
 
@@ -311,8 +308,7 @@ void TestTrack::filenameAndDirCacheAreLazyButStable() {
   const QString f2 = t.filename();
   QCOMPARE(f1, QStringLiteral("x.flac"));
   QCOMPARE(f1, f2);
-  // dir() returns canonicalPath() which is empty for non-existent paths.
-  // Just check stability.
+  // dir() returns canonicalPath() which is empty for non-existent paths. Just check stability.
   QCOMPARE(t.dir(), t.dir());
 }
 

@@ -17,9 +17,8 @@ namespace SortUi {
 
     static QList<SortingPreset> standardPresets();
 
-    // Wire an existing menu (e.g. a menu-bar submenu) to this controller: fills
-    // it now, refills on every aboutToShow (so edited presets stay current), and
-    // routes activations through the same triggered() signal as the toolbar.
+    // Wire an existing menu (e.g. a menu-bar submenu) to this controller: fills it now, refills on every aboutToShow
+    // (so edited presets stay current), and routes activations through the same triggered() signal as the toolbar.
     void attachToMenu(QMenu *menu);
 
   signals:

@@ -14,9 +14,8 @@
 #include <QThreadPool>
 #include <QtTest>
 
-// Models and loaders over a real server. Config::Global, Config::Local and
-// ModusOperandi are single-instance guarded, so one stack is built for the whole
-// binary and isolation comes from resetting the server between cases.
+// Models and loaders over a real server. Config::Global, Config::Local and ModusOperandi are single-instance
+// guarded, so one stack is built for the whole binary and isolation comes from resetting the server between cases.
 class TestMpdModels : public QObject {
   Q_OBJECT
 
@@ -80,8 +79,7 @@ void TestMpdModels::initTestCase() {
 }
 
 void TestMpdModels::cleanupTestCase() {
-  // The models run blocking calls into the client from pooled threads; a task
-  // still in flight would deadlock against the client's own thread teardown.
+  // The models run blocking calls into the client from pooled threads; a task still in flight would deadlock against the client's own thread teardown.
   QThreadPool::globalInstance()->waitForDone();
   tree.reset();
   modus.reset();

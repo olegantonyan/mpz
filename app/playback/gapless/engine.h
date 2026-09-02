@@ -34,8 +34,7 @@ namespace Playback::Gapless {
     Playback::MediaPlayer::State state() const;
     qint64 positionMs() const;
 
-    // The device selection actually in effect: the configured id while that device
-    // is plugged in, empty (= system default) whenever it is not.
+    // The device selection actually in effect: the configured id while that device is plugged in, empty (= system default) whenever it is not.
     QByteArray effectiveOutputDeviceId() const { return effective_device_id; }
 
     void setReplayGainResolver(std::function<double(const Track &)> fn);
