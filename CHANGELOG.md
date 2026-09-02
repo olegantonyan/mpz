@@ -1,6 +1,4 @@
-## [2.1.6] - next
-
-### Added
+## [2.1.6] - 2026-09-02
 
 ### Fixed
 
@@ -12,8 +10,6 @@
 - Dynamic range scan stuck on a missing file
 - Playlist name when the library folder name repeats in the path
 - Long track titles widened the window and blocked resizing it back down
-
-### Misc
 
 ## [2.1.5] - 2026-08-26
 
