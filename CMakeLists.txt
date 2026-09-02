@@ -59,7 +59,6 @@ set(PROJECT_SOURCES
   app/about_ui/area51dialog.cpp
   app/backgroundtasks.cpp
   app/backgroundtasksbutton.cpp
-  app/elidingcheckbox.cpp
   app/loadingspinner.cpp
   app/config/global.cpp
   app/config/local.cpp
