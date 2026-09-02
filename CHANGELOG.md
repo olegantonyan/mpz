@@ -12,6 +12,7 @@
 - Dynamic range scan stuck on a missing file
 - Playlist name when the library folder name repeats in the path
 - Long track titles widened the window and blocked resizing it back down
+- Window could not be narrowed on small screens: the "Playback follows cursor" label and the library/order combo boxes pinned its minimum width
 
 ### Misc
 

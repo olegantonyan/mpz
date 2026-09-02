@@ -43,6 +43,7 @@ private slots:
   void cleanupTestCase();
   void buildsWithControlsAndViews();
   void followCursorClickWritesConfig();
+  void bottomRowWidgetsCanShrink();
   void orderComboBoxKeyboardWritesConfig();
   void perPlaylistOrderFollowsTheSelectedPlaylist();
   void focusShortcutsReachTheThreeViews();
@@ -105,6 +106,21 @@ void TestMainWindow::followCursorClickWritesConfig() {
 
   QCOMPARE(box->isChecked(), expected);
   QCOMPARE(global->playbackFollowCursor(), expected);
+}
+
+void TestMainWindow::bottomRowWidgetsCanShrink() {
+  auto *box = window->findChild<QCheckBox *>(QStringLiteral("followCursorCheckBox"));
+  QVERIFY(box != nullptr);
+  QVERIFY(box->sizePolicy().horizontalPolicy() & QSizePolicy::ShrinkFlag);
+  QVERIFY(box->minimumSizeHint().width() < box->sizeHint().width());
+
+  for (const QString &name : {QStringLiteral("comboBoxLibraries"), QStringLiteral("orderComboBox"),
+                              QStringLiteral("perPlaylistOrdercomboBox")}) {
+    auto *combo = window->findChild<QComboBox *>(name);
+    QVERIFY2(combo != nullptr, qPrintable(name));
+    QCOMPARE(combo->sizeAdjustPolicy(), QComboBox::AdjustToContents);
+    QVERIFY2(combo->minimumContentsLength() > 0, qPrintable(name));
+  }
 }
 
 void TestMainWindow::orderComboBoxKeyboardWritesConfig() {
