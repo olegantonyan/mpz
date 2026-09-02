@@ -19,6 +19,7 @@
 #include <QUrl>
 
 #ifdef Q_OS_UNIX
+  #include <sys/resource.h>
   #include <unistd.h>
 #endif
 
@@ -51,7 +52,7 @@ namespace ReplayGain {
     // The in-process path decodes on a LowestPriority thread; a child process would otherwise inherit this process's normal priority and lose that.
     void lowerPriority(QProcess &worker) {
 #if defined(Q_OS_UNIX)
-      worker.setChildProcessModifier([]() { ::nice(kWorkerNiceness); });
+      worker.setChildProcessModifier([]() { ::setpriority(PRIO_PROCESS, 0, kWorkerNiceness); });
 #elif defined(Q_OS_WIN)
       worker.setCreateProcessArgumentsModifier([](QProcess::CreateProcessArguments *args) {
         args->flags |= BELOW_NORMAL_PRIORITY_CLASS;

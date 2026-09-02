@@ -26,3 +26,8 @@ target_link_libraries(sqlite3 PUBLIC Threads::Threads)
 if(NOT WIN32)
   target_link_libraries(sqlite3 PUBLIC ${CMAKE_DL_LIBS} m)
 endif()
+
+# false positive in sqlite3ColumnSetColl: gcc thinks the inlined strlen reads from address zero
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  target_compile_options(sqlite3 PRIVATE -Wno-stringop-overread)
+endif()
