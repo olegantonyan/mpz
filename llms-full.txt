@@ -18,7 +18,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Drag and drop files and folders from your file manager
 - Reorder tracks by dragging, and drag folders, radio stations and tracks between the three panels
 - Gapless playback. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant (Qt 6, 2.1.0)
-- Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (runs on the gapless engine, 2.1.0)
+- Equalizer: 10-band graphic and full parametric modes, imports AutoEq/SquigLink presets. On/off and preset are per output device, the presets are shared, and the EQ follows the device in use (2.1.0)
 - ReplayGain: reads existing tags and measures tracks itself in the background, over the playlist, the selection or the whole library; results go to a sidecar database or into tags in the files; track or album gain, preamp, dynamics compensation, clipping prevention
 - Output device switch, showing the selected device name
 - Internet radio: radio library with built-in stations, HTTPS, radio row view, IceCast stream titles (2.1.0), plus m3u/m3u8/pls stream playlists
@@ -35,7 +35,7 @@ Built with C++ and Qt 6. Lightweight, fast, follows your desktop theme. Open sou
 - Tag reading and editing via TagLib (ID3v2, Vorbis Comment, MP4, APE), with a built-in tag editor since version 2.0.8; album artist and disc number are separate tags, available as columns and sort keys
 - Common audio formats through system codecs (QtMultimedia + GStreamer/ffmpeg on Linux, native backends on macOS and Windows): FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF), Shorten
 - Playback log of recently played tracks, useful for identifying tracks heard on internet radio
-- Update check on Windows, macOS and the Linux AppImage
+- Update check on Windows, macOS and the Linux AppImage, with delta updates (zsync) for the AppImage
 - UI languages: English, Russian, Japanese, Serbian, following your system language by default
 - Configuration in two YAML files: a portable global config and a machine-local one
 - Built-in feedback form, or open a GitHub issue
@@ -62,65 +62,63 @@ Added in 2.1.0. Two modes: 10-band graphic, and full parametric with control ove
 
 On/off and the selected preset are per output device ("Default" counts as one); the presets themselves are shared across devices. The EQ follows the device in use, so unplugging headphones switches it along with the audio.
 
-It runs inside the gapless engine, so gapless has to be enabled.
+It runs inside the gapless engine, so Qt 6 builds only.
 
 ## ReplayGain
 
-Volume normalization, so albums mastered at different levels play equally loud. Existing ReplayGain tags are read as they are, and mpz can measure tracks itself: the current playlist, the selected tracks or the whole library, analysed in the background.
+Volume normalization: albums mastered at different loudness play at the same level. mpz reads existing ReplayGain tags and can also measure tracks itself, in the background: the current playlist, the selected tracks or the whole library.
 
 Results are stored either in a sidecar database, leaving the audio files untouched, or written into the files as tags. Playback settings: off, track gain or album gain, a preamp, a fallback gain for unscanned tracks and radio streams, dynamics compensation, and clipping prevention. Dynamics compensation (0-100%) uses the measured peak-to-loudness ratio to raise loud, heavily limited masters, so metal and pop stop playing quieter than classical and jazz. The mode also switches from the status bar.
 
 ## Internet radio
 
-Stream playlists in m3u, m3u8 and pls have always played in mpz, like any other playlist. Version 2.1.0 added a radio library alongside the folder library, with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM, plus your own (name, url, group, homepage, codec, bitrate). Stream playlists still play directly, or import into the library.
+Stream playlists in m3u, m3u8 and pls have always played in mpz, like any other playlist. Version 2.1.0 added a radio library alongside the folder library, with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM, and you can add your own (name, url, group, homepage, codec, bitrate). Stream playlists still play directly, or import into the library.
 
 Also new in 2.1.0: HTTPS, a radio row view instead of the track view, and stream titles from IceCast metadata including the status-json.xsl endpoint. The playback log keeps the history of what played.
 
 ## FAQ
 
-**What is mpz?** A free and open-source folder player for large local music collections, built with C++ and Qt. It treats your folder structure as the library, with a 3-column UI for the directory tree, playlists and tracks.
+**What is mpz?** A free and open-source folder player for large local music collections, written in C++ and Qt. It plays directly from your folder structure instead of importing it into a database, with three columns for the folder tree, playlists and tracks. Middle-click any folder to make a playlist from it.
 
-**Is mpz a folder player?** Yes. It plays music straight from your folder structure instead of importing it into a database. Middle-click any folder to turn it into a playlist. Your directory tree is the library, with no global indexing step.
+**Is mpz a Foobar2000 alternative?** Partly. mpz is inspired by Foobar2000, especially its "Album list", but it is not a clone: an exact cross-platform copy is not possible and not the goal. It has the features the author has used daily for years, in a native folder-based player for Linux, macOS and Windows. Foobar2000 itself runs only on Windows.
 
-**Is mpz a Foobar2000 alternative?** Partly. mpz is inspired by Foobar2000, especially its "Album list", but it is not a clone: a faithful cross-platform clone is neither feasible nor the goal. It keeps the features the author has used daily for years, in a native folder-based player for Linux, macOS and Windows, where Foobar2000 is Windows-only.
+**Can mpz handle very large music collections?** Yes, that is what it is made for. Your folder structure is the library, so nothing has to be scanned into a database before you can play.
 
-**Can mpz handle very large music collections?** Yes, that is what it is built for. Your folder structure is the library, so nothing gets scanned into a database before you can play anything.
+**What platforms does mpz support?** Linux, macOS and Windows. On Linux, install the native packages (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) for x86_64 and aarch64, or use the AUR, Flathub (flatpak install flathub org.mpz_player.mpz) or an AppImage. On Windows, download a release from GitHub: 64-bit x64, native ARM64 (Windows on ARM) or 32-bit for old systems. On macOS, download the .dmg from GitHub releases. That build is not signed, so Gatekeeper blocks it on first launch: remove the quarantine flag with xattr -dr com.apple.quarantine "/Applications/mpz music player.app", or click Open Anyway under System Settings → Privacy & Security. Building from source works on any platform with Qt and a C++ compiler.
 
-**What platforms does mpz support?** Linux, macOS and Windows. On Linux, install the native packages (openSUSE, Debian, Fedora, Ubuntu, RedHat, Mageia, Arch, Manjaro) for x86_64 and aarch64, or from the AUR, Flathub (`flatpak install flathub org.mpz_player.mpz`) or an AppImage. On Windows, take a release from GitHub: x64, native ARM64 (Windows on ARM) or legacy 32-bit. On macOS, take the `.dmg` from GitHub releases. That build is unsigned, so Gatekeeper blocks it on first launch: either remove the quarantine flag with `xattr -dr com.apple.quarantine "/Applications/mpz music player.app"`, or click Open Anyway under System Settings → Privacy & Security. Building from source works on any platform with Qt and a C++ compiler.
+**Is mpz available as a Flatpak?** Yes, on Flathub as org.mpz_player.mpz. Install it with flatpak install flathub org.mpz_player.mpz, or from your desktop's software centre. It works on any distribution, but native packages are better if your distribution has them.
 
-**Is mpz available as a Flatpak?** Yes, on Flathub as `org.mpz_player.mpz` (<https://flathub.org/apps/org.mpz_player.mpz>). Install it with `flatpak install flathub org.mpz_player.mpz`, or from the desktop's software centre. It works on any distribution, but prefer the native packages if your distro is supported.
+**Does mpz have a mobile app (Android or iOS)?** No. mpz is a desktop player for Linux, macOS and Windows; there is no Android or iOS version. On Linux you can control playback from a phone over MPRIS, for example with KDE Connect.
 
-**Does mpz have a mobile app (Android or iOS)?** No. mpz is a desktop player for Linux, macOS and Windows; there is no Android or iOS version. On Linux you can control playback from a phone over MPRIS, for example via KDE Connect (<https://kdeconnect.kde.org/>).
+**Is mpz free?** Yes. mpz is free and open-source software, licensed under the GNU GPL v3.
 
-**Is mpz free?** Yes. Free and open-source under the GNU GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.html>).
+**Does mpz support streaming services?** No, mpz is for local music files. Internet radio works (a radio library with built-in stations, plus m3u, m3u8 and pls stream playlists), but streaming services are not supported.
 
-**Does mpz support streaming services?** No, mpz focuses on local music files. Internet radio works (a radio library with built-in stations, plus m3u, m3u8 and pls stream playlists), but streaming services such as Spotify or Apple Music are not supported.
+**Does mpz play internet radio?** Yes. Stream playlists in m3u, m3u8 and pls play like any other playlist. Version 2.1.0 added a radio library with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM, your own stations, HTTPS, a radio row view, and stream titles from IceCast's status-json.xsl. Stream playlists still play directly, or can be imported into the library.
 
-**Does mpz play internet radio?** Yes, and always has: stream playlists in m3u, m3u8 and pls play like any other playlist. Version 2.1.0 added a radio library with built-in stations from SomaFM, Radio Paradise, FIP, France Musique and Nightride FM plus your own, HTTPS, a radio row view, and stream titles from IceCast's status-json.xsl. Stream playlists still play directly, or import into the library.
+**What audio formats does mpz support?** FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF) and Shorten, played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Playlists and radio streams: m3u, m3u8, pls. Because playback uses system codecs, the exact list depends on what is installed.
 
-**What audio formats does mpz support?** FLAC, MP3, Ogg Vorbis, Opus, Speex, AAC, ALAC, M4A/M4B/MP4, WAV, AIFF, WMA/ASF, APE, WavPack, Musepack, TTA, MKA, DSD (DSF/DFF) and Shorten, played through your system's codecs (QtMultimedia with the GStreamer or ffmpeg backend on Linux, native backends on macOS and Windows). Playlists and radio streams: m3u, m3u8, pls. Since playback uses system codecs, exact format availability depends on what is installed.
+**Does mpz support gapless playback?** Yes, between any two tracks, not only inside CUE-sheet albums. Decoded audio is kept in memory (100 MB by default, changeable in Settings → Advanced), so seeking is instant too. Qt 6 builds only.
 
-**Does mpz support gapless playback?** Yes, anywhere in your library. Decoded audio is buffered in memory (100 MB by default, configurable in Settings → Advanced), which also makes seeking instant. Qt 6 builds only, since version 2.1.0.
+**Does mpz have an equalizer?** Yes. Two modes: 10-band graphic and full parametric. Presets can be imported from AutoEq, SquigLink and similar sources. Each output device ("Default" is one of them) has its own on/off switch and selected preset; the presets themselves are shared. When the audio device changes, for example when you unplug headphones, the equalizer changes with it.
 
-**Does mpz have an equalizer?** Yes, since version 2.1.0. 10-band graphic and full parametric modes, importing presets from AutoEq, SquigLink and similar sources. On/off and preset are per output device ("Default" counts as one), the presets themselves are shared. The EQ follows the device in use, so unplugging headphones switches it along with the audio. It runs on the gapless engine, so gapless has to be enabled.
+**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can also measure tracks itself, in the background: the current playlist, the selected tracks or the whole library. Results are stored in a separate database, so the audio files are not changed, or written into the file tags. Track or album gain, with a preamp, optional dynamics compensation for very loud, compressed masters, and clipping prevention.
 
-**Does mpz support ReplayGain?** Yes. mpz reads existing ReplayGain tags and can measure tracks itself: the current playlist, the selection, or the whole library, analysed in the background. Results are stored either in a sidecar database, which leaves the audio files untouched, or written into the files as tags. Track or album gain, with a preamp, optional dynamics compensation for heavily limited masters, and clipping prevention.
+**Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums with a CUE sheet.
 
-**Does mpz support CUE sheets?** Yes, including gapless playback of single-file albums split by a CUE sheet.
+**Does mpz measure dynamic range (DR)?** Yes. Select tracks and choose "Dynamic range" in the playlist context menu, or open it from the track info dialog. You get a per-track and album DR log in the foobar2000 Dynamic Range Meter format.
 
-**Does mpz measure dynamic range (DR)?** Yes. Select tracks and pick "Dynamic range" in the playlist context menu, or open it from the track info dialog, to get a per-track and album DR log in the foobar2000 Dynamic Range Meter format.
+**What languages is mpz available in?** The interface is available in English, Russian, Japanese and Serbian. The system language is used by default.
 
-**What languages is mpz available in?** The interface is translated into English, Russian, Japanese and Serbian, and follows your system language by default.
+**Can mpz act as an mpd client?** Yes, as an experimental mode. You can add an mpd server as a library folder. There are limitations: see the mpd section of the README.
 
-**Can mpz act as an mpd client?** Yes, as an experimental mode since version 2.0.0. You can add an mpd server as a library folder. See the mpd impedance mismatch note in the README for caveats.
+**Does mpz support lyrics?** Yes. Lyrics can come from tags, from .lrc or .txt files next to the track, or from online sources: LRCLIB, NetEase, QQ Music or Lyrics.ovh. Online lookup is off until you enable a provider in Settings → Online lyrics & covers. Lyrics appear in the Track Info dialog or in a dockable Lyrics panel.
 
-**Does mpz support lyrics?** Yes. Lyrics can be embedded in tags, loaded from `.lrc` or `.txt` sidecar files, or fetched online from LRCLIB (<https://lrclib.net>), NetEase, QQ Music or Lyrics.ovh. Online lookup is opt-in: nothing is fetched until a provider is enabled in Settings → Online lyrics & covers. Lyrics show up in the Track Info dialog or in a dockable Lyrics panel.
+**Can mpz download missing cover art?** Yes, after you enable it. Cover art comes from tags or folder images first. If there is none, mpz can look it up online through Deezer, Apple Music or Cover Art Archive. These sources are off by default: enable and reorder them in Settings → Online lyrics & covers, where downloaded covers can also be deleted.
 
-**Can mpz download missing cover art?** Yes, once it is turned on. Cover art comes from tags or folder images first, and when neither has one mpz can look it up online through Deezer, Apple Music or Cover Art Archive (<https://coverartarchive.org>). These sources are opt-in and off by default: enable and reorder them in Settings → Online lyrics & covers, where downloaded covers can also be cleared.
+**Can mpz edit tags?** Yes. There is a built-in tag editor for track metadata (title, artist, album and so on) for the formats TagLib supports: ID3v2, Vorbis Comment, MP4 and APE.
 
-**Can mpz edit tags?** Yes. Since version 2.0.8 there is a built-in tag editor for track metadata (title, artist, album and so on) on the formats TagLib supports: ID3v2, Vorbis Comment, MP4 and APE.
-
-**Why is it called "mpz"?** The "z" reflects a no-nonsense approach: no clutter, no distractions.
+**Why is it called mpz?** The "z" stands for a simple approach: nothing extra, nothing distracting.
 
 ## Links
 
