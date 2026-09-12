@@ -6,6 +6,9 @@
 
 ### Misc
 
+- Crash reports carry module-relative addresses and the fault address
+- MPRIS object is unregistered on quit
+
 ## [2.1.6] - 2026-09-02
 
 ### Fixed

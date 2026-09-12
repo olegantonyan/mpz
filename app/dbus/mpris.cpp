@@ -54,6 +54,8 @@ static const auto FREEDESKTOP_PATH = "org.freedesktop.DBus.Properties";
 Mpris::Mpris(Playback::Controller *pl, Config::Global &c, QObject *parent) : QObject(parent), player(pl), global_conf(c), shuffle(false) {
   register_to_dbus();
 
+  connect(qApp, &QCoreApplication::aboutToQuit, this, &Mpris::unregister_from_dbus);
+
   connect(this, &Mpris::play, player->controls().play, &QToolButton::click);
   connect(this, &Mpris::pause, player->controls().pause, &QToolButton::click);
   connect(this, &Mpris::stop, player->controls().stop, &QToolButton::click);
@@ -346,6 +348,11 @@ void Mpris::register_to_dbus() {
 
   new PlayerAdaptor(this);
   new MediaPlayer2Adaptor(this);
+}
+
+void Mpris::unregister_from_dbus() {
+  QDBusConnection::sessionBus().unregisterObject(MPRIS_OBJECT_PATH);
+  disconnect(this, &QObject::destroyed, nullptr, nullptr);
 }
 
 void Mpris::notify(const QString &name, const QVariant &value) {

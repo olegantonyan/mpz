@@ -97,6 +97,7 @@ private:
   Playback::Controller *player;
   Config::Global &global_conf;
   void register_to_dbus();
+  void unregister_from_dbus();
   void notify(const QString &name, const QVariant &value);
   bool shuffle;
 

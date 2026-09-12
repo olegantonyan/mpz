@@ -2,8 +2,10 @@
 #include "crash_report/crashlog_format.h"
 
 #include <cpptrace/cpptrace.hpp>
+#include <cpptrace/formatting.hpp>
 
 #include <atomic>
+#include <cinttypes>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -25,6 +27,14 @@
 namespace mpz {
 
 namespace {
+
+const cpptrace::formatter g_formatter =
+    cpptrace::formatter{}
+        .addresses(cpptrace::formatter::address_mode::object)
+        .transform([](cpptrace::stacktrace_frame frame) {
+          if (frame.object_address == 0) frame.object_address = frame.raw_address;
+          return frame;
+        });
 
 std::string g_log_path;
 std::string g_system_info;
@@ -53,9 +63,9 @@ const char *signal_name(int signum) {
   }
 }
 
-void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
-  std::fprintf(stderr, "\nFatal: %s\n\n", reason);
-  trace.print(std::cerr);
+void write_trace(const cpptrace::stacktrace &trace, const char *reason, const std::string &details = {}) {
+  std::fprintf(stderr, "\nFatal: %s\n%s\n", reason, details.c_str());
+  g_formatter.print(std::cerr, trace);
 
   if (g_log_path.empty()) return;
   std::ofstream ofs(g_log_path, std::ios::app);
@@ -68,14 +78,15 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
   ofs << kCrashReasonLabel << reason << "\n";
   ofs << kCrashPhaseLabel << g_phase.load(std::memory_order_relaxed) << "\n";
   ofs << kCrashThreadLabel << tname << "\n";
+  ofs << details;
   if (!g_system_info.empty()) ofs << g_system_info << "\n\n";
-  trace.print(ofs);
+  g_formatter.print(ofs, trace);
   ofs << "\n" << kCrashEnd << "\n";
 }
 
+#ifdef _WIN32
 [[noreturn]] void crash_handler(int signum) {
-  // Restore default disposition so a second fault while we're tracing aborts hard instead of recursing. Both glibc
-  // and Windows MSVCRT reset to SIG_DFL automatically after a signal() handler fires, but be explicit anyway.
+  // Restore default disposition so a second fault while we're tracing aborts hard instead of recursing.
   std::signal(signum, SIG_DFL);
 
   // async-signal-unsafe but pragmatic — same trade-off as DeathHandler. A desktop app crashing
@@ -86,8 +97,62 @@ void write_trace(const cpptrace::stacktrace &trace, const char *reason) {
 
   std::_Exit(128 + signum);
 }
+#else
+bool fault_address_is_set(int signum, int si_code) {
+  if (si_code <= 0) return false;
+  switch (signum) {
+    case SIGSEGV:
+    case SIGILL:
+    case SIGFPE:
+#ifdef SIGBUS
+    case SIGBUS:
+#endif
+      return true;
+    default: return false;
+  }
+}
+
+std::string signal_details(int signum, const siginfo_t *info) {
+  if (info == nullptr) return {};
+
+  std::string details = std::string(kCrashSignalCodeLabel) + std::to_string(info->si_code) + "\n";
+  if (!fault_address_is_set(signum, info->si_code)) return details;
+
+  const auto address = reinterpret_cast<cpptrace::frame_ptr>(info->si_addr);
+  char hex[32];
+  std::snprintf(hex, sizeof(hex), "0x%016" PRIxPTR, address);
+  details += kCrashFaultAddressLabel;
+  details += hex;
+
+  cpptrace::safe_object_frame object{};
+  if (cpptrace::can_get_safe_object_frame()) cpptrace::get_safe_object_frame(address, &object);
+  if (object.object_path[0] != 0) {
+    std::snprintf(hex, sizeof(hex), "+0x%" PRIxPTR, object.address_relative_to_object_start);
+    details += " (";
+    details += object.object_path;
+    details += hex;
+    details += ")";
+  }
+  details += "\n";
+  return details;
+}
+
+[[noreturn]] void crash_handler(int signum, siginfo_t *info, void *) {
+  // Restore default disposition so a second fault while we're tracing aborts hard instead of recursing.
+  std::signal(signum, SIG_DFL);
+
+  // async-signal-unsafe but pragmatic — same trade-off as DeathHandler. A desktop app crashing
+  // once is fine to take a few hundred ms in the handler if it gets a usable trace out of it.
+  char reason[32];
+  std::snprintf(reason, sizeof(reason), "%s (%d)", signal_name(signum), signum);
+  write_trace(cpptrace::generate_trace(/*skip=*/1), reason, signal_details(signum, info));
+
+  std::_Exit(128 + signum);
+}
+#endif
 
 [[noreturn]] void terminate_handler() {
+  std::signal(SIGABRT, SIG_DFL);
   write_trace(cpptrace::generate_trace(/*skip=*/1), "std::terminate");
   std::abort();
 }
@@ -115,12 +180,17 @@ void install_crash_handler() {
 }
 #else
 void install_crash_handler() {
-  std::signal(SIGSEGV, &crash_handler);
-  std::signal(SIGABRT, &crash_handler);
-  std::signal(SIGFPE,  &crash_handler);
-  std::signal(SIGILL,  &crash_handler);
+  struct sigaction action{};
+  action.sa_sigaction = &crash_handler;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = SA_SIGINFO;
+
+  sigaction(SIGSEGV, &action, nullptr);
+  sigaction(SIGABRT, &action, nullptr);
+  sigaction(SIGFPE,  &action, nullptr);
+  sigaction(SIGILL,  &action, nullptr);
 #ifdef SIGBUS
-  std::signal(SIGBUS,  &crash_handler);
+  sigaction(SIGBUS,  &action, nullptr);
 #endif
   std::set_terminate(&terminate_handler);
 }

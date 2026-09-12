@@ -5,7 +5,7 @@
 
 namespace mpz {
 
-// On POSIX, installs std::signal handlers for SIGSEGV/SIGABRT/SIGBUS/SIGFPE/SIGILL; on Windows, a SetUnhandledExceptionFilter
+// On POSIX, installs sigaction(SA_SIGINFO) handlers for SIGSEGV/SIGABRT/SIGBUS/SIGFPE/SIGILL; on Windows, a SetUnhandledExceptionFilter
 // for SEH faults plus a SIGABRT handler. Both also set a std::terminate handler. On fault, prints a cpptrace stack trace to
 // stderr (and appends it to the crash-log file when one is set). Symbol resolution: Linux -rdynamic .dynsym, macOS Mach-O
 // symbol table, Windows the mpz.pdb shipped beside mpz.exe (read via dbghelp) — demangled names either way.
