@@ -51,6 +51,8 @@ jobs:
       - name: Install toolchain, Qt runtime libs, ffmpeg and gh
         run: |
           set -euo pipefail
+          # bullseye is EOL: its security Release file is no longer re-signed, so apt rejects it as expired
+          echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99bullseye-eol
           apt-get update
           # qtbase5-dev drags in the transitive X/xcb/fontconfig/freetype/dbus/glib stack
           # linuxdeploy needs to bundle the Qt6 xcb platform plugin; the explicit lib*
