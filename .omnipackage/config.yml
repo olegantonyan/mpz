@@ -117,12 +117,6 @@ deb: &deb
   deb:
     debian_templates: ".omnipackage/deb"
 
-opensuse_qt5: &opensuse_qt5
-  build_dependencies: [gcc, make, cmake, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel]
-  runtime_dependencies: [hicolor-icon-theme]
-  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
-  <<: *rpm
-
 opensuse_qt6: &opensuse_qt6
   build_dependencies: [gcc, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel]
   runtime_dependencies: [hicolor-icon-theme]
@@ -134,13 +128,6 @@ opensuse_qt6_leap: &opensuse_qt6_leap
     [gcc13, gcc13-c++, make, cmake, qt6-base-common-devel, qt6-multimedia-devel, qt6-widgets-devel, qt6-concurrent-devel, qt6-svg-devel, Mesa-libGL-devel]
   runtime_dependencies: [hicolor-icon-theme]
   CMAKE_EXTRA_CLI: "-DCMAKE_C_COMPILER=gcc-13 -DCMAKE_CXX_COMPILER=g++-13"
-  <<: *rpm
-
-mageia_qt5: &mageia_qt5
-  build_dependencies:
-    [gcc, make, cmake, qtbase5-common-devel, lib64qt5core-devel, lib64qt5gui-devel, lib64qt5widgets-devel, lib64qt5concurrent-devel, lib64qt5multimedia-devel, lib64qt5x11extras-devel, lib64qt5svg-devel]
-  runtime_dependencies: [hicolor-icon-theme]
-  CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
   <<: *rpm
 
 mageia_qt6: &mageia_qt6
@@ -180,7 +167,10 @@ pacman: &pacman
 
 builds:
   - distro: "opensuse_15.3"
-    <<: *opensuse_qt5
+    build_dependencies: [gcc, make, cmake, libqt5-qtbase-devel, libqt5-qtmultimedia-devel, libqt5-qtx11extras-devel, libqt5-qtsvg-devel]
+    runtime_dependencies: [hicolor-icon-theme]
+    CMAKE_EXTRA_CLI: "-DUSE_QT5=ON"
+    <<: *rpm
 
   - distro: "opensuse_15.4"
     <<: *opensuse_qt6_leap
