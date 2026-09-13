@@ -18,9 +18,9 @@ void MainMenu::setViewActions(const QList<QAction *> &actions) {
 void MainMenu::on_open() {
   QMenu menu;
 
-  QAction settings(tr("Settings…"));
-  QAction equalizer(tr("Equalizer…"));
-  QAction replaygain(tr("ReplayGain…"));
+  QAction settings(tr("Settings"));
+  QAction equalizer(tr("Equalizer"));
+  QAction replaygain(tr("ReplayGain"));
   QAction lpog(tr("Playback log"));
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
@@ -58,6 +58,7 @@ void MainMenu::on_open() {
   menu.addAction(&equalizer);
   menu.addAction(&replaygain);
 #endif
+  menu.addAction(&shortcuts);
   if (!view_actions.isEmpty()) {
     menu.addSeparator();
     for (auto *action : std::as_const(view_actions)) {
@@ -74,7 +75,6 @@ void MainMenu::on_open() {
   menu.addAction(&about);
   menu.addSeparator();
   menu.addAction(&feedback);
-  menu.addAction(&shortcuts);
   menu.addSeparator();
   menu.addAction(&quit);
 
