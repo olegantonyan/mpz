@@ -341,6 +341,13 @@ code {
 }
 .footer-list a { color: inherit; }
 .footer-list a:hover { color: var(--text); }
+.footer-note {
+  text-align: center;
+  font-size: 0.85rem;
+  margin: 1.5rem 0 0;
+}
+.footer-note a { color: inherit; }
+.footer-note a:hover { color: var(--text); }
 
 .mt-6 { margin-top: 1.5rem; }
 
