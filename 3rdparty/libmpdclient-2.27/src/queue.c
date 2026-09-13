@@ -10,6 +10,7 @@
 #include "internal.h"
 #include "isend.h"
 #include "run.h"
+#include "check_tag.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -125,8 +126,6 @@ mpd_recv_queue_change_brief(struct mpd_connection *connection,
 
 	pair = mpd_recv_pair_named(connection, "Id");
 	if (pair == NULL) {
-		mpd_return_pair(connection, pair);
-
 		if (!mpd_error_is_defined(&connection->error)) {
 			mpd_error_code(&connection->error,
 				       MPD_ERROR_MALFORMED);
@@ -497,8 +496,12 @@ bool
 mpd_send_add_tag_id(struct mpd_connection *connection, unsigned id,
 		    enum mpd_tag_type tag, const char *value)
 {
+	const char *tag_name = mpd_check_tag_name(tag, &connection->error);
+	if (tag_name == NULL)
+		return false;
+
 	return mpd_send_u_s_s_command(connection, "addtagid",
-				      id, mpd_tag_name(tag), value);
+				      id, tag_name, value);
 }
 
 bool
@@ -514,8 +517,12 @@ bool
 mpd_send_clear_tag_id(struct mpd_connection *connection, unsigned id,
 		      enum mpd_tag_type tag)
 {
+	const char *tag_name = mpd_check_tag_name(tag, &connection->error);
+	if (tag_name == NULL)
+		return false;
+
 	return mpd_send_u_s_command(connection, "cleartagid",
-				    id, mpd_tag_name(tag));
+				    id, tag_name);
 }
 
 bool

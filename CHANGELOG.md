@@ -11,6 +11,7 @@
 - Crash reports carry module-relative addresses and the fault address
 - MPRIS object is unregistered on quit
 - Update vendored TagLib to 2.3.2
+- Update vendored libmpdclient to 2.27
 
 ## [2.1.6] - 2026-09-02
 

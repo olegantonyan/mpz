@@ -6,6 +6,7 @@
 #include <mpd/recv.h>
 #include <mpd/response.h>
 #include "internal.h"
+#include "check_tag.h"
 
 #include <assert.h>
 #include <stddef.h>
@@ -58,8 +59,10 @@ mpd_send_tag_types_v(struct mpd_connection *connection,
 	size_t length = strlen(buffer);
 
 	for (unsigned i = 0; i < n; ++i) {
-		const char *t = mpd_tag_name(types[i]);
-		assert(t != NULL);
+		const char *t = mpd_check_tag_name(types[i], &connection->error);
+		if (t == NULL)
+			return false;
+
 		size_t t_length = strlen(t);
 
 		if (length + 1 + t_length + 1 > sizeof(buffer)) {

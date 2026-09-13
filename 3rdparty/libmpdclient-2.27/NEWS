@@ -1,3 +1,15 @@
+libmpdclient 2.27 (2026/08/09)
+* refuse to send newline and carriage return characters
+* use strncmp() instead of memcmp() to avoid over-read
+* fix several NULL pointer dereference bugs on OOM
+* fail instead of crashing if socket descriptor is >= 1024
+* capabilities, sticker: fix memory leak on OOM
+* search: fix string truncation in mpd_search_add_db_songs_to_playlist()
+* song: fix memory leak in the "RealUri" parser
+* song: parse floating-point numbers with the POSIX localew
+* connection: fix microsecond/millisecond mixup in mpd_connection_set_timeout()
+* queue: fix assertion failure on missing "Id" line
+
 libmpdclient 2.26 (2026/06/30)
 * fix NULL pointer dereference in mpd_song_dup() (2.25 regression)
 

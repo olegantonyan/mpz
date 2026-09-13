@@ -20,3 +20,16 @@ test('t_commands', executable('t_commands',
     libmpdclient_dep,
     check_dep,
   ]))
+
+test(
+  't_parser',
+  executable(
+    't_parser',
+    't_parser.c',
+    include_directories: inc,
+    dependencies: [
+      libmpdclient_dep,
+      check_dep,
+    ],
+  ),
+)

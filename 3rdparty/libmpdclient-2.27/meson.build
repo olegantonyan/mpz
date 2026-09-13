@@ -1,4 +1,4 @@
-project('libmpdclient', 'c', version: '2.26',
+project('libmpdclient', 'c', version: '2.27',
   meson_version: '>= 0.56.0',
   default_options: [
     'c_std=c11',
@@ -145,6 +145,7 @@ libmpdclient = library('mpdclient',
   'src/cstats.c',
   'src/sync.c',
   'src/tag.c',
+  'src/check_tag.c',
   'src/sticker.c',
   'src/settings.c',
   'src/message.c',
