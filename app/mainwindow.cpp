@@ -239,7 +239,11 @@ void MainWindow::setupUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
   // pre-size so restoreState() fits now; Qt drops its deferred state 150 ms after show
   if (isMaximized()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     resize(screen()->availableGeometry().size());
+#else
+    resize(QGuiApplication::primaryScreen()->availableGeometry().size());
+#endif
   }
   restoreState(local_conf.windowState());
 
