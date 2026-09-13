@@ -26,6 +26,7 @@
 #include <QFontDatabase>
 #include <QComboBox>
 #include <QAbstractItemView>
+#include <QScreen>
 
 #include "settings_ui/settingsdialog.h"
 #ifdef ENABLE_GAPLESS
@@ -236,6 +237,10 @@ int MainWindow::streamBuffer() {
 
 void MainWindow::setupUiSettings() {
   restoreGeometry(local_conf.windowGeomentry());
+  // pre-size so restoreState() fits now; Qt drops its deferred state 150 ms after show
+  if (isMaximized()) {
+    resize(screen()->availableGeometry().size());
+  }
   restoreState(local_conf.windowState());
 
   connect(ui->splitter, &QSplitter::splitterMoved, this, [=](int pos, int index) {

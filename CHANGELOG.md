@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Album cover and lyrics sidebar sometimes squeezed narrow on startup
+
 ### Misc
 
 - Crash reports carry module-relative addresses and the fault address
