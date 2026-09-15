@@ -222,6 +222,9 @@ builds:
   - distro: "ubuntu_26.04"
     <<: *debian_qt6
 
+  - distro: "ubuntu_26.10"
+    <<: *debian_qt6
+
   - distro: "fedora_38"
     <<: *readhat_qt6
 
