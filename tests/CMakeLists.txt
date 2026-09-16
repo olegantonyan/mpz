@@ -76,9 +76,12 @@ mpz_add_test(tst_playlistproxyfilter)
 mpz_add_test(tst_playlistsproxyfilter)
 mpz_add_test(tst_directoryproxy)
 mpz_add_test(tst_radiomodel)
-mpz_add_test(tst_covers)
 mpz_add_test(tst_dispatch)
 mpz_add_test(tst_statusbarlabel)
+
+mpz_add_test(tst_covers)
+target_compile_definitions(tst_covers PRIVATE
+  AUDIO_FIXTURES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/fixtures/replaygain")
 
 mpz_add_test(tst_cueparser_fixtures)
 target_compile_definitions(tst_cueparser_fixtures PRIVATE

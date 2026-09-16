@@ -1,4 +1,5 @@
 #include "coverart/covers.h"
+#include "playlist/loader.h"
 
 #include <QDebug>
 #include <QFileInfo>
@@ -24,6 +25,34 @@ namespace CoverArt {
       match.file = QDir(dir).absoluteFilePath(match.file);
     }
     return match;
+  }
+
+  static bool holdsAudio(const QString &dir) {
+    static const QStringList nmask = [] {
+      QStringList mask;
+      for (const auto &ext : Playlist::Loader::supportedFileFormats()) {
+        mask << QStringLiteral("*.") + ext;
+      }
+      return mask;
+    }();
+    QDirIterator it(dir, nmask, QDir::Files, QDirIterator::Subdirectories);
+    return it.hasNext();
+  }
+
+  static FolderCover::Match bestArtworkSubfolderImage(const QString &dir) {
+    FolderCover::Match result;
+    QDirIterator dirs(dir, QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::NoIteratorFlags);
+    while (dirs.hasNext()) {
+      dirs.next();
+      const auto candidate = bestImageIn(dirs.filePath());
+      if (candidate.file.isEmpty() || (!result.file.isEmpty() && candidate.score <= result.score)) {
+        continue;
+      }
+      if (!holdsAudio(dirs.filePath())) {
+        result = candidate;
+      }
+    }
+    return result;
   }
 
   Covers &Covers::instance(ModusOperandi &modus) {
@@ -67,16 +96,15 @@ namespace CoverArt {
       }
 #endif
     } else if (modus_operandi.get() == ModusOperandi::MODUS_LOCALFS) {
-      const auto local = bestLocalImage(key);
-      if (!local.file.isEmpty() && local.score >= 0) {
-        found = local.file;
+      const auto own = bestImageIn(key);
+      if (!own.file.isEmpty() && own.score >= 0) {
+        found = own.file;
         cache.insert(key, found);
       } else {
-        // Embedded art is per file; the dir-keyed `cache` would serve it to the whole directory, so it is deliberately left uncached.
+        // Embedded art is per file, so neither it nor the fallbacks below it may go into the dir-keyed `cache`.
         found = embedded_covers.get(filepath);
-        if (found.isEmpty() && !local.file.isEmpty()) {
-          found = local.file;
-          cache.insert(key, found);
+        if (found.isEmpty()) {
+          found = own.file.isEmpty() ? bestArtworkSubfolderImage(key).file : own.file;
         }
       }
     }
@@ -92,24 +120,5 @@ namespace CoverArt {
 
   QString Covers::keyByFilepath(const QString &filepath) const {
     return QFileInfo(filepath).absoluteDir().absolutePath();
-  }
-
-  FolderCover::Match Covers::bestLocalImage(const QString &dir) const {
-    const auto top = bestImageIn(dir);
-    if (!top.file.isEmpty()) {
-      return top;
-    }
-
-    // Descend one level only when the album folder itself holds no image.
-    FolderCover::Match sub;
-    QDirIterator dirs(dir, QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::NoIteratorFlags);
-    while (dirs.hasNext()) {
-      dirs.next();
-      const auto candidate = bestImageIn(dirs.filePath());
-      if (!candidate.file.isEmpty() && (sub.file.isEmpty() || candidate.score > sub.score)) {
-        sub = candidate;
-      }
-    }
-    return sub;
   }
 }

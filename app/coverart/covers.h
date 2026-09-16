@@ -27,7 +27,6 @@ namespace CoverArt {
     explicit Covers(ModusOperandi &modus);
 
     QString keyByFilepath(const QString& filepath) const;
-    FolderCover::Match bestLocalImage(const QString &dir) const;
 
     QHash <QString, QString> cache;
     CoverArt::Embedded embedded_covers;

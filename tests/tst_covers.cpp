@@ -6,6 +6,10 @@
 #include <QTcpSocket>
 #include <QTemporaryDir>
 
+#include <attachedpictureframe.h>
+#include <id3v2tag.h>
+#include <mpegfile.h>
+
 #include "config/local.h"
 #include "coverart/covers.h"
 #include "coverart/online/provider.h"
@@ -27,6 +31,28 @@ namespace {
     buffer.open(QIODevice::WriteOnly);
     img.save(&buffer, "PNG");
     return out;
+  }
+
+  bool writeTrackWithEmbeddedCover(const QString &path) {
+    if (!QFile::copy(QStringLiteral(AUDIO_FIXTURES_DIR) + "/silence.mp3", path)) {
+      return false;
+    }
+    QFile(path).setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+
+    const QByteArray png = pngBytes(300);
+    auto *frame = new TagLib::ID3v2::AttachedPictureFrame;
+    frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+    frame->setMimeType("image/png");
+    frame->setPicture(TagLib::ByteVector(png.constData(), static_cast<unsigned int>(png.size())));
+
+    TagLib::MPEG::File file(QFile::encodeName(path).constData());
+    file.ID3v2Tag(true)->addFrame(frame);
+    return file.save();
+  }
+
+  bool touch(const QString &path) {
+    QFile file(path);
+    return file.open(QIODevice::WriteOnly);
   }
 
   // Serves one canned body, so downloadImage's acceptance rules can be driven offline.
@@ -71,6 +97,10 @@ private slots:
   void folderCoverIsMemoizedPerDirectory();
   void embeddedArtIsNotMemoized();
   void descendsOneLevelWhenTheAlbumFolderHasNone();
+  void skipsSubfoldersHoldingAudio();
+  void skipsSubfoldersWithNestedAudio();
+  void embeddedBeatsSubfolderImage();
+  void ownFolderCoverBeatsEmbedded();
   void provider_emitsExactlyOnce();
   void provider_acceptsAUsableImage();
   void provider_rejectsATinyImage();
@@ -140,6 +170,46 @@ void TestCovers::descendsOneLevelWhenTheAlbumFolderHasNone() {
 
   QCOMPARE(QFileInfo(CoverArt::Covers::instance().get(dir + "/a.mp3", "artist", "album")).fileName(),
            QString("front.jpg"));
+}
+
+void TestCovers::skipsSubfoldersHoldingAudio() {
+  const QString dir = newAlbumDir();
+  QVERIFY(QDir().mkpath(dir + "/meta"));
+  QVERIFY(writeImage(dir + "/meta/front.jpg", 300));
+  QVERIFY(touch(dir + "/meta/01.MP3"));
+
+  QVERIFY(CoverArt::Covers::instance().get(dir + "/loose.mp3", "artist", "album").isEmpty());
+}
+
+void TestCovers::skipsSubfoldersWithNestedAudio() {
+  const QString dir = newAlbumDir();
+  QVERIFY(QDir().mkpath(dir + "/album/cd1"));
+  QVERIFY(writeImage(dir + "/album/cover.jpg", 300));
+  QVERIFY(touch(dir + "/album/cd1/01.flac"));
+
+  QVERIFY(CoverArt::Covers::instance().get(dir + "/loose.mp3", "artist", "album").isEmpty());
+}
+
+void TestCovers::embeddedBeatsSubfolderImage() {
+  const QString dir = newAlbumDir();
+  QVERIFY(QDir().mkpath(dir + "/scans"));
+  QVERIFY(writeImage(dir + "/scans/front.jpg", 300));
+  QVERIFY(writeTrackWithEmbeddedCover(dir + "/tagged.mp3"));
+
+  QCOMPARE(QFileInfo(CoverArt::Covers::instance().get(dir + "/plain.mp3", "artist", "album")).fileName(),
+           QString("front.jpg"));
+
+  const QString embedded = CoverArt::Covers::instance().get(dir + "/tagged.mp3", "artist", "album");
+  QCOMPARE(QImage(embedded).pixelColor(0, 0), QColor(Qt::blue));
+}
+
+void TestCovers::ownFolderCoverBeatsEmbedded() {
+  const QString dir = newAlbumDir();
+  QVERIFY(writeImage(dir + "/cover.jpg", 300));
+  QVERIFY(writeTrackWithEmbeddedCover(dir + "/tagged.mp3"));
+
+  QCOMPARE(QFileInfo(CoverArt::Covers::instance().get(dir + "/tagged.mp3", "artist", "album")).fileName(),
+           QString("cover.jpg"));
 }
 
 void TestCovers::provider_emitsExactlyOnce() {

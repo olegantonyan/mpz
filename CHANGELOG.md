@@ -5,6 +5,7 @@
 ### Fixed
 
 - Album cover and lyrics sidebar sometimes squeezed narrow on startup
+- Loose tracks next to album folders picked up another album's cover instead of embedded art
 
 ### Misc
 
