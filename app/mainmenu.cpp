@@ -1,7 +1,6 @@
 #include "mainmenu.h"
 #include "about_ui/aboutdialog.h"
 #include "feedback_ui/feedbackform.h"
-#include "settings_ui/settingsdialog.h"
 
 #include <QDebug>
 #include <QMenu>
@@ -25,15 +24,9 @@ void MainMenu::on_open() {
   QAction about(tr("About mpz"));
   QAction quit(tr("Quit"));
   QAction feedback(tr("Got feedback?"));
-  QAction shortcuts(tr("Keyboard shortcuts"));
   QAction mpdupdate(tr("mpd update"));
 
-  connect(&settings, &QAction::triggered, this, [this]() {
-    SettingsDialog dlg(global_conf, local_conf, button->parentWidget());
-    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainMenu::toggleTrayIcon);
-    connect(&dlg, &SettingsDialog::waveformToggled, this, &MainMenu::waveformToggled);
-    dlg.exec();
-  });
+  connect(&settings, &QAction::triggered, this, &MainMenu::openSettings);
   connect(&about, &QAction::triggered, [=]() {
     AboutDialog(global_conf, local_conf).exec();
   });
@@ -42,7 +35,6 @@ void MainMenu::on_open() {
   connect(&feedback, &QAction::triggered, [=]() {
     FeedbackForm(local_conf).exec();
   });
-  connect(&shortcuts, &QAction::triggered, this, &MainMenu::openShortcuts);
 #ifdef ENABLE_GAPLESS
   connect(&equalizer, &QAction::triggered, this, &MainMenu::openEqualizer);
   connect(&replaygain, &QAction::triggered, this, &MainMenu::openReplayGain);
@@ -58,7 +50,6 @@ void MainMenu::on_open() {
   menu.addAction(&equalizer);
   menu.addAction(&replaygain);
 #endif
-  menu.addAction(&shortcuts);
   if (!view_actions.isEmpty()) {
     menu.addSeparator();
     for (auto *action : std::as_const(view_actions)) {

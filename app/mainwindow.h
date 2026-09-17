@@ -188,6 +188,7 @@ private:
 #endif
   void setupShortcuts();
   void setupMainMenu();
+  void openSettings();
 #ifdef Q_OS_MACOS
   void setupMacMenuBar();
   void setupMacMediaControls();

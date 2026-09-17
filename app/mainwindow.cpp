@@ -1,6 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "shortcuts_ui/shortcutsdialog.h"
 #include "coverart/covers.h"
 #include "coverart/coverartwidget.h"
 #include "coverart/online/downloader.h"
@@ -534,8 +533,14 @@ void MainWindow::setupMainMenu() {
   main_menu = new MainMenu(ui->menuButton, global_conf, local_conf, modus_operandi);
   main_menu->setViewActions({ cover_dock->toggleViewAction(), lyrics_dock->toggleViewAction(), lock_toolbar_action });
   connect(main_menu, &MainMenu::exit, this, &MainWindow::requestQuit);
-  connect(main_menu, &MainMenu::toggleTrayIcon, this, &MainWindow::setupTrayIcon);
-  connect(main_menu, &MainMenu::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
+  connect(main_menu, &MainMenu::openSettings, this, &MainWindow::openSettings);
+}
+
+void MainWindow::openSettings() {
+  SettingsDialog dlg(global_conf, local_conf, shortcuts, this);
+  connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
+  connect(&dlg, &SettingsDialog::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
+  dlg.exec();
 }
 
 void MainWindow::setupTrayIcon() {
@@ -760,12 +765,6 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::openOutputMenu, ui->toolButtonOutputDevice, &QToolButton::click);
 #endif
 
-  auto open_dialog = [=] {
-    ShortcutsDialog dlg(shortcuts, this);
-    dlg.exec();
-  };
-  connect(main_menu, &MainMenu::openShortcuts, open_dialog);
-  connect(shortcuts, &Shortcuts::openShortcutsMenu, open_dialog);
   connect(shortcuts, &Shortcuts::jumpToPLayingTrack, status_label, &StatusBarLabel::doubleclicked);
 
   connect(shortcuts, &Shortcuts::playPause, this, [=]() {
@@ -781,12 +780,7 @@ void MainWindow::setupShortcuts() {
   connect(shortcuts, &Shortcuts::volumeDown, this, [=]() {
     player->setVolume(qMax(0, player->volume() - 5));
   });
-  connect(shortcuts, &Shortcuts::openSettings, this, [this]() {
-    SettingsDialog dlg(global_conf, local_conf, this);
-    connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
-    connect(&dlg, &SettingsDialog::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
-    dlg.exec();
-  });
+  connect(shortcuts, &Shortcuts::openSettings, this, &MainWindow::openSettings);
 }
 
 void MainWindow::setupWindowTitle() {

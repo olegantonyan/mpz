@@ -4,10 +4,13 @@
 #include "lyrics/providerchain.h"
 #include "playlist_ui/columnsconfig.h"
 #include "settings_ui/settingsdialog.h"
+#include "shortcuts.h"
+#include "shortcuts_ui/shortcutseditor.h"
 
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QKeySequenceEdit>
 #include <QListWidget>
 #include <QPushButton>
 #include <QSpinBox>
@@ -32,14 +35,18 @@ private slots:
   void uncheckingAProviderRemovesIt();
   void trayToggleIsReportedOnlyOnAChange();
   void waveformToggleIsReportedInBothDirections();
+  void applySavesEditedShortcuts();
 
 private:
   GuiTest::ConfigDir config;
+  QWidget host;
   std::unique_ptr<Config::Global> global;
   std::unique_ptr<Config::Local> local;
+  std::unique_ptr<Shortcuts> shortcuts;
 
   static QCheckBox *checkbox(SettingsDialog &dlg, const QString &text);
   static QSpinBox *spinAfter(SettingsDialog &dlg, const QString &checkbox_text);
+  static QTableWidget *columnsTable(SettingsDialog &dlg);
   static void apply(SettingsDialog &dlg);
 };
 
@@ -50,9 +57,11 @@ void TestSettingsDialog::initTestCase() {
 void TestSettingsDialog::init() {
   global = std::make_unique<Config::Global>();
   local = std::make_unique<Config::Local>();
+  shortcuts = std::make_unique<Shortcuts>(*global, *local, &host);
 }
 
 void TestSettingsDialog::cleanup() {
+  shortcuts.reset();
   local.reset();
   global.reset();
   QFile::remove(config.path() + "/global.yml");
@@ -74,12 +83,22 @@ QSpinBox *TestSettingsDialog::spinAfter(SettingsDialog &dlg, const QString &chec
   return box ? box->parentWidget()->findChild<QSpinBox *>() : nullptr;
 }
 
+QTableWidget *TestSettingsDialog::columnsTable(SettingsDialog &dlg) {
+  auto *editor = dlg.findChild<ShortcutsEditor *>();
+  for (auto *table : dlg.findChildren<QTableWidget *>()) {
+    if (!editor->isAncestorOf(table)) {
+      return table;
+    }
+  }
+  return nullptr;
+}
+
 void TestSettingsDialog::apply(SettingsDialog &dlg) {
-  dlg.findChild<QDialogButtonBox *>()->button(QDialogButtonBox::Apply)->click();
+  dlg.findChild<QDialogButtonBox *>(QString(), Qt::FindDirectChildrenOnly)->button(QDialogButtonBox::Apply)->click();
 }
 
 void TestSettingsDialog::applyPersistsTheCheckboxes() {
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   auto *stop = checkbox(dlg, "Stop playback when current track or playlist is removed");
   auto *headers = checkbox(dlg, "Show column headers");
   auto *single = checkbox(dlg, "Single instance mode");
@@ -99,7 +118,7 @@ void TestSettingsDialog::applyPersistsTheCheckboxes() {
 
 void TestSettingsDialog::bufferIsShownInKibAndStoredInBytes() {
   global->saveStreamBufferSize(256 * 1024);
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
 
   QSpinBox *buffer = nullptr;
   for (auto *spin : dlg.findChildren<QSpinBox *>()) {
@@ -116,7 +135,7 @@ void TestSettingsDialog::bufferIsShownInKibAndStoredInBytes() {
 }
 
 void TestSettingsDialog::rowHeightOverrideStoresZeroWhenOff() {
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   auto *box = checkbox(dlg, "Override theme's playlist row height:");
   auto *spin = spinAfter(dlg, "Override theme's playlist row height:");
   QVERIFY(box != nullptr && spin != nullptr);
@@ -137,13 +156,13 @@ void TestSettingsDialog::rowHeightOverrideStoresZeroWhenOff() {
 void TestSettingsDialog::columnsRoundTripThroughTheTable() {
   // The table mirrors what is stored, and nothing is stored on a fresh profile.
   {
-    SettingsDialog empty(*global, *local);
-    QCOMPARE(empty.findChild<QTableWidget *>()->rowCount(), 0);
+    SettingsDialog empty(*global, *local, shortcuts.get());
+    QCOMPARE(columnsTable(empty)->rowCount(), 0);
   }
   QVERIFY(global->saveColumnsConfig(PlaylistUi::ColumnsConfig()));
 
-  SettingsDialog dlg(*global, *local);
-  auto *table = dlg.findChild<QTableWidget *>();
+  SettingsDialog dlg(*global, *local, shortcuts.get());
+  auto *table = columnsTable(dlg);
   QVERIFY(table != nullptr);
   QVERIFY(table->rowCount() > 0);
 
@@ -169,8 +188,8 @@ void TestSettingsDialog::unknownColumnFieldIsKeptNotDropped() {
   cfg.setStretches({false, true});
   QVERIFY(global->saveColumnsConfig(cfg));
 
-  SettingsDialog dlg(*global, *local);
-  auto *table = dlg.findChild<QTableWidget *>();
+  SettingsDialog dlg(*global, *local, shortcuts.get());
+  auto *table = columnsTable(dlg);
 
   QCOMPARE(table->rowCount(), 2);
   QCOMPARE(qobject_cast<QComboBox *>(table->cellWidget(1, 0))->currentText(), QString("from_the_future"));
@@ -182,7 +201,7 @@ void TestSettingsDialog::unknownColumnFieldIsKeptNotDropped() {
 void TestSettingsDialog::unknownLanguageIsAppendedAndSelected() {
   global->saveLanguage("kl");
 
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   QComboBox *language = nullptr;
   for (auto *combo : dlg.findChildren<QComboBox *>()) {
     if (combo->currentData().toString() == "kl") {
@@ -201,7 +220,7 @@ void TestSettingsDialog::providerListsPutConfiguredFirstAndDropUnknown() {
   QVERIFY(known.size() >= 2);
   QVERIFY(global->saveLyricsProviders({known.last(), "embedded"}));
 
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   QListWidget *lyrics = nullptr;
   for (auto *list : dlg.findChildren<QListWidget *>()) {
     if (list->count() == known.size()) {
@@ -224,7 +243,7 @@ void TestSettingsDialog::uncheckingAProviderRemovesIt() {
   const QStringList known = CoverArt::Online::ProviderChain::knownProviders();
   QVERIFY(global->saveCoverProviders(known));
 
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   QListWidget *covers = nullptr;
   for (auto *list : dlg.findChildren<QListWidget *>()) {
     if (list->count() == known.size() && list->item(0)->data(Qt::UserRole).toString() == known.first()) {
@@ -242,7 +261,7 @@ void TestSettingsDialog::uncheckingAProviderRemovesIt() {
 }
 
 void TestSettingsDialog::trayToggleIsReportedOnlyOnAChange() {
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   auto *tray = dlg.findChildren<QCheckBox *>().first();
   for (auto *box : dlg.findChildren<QCheckBox *>()) {
     if (box->text().contains("tray icon") || box->text().contains("menu bar")) {
@@ -264,7 +283,7 @@ void TestSettingsDialog::trayToggleIsReportedOnlyOnAChange() {
 }
 
 void TestSettingsDialog::waveformToggleIsReportedInBothDirections() {
-  SettingsDialog dlg(*global, *local);
+  SettingsDialog dlg(*global, *local, shortcuts.get());
   auto *waveform = checkbox(dlg, "Show waveform in the seekbar");
   if (waveform == nullptr) {
     QSKIP("gapless disabled, no waveform setting");
@@ -283,6 +302,23 @@ void TestSettingsDialog::waveformToggleIsReportedInBothDirections() {
   QCOMPARE(spy.count(), 2);
   QCOMPARE(spy.last().first().toBool(), true);
   QVERIFY(!global->waveformDisabled());
+}
+
+void TestSettingsDialog::applySavesEditedShortcuts() {
+  const auto &spec = Shortcuts::defaults().first();
+  QVERIFY(!spec.description.isEmpty());
+
+  SettingsDialog dlg(*global, *local, shortcuts.get());
+  auto *table = dlg.findChild<ShortcutsEditor *>()->findChild<QTableWidget *>();
+  QVERIFY(table != nullptr);
+  QCOMPARE(table->item(0, 0)->text(), spec.description);
+
+  qobject_cast<QKeySequenceEdit *>(table->cellWidget(0, 1))
+      ->setKeySequence(QKeySequence::fromString("Ctrl+Alt+Z", QKeySequence::PortableText));
+  apply(dlg);
+
+  QCOMPARE(global->shortcuts().value(spec.key), QString("Ctrl+Alt+Z"));
+  QCOMPARE(shortcuts->sequenceFor(spec.action), QKeySequence::fromString("Ctrl+Alt+Z", QKeySequence::PortableText));
 }
 
 MPZ_GUI_TEST_MAIN(TestSettingsDialog)

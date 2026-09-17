@@ -59,16 +59,19 @@ namespace {
   };
 }
 
-SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent) :
+SettingsDialog::SettingsDialog(Config::Global &global_c, Config::Local &local_c, Shortcuts *shortcuts, QWidget *parent) :
   QDialog(parent), global_conf(global_c), local_conf(local_c)
 {
   setWindowTitle(tr("Settings"));
   resize(560, 480);
 
+  shortcuts_editor = new ShortcutsEditor(shortcuts);
+
   auto *tabs = new QTabWidget(this);
   tabs->addTab(buildGeneralTab(),  tr("General"));
   // "&&" so the ampersand renders instead of being eaten as a mnemonic.
   tabs->addTab(buildOnlineTab(),   tr("Online lyrics && covers"));
+  tabs->addTab(shortcuts_editor,   tr("Keyboard shortcuts"));
   tabs->addTab(buildAdvancedTab(), tr("Advanced"));
 
   button_box = new QDialogButtonBox(
@@ -814,6 +817,8 @@ void SettingsDialog::apply() {
     local_conf.saveCrashReportConsent(combo_crash_reports->currentData().toString());
   }
 #endif
+
+  shortcuts_editor->apply();
 
   global_conf.sync();
   local_conf.sync();

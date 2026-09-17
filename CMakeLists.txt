@@ -142,7 +142,7 @@ set(PROJECT_SOURCES
   app/playlists_ui/playlistsproxyfiltermodel.cpp
   app/rnjesus.cpp
   app/shortcuts.cpp
-  app/shortcuts_ui/shortcutsdialog.cpp
+  app/shortcuts_ui/shortcutseditor.cpp
   app/sleeplock.cpp
   app/settings_ui/settingsdialog.cpp
   app/sort_ui/sortingpresetsdialog.cpp
@@ -164,7 +164,7 @@ set(PROJECT_SOURCES
   app/playback_log_ui/playbacklogdialog.ui
   app/playlist_ui/trackinfodialog.ui
   app/playlist_ui/tageditordialog.ui
-  app/shortcuts_ui/shortcutsdialog.ui
+  app/shortcuts_ui/shortcutseditor.ui
   app/sort_ui/sortingpresets.ui
   app/resources.qrc
   app/slidingbanner.cpp

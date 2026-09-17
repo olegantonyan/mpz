@@ -51,7 +51,6 @@ const QVector<Shortcuts::Spec> &Shortcuts::defaults() {
 #ifdef ENABLE_DEVICES_MENU
     t << Spec{Action::OpenOutputMenu, "open_output_menu", tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
 #endif
-    t << Spec{Action::OpenShortcutsMenu, "open_shortcuts_dialog", tr("Open shortcuts dialog"), QKeySequence(Qt::CTRL | Qt::Key_Slash), true};
     t << Spec{Action::JumpToPlayingTrack, "jump_to_playing_track", tr("Jump to playing track"), QKeySequence(Qt::CTRL | Qt::Key_J), false};
     t << Spec{Action::Quit, "quit", tr("Quit"), QKeySequence(QKeySequence::Quit), false};
 #else
@@ -76,7 +75,6 @@ const QVector<Shortcuts::Spec> &Shortcuts::defaults() {
 #ifdef ENABLE_DEVICES_MENU
     t << Spec{Action::OpenOutputMenu, "open_output_menu", tr("Open output device menu"), QKeySequence(Qt::CTRL | Qt::Key_D), true};
 #endif
-    t << Spec{Action::OpenShortcutsMenu, "open_shortcuts_dialog", tr("Open shortcuts dialog"), QKeySequence(Qt::ALT | Qt::Key_S), true};
     t << Spec{Action::JumpToPlayingTrack, "jump_to_playing_track", tr("Jump to playing track"), QKeySequence(Qt::ALT | Qt::Key_J), true};
     t << Spec{Action::Quit, "quit", tr("Quit"), QKeySequence(Qt::CTRL | Qt::Key_Q), true};
 #endif
@@ -240,7 +238,6 @@ void Shortcuts::emitFor(Action action) {
     case Action::OpenPlaybackLog: emit openPlabackLog(); break;
     case Action::OpenSortMenu: emit openSortMenu(); break;
     case Action::OpenOutputMenu: emit openOutputMenu(); break;
-    case Action::OpenShortcutsMenu: emit openShortcutsMenu(); break;
     case Action::JumpToPlayingTrack: emit jumpToPLayingTrack(); break;
   }
 }

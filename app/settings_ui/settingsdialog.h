@@ -3,6 +3,8 @@
 
 #include "config/global.h"
 #include "config/local.h"
+#include "shortcuts.h"
+#include "shortcuts_ui/shortcutseditor.h"
 
 #include <QAbstractButton>
 #include <QCheckBox>
@@ -20,7 +22,7 @@
 class SettingsDialog : public QDialog {
   Q_OBJECT
 public:
-  explicit SettingsDialog(Config::Global &global_c, Config::Local &local_c, QWidget *parent = nullptr);
+  explicit SettingsDialog(Config::Global &global_c, Config::Local &local_c, Shortcuts *shortcuts, QWidget *parent = nullptr);
 
 signals:
   void trayIconToggled();
@@ -64,6 +66,8 @@ private:
   QListWidget *list_mpris_blacklist = nullptr;
   QCheckBox *check_mpd_stop_on_close = nullptr;
   QComboBox *combo_crash_reports = nullptr;
+
+  ShortcutsEditor *shortcuts_editor = nullptr;
 
   QDialogButtonBox *button_box = nullptr;
 

@@ -32,7 +32,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Cover art and lyrics with opt-in online sources
 - Playback order per playlist and global: sequential, random, or no-loop
 - Track sorting presets
-- Global media-key hotkeys and a built-in keyboard shortcuts dialog
+- Global media-key hotkeys and editable keyboard shortcuts
 - Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar
 - Update check on Windows, macOS, and Linux AppImage
 - UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
@@ -266,11 +266,11 @@ This will ignore commands issued by Wireplumber. Starting around version 0.5, it
 
 ## Keyboard shortcuts
 
-The full, platform-aware list is in the app: press Alt+S (Linux/Windows) or ⌘+/ (macOS), or open the main menu → "Keyboard shortcuts".
+The full, platform-aware list is in the app: Settings → "Keyboard shortcuts".
 
 Common ones: Space - play/pause; Ctrl+1/2/3 - focus the three panes; Ctrl+L - playback log; Ctrl+J - jump to the playing track.
 
-All of them are editable in that dialog: click a key field, press the new combination, OK. Global media keys are not rebindable.
+All of them are editable there: click a key field, press the new combination, OK. Global media keys are not rebindable.
 
 ## Limitations
 

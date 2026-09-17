@@ -158,10 +158,6 @@ MacMenuBar::MacMenuBar(MainWindow *win, Config::Global &global_c, Config::Local 
   shortcut_actions << qMakePair(Shortcuts::Action::OpenPlaybackLog, playback_log_action);
   connect(playback_log_action, &QAction::triggered, shortcuts, &Shortcuts::openPlabackLog);
 
-  auto *shortcuts_action = view->addAction(tr("Keyboard Shortcuts"));
-  shortcut_actions << qMakePair(Shortcuts::Action::OpenShortcutsMenu, shortcuts_action);
-  connect(shortcuts_action, &QAction::triggered, shortcuts, &Shortcuts::openShortcutsMenu);
-
   view->addSeparator();
 
   auto *fullscreen = view->addAction(tr("Enter Full Screen"));

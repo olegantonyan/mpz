@@ -1,13 +1,14 @@
-#include "shortcuts_ui/shortcutsdialog.h"
-#include "ui_shortcutsdialog.h"
+#include "shortcuts_ui/shortcutseditor.h"
+#include "ui_shortcutseditor.h"
 
 #include <QTableWidgetItem>
 #include <QHeaderView>
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QSignalBlocker>
 #include <QMap>
 
-ShortcutsDialog::ShortcutsDialog(Shortcuts *sc, QWidget *parent) : QDialog(parent), ui(new Ui::ShortcutsDialog), shortcuts(sc) {
+ShortcutsEditor::ShortcutsEditor(Shortcuts *sc, QWidget *parent) : QWidget(parent), ui(new Ui::ShortcutsEditor), shortcuts(sc) {
   ui->setupUi(this);
 
   const auto editor_hint = QKeySequenceEdit().sizeHint();
@@ -43,17 +44,15 @@ ShortcutsDialog::ShortcutsDialog(Shortcuts *sc, QWidget *parent) : QDialog(paren
     row_editors << editor;
   }
 
-  connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ShortcutsDialog::accept);
-  connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ShortcutsDialog::reject);
-  connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &ShortcutsDialog::onButtonBoxClicked);
-  connect(this, &QDialog::accepted, this, &ShortcutsDialog::apply);
+  connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked,
+          this, &ShortcutsEditor::restoreDefaults);
 }
 
-ShortcutsDialog::~ShortcutsDialog() {
+ShortcutsEditor::~ShortcutsEditor() {
   delete ui;
 }
 
-void ShortcutsDialog::onSequenceChanged(int row, const QKeySequence &sequence) {
+void ShortcutsEditor::onSequenceChanged(int row, const QKeySequence &sequence) {
   // keep one combination; setMaximumSequenceLength is Qt 6.5+
   if (sequence.count() > 1) {
     auto first = sequence.toString(QKeySequence::PortableText).section(", ", 0, 0);
@@ -77,13 +76,7 @@ void ShortcutsDialog::onSequenceChanged(int row, const QKeySequence &sequence) {
   }
 }
 
-void ShortcutsDialog::onButtonBoxClicked(QAbstractButton *btn) {
-  if (ui->buttonBox->buttonRole(btn) == QDialogButtonBox::ResetRole) {
-    restoreDefaults();
-  }
-}
-
-void ShortcutsDialog::restoreDefaults() {
+void ShortcutsEditor::restoreDefaults() {
   for (const auto &spec : Shortcuts::defaults()) {
     const int row = row_keys.indexOf(spec.key);
     if (row < 0) {
@@ -96,7 +89,7 @@ void ShortcutsDialog::restoreDefaults() {
   ui->warningLabel->clear();
 }
 
-void ShortcutsDialog::apply() {
+void ShortcutsEditor::apply() {
   QMap<QString, QString> overrides;
   for (const auto &spec : Shortcuts::defaults()) {
     const int row = row_keys.indexOf(spec.key);

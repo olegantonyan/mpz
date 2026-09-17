@@ -26,7 +26,7 @@ add_dependencies(tst_singleinstance ${CMAKE_PROJECT_NAME})
 target_compile_definitions(tst_singleinstance PRIVATE
   MPZ_BINARY="$<TARGET_FILE:${CMAKE_PROJECT_NAME}>")
 
-mpz_add_gui_test(tst_shortcutsdialog)
+mpz_add_gui_test(tst_shortcutseditor)
 mpz_add_gui_test(tst_tageditor)
 mpz_add_gui_test(tst_settingsdialog)
 mpz_add_gui_test(tst_trackinfo)

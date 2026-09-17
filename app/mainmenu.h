@@ -20,10 +20,8 @@ public:
 
 signals:
   void exit();
-  void toggleTrayIcon();
-  void waveformToggled(bool enabled);
+  void openSettings();
   void openPlaybackLog();
-  void openShortcuts();
   void openEqualizer();
   void openReplayGain();
 

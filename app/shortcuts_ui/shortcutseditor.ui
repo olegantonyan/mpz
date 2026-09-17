@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ShortcutsDialog</class>
- <widget class="QDialog" name="ShortcutsDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>538</width>
-    <height>620</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Keyboard shortcuts</string>
-  </property>
+ <class>ShortcutsEditor</class>
+ <widget class="QWidget" name="ShortcutsEditor">
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTableWidget" name="tableWidget"/>
@@ -33,7 +22,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+      <set>QDialogButtonBox::RestoreDefaults</set>
      </property>
     </widget>
    </item>
