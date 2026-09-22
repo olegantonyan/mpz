@@ -245,8 +245,15 @@ namespace Playback::Gapless {
       return false;
     }
     sink = new QAudioSink(active_device, sink_format, this);
+    sink_failed = false;
     sink->setBufferSize(sink_format.bytesForDuration(500000));
     sink->setVolume(volume_pct / 100.0);
+    // direct: record the failure before any reset() clears error()
+    connect(sink, &QAudioSink::stateChanged, this, [this, s = sink](QAudio::State state) {
+      if (s == sink && state == QAudio::StoppedState && s->error() == QAudio::IOError) {
+        sink_failed = true;
+      }
+    });
     // queued: reset()/start() emit stateChanged synchronously, which must not re-enter feedSink mid-mutation
     const quint64 generation = sink_generation;
     connect(sink, &QAudioSink::stateChanged, this, [this, generation](QAudio::State s) {
@@ -294,10 +301,20 @@ namespace Playback::Gapless {
     if (sink) {
       sink->reset(); // stop() defers the pipewire disconnect until the ringbuffer drains, which a dead device never does
       sink->stop();
-      sink->deleteLater();
+      if (sink_failed) {
+        abandonSink();
+      } else {
+        sink->deleteLater();
+      }
       sink = nullptr;
     }
     sink_io = nullptr;
+  }
+
+  void Engine::abandonSink() {
+    // Qt's PipeWire stream outlives a sink that failed with IOError and keeps calling into it
+    sink->disconnect(this);
+    sink->setParent(nullptr);
   }
 
   void Engine::releaseAudio() {
@@ -309,7 +326,11 @@ namespace Playback::Gapless {
     if (sink) {
       sink->reset(); // stop() drains synchronously on Linux; drop the buffer first
       sink->stop();
-      delete sink; // not deleteLater: the stream must go down while the event loop still runs
+      if (sink_failed) {
+        abandonSink();
+      } else {
+        delete sink; // not deleteLater: the stream must go down while the event loop still runs
+      }
       sink = nullptr;
       sink_io = nullptr;
     }

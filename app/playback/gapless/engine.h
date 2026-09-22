@@ -89,6 +89,7 @@ namespace Playback::Gapless {
     bool createSink();
     bool ensureSink();
     void destroySink();
+    void abandonSink();
     void beginOutputRecovery(const QString &reason);
     void tryRestoreOutput();
     void cancelOutputRecovery();
@@ -137,6 +138,7 @@ namespace Playback::Gapless {
     TrackDecoder *decoder = nullptr;
     TrackDecoder *prebuffer_decoder = nullptr;
     QAudioSink *sink = nullptr;
+    bool sink_failed = false;
     QIODevice *sink_io = nullptr;
     QAudioFormat sink_format;
     QAudioFormat prepared_format;

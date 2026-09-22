@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- Crash on audio device removal
+
 ### Misc
 
 ## [2.1.7] - 2026-09-21 
