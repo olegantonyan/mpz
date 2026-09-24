@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.12.0.schema.json
+
+PackageIdentifier: OlegAntonyan.mpz
+PackageVersion: 2.1.2
+PackageLocale: en-US
+Publisher: Oleg Antonyan
+PublisherUrl: https://mpz-player.org/
+PublisherSupportUrl: https://github.com/olegantonyan/mpz/issues
+Author: Oleg Antonyan
+PackageName: mpz Music Player
+PackageUrl: https://mpz-player.org/
+License: GPL-3.0-or-later
+LicenseUrl: https://github.com/olegantonyan/mpz/blob/master/license.txt
+Copyright: Copyright (C) Oleg Antonyan
+ShortDescription: Music player for large local collections
+Description: |-
+  A folder player for big local music collections. Instead of indexing every file
+  into a library, mpz treats your files and folders as the library and provides a
+  convenient way to build playlists directly from folders.
+
+  The main feature is the three-column UI: a directory tree, the list of playlists,
+  and the tracks of the current playlist. Choose library folders, middle-click a
+  folder, and a playlist is created from it.
+
+  Also supported: gapless playback, a 10-band and parametric equalizer with AutoEq
+  presets, internet radio, CUE sheets, a tag editor, cover art and lyrics, and an
+  experimental MPD client mode.
+Moniker: mpz
+Tags:
+- audio
+- collection
+- flac
+- library
+- mpd
+- music
+- player
+- playlist
+ReleaseNotesUrl: https://github.com/olegantonyan/mpz/releases/tag/2.1.2
+ManifestType: defaultLocale
+ManifestVersion: 1.12.0
