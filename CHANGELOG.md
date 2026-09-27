@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Crash on audio device removal
+- One more crash on audio device removal (Linux, PipeWire)
 
 ### Misc
 
