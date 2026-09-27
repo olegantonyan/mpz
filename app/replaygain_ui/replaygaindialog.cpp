@@ -175,7 +175,7 @@ namespace ReplayGainUi {
     auto *box = new QWidget;
     auto *layout = new QVBoxLayout(box);
 
-    sidecar_radio_ = new QRadioButton(tr("Store results in a sidecar database"));
+    sidecar_radio_ = new QRadioButton(tr("Store results in a database"));
     tags_radio_ = new QRadioButton(tr("Write ReplayGain tags into the audio files"));
     auto *group = new QButtonGroup(this);
     group->addButton(sidecar_radio_);
@@ -207,7 +207,7 @@ namespace ReplayGainUi {
 
     auto *tags_hint = new QLabel(
         tr("Rewrites every analysed file, so its size and modification time change. "
-           "Tracks inside a cue sheet can only be stored in the sidecar."));
+           "Tracks inside a cue sheet can only be stored in the database."));
     tags_hint->setWordWrap(true);
     tags_hint->setContentsMargins(indent, 0, 0, 0);
     tags_hint->setStyleSheet("color: #d35400;");

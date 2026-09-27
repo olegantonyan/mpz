@@ -186,6 +186,7 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std
   setup_view(ui->tableViewTags, &model_tags);
   setup_view(ui->tableViewFile, &model_file);
   setup_view(ui->tableViewOther, &model_other);
+  setup_view(ui->tableViewReplayGain, &model_replaygain);
   for (int i = 0; i < ui->tabWidget->count(); ++i) {
     tab_titles << ui->tabWidget->tabText(i);
   }
@@ -221,10 +222,16 @@ TrackInfoDialog::~TrackInfoDialog() {
 }
 
 void TrackInfoDialog::setup_table() {
+  for (auto *m : { &model, &model_tags, &model_file, &model_other, &model_replaygain }) {
+    m->removeRows(0, m->rowCount());
+  }
   add_general_rows();
   add_tags_rows();
   add_file_rows();
   add_other_rows();
+#ifdef ENABLE_GAPLESS
+  add_replaygain_rows();
+#endif
 
   const struct {
     QWidget *page;
@@ -235,6 +242,7 @@ void TrackInfoDialog::setup_table() {
     { ui->tabTags, ui->tableViewTags, &model_tags },
     { ui->tabFile, ui->tableViewFile, &model_file },
     { ui->tabOther, ui->tableViewOther, &model_other },
+    { ui->tabReplayGain, ui->tableViewReplayGain, &model_replaygain },
   };
 
   // Re-adding only the non-empty pages rather than QTabWidget::setTabVisible, which needs Qt 5.15 (openSUSE Leap 15.3 still ships 5.12).
@@ -487,6 +495,52 @@ void TrackInfoDialog::add_other_rows() {
 #endif
 }
 
+#ifdef ENABLE_GAPLESS
+void TrackInfoDialog::setReplayGain(ReplayGain::Manager *rg) {
+  replay_gain = rg;
+  setup_table();
+}
+
+void TrackInfoDialog::add_replaygain_rows() {
+  if (!replay_gain || _track.isStream() || _track.isMpd() || _track.path().isEmpty()) {
+    return;
+  }
+  const ReplayGain::Resolved resolved = replay_gain->resolver().resolve(_track);
+  const ReplayGain::Gain &g = resolved.gain;
+  const ReplayGain::Settings settings = replay_gain->settings();
+  const auto db = [](double v) { return QString::asprintf("%+.2f dB", v); };
+  const auto peak = [](double v) { return QString::number(v, 'f', 6); };
+
+  switch (resolved.source) {
+    case ReplayGain::Source::Sidecar: add_table_row(model_replaygain, tr("Source"), tr("Database")); break;
+    case ReplayGain::Source::Tags: add_table_row(model_replaygain, tr("Source"), tr("Tags")); break;
+    case ReplayGain::Source::Cue: add_table_row(model_replaygain, tr("Source"), tr("CUE sheet")); break;
+    case ReplayGain::Source::None: add_table_row(model_replaygain, tr("Source"), tr("None")); break;
+  }
+  if (g.has_track) {
+    add_table_row(model_replaygain, tr("Track gain"), db(g.track_db));
+    add_table_row(model_replaygain, tr("Track peak"), peak(g.track_peak));
+  }
+  if (g.has_album) {
+    add_table_row(model_replaygain, tr("Album gain"), db(g.album_db));
+    add_table_row(model_replaygain, tr("Album peak"), peak(g.album_peak));
+  }
+
+  if (settings.mode == ReplayGain::Mode::Off) {
+    add_table_row(model_replaygain, tr("Applied"), tr("Off"));
+    return;
+  }
+  QString kind;
+  switch (ReplayGain::appliedKind(g, settings)) {
+    case ReplayGain::Applied::Track: kind = tr("Track"); break;
+    case ReplayGain::Applied::Album: kind = tr("Album"); break;
+    case ReplayGain::Applied::Fallback: kind = tr("Fallback"); break;
+  }
+  add_table_row(model_replaygain, tr("Applied"),
+                QString("%1, %2").arg(kind, db(ReplayGain::effectiveGainDb(g, settings))));
+}
+#endif
+
 void TrackInfoDialog::add_table_row(QStandardItemModel &m, const QString &title, const QString &content) {
   const QString display = Text::elide(flatten(content), kValueLimit);
   auto *key = new QStandardItem(title);
@@ -623,10 +677,6 @@ void TrackInfoDialog::refresh_track(const QList<quint64> &uids) {
     return;
   }
   _track = t;
-  model.removeRows(0, model.rowCount());
-  model_tags.removeRows(0, model_tags.rowCount());
-  model_file.removeRows(0, model_file.rowCount());
-  model_other.removeRows(0, model_other.rowCount());
   setup_table();
   setWindowTitle(base_title + ": " + _track.formattedTitle());
 }

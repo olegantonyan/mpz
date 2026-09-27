@@ -5,6 +5,9 @@
 #include "playlist/playlist.h"
 #include "config/global.h"
 #include "playlist_ui/tageditordialog.h"
+#ifdef ENABLE_GAPLESS
+  #include "replaygain/manager.h"
+#endif
 
 #include <QDialog>
 #include <QPixmap>
@@ -25,6 +28,10 @@ public:
                            std::shared_ptr<Playlist::Playlist> playlist = nullptr,
                            QWidget *parent = nullptr);
   ~TrackInfoDialog();
+
+#ifdef ENABLE_GAPLESS
+  void setReplayGain(ReplayGain::Manager *rg);
+#endif
 
 signals:
   void tagEditorOpened(TagEditorDialog *editor);
@@ -48,6 +55,7 @@ private:
   QStandardItemModel model_tags;
   QStandardItemModel model_file;
   QStandardItemModel model_other;
+  QStandardItemModel model_replaygain;
   QPixmap cover_art;
   Track _track;
   Config::Global &global_conf;
@@ -56,6 +64,9 @@ private:
   QString track_path;
   QString cover_art_path;
   QStringList tab_titles;
+#ifdef ENABLE_GAPLESS
+  ReplayGain::Manager *replay_gain = nullptr;
+#endif
 
   void setup_table();
   void setup_view(QTableView *view, QStandardItemModel *m);
@@ -68,6 +79,9 @@ private:
   void add_tags_rows();
   void add_file_rows();
   void add_other_rows();
+#ifdef ENABLE_GAPLESS
+  void add_replaygain_rows();
+#endif
 
   void add_table_row(QStandardItemModel &m, const QString &title, const QString &content);
 

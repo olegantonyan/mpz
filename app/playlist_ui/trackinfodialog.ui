@@ -121,6 +121,28 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tabReplayGain">
+        <attribute name="title">
+         <string>ReplayGain</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="replayGainLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTableView" name="tableViewReplayGain"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="QLabel" name="labelCoverArt">
        <property name="sizePolicy">

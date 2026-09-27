@@ -305,14 +305,14 @@ void TestReplayGainManager::appliedGainTextNamesTheModeValueAndSource() {
   s.mode = ReplayGain::Mode::Track;
   m.setSettings(s);
   QCOMPARE(m.appliedGainText(Track(scanned)),
-           QStringLiteral("ReplayGain: track -6.00 dB (sidecar)"));
+           QStringLiteral("ReplayGain: track -6.00 dB (database)"));
   QCOMPARE(m.appliedGainText(Track(bare)), QStringLiteral("ReplayGain: fallback 0.00 dB (none)"));
 
   s.mode = ReplayGain::Mode::Album;
   s.preamp_db = 1.5;
   m.setSettings(s);
   QCOMPARE(m.appliedGainText(Track(scanned)),
-           QStringLiteral("ReplayGain: album -4.50 dB (sidecar)"));
+           QStringLiteral("ReplayGain: album -4.50 dB (database)"));
 
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));
   QCOMPARE(m.appliedGainText(stream), QStringLiteral("ReplayGain: fallback 0.00 dB (none)"));
@@ -332,7 +332,7 @@ void TestReplayGainManager::statusTextFallsBackToTheBareMode() {
   ReplayGain::Settings s = m.settings();
   s.mode = ReplayGain::Mode::Track;
   m.setSettings(s);
-  QCOMPARE(m.statusText(Track(scanned)), QStringLiteral("ReplayGain: track -6.00 dB (sidecar)"));
+  QCOMPARE(m.statusText(Track(scanned)), QStringLiteral("ReplayGain: track -6.00 dB (database)"));
   QCOMPARE(m.statusText(Track()), QStringLiteral("ReplayGain: track"));
 
   const Track stream(QUrl(QStringLiteral("http://example.com/live")), QStringLiteral("live"));

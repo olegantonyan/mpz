@@ -34,7 +34,7 @@ namespace ReplayGain {
 
     QString sourceName(Source source) {
       switch (source) {
-        case Source::Sidecar: return QStringLiteral("sidecar");
+        case Source::Sidecar: return QStringLiteral("database");
         case Source::Tags: return QStringLiteral("tags");
         case Source::Cue: return QStringLiteral("cue");
         case Source::None: break;

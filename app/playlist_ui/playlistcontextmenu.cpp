@@ -1,5 +1,4 @@
 #include "playlistcontextmenu.h"
-#include "trackinfodialog.h"
 #include "tageditordialog.h"
 #include "reveal_in_filemanager.h"
 #include "icons.h"
@@ -15,7 +14,7 @@
 #include <algorithm>
 
 namespace PlaylistUi {
-  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, Config::Global &global, QObject *parent) : QObject(parent), proxy(p), view(v), search(s), global_conf(global) {
+  PlaylistContextMenu::PlaylistContextMenu(ProxyFilterModel *p, QTableView *v, QLineEdit *s, QObject *parent) : QObject(parent), proxy(p), view(v), search(s) {
     Q_ASSERT(proxy);
     Q_ASSERT(view);
     Q_ASSERT(search);
@@ -135,17 +134,7 @@ namespace PlaylistUi {
     }
     auto selection = rows.first();
     if (selection.isValid()) {
-      auto track = proxy->activeModel()->itemAt(proxy->mapToSource(selection));
-      auto pl = proxy->activeModel()->playlist();
-      TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl);
-      dlg->setModal(false);
-      connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
-      connect(dlg, &TrackInfoDialog::tagEditorOpened, this, [this, pl](TagEditorDialog *editor) {
-        connect(editor, &TagEditorDialog::saved, this, [this, pl](const QList<quint64> &uids) {
-          emit tracksChanged(pl, uids);
-        });
-      });
-      dlg->show();
+      emit trackInfoRequested(proxy->activeModel()->itemAt(proxy->mapToSource(selection)));
     }
   }
 

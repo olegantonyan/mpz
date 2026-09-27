@@ -38,6 +38,7 @@ namespace PlaylistUi {
     void durationOfSelectedChanged(quint32 total_duration);
     void createPlaylistRequested(const QList<QDir> &filepaths, const QString &libraryDir);
     void createPlaylistFromTracksRequested(const QVector<Track> &tracks, const QString &name);
+    void trackInfoRequested(const Track &track);
 
   public slots:
     void on_load(const std::shared_ptr<Playlist::Playlist> pi);
@@ -52,6 +53,7 @@ namespace PlaylistUi {
     void on_removeTracks(quint64 playlist_uid, const QVector<Track> &tracks);
     void on_tracksAppended(const std::shared_ptr<Playlist::Playlist> pl);
     void sortBy(const QString &criteria);
+    void on_tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private slots:
     void removeSelectedTracks();
@@ -59,7 +61,6 @@ namespace PlaylistUi {
     void on_search(const QString &term);
     void on_currentSelectionChanged(const QModelIndex &index, const QModelIndex &prev);
     void on_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    void on_tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private:
     QTableView *view;

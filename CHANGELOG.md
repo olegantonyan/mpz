@@ -2,6 +2,8 @@
 
 ### Added
 
+- Show ReplayGain data in track info dialog
+
 ### Fixed
 
 - One more crash on audio device removal (Linux, PipeWire)

@@ -4,7 +4,6 @@
 #include "playlistmodel.h"
 #include "playlistproxyfiltermodel.h"
 #include "playlist/playlist.h"
-#include "config/global.h"
 
 #include <QObject>
 #include <QPoint>
@@ -17,7 +16,7 @@ namespace PlaylistUi {
   class PlaylistContextMenu : public QObject {
     Q_OBJECT
   public:
-    explicit PlaylistContextMenu(ProxyFilterModel *proxy, QTableView *view, QLineEdit *seacrh, Config::Global &global, QObject *parent = nullptr);
+    explicit PlaylistContextMenu(ProxyFilterModel *proxy, QTableView *view, QLineEdit *seacrh, QObject *parent = nullptr);
 
   public slots:
     void show(const QPoint &pos);
@@ -25,13 +24,13 @@ namespace PlaylistUi {
 
   signals:
     void removeRequested();
+    void trackInfoRequested(const Track &track);
     void tracksChanged(const std::shared_ptr<Playlist::Playlist> pl, const QList<quint64> &uids);
 
   private:
     ProxyFilterModel *proxy;
     QTableView *view;
     QLineEdit *search;
-    Config::Global &global_conf;
 
     QAction remove;
     QAction clear_filter;

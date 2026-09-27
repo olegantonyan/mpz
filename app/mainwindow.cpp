@@ -516,6 +516,7 @@ void MainWindow::setupDockWidgets() {
 
   connect(cover_widget, &CoverArt::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
   connect(lyrics_widget, &Lyrics::Widget::trackInfoRequested, this, &MainWindow::openTrackInfo);
+  connect(playlist, &PlaylistUi::Controller::trackInfoRequested, this, &MainWindow::openTrackInfo);
 }
 
 void MainWindow::openTrackInfo(const Track &track) {
@@ -523,6 +524,14 @@ void MainWindow::openTrackInfo(const Track &track) {
   TrackInfoDialog *dlg = new TrackInfoDialog(track, global_conf, pl, this);
   dlg->setModal(false);
   connect(dlg, &TrackInfoDialog::finished, dlg, &TrackInfoDialog::deleteLater);
+  connect(dlg, &TrackInfoDialog::tagEditorOpened, this, [this, pl](TagEditorDialog *editor) {
+    connect(editor, &TagEditorDialog::saved, playlist, [this, pl](const QList<quint64> &uids) {
+      playlist->on_tracksChanged(pl, uids);
+    });
+  });
+#ifdef ENABLE_GAPLESS
+  dlg->setReplayGain(replay_gain);
+#endif
   dlg->show();
 }
 

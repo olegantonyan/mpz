@@ -81,8 +81,9 @@ namespace PlaylistUi {
       }
     });
 
-    context_menu = new PlaylistContextMenu(proxy, view, search, global_conf, this);
+    context_menu = new PlaylistContextMenu(proxy, view, search, this);
     connect(context_menu, &PlaylistContextMenu::removeRequested, this, &Controller::removeSelectedTracks);
+    connect(context_menu, &PlaylistContextMenu::trackInfoRequested, this, &Controller::trackInfoRequested);
     connect(context_menu, &PlaylistContextMenu::tracksChanged, this, &Controller::on_tracksChanged);
 
     view->setContextMenuPolicy(Qt::CustomContextMenu);
