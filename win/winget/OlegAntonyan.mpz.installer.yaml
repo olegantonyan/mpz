@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.12.0.schema.json
+
+PackageIdentifier: OlegAntonyan.mpz
+PackageVersion: 2.1.2
+Platform:
+- Windows.Desktop
+MinimumOSVersion: 10.0.17763.0
+InstallerType: exe
+# No Scope: files go to Program Files but Qt Installer Framework registers the
+# Apps & Features entry under HKCU, so neither scope describes it.
+# Qt Installer Framework can only elevate from the GUI.
+ElevationRequirement: elevationRequired
+InstallModes:
+- interactive
+- silent
+- silentWithProgress
+# Qt Installer Framework drops options after the command, so "install" stays last;
+# adding Log or InstallLocation would append past it.
+InstallerSwitches:
+  Silent: --accept-licenses --accept-messages --confirm-command install
+  SilentWithProgress: --accept-licenses --accept-messages --confirm-command install
+UpgradeBehavior: install
+ProductCode: '{CB3FB4C2-AC12-4EAB-A0D3-CB6C62752B47}'
+# Verified against the installed registry key; DisplayName is lowercase there.
+AppsAndFeaturesEntries:
+- DisplayName: mpz music player
+  DisplayVersion: 2.1.2
+  Publisher: Oleg Antonyan
+  ProductCode: '{CB3FB4C2-AC12-4EAB-A0D3-CB6C62752B47}'
+ReleaseDate: 2026-08-01
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/olegantonyan/mpz/releases/download/2.1.2/mpz-2.1.2-win-x86_64-qt6-installer.exe
+  InstallerSha256: 541A1BDD101E4FE98CC0C795075B7D8CBC025C42FE768CFACC1833E3E0B4B087
+- Architecture: arm64
+  InstallerUrl: https://github.com/olegantonyan/mpz/releases/download/2.1.2/mpz-2.1.2-win-arm64-qt6-installer.exe
+  InstallerSha256: EFA003BD14E4A89FA0EED916D6042FA75887B5AE436DEB61C9FA069F1ACC6FEE
+ManifestType: installer
+ManifestVersion: 1.12.0
