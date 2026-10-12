@@ -15,5 +15,6 @@
         <file alias="app/resources/radio/radio.json">resources/radio/radio.json</file>
         <file alias="app/resources/translations/sr.qm">resources/translations/sr.qm</file>
         <file alias="app/resources/translations/ja.qm">resources/translations/ja.qm</file>
+        <file alias="app/resources/translations/it.qm">resources/translations/it.qm</file>
    </qresource>
 </RCC>

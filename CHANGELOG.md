@@ -3,6 +3,7 @@
 ### Added
 
 - Show ReplayGain data in track info dialog
+- Italian language translation (@giallorosso84)
 
 ### Fixed
 

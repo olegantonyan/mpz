@@ -47,6 +47,7 @@ namespace {
   const LanguageEntry kLanguages[] = {
     {"",   "System default"},
     {"en", "English"},
+    {"it", "Italian"},
     {"ja", "Japanese"},
     {"ru", "Russian"},
     {"sr", "Serbian"},
