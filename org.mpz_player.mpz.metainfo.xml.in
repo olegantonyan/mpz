@@ -9,6 +9,7 @@
   <summary xml:lang="ru">Локальная музыка по папкам</summary>
   <summary xml:lang="ja">大規模なローカルコレクション向けの音楽プレーヤー</summary>
   <summary xml:lang="sr">Локална музика по фасциклама</summary>
+  <summary xml:lang="it">Musica locale per cartelle</summary>
 
   <launchable type="desktop-id">@DESKTOP_FILE_ID@.desktop</launchable>
 
@@ -21,6 +22,7 @@
     </p>
     <p xml:lang="ru">Проигрыватель для больших локальных музыкальных коллекций, работающий с папками. Вместо того чтобы индексировать каждый файл в библиотеку, mpz считает библиотекой сами файлы и папки и позволяет удобно собирать плейлисты прямо из папок.</p>
     <p xml:lang="sr">Плејер за велике локалне музичке колекције који ради са фасциклама. Уместо да индексира сваку датотеку у библиотеку, mpz саме датотеке и фасцикле третира као библиотеку и омогућава лако прављење плејлисти директно из фасцикли.</p>
+    <p xml:lang="it">Un lettore a cartelle per grandi collezioni musicali locali. Invece di indicizzare ogni file in una libreria, mpz considera come libreria i file e le cartelle stessi e permette di creare comodamente playlist direttamente dalle cartelle.</p>
     <p>
       The main feature is the three-column UI: a directory tree, the list of
       playlists, and the tracks of the current playlist — similar to
@@ -29,6 +31,7 @@
     </p>
     <p xml:lang="ru">Главная особенность — интерфейс из трёх колонок: дерево папок, список плейлистов и треки текущего плейлиста — как Album List в Foobar2000. Укажите папки библиотеки, щёлкните по папке средней кнопкой мыши — и из неё создастся плейлист.</p>
     <p xml:lang="sr">Главна одлика је интерфејс са три колоне: стабло фасцикли, списак плејлисти и нумере текуће плејлисте — слично Album List-у у Foobar2000. Изаберите фасцикле библиотеке, кликните средњим тастером на фасциклу и од ње се прави плејлиста.</p>
+    <p xml:lang="it">La caratteristica principale è l'interfaccia a tre colonne: albero delle cartelle, elenco delle playlist e brani della playlist corrente, simile all'Album List di Foobar2000. Scegli le cartelle della libreria, fai clic con il tasto centrale su una cartella e da essa verrà creata una playlist.</p>
     <p>
       Also supported: gapless playback, a 10-band and parametric equalizer with
       AutoEq presets, ReplayGain volume normalization, internet radio, CUE
@@ -37,6 +40,7 @@
     </p>
     <p xml:lang="ru">Также поддерживаются: воспроизведение без пауз, 10-полосный и параметрический эквалайзер с пресетами AutoEq, нормализация громкости ReplayGain, интернет-радио, CUE-листы, редактор тегов, обложки альбомов и тексты песен, управление через MPRIS и экспериментальный режим клиента MPD.</p>
     <p xml:lang="sr">Такође су подржани: репродукција без прекида, 10-појасни и параметарски еквилајзер са AutoEq пресетима, ReplayGain нормализација гласноће, интернет радио, CUE листови, уређивач ознака, омоти албума и текстови песама, MPRIS контрола медија и експериментални режим MPD клијента.</p>
+    <p xml:lang="it">Sono supportati anche: riproduzione gapless, equalizzatore a 10 bande e parametrico con preset AutoEq, normalizzazione del volume ReplayGain, radio via Internet, CUE sheet, editor di tag, copertine album e testi, controllo multimediale MPRIS e una modalità client MPD sperimentale.</p>
   </description>
 
   <keywords>
@@ -86,6 +90,16 @@
     <keyword xml:lang="sr">библиотека</keyword>
     <keyword xml:lang="sr">еквилајзер</keyword>
     <keyword xml:lang="sr">радио</keyword>
+    <keyword xml:lang="it">musica</keyword>
+    <keyword xml:lang="it">audio</keyword>
+    <keyword xml:lang="it">lettore</keyword>
+    <keyword xml:lang="it">cartella</keyword>
+    <keyword xml:lang="it">cartelle</keyword>
+    <keyword xml:lang="it">playlist</keyword>
+    <keyword xml:lang="it">collezione</keyword>
+    <keyword xml:lang="it">libreria</keyword>
+    <keyword xml:lang="it">equalizzatore</keyword>
+    <keyword xml:lang="it">radio</keyword>
   </keywords>
 
   <developer id="org.mpz_player">

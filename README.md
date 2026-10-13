@@ -35,7 +35,7 @@ In version 2.0.0 an experimental [mpd](https://musicpd.org) client mode was adde
 - Global media-key hotkeys and editable keyboard shortcuts
 - Media/OS integration: MPRIS on Linux (remote control, e.g. via [KDE Connect](https://kdeconnect.kde.org/)), SMTC and taskbar controls on Windows, Now Playing and native menu/Dock on macOS, system tray / macOS menu bar
 - Update check on Windows, macOS, and Linux AppImage
-- UI languages: English, Russian, Japanese, Serbian (see [adding a translation](#adding-a-translation))
+- UI languages: English, Russian, Japanese, Serbian, Italian (see [adding a translation](#adding-a-translation))
 - Configuration in 2 yaml files: global (portable between computers) and local (specific to this installation)
 - [mpd](https://musicpd.org) client mode
 - ReplayGain that can write either tags or separate file
