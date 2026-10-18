@@ -1,4 +1,4 @@
-## [next] - 
+## [2.1.8] - 2026-10-18 
 
 ### Added
 
@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- Crash when an audio device disappears, notably while paused (Linux, WirePlumber 0.5.18+)
 - One more crash on audio device removal (Linux, PipeWire)
 
 ### Misc
