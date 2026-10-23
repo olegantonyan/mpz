@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- mpz offered as a handler for WMV and Ogg video files (Linux)
+
 ### Misc
 
 - Skip the PipeWire `node.linger` workaround on Qt 6.11.3+ (QTBUG-149181)
