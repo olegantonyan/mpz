@@ -45,12 +45,14 @@ jobs:
       - name: Install dependencies
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.10.3
+          version: 6.12.0
           host: windows
           target: desktop
           arch: win64_msvc2022_64
           modules: 'qtmultimedia'
           tools: 'tools_ifw tools_ninja tools_cmake'
+          # aqtinstall 3.3.0 can't find Windows x64 Qt 6.11+ (per-arch repo layout); fix is unreleased
+          aqtsource: git+https://github.com/miurahr/aqtinstall.git@8c3695d4a4e1ceabf6a74dc6c79681656dc6b74b
 
       - name: Set up MSVC x64 toolchain
         uses: ilammy/msvc-dev-cmd@v1
@@ -159,7 +161,7 @@ jobs:
       - name: Install dependencies
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.10.3
+          version: 6.12.0
           host: windows_arm64
           target: desktop
           arch: win64_msvc2022_arm64

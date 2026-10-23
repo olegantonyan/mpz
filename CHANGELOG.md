@@ -7,6 +7,7 @@
 ### Misc
 
 - Skip the PipeWire `node.linger` workaround on Qt 6.11.3+ (QTBUG-149181)
+- Windows and Mac builds updated to Qt 6.12
 
 ## [2.1.8] - 2026-10-18 
 
