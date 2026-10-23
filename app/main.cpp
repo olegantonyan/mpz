@@ -100,9 +100,15 @@ int main(int argc, char *argv[]) {
   qputenv("PULSE_PROP_application.icon_name", icon_name);
   qputenv("PULSE_PROP_application.id", desktop_file_id);
   if (!qEnvironmentVariableIsSet("PIPEWIRE_PROPS")) {
-    // node.linger: WirePlumber >= 0.5.18 destroys dead dont-reconnect streams, which Qt < 6.12 frees on the pw thread and segfaults
-    qputenv("PIPEWIRE_PROPS", "{ application.icon-name = " + icon_name + ", application.id = " + desktop_file_id +
-                              ", node.linger = true }");
+#if QT_VERSION < QT_VERSION_CHECK(6, 11, 3)
+    // WirePlumber >= 0.5.18 destroys dead dont-reconnect streams, which Qt frees on the pw thread and segfaults:
+    // https://qt-project.atlassian.net/browse/QTBUG-149181
+    const QByteArray linger = ", node.linger = true";
+#else
+    const QByteArray linger;
+#endif
+    qputenv("PIPEWIRE_PROPS",
+            "{ application.icon-name = " + icon_name + ", application.id = " + desktop_file_id + linger + " }");
   }
 #endif
 #ifdef ENABLE_CRASH_HANDLER
