@@ -279,6 +279,26 @@ All of them are editable there: click a key field, press the new combination, OK
 
 Starting at Qt 6.4, QtMultimedia supports ffmpeg backend on Linux, and it seems like they are heading towards enabling it by default. You can set the multimedia backend via the environment variable QT_MEDIA_BACKEND: `QT_MEDIA_BACKEND=ffmpeg mpz` or `QT_MEDIA_BACKEND=gstreamer mpz`.
 
+### Crashes with PipeWire (Linux)
+
+Since Qt 6.10, mpz sends sound directly to PipeWire. Qt versions before 6.11.3 have a bug: mpz can crash when the audio device goes away. For example, Bluetooth headphones disconnect, the PC wakes up from sleep, or the sound server restarts. Qt 6.11.3 and 6.12 fix this.
+
+If you get these crashes, tell Qt to use PulseAudio instead. PipeWire still plays the sound through its PulseAudio layer (`pipewire-pulse`), which most distros install by default.
+
+Native package, AppImage, or build from sources:
+
+```
+QT_AUDIO_BACKEND=pulseaudio mpz
+```
+
+Flatpak (you only need to run this once):
+
+```
+flatpak override --user --env=QT_AUDIO_BACKEND=pulseaudio org.mpz_player.mpz
+```
+
+Your chosen output device and per-device equalizer settings may reset after the switch, so choose them again. Remove the variable when your Qt is 6.11.3 or newer. For Flatpak: `flatpak override --user --unset-env=QT_AUDIO_BACKEND org.mpz_player.mpz`.
+
 ### mpd impedance mismatch
 When used as an [mpd](https://musicpd.org) client, there is a fundamental difference that can lead to some weird behavior. By design mpz does not have an explicit playback queue - the playlist itself is the queue. In mpd, there's an explicit playback queue and playlists are merely lists of tracks that can be loaded into the queue to play.
 
