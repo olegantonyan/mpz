@@ -1,0 +1,9 @@
+1. Get SHA256 of the new installers: gh release view 2.1.3 --json assets --jq '.assets[] | select(.name|test("qt6-installer")) | "\(.name) \(.digest)"'
+2. Update version in all 3 yaml files: PackageVersion
+3. Update in OlegAntonyan.mpz.installer.yaml: both InstallerUrl, both InstallerSha256 (uppercase, drop the "sha256:" prefix), AppsAndFeaturesEntries.DisplayVersion, ReleaseDate
+4. Update ReleaseNotesUrl in OlegAntonyan.mpz.locale.en-US.yaml
+5. On windows, once per machine: winget settings --enable LocalManifestFiles
+6. Validate: winget validate --manifest win/winget
+7. Test from a NON-elevated powershell (a UAC prompt must appear): winget install --manifest win/winget
+8. Copy the 3 yaml files into a fork of microsoft/winget-pkgs as manifests/o/OlegAntonyan/mpz/2.1.3/
+9. Open a pull request. One package version per pull request, manifests only.
