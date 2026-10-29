@@ -2,6 +2,15 @@
 
 ### Added
 
+- Theme setting: Follow system (default), Light or Dark
+  - macOS: native light/dark appearance
+  - Windows 11: native style, dark title bar
+  - Windows 10: Dark switches to the Fusion style, since the native style has no dark mode
+  - KDE Plasma: picking the scheme the system already uses changes nothing. Picking the opposite one switches mpz to Breeze Light or Breeze Dark colors with your accent color, title bar included, the same way KDE apps apply a per-app color scheme
+  - GNOME, Xfce and other GTK-based desktops: Qt's GTK theme plugin switches to the GTK theme's own light/dark variant (e.g. Adwaita dark)
+  - Other Linux desktops, Flatpak without a matching theme, Qt older than 6.8: Breeze Light/Dark colors if Breeze is installed, otherwise a generic light/dark palette
+  - Styles that draw their own colors (e.g. Kvantum) ignore the setting
+
 ### Fixed
 
 - mpz offered as a handler for WMV and Ogg video files (Linux)

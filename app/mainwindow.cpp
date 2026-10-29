@@ -549,6 +549,7 @@ void MainWindow::openSettings() {
   SettingsDialog dlg(global_conf, local_conf, shortcuts, this);
   connect(&dlg, &SettingsDialog::trayIconToggled, this, &MainWindow::setupTrayIcon);
   connect(&dlg, &SettingsDialog::waveformToggled, player, &Playback::Controller::setWaveformEnabled);
+  connect(&dlg, &SettingsDialog::colorSchemeChanged, static_cast<MpzApplication *>(qApp), &MpzApplication::applyColorScheme);
   dlg.exec();
 }
 

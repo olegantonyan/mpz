@@ -1,6 +1,8 @@
 #ifndef MPZAPPLICATION_H
 #define MPZAPPLICATION_H
 
+#include "colorschemeoverride.h"
+
 #include <QApplication>
 #include <QStringList>
 
@@ -10,6 +12,9 @@ public:
   MpzApplication(int &argc, char **argv);
 
   QStringList drainPendingFiles();
+
+public slots:
+  void applyColorScheme(const QString &scheme);
 
 signals:
   void filesOpened(const QStringList &files);
@@ -21,6 +26,7 @@ protected:
 
 private:
   QStringList pending_files;
+  ColorSchemeOverride color_scheme_override;
 };
 
 #endif // MPZAPPLICATION_H

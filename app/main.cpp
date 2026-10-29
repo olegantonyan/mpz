@@ -162,6 +162,8 @@ int main(int argc, char *argv[]) {
   // them into the initial argument list. Later FileOpen events route through the same IPC signal as a second-instance file drop.
   arguments << a.drainPendingFiles();
 
+  a.applyColorScheme(local_conf.colorScheme());
+
   MainWindow w(arguments, &instance, local_conf, global_conf);
   QObject::connect(&a, &MpzApplication::filesOpened, &instance, &IPC::Instance::load_files_received);
 #ifdef Q_OS_MACOS
