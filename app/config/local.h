@@ -81,6 +81,9 @@ namespace Config {
     QString lastReportedCrash() const;
     void saveLastReportedCrash(const QString &arg);
 
+    QString colorScheme() const;
+    void saveColorScheme(const QString &arg);
+
   private:
     Config::Storage storage;
 

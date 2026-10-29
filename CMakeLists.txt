@@ -95,6 +95,7 @@ set(PROJECT_SOURCES
   app/ipc/instance.cpp
   app/mainmenu.cpp
   app/mpzapplication.cpp
+  app/colorschemeoverride.cpp
   app/mainwindow.cpp
   app/directory_ui/directorymodel/proxy.cpp
   app/directory_ui/directorymodel/localfs.cpp

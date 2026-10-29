@@ -13,6 +13,10 @@ QStringList MpzApplication::drainPendingFiles() {
   return files;
 }
 
+void MpzApplication::applyColorScheme(const QString &scheme) {
+  color_scheme_override.apply(ColorSchemeOverride::modeFromString(scheme));
+}
+
 bool MpzApplication::event(QEvent *event) {
 #ifdef Q_OS_MACOS
   if (event->type() == QEvent::ApplicationActivate) {

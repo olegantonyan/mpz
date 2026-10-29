@@ -27,6 +27,7 @@ public:
 signals:
   void trayIconToggled();
   void waveformToggled(bool enabled);
+  void colorSchemeChanged(const QString &scheme);
 
 private:
   Config::Global &global_conf;
@@ -47,6 +48,7 @@ private:
   QCheckBox *check_show_headers = nullptr;
   QSpinBox *spin_row_height = nullptr;
   QComboBox *combo_language = nullptr;
+  QComboBox *combo_color_scheme = nullptr;
 
   QComboBox *combo_library_filter_scope = nullptr;
 

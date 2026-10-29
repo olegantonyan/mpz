@@ -349,6 +349,14 @@ namespace Config {
     storage.set("last_reported_crash", Config::Value(arg));
   }
 
+  QString Local::colorScheme() const {
+    return storage.get("color_scheme").get<QString>();
+  }
+
+  void Local::saveColorScheme(const QString &arg) {
+    storage.set("color_scheme", Config::Value(arg));
+  }
+
   Value Local::serializeTrack(const Track &t) const {
     QMap<QString, Config::Value> r;
     r["path"] = t.path();

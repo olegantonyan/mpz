@@ -210,6 +210,17 @@ QWidget *SettingsDialog::buildGeneralTab() {
   rh_row->addStretch();
   iv->addLayout(rh_row);
 
+  combo_color_scheme = new QComboBox;
+  combo_color_scheme->addItem(tr("Follow system"), "auto");
+  combo_color_scheme->addItem(tr("Light"), "light");
+  combo_color_scheme->addItem(tr("Dark"), "dark");
+  combo_color_scheme->setCurrentIndex(std::max(0, combo_color_scheme->findData(local_conf.colorScheme())));
+  auto *scheme_row = new QHBoxLayout;
+  scheme_row->addWidget(new QLabel(tr("Theme:")));
+  scheme_row->addWidget(combo_color_scheme);
+  scheme_row->addStretch();
+  iv->addLayout(scheme_row);
+
   combo_language = new QComboBox;
   auto *lang_row = new QHBoxLayout;
   lang_row->addWidget(new QLabel(tr("Language:")));
@@ -775,6 +786,9 @@ void SettingsDialog::apply() {
   global_conf.savePlaylistRowHeight(
       check_row_height->isChecked() ? spin_row_height->value() : 0);
   global_conf.saveLanguage(combo_language->currentData().toString());
+  const QString color_scheme = combo_color_scheme->currentData().toString();
+  const bool color_scheme_changed = color_scheme != local_conf.colorScheme();
+  local_conf.saveColorScheme(color_scheme);
 
   // Library
   global_conf.saveLibraryFilterScope(combo_library_filter_scope->currentData().toString());
@@ -827,6 +841,9 @@ void SettingsDialog::apply() {
   if (tray_now != tray_was_enabled) {
     tray_was_enabled = tray_now;
     emit trayIconToggled();
+  }
+  if (color_scheme_changed) {
+    emit colorSchemeChanged(color_scheme);
   }
 }
 
