@@ -102,6 +102,8 @@ namespace MpzdClient {
       } else if (k == "volume") {
         st.volume = v.toInt();
         in_track = false;
+      } else if (k == "output") {
+        st.output = v;
       } else if (k == "order") {
         st.order = v;
       } else if (k == "follow") {

@@ -869,10 +869,16 @@ void MainWindow::setupOutputDevice() {
 
   connect(output_device_button, &AudioDeviceUi::OutputDeviceButton::outputDeviceChanged, player, &Playback::Controller::setOutputDevice);
   connect(player, &Playback::Controller::outputDeviceChanged, output_device_button, &AudioDeviceUi::OutputDeviceButton::refresh);
-  connect(&modus_operandi, &ModusOperandi::changed, this, [=](auto mode) {
+  const auto apply_mode = [=](ModusOperandi::ActiveMode mode) {
+#ifdef ENABLE_MPZD_SUPPORT
+    output_device_button->setRemote(mode == ModusOperandi::MODUS_MPZD ? &modus_operandi.mpzd_client : nullptr);
+    ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS || mode == ModusOperandi::MODUS_MPZD);
+#else
     ui->toolButtonOutputDevice->setEnabled(mode == ModusOperandi::MODUS_LOCALFS);
-  });
-  ui->toolButtonOutputDevice->setEnabled(modus_operandi.get() == ModusOperandi::MODUS_LOCALFS);
+#endif
+  };
+  connect(&modus_operandi, &ModusOperandi::changed, this, apply_mode);
+  apply_mode(modus_operandi.get());
 #else
   ui->toolButtonOutputDevice->setVisible(false);
 #endif

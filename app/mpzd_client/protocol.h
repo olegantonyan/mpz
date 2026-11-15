@@ -57,6 +57,7 @@ namespace MpzdClient {
     QString format;
     QString icy;
     int volume = 100;
+    QString output;
     QString order;
     bool follow = false;
     quint32 sel_playlist = 0;
