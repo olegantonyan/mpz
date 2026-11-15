@@ -9,6 +9,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "playback/mpd/mediaplayer.h"
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  #include "playback/mpzd/mediaplayer.h"
+#endif
 #ifdef ENABLE_GAPLESS
   #include "playback/gapless/gaplessmediaplayer.h"
   #include "waveform/analyzer.h"
@@ -99,6 +102,9 @@ namespace Playback {
     ModusOperandi &modus_operndi;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::MediaPlayer _mpdplayer;
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+    Mpzd::MediaPlayer _mpzdplayer;
 #endif
     Track _current_track;
 #ifdef ENABLE_GAPLESS

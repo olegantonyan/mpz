@@ -41,7 +41,7 @@ namespace Playback {
     }
 
     void PlaybackOrder::onTrackSelected(const Track &track) {
-      if (global_conf.playbackFollowCursor() && track.isMpd() && dispatch->state().selectedTrack() != dispatch->state().playingTrack()) {
+      if (global_conf.playbackFollowCursor() && track.isRemote() && dispatch->state().selectedTrack() != dispatch->state().playingTrack()) {
         auto songs = client.lsQueueSongs();
         for (const auto &it : std::as_const(songs)) {
           if (it.filepath == track.path()) {

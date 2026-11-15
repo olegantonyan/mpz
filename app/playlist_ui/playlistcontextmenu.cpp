@@ -59,7 +59,7 @@ namespace PlaylistUi {
     tracks.reserve(rows.size());
     for (const auto &i : std::as_const(rows)) {
       const auto t = proxy->activeModel()->itemAt(proxy->mapToSource(i));
-      if (!t.isMpd() && !t.isStream()) {
+      if (!t.isRemote() && !t.isStream()) {
         tracks << t;
       }
     }
@@ -85,7 +85,7 @@ namespace PlaylistUi {
       bool any_local = false;
       for (const auto &i : view->selectionModel()->selectedRows()) {
         const auto t = proxy->activeModel()->itemAt(proxy->mapToSource(i));
-        if (t.isMpd() || t.isStream()) {
+        if (t.isRemote() || t.isStream()) {
           continue;
         }
         any_local = true;
@@ -142,7 +142,7 @@ namespace PlaylistUi {
     QVector<Track> editable;
     for (const auto &i : view->selectionModel()->selectedRows()) {
       const auto t = proxy->activeModel()->itemAt(proxy->mapToSource(i));
-      if (!t.isCue() && !t.isMpd() && !t.isStream()) {
+      if (!t.isCue() && !t.isRemote() && !t.isStream()) {
         editable << t;
       }
     }

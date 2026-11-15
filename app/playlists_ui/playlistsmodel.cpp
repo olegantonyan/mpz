@@ -39,6 +39,12 @@ namespace PlaylistsUi {
     emit asyncTracksLoadFinished(playlist);
   }
 
+  void Model::reloadPlaylist(std::shared_ptr<Playlist::Playlist> playlist) {
+    if (playlist) {
+      playlist->reload();
+    }
+  }
+
   void Model::appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks) {
     if (!playlist || tracks.isEmpty()) {
       return;

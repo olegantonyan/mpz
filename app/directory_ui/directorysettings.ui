@@ -36,6 +36,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButtonAddMpzd">
+         <property name="text">
+          <string>Add mpzd</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButtonEdit">
          <property name="text">
           <string>Edit</string>

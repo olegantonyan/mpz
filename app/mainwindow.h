@@ -217,6 +217,9 @@ private:
 #ifdef ENABLE_MPD_SUPPORT
   void setupMpdOrder();
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  void setupMpzdSync();
+#endif
 
   void preloadPlaylist(const QStringList &args);
   void cancelPreload();

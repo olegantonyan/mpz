@@ -17,6 +17,11 @@ namespace PlaylistUi {
     connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::reload);
     connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &Mpd::Model::onMpdLost);
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+    mpzd = new Mpzd::Model(stl, col_cfg, modus.mpzd_client, this);
+    connect(mpzd, &Mpzd::Model::appendToPlaylistAsyncFinished, this, &ProxyFilterModel::appendToPlaylistAsyncFinished);
+    connect(&modus_operandi, &ModusOperandi::mpzdLost, mpzd, &Mpzd::Model::onMpzdLost);
+#endif
 
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());
@@ -29,6 +34,15 @@ namespace PlaylistUi {
       setSourceModel(mpd);
       break;
 #endif
+      setSourceModel(localfs);
+      break;
+    case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+      setSourceModel(mpzd);
+      break;
+#endif
+      setSourceModel(localfs);
+      break;
     case ModusOperandi::MODUS_LOCALFS:
     default:
       setSourceModel(localfs);

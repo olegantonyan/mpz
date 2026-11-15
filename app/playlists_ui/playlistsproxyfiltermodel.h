@@ -6,6 +6,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd/playlistsmodel.h"
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  #include "mpzd/playlistsmodel.h"
+#endif
 
 #include <QObject>
 #include <QSortFilterProxyModel>
@@ -41,6 +44,9 @@ namespace PlaylistsUi {
     Model *localfs;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::Model *mpd;
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+    Mpzd::Model *mpzd;
 #endif
   };
 }

@@ -173,7 +173,7 @@ QString Track::formattedTime(quint64 tm) {
 }
 
 bool Track::isValid() const {
-  return uid() != 0 && (isMpd() || QFile::exists(path()) || isStream());
+  return uid() != 0 && (isRemote() || QFile::exists(path()) || isStream());
 }
 
 Track::AudioProperties Track::audioPropertiesOf(const QString &filepath) {
@@ -194,7 +194,7 @@ Track::AudioProperties Track::audioPropertiesOf(const QString &filepath) {
 }
 
 bool Track::readMetadata() {
-  if (isMpd() || !isValid()) {
+  if (isRemote() || !isValid()) {
     return false;
   }
   const QByteArray encoded = path().toUtf8();
@@ -249,12 +249,16 @@ void Track::generateUidByHashing(const QString &prefix) {
   _uid = qHashBits(utf8.constData(), utf8.size());
 }
 
+void Track::setUid(quint64 uid) {
+  _uid = uid;
+}
+
 void Track::setPlaylistName(const QString &pln) {
   _playlist_name = pln;
 }
 
-void Track::setMpd(const QUrl &mpd_server_url) {
-  _mpd_server_url = mpd_server_url;
+void Track::setRemote(const QUrl &remote_server_url) {
+  _remote_server_url = remote_server_url;
 }
 
 void Track::setDuration(quint64 dur) {
@@ -356,12 +360,12 @@ QString Track::shortText() const {
   return url().toDisplayString();
 }
 
-bool Track::isMpd() const {
-  return !mpd_server_url().isEmpty();
+bool Track::isRemote() const {
+  return !remote_server_url().isEmpty();
 }
 
-QUrl Track::mpd_server_url() const {
-  return _mpd_server_url;
+QUrl Track::remote_server_url() const {
+  return _remote_server_url;
 }
 
 quint64 Track::uid() const {

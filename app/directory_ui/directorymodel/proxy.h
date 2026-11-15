@@ -9,6 +9,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd.h"
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  #include "mpzd.h"
+#endif
 
 #include <QObject>
 #include <QString>
@@ -62,6 +65,9 @@ namespace DirectoryUi {
 #ifdef ENABLE_MPD_SUPPORT
       Mpd *mpd;
       bool loadAsyncMpdOnce = true;
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+      Mpzd *mpzd;
 #endif
       Config::Global &global_conf;
       QString filter_term;

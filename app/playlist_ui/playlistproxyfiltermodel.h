@@ -5,6 +5,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "mpd/playlistmodel.h"
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  #include "mpzd/playlistmodel.h"
+#endif
 #include "modusoperandi.h"
 
 #include <QObject>
@@ -38,6 +41,9 @@ namespace PlaylistUi {
     Model *localfs;
 #ifdef ENABLE_MPD_SUPPORT
     Mpd::Model *mpd;
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+    Mpzd::Model *mpzd;
 #endif
     QString filter_term;
   };

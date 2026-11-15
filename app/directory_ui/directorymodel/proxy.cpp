@@ -16,6 +16,12 @@ namespace DirectoryUi {
       connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &DirectoryModel::Mpd::onMpdReady);
       connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &DirectoryModel::Mpd::onMpdLost);
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+      mpzd = new Mpzd(modus.mpzd_client, this);
+      connect(mpzd, &Mpzd::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
+      connect(&modus_operandi, &ModusOperandi::mpzdReady, mpzd, &DirectoryModel::Mpzd::onMpzdReady);
+      connect(&modus_operandi, &ModusOperandi::mpzdLost, mpzd, &DirectoryModel::Mpzd::onMpzdLost);
+#endif
       connect(localfs, &Localfs::directoryLoaded, this, &DirectoryModel::Proxy::directoryLoaded);
       connect(&modus_operandi, &ModusOperandi::changed, this, &Proxy::switchTo);
       switchTo(modus_operandi.get());
@@ -41,6 +47,15 @@ namespace DirectoryUi {
         setSourceModel(mpd);
         break;
 #endif
+        setSourceModel(localfs);
+        break;
+      case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+        setSourceModel(mpzd);
+        break;
+#endif
+        setSourceModel(localfs);
+        break;
       case ModusOperandi::MODUS_LOCALFS:
       default:
         setSourceModel(localfs);
@@ -63,6 +78,11 @@ namespace DirectoryUi {
         }
 #endif
         break;
+      case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+        mpzd->loadAsync(path);
+#endif
+        break;
       case ModusOperandi::MODUS_LOCALFS:
       default:
         localfs->loadAsync(path);
@@ -80,6 +100,11 @@ namespace DirectoryUi {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         result = mapFromSource(mpd->rootIndex());
+#endif
+        break;
+      case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+        result = mapFromSource(mpzd->rootIndex());
 #endif
         break;
       case ModusOperandi::MODUS_LOCALFS:
@@ -103,6 +128,11 @@ namespace DirectoryUi {
         result = mpd->filePath(mapToSource(index));
 #endif
         break;
+      case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+        result = mpzd->filePath(mapToSource(index));
+#endif
+        break;
       case ModusOperandi::MODUS_LOCALFS:
       default:
         result = localfs->filePath(mapToSource(index));
@@ -121,6 +151,11 @@ namespace DirectoryUi {
       case ModusOperandi::MODUS_MPD:
 #ifdef ENABLE_MPD_SUPPORT
         mpd->filter(term);
+#endif
+        break;
+      case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+        mpzd->filter(term);
 #endif
         break;
       case ModusOperandi::MODUS_LOCALFS:
@@ -217,7 +252,7 @@ namespace DirectoryUi {
         }
         return new TracksMimeData(tracks, displayName(indexes.first()));
       }
-      if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+      if (modus_operandi.isRemote()) {
         return nullptr;
       }
       auto *data = QSortFilterProxyModel::mimeData(indexes);

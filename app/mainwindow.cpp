@@ -146,6 +146,9 @@ MainWindow::MainWindow(const QStringList &args, IPC::Instance *instance, Config:
   setupOrderCombobox();
   setupPerPlaylistOrderCombobox();
   setupFollowCursorCheckbox();
+#ifdef ENABLE_MPZD_SUPPORT
+  setupMpzdSync();
+#endif
   setupVolumeControl();
   setupMainMenu();
   setupShortcuts();
@@ -277,7 +280,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     return;
   }
 #endif
-  if (modus_operandi.get() != ModusOperandi::MODUS_MPD || global_conf.mpdStopPlayerOnClose()) {
+  if (!modus_operandi.isRemote() || global_conf.mpdStopPlayerOnClose()) {
     player->stop();
   }
 #ifdef ENABLE_GAPLESS
@@ -587,7 +590,7 @@ void MainWindow::setupPlaybackDispatch() {
     dispatch->state().setSelected(track.uid());
     dispatch->state().resetFolowedCursor();
 #ifdef ENABLE_MPD_SUPPORT
-    if (mpd_order != nullptr) {
+    if (mpd_order != nullptr && modus_operandi.get() == ModusOperandi::MODUS_MPD) {
       mpd_order->onTrackSelected(track);
     }
 #endif
@@ -614,7 +617,17 @@ void MainWindow::setupPlaybackDispatch() {
   connect(dispatch, &Playback::Dispatch::stop, player, &Playback::Controller::stop);
   connect(dispatch, &Playback::Dispatch::unloadPlaylistView, playlist, &PlaylistUi::Controller::on_unload);
 
-  connect(playlists, &PlaylistsUi::Controller::doubleclicked, dispatch, &Playback::Dispatch::on_startFromPlaylistRequested);
+  connect(playlists, &PlaylistsUi::Controller::doubleclicked, this, [=](const std::shared_ptr<Playlist::Playlist> pl) {
+#ifdef ENABLE_MPZD_SUPPORT
+    if (modus_operandi.get() == ModusOperandi::MODUS_MPZD) {
+      if (pl != nullptr) {
+        modus_operandi.mpzd_client.request({"play", QString::number(pl->uid())});
+      }
+      return;
+    }
+#endif
+    dispatch->on_startFromPlaylistRequested(pl);
+  });
 
   connect(dispatch, &Playback::Dispatch::noTrackToStart, this, [=]() {
     autoplay_created_playlist = library->createPlaylistFromSelection();
@@ -953,6 +966,8 @@ void MainWindow::openReplayGainDialog() {
   if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
     reason = tr("Gains are not applied in mpd mode — mpd has its own replay_gain setting. "
                 "Analysing and tagging still work.");
+  } else if (modus_operandi.get() == ModusOperandi::MODUS_MPZD) {
+    reason = tr("Gains are not applied in mpzd mode. Analysing and tagging still work.");
   }
 
   if (!rg_dialog) {
@@ -983,10 +998,56 @@ void MainWindow::applyEqForDevice(const QByteArray &device_id) {
 }
 #endif
 
+#ifdef ENABLE_MPZD_SUPPORT
+void MainWindow::setupMpzdSync() {
+  auto &client = modus_operandi.mpzd_client;
+  const auto active = [this]() { return modus_operandi.get() == ModusOperandi::MODUS_MPZD; };
+
+  connect(playlist, &PlaylistUi::Controller::selected, this, [=, &client](const Track &track) {
+    if (active() && track.isRemote()) {
+      client.request({"select", QString::number(MpzdClient::playlistIdOf(track.uid())), QString::number(MpzdClient::trackIdOf(track.uid()))});
+    }
+  });
+  connect(ui->orderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=, &client]() {
+    if (active()) {
+      client.request({"order", MpzdClient::globalOrderName(global_conf.playbackOrder())});
+    }
+  });
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+  connect(ui->followCursorCheckBox, &QCheckBox::checkStateChanged, this, [=, &client](Qt::CheckState state) {
+#else
+  connect(ui->followCursorCheckBox, &QCheckBox::stateChanged, this, [=, &client](int state) {
+#endif
+    if (active()) {
+      client.request({"follow", state == Qt::Checked ? "on" : "off"});
+    }
+  });
+  connect(&client, &MpzdClient::Client::statusChanged, this, [=](const MpzdClient::Status &status) {
+    if (!active()) {
+      return;
+    }
+    const int order_idx = status.order == "random" ? 1 : (status.order == "noloop" ? 2 : 0);
+    if (ui->orderComboBox->currentIndex() != order_idx) {
+      const QSignalBlocker blocker(ui->orderComboBox);
+      ui->orderComboBox->setCurrentIndex(order_idx);
+    }
+    const auto follow = status.follow ? Qt::Checked : Qt::Unchecked;
+    if (ui->followCursorCheckBox->checkState() != follow) {
+      const QSignalBlocker blocker(ui->followCursorCheckBox);
+      ui->followCursorCheckBox->setCheckState(follow);
+    }
+  });
+}
+#endif
+
 #ifdef ENABLE_MPD_SUPPORT
 void MainWindow::setupMpdOrder() {
   mpd_order = new Playback::Mpd::PlaybackOrder(global_conf, modus_operandi.mpd_client, playlists, dispatch, this);
-  connect(player, &Playback::Controller::started, mpd_order, &Playback::Mpd::PlaybackOrder::updateByTrack);
+  connect(player, &Playback::Controller::started, mpd_order, [this](const Track &track) {
+    if (modus_operandi.get() == ModusOperandi::MODUS_MPD) {
+      mpd_order->updateByTrack(track);
+    }
+  });
 }
 #endif
 

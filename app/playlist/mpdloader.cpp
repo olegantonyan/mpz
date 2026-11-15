@@ -67,7 +67,7 @@ namespace Playlist {
     }
     track.generateUidByHashing(playlist_name);
     track.setPlaylistName(playlist_name);
-    track.setMpd(client.currentUrl());
+    track.setRemote(client.currentUrl());
     return track;
   }
 

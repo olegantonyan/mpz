@@ -90,7 +90,7 @@ void TestMpdPlayer::playStartsTheTrackFoundInTheMpdPlaylist() {
 
 void TestMpdPlayer::playIsIgnoredWhenTheTrackIsNotInThePlaylist() {
   Track stranger("wav/nowhere.wav", 0, "a", "b", "c", 1, 2000, 1000, 2, 320, 44100);
-  stranger.setMpd(server.url());
+  stranger.setRemote(server.url());
   stranger.setPlaylistName(kPlaylist);
 
   player->setTrack(stranger);

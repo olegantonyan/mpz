@@ -124,7 +124,7 @@ namespace PlaylistsUi {
     if (!i) {
       return;
     }
-    i->reload();
+    model->activeModel()->reloadPlaylist(i);
     model->persist();
     emit playlistChanged(i);
   }
