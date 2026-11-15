@@ -45,29 +45,16 @@ namespace DirectoryUi {
       resetRoot();
       endResetModel();
       const QString url = client.currentUrl().toString();
-      client.request({"libraries"}, this, [this, gen, url](const MpzdClient::Reply &reply) {
+      client.request({"library"}, this, [this, gen, url](const MpzdClient::Reply &reply) {
         if (gen != generation) {
           return;
         }
-        QStringList libraries;
-        for (const auto &line : reply.lines) {
-          if (line.first == "library") {
-            libraries << line.second;
-          }
-        }
-        if (libraries.size() == 1) {
-          listInto(root_item, libraries.first(), [this, url]() { emit directoryLoaded(url); });
+        const QString library = reply.value("library");
+        if (library.isEmpty()) {
+          emit directoryLoaded(url);
           return;
         }
-        beginResetModel();
-        for (const auto &lib : std::as_const(libraries)) {
-          auto *item = new TreeItem(true, lib, 0, root_item);
-          item->name = lib;
-          item->update_visibility(filter_term);
-          root_item->children.append(item);
-        }
-        endResetModel();
-        emit directoryLoaded(url);
+        listInto(root_item, library, [this, url]() { emit directoryLoaded(url); });
       });
     }
 

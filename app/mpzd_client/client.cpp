@@ -24,7 +24,7 @@ namespace MpzdClient {
       return {false, s.errorString()};
     }
     s.write(encode({"version"}));
-    s.write(encode({"libraries"}));
+    s.write(encode({"library"}));
     Parser p;
     QList<Item> items;
     int replies = 0;
@@ -43,8 +43,7 @@ namespace MpzdClient {
       }
     }
     const QString version = items.at(0).reply.value("version");
-    const int libraries = items.at(1).reply.records("library").size();
-    return {true, QObject::tr("mpzd %1, %n library folder(s)", "", libraries).arg(version)};
+    return {true, QObject::tr("mpzd %1, library %2").arg(version, items.at(1).reply.value("library"))};
   }
 
   QUrl Client::currentUrl() const {
