@@ -1,27 +1,44 @@
 #include "client.h"
 
+#include <QDeadlineTimer>
 #include <QDebug>
+#include <QSignalBlocker>
 
 #include <memory>
 
 namespace MpzdClient {
   constexpr int RECONNECT_MS = 3000;
+  constexpr int CONNECT_TIMEOUT_MS = 5000;
+  constexpr int REQUEST_TIMEOUT_MS = 15000;
+  constexpr int HEARTBEAT_MS = 20000;
+  constexpr int WATCHDOG_MS = 1000;
   constexpr int TRACKS_PAGE = 2000;
 
   Client::Client(QObject *parent) : QObject{parent} {
     reconnect_timer.setSingleShot(true);
     reconnect_timer.setInterval(RECONNECT_MS);
     connect(&reconnect_timer, &QTimer::timeout, this, &Client::connectSocket);
+    connect_timer.setSingleShot(true);
+    connect_timer.setInterval(CONNECT_TIMEOUT_MS);
+    connect(&connect_timer, &QTimer::timeout, this, [this]() { dropConnection(tr("cannot connect: timed out")); });
+    watchdog_timer.setInterval(WATCHDOG_MS);
+    connect(&watchdog_timer, &QTimer::timeout, this, &Client::onWatchdog);
     connect(&socket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
     connect(&socket, &QTcpSocket::disconnected, this, &Client::onSocketClosed);
     connect(&socket, &QAbstractSocket::errorOccurred, this, &Client::onSocketError);
   }
 
+  Client::~Client() {
+    abortSocket();
+  }
+
   QPair<bool, QString> Client::probe(const QUrl &url, int timeout_ms) {
+    const QDeadlineTimer deadline(timeout_ms);
+    const auto failure = [&](const QTcpSocket &sock) { return QPair<bool, QString>{false, deadline.hasExpired() ? QObject::tr("timed out") : sock.errorString()}; };
     QTcpSocket s;
     s.connectToHost(url.host(), url.port(DEFAULT_PORT));
-    if (!s.waitForConnected(timeout_ms)) {
-      return {false, s.errorString()};
+    if (!s.waitForConnected(int(deadline.remainingTime()))) {
+      return failure(s);
     }
     s.write(encode({"version"}));
     s.write(encode({"library"}));
@@ -29,8 +46,8 @@ namespace MpzdClient {
     QList<Item> items;
     int replies = 0;
     while (replies < 2) {
-      if (!s.waitForReadyRead(timeout_ms)) {
-        return {false, s.errorString()};
+      if (!s.waitForReadyRead(int(deadline.remainingTime()))) {
+        return failure(s);
       }
       for (const auto &it : p.feed(s.readAll())) {
         if (it.kind == Item::Greeting && it.text != QString("mpzd %1").arg(PROTOCOL_VERSION)) {
@@ -68,7 +85,7 @@ namespace MpzdClient {
     error_reported = false;
     reconnect_timer.stop();
     ready = false;
-    socket.abort();
+    abortSocket();
     failPending(tr("connection reset"));
     if (was_ready) {
       emit disconnected(previous);
@@ -82,7 +99,7 @@ namespace MpzdClient {
     const QUrl previous = url;
     url = QUrl();
     ready = false;
-    socket.abort();
+    abortSocket();
     failPending(tr("connection closed"));
     last_status = Status();
     if (was_ready) {
@@ -95,8 +112,46 @@ namespace MpzdClient {
       return;
     }
     parser.reset();
-    socket.abort();
+    abortSocket();
+    connect_timer.start();
     socket.connectToHost(url.host(), url.port(DEFAULT_PORT));
+  }
+
+  void Client::abortSocket() {
+    connect_timer.stop();
+    watchdog_timer.stop();
+    const QSignalBlocker blocker(&socket);
+    socket.abort();
+  }
+
+  void Client::dropConnection(const QString &message) {
+    const bool was_ready = ready;
+    ready = false;
+    abortSocket();
+    failPending(message);
+    if (url.isEmpty()) {
+      return;
+    }
+    qWarning() << "mpzd:" << message << url;
+    if (was_ready) {
+      emit error(url, message);
+      emit disconnected(url);
+    } else if (!error_reported) {
+      error_reported = true;
+      emit error(url, message);
+    }
+    reconnect_timer.start();
+  }
+
+  void Client::onWatchdog() {
+    if (!ready) {
+      return;
+    }
+    if (!pending.isEmpty() && pending.head().sent.elapsed() > REQUEST_TIMEOUT_MS && last_rx.elapsed() > REQUEST_TIMEOUT_MS) {
+      dropConnection(tr("mpzd not responding"));
+    } else if (pending.isEmpty() && last_rx.elapsed() > HEARTBEAT_MS) {
+      request({"ping"});
+    }
   }
 
   void Client::request(const QStringList &args, QObject *context, Callback callback) {
@@ -109,7 +164,9 @@ namespace MpzdClient {
       }
       return;
     }
-    pending.enqueue({context, context != nullptr, std::move(callback)});
+    QElapsedTimer sent;
+    sent.start();
+    pending.enqueue({context, context != nullptr, std::move(callback), sent});
     socket.write(encode(args));
   }
 
@@ -201,13 +258,14 @@ namespace MpzdClient {
   }
 
   void Client::onReadyRead() {
+    last_rx.restart();
     const auto items = parser.feed(socket.readAll());
     for (const auto &it : items) {
       if (it.kind == Item::Greeting) {
         if (it.text != QString("mpzd %1").arg(PROTOCOL_VERSION)) {
           const QString msg = tr("not an mpzd server: %1").arg(it.text);
           qWarning() << "mpzd:" << msg;
-          socket.abort();
+          abortSocket();
           if (!error_reported) {
             error_reported = true;
             emit error(url, msg);
@@ -216,6 +274,9 @@ namespace MpzdClient {
         }
         ready = true;
         error_reported = false;
+        connect_timer.stop();
+        watchdog_timer.start();
+        socket.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
         qDebug() << "connected to mpzd at" << url;
         request({"watch", "on"});
         emit connected(url);
@@ -237,18 +298,9 @@ namespace MpzdClient {
   }
 
   void Client::onSocketClosed() {
-    if (url.isEmpty()) {
-      return;
+    if (!url.isEmpty()) {
+      dropConnection(tr("mpzd connection lost"));
     }
-    const bool was_ready = ready;
-    ready = false;
-    failPending(tr("connection lost"));
-    if (was_ready) {
-      qWarning() << "mpzd connection lost with" << url;
-      emit error(url, tr("mpzd connection lost"));
-      emit disconnected(url);
-    }
-    reconnect_timer.start();
   }
 
   void Client::onSocketError() {
@@ -256,6 +308,7 @@ namespace MpzdClient {
       return;
     }
     if (!ready) {
+      connect_timer.stop();
       if (!error_reported) {
         error_reported = true;
         qWarning() << "mpzd:" << socket.errorString();

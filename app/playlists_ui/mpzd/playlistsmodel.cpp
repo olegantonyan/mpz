@@ -12,11 +12,14 @@ namespace PlaylistsUi {
 
     void Model::loadAsync() {
       if (!client.isConnected()) {
+        emit asyncLoadFinished();
         return;
       }
       client.request({"playlists"}, this, [this](const MpzdClient::Reply &reply) {
         if (reply.ok) {
           applyPlaylists(MpzdClient::playlistsFromReply(reply));
+        } else {
+          emit asyncLoadFinished();
         }
       });
     }

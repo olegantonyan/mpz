@@ -3,6 +3,7 @@
 
 #include "mpzd_client/protocol.h"
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QPointer>
 #include <QQueue>
@@ -19,8 +20,9 @@ namespace MpzdClient {
     using Callback = std::function<void(const Reply &)>;
 
     explicit Client(QObject *parent = nullptr);
+    ~Client() override;
 
-    static QPair<bool, QString> probe(const QUrl &url, int timeout_ms = 3000);
+    static QPair<bool, QString> probe(const QUrl &url, int timeout_ms = 2000);
 
     QUrl currentUrl() const;
     bool isConnected() const;
@@ -48,6 +50,7 @@ namespace MpzdClient {
       QPointer<QObject> context;
       bool has_context;
       Callback callback;
+      QElapsedTimer sent;
     };
 
     QTcpSocket socket;
@@ -55,12 +58,18 @@ namespace MpzdClient {
     Parser parser;
     QQueue<Pending> pending;
     QTimer reconnect_timer;
+    QTimer connect_timer;
+    QTimer watchdog_timer;
+    QElapsedTimer last_rx;
     Status last_status;
     bool ready = false;
     bool error_reported = false;
     bool status_requested = false;
 
     void connectSocket();
+    void abortSocket();
+    void dropConnection(const QString &message);
+    void onWatchdog();
     void failPending(const QString &message);
     void handleEvent(const QString &event);
     void onReadyRead();

@@ -65,6 +65,9 @@ namespace DirectoryUi {
         if (gen != generation) {
           return;
         }
+        if (!reply.ok) {
+          item->loaded = false;
+        }
         QVector<TreeItem *> fresh;
         for (const auto &line : reply.lines) {
           if (line.first != "dir" && line.first != "file") {
