@@ -308,7 +308,7 @@ void TestMpdModels::mpdLoaderBuildsTracksMarkedAsMpd() {
 
   QCOMPARE(tracks.size(), 2);
   for (const auto &t : tracks) {
-    QVERIFY(t.isMpd());
+    QVERIFY(t.isRemote());
     QCOMPARE(t.album(), QString("Tagged Album"));
     QCOMPARE(t.artist(), QString("Tagged Artist"));
   }

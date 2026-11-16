@@ -104,7 +104,7 @@ namespace Lyrics {
   }
 
   QString Widget::fetch_embedded_lyrics(const Track &track) const {
-    if (track.isMpd() || track.isCue() || track.path().isEmpty() || !QFile::exists(track.path())) {
+    if (track.isRemote() || track.isCue() || track.path().isEmpty() || !QFile::exists(track.path())) {
       return QString();
     }
     TagLib::FileRef f(track.path().toUtf8().constData());
@@ -120,7 +120,7 @@ namespace Lyrics {
   }
 
   QString Widget::fetch_sidecar_lyrics(const Track &track) const {
-    if (track.isMpd() || track.path().isEmpty()) {
+    if (track.isRemote() || track.path().isEmpty()) {
       return QString();
     }
     QFileInfo fi(track.path());

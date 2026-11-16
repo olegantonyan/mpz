@@ -584,8 +584,8 @@ QWidget *SettingsDialog::buildAdvancedTab() {
   });
 #endif
 
-#ifdef ENABLE_MPD_SUPPORT
-  check_mpd_stop_on_close = new QCheckBox(tr("Stop MPD playback when closing mpz"));
+#if defined(ENABLE_MPD_SUPPORT) || defined(ENABLE_MPZD_SUPPORT)
+  check_mpd_stop_on_close = new QCheckBox(tr("Stop server (mpd/mpzd) playback when closing mpz"));
   check_mpd_stop_on_close->setChecked(global_conf.mpdStopPlayerOnClose());
   vbox->addWidget(check_mpd_stop_on_close);
 #endif
@@ -821,7 +821,7 @@ void SettingsDialog::apply() {
     global_conf.saveMprisBlacklist(collectMprisBlacklist());
   }
 #endif
-#ifdef ENABLE_MPD_SUPPORT
+#if defined(ENABLE_MPD_SUPPORT) || defined(ENABLE_MPZD_SUPPORT)
   if (check_mpd_stop_on_close) {
     global_conf.saveMpdStopPlayerOnClose(check_mpd_stop_on_close->isChecked());
   }

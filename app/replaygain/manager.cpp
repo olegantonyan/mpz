@@ -135,7 +135,7 @@ namespace ReplayGain {
   }
 
   QString Manager::appliedGainText(const Track &track) {
-    if (settings_.mode == Mode::Off || track.isMpd() ||
+    if (settings_.mode == Mode::Off || track.isRemote() ||
         (!track.isStream() && track.path().isEmpty())) {
       return QString();
     }
@@ -210,7 +210,7 @@ namespace ReplayGain {
     walked_folders.clear();
     store_.beginBatch();
     for (const auto &root : roots) {
-      if (!root.startsWith(QLatin1String("mpd://"))) {
+      if (!root.startsWith(QLatin1String("mpd://")) && !root.startsWith(QLatin1String("mpzd://"))) {
         walk_folders << root;
       }
     }
@@ -290,7 +290,7 @@ namespace ReplayGain {
     QVector<ScanTarget> targets;
     targets.reserve(tracks.size());
     for (const auto &track : tracks) {
-      if (track.isStream() || track.isMpd() || track.path().isEmpty()) {
+      if (track.isStream() || track.isRemote() || track.path().isEmpty()) {
         continue;
       }
       const QFileInfo info(track.path());

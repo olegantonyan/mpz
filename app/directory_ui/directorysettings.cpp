@@ -7,6 +7,9 @@
 #ifdef ENABLE_MPD_SUPPORT
   #include "addmpddialog.h"
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  #include "addmpzddialog.h"
+#endif
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -31,6 +34,9 @@ DirectorySettings::DirectorySettings(const QStringList &paths, ModusOperandi &mo
   ui->setupUi(this);
 
   ui->sandboxNotice->setVisible(SysInfo::sandboxed() && !local_conf.sandboxNoticeDismissed());
+#ifndef ENABLE_MPZD_SUPPORT
+  ui->pushButtonAddMpzd->hide();
+#endif
   ui->sandboxNoticeLabel->setTextFormat(Qt::RichText);
   ui->sandboxNoticeLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
   ui->sandboxNoticeLabel->setOpenExternalLinks(true);
@@ -76,6 +82,16 @@ void DirectorySettings::on_pushButtonAddMpd_clicked() {
 #endif
 }
 
+void DirectorySettings::on_pushButtonAddMpzd_clicked() {
+#ifdef ENABLE_MPZD_SUPPORT
+  DirectoryUi::AddMpzdDialog dlg(this);
+  if (dlg.exec() == QDialog::Accepted && !dlg.url().isEmpty()) {
+    auto existing = model.stringList();
+    existing.append(dlg.url());
+    model.setStringList(existing);
+  }
+#endif
+}
 
 void DirectorySettings::on_pushButtonRadioStations_clicked() {
   editRadioStations();
@@ -113,7 +129,18 @@ void DirectorySettings::on_pushButtonEdit_clicked() {
   }
 
   QString replacement;
-  if (current.startsWith("mpd://")) {
+  if (current.startsWith("mpzd://")) {
+#ifdef ENABLE_MPZD_SUPPORT
+    DirectoryUi::AddMpzdDialog dlg(this);
+    dlg.setUrl(current);
+    if (dlg.exec() != QDialog::Accepted || dlg.url().isEmpty()) {
+      return;
+    }
+    replacement = dlg.url();
+#else
+    return;
+#endif
+  } else if (current.startsWith("mpd://")) {
 #ifdef ENABLE_MPD_SUPPORT
     DirectoryUi::AddMpdDialog dlg(modus_operandi.mpd_client);
     dlg.setUrl(current);

@@ -18,6 +18,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #ifdef ENABLE_MPD_SUPPORT
   , _mpdplayer(stream_buffer_size, outdevid, modus.mpd_client)
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+  , _mpzdplayer(stream_buffer_size, outdevid, modus.mpzd_client)
+#endif
 {
 #ifndef ENABLE_GAPLESS
     Q_UNUSED(gapless_cache_mb)
@@ -35,6 +38,9 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       _player.releaseAudio();
 #ifdef ENABLE_MPD_SUPPORT
       _mpdplayer.releaseAudio();
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+      _mpzdplayer.releaseAudio();
 #endif
     });
 
@@ -87,6 +93,27 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
       emit trackChanged(_current_track);
     });
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+    connect(&_mpzdplayer, &Mpzd::MediaPlayer::positionChanged, this, &Controller::on_positionChanged);
+    connect(&_mpzdplayer, &Mpzd::MediaPlayer::stateChanged, this, &Controller::on_stateChanged);
+    connect(&_mpzdplayer, &Mpzd::MediaPlayer::trackLoaded, this, [=](const Track &track) {
+      setCurrentTrack(track);
+      if (track.isStream() || track.duration() == 0) {
+        _controls.seekbar->setMaximum(std::numeric_limits<int>::max());
+      } else {
+        _controls.seekbar->setMaximum(static_cast<int>(track.duration() / 1000));
+      }
+    });
+    connect(&_mpzdplayer, &Mpzd::MediaPlayer::volumeReported, this, [=](int volume) {
+      if (modus_operndi.get() == ModusOperandi::MODUS_MPZD) {
+        emit volumeChanged(volume);
+      }
+    });
+    connect(&_mpzdplayer, &Mpzd::MediaPlayer::streamMetaChanged, this, [=](const StreamMetaData &meta) {
+      _current_track.setStreamMeta(meta);
+      emit trackChanged(_current_track);
+    });
+#endif
     connect(&modus_operndi, &ModusOperandi::changed, this, &Controller::switchTo);
 
     connect(_controls.stop, &QToolButton::clicked, this, &Controller::stop);
@@ -126,6 +153,12 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
 #ifdef ENABLE_MPD_SUPPORT
       return _mpdplayer;
 #endif
+      return _player;
+    case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+      return _mpzdplayer;
+#endif
+      return _player;
     case ModusOperandi::MODUS_LOCALFS:
     default:
       return _player;
@@ -211,7 +244,7 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::on_controlsPlay() {
-    if (player().state() == MediaPlayer::PausedState) {
+    if (player().state() == MediaPlayer::PausedState || modus_operndi.get() == ModusOperandi::MODUS_MPZD) {
       player().play();
     } else  {
       emit startRequested();
@@ -302,20 +335,21 @@ Controller::Controller(const Controls &c, quint32 stream_buffer_size, QByteArray
   }
 
   void Controller::switchTo(ModusOperandi::ActiveMode new_mode) {
-    switch (new_mode) {
-    case ModusOperandi::MODUS_MPD:
+    if (new_mode != ModusOperandi::MODUS_LOCALFS) {
       _player.stop();
       _player.clearTrack();
-      break;
-    case ModusOperandi::MODUS_LOCALFS:
-    default:
+    }
 #ifdef ENABLE_MPD_SUPPORT
+    if (new_mode != ModusOperandi::MODUS_MPD) {
       _mpdplayer.stop();
       _mpdplayer.clearTrack();
-#endif
-      break;
     }
-
+#endif
+#ifdef ENABLE_MPZD_SUPPORT
+    if (new_mode != ModusOperandi::MODUS_MPZD) {
+      _mpzdplayer.clearTrack();
+    }
+#endif
   }
 
   bool Controller::eventFilter(QObject *obj, QEvent *event) {

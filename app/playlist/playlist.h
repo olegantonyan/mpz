@@ -31,6 +31,7 @@ namespace Playlist {
     void append(const QVector<Track> &tracks, bool with_sort);
 
     quint64 uid() const;
+    void setUid(quint64 uid);
 
     bool hasTrack(quint64 track_uid) const;
     int trackIndex(quint64 track_uid) const;

@@ -31,7 +31,7 @@ namespace PlaylistsUi {
     virtual void remove(const QModelIndex &index);
     std::shared_ptr<Playlist::Playlist> itemAt(const QModelIndex &index) const;
     std::shared_ptr<Playlist::Playlist> itemBy(quint64 uid) const;
-    std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
+    virtual std::shared_ptr<Playlist::Playlist> itemByTrack(quint64 track_uid) const;
     int listSize() const;
     QModelIndex itemIndex(std::shared_ptr<Playlist::Playlist> playlist) const;
     virtual bool persist();
@@ -41,7 +41,8 @@ namespace PlaylistsUi {
     virtual void saveCurrentPlaylistIndex(const QModelIndex &idx);
     virtual QFuture<void> createPlaylistAsync(const QList<QDir> &filepaths, const QString &libraryDir);
     // Tracks are already built (radio stations), so there is nothing to scan.
-    void createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
+    virtual void createPlaylistFromTracks(const QVector<Track> &tracks, const QString &name);
+    virtual void reloadPlaylist(std::shared_ptr<Playlist::Playlist> playlist);
     virtual void asyncTracksLoad(std::shared_ptr<Playlist::Playlist> playlist);
     virtual void appendTracksToPlaylist(std::shared_ptr<Playlist::Playlist> playlist, const QVector<Track> &tracks);
 

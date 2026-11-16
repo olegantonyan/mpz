@@ -70,7 +70,7 @@ namespace {
   constexpr int kTabsShare = 45;
 
   bool has_local_file(const Track &t) {
-    return !t.isMpd() && !t.isStream() && !t.path().isEmpty() && QFile::exists(t.path());
+    return !t.isRemote() && !t.isStream() && !t.path().isEmpty() && QFile::exists(t.path());
   }
 
   QString flatten(const QString &s) {
@@ -208,10 +208,10 @@ TrackInfoDialog::TrackInfoDialog(const Track &track, Config::Global &global, std
   if (!cover_art_path.isEmpty()) {
     ui->labelCoverArt->setContextMenuPolicy(Qt::CustomContextMenu);
   }
-  ui->toolButtonOpenFileManager->setVisible(!track.isMpd());
-  ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isMpd() && !track.isStream());
+  ui->toolButtonOpenFileManager->setVisible(!track.isRemote());
+  ui->toolButtonEditTags->setVisible(!track.isCue() && !track.isRemote() && !track.isStream());
 #ifdef ENABLE_DR_METER
-  ui->toolButtonDynamicRange->setVisible(!track.isMpd() && !track.isStream());
+  ui->toolButtonDynamicRange->setVisible(!track.isRemote() && !track.isStream());
 #else
   ui->toolButtonDynamicRange->setVisible(false);
 #endif
@@ -302,12 +302,12 @@ void TrackInfoDialog::add_general_rows() {
     add_table_row(model, tr("Stream url"), _track.url().toDisplayString());
   }
   if (!_track.path().isEmpty()) {
-    if (_track.isMpd()) {
-      auto url = _track.mpd_server_url();
+    if (_track.isRemote()) {
+      auto url = _track.remote_server_url();
       if (!url.password().isEmpty()) {
         url.setPassword("***");
       }
-      add_table_row(model, tr("File path"), url.toString() + "/" + _track.path());
+      add_table_row(model, tr("File path"), url.toString() + (_track.path().startsWith("/") ? "" : "/") + _track.path());
     } else {
       add_table_row(model, tr("File path"), _track.path());
     }
@@ -502,7 +502,7 @@ void TrackInfoDialog::setReplayGain(ReplayGain::Manager *rg) {
 }
 
 void TrackInfoDialog::add_replaygain_rows() {
-  if (!replay_gain || _track.isStream() || _track.isMpd() || _track.path().isEmpty()) {
+  if (!replay_gain || _track.isStream() || _track.isRemote() || _track.path().isEmpty()) {
     return;
   }
   const ReplayGain::Resolved resolved = replay_gain->resolver().resolve(_track);
@@ -719,7 +719,7 @@ void TrackInfoDialog::setup_lyrics() {
 }
 
 QString TrackInfoDialog::fetch_embedded_lyrics() const {
-  if (_track.isMpd() || _track.isCue() || _track.path().isEmpty() || !QFile::exists(_track.path())) {
+  if (_track.isRemote() || _track.isCue() || _track.path().isEmpty() || !QFile::exists(_track.path())) {
     return QString();
   }
   TagLib::FileRef f(_track.path().toUtf8().constData());
@@ -735,7 +735,7 @@ QString TrackInfoDialog::fetch_embedded_lyrics() const {
 }
 
 QString TrackInfoDialog::fetch_sidecar_lyrics() const {
-  if (_track.isMpd() || _track.path().isEmpty()) {
+  if (_track.isRemote() || _track.path().isEmpty()) {
     return QString();
   }
   QFileInfo fi(_track.path());

@@ -16,6 +16,14 @@ namespace PlaylistsUi {
     connect(&modus_operandi, &ModusOperandi::mpdReady, mpd, &Mpd::Model::loadAsync);
     connect(&modus_operandi, &ModusOperandi::mpdLost, mpd, &Mpd::Model::onMpdLost);
 #endif
+#ifdef ENABLE_MPZD_SUPPORT
+    mpzd = new Mpzd::Model(conf, modus.mpzd_client, this);
+    connect(mpzd, &Mpzd::Model::asyncLoadFinished, this, &ProxyFilterModel::asyncLoadFinished);
+    connect(mpzd, &Mpzd::Model::createPlaylistAsyncFinished, this, &ProxyFilterModel::createPlaylistAsyncFinished);
+    connect(mpzd, &Mpzd::Model::asyncTracksLoadFinished, this, &ProxyFilterModel::asyncTracksLoadFinished);
+    connect(&modus_operandi, &ModusOperandi::mpzdReady, mpzd, &Mpzd::Model::loadAsync);
+    connect(&modus_operandi, &ModusOperandi::mpzdLost, mpzd, &Mpzd::Model::onMpzdLost);
+#endif
     connect(&modus_operandi, &ModusOperandi::changed, this, &ProxyFilterModel::switchTo);
     switchTo(modus_operandi.get());
   }
@@ -27,6 +35,18 @@ namespace PlaylistsUi {
       setSourceModel(mpd);
       break;
 #endif
+      setSourceModel(localfs);
+      localfs->loadAsync();
+      break;
+    case ModusOperandi::MODUS_MPZD:
+#ifdef ENABLE_MPZD_SUPPORT
+      setSourceModel(mpzd);
+      mpzd->loadAsync();
+      break;
+#endif
+      setSourceModel(localfs);
+      localfs->loadAsync();
+      break;
     case ModusOperandi::MODUS_LOCALFS:
     default:
       setSourceModel(localfs);
@@ -65,15 +85,7 @@ namespace PlaylistsUi {
   }
 
   Model *ProxyFilterModel::activeModel() const {
-    switch (modus_operandi.get()) {
-    case ModusOperandi::MODUS_MPD:
-#ifdef ENABLE_MPD_SUPPORT
-      return qobject_cast<Mpd::Model *>(sourceModel());
-#endif
-    case ModusOperandi::MODUS_LOCALFS:
-    default:
-      return qobject_cast<Model *>(sourceModel());
-    }
+    return qobject_cast<Model *>(sourceModel());
   }
 
   void ProxyFilterModel::onRename(const QString &old_name, const QString &new_name) {

@@ -44,8 +44,9 @@ public:
   void setAlbumArtist(const QString &aa);
   void setDiscNumber(const QString &disc);
   void generateUidByHashing(const QString &prefix);
+  void setUid(quint64 uid);
   void setPlaylistName(const QString &pln);
-  void setMpd(const QUrl &mpd_server_url);
+  void setRemote(const QUrl &remote_server_url);
 
   QString path() const;
   QUrl url() const;
@@ -69,8 +70,8 @@ public:
   QString formattedDuration() const;
   QString formattedAudioInfo() const;
   QString shortText() const;
-  bool isMpd() const;
-  QUrl mpd_server_url() const;
+  bool isRemote() const;
+  QUrl remote_server_url() const;
 
   quint64 uid() const;
 
@@ -116,7 +117,7 @@ private:
   quint64 _uid;
 
   bool _cue;
-  QUrl _mpd_server_url;
+  QUrl _remote_server_url;
 
   StreamMetaData _stream_meta;
   ReplayGain::Gain _replay_gain;

@@ -27,8 +27,8 @@ private slots:
   void streamTitleUsesStatusFallbackOverStationName();
   void streamTitleFallsBackToSanitizedUrl();
 
-  void setMpdMakesIsMpdTrue();
-  void setMpdEmptyClearsMpd();
+  void setRemoteMakesIsRemoteTrue();
+  void setRemoteEmptyClearsRemote();
   void setCueToggles();
   void setDurationOverrides();
   void setPlaylistNameRoundTrips();
@@ -75,7 +75,7 @@ void TestTrack::defaultTrackIsZeroed() {
   QVERIFY(t.disc_number().isEmpty());
   QVERIFY(t.album_artist().isEmpty());
   QVERIFY(!t.isCue());
-  QVERIFY(!t.isMpd());
+  QVERIFY(!t.isRemote());
   QVERIFY(!t.isStream());
 }
 
@@ -178,21 +178,21 @@ void TestTrack::streamCtorHasUid() {
   QVERIFY(t.uid() != 0);
 }
 
-void TestTrack::setMpdMakesIsMpdTrue() {
+void TestTrack::setRemoteMakesIsRemoteTrue() {
   Track t;
-  QVERIFY(!t.isMpd());
-  t.setMpd(QUrl(QStringLiteral("mpd://localhost:6600")));
-  QVERIFY(t.isMpd());
-  QCOMPARE(t.mpd_server_url(),
+  QVERIFY(!t.isRemote());
+  t.setRemote(QUrl(QStringLiteral("mpd://localhost:6600")));
+  QVERIFY(t.isRemote());
+  QCOMPARE(t.remote_server_url(),
            QUrl(QStringLiteral("mpd://localhost:6600")));
 }
 
-void TestTrack::setMpdEmptyClearsMpd() {
+void TestTrack::setRemoteEmptyClearsRemote() {
   Track t;
-  t.setMpd(QUrl(QStringLiteral("mpd://host")));
-  QVERIFY(t.isMpd());
-  t.setMpd(QUrl());
-  QVERIFY(!t.isMpd());
+  t.setRemote(QUrl(QStringLiteral("mpd://host")));
+  QVERIFY(t.isRemote());
+  t.setRemote(QUrl());
+  QVERIFY(!t.isRemote());
 }
 
 void TestTrack::setCueToggles() {

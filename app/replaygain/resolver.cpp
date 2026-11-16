@@ -29,7 +29,7 @@ namespace ReplayGain {
   }
 
   Resolved Resolver::resolve(const Track &track) {
-    if (track.isStream() || track.isMpd() || track.path().isEmpty()) {
+    if (track.isStream() || track.isRemote() || track.path().isEmpty()) {
       return Resolved();
     }
 

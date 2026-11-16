@@ -59,6 +59,10 @@ namespace Playlist {
     return _uid;
   }
 
+  void Playlist::setUid(quint64 uid) {
+    _uid = uid;
+  }
+
   bool Playlist::hasTrack(quint64 track_uid) const {
     return trackIndex(track_uid) >= 0;
   }

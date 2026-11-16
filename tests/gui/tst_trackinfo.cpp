@@ -116,7 +116,7 @@ void TestTrackInfo::generalRowsDifferPerTrackKind() {
 
 void TestTrackInfo::mpdPathHasItsPasswordMasked() {
   Track track("music/song.mp3", 0, "artist", "album", "title", 1, 2000, 1000, 2, 320, 44100);
-  track.setMpd(QUrl("mpd://user:secret@host:6600"));
+  track.setRemote(QUrl("mpd://user:secret@host:6600"));
 
   TrackInfoDialog dlg(track, *global);
   auto *view = dlg.findChild<QTableView *>(QStringLiteral("tableView"));
